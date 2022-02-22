@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@mogami/api/core/data-access": [
+        "libs/api/core/data-access/src/index.ts"
+      ],
+      "@mogami/api/core/feature": ["libs/api/core/feature/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
