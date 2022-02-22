@@ -1,0 +1,21 @@
+{
+  "name": "mogami",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test"
+  },
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nrwl/cli": "13.8.3",
+    "@nrwl/nx-cloud": "latest",
+    "@nrwl/tao": "13.8.3",
+    "@nrwl/workspace": "13.8.3",
+    "@types/node": "16.11.7",
+    "prettier": "^2.5.1",
+    "typescript": "~4.5.2"
+  }
+}
