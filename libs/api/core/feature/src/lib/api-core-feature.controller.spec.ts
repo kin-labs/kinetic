@@ -1,19 +1,19 @@
-import { Test } from '@nestjs/testing';
-import { ApiCoreFeatureController } from './api-core-feature.controller';
+import { Test } from '@nestjs/testing'
+import { ApiCoreFeatureController } from './api-core-feature.controller'
 
 describe('ApiCoreFeatureController', () => {
-  let controller: ApiCoreFeatureController;
+  let controller: ApiCoreFeatureController
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [],
       controllers: [ApiCoreFeatureController],
-    }).compile();
+    }).compile()
 
-    controller = module.get(ApiCoreFeatureController);
-  });
+    controller = module.get(ApiCoreFeatureController)
+  })
 
   it('should be defined', () => {
-    expect(controller).toBeTruthy();
-  });
-});
+    expect(controller).toBeTruthy()
+  })
+})

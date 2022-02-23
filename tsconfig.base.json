@@ -15,13 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@mogami/api/config/data-access": [
-        "libs/api/config/data-access/src/index.ts"
-      ],
+      "@mogami/api/config/data-access": ["libs/api/config/data-access/src/index.ts"],
       "@mogami/api/config/feature": ["libs/api/config/feature/src/index.ts"],
-      "@mogami/api/core/data-access": [
-        "libs/api/core/data-access/src/index.ts"
-      ],
+      "@mogami/api/core/data-access": ["libs/api/core/data-access/src/index.ts"],
       "@mogami/api/core/feature": ["libs/api/core/feature/src/index.ts"]
     }
   },
