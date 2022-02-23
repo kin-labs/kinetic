@@ -14,9 +14,11 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.2.0",
     "@prisma/client": "^3.10.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
+    "swagger-ui-express": "^4.3.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
