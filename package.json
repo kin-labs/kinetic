@@ -8,7 +8,10 @@
     "test": "nx test",
     "build:api": "nx build api",
     "dev:api": "nx serve api",
-    "dev:services": "docker compose up"
+    "dev:services": "docker compose up",
+    "format": "nx format:write",
+    "format:check": "nx format:check",
+    "format:write": "nx format:write"
   },
   "private": true,
   "dependencies": {

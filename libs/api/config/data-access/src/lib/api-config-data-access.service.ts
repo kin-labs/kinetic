@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class ApiConfigDataAccessService {
   config() {
     return {
-      env: process.env.NODE_ENV
+      env: process.env.NODE_ENV,
     }
   }
 }

@@ -1,5 +1,5 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Injectable, OnModuleInit } from '@nestjs/common'
+import { PrismaClient } from '@prisma/client'
 
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
@@ -8,7 +8,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   async onModuleInit() {
-    await this.$connect();
+    await this.$connect()
   }
 }
-
