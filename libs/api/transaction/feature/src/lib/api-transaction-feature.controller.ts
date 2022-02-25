@@ -1,6 +1,8 @@
 import { Controller, Get, Post } from '@nestjs/common'
 import { ApiTransactionDataAccessService } from '@mogami/api/transaction/data-access'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('transaction')
 @Controller('transaction')
 export class ApiTransactionFeatureController {
   constructor(private readonly service: ApiTransactionDataAccessService) {}
@@ -27,12 +29,12 @@ export class ApiTransactionFeatureController {
 
   @Get('history')
   getHistory() {
-    return this.getHistory()
+    return this.service.getHistory()
   }
 
   @Post('sign-transaction')
   signTransaction() {
-    return this.signTransaction()
+    return this.service.signTransaction()
   }
 
   @Post('submit-transaction')
