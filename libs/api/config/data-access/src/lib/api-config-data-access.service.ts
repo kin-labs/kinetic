@@ -1,10 +1,26 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class ApiConfigDataAccessService {
-  config() {
+  constructor(private readonly config: ConfigService) {}
+
+  get environment() {
+    return this.config.get('environment')
+  }
+
+  get port() {
+    return this.config.get('port')
+  }
+
+  get prefix() {
+    return 'api'
+  }
+
+  configSummary() {
     return {
-      env: process.env.NODE_ENV,
+      environment: this.environment,
+      port: this.port,
     }
   }
 }
