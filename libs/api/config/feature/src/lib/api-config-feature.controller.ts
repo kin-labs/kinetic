@@ -7,6 +7,6 @@ export class ApiConfigFeatureController {
 
   @Get()
   config() {
-    return this.service.config()
+    return this.service.configSummary()
   }
 }
