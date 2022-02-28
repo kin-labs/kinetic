@@ -16,8 +16,6 @@ async function bootstrap() {
       transform: true,
     }),
   )
-  const port = process.env.PORT || 3000
-
   const configSwagger = new DocumentBuilder()
     .setTitle('Mogami')
     .setDescription('The Mogami API description')
@@ -28,7 +26,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document)
 
   await app.listen(config.port)
-  Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`)
+  Logger.log(`🚀 Application is running on: http://localhost:${config.port}/${globalPrefix}`)
 }
 
 bootstrap()
