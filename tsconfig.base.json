@@ -22,7 +22,8 @@
       "@mogami/api/core/data-access": ["libs/api/core/data-access/src/index.ts"],
       "@mogami/api/core/feature": ["libs/api/core/feature/src/index.ts"],
       "@mogami/api/transaction/data-access": ["libs/api/transaction/data-access/src/index.ts"],
-      "@mogami/api/transaction/feature": ["libs/api/transaction/feature/src/index.ts"]
+      "@mogami/api/transaction/feature": ["libs/api/transaction/feature/src/index.ts"],
+      "@mogami/solana": ["libs/solana/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

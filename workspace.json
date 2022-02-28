@@ -9,6 +9,7 @@
     "api-core-data-access": "libs/api/core/data-access",
     "api-core-feature": "libs/api/core/feature",
     "api-transaction-data-access": "libs/api/transaction/data-access",
-    "api-transaction-feature": "libs/api/transaction/feature"
+    "api-transaction-feature": "libs/api/transaction/feature",
+    "solana": "libs/solana"
   }
 }
