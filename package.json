@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node dist/apps/api/main.js",
-    "build": "yarn build:api",
+    "build": "yarn build:api --prod",
     "test": "nx test",
     "build:api": "nx build api",
     "dev:api": "nx serve api",
