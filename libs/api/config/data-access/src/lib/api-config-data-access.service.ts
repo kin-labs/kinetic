@@ -17,6 +17,10 @@ export class ApiConfigDataAccessService {
     return 'api'
   }
 
+  get solanaRpcEndpoint() {
+    return this.config.get('solanaRpcEndpoint')
+  }
+
   configSummary() {
     return {
       environment: this.environment,
