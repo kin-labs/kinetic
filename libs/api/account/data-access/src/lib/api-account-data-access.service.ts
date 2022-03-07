@@ -1,18 +1,31 @@
 import { Injectable } from '@nestjs/common'
 import { AccountInfoResponse } from './entities/account-info.entity'
-import { CreateAccountResponse } from './entities/create-account.entity'
+import { Solana } from '@mogami/solana'
+import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
+import { ResolveTokenAccountsResponse } from './entities/resolve-token-accounts.entity'
+import { Commitment, TokenAccountsFilter } from '@solana/web3.js'
 
 @Injectable()
 export class ApiAccountDataAccessService {
-  getAccountInfo(): AccountInfoResponse {
-    return {}
+  readonly solana: Solana
+
+  constructor(readonly config: ApiConfigDataAccessService) {
+    this.solana = new Solana(this.config.solanaRpcEndpoint)
   }
 
-  createAccount(): CreateAccountResponse {
-    return {}
+  getAccountInfo(accountId: string, commitment?: Commitment) {
+    return this.solana.getAccountInfo(accountId, commitment)
   }
 
-  resolveTokenAccounts() {
-    return {}
+  // createAccount(newAccountRequest: CreateAccountRequest): CreateAccountResponse {
+  //   return this.solana.createAccount(newAccountRequest) as CreateAccountResponse
+  // }
+
+  resolveTokenAccounts(
+    accountId: string,
+    filter: TokenAccountsFilter,
+    commitment: Commitment,
+  ): ResolveTokenAccountsResponse {
+    return this.solana.resolveTokenAccounts(accountId, filter, commitment) as ResolveTokenAccountsResponse
   }
 }

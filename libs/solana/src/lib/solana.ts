@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common'
-import { Connection } from '@solana/web3.js'
+import { Commitment, Connection, PublicKey, TokenAccountsFilter } from '@solana/web3.js'
 import { parseEndpoint } from './helpers/parse-endpoint'
 
 export class Solana {
@@ -19,5 +19,14 @@ export class Solana {
 
   getMinimumBalanceForRentExemption(dataLength: number) {
     return this.connection.getMinimumBalanceForRentExemption(dataLength)
+  }
+  // createAccount(newAccountRequest) {}
+
+  getAccountInfo(accountId: string, commitment: Commitment) {
+    return this.connection.getParsedAccountInfo(new PublicKey(accountId), commitment)
+  }
+
+  resolveTokenAccounts(accountId: string, filter: TokenAccountsFilter, commitment: Commitment) {
+    return this.connection.getTokenAccountsByOwner(new PublicKey(accountId), filter, commitment)
   }
 }
