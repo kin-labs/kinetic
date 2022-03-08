@@ -12,4 +12,12 @@ export class Solana {
     this.connection = new Connection(this.endpoint)
     this.logger.verbose(`RPC Endpoint: ${this.endpoint}`)
   }
+
+  getRecentBlockhash() {
+    return this.connection.getRecentBlockhash()
+  }
+
+  getMinimumBalanceForRentExemption(dataLength: number) {
+    return this.connection.getMinimumBalanceForRentExemption(dataLength)
+  }
 }

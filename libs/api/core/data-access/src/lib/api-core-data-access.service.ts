@@ -6,7 +6,8 @@ import { PrismaClient } from '@prisma/client'
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
   readonly solana: Solana
-  constructor(private readonly config: ApiConfigDataAccessService) {
+
+  constructor(readonly config: ApiConfigDataAccessService) {
     super()
     this.solana = new Solana(config.solanaRpcEndpoint)
   }
