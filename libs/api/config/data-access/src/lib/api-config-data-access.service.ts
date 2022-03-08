@@ -21,7 +21,7 @@ export class ApiConfigDataAccessService {
   }
 
   get mogamiSubsidizerKeypair(): Keypair {
-    return Keypair.fromSecretKey(Uint8Array.from(this.config.get('mogamiSubsidizerSecretKey')))
+    return this.config.get('mogamiSubsidizerKeypair')
   }
 
   get mogamiSubsidizerPublicKey(): PublicKey {
