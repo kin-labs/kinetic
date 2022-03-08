@@ -1,18 +1,23 @@
+import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Injectable } from '@nestjs/common'
-import { AccountInfoResponse } from './entities/account-info.entity'
-import { CreateAccountResponse } from './entities/create-account.entity'
+import { Commitment, PublicKey } from '@solana/web3.js'
 
 @Injectable()
 export class ApiAccountDataAccessService {
-  getAccountInfo(): AccountInfoResponse {
-    return {}
+  constructor(readonly data: ApiCoreDataAccessService) {}
+
+  getAccountInfo(accountId: string, commitment?: Commitment) {
+    return this.data.solana.getAccountInfo(accountId, { commitment })
   }
 
-  createAccount(): CreateAccountResponse {
-    return {}
-  }
+  // createAccount(newAccountRequest: CreateAccountRequest) {
+  //   return this.data.solana.createAccount(newAccountRequest)
+  // }
 
-  resolveTokenAccounts() {
-    return {}
+  tokenAccounts(accountId: string, commitment: Commitment) {
+    return this.data.solana.tokenAccounts(accountId, {
+      commitment,
+      filter: { mint: new PublicKey(this.data.config.mogamiMintPublicKey) },
+    })
   }
 }

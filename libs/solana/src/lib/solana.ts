@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common'
-import { Connection } from '@solana/web3.js'
+import { Commitment, Connection, PublicKey, TokenAccountsFilter } from '@solana/web3.js'
 import { parseEndpoint } from './helpers/parse-endpoint'
 
 export class Solana {
@@ -13,11 +13,22 @@ export class Solana {
     this.logger.verbose(`RPC Endpoint: ${this.endpoint}`)
   }
 
-  getRecentBlockhash() {
-    return this.connection.getRecentBlockhash()
+  getAccountInfo(accountId: string, { commitment = 'single' }: { commitment?: Commitment }) {
+    return this.connection.getParsedAccountInfo(new PublicKey(accountId), commitment)
   }
 
   getMinimumBalanceForRentExemption(dataLength: number) {
     return this.connection.getMinimumBalanceForRentExemption(dataLength)
+  }
+
+  getRecentBlockhash() {
+    return this.connection.getRecentBlockhash()
+  }
+
+  tokenAccounts(
+    accountId: string,
+    { filter, commitment = 'single' }: { filter: TokenAccountsFilter; commitment?: Commitment },
+  ) {
+    return this.connection.getTokenAccountsByOwner(new PublicKey(accountId), filter, commitment)
   }
 }

@@ -8,6 +8,7 @@ on:
 
 env:
   DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=mogami'
+  MOGAMI_MINT_PUBLIC_KEY: 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6'
   NX_CLOUD_DISTRIBUTED_EXECUTION: true
   SOLANA_RPC_ENDPOINT: 'http://localhost:8899'
 
