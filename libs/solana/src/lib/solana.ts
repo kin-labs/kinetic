@@ -13,20 +13,22 @@ export class Solana {
     this.logger.verbose(`RPC Endpoint: ${this.endpoint}`)
   }
 
-  getRecentBlockhash() {
-    return this.connection.getRecentBlockhash()
+  getAccountInfo(accountId: string, { commitment = 'single' }: { commitment?: Commitment }) {
+    return this.connection.getParsedAccountInfo(new PublicKey(accountId), commitment)
   }
 
   getMinimumBalanceForRentExemption(dataLength: number) {
     return this.connection.getMinimumBalanceForRentExemption(dataLength)
   }
-  // createAccount(newAccountRequest) {}
 
-  getAccountInfo(accountId: string, commitment: Commitment) {
-    return this.connection.getParsedAccountInfo(new PublicKey(accountId), commitment)
+  getRecentBlockhash() {
+    return this.connection.getRecentBlockhash()
   }
 
-  resolveTokenAccounts(accountId: string, filter: TokenAccountsFilter, commitment: Commitment) {
+  tokenAccounts(
+    accountId: string,
+    { filter, commitment = 'single' }: { filter: TokenAccountsFilter; commitment?: Commitment },
+  ) {
     return this.connection.getTokenAccountsByOwner(new PublicKey(accountId), filter, commitment)
   }
 }

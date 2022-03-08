@@ -16,6 +16,10 @@ export class ApiConfigDataAccessService {
     return this.config.get('environment')
   }
 
+  get mogamiMintPublicKey() {
+    return this.config.get('mogamiMintPublicKey')
+  }
+
   get port() {
     return this.config.get('port')
   }
@@ -38,7 +42,7 @@ export class ApiConfigDataAccessService {
   getServiceConfig() {
     return {
       subsidizer: this.config.get('mogamiSubsidizerSecretKey'),
-      token: this.config.get('mogamiMintPublicKey'),
+      token: this.mogamiMintPublicKey,
       tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
     }
   }

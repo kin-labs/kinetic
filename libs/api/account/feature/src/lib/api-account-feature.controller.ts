@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Query } from '@nestjs/common'
 import { ApiAccountDataAccessService } from '@mogami/api/account/data-access'
+import { Controller, Get, Param, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { Commitment, TokenAccountsFilter } from '@solana/web3.js'
+import { Commitment } from '@solana/web3.js'
 
 @ApiTags('account')
 @Controller('account')
@@ -18,12 +18,8 @@ export class ApiAccountFeatureController {
   //   return this.service.createAccount(null)
   // }
 
-  @Get('resolve-token-accounts')
-  resolveTokenAccounts(
-    @Param('accountId') accountId: string,
-    @Param('filter') filter: TokenAccountsFilter,
-    @Query('commitment') commitment: Commitment,
-  ) {
-    return this.service.resolveTokenAccounts(accountId, filter, commitment)
+  @Get('token-accounts/:accountId')
+  tokenAccounts(@Param('accountId') accountId: string, @Query('commitment') commitment: Commitment) {
+    return this.service.tokenAccounts(accountId, commitment)
   }
 }

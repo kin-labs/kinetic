@@ -1,31 +1,23 @@
+import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Injectable } from '@nestjs/common'
-import { AccountInfoResponse } from './entities/account-info.entity'
-import { Solana } from '@mogami/solana'
-import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
-import { ResolveTokenAccountsResponse } from './entities/resolve-token-accounts.entity'
-import { Commitment, TokenAccountsFilter } from '@solana/web3.js'
+import { Commitment, PublicKey } from '@solana/web3.js'
 
 @Injectable()
 export class ApiAccountDataAccessService {
-  readonly solana: Solana
-
-  constructor(readonly config: ApiConfigDataAccessService) {
-    this.solana = new Solana(this.config.solanaRpcEndpoint)
-  }
+  constructor(readonly data: ApiCoreDataAccessService) {}
 
   getAccountInfo(accountId: string, commitment?: Commitment) {
-    return this.solana.getAccountInfo(accountId, commitment)
+    return this.data.solana.getAccountInfo(accountId, { commitment })
   }
 
-  // createAccount(newAccountRequest: CreateAccountRequest): CreateAccountResponse {
-  //   return this.solana.createAccount(newAccountRequest) as CreateAccountResponse
+  // createAccount(newAccountRequest: CreateAccountRequest) {
+  //   return this.data.solana.createAccount(newAccountRequest)
   // }
 
-  resolveTokenAccounts(
-    accountId: string,
-    filter: TokenAccountsFilter,
-    commitment: Commitment,
-  ): ResolveTokenAccountsResponse {
-    return this.solana.resolveTokenAccounts(accountId, filter, commitment) as ResolveTokenAccountsResponse
+  tokenAccounts(accountId: string, commitment: Commitment) {
+    return this.data.solana.tokenAccounts(accountId, {
+      commitment,
+      filter: { mint: new PublicKey(this.data.config.mogamiMintPublicKey) },
+    })
   }
 }

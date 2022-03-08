@@ -1,9 +1,9 @@
+import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 import { Module } from '@nestjs/common'
 import { ApiAccountDataAccessService } from './api-account-data-access.service'
-import { ApiConfigDataAccessModule } from '@mogami/api/config/data-access'
 
 @Module({
-  imports: [ApiConfigDataAccessModule],
+  imports: [ApiCoreDataAccessModule],
   providers: [ApiAccountDataAccessService],
   exports: [ApiAccountDataAccessService],
 })
