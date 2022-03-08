@@ -32,7 +32,7 @@ yarn dev:api
 
 # Building the project
 
-You can build both apps into a production build:
+You can build the app into a production build:
 
 ```shell
 yarn build
@@ -42,4 +42,12 @@ After that, you can run the production app:
 
 ```shell
 yarn start
+```
+
+# Testing the project
+
+Use this command to the e2e test of the API:
+
+```shell
+nx e2e api-e2e
 ```

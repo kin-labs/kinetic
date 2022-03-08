@@ -8,6 +8,7 @@
     "api-config-feature": "libs/api/config/feature",
     "api-core-data-access": "libs/api/core/data-access",
     "api-core-feature": "libs/api/core/feature",
+    "api-e2e": "apps/api-e2e",
     "api-transaction-data-access": "libs/api/transaction/data-access",
     "api-transaction-feature": "libs/api/transaction/feature",
     "solana": "libs/solana"

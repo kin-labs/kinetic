@@ -6,17 +6,25 @@ on:
     branches:
       - main
 
+env:
+  DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=mogami'
+  SOLANA_RPC_ENDPOINT: 'http://localhost:8899'
+
 jobs:
   build:
     services:
       postgres:
         image: postgres:12
         env:
-          POSTGRES_DB: nxpm
-          POSTGRES_USER: nxpm
-          POSTGRES_PASSWORD: nxpm
+          POSTGRES_DB: prisma
+          POSTGRES_USER: prisma
+          POSTGRES_PASSWORD: prisma
         ports: ['5432:5432']
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      solana:
+        image: solanalabs/solana:v1.9.9
+        ports: ['8899:8899', '8900:8900']
+        options: --entrypoint="solana-test-validator"
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
@@ -33,5 +41,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install --frozen-lockfile
-      - run: yarn build
       - run: yarn format:check
+      - run: yarn build
+      - run: yarn nx e2e api-e2e

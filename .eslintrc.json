@@ -10,7 +10,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": [],
+            "allow": ["@mogami/api-app-module"],
             "depConstraints": [
               {
                 "sourceTag": "*",
