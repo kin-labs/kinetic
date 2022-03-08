@@ -1,6 +1,6 @@
+import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Injectable } from '@nestjs/common'
 import { HistoryResponse } from './entities/history.entity'
-import { MinimumBalanceForRentExemptionResponse } from './entities/minimum-balance-for-rent-exemtion.entity'
 import { MinimumKinVersionResponse } from './entities/minimum-kin-version.entity'
 import { RecentBlockhashResponse } from './entities/recent-blockhash.entity'
 import { ServiceConfigResponse } from './entities/service-config.entity'
@@ -9,24 +9,22 @@ import { SubmitTransactionResponse } from './entities/submit-transaction.entity'
 
 @Injectable()
 export class ApiTransactionDataAccessService {
+  constructor(readonly data: ApiCoreDataAccessService) {}
+
   getServiceConfig(): ServiceConfigResponse {
-    return {}
+    return this.data.config.getServiceConfig()
   }
 
   getMinimumKinVersion(): MinimumKinVersionResponse {
-    return {
-      version: 1,
-    }
+    return { version: 5 }
   }
 
-  getRecentBlockhash(): RecentBlockhashResponse {
-    return {}
+  getRecentBlockhash(): Promise<RecentBlockhashResponse> {
+    return this.data.solana.getRecentBlockhash()
   }
 
-  getMinimumBalanceForRentExemption(size: number): MinimumBalanceForRentExemptionResponse {
-    return {
-      lamports: 0,
-    }
+  getMinimumBalanceForRentExemption(dataLength: number): Promise<number> {
+    return this.data.solana.getMinimumBalanceForRentExemption(dataLength)
   }
 
   getHistory(): HistoryResponse {

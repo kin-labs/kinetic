@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common'
+import { Controller, Get, Post, Param } from '@nestjs/common'
 import { ApiTransactionDataAccessService } from '@mogami/api/transaction/data-access'
 import { ApiTags } from '@nestjs/swagger'
 
@@ -12,7 +12,7 @@ export class ApiTransactionFeatureController {
     return this.service.getServiceConfig()
   }
 
-  @Get('mininmum-kin-version')
+  @Get('minimum-kin-version')
   getMinimumKinVersion() {
     return this.service.getMinimumKinVersion()
   }
@@ -22,9 +22,9 @@ export class ApiTransactionFeatureController {
     return this.service.getRecentBlockhash()
   }
 
-  @Get('minimum-balance-for-rent-exemption')
-  getMinimumBalanceForRentExemption() {
-    return this.service.getMinimumBalanceForRentExemption(1)
+  @Get('minimum-balance-for-rent-exemption/:dataLength')
+  getMinimumBalanceForRentExemption(@Param('dataLength') dataLength: number) {
+    return this.service.getMinimumBalanceForRentExemption(dataLength)
   }
 
   @Get('history')
