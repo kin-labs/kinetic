@@ -51,3 +51,21 @@ Use this command to the e2e test of the API:
 ```shell
 nx e2e api-e2e
 ```
+
+Use this command to run a unit test of one of the projects in the workspace:
+
+```shell
+nx test api-core-feature
+```
+
+Or in watch mode:
+
+```shell
+nx test api-core-feature --watch
+```
+
+Run the unit tests on all the projects.
+
+```shell
+nx run-many --target test --all
+```

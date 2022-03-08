@@ -1,3 +1,4 @@
+import { ApiConfigDataAccessModule } from '@mogami/api/config/data-access'
 import { Test } from '@nestjs/testing'
 import { ApiConfigFeatureController } from './api-config-feature.controller'
 
@@ -7,6 +8,7 @@ describe('ApiConfigFeatureController', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [],
+      imports: [ApiConfigDataAccessModule],
       controllers: [ApiConfigFeatureController],
     }).compile()
 

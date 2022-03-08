@@ -67,3 +67,4 @@ jobs:
       - run: yarn format:check
       - run: yarn build
       - run: yarn nx e2e api-e2e
+      - run: yarn nx affected --target test

@@ -1,3 +1,4 @@
+import { ConfigModule } from '@nestjs/config'
 import { Test } from '@nestjs/testing'
 import { ApiConfigDataAccessService } from './api-config-data-access.service'
 
@@ -6,6 +7,7 @@ describe('ApiConfigDataAccessService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [ConfigModule],
       providers: [ApiConfigDataAccessService],
     }).compile()
 

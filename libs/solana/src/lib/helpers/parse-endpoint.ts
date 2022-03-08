@@ -6,5 +6,5 @@ import { Cluster, clusterApiUrl } from '@solana/web3.js'
  * @returns {string}
  */
 export function parseEndpoint(endpoint: string): string {
-  return endpoint.startsWith('http') ? endpoint : clusterApiUrl(endpoint as Cluster)
+  return endpoint?.startsWith('http') ? endpoint : clusterApiUrl(endpoint as Cluster)
 }
