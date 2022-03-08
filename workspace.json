@@ -11,6 +11,7 @@
     "api-e2e": "apps/api-e2e",
     "api-transaction-data-access": "libs/api/transaction/data-access",
     "api-transaction-feature": "libs/api/transaction/feature",
+    "sdk": "libs/sdk",
     "solana": "libs/solana"
   }
 }
