@@ -31,8 +31,8 @@ jobs:
           node-version: '14'
       - run: yarn install --frozen-lockfile
       - run: yarn format:check
-      - run: yarn nx e2e api-e2e
       - run: yarn nx-cloud start-ci-run
+      - run: yarn nx e2e api-e2e
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
@@ -70,8 +70,8 @@ jobs:
           node-version: '14'
       - run: yarn install --frozen-lockfile
       - run: yarn format:check
-      - run: yarn nx e2e api-e2e
       - run: yarn nx-cloud start-ci-run
+      - run: yarn nx e2e api-e2e
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
@@ -80,6 +80,19 @@ jobs:
     runs-on: ubuntu-20.04
     name: Agent 1
     timeout-minutes: 60
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: prisma
+          POSTGRES_USER: prisma
+          POSTGRES_PASSWORD: prisma
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      solana:
+        image: solanalabs/solana:v1.9.9
+        ports: ['8899:8899', '8900:8900']
+        options: --entrypoint="solana-test-validator"
     strategy:
       matrix:
         agent: [1, 2, 3]
