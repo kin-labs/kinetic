@@ -1,6 +1,6 @@
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Solana } from '@mogami/solana'
-import { Injectable, OnModuleInit } from '@nestjs/common'
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
 
 @Injectable()
@@ -9,7 +9,9 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   constructor(readonly config: ApiConfigDataAccessService) {
     super()
-    this.solana = new Solana(config.solanaRpcEndpoint)
+    this.solana = new Solana(config.solanaRpcEndpoint, {
+      logger: new Logger('@mogami/solana'),
+    })
   }
 
   uptime() {

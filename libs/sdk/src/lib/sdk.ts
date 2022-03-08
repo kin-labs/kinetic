@@ -1,14 +1,18 @@
+import { Solana } from '@mogami/solana'
 import { Http } from './helpers/http'
 import { SdkConfig } from './interfaces/sdk-config'
 
 interface ServerConfig {
   environment: string
   port: number
+  solanaRpcEndpoint: string
 }
 
 export class Sdk {
   http: Http
   serverConfig: ServerConfig
+  solana: Solana
+
   constructor(readonly sdkConfig: SdkConfig) {
     if (!sdkConfig.endpoint && !sdkConfig.http) {
       throw new Error(`Provide either and 'endpoint' or 'http' parameter.`)
@@ -24,6 +28,9 @@ export class Sdk {
     try {
       this.serverConfig = await this.http.get('/api/config')
       this.sdkConfig?.logger?.log(`Initializing Server: `, this.serverConfig)
+      this.solana = new Solana(this.sdkConfig?.solanaRpcEndpoint || this.serverConfig.solanaRpcEndpoint, {
+        logger: this.sdkConfig?.logger,
+      })
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
       throw new Error(`Error initializing Server.`)

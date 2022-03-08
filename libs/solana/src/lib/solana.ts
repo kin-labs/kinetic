@@ -1,16 +1,18 @@
-import { Logger } from '@nestjs/common'
 import { Commitment, Connection, PublicKey, TokenAccountsFilter } from '@solana/web3.js'
 import { parseEndpoint } from './helpers/parse-endpoint'
+
+export interface SolanaConfig {
+  logger?
+}
 
 export class Solana {
   readonly endpoint: string
   readonly connection: Connection
-  readonly logger = new Logger('@mogami/solana')
 
-  constructor(endpoint: string) {
+  constructor(endpoint: string, private readonly config?: SolanaConfig) {
     this.endpoint = parseEndpoint(endpoint)
     this.connection = new Connection(this.endpoint)
-    this.logger.verbose(`RPC Endpoint: ${this.endpoint}`)
+    config?.logger?.log(`Solana RPC Endpoint: ${this.endpoint}`)
   }
 
   getAccountInfo(accountId: string, { commitment = 'single' }: { commitment?: Commitment }) {

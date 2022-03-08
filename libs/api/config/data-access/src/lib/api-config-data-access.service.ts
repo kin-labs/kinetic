@@ -44,6 +44,7 @@ export class ApiConfigDataAccessService {
     return {
       environment: this.environment,
       port: this.port,
+      solanaRpcEndpoint: this.solanaRpcEndpoint,
     }
   }
 
