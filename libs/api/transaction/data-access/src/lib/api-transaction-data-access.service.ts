@@ -1,3 +1,5 @@
+import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { Solana } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
 import { HistoryResponse } from './entities/history.entity'
 import { MinimumKinVersionResponse } from './entities/minimum-kin-version.entity'
@@ -5,25 +7,21 @@ import { RecentBlockhashResponse } from './entities/recent-blockhash.entity'
 import { ServiceConfigResponse } from './entities/service-config.entity'
 import { SignTransactionResponse } from './entities/sign-transaction.entity'
 import { SubmitTransactionResponse } from './entities/submit-transaction.entity'
-import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
-import { Solana } from '@mogami/solana'
 
 @Injectable()
 export class ApiTransactionDataAccessService {
   readonly solana: Solana
 
-  constructor(readonly config: ApiConfigDataAccessService) {
-    this.solana = new Solana(this.config.solanaRpcEndpoint)
+  constructor(readonly data: ApiCoreDataAccessService) {
+    this.solana = new Solana(this.data.config.solanaRpcEndpoint)
   }
 
   getServiceConfig(): ServiceConfigResponse {
-    return this.config.getServiceConfig()
+    return this.data.config.getServiceConfig()
   }
 
   getMinimumKinVersion(): MinimumKinVersionResponse {
-    return {
-      version: this.config.minimumKinVersion,
-    }
+    return { version: 5 }
   }
 
   getRecentBlockhash(): Promise<RecentBlockhashResponse> {

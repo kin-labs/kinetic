@@ -22,22 +22,17 @@ export class ApiConfigDataAccessService {
     return this.config.get('solanaRpcEndpoint')
   }
 
-  get minimumKinVersion() {
-    return this.config.get('minimumKinVersion')
-  }
-
   configSummary() {
     return {
       environment: this.environment,
       port: this.port,
-      minimumKinVersion: this.minimumKinVersion,
     }
   }
 
   getServiceConfig() {
     return {
       subsidizer: this.config.get('mogamiSubsidizerSecretKey'),
-      token: this.config.get('mogamiMintPubliKey'),
+      token: this.config.get('mogamiMintPublicKey'),
       tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
     }
   }
