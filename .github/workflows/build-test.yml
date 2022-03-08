@@ -8,11 +8,12 @@ on:
 
 env:
   DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=mogami'
+  NX_CLOUD_DISTRIBUTED_EXECUTION: true
   SOLANA_RPC_ENDPOINT: 'http://localhost:8899'
 
 jobs:
   main:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: ${{ github.event_name != 'pull_request' }}
     steps:
       - uses: actions/checkout@v3
@@ -21,19 +22,24 @@ jobs:
           fetch-depth: 0
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
-      - run: npm install
-      - run: npx nx affected --target=build --parallel=3
-      - run: npx nx affected --target=test --parallel=2
+      - run: yarn install --frozen-lockfile
+      - run: yarn format:check
+      - run: yarn nx e2e api-e2e
+      - run: yarn nx-cloud start-ci-run
+      - run: yarn nx affected --target=build --parallel --max-parallel=3
+      - run: yarn nx affected --target=lint --parallel --max-parallel=3
+      - run: yarn nx affected --target=test --parallel --max-parallel=2
+      - run: yarn nx-cloud stop-all-agents
   pr:
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'pull_request' }}
-    strategy:
-      matrix:
-        node-version: [14.x]
-        operating-system: [ubuntu-20.04]
     services:
       postgres:
         image: postgres:12
@@ -59,12 +65,33 @@ jobs:
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Setup node ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '14'
       - run: yarn install --frozen-lockfile
       - run: yarn format:check
-      - run: yarn build
       - run: yarn nx e2e api-e2e
-      - run: yarn nx affected --target test
+      - run: yarn nx-cloud start-ci-run
+      - run: yarn nx affected --target=build --parallel --max-parallel=3
+      - run: yarn nx affected --target=lint --parallel --max-parallel=3
+      - run: yarn nx affected --target=test --parallel --max-parallel=2
+      - run: yarn nx-cloud stop-all-agents
+  agents:
+    runs-on: ubuntu-20.04
+    name: Agent 1
+    timeout-minutes: 60
+    strategy:
+      matrix:
+        agent: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - run: yarn install --frozen-lockfile
+      - name: Start Nx Agent ${{ matrix.agent }}
+        run: yarn nx-cloud start-agent
