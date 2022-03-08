@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { PublicKey } from '@solana/web3.js'
+import { Keypair, PublicKey } from '@solana/web3.js'
 
 // TODO Figure out why this import breaks the build
 // Related issue: https://github.com/kin-labs/mogami/issues/26
@@ -18,6 +18,14 @@ export class ApiConfigDataAccessService {
 
   get mogamiMintPublicKey() {
     return this.config.get('mogamiMintPublicKey')
+  }
+
+  get mogamiSubsidizerKeypair(): Keypair {
+    return Keypair.fromSecretKey(Uint8Array.from(this.config.get('mogamiSubsidizerSecretKey')))
+  }
+
+  get mogamiSubsidizerPublicKey(): PublicKey {
+    return this.mogamiSubsidizerKeypair.publicKey
   }
 
   get port() {
@@ -41,7 +49,7 @@ export class ApiConfigDataAccessService {
 
   getServiceConfig() {
     return {
-      subsidizer: this.config.get('mogamiSubsidizerSecretKey'),
+      subsidizer: this.mogamiSubsidizerPublicKey.toBase58(),
       token: this.mogamiMintPublicKey,
       tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
     }
