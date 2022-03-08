@@ -49,8 +49,8 @@ export class ApiConfigDataAccessService {
 
   getServiceConfig() {
     return {
+      mint: this.mogamiMintPublicKey,
       subsidizer: this.mogamiSubsidizerPublicKey.toBase58(),
-      token: this.mogamiMintPublicKey,
       tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
     }
   }

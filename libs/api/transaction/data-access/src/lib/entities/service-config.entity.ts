@@ -1,5 +1,5 @@
 export interface ServiceConfigResponse {
+  mint: string
   subsidizer: string
-  token: string
   tokenProgram: string
 }
