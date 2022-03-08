@@ -7,9 +7,8 @@ import { AppModule } from './app/app.module'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  const globalPrefix = 'api'
   const config = app.get(ApiConfigDataAccessService)
-  app.setGlobalPrefix(globalPrefix)
+  app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -23,10 +22,10 @@ async function bootstrap() {
     .addTag('mogami')
     .build()
   const document = SwaggerModule.createDocument(app, configSwagger)
-  SwaggerModule.setup('api', app, document)
+  SwaggerModule.setup(config.prefix, app, document)
 
   await app.listen(config.port)
-  Logger.log(`🚀 Application is running on: http://localhost:${config.port}/${globalPrefix}`)
+  Logger.log(`🚀 Application is running on: http://localhost:${config.port}/${config.prefix}`)
 }
 
 bootstrap()
