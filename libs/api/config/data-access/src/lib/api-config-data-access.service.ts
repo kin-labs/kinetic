@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common'
+import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Keypair, PublicKey } from '@solana/web3.js'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
 // TODO Figure out why this import breaks the build
 // Related issue: https://github.com/kin-labs/mogami/issues/26
@@ -45,6 +46,17 @@ export class ApiConfigDataAccessService {
       environment: this.environment,
       port: this.port,
     }
+  }
+
+  configureSwagger(app: INestApplication) {
+    const config = new DocumentBuilder()
+      .setTitle('Mogami')
+      .setDescription('The Mogami API description')
+      .setVersion('1.0')
+      .addTag('mogami')
+      .build()
+    const document = SwaggerModule.createDocument(app, config)
+    SwaggerModule.setup(this.prefix, app, document)
   }
 
   getServiceConfig() {
