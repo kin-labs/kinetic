@@ -2,12 +2,7 @@ import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Keypair, PublicKey } from '@solana/web3.js'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
-
-// TODO Figure out why this import breaks the build
-// Related issue: https://github.com/kin-labs/mogami/issues/26
-// import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
-
-const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 
 @Injectable()
 export class ApiConfigDataAccessService {
