@@ -1,10 +1,16 @@
 import { Solana } from '@mogami/solana'
+import { AccountSdk, TransactionSdk } from './feature'
 import { SdkConfig } from './interfaces/sdk-config'
 
 export class Sdk {
+  readonly account: AccountSdk
+  readonly transaction: TransactionSdk
   solana: Solana
 
-  constructor(readonly sdkConfig: SdkConfig) {}
+  constructor(readonly sdkConfig: SdkConfig) {
+    this.account = new AccountSdk(sdkConfig)
+    this.transaction = new TransactionSdk(sdkConfig)
+  }
 
   get solanaRpcEndpoint() {
     return this.sdkConfig.solanaRpcEndpoint || 'mainnet-beta'
@@ -13,6 +19,8 @@ export class Sdk {
   async init() {
     try {
       this.solana = new Solana(this.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
+      this.account.solana = this.solana
+      this.transaction.solana = this.solana
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
       throw new Error(`Error initializing Server.`)
