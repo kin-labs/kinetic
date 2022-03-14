@@ -13,6 +13,7 @@
     "api-transaction-feature": "libs/api/transaction/feature",
     "demo": "apps/demo",
     "demo-e2e": "apps/demo-e2e",
+    "keypair": "libs/keypair",
     "sdk": "libs/sdk",
     "solana": "libs/solana"
   }
