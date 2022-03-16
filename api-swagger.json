@@ -1,0 +1,96 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/uptime": {
+      "get": {
+        "operationId": "ApiCoreFeatureController_uptime",
+        "parameters": [],
+        "responses": { "200": { "description": "" } }
+      }
+    },
+    "/api/config": {
+      "get": {
+        "operationId": "ApiConfigFeatureController_config",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["config"]
+      }
+    },
+    "/api/account/info/{accountId}": {
+      "get": {
+        "operationId": "ApiAccountFeatureController_getAccountInfo",
+        "parameters": [{ "name": "accountId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["account"]
+      }
+    },
+    "/api/account/token-accounts/{accountId}": {
+      "get": {
+        "operationId": "ApiAccountFeatureController_tokenAccounts",
+        "parameters": [{ "name": "accountId", "required": true, "in": "path", "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["account"]
+      }
+    },
+    "/api/transaction/service-config": {
+      "get": {
+        "operationId": "ApiTransactionFeatureController_getServiceConfig",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["transaction"]
+      }
+    },
+    "/api/transaction/minimum-kin-version": {
+      "get": {
+        "operationId": "ApiTransactionFeatureController_getMinimumKinVersion",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["transaction"]
+      }
+    },
+    "/api/transaction/recent-blockhash": {
+      "get": {
+        "operationId": "ApiTransactionFeatureController_getRecentBlockhash",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["transaction"]
+      }
+    },
+    "/api/transaction/minimum-balance-for-rent-exemption/{dataLength}": {
+      "get": {
+        "operationId": "ApiTransactionFeatureController_getMinimumBalanceForRentExemption",
+        "parameters": [{ "name": "dataLength", "required": true, "in": "path", "schema": { "type": "number" } }],
+        "responses": { "200": { "description": "" } },
+        "tags": ["transaction"]
+      }
+    },
+    "/api/transaction/history": {
+      "get": {
+        "operationId": "ApiTransactionFeatureController_getHistory",
+        "parameters": [],
+        "responses": { "200": { "description": "" } },
+        "tags": ["transaction"]
+      }
+    },
+    "/api/transaction/sign-transaction": {
+      "post": {
+        "operationId": "ApiTransactionFeatureController_signTransaction",
+        "parameters": [],
+        "responses": { "201": { "description": "" } },
+        "tags": ["transaction"]
+      }
+    },
+    "/api/transaction/submit-transaction": {
+      "post": {
+        "operationId": "ApiTransactionFeatureController_submitTransaction",
+        "parameters": [],
+        "responses": { "201": { "description": "" } },
+        "tags": ["transaction"]
+      }
+    }
+  },
+  "info": { "title": "Mogami", "description": "The Mogami API description", "version": "1.0", "contact": {} },
+  "tags": [{ "name": "mogami", "description": "" }],
+  "servers": [],
+  "components": { "schemas": {} }
+}

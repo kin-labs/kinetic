@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { Keypair, PublicKey } from '@solana/web3.js'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import * as fs from 'fs'
 
 @Injectable()
 export class ApiConfigDataAccessService {
@@ -52,6 +53,9 @@ export class ApiConfigDataAccessService {
       .addTag('mogami')
       .build()
     const document = SwaggerModule.createDocument(app, config)
+    if (this.environment === 'development') {
+      fs.writeFileSync('./api-swagger.json', JSON.stringify(document))
+    }
     SwaggerModule.setup(this.prefix, app, document)
   }
 
