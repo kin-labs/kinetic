@@ -1,9 +1,10 @@
 import { Commitment, Connection, PublicKey } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
 import { parseEndpoint } from './helpers/parse-endpoint'
+import { SolanaLogger } from './interfaces/solana-logger'
 
 export interface SolanaConfig {
-  logger?
+  logger?: SolanaLogger
 }
 
 export type PublicKeyString = PublicKey | string
