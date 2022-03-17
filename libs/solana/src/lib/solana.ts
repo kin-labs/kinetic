@@ -1,6 +1,6 @@
-import { Commitment, Connection, PublicKey, TokenAccountsFilter } from '@solana/web3.js'
-import { parseEndpoint } from './helpers/parse-endpoint'
+import { Commitment, Connection, PublicKey } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
+import { parseEndpoint } from './helpers/parse-endpoint'
 
 export interface SolanaConfig {
   logger?
@@ -63,12 +63,5 @@ export class Solana {
   async getTokenBalances(account: PublicKeyString, mint: PublicKeyString): Promise<TokenBalance[]> {
     const tokens = await this.getTokenAccounts(account, mint)
     return Promise.all(tokens.map(async (account) => this.getTokenBalance(account)))
-  }
-
-  tokenAccounts(
-    accountId: PublicKeyString,
-    { filter, commitment = 'single' }: { filter: TokenAccountsFilter; commitment?: Commitment },
-  ) {
-    return this.connection.getTokenAccountsByOwner(new PublicKey(accountId), filter, commitment)
   }
 }
