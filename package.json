@@ -30,6 +30,7 @@
     "@solana/spl-token": "^0.2.0",
     "@solana/web3.js": "^1.35.1",
     "autoprefixer": "latest",
+    "bignumber": "^1.1.0",
     "bip39": "^3.0.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",

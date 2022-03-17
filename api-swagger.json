@@ -45,6 +45,27 @@
         "tags": ["account"]
       }
     },
+    "/api/account/balance/{accountId}": {
+      "get": {
+        "operationId": "ApiAccountFeatureController_getBalance",
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["account"]
+      }
+    },
     "/api/account/token-accounts/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_tokenAccounts",
