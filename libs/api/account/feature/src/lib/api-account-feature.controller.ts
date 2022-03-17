@@ -23,6 +23,11 @@ export class ApiAccountFeatureController {
     return this.service.getBalance(accountId)
   }
 
+  @Get('history/:accountId')
+  getHistory(@Param('accountId') accountId: string) {
+    return this.service.getHistory(accountId)
+  }
+
   @Get('token-accounts/:accountId')
   tokenAccounts(@Param('accountId') accountId: string) {
     return this.service.getTokenAccounts(accountId)

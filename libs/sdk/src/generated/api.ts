@@ -115,6 +115,42 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    apiAccountFeatureControllerGetHistory: async (
+      accountId: string,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'accountId' is not null or undefined
+      assertParamExists('apiAccountFeatureControllerGetHistory', 'accountId', accountId)
+      const localVarPath = `/api/account/history/{accountId}`.replace(
+        `{${'accountId'}}`,
+        encodeURIComponent(String(accountId)),
+      )
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
+     * @param {string} accountId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     apiAccountFeatureControllerTokenAccounts: async (
       accountId: string,
       options: AxiosRequestConfig = {},
@@ -193,6 +229,22 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    async apiAccountFeatureControllerGetHistory(
+      accountId: string,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerGetHistory(
+        accountId,
+        options,
+      )
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
+     * @param {string} accountId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     async apiAccountFeatureControllerTokenAccounts(
       accountId: string,
       options?: AxiosRequestConfig,
@@ -241,6 +293,17 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    apiAccountFeatureControllerGetHistory(accountId: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .apiAccountFeatureControllerGetHistory(accountId, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @param {string} accountId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     apiAccountFeatureControllerTokenAccounts(accountId: string, options?: any): AxiosPromise<void> {
       return localVarFp
         .apiAccountFeatureControllerTokenAccounts(accountId, options)
@@ -279,6 +342,19 @@ export class AccountApi extends BaseAPI {
   public apiAccountFeatureControllerGetBalance(accountId: string, options?: AxiosRequestConfig) {
     return AccountApiFp(this.configuration)
       .apiAccountFeatureControllerGetBalance(accountId, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {string} accountId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApi
+   */
+  public apiAccountFeatureControllerGetHistory(accountId: string, options?: AxiosRequestConfig) {
+    return AccountApiFp(this.configuration)
+      .apiAccountFeatureControllerGetHistory(accountId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
