@@ -22,8 +22,9 @@ export class ApiAccountFeatureController {
   getBalance(@Param('accountId') accountId: string) {
     return this.service.getBalance(accountId)
   }
+
   @Get('token-accounts/:accountId')
-  tokenAccounts(@Param('accountId') accountId: string, @Query('commitment') commitment: Commitment) {
-    return this.service.tokenAccounts(accountId, commitment)
+  tokenAccounts(@Param('accountId') accountId: string) {
+    return this.service.getTokenAccounts(accountId)
   }
 }
