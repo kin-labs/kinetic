@@ -1,2 +1,3 @@
+export * from './lib/helpers'
 export * from './lib/solana'
-export * from './lib/helpers/parse-endpoint'
+export * from './lib/interfaces'

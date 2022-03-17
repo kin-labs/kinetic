@@ -1,25 +1,7 @@
 import { Commitment, Connection, PublicKey } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
-import { parseEndpoint } from './helpers/parse-endpoint'
-import { SolanaLogger } from './interfaces/solana-logger'
-
-export interface SolanaConfig {
-  logger?: SolanaLogger
-}
-
-export type PublicKeyString = PublicKey | string
-
-export interface TokenBalance {
-  account: PublicKeyString
-  balance: BigNumber
-}
-
-export function getPublicKey(account: PublicKeyString): PublicKey {
-  if (typeof account === 'string') {
-    return new PublicKey(account)
-  }
-  return account
-}
+import { getPublicKey, parseEndpoint } from './helpers'
+import { PublicKeyString, SolanaConfig, TokenBalance } from './interfaces'
 
 export class Solana {
   readonly endpoint: string
