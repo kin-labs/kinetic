@@ -66,6 +66,27 @@
         "tags": ["account"]
       }
     },
+    "/api/account/history/{accountId}": {
+      "get": {
+        "operationId": "ApiAccountFeatureController_getHistory",
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["account"]
+      }
+    },
     "/api/account/token-accounts/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_tokenAccounts",

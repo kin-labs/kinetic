@@ -31,6 +31,14 @@ export class Solana {
     config?.logger?.log(`Solana RPC Endpoint: ${this.endpoint}`)
   }
 
+  async getAccountHistory(account: PublicKeyString) {
+    const history = await this.connection.getConfirmedSignaturesForAddress2(getPublicKey(account))
+    return {
+      account,
+      history,
+    }
+  }
+
   getAccountInfo(accountId: PublicKeyString, { commitment = 'single' }: { commitment?: Commitment }) {
     return this.connection.getParsedAccountInfo(new PublicKey(accountId), commitment)
   }
@@ -53,6 +61,10 @@ export class Solana {
     return res.value.map(({ pubkey }) => pubkey.toBase58())
   }
 
+  getTokenAccountsHistory(accounts: PublicKeyString[]) {
+    return Promise.all(accounts.map((account) => this.getAccountHistory(account)))
+  }
+
   async getTokenBalance(account: PublicKeyString): Promise<TokenBalance> {
     const res = await this.connection.getTokenAccountBalance(getPublicKey(account))
     return {
@@ -64,5 +76,9 @@ export class Solana {
   async getTokenBalances(account: PublicKeyString, mint: PublicKeyString): Promise<TokenBalance[]> {
     const tokens = await this.getTokenAccounts(account, mint)
     return Promise.all(tokens.map(async (account) => this.getTokenBalance(account)))
+  }
+
+  async getTokenHistory(account: PublicKeyString, mint: PublicKeyString) {
+    return this.getTokenAccounts(account, mint).then((accounts) => this.getTokenAccountsHistory(accounts))
   }
 }
