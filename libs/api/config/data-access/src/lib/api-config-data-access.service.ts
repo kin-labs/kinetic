@@ -54,7 +54,7 @@ export class ApiConfigDataAccessService {
       .build()
     const document = SwaggerModule.createDocument(app, config)
     if (this.environment === 'development') {
-      fs.writeFileSync('./api-swagger.json', JSON.stringify(document))
+      fs.writeFileSync('./api-swagger.json', JSON.stringify(document, null, 2))
     }
     SwaggerModule.setup(this.prefix, app, document)
   }
