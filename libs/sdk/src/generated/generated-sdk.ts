@@ -277,6 +277,20 @@ export class Api<SecurityDataType extends unknown> {
      * No description
      *
      * @tags account
+     * @name ApiAccountFeatureControllerGetBalance
+     * @request GET:/api/account/balance/{accountId}
+     */
+    apiAccountFeatureControllerGetBalance: (accountId: string, params: RequestParams = {}) =>
+      this.http.request<void, any>({
+        path: `/api/account/balance/${accountId}`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags account
      * @name ApiAccountFeatureControllerTokenAccounts
      * @request GET:/api/account/token-accounts/{accountId}
      */

@@ -21,51 +21,70 @@
             "description": ""
           }
         },
-        "tags": [
-          "config"
-        ]
+        "tags": ["config"]
       }
     },
     "/api/account/info/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_getAccountInfo",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
           }
         },
-        "tags": [
-          "account"
-        ]
+        "tags": ["account"]
       }
     },
     "/api/account/balance/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_getBalance",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
           }
         },
-        "tags": [
-          "account"
-        ]
+        "tags": ["account"]
       }
     },
     "/api/account/token-accounts/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_tokenAccounts",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
           }
         },
-        "tags": [
-          "account"
-        ]
+        "tags": ["account"]
       }
     },
     "/api/transaction/service-config": {
@@ -77,9 +96,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "transaction"
-        ]
+        "tags": ["transaction"]
       }
     },
     "/api/transaction/minimum-kin-version": {
@@ -91,9 +108,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "transaction"
-        ]
+        "tags": ["transaction"]
       }
     },
     "/api/transaction/recent-blockhash": {
@@ -105,9 +120,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "transaction"
-        ]
+        "tags": ["transaction"]
       }
     },
     "/api/transaction/minimum-balance-for-rent-exemption/{dataLength}": {
@@ -128,9 +141,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "transaction"
-        ]
+        "tags": ["transaction"]
       }
     },
     "/api/transaction/history": {
@@ -142,9 +153,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "transaction"
-        ]
+        "tags": ["transaction"]
       }
     },
     "/api/transaction/sign-transaction": {
@@ -156,9 +165,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "transaction"
-        ]
+        "tags": ["transaction"]
       }
     },
     "/api/transaction/submit-transaction": {
@@ -170,9 +177,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "transaction"
-        ]
+        "tags": ["transaction"]
       }
     }
   },
