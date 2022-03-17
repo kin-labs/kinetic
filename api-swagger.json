@@ -17,8 +17,15 @@
         "operationId": "ApiConfigFeatureController_config",
         "parameters": [],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiConfigSummary"
+                }
+              }
+            }
           }
         },
         "tags": ["config"]
@@ -220,6 +227,22 @@
     }
   ],
   "components": {
-    "schemas": {}
+    "schemas": {
+      "ApiConfigSummary": {
+        "type": "object",
+        "properties": {
+          "port": {
+            "type": "number"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "solanaRpcEndpoint": {
+            "type": "string"
+          }
+        },
+        "required": ["port", "environment", "solanaRpcEndpoint"]
+      }
+    }
   }
 }
