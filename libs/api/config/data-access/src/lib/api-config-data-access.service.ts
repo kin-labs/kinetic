@@ -55,6 +55,7 @@ export class ApiConfigDataAccessService {
       .setDescription('The Mogami API description')
       .setVersion('1.0')
       .addTag('mogami')
+      .addServer('http://localhost:3000')
       .build()
     const document = SwaggerModule.createDocument(app, config)
     if (this.environment === 'development') {
