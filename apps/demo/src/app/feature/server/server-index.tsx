@@ -1,8 +1,11 @@
-import { EyeIcon, TrashIcon } from '@heroicons/react/outline'
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useState } from 'react'
-import { Alert, Button, Card, Form, Input, Modal, Textarea } from 'react-daisyui'
+import { Button } from 'react-daisyui'
 import { serverDb, ServerEntity } from '../../data-access/server'
+import { UiAlert } from '../../ui/ui-alert/ui-alert'
+import { ServerCreateModal } from './server-create-modal'
+import { ServerDetailsModal } from './server-details-modal'
+import { ServerGrid } from './server-grid'
 
 export function ServerIndex() {
   const result = useLiveQuery(() => serverDb.server.toArray())
@@ -10,7 +13,7 @@ export function ServerIndex() {
   const [serverCreateVisible, setServerCreateVisible] = useState<boolean>(false)
   const [selectedServer, setSelectedServer] = useState<ServerEntity | null>()
 
-  const deleteServer = (id: string) => serverDb.server.delete(id)
+  const deleteServer = (server: ServerEntity) => serverDb.server.delete(server.id)
 
   const showServer = (server: ServerEntity) => {
     setSelectedServer(server)
@@ -30,35 +33,9 @@ export function ServerIndex() {
         <Button onClick={() => setServerCreateVisible(true)}>Add Server</Button>
       </div>
       {result?.length ? (
-        <div className="grid grid-cols-2 gap-6">
-          {result?.map((server) => (
-            <Card key={server.id} className="bg-base-300">
-              <Card.Body>
-                <div className="flex justify-between items-center">
-                  <div className="flex flex-col space-y-2">
-                    <code>{server.name}</code>
-                    <span className="text-sm">{server.endpoint}</span>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button onClick={() => showServer(server)}>
-                      <EyeIcon className="w-6 h-6 text-gray-500" />
-                    </button>
-                    <button onClick={() => deleteServer(server.id!)}>
-                      <TrashIcon className="w-6 h-6 text-red-500" />
-                    </button>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          ))}
-        </div>
+        <ServerGrid servers={result} showServer={showServer} deleteServer={deleteServer} />
       ) : (
-        <div>
-          <Alert status="info">
-            <div className="font-bold text-lg">No Servers found.</div>
-            <div>Add a new one to use the Mogami demo.</div>
-          </Alert>
-        </div>
+        <UiAlert status="info" title="No Servers found." message="Add a new one to use the Mogami demo." />
       )}
       <ServerCreateModal
         visible={serverCreateVisible}
@@ -71,46 +48,5 @@ export function ServerIndex() {
         visible={serverDetailsVisible}
       />
     </div>
-  )
-}
-
-function ServerCreateModal({
-  submit,
-  toggle,
-  visible,
-}: {
-  submit: (endpoint: string) => void
-  toggle: () => void
-  visible: boolean
-}) {
-  const [value, setValue] = useState<string>('http://localhost:3000/api')
-  return (
-    <Modal open={visible} acceptText="Import" onAccept={() => submit(value)} onCancel={toggle}>
-      <Input className="w-full" bordered onChange={(e) => setValue(e.target.value)} value={value} />
-    </Modal>
-  )
-}
-
-function ServerDetailsModal({
-  toggle,
-  server,
-  visible,
-}: {
-  toggle: () => void
-  server?: ServerEntity | null | undefined
-  visible: boolean
-}) {
-  return (
-    <Modal open={visible} footer={false}>
-      <Form>
-        <Form.Label>Name</Form.Label>
-        <Textarea rows={2} className="w-full" bordered value={server?.name} />
-        <Form.Label>Url</Form.Label>
-        <Textarea rows={1} className="w-full" bordered value={server?.endpoint} />
-      </Form>
-      <div className="modal-action">
-        <Button onClick={toggle}>Close</Button>
-      </div>
-    </Modal>
   )
 }
