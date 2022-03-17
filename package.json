@@ -9,7 +9,7 @@
     "build": "yarn build:api --prod",
     "test": "nx test",
     "build:api": "nx build api",
-    "build:sdk": "yarn openapi-generator-cli generate -i ./api-swagger.json -g typescript-axios -o libs/sdk/src/generated",
+    "build:sdk": "yarn openapi-generator-cli generate -i ./api-swagger.json -g typescript-axios -o libs/sdk/src/generated && nx format:write --uncommitted",
     "dev:api": "nx serve api",
     "dev:services": "docker compose up",
     "format": "nx format:write",
