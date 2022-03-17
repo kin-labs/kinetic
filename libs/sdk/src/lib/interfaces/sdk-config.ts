@@ -1,4 +1,6 @@
+import { SdkLogger } from './sdk-logger'
+
 export interface SdkConfig {
-  logger?
+  logger?: SdkLogger
   solanaRpcEndpoint?: string
 }

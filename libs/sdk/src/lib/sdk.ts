@@ -5,7 +5,7 @@ import { SdkConfig } from './interfaces/sdk-config'
 export class Sdk {
   readonly account: AccountSdk
   readonly transaction: TransactionSdk
-  solana: Solana
+  solana: Solana | undefined
 
   constructor(readonly sdkConfig: SdkConfig) {
     this.account = new AccountSdk(sdkConfig)
