@@ -1,15 +1,35 @@
 import { Solana } from '@mogami/solana'
+import { Configuration } from '../generated'
 import { AccountSdk, TransactionSdk } from './feature'
+import { ConfigSdk } from './feature/config-sdk'
+import { CoreSdk } from './feature/core-sdk'
 import { SdkConfig } from './interfaces/sdk-config'
 
 export class Sdk {
-  readonly account: AccountSdk
-  readonly transaction: TransactionSdk
   solana: Solana | undefined
 
+  // Config object for exposed generated APIs
+  private readonly apiConfig: Configuration
+
+  // Exposed generated APIs
+  readonly account: AccountSdk
+  readonly core: CoreSdk
+  readonly config: ConfigSdk
+  readonly transaction: TransactionSdk
+
   constructor(readonly sdkConfig: SdkConfig) {
-    this.account = new AccountSdk(sdkConfig)
-    this.transaction = new TransactionSdk(sdkConfig)
+    // Create the API Configuration
+    this.apiConfig = new Configuration({ basePath: sdkConfig.endpoint })
+
+    // Configure the APIs
+    this.account = new AccountSdk(this.apiConfig)
+    this.config = new ConfigSdk(this.apiConfig)
+    this.core = new CoreSdk(this.apiConfig)
+    this.transaction = new TransactionSdk(this.apiConfig)
+  }
+
+  get endpoint() {
+    return this.sdkConfig.endpoint
   }
 
   get solanaRpcEndpoint() {
@@ -19,8 +39,6 @@ export class Sdk {
   async init() {
     try {
       this.solana = new Solana(this.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
-      this.account.solana = this.solana
-      this.transaction.solana = this.solana
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
       throw new Error(`Error initializing Server.`)

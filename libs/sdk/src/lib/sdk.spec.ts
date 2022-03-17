@@ -1,6 +1,7 @@
 import { SdkConfig } from './interfaces/sdk-config'
 import { Sdk } from './sdk'
 
+const MOGAMI_SDK_ENDPOINT = 'http://localhost:3000'
 const SOLANA_RPC_NAME = 'mainnet-beta'
 const SOLANA_RPC_ENDPOINT = 'https://api.mainnet-beta.solana.com/'
 
@@ -14,7 +15,7 @@ describe('sdk', () => {
   let sdk: Sdk
 
   beforeEach(async () => {
-    sdk = await Sdk.setup({})
+    sdk = await Sdk.setup({ endpoint: MOGAMI_SDK_ENDPOINT })
   })
 
   describe('initializing', () => {
@@ -25,7 +26,7 @@ describe('sdk', () => {
       })
 
       it('should connect with a logger configured', async () => {
-        const config: SdkConfig = { logger: console }
+        const config: SdkConfig = { endpoint: MOGAMI_SDK_ENDPOINT, logger: console }
         sdk = await Sdk.setup(config)
 
         expectConfiguredSdk(sdk)

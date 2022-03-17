@@ -1,7 +1,8 @@
-import { Solana } from '@mogami/solana'
-import { SdkConfig } from '../interfaces/sdk-config'
+import { Configuration, TransactionApi } from '../../generated'
 
 export class TransactionSdk {
-  solana: Solana | undefined
-  constructor(private readonly config: SdkConfig) {}
+  private api: TransactionApi
+  constructor(apiConfig: Configuration) {
+    this.api = new TransactionApi(apiConfig)
+  }
 }

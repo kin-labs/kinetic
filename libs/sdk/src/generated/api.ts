@@ -32,6 +32,32 @@ import {
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base'
 
 /**
+ *
+ * @export
+ * @interface ApiConfigSummary
+ */
+export interface ApiConfigSummary {
+  /**
+   *
+   * @type {number}
+   * @memberof ApiConfigSummary
+   */
+  port: number
+  /**
+   *
+   * @type {string}
+   * @memberof ApiConfigSummary
+   */
+  environment: string
+  /**
+   *
+   * @type {string}
+   * @memberof ApiConfigSummary
+   */
+  solanaRpcEndpoint: string
+}
+
+/**
  * AccountApi - axios parameter creator
  * @export
  */
@@ -422,7 +448,7 @@ export const ConfigApiFp = function (configuration?: Configuration) {
      */
     async apiConfigFeatureControllerConfig(
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiConfigSummary>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiConfigFeatureControllerConfig(options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -441,7 +467,7 @@ export const ConfigApiFactory = function (configuration?: Configuration, basePat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiConfigFeatureControllerConfig(options?: any): AxiosPromise<void> {
+    apiConfigFeatureControllerConfig(options?: any): AxiosPromise<ApiConfigSummary> {
       return localVarFp.apiConfigFeatureControllerConfig(options).then((request) => request(axios, basePath))
     },
   }
