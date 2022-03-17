@@ -5,6 +5,8 @@ export interface SolanaConfig {
   logger?
 }
 
+export type PublicKeyString = PublicKey | string
+
 export class Solana {
   readonly endpoint: string
   readonly connection: Connection
@@ -15,7 +17,7 @@ export class Solana {
     config?.logger?.log(`Solana RPC Endpoint: ${this.endpoint}`)
   }
 
-  getAccountInfo(accountId: string, { commitment = 'single' }: { commitment?: Commitment }) {
+  getAccountInfo(accountId: PublicKeyString, { commitment = 'single' }: { commitment?: Commitment }) {
     return this.connection.getParsedAccountInfo(new PublicKey(accountId), commitment)
   }
 
@@ -27,8 +29,12 @@ export class Solana {
     return this.connection.getRecentBlockhash()
   }
 
+  getBalance(accountId: PublicKeyString, mogamiMintPublicKey: any) {
+    return this.connection.getBalance(new PublicKey(accountId), mogamiMintPublicKey)
+  }
+
   tokenAccounts(
-    accountId: string,
+    accountId: PublicKeyString,
     { filter, commitment = 'single' }: { filter: TokenAccountsFilter; commitment?: Commitment },
   ) {
     return this.connection.getTokenAccountsByOwner(new PublicKey(accountId), filter, commitment)
