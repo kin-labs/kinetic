@@ -1,13 +1,17 @@
 import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Keypair, PublicKey } from '@solana/web3.js'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { Keypair, PublicKey } from '@solana/web3.js'
 import * as fs from 'fs'
 
 @Injectable()
 export class ApiConfigDataAccessService {
   constructor(private readonly config: ConfigService) {}
+
+  get corsOrigins(): string[] {
+    return this.config.get('cors.origin')
+  }
 
   get environment() {
     return this.config.get('environment')
