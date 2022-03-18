@@ -56,6 +56,57 @@ export interface ApiConfigSummary {
    */
   solanaRpcEndpoint: string
 }
+/**
+ *
+ * @export
+ * @interface CreateAccountRequest
+ */
+export interface CreateAccountRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountRequest
+   */
+  tx: string
+}
+/**
+ *
+ * @export
+ * @interface RecentBlockhashResponse
+ */
+export interface RecentBlockhashResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof RecentBlockhashResponse
+   */
+  blockhash: string
+}
+/**
+ *
+ * @export
+ * @interface ServiceConfigResponse
+ */
+export interface ServiceConfigResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof ServiceConfigResponse
+   */
+  mint: string
+  /**
+   *
+   * @type {string}
+   * @memberof ServiceConfigResponse
+   */
+  subsidizer: string
+  /**
+   *
+   * @type {string}
+   * @memberof ServiceConfigResponse
+   */
+  tokenProgram: string
+}
 
 /**
  * AccountApi - axios parameter creator
@@ -63,6 +114,42 @@ export interface ApiConfigSummary {
  */
 export const AccountApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
+    /**
+     *
+     * @param {CreateAccountRequest} createAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiAccountFeatureControllerCreateAccount: async (
+      createAccountRequest: CreateAccountRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createAccountRequest' is not null or undefined
+      assertParamExists('apiAccountFeatureControllerCreateAccount', 'createAccountRequest', createAccountRequest)
+      const localVarPath = `/api/account/create`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      localVarHeaderParameter['Content-Type'] = 'application/json'
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+      localVarRequestOptions.data = serializeDataIfNeeded(createAccountRequest, localVarRequestOptions, configuration)
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
     /**
      *
      * @param {string} accountId
@@ -219,6 +306,22 @@ export const AccountApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @param {CreateAccountRequest} createAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiAccountFeatureControllerCreateAccount(
+      createAccountRequest: CreateAccountRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerCreateAccount(
+        createAccountRequest,
+        options,
+      )
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
      * @param {string} accountId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -293,6 +396,20 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
   return {
     /**
      *
+     * @param {CreateAccountRequest} createAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiAccountFeatureControllerCreateAccount(
+      createAccountRequest: CreateAccountRequest,
+      options?: any,
+    ): AxiosPromise<void> {
+      return localVarFp
+        .apiAccountFeatureControllerCreateAccount(createAccountRequest, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     *
      * @param {string} accountId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -345,6 +462,22 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class AccountApi extends BaseAPI {
+  /**
+   *
+   * @param {CreateAccountRequest} createAccountRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApi
+   */
+  public apiAccountFeatureControllerCreateAccount(
+    createAccountRequest: CreateAccountRequest,
+    options?: AxiosRequestConfig,
+  ) {
+    return AccountApiFp(this.configuration)
+      .apiAccountFeatureControllerCreateAccount(createAccountRequest, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
   /**
    *
    * @param {string} accountId
@@ -856,7 +989,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
      */
     async apiTransactionFeatureControllerGetRecentBlockhash(
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecentBlockhashResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerGetRecentBlockhash(
         options,
       )
@@ -869,7 +1002,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
      */
     async apiTransactionFeatureControllerGetServiceConfig(
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ServiceConfigResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerGetServiceConfig(options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -948,7 +1081,7 @@ export const TransactionApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiTransactionFeatureControllerGetRecentBlockhash(options?: any): AxiosPromise<void> {
+    apiTransactionFeatureControllerGetRecentBlockhash(options?: any): AxiosPromise<RecentBlockhashResponse> {
       return localVarFp
         .apiTransactionFeatureControllerGetRecentBlockhash(options)
         .then((request) => request(axios, basePath))
@@ -958,7 +1091,7 @@ export const TransactionApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiTransactionFeatureControllerGetServiceConfig(options?: any): AxiosPromise<void> {
+    apiTransactionFeatureControllerGetServiceConfig(options?: any): AxiosPromise<ServiceConfigResponse> {
       return localVarFp
         .apiTransactionFeatureControllerGetServiceConfig(options)
         .then((request) => request(axios, basePath))

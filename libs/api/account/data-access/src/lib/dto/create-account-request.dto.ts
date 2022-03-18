@@ -1,7 +1,7 @@
-import { Commitment, Transaction } from '@solana/web3.js'
+import { ApiProperty } from '@nestjs/swagger'
 
 export class CreateAccountRequest {
-  commitment?: Commitment
   // Signed account create transaction created by the SDK.
-  transaction: Transaction
+  @ApiProperty()
+  tx: string
 }

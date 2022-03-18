@@ -1,6 +1,7 @@
-import { ApiAccountDataAccessService } from '@mogami/api/account/data-access'
-import { Controller, Get, Param, Query } from '@nestjs/common'
+import { ApiAccountDataAccessService, CreateAccountRequest } from '@mogami/api/account/data-access'
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { ApiBody } from '@nestjs/swagger/dist/decorators/api-body.decorator'
 import { Commitment } from '@solana/web3.js'
 
 @ApiTags('account')
@@ -13,10 +14,11 @@ export class ApiAccountFeatureController {
     return this.service.getAccountInfo(accountId, commitment)
   }
 
-  // @Post('account')
-  // createAccount() {
-  //   return this.service.createAccount(null)
-  // }
+  @Post('create')
+  @ApiBody({ type: CreateAccountRequest })
+  createAccount(@Body() body: CreateAccountRequest) {
+    return this.service.createAccount(body)
+  }
 
   @Get('balance/:accountId')
   getBalance(@Param('accountId') accountId: string) {

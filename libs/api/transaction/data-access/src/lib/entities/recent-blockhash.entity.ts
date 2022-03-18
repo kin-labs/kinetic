@@ -1,6 +1,6 @@
-import { FeeCalculator } from '@solana/web3.js'
+import { ApiProperty } from '@nestjs/swagger'
 
-export interface RecentBlockhashResponse {
+export class RecentBlockhashResponse {
+  @ApiProperty()
   blockhash: string
-  feeCalculator: FeeCalculator
 }

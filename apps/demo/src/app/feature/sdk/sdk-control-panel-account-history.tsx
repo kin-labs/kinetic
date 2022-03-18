@@ -1,11 +1,12 @@
 import { Sdk } from '@mogami/sdk'
 import React, { useState } from 'react'
 import { Button, Input } from 'react-daisyui'
+import { KeypairEntity } from '../../data-access/keypair'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelAccountHistory({ sdk }: { sdk: Sdk }) {
+export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: KeypairEntity; sdk: Sdk }) {
   const [result, setResult] = useState<unknown>(null)
-  const [value, setValue] = useState<string>('')
+  const [value, setValue] = useState<string>(keypair.publicKey)
   const getResult = () => {
     sdk.account.history(value).then((res) => setResult(res.data))
   }

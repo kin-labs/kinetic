@@ -1,7 +1,8 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
-import { Commitment } from '@solana/web3.js'
+import { Commitment, Transaction } from '@solana/web3.js'
+import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
 export class ApiAccountDataAccessService {
@@ -25,5 +26,15 @@ export class ApiAccountDataAccessService {
 
   getTokenAccounts(accountId: PublicKeyString) {
     return this.data.solana.getTokenAccounts(accountId, this.data.config.mogamiMintPublicKey)
+  }
+
+  createAccount(body: CreateAccountRequest) {
+    console.log('body', body)
+    const txJson = JSON.parse(body.tx)
+    console.log('body', txJson)
+    const tx = Transaction.from(txJson)
+
+    console.log(tx.feePayer.toBase58())
+    return true
   }
 }
