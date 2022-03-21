@@ -1,4 +1,4 @@
-import { Commitment, Connection, PublicKey } from '@solana/web3.js'
+import { Commitment, Connection, PublicKey, Transaction } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
 import { getPublicKey, parseEndpoint } from './helpers'
 import { PublicKeyString, SolanaConfig, TokenBalance } from './interfaces'
@@ -62,5 +62,9 @@ export class Solana {
 
   async getTokenHistory(account: PublicKeyString, mint: PublicKeyString) {
     return this.getTokenAccounts(account, mint).then((accounts) => this.getTokenAccountsHistory(accounts))
+  }
+
+  submitTransaction(tx: Transaction) {
+    return this.connection.sendRawTransaction(tx.serialize())
   }
 }

@@ -17,7 +17,6 @@ export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: Keypai
 
   const getResult = () => {
     sdk.account.create(kp).then((res) => {
-      console.log('res', res)
       setResult(res)
     })
   }

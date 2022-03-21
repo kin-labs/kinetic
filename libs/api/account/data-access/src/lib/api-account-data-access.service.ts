@@ -25,11 +25,8 @@ export class ApiAccountDataAccessService {
     return this.data.solana.getTokenAccounts(accountId, this.data.config.mogamiMintPublicKey)
   }
 
-  createAccount(body: CreateAccountRequest) {
-    console.log('body', body)
+  async createAccount(body: CreateAccountRequest) {
     const txJson = JSON.parse(body.tx)
-    console.log('body', txJson)
-
     const schema = new Map([
       [
         Object,
@@ -41,12 +38,9 @@ export class ApiAccountDataAccessService {
     ])
 
     const buffer = borsh.serialize(schema, txJson)
-
-    console.log('buffer', buffer)
     const tx = Transaction.from(buffer)
-    console.log('tx', tx)
-
-    console.log('tx.feePayer', tx.feePayer.toBase58())
+    tx.partialSign(...[this.data.config.mogamiSubsidizerKeypair])
+    await this.data.solana.submitTransaction(tx)
     return true
   }
 }

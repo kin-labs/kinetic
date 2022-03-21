@@ -46,7 +46,6 @@ export class AccountSdk {
     // Get AssociatedTokenAccount
     const associatedTokenAccount = await getAssociatedTokenAddress(mintKey, owner.solanaPublicKey)
 
-    console.log('associatedTokenAccount', associatedTokenAccount.toBase58())
     // Create Transaction
     const instructions: TransactionInstruction[] = [
       createAssociatedTokenAccountInstruction(subsidizerKey, associatedTokenAccount, owner.solanaPublicKey, mintKey),
@@ -66,7 +65,6 @@ export class AccountSdk {
     // Submit Transaction
     const res = await this.api.apiAccountFeatureControllerCreateAccount({ tx: JSON.stringify(serialized) })
 
-    console.log('res', res)
     return Promise.resolve({ mint, subsidizer, recentBlockhash, res })
   }
 }
