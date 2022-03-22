@@ -52,6 +52,28 @@
         "tags": ["account"]
       }
     },
+    "/api/account/create": {
+      "post": {
+        "operationId": "ApiAccountFeatureController_createAccount",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["account"]
+      }
+    },
     "/api/account/balance/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_getBalance",
@@ -120,8 +142,15 @@
         "operationId": "ApiTransactionFeatureController_getServiceConfig",
         "parameters": [],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceConfigResponse"
+                }
+              }
+            }
           }
         },
         "tags": ["transaction"]
@@ -144,8 +173,15 @@
         "operationId": "ApiTransactionFeatureController_getRecentBlockhash",
         "parameters": [],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecentBlockhashResponse"
+                }
+              }
+            }
           }
         },
         "tags": ["transaction"]
@@ -248,6 +284,39 @@
           }
         },
         "required": ["port", "environment", "solanaRpcEndpoint"]
+      },
+      "CreateAccountRequest": {
+        "type": "object",
+        "properties": {
+          "tx": {
+            "type": "string"
+          }
+        },
+        "required": ["tx"]
+      },
+      "ServiceConfigResponse": {
+        "type": "object",
+        "properties": {
+          "mint": {
+            "type": "string"
+          },
+          "subsidizer": {
+            "type": "string"
+          },
+          "tokenProgram": {
+            "type": "string"
+          }
+        },
+        "required": ["mint", "subsidizer", "tokenProgram"]
+      },
+      "RecentBlockhashResponse": {
+        "type": "object",
+        "properties": {
+          "blockhash": {
+            "type": "string"
+          }
+        },
+        "required": ["blockhash"]
       }
     }
   }

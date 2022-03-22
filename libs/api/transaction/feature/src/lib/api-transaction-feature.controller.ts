@@ -1,6 +1,10 @@
-import { Controller, Get, Post, Param } from '@nestjs/common'
-import { ApiTransactionDataAccessService } from '@mogami/api/transaction/data-access'
-import { ApiTags } from '@nestjs/swagger'
+import {
+  ApiTransactionDataAccessService,
+  RecentBlockhashResponse,
+  ServiceConfigResponse,
+} from '@mogami/api/transaction/data-access'
+import { Controller, Get, Param, Post } from '@nestjs/common'
+import { ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('transaction')
 @Controller('transaction')
@@ -8,6 +12,7 @@ export class ApiTransactionFeatureController {
   constructor(private readonly service: ApiTransactionDataAccessService) {}
 
   @Get('service-config')
+  @ApiResponse({ type: ServiceConfigResponse })
   getServiceConfig() {
     return this.service.getServiceConfig()
   }
@@ -18,6 +23,7 @@ export class ApiTransactionFeatureController {
   }
 
   @Get('recent-blockhash')
+  @ApiResponse({ type: RecentBlockhashResponse })
   getRecentBlockhash() {
     return this.service.getRecentBlockhash()
   }
