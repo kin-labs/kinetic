@@ -236,6 +236,16 @@
       "post": {
         "operationId": "ApiTransactionFeatureController_submitTransaction",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitPaymentRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -317,6 +327,15 @@
           }
         },
         "required": ["blockhash"]
+      },
+      "SubmitPaymentRequest": {
+        "type": "object",
+        "properties": {
+          "tx": {
+            "type": "string"
+          }
+        },
+        "required": ["tx"]
       }
     }
   }

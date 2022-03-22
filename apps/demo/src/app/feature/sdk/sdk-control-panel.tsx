@@ -7,6 +7,7 @@ import { SdkControlPanelAccountHistory } from './sdk-control-panel-account-histo
 import { SdkControlPanelCreateAccount } from './sdk-control-panel-create-account'
 import { SdkControlPanelServerConfig } from './sdk-control-panel-server-config'
 import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts'
+import { SdkControlPanelSubmitPayment } from './sdk-control-panel-submit-payment'
 
 export function SdkControlPanel({ keypair, sdk }: { keypair: KeypairEntity; sdk: Sdk }) {
   return (
@@ -17,6 +18,7 @@ export function SdkControlPanel({ keypair, sdk }: { keypair: KeypairEntity; sdk:
       <SdkControlPanelTokenAccounts keypair={keypair} sdk={sdk} />
       <SdkControlPanelAccountHistory keypair={keypair} sdk={sdk} />
       <SdkControlPanelCreateAccount keypair={keypair} sdk={sdk} />
+      <SdkControlPanelSubmitPayment keypair={keypair} sdk={sdk} />
     </div>
   )
 }

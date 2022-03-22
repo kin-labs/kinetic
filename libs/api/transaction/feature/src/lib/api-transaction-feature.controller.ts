@@ -2,9 +2,10 @@ import {
   ApiTransactionDataAccessService,
   RecentBlockhashResponse,
   ServiceConfigResponse,
+  SubmitPaymentRequest,
 } from '@mogami/api/transaction/data-access'
-import { Controller, Get, Param, Post } from '@nestjs/common'
-import { ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('transaction')
 @Controller('transaction')
@@ -44,7 +45,8 @@ export class ApiTransactionFeatureController {
   }
 
   @Post('submit-transaction')
-  submitTransaction() {
-    return this.service.submitTransaction()
+  @ApiBody({ type: SubmitPaymentRequest })
+  submitTransaction(@Body() body: SubmitPaymentRequest) {
+    return this.service.submitTransaction(body)
   }
 }
