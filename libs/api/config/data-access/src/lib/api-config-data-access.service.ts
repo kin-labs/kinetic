@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Keypair, PublicKey } from '@solana/web3.js'
+import { exec } from 'child_process'
 import * as fs from 'fs'
 
 @Injectable()
@@ -62,6 +63,7 @@ export class ApiConfigDataAccessService {
     const document = SwaggerModule.createDocument(app, config)
     if (this.environment === 'development') {
       fs.writeFileSync('./api-swagger.json', JSON.stringify(document, null, 2))
+      exec('prettier --write ./api-swagger.json', { cwd: process.cwd() })
     }
     SwaggerModule.setup(this.prefix, app, document)
   }
