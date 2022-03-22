@@ -9,7 +9,7 @@ import { SdkControlPanelResult } from './sdk-control-panel-result'
 export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: KeypairEntity; sdk: Sdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [accountId, setAccountId] = useState<string>('FET3bRjswDCGwLJLZzJtGepb33YwP64kjrRHo314rXmS')
-  const [value, setValue] = useState<string>('45')
+  const [amount, setAmount] = useState<string>('45')
 
   if (!keypair.mnemonic) {
     return <UiAlert message="Mnemonic not found on KeypairEntity" />
@@ -18,7 +18,11 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: Keypai
   const kp: Keypair = Keypair.fromMnemonicSet(keypair.mnemonic)[0]
 
   const getResult = async () => {
-    const res = await sdk.transaction.submit(accountId, value, kp)
+    const res = await sdk.transaction.submit({
+      amount,
+      destination: accountId,
+      owner: kp,
+    })
     setResult(res)
   }
 
@@ -36,8 +40,8 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: Keypai
         <Input
           className="w-full"
           bordered
-          value={value}
-          onChange={(ev) => setValue(ev.target.value)}
+          value={amount}
+          onChange={(ev) => setAmount(ev.target.value)}
           placeholder="Enter the amount"
         />
       </div>
