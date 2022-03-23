@@ -11,7 +11,7 @@ export class Airdrop {
   constructor(private readonly config: AirdropConfig) {
     this.connection = config.connection
     this.feePayer = config.feePayer
-    this.mint = config.mint
+    this.mint = getPublicKey(config.mint)
   }
 
   async airdrop(account: PublicKeyString, amount: number = this.config.airdropDefault) {
@@ -63,7 +63,7 @@ export class Airdrop {
         airdropMax: this.config.airdropMax,
         decimals: this.config.decimals,
         feePayer: this.config.feePayer.publicKey.toBase58(),
-        mint: this.config.mint.toBase58(),
+        mint: this.mint.toBase58(),
       },
       balances: {
         from: {

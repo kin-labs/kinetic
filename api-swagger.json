@@ -12,25 +12,6 @@
         }
       }
     },
-    "/api/config": {
-      "get": {
-        "operationId": "ApiConfigFeatureController_config",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiConfigSummary"
-                }
-              }
-            }
-          }
-        },
-        "tags": ["config"]
-      }
-    },
     "/api/account/info/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_getAccountInfo",
@@ -135,6 +116,47 @@
           }
         },
         "tags": ["account"]
+      }
+    },
+    "/api/airdrop": {
+      "post": {
+        "operationId": "ApiAirdropFeatureController_request",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AirdropRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["airdrop"]
+      }
+    },
+    "/api/config": {
+      "get": {
+        "operationId": "ApiConfigFeatureController_config",
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiConfigSummary"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["config"]
       }
     },
     "/api/transaction/service-config": {
@@ -280,6 +302,27 @@
   ],
   "components": {
     "schemas": {
+      "CreateAccountRequest": {
+        "type": "object",
+        "properties": {
+          "tx": {
+            "type": "string"
+          }
+        },
+        "required": ["tx"]
+      },
+      "AirdropRequest": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          }
+        },
+        "required": ["account"]
+      },
       "ApiConfigSummary": {
         "type": "object",
         "properties": {
@@ -294,15 +337,6 @@
           }
         },
         "required": ["port", "environment", "solanaRpcEndpoint"]
-      },
-      "CreateAccountRequest": {
-        "type": "object",
-        "properties": {
-          "tx": {
-            "type": "string"
-          }
-        },
-        "required": ["tx"]
       },
       "ServiceConfigResponse": {
         "type": "object",
