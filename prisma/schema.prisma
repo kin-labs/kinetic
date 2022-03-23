@@ -10,3 +10,25 @@ datasource db {
 model App {
   id String @id @default(cuid())
 }
+
+model Airdrop {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  amount           Int
+  date             String
+  fromOwner        String
+  fromPreSol       String
+  fromPreToken     String
+  fromPostSol      String
+  fromPostToken    String
+  fromTokenAccount String
+  mintId           String
+  signature        String
+  toOwner          String
+  toPreSol         String
+  toPreToken       String
+  toPostSol        String
+  toPostToken      String
+  toTokenAccount   String
+}

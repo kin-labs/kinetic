@@ -1,8 +1,9 @@
+import { AirdropConfig } from '@mogami/airdrop'
 import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { Keypair, PublicKey } from '@solana/web3.js'
+import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 import { exec } from 'child_process'
 import * as fs from 'fs'
 
@@ -16,6 +17,35 @@ export class ApiConfigDataAccessService {
 
   get environment() {
     return this.config.get('environment')
+  }
+
+  mogamiAirdropConfig(connection: Connection): AirdropConfig | null {
+    return this.mogamiAirdropKeypair
+      ? {
+          airdropDefault: this.mogamiAirdropDefault,
+          airdropMax: this.mogamiAirdropMax,
+          connection,
+          decimals: this.mogamiMintDecimals,
+          feePayer: this.mogamiAirdropKeypair,
+          mint: this.mogamiMintPublicKey,
+        }
+      : null
+  }
+
+  get mogamiAirdropDefault(): number {
+    return this.config.get('mogamiAirdropDefault')
+  }
+
+  get mogamiAirdropMax(): number {
+    return this.config.get('mogamiAirdropMax')
+  }
+
+  get mogamiAirdropKeypair(): Keypair {
+    return this.config.get('mogamiAirdropKeypair')
+  }
+
+  get mogamiMintDecimals() {
+    return this.config.get('mogamiMintDecimals')
   }
 
   get mogamiMintPublicKey() {

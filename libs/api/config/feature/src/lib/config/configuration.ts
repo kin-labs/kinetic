@@ -11,6 +11,12 @@ const origin = originsEnv.length && originsEnv[0] === '*' ? '*' : originsEnv
 export default () => ({
   cors: { origin },
   environment: process.env.NODE_ENV,
+  mogamiAirdropDefault: process.env.MOGAMI_AIRDROP_DEFAULT,
+  mogamiAirdropMax: process.env.MOGAMI_AIRDROP_MAX,
+  mogamiAirdropKeypair: process.env.MOGAMI_AIRDROP_SECRET_KEY
+    ? Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.MOGAMI_AIRDROP_SECRET_KEY)))
+    : null,
+  mogamiMintDecimals: process.env.MOGAMI_MINT_DECIMALS,
   mogamiMintPublicKey: process.env.MOGAMI_MINT_PUBLIC_KEY,
   mogamiSubsidizerKeypair: Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.MOGAMI_SUBSIDIZER_SECRET_KEY))),
   port: parseInt(process.env.PORT, 10),

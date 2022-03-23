@@ -1,6 +1,7 @@
 import { Solana } from '@mogami/solana'
 import { Configuration } from '../generated'
 import { AccountSdk, TransactionSdk } from './feature'
+import { AirdropSdk } from './feature/airdrop-sdk'
 import { ConfigSdk } from './feature/config-sdk'
 import { CoreSdk } from './feature/core-sdk'
 import { SdkConfig } from './interfaces/sdk-config'
@@ -12,6 +13,7 @@ export class Sdk {
   private readonly apiConfig: Configuration
 
   // Exposed generated APIs
+  readonly airdrop: AirdropSdk
   readonly account: AccountSdk
   readonly core: CoreSdk
   readonly config: ConfigSdk
@@ -22,6 +24,7 @@ export class Sdk {
     this.apiConfig = new Configuration({ basePath: sdkConfig.endpoint })
 
     // Configure the APIs
+    this.airdrop = new AirdropSdk(this.apiConfig)
     this.account = new AccountSdk(this.apiConfig)
     this.config = new ConfigSdk(this.apiConfig)
     this.core = new CoreSdk(this.apiConfig)

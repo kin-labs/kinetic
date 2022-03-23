@@ -1,9 +1,12 @@
 {
   "version": 2,
   "projects": {
+    "airdrop": "libs/airdrop",
     "api": "apps/api",
     "api-account-data-access": "libs/api/account/data-access",
     "api-account-feature": "libs/api/account/feature",
+    "api-airdrop-data-access": "libs/api/airdrop/data-access",
+    "api-airdrop-feature": "libs/api/airdrop/feature",
     "api-config-data-access": "libs/api/config/data-access",
     "api-config-feature": "libs/api/config/feature",
     "api-core-data-access": "libs/api/core/data-access",

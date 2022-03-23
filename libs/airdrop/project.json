@@ -1,0 +1,34 @@
+{
+  "root": "libs/airdrop",
+  "sourceRoot": "libs/airdrop/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/airdrop",
+        "tsConfig": "libs/airdrop/tsconfig.lib.json",
+        "packageJson": "libs/airdrop/package.json",
+        "main": "libs/airdrop/src/index.ts",
+        "assets": ["libs/airdrop/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/airdrop/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/airdrop"],
+      "options": {
+        "jestConfig": "libs/airdrop/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
