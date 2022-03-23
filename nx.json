@@ -1,7 +1,7 @@
 {
   "npmScope": "mogami",
   "affected": {
-    "defaultBase": "main"
+    "defaultBase": "dev"
   },
   "cli": {
     "defaultCollection": "@nrwl/nest"
