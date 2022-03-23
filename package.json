@@ -3,19 +3,19 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev:demo": "nx serve demo",
-    "dev:sdk": "nodemon --watch ./api-swagger.json -x 'yarn build:sdk'",
-    "start": "node dist/apps/api/main.js",
-    "build": "yarn build:api --prod",
-    "test": "nx test",
-    "build:api": "nx build api",
+    "build": "yarn prisma generate && yarn build:api",
+    "build:api": "nx build api --prod",
     "build:sdk": "yarn openapi-generator-cli generate -i ./api-swagger.json -g typescript-axios -o libs/sdk/src/generated && nx format:write --uncommitted",
     "dev:api": "nx serve api",
+    "dev:demo": "nx serve demo",
+    "dev:sdk": "nodemon --watch ./api-swagger.json -x 'yarn build:sdk'",
     "dev:services": "docker compose up",
     "format": "nx format:write",
     "format:check": "nx format:check",
     "format:write": "nx format:write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "node dist/apps/api/main.js",
+    "test": "nx test"
   },
   "private": true,
   "dependencies": {

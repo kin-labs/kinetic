@@ -35,6 +35,7 @@ jobs:
           node-version: '14'
       - run: yarn install --frozen-lockfile
       - run: yarn format:check
+      - run: yarn build
       - run: yarn nx-cloud start-ci-run
       - run: yarn nx e2e api-e2e
       - run: yarn nx affected --target=build --parallel --max-parallel=3
@@ -74,6 +75,7 @@ jobs:
           node-version: '14'
       - run: yarn install --frozen-lockfile
       - run: yarn format:check
+      - run: yarn build
       - run: yarn nx-cloud start-ci-run
       - run: yarn nx e2e api-e2e
       - run: yarn nx affected --target=build --parallel --max-parallel=3
