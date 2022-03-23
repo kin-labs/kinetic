@@ -14,7 +14,7 @@
     "format:check": "nx format:check",
     "format:write": "nx format:write",
     "prepare": "husky install",
-    "start": "node dist/apps/api/main.js",
+    "start": "yarn prisma db push && node dist/apps/api/main.js",
     "test": "nx test"
   },
   "private": true,
