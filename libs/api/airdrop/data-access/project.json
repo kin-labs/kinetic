@@ -1,0 +1,22 @@
+{
+  "root": "libs/api/airdrop/data-access",
+  "sourceRoot": "libs/api/airdrop/data-access/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/airdrop/data-access/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/airdrop/data-access"],
+      "options": {
+        "jestConfig": "libs/api/airdrop/data-access/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:api", "type:data-access"]
+}

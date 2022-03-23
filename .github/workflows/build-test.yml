@@ -112,5 +112,6 @@ jobs:
         with:
           node-version: '14'
       - run: yarn install --frozen-lockfile
+      - run: yarn build
       - name: Start Nx Agent ${{ matrix.agent }}
         run: yarn nx-cloud start-agent
