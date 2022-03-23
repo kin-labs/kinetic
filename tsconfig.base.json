@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@mogami/airdrop": ["libs/airdrop/src/index.ts"],
       "@mogami/api-app-module": ["apps/api/src/app/app.module.ts"],
       "@mogami/api/account/data-access": ["libs/api/account/data-access/src/index.ts"],
       "@mogami/api/account/feature": ["libs/api/account/feature/src/index.ts"],

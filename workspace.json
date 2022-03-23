@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "airdrop": "libs/airdrop",
     "api": "apps/api",
     "api-account-data-access": "libs/api/account/data-access",
     "api-account-feature": "libs/api/account/feature",
