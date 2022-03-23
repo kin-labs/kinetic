@@ -3,6 +3,7 @@ import { createAssociatedTokenAccount, transferChecked } from '@solana/spl-token
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
 import { AirdropConfig } from './airdrop-config'
+import { AirdropResponse } from './airdrop-response'
 
 export class Airdrop {
   private readonly connection: Connection
@@ -14,8 +15,9 @@ export class Airdrop {
     this.mint = getPublicKey(config.mint)
   }
 
-  async airdrop(account: PublicKeyString, amount: number = this.config.airdropDefault) {
-    if (amount > this.config.airdropMax) {
+  async airdrop(account: PublicKeyString, amount?: number | string): Promise<AirdropResponse> {
+    amount = amount && amount?.toString()?.length && Number(amount) > 0 ? Number(amount) : this.config.airdropDefault
+    if (Number(amount) > this.config.airdropMax) {
       throw new Error(`Try requesting ${this.config.airdropMax} or less.`)
     }
     // Get Fee Payer Accounts
@@ -39,7 +41,7 @@ export class Airdrop {
 
     // Make transaction
     const signature = await this.sendTokens({
-      amount: amount * Math.pow(10, this.config.decimals),
+      amount: Number(amount * Math.pow(10, this.config.decimals)),
       toTokenAccount,
       fromTokenAccount,
       fromOwner,
@@ -79,6 +81,7 @@ export class Airdrop {
           post: toPostBalance,
         },
       },
+      amount,
       signature,
     }
   }

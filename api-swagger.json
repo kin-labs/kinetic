@@ -133,8 +133,34 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirdropResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["airdrop"]
+      }
+    },
+    "/api/airdrop/stats": {
+      "get": {
+        "operationId": "ApiAirdropFeatureController_stats",
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirdropStats"
+                }
+              }
+            }
           }
         },
         "tags": ["airdrop"]
@@ -322,6 +348,45 @@
           }
         },
         "required": ["account"]
+      },
+      "AirdropResponse": {
+        "type": "object",
+        "properties": {
+          "signature": {
+            "type": "string"
+          }
+        },
+        "required": ["signature"]
+      },
+      "AirdropStatsCounts": {
+        "type": "object",
+        "properties": {
+          "averageValue": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "totalValue": {
+            "type": "number"
+          }
+        },
+        "required": ["averageValue", "total", "totalValue"]
+      },
+      "AirdropStats": {
+        "type": "object",
+        "properties": {
+          "counts": {
+            "$ref": "#/components/schemas/AirdropStatsCounts"
+          },
+          "dates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["counts", "dates"]
       },
       "ApiConfigSummary": {
         "type": "object",
