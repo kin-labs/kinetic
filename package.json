@@ -22,7 +22,9 @@
     "format:write": "nx format:write",
     "prepare": "husky install",
     "start": "yarn prisma db push && node dist/apps/api/main.js",
-    "test": "nx test"
+    "test": "nx test && yarn test:e2e",
+    "test:e2e:watch": "nx run demo-e2e:e2e --headed --watch",
+    "test:e2e": "nx run demo-e2e:e2e"
   },
   "private": true,
   "dependencies": {
@@ -76,6 +78,7 @@
     "@graphql-codegen/typescript": "^2.4.8",
     "@graphql-codegen/typescript-operations": "^2.3.5",
     "@graphql-codegen/typescript-urql": "^3.5.7",
+    "@cypress/code-coverage": "^3.9.12",
     "@nestjs/schematics": "^8.0.8",
     "@nestjs/testing": "^8.4.3",
     "@nrwl/cli": "13.9.5",

@@ -11,9 +11,11 @@ export function SdkControlPanelServerConfig({ sdk }: { sdk: Sdk }) {
   return (
     <div className="flex flex-col space-y-3">
       <div>
-        <Button onClick={getResult}>Get Server Config</Button>
+        <Button className="get-server-config-btn" onClick={getResult}>
+          Get Server Config
+        </Button>
       </div>
-      <SdkControlPanelResult data={result} />
+      <SdkControlPanelResult cyData="panel-get-server-config" data={result} />
     </div>
   )
 }

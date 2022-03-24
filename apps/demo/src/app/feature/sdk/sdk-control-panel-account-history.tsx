@@ -13,7 +13,9 @@ export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: Keypa
   return (
     <div className="flex flex-col space-y-3">
       <div className="flex space-x-2 items-center">
-        <Button onClick={getResult}>Get Account History</Button>
+        <Button className="get-account-history-btn" onClick={getResult}>
+          Get Account History
+        </Button>
         <Input
           className="w-full"
           bordered
@@ -22,7 +24,7 @@ export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: Keypa
           placeholder="Enter the accountId (Public Key for the Account owner)"
         />
       </div>
-      <SdkControlPanelResult data={result} />
+      <SdkControlPanelResult cyData="panel-get-account-history" data={result} />
     </div>
   )
 }

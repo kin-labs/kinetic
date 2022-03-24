@@ -13,7 +13,9 @@ export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: Keypa
   return (
     <div className="flex flex-col space-y-3">
       <div className="flex space-x-2 items-center">
-        <Button onClick={getResult}>Request Airdrop</Button>
+        <Button className="request-airdrop-btn" onClick={getResult}>
+          Request Airdrop
+        </Button>
         <Input
           className="w-full"
           bordered
@@ -23,7 +25,7 @@ export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: Keypa
           placeholder="Enter the amount (Max: 50000)"
         />
       </div>
-      <SdkControlPanelResult data={result} />
+      <SdkControlPanelResult cyData="panel-request-airdrop" data={result} />
     </div>
   )
 }

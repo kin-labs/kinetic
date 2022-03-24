@@ -59,11 +59,25 @@ export function SdkIndex() {
   }
 
   if (!keypairs || !keypairs?.length || !keypair) {
-    return <UiAlert status="warning" title="No Keypairs configured." message="Add a new one on the Keypair page." />
+    return (
+      <UiAlert
+        cyData="card-sdk-warning"
+        status="warning"
+        title="No Keypairs configured."
+        message="Add a new one on the Keypair page."
+      />
+    )
   }
 
   if (!servers || !servers?.length) {
-    return <UiAlert status="warning" title="No Servers configured." message="Add a new one on the Servers page." />
+    return (
+      <UiAlert
+        cyData="card-sdk-warning"
+        status="warning"
+        title="No Servers configured."
+        message="Add a new one on the Servers page."
+      />
+    )
   }
 
   return (

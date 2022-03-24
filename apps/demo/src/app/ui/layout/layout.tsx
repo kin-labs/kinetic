@@ -6,6 +6,7 @@ import { ThemeSwitcher } from '../theme-switcher/theme-switcher'
 export interface LayoutLink {
   label: string
   path: string
+  cyData?: string
 }
 
 export function Layout({ children, links }: PropsWithChildren<{ links: LayoutLink[] }>) {
@@ -21,9 +22,11 @@ export function Layout({ children, links }: PropsWithChildren<{ links: LayoutLin
                 {appName}
               </NavLink>
               <ul className="menu menu-horizontal p-0 space-x-2">
-                {links?.map(({ label, path }) => (
+                {links?.map(({ label, path, cyData }) => (
                   <li key={path}>
-                    <NavLink to={path}>{label}</NavLink>
+                    <NavLink cy-data={cyData} to={path}>
+                      {label}
+                    </NavLink>
                   </li>
                 ))}
               </ul>

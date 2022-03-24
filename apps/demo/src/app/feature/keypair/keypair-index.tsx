@@ -40,8 +40,12 @@ export function KeypairIndex() {
         Here you can generate and import keypairs using the <code>@mogami/keypair</code> package.
       </div>
       <div className="flex space-x-2">
-        <Button onClick={generateMnemonic}>Generate Keypair</Button>
-        <Button onClick={() => toggleImportVisible(true)}>Import Mnemonic</Button>
+        <Button className={'generate-keypair-btn'} onClick={generateMnemonic}>
+          Generate Keypair
+        </Button>
+        <Button className={'import-mnemonic-btn'} onClick={() => toggleImportVisible(true)}>
+          Import Mnemonic
+        </Button>
       </div>
       {result?.length ? (
         <div className="grid grid-cols-2 gap-6">
@@ -52,7 +56,7 @@ export function KeypairIndex() {
                   <code>{kp.publicKey}</code>
                   <div className="flex space-x-2">
                     <button onClick={() => showKeypair(kp)}>
-                      <EyeIcon className="w-6 h-6 text-gray-500" />
+                      <EyeIcon className="w-6 h-6 text-gray-500 keypair-eye-icon" />
                     </button>
                     <button onClick={() => deleteKeypair(kp.id!)}>
                       <TrashIcon className="w-6 h-6 text-red-500" />
@@ -66,7 +70,9 @@ export function KeypairIndex() {
       ) : (
         <div>
           <Alert status="info">
-            <div className="font-bold text-lg">No Keypairs found.</div>
+            <div cy-data="card-keypair-warning" className="font-bold text-lg">
+              No Keypairs found.
+            </div>
             <div>Generate or import one to use the Mogami demo.</div>
           </Alert>
         </div>
@@ -127,11 +133,11 @@ function KeypairDetailsModal({
     <Modal open={visible} footer={false}>
       <Form>
         <Form.Label>Mnemonic</Form.Label>
-        <Textarea rows={2} className="w-full" bordered value={keypair?.mnemonic} />
+        <Textarea rows={2} className="w-full text-area-mnemonic" bordered value={keypair?.mnemonic} />
         <Form.Label>Public Key</Form.Label>
-        <Textarea rows={1} className="w-full" bordered value={keypair?.publicKey} />
+        <Textarea rows={1} className="w-full text-area-public-key" bordered value={keypair?.publicKey} />
         <Form.Label>Secret Key</Form.Label>
-        <Textarea rows={1} className="w-full" bordered value={keypair?.secretKey} />
+        <Textarea rows={1} className="w-full text-area-secret-key" bordered value={keypair?.secretKey} />
       </Form>
       <div className="modal-action">
         <Button onClick={toggle}>Close</Button>

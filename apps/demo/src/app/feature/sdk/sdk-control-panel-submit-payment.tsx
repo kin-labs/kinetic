@@ -29,7 +29,9 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: Keypai
   return (
     <div className="flex flex-col space-y-3">
       <div className="flex space-x-2 items-center">
-        <Button onClick={getResult}>Submit Payment</Button>
+        <Button className="submit-payment-btn" onClick={getResult}>
+          Submit Payment
+        </Button>
         <Input
           className="w-full"
           bordered
@@ -45,7 +47,7 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: Keypai
           placeholder="Enter the amount"
         />
       </div>
-      <SdkControlPanelResult data={result} />
+      <SdkControlPanelResult cyData="panel-submit-payment" data={result} />
     </div>
   )
 }

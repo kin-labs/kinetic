@@ -24,9 +24,11 @@ export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: Keypai
   return (
     <div className="flex flex-col space-y-3">
       <div className="flex space-x-2 items-center">
-        <Button onClick={getResult}>Create Account</Button>
+        <Button className="create-account-btn" onClick={getResult}>
+          Create Account
+        </Button>
       </div>
-      <SdkControlPanelResult data={result} />
+      <SdkControlPanelResult cyData="panel-create-account" data={result} />
     </div>
   )
 }

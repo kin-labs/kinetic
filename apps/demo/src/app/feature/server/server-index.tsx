@@ -23,6 +23,7 @@ export function ServerIndex() {
   const createServer = (endpoint: string) => {
     const { host } = new URL(endpoint)
     serverDb.server.add({ id: host, name: host, endpoint })
+    console.log({ id: host, name: host, endpoint })
     setServerCreateVisible(false)
   }
 
@@ -35,7 +36,12 @@ export function ServerIndex() {
       {result?.length ? (
         <ServerGrid servers={result} showServer={showServer} deleteServer={deleteServer} />
       ) : (
-        <UiAlert status="info" title="No Servers found." message="Add a new one to use the Mogami demo." />
+        <UiAlert
+          cyData="card-servers-warning"
+          status="info"
+          title="No Servers found."
+          message="Add a new one to use the Mogami demo."
+        />
       )}
       <ServerCreateModal
         visible={serverCreateVisible}

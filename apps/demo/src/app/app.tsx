@@ -5,10 +5,10 @@ import { Layout, LayoutLink } from './ui/layout/layout'
 
 export function App() {
   const links: LayoutLink[] = [
-    { label: 'Home', path: '/home' },
-    { label: 'Keypair', path: '/keypair' },
-    { label: 'SDK', path: '/sdk' },
-    { label: 'Servers', path: '/servers' },
+    { label: 'Home', path: '/home', cyData: 'cy-nav-btn-home' },
+    { label: 'Keypair', path: '/keypair', cyData: 'cy-nav-btn-keypair' },
+    { label: 'SDK', path: '/sdk', cyData: 'cy-nav-btn-sdk' },
+    { label: 'Servers', path: '/servers', cyData: 'cy-nav-btn-servers' },
   ]
   return (
     <Layout links={links}>

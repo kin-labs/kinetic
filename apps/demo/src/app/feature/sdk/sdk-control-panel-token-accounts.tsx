@@ -13,7 +13,9 @@ export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: Keypai
   return (
     <div className="flex flex-col space-y-3">
       <div className="flex space-x-2 items-center">
-        <Button onClick={getResult}>Get Token Accounts</Button>
+        <Button className="get-token-accounts-btn" onClick={getResult}>
+          Get Token Accounts
+        </Button>
         <Input
           className="w-full"
           bordered
@@ -22,7 +24,7 @@ export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: Keypai
           placeholder="Enter the accountId (Public Key for the Account owner)"
         />
       </div>
-      <SdkControlPanelResult data={result} />
+      <SdkControlPanelResult cyData="panel-get-token-accounts" data={result} />
     </div>
   )
 }
