@@ -1,0 +1,43 @@
+import React, { PropsWithChildren } from 'react'
+import { Navbar } from 'react-daisyui'
+import { NavLink } from 'react-router-dom'
+import { ThemeSwitcher } from '../theme-switcher/theme-switcher'
+
+export interface LayoutLink {
+  label: string
+  path: string
+}
+
+export function Layout({ children, links }: PropsWithChildren<{ links: LayoutLink[] }>) {
+  const appName = 'Mogami Admin'
+  const appFooter = <p>Kin Foundation &copy; 2022</p>
+  return (
+    <div className="h-full flex flex-col justify-between">
+      <header className="">
+        <Navbar className="bg-neutral text-neutral-content px-4 py-2">
+          <Navbar.Start>
+            <div className="flex space-x-4 items-center">
+              <NavLink to="/" className="btn btn-ghost normal-case text-lg font-bold">
+                {appName}
+              </NavLink>
+              <ul className="menu menu-horizontal p-0 space-x-2">
+                {links?.map(({ label, path }) => (
+                  <li key={path}>
+                    <NavLink to={path}>{label}</NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Navbar.Start>
+        </Navbar>
+      </header>
+      <main className="flex-grow p-4 overflow-auto">{children}</main>
+      <footer className="footer items-center p-4 bg-neutral text-neutral-content">
+        <div className="items-center grid-flow-col">
+          <ThemeSwitcher />
+        </div>
+        <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">{appFooter}</div>
+      </footer>
+    </div>
+  )
+}

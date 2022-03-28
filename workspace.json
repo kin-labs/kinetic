@@ -1,6 +1,8 @@
 {
   "version": 2,
   "projects": {
+    "admin": "apps/admin",
+    "admin-e2e": "apps/admin-e2e",
     "airdrop": "libs/airdrop",
     "api": "apps/api",
     "api-account-data-access": "libs/api/account/data-access",
