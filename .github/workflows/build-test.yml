@@ -36,12 +36,12 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn format:check
       - run: yarn build
-      - run: yarn nx-cloud start-ci-run
+      # - run: yarn nx-cloud start-ci-run
       - run: yarn nx e2e api-e2e
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
-      - run: yarn nx-cloud stop-all-agents
+      # - run: yarn nx-cloud stop-all-agents
   pr:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'pull_request' }}
@@ -76,42 +76,42 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn format:check
       - run: yarn build
-      - run: yarn nx-cloud start-ci-run
+      # - run: yarn nx-cloud start-ci-run
       - run: yarn nx e2e api-e2e
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
-      - run: yarn nx-cloud stop-all-agents
-  agents:
-    runs-on: ubuntu-20.04
-    name: Agent 1
-    timeout-minutes: 60
-    services:
-      postgres:
-        image: postgres:12
-        env:
-          POSTGRES_DB: prisma
-          POSTGRES_USER: prisma
-          POSTGRES_PASSWORD: prisma
-        ports: ['5432:5432']
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      solana:
-        image: solanalabs/solana:v1.9.9
-        ports: ['8899:8899', '8900:8900']
-        options: --entrypoint="solana-test-validator"
-    strategy:
-      matrix:
-        agent: [1, 2, 3]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - run: yarn install --frozen-lockfile
-      - run: yarn build
-      - name: Start Nx Agent ${{ matrix.agent }}
-        run: yarn nx-cloud start-agent
+      # - run: yarn nx-cloud stop-all-agents
+#  agents:
+#    runs-on: ubuntu-20.04
+#    name: Agent 1
+#    timeout-minutes: 60
+#    services:
+#      postgres:
+#        image: postgres:12
+#        env:
+#          POSTGRES_DB: prisma
+#          POSTGRES_USER: prisma
+#          POSTGRES_PASSWORD: prisma
+#        ports: ['5432:5432']
+#        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+#      solana:
+#        image: solanalabs/solana:v1.9.9
+#        ports: ['8899:8899', '8900:8900']
+#        options: --entrypoint="solana-test-validator"
+#    strategy:
+#      matrix:
+#        agent: [1, 2, 3]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/cache@v2
+#        with:
+#          path: '**/node_modules'
+#          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+#      - uses: actions/setup-node@v1
+#        with:
+#          node-version: '14'
+#      - run: yarn install --frozen-lockfile
+#      - run: yarn build
+#      - name: Start Nx Agent ${{ matrix.agent }}
+#        run: yarn nx-cloud start-agent
