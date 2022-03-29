@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "yarn prisma generate && yarn build:api",
+    "build": "yarn build:api",
     "build:api": "nx build api --prod",
     "build:sdk": "yarn openapi-generator-cli generate -i ./api-swagger.json -g typescript-axios -o libs/sdk/src/generated && nx format:write --uncommitted",
     "dev:api": "nx serve api",
