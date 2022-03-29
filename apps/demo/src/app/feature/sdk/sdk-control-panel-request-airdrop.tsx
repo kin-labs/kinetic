@@ -1,5 +1,5 @@
 import { Sdk } from '@mogami/sdk'
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { Button, Input } from 'react-daisyui'
 import { KeypairEntity } from '../../data-access/keypair'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
@@ -19,7 +19,7 @@ export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: Keypa
           bordered
           type="number"
           value={amount}
-          onChange={(ev) => setAmount(ev.target.value)}
+          onChange={(ev: ChangeEvent<HTMLInputElement>) => setAmount(ev.target.value)}
           placeholder="Enter the amount (Max: 50000)"
         />
       </div>

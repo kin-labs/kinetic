@@ -1,6 +1,6 @@
 import { Keypair } from '@mogami/keypair'
 import { Sdk } from '@mogami/sdk'
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { Button, Input } from 'react-daisyui'
 import { KeypairEntity } from '../../data-access/keypair'
 import { UiAlert } from '../../ui/ui-alert/ui-alert'
@@ -34,14 +34,14 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: Keypai
           className="w-full"
           bordered
           value={accountId}
-          onChange={(ev) => setAccountId(ev.target.value)}
+          onChange={(ev: ChangeEvent<HTMLInputElement>) => setAccountId(ev.target.value)}
           placeholder="Enter the destination accountId"
         />
         <Input
           className="w-full"
           bordered
           value={amount}
-          onChange={(ev) => setAmount(ev.target.value)}
+          onChange={(ev: ChangeEvent<HTMLInputElement>) => setAmount(ev.target.value)}
           placeholder="Enter the amount"
         />
       </div>
