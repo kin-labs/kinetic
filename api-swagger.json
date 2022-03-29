@@ -30,7 +30,9 @@
             "description": ""
           }
         },
-        "tags": ["account"]
+        "tags": [
+          "account"
+        ]
       }
     },
     "/api/account/create": {
@@ -52,7 +54,9 @@
             "description": ""
           }
         },
-        "tags": ["account"]
+        "tags": [
+          "account"
+        ]
       }
     },
     "/api/account/balance/{accountId}": {
@@ -73,7 +77,9 @@
             "description": ""
           }
         },
-        "tags": ["account"]
+        "tags": [
+          "account"
+        ]
       }
     },
     "/api/account/history/{accountId}": {
@@ -94,7 +100,9 @@
             "description": ""
           }
         },
-        "tags": ["account"]
+        "tags": [
+          "account"
+        ]
       }
     },
     "/api/account/token-accounts/{accountId}": {
@@ -115,7 +123,9 @@
             "description": ""
           }
         },
-        "tags": ["account"]
+        "tags": [
+          "account"
+        ]
       }
     },
     "/api/airdrop": {
@@ -144,7 +154,9 @@
             }
           }
         },
-        "tags": ["airdrop"]
+        "tags": [
+          "airdrop"
+        ]
       }
     },
     "/api/airdrop/stats": {
@@ -163,7 +175,9 @@
             }
           }
         },
-        "tags": ["airdrop"]
+        "tags": [
+          "airdrop"
+        ]
       }
     },
     "/api/config": {
@@ -182,7 +196,9 @@
             }
           }
         },
-        "tags": ["config"]
+        "tags": [
+          "config"
+        ]
       }
     },
     "/api/transaction/service-config": {
@@ -201,7 +217,9 @@
             }
           }
         },
-        "tags": ["transaction"]
+        "tags": [
+          "transaction"
+        ]
       }
     },
     "/api/transaction/minimum-kin-version": {
@@ -213,7 +231,9 @@
             "description": ""
           }
         },
-        "tags": ["transaction"]
+        "tags": [
+          "transaction"
+        ]
       }
     },
     "/api/transaction/recent-blockhash": {
@@ -232,7 +252,9 @@
             }
           }
         },
-        "tags": ["transaction"]
+        "tags": [
+          "transaction"
+        ]
       }
     },
     "/api/transaction/minimum-balance-for-rent-exemption/{dataLength}": {
@@ -253,7 +275,9 @@
             "description": ""
           }
         },
-        "tags": ["transaction"]
+        "tags": [
+          "transaction"
+        ]
       }
     },
     "/api/transaction/history": {
@@ -265,7 +289,9 @@
             "description": ""
           }
         },
-        "tags": ["transaction"]
+        "tags": [
+          "transaction"
+        ]
       }
     },
     "/api/transaction/sign-transaction": {
@@ -277,7 +303,9 @@
             "description": ""
           }
         },
-        "tags": ["transaction"]
+        "tags": [
+          "transaction"
+        ]
       }
     },
     "/api/transaction/submit-transaction": {
@@ -299,7 +327,9 @@
             "description": ""
           }
         },
-        "tags": ["transaction"]
+        "tags": [
+          "transaction"
+        ]
       }
     }
   },
@@ -335,7 +365,9 @@
             "type": "string"
           }
         },
-        "required": ["tx"]
+        "required": [
+          "tx"
+        ]
       },
       "AirdropRequest": {
         "type": "object",
@@ -347,7 +379,9 @@
             "type": "string"
           }
         },
-        "required": ["account"]
+        "required": [
+          "account"
+        ]
       },
       "AirdropResponse": {
         "type": "object",
@@ -356,7 +390,9 @@
             "type": "string"
           }
         },
-        "required": ["signature"]
+        "required": [
+          "signature"
+        ]
       },
       "AirdropStatsCounts": {
         "type": "object",
@@ -371,7 +407,11 @@
             "type": "number"
           }
         },
-        "required": ["averageValue", "total", "totalValue"]
+        "required": [
+          "averageValue",
+          "total",
+          "totalValue"
+        ]
       },
       "AirdropStats": {
         "type": "object",
@@ -386,7 +426,10 @@
             }
           }
         },
-        "required": ["counts", "dates"]
+        "required": [
+          "counts",
+          "dates"
+        ]
       },
       "ApiConfigSummary": {
         "type": "object",
@@ -401,7 +444,11 @@
             "type": "string"
           }
         },
-        "required": ["port", "environment", "solanaRpcEndpoint"]
+        "required": [
+          "port",
+          "environment",
+          "solanaRpcEndpoint"
+        ]
       },
       "ServiceConfigResponse": {
         "type": "object",
@@ -416,7 +463,11 @@
             "type": "string"
           }
         },
-        "required": ["mint", "subsidizer", "tokenProgram"]
+        "required": [
+          "mint",
+          "subsidizer",
+          "tokenProgram"
+        ]
       },
       "RecentBlockhashResponse": {
         "type": "object",
@@ -425,7 +476,9 @@
             "type": "string"
           }
         },
-        "required": ["blockhash"]
+        "required": [
+          "blockhash"
+        ]
       },
       "SubmitPaymentRequest": {
         "type": "object",
@@ -434,7 +487,9 @@
             "type": "string"
           }
         },
-        "required": ["tx"]
+        "required": [
+          "tx"
+        ]
       }
     }
   }
