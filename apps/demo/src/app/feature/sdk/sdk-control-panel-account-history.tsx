@@ -1,5 +1,5 @@
 import { Sdk } from '@mogami/sdk'
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { Button, Input } from 'react-daisyui'
 import { KeypairEntity } from '../../data-access/keypair'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
@@ -18,7 +18,7 @@ export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: Keypa
           className="w-full"
           bordered
           value={value}
-          onChange={(ev) => setValue(ev.target.value)}
+          onChange={(ev: ChangeEvent<HTMLInputElement>) => setValue(ev.target.value)}
           placeholder="Enter the accountId (Public Key for the Account owner)"
         />
       </div>

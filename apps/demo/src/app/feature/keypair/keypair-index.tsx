@@ -1,7 +1,7 @@
 import { EyeIcon, TrashIcon } from '@heroicons/react/outline'
 import { Keypair } from '@mogami/keypair'
 import { useLiveQuery } from 'dexie-react-hooks'
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { Alert, Button, Card, Form, Modal, Textarea } from 'react-daisyui'
 import { keypairDb, KeypairEntity } from '../../data-access/keypair'
 
@@ -103,7 +103,13 @@ function ImportMnemonicModal({
 }) {
   return (
     <Modal open={visible} acceptText="Import" onAccept={submit} onCancel={toggle}>
-      <Textarea rows={2} className="w-full" bordered onChange={(e) => setValue(e.target.value)} value={value} />
+      <Textarea
+        rows={2}
+        className="w-full"
+        bordered
+        onChange={(ev: ChangeEvent<HTMLInputElement>) => setValue(ev.target.value)}
+        value={value}
+      />
     </Modal>
   )
 }
