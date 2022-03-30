@@ -29,6 +29,7 @@
       "@mogami/api/transaction/feature": ["libs/api/transaction/feature/src/index.ts"],
       "@mogami/keypair": ["libs/keypair/src/index.ts"],
       "@mogami/sdk": ["libs/sdk/src/index.ts"],
+      "@mogami/shared/util/admin-sdk": ["libs/shared/util/admin-sdk/src/index.ts"],
       "@mogami/solana": ["libs/solana/src/index.ts"]
     }
   },
