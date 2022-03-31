@@ -1,8 +1,10 @@
+import { useUptimeQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Hero } from 'react-daisyui'
 import { Link } from 'react-router-dom'
 
 export function HomeIndex() {
+  const [{ data }] = useUptimeQuery()
   const pages = [{ label: 'About', path: '/about' }]
   return (
     <div>
@@ -24,6 +26,7 @@ export function HomeIndex() {
           </div>
         </Hero.Content>
       </Hero>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   )
 }

@@ -15,10 +15,11 @@ async function bootstrap() {
   config.configureSwagger(app)
   await app.listen(config.port)
   Logger.log(
-    `🚀 Application is running on http://localhost:${config.port}/${config.prefix} with CORS ${
+    `🚀 API is running on http://localhost:${config.port}/${config.prefix} with CORS ${
       config.corsOrigins ? `enabled for ${config.corsOrigins}` : 'disabled'
     }.`,
   )
+  Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
 }
 
 bootstrap()

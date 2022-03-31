@@ -20,6 +20,7 @@
     "demo-e2e": "apps/demo-e2e",
     "keypair": "libs/keypair",
     "sdk": "libs/sdk",
+    "shared-util-admin-sdk": "libs/shared/util/admin-sdk",
     "solana": "libs/solana"
   }
 }
