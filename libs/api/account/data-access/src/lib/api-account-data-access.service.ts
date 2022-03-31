@@ -13,8 +13,9 @@ export class ApiAccountDataAccessService {
     return this.data.solana.getAccountInfo(accountId, { commitment })
   }
 
-  getBalance(accountId: PublicKeyString) {
-    return this.data.solana.getBalance(accountId, this.data.config.mogamiMintPublicKey)
+  async getBalance(accountId: PublicKeyString) {
+    const value = await this.data.solana.getBalance(accountId, this.data.config.mogamiMintPublicKey)
+    return { value }
   }
 
   getHistory(accountId: PublicKeyString) {

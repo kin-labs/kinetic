@@ -1,8 +1,15 @@
-import { ApiAccountDataAccessService, CreateAccountRequest } from '@mogami/api/account/data-access'
+import {
+  ApiAccountDataAccessService,
+  CreateAccountRequest,
+  CreateAccountResponse,
+  HistoryResponse,
+  BalanceResponse,
+} from '@mogami/api/account/data-access'
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ApiBody } from '@nestjs/swagger/dist/decorators/api-body.decorator'
 import { Commitment } from '@solana/web3.js'
+import BigNumber from 'bignumber.js'
 
 @ApiTags('account')
 @Controller('account')
@@ -16,21 +23,25 @@ export class ApiAccountFeatureController {
 
   @Post('create')
   @ApiBody({ type: CreateAccountRequest })
+  @ApiResponse({ type: CreateAccountResponse })
   createAccount(@Body() body: CreateAccountRequest) {
     return this.service.createAccount(body)
   }
 
   @Get('balance/:accountId')
+  @ApiResponse({ type: BalanceResponse })
   getBalance(@Param('accountId') accountId: string) {
     return this.service.getBalance(accountId)
   }
 
   @Get('history/:accountId')
+  @ApiResponse({ type: HistoryResponse })
   getHistory(@Param('accountId') accountId: string) {
     return this.service.getHistory(accountId)
   }
 
   @Get('token-accounts/:accountId')
+  @ApiResponse({ type: String, isArray: true })
   tokenAccounts(@Param('accountId') accountId: string) {
     return this.service.getTokenAccounts(accountId)
   }
