@@ -1,3 +1,6 @@
 export * from './lib/api-account-data-access.module'
 export * from './lib/api-account-data-access.service'
 export * from './lib/dto/create-account-request.dto'
+export * from './lib/entities/create-account.entity'
+export * from './lib/entities/history.entity'
+export * from './lib/entities/balance.entity'

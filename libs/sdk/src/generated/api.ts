@@ -135,6 +135,19 @@ export interface ApiConfigSummary {
 /**
  *
  * @export
+ * @interface BalanceResponse
+ */
+export interface BalanceResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof BalanceResponse
+   */
+  value: string
+}
+/**
+ *
+ * @export
  * @interface CreateAccountRequest
  */
 export interface CreateAccountRequest {
@@ -144,6 +157,70 @@ export interface CreateAccountRequest {
    * @memberof CreateAccountRequest
    */
   tx: string
+}
+/**
+ *
+ * @export
+ * @interface CreateAccountResponse
+ */
+export interface CreateAccountResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountResponse
+   */
+  status: string
+  /**
+   *
+   * @type {object}
+   * @memberof CreateAccountResponse
+   */
+  account: object
+}
+/**
+ *
+ * @export
+ * @interface HistoryResponse
+ */
+export interface HistoryResponse {
+  /**
+   *
+   * @type {object}
+   * @memberof HistoryResponse
+   */
+  account: object
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof HistoryResponse
+   */
+  history: Array<string>
+}
+/**
+ *
+ * @export
+ * @interface MinimumBalanceForRentExemptionResponse
+ */
+export interface MinimumBalanceForRentExemptionResponse {
+  /**
+   *
+   * @type {number}
+   * @memberof MinimumBalanceForRentExemptionResponse
+   */
+  lamports: number
+}
+/**
+ *
+ * @export
+ * @interface MinimumKinVersionResponse
+ */
+export interface MinimumKinVersionResponse {
+  /**
+   *
+   * @type {number}
+   * @memberof MinimumKinVersionResponse
+   */
+  version: number
 }
 /**
  *
@@ -402,7 +479,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     async apiAccountFeatureControllerCreateAccount(
       createAccountRequest: CreateAccountRequest,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAccountResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerCreateAccount(
         createAccountRequest,
         options,
@@ -434,7 +511,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     async apiAccountFeatureControllerGetBalance(
       accountId: string,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BalanceResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerGetBalance(
         accountId,
         options,
@@ -450,7 +527,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     async apiAccountFeatureControllerGetHistory(
       accountId: string,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HistoryResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerGetHistory(
         accountId,
         options,
@@ -466,7 +543,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     async apiAccountFeatureControllerTokenAccounts(
       accountId: string,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerTokenAccounts(
         accountId,
         options,
@@ -492,7 +569,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     apiAccountFeatureControllerCreateAccount(
       createAccountRequest: CreateAccountRequest,
       options?: any,
-    ): AxiosPromise<void> {
+    ): AxiosPromise<CreateAccountResponse> {
       return localVarFp
         .apiAccountFeatureControllerCreateAccount(createAccountRequest, options)
         .then((request) => request(axios, basePath))
@@ -514,7 +591,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerGetBalance(accountId: string, options?: any): AxiosPromise<void> {
+    apiAccountFeatureControllerGetBalance(accountId: string, options?: any): AxiosPromise<BalanceResponse> {
       return localVarFp
         .apiAccountFeatureControllerGetBalance(accountId, options)
         .then((request) => request(axios, basePath))
@@ -525,7 +602,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerGetHistory(accountId: string, options?: any): AxiosPromise<void> {
+    apiAccountFeatureControllerGetHistory(accountId: string, options?: any): AxiosPromise<HistoryResponse> {
       return localVarFp
         .apiAccountFeatureControllerGetHistory(accountId, options)
         .then((request) => request(axios, basePath))
@@ -536,7 +613,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerTokenAccounts(accountId: string, options?: any): AxiosPromise<void> {
+    apiAccountFeatureControllerTokenAccounts(accountId: string, options?: any): AxiosPromise<Array<string>> {
       return localVarFp
         .apiAccountFeatureControllerTokenAccounts(accountId, options)
         .then((request) => request(axios, basePath))
@@ -1232,7 +1309,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     async apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(
       dataLength: number,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumBalanceForRentExemptionResponse>> {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(
           dataLength,
@@ -1247,7 +1324,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
      */
     async apiTransactionFeatureControllerGetMinimumKinVersion(
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumKinVersionResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerGetMinimumKinVersion(
         options,
       )
@@ -1297,7 +1374,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     async apiTransactionFeatureControllerSubmitTransaction(
       submitPaymentRequest: SubmitPaymentRequest,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerSubmitTransaction(
         submitPaymentRequest,
         options,
@@ -1335,7 +1412,7 @@ export const TransactionApiFactory = function (
     apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(
       dataLength: number,
       options?: any,
-    ): AxiosPromise<void> {
+    ): AxiosPromise<MinimumBalanceForRentExemptionResponse> {
       return localVarFp
         .apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(dataLength, options)
         .then((request) => request(axios, basePath))
@@ -1345,7 +1422,7 @@ export const TransactionApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiTransactionFeatureControllerGetMinimumKinVersion(options?: any): AxiosPromise<void> {
+    apiTransactionFeatureControllerGetMinimumKinVersion(options?: any): AxiosPromise<MinimumKinVersionResponse> {
       return localVarFp
         .apiTransactionFeatureControllerGetMinimumKinVersion(options)
         .then((request) => request(axios, basePath))
@@ -1389,7 +1466,7 @@ export const TransactionApiFactory = function (
     apiTransactionFeatureControllerSubmitTransaction(
       submitPaymentRequest: SubmitPaymentRequest,
       options?: any,
-    ): AxiosPromise<void> {
+    ): AxiosPromise<object> {
       return localVarFp
         .apiTransactionFeatureControllerSubmitTransaction(submitPaymentRequest, options)
         .then((request) => request(axios, basePath))

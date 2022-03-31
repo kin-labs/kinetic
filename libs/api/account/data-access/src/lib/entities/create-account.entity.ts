@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 interface AccountInfo {
   id: string // publicKey
   balance: string
@@ -16,7 +17,9 @@ enum CreateAccountResultStatus {
   badNonce = 'badNonce',
 }
 
-export interface CreateAccountResponse {
+export class CreateAccountResponse {
+  @ApiProperty()
   status: CreateAccountResultStatus
+  @ApiProperty()
   account?: AccountInfo
 }

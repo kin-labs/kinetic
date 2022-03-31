@@ -48,8 +48,15 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAccountResponse"
+                }
+              }
+            }
           }
         },
         "tags": ["account"]
@@ -69,8 +76,15 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
           }
         },
         "tags": ["account"]
@@ -90,8 +104,15 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryResponse"
+                }
+              }
+            }
           }
         },
         "tags": ["account"]
@@ -111,8 +132,18 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": ["account"]
@@ -209,8 +240,15 @@
         "operationId": "ApiTransactionFeatureController_getMinimumKinVersion",
         "parameters": [],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MinimumKinVersionResponse"
+                }
+              }
+            }
           }
         },
         "tags": ["transaction"]
@@ -249,8 +287,15 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MinimumBalanceForRentExemptionResponse"
+                }
+              }
+            }
           }
         },
         "tags": ["transaction"]
@@ -295,8 +340,15 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmitTransactionResponse"
+                }
+              }
+            }
           }
         },
         "tags": ["transaction"]
@@ -336,6 +388,42 @@
           }
         },
         "required": ["tx"]
+      },
+      "CreateAccountResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "account": {
+            "type": "object"
+          }
+        },
+        "required": ["status", "account"]
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": ["value"]
+      },
+      "HistoryResponse": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "object"
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["account", "history"]
       },
       "AirdropRequest": {
         "type": "object",
@@ -418,6 +506,15 @@
         },
         "required": ["mint", "subsidizer", "tokenProgram"]
       },
+      "MinimumKinVersionResponse": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "number"
+          }
+        },
+        "required": ["version"]
+      },
       "RecentBlockhashResponse": {
         "type": "object",
         "properties": {
@@ -427,6 +524,15 @@
         },
         "required": ["blockhash"]
       },
+      "MinimumBalanceForRentExemptionResponse": {
+        "type": "object",
+        "properties": {
+          "lamports": {
+            "type": "number"
+          }
+        },
+        "required": ["lamports"]
+      },
       "SubmitPaymentRequest": {
         "type": "object",
         "properties": {
@@ -435,6 +541,10 @@
           }
         },
         "required": ["tx"]
+      },
+      "SubmitTransactionResponse": {
+        "type": "object",
+        "properties": {}
       }
     }
   }

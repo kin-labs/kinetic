@@ -3,6 +3,9 @@ import {
   RecentBlockhashResponse,
   ServiceConfigResponse,
   SubmitPaymentRequest,
+  MinimumKinVersionResponse,
+  MinimumBalanceForRentExemptionResponse,
+  SubmitTransactionResponse,
 } from '@mogami/api/transaction/data-access'
 import { Body, Controller, Get, Param, Post } from '@nestjs/common'
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -19,6 +22,7 @@ export class ApiTransactionFeatureController {
   }
 
   @Get('minimum-kin-version')
+  @ApiResponse({ type: MinimumKinVersionResponse })
   getMinimumKinVersion() {
     return this.service.getMinimumKinVersion()
   }
@@ -30,6 +34,7 @@ export class ApiTransactionFeatureController {
   }
 
   @Get('minimum-balance-for-rent-exemption/:dataLength')
+  @ApiResponse({ type: MinimumBalanceForRentExemptionResponse })
   getMinimumBalanceForRentExemption(@Param('dataLength') dataLength: number) {
     return this.service.getMinimumBalanceForRentExemption(dataLength)
   }
@@ -46,6 +51,7 @@ export class ApiTransactionFeatureController {
 
   @Post('submit-transaction')
   @ApiBody({ type: SubmitPaymentRequest })
+  @ApiResponse({ type: SubmitTransactionResponse })
   submitTransaction(@Body() body: SubmitPaymentRequest) {
     return this.service.submitTransaction(body)
   }
