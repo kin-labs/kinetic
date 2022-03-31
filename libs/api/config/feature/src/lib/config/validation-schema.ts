@@ -1,7 +1,12 @@
 import * as Joi from 'joi'
 
 export const validationSchema = Joi.object({
+  ADMIN_EMAIL: Joi.string().required().error(new Error(`ADMIN_EMAIL is required.`)),
+  ADMIN_PASSWORD: Joi.string().required().error(new Error(`ADMIN_PASSWORD is required.`)),
+  COOKIE_DOMAIN: Joi.string().required(),
+  COOKIE_NAME: Joi.string().required().default('__session'),
   DATABASE_URL: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
   MOGAMI_AIRDROP_DEFAULT: Joi.number().default(1),
   MOGAMI_AIRDROP_MAX: Joi.number().default(50000),
   MOGAMI_AIRDROP_SECRET_KEY: Joi.string().optional(),

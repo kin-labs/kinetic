@@ -9,8 +9,15 @@ const originsEnv: string[] = process.env.CORS_ORIGINS?.includes(',')
 const origin = originsEnv.length && originsEnv[0] === '*' ? '*' : originsEnv
 
 export default () => ({
+  admin: {
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD,
+  },
   cors: { origin },
   environment: process.env.NODE_ENV,
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
   mogamiAirdropDefault: process.env.MOGAMI_AIRDROP_DEFAULT,
   mogamiAirdropMax: process.env.MOGAMI_AIRDROP_MAX,
   mogamiAirdropKeypair: process.env.MOGAMI_AIRDROP_SECRET_KEY

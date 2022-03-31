@@ -9,6 +9,50 @@
     "api-account-feature": "libs/api/account/feature",
     "api-airdrop-data-access": "libs/api/airdrop/data-access",
     "api-airdrop-feature": "libs/api/airdrop/feature",
+    "api-auth-data-access": {
+      "root": "libs/api/auth/data-access",
+      "sourceRoot": "libs/api/auth/data-access/src",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/api/auth/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/auth/data-access"],
+          "options": {
+            "jestConfig": "libs/api/auth/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:api", "type:data-access"]
+    },
+    "api-auth-feature": {
+      "root": "libs/api/auth/feature",
+      "sourceRoot": "libs/api/auth/feature/src",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/api/auth/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/auth/feature"],
+          "options": {
+            "jestConfig": "libs/api/auth/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:api", "type:feature"]
+    },
     "api-config-data-access": "libs/api/config/data-access",
     "api-config-feature": "libs/api/config/feature",
     "api-core-data-access": "libs/api/core/data-access",
@@ -16,6 +60,50 @@
     "api-e2e": "apps/api-e2e",
     "api-transaction-data-access": "libs/api/transaction/data-access",
     "api-transaction-feature": "libs/api/transaction/feature",
+    "api-user-data-access": {
+      "root": "libs/api/user/data-access",
+      "sourceRoot": "libs/api/user/data-access/src",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/api/user/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/user/data-access"],
+          "options": {
+            "jestConfig": "libs/api/user/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:api", "type:data-access"]
+    },
+    "api-user-feature": {
+      "root": "libs/api/user/feature",
+      "sourceRoot": "libs/api/user/feature/src",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/api/user/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/user/feature"],
+          "options": {
+            "jestConfig": "libs/api/user/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:api", "type:feature"]
+    },
     "demo": "apps/demo",
     "demo-e2e": "apps/demo-e2e",
     "keypair": "libs/keypair",

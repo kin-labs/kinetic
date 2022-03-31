@@ -11,12 +11,24 @@ import * as fs from 'fs'
 export class ApiConfigDataAccessService {
   constructor(private readonly config: ConfigService) {}
 
+  get adminEmail(): string {
+    return this.config.get('admin.email')
+  }
+
+  get adminPassword(): string {
+    return this.config.get('admin.password')
+  }
+
   get corsOrigins(): string[] {
     return this.config.get('cors.origin')
   }
 
   get environment() {
     return this.config.get('environment')
+  }
+
+  get jwtSecret(): string {
+    return this.config.get('jwt.secret')
   }
 
   mogamiAirdropConfig(connection: Connection): AirdropConfig | null {

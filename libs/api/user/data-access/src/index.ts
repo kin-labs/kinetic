@@ -1,0 +1,5 @@
+export * from './lib/api-user-data-access.module'
+export * from './lib/api-user-data-access.service'
+export * from './lib/entities/user-email.entity'
+export * from './lib/entities/user-role.enum'
+export * from './lib/entities/user.entity'
