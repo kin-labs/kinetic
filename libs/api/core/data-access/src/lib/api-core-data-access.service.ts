@@ -30,15 +30,19 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     return user
   }
 
-  async getAppByIndex(index: number) {
+  getAppByIndex(index: number) {
     return this.app.findUnique({ where: { index } })
   }
 
   getUserByEmail(email: string) {
-    return this.user.findFirst({ where: { emails: { some: { email } } } })
+    return this.user.findFirst({ where: { emails: { some: { email } } }, include: { emails: true } })
   }
 
   getUserById(userId: string) {
-    return this.user.findUnique({ where: { id: userId } })
+    return this.user.findUnique({ where: { id: userId }, include: { emails: true } })
+  }
+
+  getUserByUsername(username: string) {
+    return this.user.findUnique({ where: { username }, include: { emails: true } })
   }
 }

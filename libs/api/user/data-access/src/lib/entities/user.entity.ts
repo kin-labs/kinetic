@@ -10,11 +10,10 @@ export class User {
   createdAt?: Date
   @Field()
   updatedAt?: Date
-  @Field()
+  @Field({ nullable: true })
   name?: string
   @Field()
   username?: string
-  @Field()
   avatarUrl?: string
 
   @Field(() => [UserEmail], { nullable: true })

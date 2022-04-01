@@ -13,6 +13,7 @@
     "api-app-feature": "libs/api/app/feature",
     "api-auth-data-access": "libs/api/auth/data-access",
     "api-auth-feature": "libs/api/auth/feature",
+    "api-auth-util": "libs/api/auth/util",
     "api-config-data-access": "libs/api/config/data-access",
     "api-config-feature": "libs/api/config/feature",
     "api-core-data-access": "libs/api/core/data-access",

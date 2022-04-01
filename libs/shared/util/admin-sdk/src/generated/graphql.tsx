@@ -48,18 +48,29 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation'
   createApp?: Maybe<App>
+  createUser?: Maybe<User>
   deleteApp?: Maybe<App>
+  deleteUser?: Maybe<User>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
   updateApp?: Maybe<App>
+  updateUser?: Maybe<User>
 }
 
 export type MutationCreateAppArgs = {
   input: AppCreateInput
 }
 
+export type MutationCreateUserArgs = {
+  input: UserCreateInput
+}
+
 export type MutationDeleteAppArgs = {
   appId: Scalars['String']
+}
+
+export type MutationDeleteUserArgs = {
+  userId: Scalars['String']
 }
 
 export type MutationLoginArgs = {
@@ -71,28 +82,49 @@ export type MutationUpdateAppArgs = {
   input: AppUpdateInput
 }
 
+export type MutationUpdateUserArgs = {
+  input: UserUpdateInput
+  userId: Scalars['String']
+}
+
 export type Query = {
   __typename?: 'Query'
   app?: Maybe<App>
   apps?: Maybe<Array<App>>
   me?: Maybe<User>
   uptime: Scalars['Float']
+  user?: Maybe<User>
+  users?: Maybe<Array<User>>
 }
 
 export type QueryAppArgs = {
   appId: Scalars['String']
 }
 
+export type QueryUserArgs = {
+  userId: Scalars['String']
+}
+
 export type User = {
   __typename?: 'User'
-  avatarUrl: Scalars['String']
+  avatarUrl?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
+  email?: Maybe<Scalars['String']>
   emails?: Maybe<Array<UserEmail>>
   id: Scalars['String']
-  name: Scalars['String']
+  name?: Maybe<Scalars['String']>
   role?: Maybe<UserRole>
   updatedAt: Scalars['DateTime']
   username: Scalars['String']
+}
+
+export type UserCreateInput = {
+  avatarUrl?: InputMaybe<Scalars['String']>
+  email: Scalars['String']
+  name?: InputMaybe<Scalars['String']>
+  password: Scalars['String']
+  role?: InputMaybe<UserRole>
+  username?: InputMaybe<Scalars['String']>
 }
 
 export type UserEmail = {
@@ -106,6 +138,12 @@ export type UserEmail = {
 export enum UserRole {
   Admin = 'Admin',
   User = 'User',
+}
+
+export type UserUpdateInput = {
+  avatarUrl?: InputMaybe<Scalars['String']>
+  name?: InputMaybe<Scalars['String']>
+  role?: InputMaybe<UserRole>
 }
 
 export type AppDetailsFragment = {
@@ -206,8 +244,9 @@ export type MeQuery = {
     id: string
     createdAt: any
     updatedAt: any
-    avatarUrl: string
-    name: string
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
     username: string
     role?: UserRole | null
   } | null
@@ -222,8 +261,9 @@ export type UserDetailsFragment = {
   id: string
   createdAt: any
   updatedAt: any
-  avatarUrl: string
-  name: string
+  avatarUrl?: string | null
+  email?: string | null
+  name?: string | null
   username: string
   role?: UserRole | null
 }
@@ -234,6 +274,101 @@ export type UserEmailDetailsFragment = {
   createdAt: any
   updatedAt: any
   email: string
+}
+
+export type CreateUserMutationVariables = Exact<{
+  input: UserCreateInput
+}>
+
+export type CreateUserMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'User'
+    id: string
+    createdAt: any
+    updatedAt: any
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
+    username: string
+    role?: UserRole | null
+  } | null
+}
+
+export type DeleteUserMutationVariables = Exact<{
+  userId: Scalars['String']
+}>
+
+export type DeleteUserMutation = {
+  __typename?: 'Mutation'
+  deleted?: {
+    __typename?: 'User'
+    id: string
+    createdAt: any
+    updatedAt: any
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
+    username: string
+    role?: UserRole | null
+  } | null
+}
+
+export type UpdateUserMutationVariables = Exact<{
+  userId: Scalars['String']
+  input: UserUpdateInput
+}>
+
+export type UpdateUserMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'User'
+    id: string
+    createdAt: any
+    updatedAt: any
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
+    username: string
+    role?: UserRole | null
+  } | null
+}
+
+export type UserQueryVariables = Exact<{
+  userId: Scalars['String']
+}>
+
+export type UserQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'User'
+    id: string
+    createdAt: any
+    updatedAt: any
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
+    username: string
+    role?: UserRole | null
+    emails?: Array<{ __typename?: 'UserEmail'; id: string; createdAt: any; updatedAt: any; email: string }> | null
+  } | null
+}
+
+export type UsersQueryVariables = Exact<{ [key: string]: never }>
+
+export type UsersQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'User'
+    id: string
+    createdAt: any
+    updatedAt: any
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
+    username: string
+    role?: UserRole | null
+  }> | null
 }
 
 export const AppDetailsFragmentDoc = gql`
@@ -256,6 +391,7 @@ export const UserDetailsFragmentDoc = gql`
     createdAt
     updatedAt
     avatarUrl
+    email
     name
     username
     role
@@ -361,4 +497,68 @@ export const UptimeDocument = gql`
 
 export function useUptimeQuery(options?: Omit<Urql.UseQueryArgs<UptimeQueryVariables>, 'query'>) {
   return Urql.useQuery<UptimeQuery>({ query: UptimeDocument, ...options })
+}
+export const CreateUserDocument = gql`
+  mutation CreateUser($input: UserCreateInput!) {
+    created: createUser(input: $input) {
+      ...UserDetails
+    }
+  }
+  ${UserDetailsFragmentDoc}
+`
+
+export function useCreateUserMutation() {
+  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument)
+}
+export const DeleteUserDocument = gql`
+  mutation DeleteUser($userId: String!) {
+    deleted: deleteUser(userId: $userId) {
+      ...UserDetails
+    }
+  }
+  ${UserDetailsFragmentDoc}
+`
+
+export function useDeleteUserMutation() {
+  return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument)
+}
+export const UpdateUserDocument = gql`
+  mutation UpdateUser($userId: String!, $input: UserUpdateInput!) {
+    updated: updateUser(userId: $userId, input: $input) {
+      ...UserDetails
+    }
+  }
+  ${UserDetailsFragmentDoc}
+`
+
+export function useUpdateUserMutation() {
+  return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument)
+}
+export const UserDocument = gql`
+  query User($userId: String!) {
+    item: user(userId: $userId) {
+      ...UserDetails
+      emails {
+        ...UserEmailDetails
+      }
+    }
+  }
+  ${UserDetailsFragmentDoc}
+  ${UserEmailDetailsFragmentDoc}
+`
+
+export function useUserQuery(options: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserQuery>({ query: UserDocument, ...options })
+}
+export const UsersDocument = gql`
+  query Users {
+    items: users {
+      ...UserDetails
+    }
+  }
+  ${UserDetailsFragmentDoc}
+`
+
+export function useUsersQuery(options?: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'>) {
+  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options })
 }

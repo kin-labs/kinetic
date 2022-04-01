@@ -3,6 +3,7 @@ fragment UserDetails on User {
   createdAt
   updatedAt
   avatarUrl
+  email
   name
   username
   role
@@ -13,4 +14,37 @@ fragment UserEmailDetails on UserEmail {
   createdAt
   updatedAt
   email
+}
+
+mutation CreateUser($input: UserCreateInput!) {
+  created: createUser(input: $input) {
+    ...UserDetails
+  }
+}
+
+mutation DeleteUser($userId: String!) {
+  deleted: deleteUser(userId: $userId) {
+    ...UserDetails
+  }
+}
+
+mutation UpdateUser($userId: String!, $input: UserUpdateInput!) {
+  updated: updateUser(userId: $userId, input: $input) {
+    ...UserDetails
+  }
+}
+
+query User($userId: String!) {
+  item: user(userId: $userId) {
+    ...UserDetails
+    emails {
+      ...UserEmailDetails
+    }
+  }
+}
+
+query Users {
+  items: users {
+    ...UserDetails
+  }
 }
