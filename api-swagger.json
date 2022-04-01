@@ -12,6 +12,24 @@
         }
       }
     },
+    "/api/health-check": {
+      "get": {
+        "operationId": "ApiCoreFeatureController_healthCheck",
+        "parameters": [],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/account/info/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_getAccountInfo",
@@ -380,6 +398,21 @@
   ],
   "components": {
     "schemas": {
+      "HealthCheckResponse": {
+        "type": "object",
+        "properties": {
+          "isSolanaOk": {
+            "type": "boolean"
+          },
+          "isMogamiOk": {
+            "type": "boolean"
+          },
+          "time": {
+            "type": "string"
+          }
+        },
+        "required": ["isSolanaOk", "isMogamiOk", "time"]
+      },
       "CreateAccountRequest": {
         "type": "object",
         "properties": {

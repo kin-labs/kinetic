@@ -49,6 +49,7 @@
     "@solana/web3.js": "^1.37.0",
     "apollo-server-express": "^3.6.7",
     "autoprefixer": "^10.4.4",
+    "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
     "bignumber": "^1.1.0",
     "bip39": "^3.0.4",
