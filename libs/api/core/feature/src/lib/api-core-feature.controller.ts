@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessService, HealthCheckResponse } from '@mogami/api/core/data-access'
+import { ApiResponse } from '@nestjs/swagger'
 
 @Controller()
 export class ApiCoreFeatureController {
@@ -8,5 +9,11 @@ export class ApiCoreFeatureController {
   @Get('uptime')
   uptime() {
     return this.service.uptime()
+  }
+
+  @Get('health-check')
+  @ApiResponse({ type: HealthCheckResponse })
+  healthCheck() {
+    return this.service.healthCheck()
   }
 }

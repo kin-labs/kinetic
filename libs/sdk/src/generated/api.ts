@@ -180,6 +180,31 @@ export interface CreateAccountResponse {
 /**
  *
  * @export
+ * @interface HealthCheckResponse
+ */
+export interface HealthCheckResponse {
+  /**
+   *
+   * @type {boolean}
+   * @memberof HealthCheckResponse
+   */
+  isSolanaOk: boolean
+  /**
+   *
+   * @type {boolean}
+   * @memberof HealthCheckResponse
+   */
+  isMogamiOk: boolean
+  /**
+   *
+   * @type {string}
+   * @memberof HealthCheckResponse
+   */
+  time: string
+}
+/**
+ *
+ * @export
  * @interface HistoryResponse
  */
 export interface HistoryResponse {
@@ -974,6 +999,33 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    apiCoreFeatureControllerHealthCheck: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/health-check`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     apiCoreFeatureControllerUptime: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/api/uptime`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1011,6 +1063,17 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    async apiCoreFeatureControllerHealthCheck(
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HealthCheckResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiCoreFeatureControllerHealthCheck(options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     async apiCoreFeatureControllerUptime(
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
@@ -1032,6 +1095,14 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
+    apiCoreFeatureControllerHealthCheck(options?: any): AxiosPromise<HealthCheckResponse> {
+      return localVarFp.apiCoreFeatureControllerHealthCheck(options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
     apiCoreFeatureControllerUptime(options?: any): AxiosPromise<void> {
       return localVarFp.apiCoreFeatureControllerUptime(options).then((request) => request(axios, basePath))
     },
@@ -1045,6 +1116,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public apiCoreFeatureControllerHealthCheck(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .apiCoreFeatureControllerHealthCheck(options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
   /**
    *
    * @param {*} [options] Override http request option.

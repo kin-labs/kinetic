@@ -2,6 +2,7 @@ import { Commitment, Connection, PublicKey, Transaction } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
 import { getPublicKey, parseEndpoint } from './helpers'
 import { PublicKeyString, SolanaConfig, TokenBalance } from './interfaces'
+import axios from 'axios'
 
 export class Solana {
   readonly endpoint: string
@@ -66,5 +67,10 @@ export class Solana {
 
   submitTransaction(tx: Transaction) {
     return this.connection.sendRawTransaction(tx.serialize())
+  }
+
+  async healthCheck() {
+    const res = await axios.get(`${this.endpoint}/health`)
+    return res.data.toString() === 'ok'
   }
 }
