@@ -22,9 +22,11 @@
     "format:write": "nx format:write",
     "prepare": "husky install",
     "start": "yarn prisma db push && node dist/apps/api/main.js",
-    "test": "nx test && yarn test:e2e",
-    "test:e2e:watch": "nx run demo-e2e:e2e --headed --watch",
-    "test:e2e": "nx run demo-e2e:e2e"
+    "test": "nx test && yarn test:admin-e2e && yarn test:demo-e2e",
+    "test:admin-e2e:watch": "nx run admin-e2e:e2e --headed --watch",
+    "test:admin-e2e": "nx run admin-e2e:e2e",
+    "test:demo-e2e:watch": "nx run demo-e2e:e2e --headed --watch",
+    "test:demo-e2e": "nx run demo-e2e:e2e"
   },
   "private": true,
   "dependencies": {
