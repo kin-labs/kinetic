@@ -32,3 +32,29 @@ model Airdrop {
   toPostToken      String
   toTokenAccount   String
 }
+
+model User {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+  avatarUrl String?
+  name      String?
+  password  String?
+  role      UserRole
+  username  String      @unique
+  emails    UserEmail[] @relation("UserEmail_belongsTo_Owner")
+}
+
+model UserEmail {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  email     String   @unique
+  owner     User     @relation(name: "UserEmail_belongsTo_Owner", fields: [ownerId], references: [id])
+  ownerId   String
+}
+
+enum UserRole {
+  Admin
+  User
+}

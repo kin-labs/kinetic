@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common'
-import { getEndpoint, initializeE2eApp } from './helpers'
+import { getEndpoint, initializeE2eApp } from '../helpers'
 
 describe('CoreFeatureController (e2e)', () => {
   let app: INestApplication

@@ -3,6 +3,14 @@ schema: 'api-schema.graphql'
 documents:
   - 'libs/shared/util/admin-sdk/src/graphql/**/*.graphql'
 generates:
+  apps/api-e2e/src/generated/api-sdk.ts:
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript
+      - typescript-document-nodes
+      - typescript-operations
+      - fragment-matcher
   libs/shared/util/admin-sdk/src/generated/graphql.tsx:
     plugins:
       - 'typescript'

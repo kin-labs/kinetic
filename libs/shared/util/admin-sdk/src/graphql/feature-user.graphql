@@ -1,0 +1,16 @@
+fragment UserDetails on User {
+  id
+  createdAt
+  updatedAt
+  avatarUrl
+  name
+  username
+  role
+}
+
+fragment UserEmailDetails on UserEmail {
+  id
+  createdAt
+  updatedAt
+  email
+}

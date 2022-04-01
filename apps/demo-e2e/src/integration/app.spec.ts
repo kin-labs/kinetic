@@ -89,7 +89,7 @@ describe('demo', () => {
     cy.get('[cy-data="panel-get-server-config"]').then((el) => {
       const config = JSON.parse(el[0].innerText)
       expect(config.environment).to.equals('production')
-      expect(config.port).to.equals(34453)
+      expect(config.port).to.satisfy(Number.isInteger)
       expect(config.solanaRpcEndpoint).to.equals('devnet')
     })
   })

@@ -17,7 +17,7 @@ export class ApiAccountFeatureController {
   constructor(private readonly service: ApiAccountDataAccessService) {}
 
   @Get('info/:accountId')
-  getAccountInfo(@Param('accountId') accountId: string, @Query('commitment') commitment: Commitment) {
+  getAccountInfo(@Param('accountId') accountId: string, @Query('commitment') commitment?: Commitment) {
     return this.service.getAccountInfo(accountId, commitment)
   }
 

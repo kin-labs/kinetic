@@ -2,6 +2,49 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthToken {
+  token: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  login(input: LoginInput!): AuthToken
+  logout: Boolean
+}
+
 type Query {
+  me: User
   uptime: Float!
+}
+
+type User {
+  avatarUrl: String!
+  createdAt: DateTime!
+  emails: [UserEmail!]
+  id: String!
+  name: String!
+  role: UserRole
+  updatedAt: DateTime!
+  username: String!
+}
+
+type UserEmail {
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  updatedAt: DateTime!
+}
+
+enum UserRole {
+  Admin
+  User
 }
