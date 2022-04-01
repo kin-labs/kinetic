@@ -1,4 +1,12 @@
-import { ApiAppDataAccessService, App, AppCreateInput, AppUpdateInput } from '@mogami/api/app/data-access'
+import {
+  ApiAppDataAccessService,
+  App,
+  AppCreateInput,
+  AppUpdateInput,
+  AppUserAddInput,
+  AppUserRemoveInput,
+  AppUserUpdateRoleInput,
+} from '@mogami/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
@@ -27,6 +35,21 @@ export class ApiAppFeatureResolver {
   @Query(() => App, { nullable: true })
   app(@CtxUser() user: User, @Args('appId') appId: string) {
     return this.service.app(user.id, appId)
+  }
+
+  @Mutation(() => App, { nullable: true })
+  appUserAdd(@CtxUser() user: User, @Args('appId') appId: string, @Args('input') input: AppUserAddInput) {
+    return this.service.appUserAdd(user.id, appId, input)
+  }
+
+  @Mutation(() => App, { nullable: true })
+  appUserRemove(@CtxUser() user: User, @Args('appId') appId: string, @Args('input') input: AppUserRemoveInput) {
+    return this.service.appUserRemove(user.id, appId, input)
+  }
+
+  @Mutation(() => App, { nullable: true })
+  appUserUpdateRole(@CtxUser() user: User, @Args('appId') appId: string, @Args('input') input: AppUserUpdateRoleInput) {
+    return this.service.appUserUpdateRole(user.id, appId, input)
   }
 
   @Mutation(() => App, { nullable: true })

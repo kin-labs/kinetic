@@ -8,6 +8,7 @@ type App {
   index: Int!
   name: String
   updatedAt: DateTime!
+  users: [AppUser!]
 }
 
 input AppCreateInput {
@@ -17,6 +18,33 @@ input AppCreateInput {
 
 input AppUpdateInput {
   name: String
+}
+
+type AppUser {
+  createdAt: DateTime!
+  id: String!
+  role: AppUserRole!
+  updatedAt: DateTime!
+  user: User
+}
+
+input AppUserAddInput {
+  role: AppUserRole!
+  userId: String!
+}
+
+input AppUserRemoveInput {
+  userId: String!
+}
+
+enum AppUserRole {
+  Member
+  Owner
+}
+
+input AppUserUpdateRoleInput {
+  role: AppUserRole!
+  userId: String!
 }
 
 type AuthToken {
@@ -34,6 +62,9 @@ input LoginInput {
 }
 
 type Mutation {
+  appUserAdd(appId: String!, input: AppUserAddInput!): App
+  appUserRemove(appId: String!, input: AppUserRemoveInput!): App
+  appUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
   createApp(input: AppCreateInput!): App
   createUser(input: UserCreateInput!): User
   deleteApp(appId: String!): App

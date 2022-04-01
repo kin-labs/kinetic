@@ -24,6 +24,7 @@ export type App = {
   index: Scalars['Int']
   name?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
+  users?: Maybe<Array<AppUser>>
 }
 
 export type AppCreateInput = {
@@ -33,6 +34,34 @@ export type AppCreateInput = {
 
 export type AppUpdateInput = {
   name?: InputMaybe<Scalars['String']>
+}
+
+export type AppUser = {
+  __typename?: 'AppUser'
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  role: AppUserRole
+  updatedAt: Scalars['DateTime']
+  user?: Maybe<User>
+}
+
+export type AppUserAddInput = {
+  role: AppUserRole
+  userId: Scalars['String']
+}
+
+export type AppUserRemoveInput = {
+  userId: Scalars['String']
+}
+
+export enum AppUserRole {
+  Member = 'Member',
+  Owner = 'Owner',
+}
+
+export type AppUserUpdateRoleInput = {
+  role: AppUserRole
+  userId: Scalars['String']
 }
 
 export type AuthToken = {
@@ -47,6 +76,9 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  appUserAdd?: Maybe<App>
+  appUserRemove?: Maybe<App>
+  appUserUpdateRole?: Maybe<App>
   createApp?: Maybe<App>
   createUser?: Maybe<User>
   deleteApp?: Maybe<App>
@@ -55,6 +87,21 @@ export type Mutation = {
   logout?: Maybe<Scalars['Boolean']>
   updateApp?: Maybe<App>
   updateUser?: Maybe<User>
+}
+
+export type MutationAppUserAddArgs = {
+  appId: Scalars['String']
+  input: AppUserAddInput
+}
+
+export type MutationAppUserRemoveArgs = {
+  appId: Scalars['String']
+  input: AppUserRemoveInput
+}
+
+export type MutationAppUserUpdateRoleArgs = {
+  appId: Scalars['String']
+  input: AppUserUpdateRoleInput
 }
 
 export type MutationCreateAppArgs = {
@@ -155,6 +202,25 @@ export type AppDetailsFragment = {
   name?: string | null
 }
 
+export type AppUserDetailsFragment = {
+  __typename?: 'AppUser'
+  id: string
+  createdAt: any
+  updatedAt: any
+  role: AppUserRole
+  user?: {
+    __typename?: 'User'
+    id: string
+    createdAt: any
+    updatedAt: any
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
+    username: string
+    role?: UserRole | null
+  } | null
+}
+
 export type CreateAppMutationVariables = Exact<{
   input: AppCreateInput
 }>
@@ -168,6 +234,24 @@ export type CreateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
   } | null
 }
 
@@ -201,6 +285,24 @@ export type UpdateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
   } | null
 }
 
@@ -210,7 +312,137 @@ export type AppQueryVariables = Exact<{
 
 export type AppQuery = {
   __typename?: 'Query'
-  item?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type AppUserAddMutationVariables = Exact<{
+  appId: Scalars['String']
+  input: AppUserAddInput
+}>
+
+export type AppUserAddMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type AppUserRemoveMutationVariables = Exact<{
+  appId: Scalars['String']
+  input: AppUserRemoveInput
+}>
+
+export type AppUserRemoveMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type AppUserUpdateRoleMutationVariables = Exact<{
+  appId: Scalars['String']
+  input: AppUserUpdateRoleInput
+}>
+
+export type AppUserUpdateRoleMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
+  } | null
 }
 
 export type AppsQueryVariables = Exact<{ [key: string]: never }>
@@ -380,11 +612,6 @@ export const AppDetailsFragmentDoc = gql`
     name
   }
 `
-export const AuthTokenDetailsFragmentDoc = gql`
-  fragment AuthTokenDetails on AuthToken {
-    token
-  }
-`
 export const UserDetailsFragmentDoc = gql`
   fragment UserDetails on User {
     id
@@ -395,6 +622,23 @@ export const UserDetailsFragmentDoc = gql`
     name
     username
     role
+  }
+`
+export const AppUserDetailsFragmentDoc = gql`
+  fragment AppUserDetails on AppUser {
+    id
+    createdAt
+    updatedAt
+    role
+    user {
+      ...UserDetails
+    }
+  }
+  ${UserDetailsFragmentDoc}
+`
+export const AuthTokenDetailsFragmentDoc = gql`
+  fragment AuthTokenDetails on AuthToken {
+    token
   }
 `
 export const UserEmailDetailsFragmentDoc = gql`
@@ -409,9 +653,13 @@ export const CreateAppDocument = gql`
   mutation CreateApp($input: AppCreateInput!) {
     created: createApp(input: $input) {
       ...AppDetails
+      users {
+        ...AppUserDetails
+      }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
 `
 
 export function useCreateAppMutation() {
@@ -433,9 +681,13 @@ export const UpdateAppDocument = gql`
   mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
     updated: updateApp(appId: $appId, input: $input) {
       ...AppDetails
+      users {
+        ...AppUserDetails
+      }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
 `
 
 export function useUpdateAppMutation() {
@@ -445,13 +697,65 @@ export const AppDocument = gql`
   query App($appId: String!) {
     item: app(appId: $appId) {
       ...AppDetails
+      users {
+        ...AppUserDetails
+      }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
 `
 
 export function useAppQuery(options: Omit<Urql.UseQueryArgs<AppQueryVariables>, 'query'>) {
   return Urql.useQuery<AppQuery>({ query: AppDocument, ...options })
+}
+export const AppUserAddDocument = gql`
+  mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
+    item: appUserAdd(appId: $appId, input: $input) {
+      ...AppDetails
+      users {
+        ...AppUserDetails
+      }
+    }
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
+`
+
+export function useAppUserAddMutation() {
+  return Urql.useMutation<AppUserAddMutation, AppUserAddMutationVariables>(AppUserAddDocument)
+}
+export const AppUserRemoveDocument = gql`
+  mutation AppUserRemove($appId: String!, $input: AppUserRemoveInput!) {
+    item: appUserRemove(appId: $appId, input: $input) {
+      ...AppDetails
+      users {
+        ...AppUserDetails
+      }
+    }
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
+`
+
+export function useAppUserRemoveMutation() {
+  return Urql.useMutation<AppUserRemoveMutation, AppUserRemoveMutationVariables>(AppUserRemoveDocument)
+}
+export const AppUserUpdateRoleDocument = gql`
+  mutation AppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
+    item: appUserUpdateRole(appId: $appId, input: $input) {
+      ...AppDetails
+      users {
+        ...AppUserDetails
+      }
+    }
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
+`
+
+export function useAppUserUpdateRoleMutation() {
+  return Urql.useMutation<AppUserUpdateRoleMutation, AppUserUpdateRoleMutationVariables>(AppUserUpdateRoleDocument)
 }
 export const AppsDocument = gql`
   query Apps {

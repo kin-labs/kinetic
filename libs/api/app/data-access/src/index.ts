@@ -1,6 +1,10 @@
-export * from './lib/api-app-data-access.service'
 export * from './lib/api-app-data-access.module'
-
+export * from './lib/api-app-data-access.service'
 export * from './lib/dto/app-create.input'
 export * from './lib/dto/app-update.input'
+export * from './lib/dto/app-user-add.input'
+export * from './lib/dto/app-user-remove.input'
+export * from './lib/dto/app-user-update-role.input'
+export * from './lib/entity/app-user-role.enum'
+export * from './lib/entity/app-user.entity'
 export * from './lib/entity/app.entity'
