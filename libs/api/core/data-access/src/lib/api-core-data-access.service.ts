@@ -1,7 +1,7 @@
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, UserRole } from '@prisma/client'
 
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
@@ -20,6 +20,18 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async onModuleInit() {
     await this.$connect()
+  }
+
+  async ensureAdminUser(userId: string) {
+    const user = await this.getUserById(userId)
+    if (user.role !== UserRole.Admin) {
+      throw new Error(`Admin role required.`)
+    }
+    return user
+  }
+
+  async getAppByIndex(index: number) {
+    return this.app.findUnique({ where: { index } })
   }
 
   getUserByEmail(email: string) {

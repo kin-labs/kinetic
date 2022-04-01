@@ -1,0 +1,22 @@
+{
+  "root": "libs/api/app/feature",
+  "sourceRoot": "libs/api/app/feature/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/app/feature/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/app/feature"],
+      "options": {
+        "jestConfig": "libs/api/app/feature/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:api", "type:feature"]
+}

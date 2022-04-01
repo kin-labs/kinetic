@@ -9,6 +9,8 @@
     "api-account-feature": "libs/api/account/feature",
     "api-airdrop-data-access": "libs/api/airdrop/data-access",
     "api-airdrop-feature": "libs/api/airdrop/feature",
+    "api-app-data-access": "libs/api/app/data-access",
+    "api-app-feature": "libs/api/app/feature",
     "api-auth-data-access": "libs/api/auth/data-access",
     "api-auth-feature": "libs/api/auth/feature",
     "api-config-data-access": "libs/api/config/data-access",

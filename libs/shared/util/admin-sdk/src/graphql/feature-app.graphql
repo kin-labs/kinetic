@@ -1,0 +1,37 @@
+fragment AppDetails on App {
+  id
+  createdAt
+  updatedAt
+  index
+  name
+}
+
+mutation CreateApp($input: AppCreateInput!) {
+  created: createApp(input: $input) {
+    ...AppDetails
+  }
+}
+
+mutation DeleteApp($appId: String!) {
+  deleted: deleteApp(appId: $appId) {
+    ...AppDetails
+  }
+}
+
+mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
+  updated: updateApp(appId: $appId, input: $input) {
+    ...AppDetails
+  }
+}
+
+query App($appId: String!) {
+  item: app(appId: $appId) {
+    ...AppDetails
+  }
+}
+
+query Apps {
+  items: apps {
+    ...AppDetails
+  }
+}

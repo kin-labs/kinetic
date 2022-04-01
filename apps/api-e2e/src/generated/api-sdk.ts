@@ -16,6 +16,24 @@ export type Scalars = {
   DateTime: any
 }
 
+export type App = {
+  __typename?: 'App'
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  index: Scalars['Int']
+  name?: Maybe<Scalars['String']>
+  updatedAt: Scalars['DateTime']
+}
+
+export type AppCreateInput = {
+  index: Scalars['Int']
+  name: Scalars['String']
+}
+
+export type AppUpdateInput = {
+  name?: InputMaybe<Scalars['String']>
+}
+
 export type AuthToken = {
   __typename?: 'AuthToken'
   token: Scalars['String']
@@ -28,18 +46,40 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  createApp?: Maybe<App>
+  deleteApp?: Maybe<App>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
+  updateApp?: Maybe<App>
+}
+
+export type MutationCreateAppArgs = {
+  input: AppCreateInput
+}
+
+export type MutationDeleteAppArgs = {
+  appId: Scalars['String']
 }
 
 export type MutationLoginArgs = {
   input: LoginInput
 }
 
+export type MutationUpdateAppArgs = {
+  appId: Scalars['String']
+  input: AppUpdateInput
+}
+
 export type Query = {
   __typename?: 'Query'
+  app?: Maybe<App>
+  apps?: Maybe<Array<App>>
   me?: Maybe<User>
   uptime: Scalars['Float']
+}
+
+export type QueryAppArgs = {
+  appId: Scalars['String']
 }
 
 export type User = {
@@ -67,6 +107,15 @@ export enum UserRole {
   User = 'User',
 }
 
+export const AppDetails = gql`
+  fragment AppDetails on App {
+    id
+    createdAt
+    updatedAt
+    index
+    name
+  }
+`
 export const AuthTokenDetails = gql`
   fragment AuthTokenDetails on AuthToken {
     token
@@ -91,6 +140,46 @@ export const UserEmailDetails = gql`
     email
   }
 `
+export const CreateApp = gql`
+  mutation CreateApp($input: AppCreateInput!) {
+    created: createApp(input: $input) {
+      ...AppDetails
+    }
+  }
+  ${AppDetails}
+`
+export const DeleteApp = gql`
+  mutation DeleteApp($appId: String!) {
+    deleted: deleteApp(appId: $appId) {
+      ...AppDetails
+    }
+  }
+  ${AppDetails}
+`
+export const UpdateApp = gql`
+  mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
+    updated: updateApp(appId: $appId, input: $input) {
+      ...AppDetails
+    }
+  }
+  ${AppDetails}
+`
+export const App = gql`
+  query App($appId: String!) {
+    item: app(appId: $appId) {
+      ...AppDetails
+    }
+  }
+  ${AppDetails}
+`
+export const Apps = gql`
+  query Apps {
+    items: apps {
+      ...AppDetails
+    }
+  }
+  ${AppDetails}
+`
 export const Login = gql`
   mutation Login($input: LoginInput!) {
     login(input: $input) {
@@ -112,6 +201,87 @@ export const Uptime = gql`
     uptime
   }
 `
+export type AppDetailsFragment = {
+  __typename?: 'App'
+  id: string
+  createdAt: any
+  updatedAt: any
+  index: number
+  name?: string | null
+}
+
+export type CreateAppMutationVariables = Exact<{
+  input: AppCreateInput
+}>
+
+export type CreateAppMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+  } | null
+}
+
+export type DeleteAppMutationVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type DeleteAppMutation = {
+  __typename?: 'Mutation'
+  deleted?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+  } | null
+}
+
+export type UpdateAppMutationVariables = Exact<{
+  appId: Scalars['String']
+  input: AppUpdateInput
+}>
+
+export type UpdateAppMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+  } | null
+}
+
+export type AppQueryVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type AppQuery = {
+  __typename?: 'Query'
+  item?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+}
+
+export type AppsQueryVariables = Exact<{ [key: string]: never }>
+
+export type AppsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+  }> | null
+}
+
 export type AuthTokenDetailsFragment = { __typename?: 'AuthToken'; token: string }
 
 export type LoginMutationVariables = Exact<{

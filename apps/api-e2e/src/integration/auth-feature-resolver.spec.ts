@@ -1,9 +1,7 @@
 import { INestApplication } from '@nestjs/common'
 import { UserRole } from '@prisma/client'
 import { Me } from '../generated/api-sdk'
-import { runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
-import { initializeE2eApp } from '../helpers/'
-import { ADMIN_EMAIL } from '../helpers/api-e2e.constants'
+import { ADMIN_EMAIL, initializeE2eApp, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 
 describe('Auth (e2e)', () => {
   let app: INestApplication
@@ -34,13 +32,6 @@ describe('Auth (e2e)', () => {
 
           expect(data).toHaveProperty('me.id')
 
-          // Remove any property that might change each run, snapshot it
-          data.me.id = undefined
-          data.me.createdAt = undefined
-          data.me.updatedAt = undefined
-          expect(data.me).toMatchSnapshot()
-
-          // Pick properties specifically and test value.
           expect(data.me.role).toEqual(UserRole.Admin)
           expect(data.me.name).toEqual('Mogami Admin')
           expect(data.me.username).toEqual(ADMIN_EMAIL)
