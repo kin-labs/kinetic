@@ -1,18 +1,10 @@
+import { hashPassword, validatePassword } from '@mogami/api/auth/util'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { UserRole } from '@mogami/api/user/data-access'
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
 import { JwtService, JwtSignOptions } from '@nestjs/jwt'
-import { compareSync, hashSync } from 'bcrypt'
 import { Response } from 'express'
 import { LoginInput } from './dto/login.input'
-
-export function validatePassword(password: string, hashedPassword: string): boolean {
-  return compareSync(password, hashedPassword)
-}
-
-export function hashPassword(password: string): string {
-  return hashSync(password, 10)
-}
 
 @Injectable()
 export class ApiAuthDataAccessService {
@@ -47,11 +39,10 @@ export class ApiAuthDataAccessService {
     if (existing < 1) {
       await this.data.user.create({
         data: {
-          avatarUrl: 'https://avatars.githubusercontent.com/u/82999948?v=4',
-          name: 'Mogami Admin',
+          name: 'Admin',
           password: hashPassword(password),
           role: UserRole.Admin,
-          username: email,
+          username: 'admin',
           emails: {
             create: { email },
           },

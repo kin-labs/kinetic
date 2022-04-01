@@ -1,0 +1,22 @@
+{
+  "root": "libs/api/auth/util",
+  "sourceRoot": "libs/api/auth/util/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/auth/util/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/auth/util"],
+      "options": {
+        "jestConfig": "libs/api/auth/util/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["type:util", "scope:api"]
+}

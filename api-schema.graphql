@@ -35,10 +35,13 @@ input LoginInput {
 
 type Mutation {
   createApp(input: AppCreateInput!): App
+  createUser(input: UserCreateInput!): User
   deleteApp(appId: String!): App
+  deleteUser(userId: String!): User
   login(input: LoginInput!): AuthToken
   logout: Boolean
   updateApp(appId: String!, input: AppUpdateInput!): App
+  updateUser(input: UserUpdateInput!, userId: String!): User
 }
 
 type Query {
@@ -46,17 +49,29 @@ type Query {
   apps: [App!]
   me: User
   uptime: Float!
+  user(userId: String!): User
+  users: [User!]
 }
 
 type User {
-  avatarUrl: String!
+  avatarUrl: String
   createdAt: DateTime!
+  email: String
   emails: [UserEmail!]
   id: String!
-  name: String!
+  name: String
   role: UserRole
   updatedAt: DateTime!
   username: String!
+}
+
+input UserCreateInput {
+  avatarUrl: String
+  email: String!
+  name: String
+  password: String!
+  role: UserRole
+  username: String
 }
 
 type UserEmail {
@@ -69,4 +84,10 @@ type UserEmail {
 enum UserRole {
   Admin
   User
+}
+
+input UserUpdateInput {
+  avatarUrl: String
+  name: String
+  role: UserRole
 }
