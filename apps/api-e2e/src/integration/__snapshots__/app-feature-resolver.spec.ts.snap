@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App (e2e) Unexpected usage Mall-formed Input should not create an app 1`] = `
+Array [
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 20,
+        "line": 1,
+      },
+    ],
+    "message": "Variable \\"$input\\" got invalid value {}; Field \\"index\\" of required type \\"Int!\\" was not provided.",
+  },
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 20,
+        "line": 1,
+      },
+    ],
+    "message": "Variable \\"$input\\" got invalid value {}; Field \\"name\\" of required type \\"String!\\" was not provided.",
+  },
+]
+`;
+
+exports[`App (e2e) Unexpected usage Mall-formed Input should not delete an app 1`] = `
+Array [
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 20,
+        "line": 1,
+      },
+    ],
+    "message": "Variable \\"$appId\\" of required type \\"String!\\" was not provided.",
+  },
+]
+`;
+
+exports[`App (e2e) Unexpected usage Mall-formed Input should not find an app 1`] = `
+Array [
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 11,
+        "line": 1,
+      },
+    ],
+    "message": "Variable \\"$appId\\" of required type \\"String!\\" was not provided.",
+  },
+]
+`;
+
+exports[`App (e2e) Unexpected usage Mall-formed Input should not update an app 1`] = `
+Array [
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 20,
+        "line": 1,
+      },
+    ],
+    "message": "Variable \\"$appId\\" of required type \\"String!\\" was not provided.",
+  },
+]
+`;

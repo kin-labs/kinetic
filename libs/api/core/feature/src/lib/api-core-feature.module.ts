@@ -1,5 +1,6 @@
 import { ApiAccountFeatureModule } from '@mogami/api/account/feature'
 import { ApiAirdropFeatureModule } from '@mogami/api/airdrop/feature'
+import { ApiAppFeatureModule } from '@mogami/api/app/feature'
 import { ApiAuthFeatureModule } from '@mogami/api/auth/feature'
 import { ApiConfigFeatureModule } from '@mogami/api/config/feature'
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
@@ -37,6 +38,7 @@ import { serveStaticFactory } from './serve-static.factory'
     ApiCoreDataAccessModule,
     ApiTransactionFeatureModule,
     ApiUserFeatureModule,
+    ApiAppFeatureModule,
   ],
 })
 export class ApiCoreFeatureModule {}

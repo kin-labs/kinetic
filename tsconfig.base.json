@@ -21,6 +21,8 @@
       "@mogami/api/account/feature": ["libs/api/account/feature/src/index.ts"],
       "@mogami/api/airdrop/data-access": ["libs/api/airdrop/data-access/src/index.ts"],
       "@mogami/api/airdrop/feature": ["libs/api/airdrop/feature/src/index.ts"],
+      "@mogami/api/app/data-access": ["libs/api/app/data-access/src/index.ts"],
+      "@mogami/api/app/feature": ["libs/api/app/feature/src/index.ts"],
       "@mogami/api/auth/data-access": ["libs/api/auth/data-access/src/index.ts"],
       "@mogami/api/auth/feature": ["libs/api/auth/feature/src/index.ts"],
       "@mogami/api/config/data-access": ["libs/api/config/data-access/src/index.ts"],
