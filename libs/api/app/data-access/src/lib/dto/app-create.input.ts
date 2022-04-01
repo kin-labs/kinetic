@@ -7,4 +7,7 @@ export class AppCreateInput {
 
   @Field()
   name: string
+
+  @Field({ nullable: true })
+  skipWalletCreation?: boolean
 }

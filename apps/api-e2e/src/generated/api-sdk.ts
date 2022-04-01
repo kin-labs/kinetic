@@ -24,11 +24,13 @@ export type App = {
   name?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
   users?: Maybe<Array<AppUser>>
+  wallet?: Maybe<Wallet>
 }
 
 export type AppCreateInput = {
   index: Scalars['Int']
   name: Scalars['String']
+  skipWalletCreation?: InputMaybe<Scalars['Boolean']>
 }
 
 export type AppUpdateInput = {
@@ -78,6 +80,8 @@ export type Mutation = {
   appUserAdd?: Maybe<App>
   appUserRemove?: Maybe<App>
   appUserUpdateRole?: Maybe<App>
+  appWalletAdd?: Maybe<App>
+  appWalletRemove?: Maybe<App>
   createApp?: Maybe<App>
   createUser?: Maybe<User>
   deleteApp?: Maybe<App>
@@ -103,6 +107,16 @@ export type MutationAppUserRemoveArgs = {
 export type MutationAppUserUpdateRoleArgs = {
   appId: Scalars['String']
   input: AppUserUpdateRoleInput
+}
+
+export type MutationAppWalletAddArgs = {
+  appId: Scalars['String']
+  walletId: Scalars['String']
+}
+
+export type MutationAppWalletRemoveArgs = {
+  appId: Scalars['String']
+  walletId: Scalars['String']
 }
 
 export type MutationCreateAppArgs = {
@@ -273,10 +287,14 @@ export const CreateApp = gql`
       users {
         ...AppUserDetails
       }
+      wallet {
+        ...WalletDetails
+      }
     }
   }
   ${AppDetails}
   ${AppUserDetails}
+  ${WalletDetails}
 `
 export const DeleteApp = gql`
   mutation DeleteApp($appId: String!) {
@@ -293,10 +311,14 @@ export const UpdateApp = gql`
       users {
         ...AppUserDetails
       }
+      wallet {
+        ...WalletDetails
+      }
     }
   }
   ${AppDetails}
   ${AppUserDetails}
+  ${WalletDetails}
 `
 export const App = gql`
   query App($appId: String!) {
@@ -305,10 +327,14 @@ export const App = gql`
       users {
         ...AppUserDetails
       }
+      wallet {
+        ...WalletDetails
+      }
     }
   }
   ${AppDetails}
   ${AppUserDetails}
+  ${WalletDetails}
 `
 export const AppUserAdd = gql`
   mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
@@ -345,6 +371,30 @@ export const AppUserUpdateRole = gql`
   }
   ${AppDetails}
   ${AppUserDetails}
+`
+export const AppWalletAdd = gql`
+  mutation AppWalletAdd($appId: String!, $walletId: String!) {
+    item: appWalletAdd(appId: $appId, walletId: $walletId) {
+      ...AppDetails
+      wallet {
+        ...WalletDetails
+      }
+    }
+  }
+  ${AppDetails}
+  ${WalletDetails}
+`
+export const AppWalletRemove = gql`
+  mutation AppWalletRemove($appId: String!, $walletId: String!) {
+    item: appWalletRemove(appId: $appId, walletId: $walletId) {
+      ...AppDetails
+      wallet {
+        ...WalletDetails
+      }
+    }
+  }
+  ${AppDetails}
+  ${WalletDetails}
 `
 export const Apps = gql`
   query Apps {
@@ -510,6 +560,7 @@ export type CreateAppMutation = {
         role?: UserRole | null
       } | null
     }> | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
   } | null
 }
 
@@ -561,6 +612,7 @@ export type UpdateAppMutation = {
         role?: UserRole | null
       } | null
     }> | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
   } | null
 }
 
@@ -595,6 +647,7 @@ export type AppQuery = {
         role?: UserRole | null
       } | null
     }> | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
   } | null
 }
 
@@ -700,6 +753,42 @@ export type AppUserUpdateRoleMutation = {
         role?: UserRole | null
       } | null
     }> | null
+  } | null
+}
+
+export type AppWalletAddMutationVariables = Exact<{
+  appId: Scalars['String']
+  walletId: Scalars['String']
+}>
+
+export type AppWalletAddMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+  } | null
+}
+
+export type AppWalletRemoveMutationVariables = Exact<{
+  appId: Scalars['String']
+  walletId: Scalars['String']
+}>
+
+export type AppWalletRemoveMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
   } | null
 }
 

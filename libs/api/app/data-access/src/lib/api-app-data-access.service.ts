@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { AppCreateInput } from './dto/app-create.input'
@@ -10,8 +11,8 @@ import { AppUserRole } from './entity/app-user-role.enum'
 
 @Injectable()
 export class ApiAppDataAccessService {
-  private include: Prisma.AppInclude = { users: { include: { user: true } } }
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  private include: Prisma.AppInclude = { users: { include: { user: true } }, wallet: true }
+  constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
 
   async createApp(userId: string, input: AppCreateInput) {
     await this.data.ensureAdminUser(userId)
@@ -19,9 +20,16 @@ export class ApiAppDataAccessService {
     if (app) {
       throw new BadRequestException(`App with index ${input.index} already exists`)
     }
+    let wallet
+    if (!input.skipWalletCreation) {
+      const generated = await this.wallet.generateWallet(userId)
+      wallet = { connect: { id: generated.id } }
+    }
     const data: Prisma.AppCreateInput = {
-      ...input,
+      index: input.index,
+      name: input.name,
       users: { create: { role: AppUserRole.Owner, userId } },
+      wallet,
     }
     return this.data.app.create({ data, include: this.include })
   }
@@ -91,5 +99,37 @@ export class ApiAppDataAccessService {
       throw new NotFoundException(`App with id ${appId} does not exist.`)
     }
     return app
+  }
+
+  async appWalletAdd(userId: string, appId: string, walletId: string) {
+    const app = await this.ensureAppById(userId, appId)
+    if (app.walletId) {
+      throw new BadRequestException(`App already has a wallet`)
+    }
+    const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
+    if (!wallet) {
+      throw new BadRequestException(`Wallet with id ${walletId} not found`)
+    }
+    return this.data.app.update({
+      where: { id: appId },
+      data: { walletId: wallet.id },
+      include: this.include,
+    })
+  }
+
+  async appWalletRemove(userId: string, appId: string, walletId: string) {
+    const app = await this.ensureAppById(userId, appId)
+    if (!app.walletId) {
+      throw new BadRequestException(`App already has no wallet`)
+    }
+    const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
+    if (!wallet) {
+      throw new BadRequestException(`Wallet with id ${walletId} not found`)
+    }
+    return this.data.app.update({
+      where: { id: appId },
+      data: { wallet: { disconnect: true } },
+      include: this.include,
+    })
   }
 }

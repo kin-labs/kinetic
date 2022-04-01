@@ -12,9 +12,12 @@ import {
   AppUserRole,
   AppUserUpdateRole,
   AppUserUpdateRoleInput,
+  AppWalletAdd,
+  AppWalletRemove,
   CreateApp,
   CreateUser,
   DeleteApp,
+  GenerateWallet,
   UpdateApp,
 } from '../generated/api-sdk'
 import {
@@ -71,6 +74,8 @@ describe('App (e2e)', () => {
             expect(data.name).toEqual(input.name)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
+            expect(data.wallet).toBeDefined()
+            expect(data.wallet.publicKey).toBeDefined()
           })
       })
 
@@ -87,6 +92,8 @@ describe('App (e2e)', () => {
             expect(data.name).toEqual(input.name)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
+            expect(data.wallet).toBeDefined()
+            expect(data.wallet.publicKey).toBeDefined()
           })
       })
 
@@ -101,6 +108,8 @@ describe('App (e2e)', () => {
             expect(data.index).toEqual(appIndex)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
+            expect(data.wallet).toBeDefined()
+            expect(data.wallet.publicKey).toBeDefined()
           })
       })
 
@@ -190,6 +199,47 @@ describe('App (e2e)', () => {
             const data = res.body.data?.item
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
+          })
+      })
+    })
+
+    describe('Wallets', () => {
+      let appId: string | undefined
+      let walletId: string | undefined
+      let walletPublicKey: string | undefined
+
+      it('should add a wallet to an app', async () => {
+        const name = uniq('app-')
+
+        // Create App - but skip automatic wallet generation
+        const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
+          input: { index: randomAppIndex(), name, skipWalletCreation: true },
+        })
+        appId = createdApp.body.data.created.id
+
+        // Generate wallet
+        const createdWallet = await runGraphQLQueryAdmin(app, token, GenerateWallet)
+        walletId = createdWallet.body.data.generated?.id
+        walletPublicKey = createdWallet.body.data.generated?.publicKey
+
+        await runGraphQLQueryAdmin(app, token, AppWalletAdd, { appId, walletId })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const data = res.body.data?.item
+            expect(data.wallet).toBeDefined()
+            expect(data.wallet.id).toEqual(walletId)
+            expect(data.wallet.publicKey).toEqual(walletPublicKey)
+          })
+      })
+
+      it('should remove a wallet fom an app', async () => {
+        await runGraphQLQueryAdmin(app, token, AppWalletRemove, { appId, walletId })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const data = res.body.data?.item
+            expect(data.wallet).toBeFalsy()
           })
       })
     })
