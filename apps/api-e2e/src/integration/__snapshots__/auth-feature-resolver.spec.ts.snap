@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Auth (e2e) retrieve data of logged in user should retrieve data of user: admin 1`] = `
+Object {
+  "avatarUrl": "https://avatars.githubusercontent.com/u/82999948?v=4",
+  "createdAt": undefined,
+  "id": undefined,
+  "name": "Mogami Admin",
+  "role": "Admin",
+  "updatedAt": undefined,
+  "username": "mogami@kin.org",
+}
+`;

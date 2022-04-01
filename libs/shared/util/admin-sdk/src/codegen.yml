@@ -5,6 +5,8 @@ documents:
 generates:
   apps/api-e2e/src/generated/api-sdk.ts:
     plugins:
+      - add:
+          content: '/* eslint-disable */'
       - typescript
       - typescript-document-nodes
       - typescript-operations
