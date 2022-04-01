@@ -83,6 +83,8 @@ export type Mutation = {
   createUser?: Maybe<User>
   deleteApp?: Maybe<App>
   deleteUser?: Maybe<User>
+  deleteWallet?: Maybe<Wallet>
+  generateWallet?: Maybe<Wallet>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
   updateApp?: Maybe<App>
@@ -120,6 +122,10 @@ export type MutationDeleteUserArgs = {
   userId: Scalars['String']
 }
 
+export type MutationDeleteWalletArgs = {
+  walletId: Scalars['String']
+}
+
 export type MutationLoginArgs = {
   input: LoginInput
 }
@@ -142,6 +148,8 @@ export type Query = {
   uptime: Scalars['Float']
   user?: Maybe<User>
   users?: Maybe<Array<User>>
+  wallet?: Maybe<Wallet>
+  wallets?: Maybe<Array<Wallet>>
 }
 
 export type QueryAppArgs = {
@@ -150,6 +158,10 @@ export type QueryAppArgs = {
 
 export type QueryUserArgs = {
   userId: Scalars['String']
+}
+
+export type QueryWalletArgs = {
+  walletId: Scalars['String']
 }
 
 export type User = {
@@ -191,6 +203,14 @@ export type UserUpdateInput = {
   avatarUrl?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
   role?: InputMaybe<UserRole>
+}
+
+export type Wallet = {
+  __typename?: 'Wallet'
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  publicKey?: Maybe<Scalars['String']>
+  updatedAt: Scalars['DateTime']
 }
 
 export type AppDetailsFragment = {
@@ -603,6 +623,46 @@ export type UsersQuery = {
   }> | null
 }
 
+export type WalletDetailsFragment = {
+  __typename?: 'Wallet'
+  id: string
+  createdAt: any
+  updatedAt: any
+  publicKey?: string | null
+}
+
+export type GenerateWalletMutationVariables = Exact<{ [key: string]: never }>
+
+export type GenerateWalletMutation = {
+  __typename?: 'Mutation'
+  generated?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+}
+
+export type DeleteWalletMutationVariables = Exact<{
+  walletId: Scalars['String']
+}>
+
+export type DeleteWalletMutation = {
+  __typename?: 'Mutation'
+  deleted?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+}
+
+export type WalletQueryVariables = Exact<{
+  walletId: Scalars['String']
+}>
+
+export type WalletQuery = {
+  __typename?: 'Query'
+  item?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+}
+
+export type WalletsQueryVariables = Exact<{ [key: string]: never }>
+
+export type WalletsQuery = {
+  __typename?: 'Query'
+  items?: Array<{ __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null }> | null
+}
+
 export const AppDetailsFragmentDoc = gql`
   fragment AppDetails on App {
     id
@@ -647,6 +707,14 @@ export const UserEmailDetailsFragmentDoc = gql`
     createdAt
     updatedAt
     email
+  }
+`
+export const WalletDetailsFragmentDoc = gql`
+  fragment WalletDetails on Wallet {
+    id
+    createdAt
+    updatedAt
+    publicKey
   }
 `
 export const CreateAppDocument = gql`
@@ -865,4 +933,52 @@ export const UsersDocument = gql`
 
 export function useUsersQuery(options?: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'>) {
   return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options })
+}
+export const GenerateWalletDocument = gql`
+  mutation GenerateWallet {
+    generated: generateWallet {
+      ...WalletDetails
+    }
+  }
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useGenerateWalletMutation() {
+  return Urql.useMutation<GenerateWalletMutation, GenerateWalletMutationVariables>(GenerateWalletDocument)
+}
+export const DeleteWalletDocument = gql`
+  mutation DeleteWallet($walletId: String!) {
+    deleted: deleteWallet(walletId: $walletId) {
+      ...WalletDetails
+    }
+  }
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useDeleteWalletMutation() {
+  return Urql.useMutation<DeleteWalletMutation, DeleteWalletMutationVariables>(DeleteWalletDocument)
+}
+export const WalletDocument = gql`
+  query Wallet($walletId: String!) {
+    item: wallet(walletId: $walletId) {
+      ...WalletDetails
+    }
+  }
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useWalletQuery(options: Omit<Urql.UseQueryArgs<WalletQueryVariables>, 'query'>) {
+  return Urql.useQuery<WalletQuery>({ query: WalletDocument, ...options })
+}
+export const WalletsDocument = gql`
+  query Wallets {
+    items: wallets {
+      ...WalletDetails
+    }
+  }
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useWalletsQuery(options?: Omit<Urql.UseQueryArgs<WalletsQueryVariables>, 'query'>) {
+  return Urql.useQuery<WalletsQuery>({ query: WalletsDocument, ...options })
 }

@@ -23,6 +23,50 @@
     "api-transaction-feature": "libs/api/transaction/feature",
     "api-user-data-access": "libs/api/user/data-access",
     "api-user-feature": "libs/api/user/feature",
+    "api-wallet-data-access": {
+      "root": "libs/api/wallet/data-access",
+      "sourceRoot": "libs/api/wallet/data-access/src",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/api/wallet/data-access/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/wallet/data-access"],
+          "options": {
+            "jestConfig": "libs/api/wallet/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:api", "type:data-access"]
+    },
+    "api-wallet-feature": {
+      "root": "libs/api/wallet/feature",
+      "sourceRoot": "libs/api/wallet/feature/src",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/api/wallet/feature/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/api/wallet/feature"],
+          "options": {
+            "jestConfig": "libs/api/wallet/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": ["scope:api", "type:feature"]
+    },
     "demo": "apps/demo",
     "demo-e2e": "apps/demo-e2e",
     "keypair": "libs/keypair",

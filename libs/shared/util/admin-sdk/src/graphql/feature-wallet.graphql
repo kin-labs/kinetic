@@ -1,0 +1,30 @@
+fragment WalletDetails on Wallet {
+  id
+  createdAt
+  updatedAt
+  publicKey
+}
+
+mutation GenerateWallet {
+  generated: generateWallet {
+    ...WalletDetails
+  }
+}
+
+mutation DeleteWallet($walletId: String!) {
+  deleted: deleteWallet(walletId: $walletId) {
+    ...WalletDetails
+  }
+}
+
+query Wallet($walletId: String!) {
+  item: wallet(walletId: $walletId) {
+    ...WalletDetails
+  }
+}
+
+query Wallets {
+  items: wallets {
+    ...WalletDetails
+  }
+}

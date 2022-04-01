@@ -6,6 +6,7 @@ import { ApiConfigFeatureModule } from '@mogami/api/config/feature'
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 import { ApiTransactionFeatureModule } from '@mogami/api/transaction/feature'
 import { ApiUserFeatureModule } from '@mogami/api/user/feature'
+import { ApiWalletFeatureModule } from '@mogami/api/wallet/feature'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
@@ -33,12 +34,13 @@ import { serveStaticFactory } from './serve-static.factory'
     ServeStaticModule.forRootAsync({ useFactory: serveStaticFactory() }),
     ApiAccountFeatureModule,
     ApiAirdropFeatureModule,
+    ApiAppFeatureModule,
     ApiAuthFeatureModule,
     ApiConfigFeatureModule,
     ApiCoreDataAccessModule,
     ApiTransactionFeatureModule,
     ApiUserFeatureModule,
-    ApiAppFeatureModule,
+    ApiWalletFeatureModule,
   ],
 })
 export class ApiCoreFeatureModule {}
