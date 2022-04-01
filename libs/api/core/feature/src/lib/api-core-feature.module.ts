@@ -8,9 +8,11 @@ import { ApiUserFeatureModule } from '@mogami/api/user/feature'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
+import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { ApiCoreFeatureController } from './api-core-feature.controller'
 import { ApiCoreFeatureResolver } from './api-core-feature.resolver'
+import { serveStaticFactory } from './serve-static.factory'
 
 @Module({
   controllers: [ApiCoreFeatureController],
@@ -27,6 +29,7 @@ import { ApiCoreFeatureResolver } from './api-core-feature.resolver'
       },
       sortSchema: true,
     }),
+    ServeStaticModule.forRootAsync({ useFactory: serveStaticFactory() }),
     ApiAccountFeatureModule,
     ApiAirdropFeatureModule,
     ApiAuthFeatureModule,
