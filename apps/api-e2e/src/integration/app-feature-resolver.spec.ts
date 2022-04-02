@@ -1,7 +1,22 @@
 import { INestApplication } from '@nestjs/common'
-import { UserRole } from '@prisma/client'
 import { Response } from 'supertest'
-import { App, AppCreateInput, Apps, AppUpdateInput, CreateApp, DeleteApp, UpdateApp } from '../generated/api-sdk'
+import {
+  App,
+  AppCreateInput,
+  Apps,
+  AppUpdateInput,
+  AppUserAdd,
+  AppUserAddInput,
+  AppUserRemove,
+  AppUserRemoveInput,
+  AppUserRole,
+  AppUserUpdateRole,
+  AppUserUpdateRoleInput,
+  CreateApp,
+  CreateUser,
+  DeleteApp,
+  UpdateApp,
+} from '../generated/api-sdk'
 import {
   ADMIN_EMAIL,
   getRandomInt,
@@ -19,7 +34,7 @@ function expectUnauthorized(res: Response) {
 }
 
 function randomAppIndex(): number {
-  return getRandomInt(1_000, 10_000)
+  return getRandomInt(1_000, 1_000_000)
 }
 
 describe('App (e2e)', () => {
@@ -30,7 +45,7 @@ describe('App (e2e)', () => {
 
   beforeAll(async () => {
     app = await initializeE2eApp()
-    const res = await runLoginQuery(app, ADMIN_EMAIL, UserRole.Admin)
+    const res = await runLoginQuery(app, ADMIN_EMAIL)
     token = res.body.data.login.token
     appIndex = randomAppIndex()
   })
@@ -54,6 +69,8 @@ describe('App (e2e)', () => {
             appId = data.id
             expect(data.index).toEqual(input.index)
             expect(data.name).toEqual(input.name)
+            expect(data.users.length).toEqual(1)
+            expect(data.users[0].role).toEqual(AppUserRole.Owner)
           })
       })
 
@@ -68,6 +85,8 @@ describe('App (e2e)', () => {
 
             expect(data.index).toEqual(appIndex)
             expect(data.name).toEqual(input.name)
+            expect(data.users.length).toEqual(1)
+            expect(data.users[0].role).toEqual(AppUserRole.Owner)
           })
       })
 
@@ -80,6 +99,8 @@ describe('App (e2e)', () => {
 
             expect(data.id).toEqual(appId)
             expect(data.index).toEqual(appIndex)
+            expect(data.users.length).toEqual(1)
+            expect(data.users[0].role).toEqual(AppUserRole.Owner)
           })
       })
 
@@ -107,6 +128,71 @@ describe('App (e2e)', () => {
           })
       })
     })
+
+    describe('AppUsers', () => {
+      let appId: string | undefined
+      let userId: string | undefined
+
+      it('should add a user to an app', async () => {
+        const email = uniq('email-')
+
+        // Create App
+        const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
+          input: { index: randomAppIndex(), name: `test-${email}` },
+        })
+        appId = createdApp.body.data.created.id
+
+        // Create user
+        const createdUser = await runGraphQLQueryAdmin(app, token, CreateUser, {
+          input: { password: 'password', email },
+        })
+        userId = createdUser.body.data.created.id
+
+        const input: AppUserAddInput = {
+          role: AppUserRole.Member,
+          userId,
+        }
+
+        await runGraphQLQueryAdmin(app, token, AppUserAdd, { appId, input })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const data = res.body.data?.item
+            expect(data.users.length).toEqual(2)
+            expect(data.users[0].role).toEqual(AppUserRole.Owner)
+            expect(data.users[1].role).toEqual(AppUserRole.Member)
+          })
+      })
+
+      it('should change a user role in an app', async () => {
+        const input: AppUserUpdateRoleInput = {
+          role: AppUserRole.Owner,
+          userId,
+        }
+
+        await runGraphQLQueryAdmin(app, token, AppUserUpdateRole, { appId, input })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const data = res.body.data?.item
+            expect(data.users.length).toEqual(2)
+            expect(data.users[0].role).toEqual(AppUserRole.Owner)
+            expect(data.users[1].role).toEqual(AppUserRole.Owner)
+          })
+      })
+
+      it('should remove a user fom an app', async () => {
+        const input: AppUserRemoveInput = { userId }
+        await runGraphQLQueryAdmin(app, token, AppUserRemove, { appId, input })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const data = res.body.data?.item
+            expect(data.users.length).toEqual(1)
+            expect(data.users[0].role).toEqual(AppUserRole.Owner)
+          })
+      })
+    })
   })
 
   describe('Unexpected usage', () => {
@@ -128,37 +214,37 @@ describe('App (e2e)', () => {
       })
 
       it('should not update an app that does not exist', async () => {
-        const appId = uniq('app-')
-        const input: AppUpdateInput = { name: `App ${appId}` }
+        const testAppId = uniq('app-')
+        const input: AppUpdateInput = { name: `App ${testAppId}` }
 
-        return runGraphQLQueryAdmin(app, token, UpdateApp, { appId, input })
+        return runGraphQLQueryAdmin(app, token, UpdateApp, { appId: testAppId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
             const errors = JSON.parse(res.text).errors
-            expect(errors[0].message).toEqual(`App with id ${appId} does not exist.`)
+            expect(errors[0].message).toEqual(`App with id ${testAppId} does not exist.`)
           })
       })
 
       it('should not find an app that does not exist', async () => {
-        const appId = uniq('app-')
-        return runGraphQLQueryAdmin(app, token, App, { appId })
+        const testAppId = uniq('app-')
+        return runGraphQLQueryAdmin(app, token, App, { appId: testAppId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
             const errors = JSON.parse(res.text).errors
-            expect(errors[0].message).toEqual(`App with id ${appId} does not exist.`)
+            expect(errors[0].message).toEqual(`App with id ${testAppId} does not exist.`)
           })
       })
 
       it('should not delete an app that does not exist', async () => {
-        const appId = uniq('app-')
-        return runGraphQLQueryAdmin(app, token, DeleteApp, { appId })
+        const testAppId = uniq('app-')
+        return runGraphQLQueryAdmin(app, token, DeleteApp, { appId: testAppId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
             const errors = JSON.parse(res.text).errors
-            expect(errors[0].message).toEqual(`App with id ${appId} does not exist.`)
+            expect(errors[0].message).toEqual(`App with id ${testAppId} does not exist.`)
           })
       })
     })

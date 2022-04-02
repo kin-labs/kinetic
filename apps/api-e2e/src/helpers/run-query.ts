@@ -1,5 +1,4 @@
 import { INestApplication } from '@nestjs/common'
-import { UserRole } from '@prisma/client'
 import { ASTNode } from 'graphql'
 import { print } from 'graphql/language/printer'
 import * as request from 'supertest'
@@ -27,7 +26,7 @@ export function runGraphQLQueryAdmin(
   return runGraphQLQuery(app, query, variables, { token })
 }
 
-export function runLoginQuery(app: INestApplication, email: string, role: UserRole) {
-  const input: LoginInput = { password: ADMIN_PASSWORD, email }
+export function runLoginQuery(app: INestApplication, email: string, password = ADMIN_PASSWORD) {
+  const input: LoginInput = { password, email }
   return runGraphQLQuery(app, Login, { input }).expect(200)
 }

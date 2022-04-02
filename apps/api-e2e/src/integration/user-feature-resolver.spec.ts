@@ -31,7 +31,7 @@ describe('User (e2e)', () => {
 
   beforeAll(async () => {
     app = await initializeE2eApp()
-    const res = await runLoginQuery(app, ADMIN_EMAIL, UserRole.Admin)
+    const res = await runLoginQuery(app, ADMIN_EMAIL)
     token = res.body.data.login.token
     username = randomUsername()
   })

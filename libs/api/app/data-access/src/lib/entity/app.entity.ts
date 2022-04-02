@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { AppUser } from './app-user.entity'
 
 @ObjectType()
 export class App {
@@ -12,4 +13,6 @@ export class App {
   index: number
   @Field({ nullable: true })
   name: string
+  @Field(() => [AppUser], { nullable: true })
+  users: AppUser[]
 }

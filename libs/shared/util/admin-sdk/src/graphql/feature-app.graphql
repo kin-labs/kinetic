@@ -6,9 +6,22 @@ fragment AppDetails on App {
   name
 }
 
+fragment AppUserDetails on AppUser {
+  id
+  createdAt
+  updatedAt
+  role
+  user {
+    ...UserDetails
+  }
+}
+
 mutation CreateApp($input: AppCreateInput!) {
   created: createApp(input: $input) {
     ...AppDetails
+    users {
+      ...AppUserDetails
+    }
   }
 }
 
@@ -21,12 +34,45 @@ mutation DeleteApp($appId: String!) {
 mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
   updated: updateApp(appId: $appId, input: $input) {
     ...AppDetails
+    users {
+      ...AppUserDetails
+    }
   }
 }
 
 query App($appId: String!) {
   item: app(appId: $appId) {
     ...AppDetails
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
+  item: appUserAdd(appId: $appId, input: $input) {
+    ...AppDetails
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+mutation AppUserRemove($appId: String!, $input: AppUserRemoveInput!) {
+  item: appUserRemove(appId: $appId, input: $input) {
+    ...AppDetails
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+mutation AppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
+  item: appUserUpdateRole(appId: $appId, input: $input) {
+    ...AppDetails
+    users {
+      ...AppUserDetails
+    }
   }
 }
 

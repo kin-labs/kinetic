@@ -16,7 +16,7 @@ describe('Auth (e2e)', () => {
 
   describe('log in ', () => {
     it('should login with sample user: admin', async () => {
-      const res = await runLoginQuery(app, ADMIN_EMAIL, UserRole.Admin)
+      const res = await runLoginQuery(app, ADMIN_EMAIL)
       expect(res.body.data.login.token).toBeDefined()
       token = res.body.data.login.token
     })

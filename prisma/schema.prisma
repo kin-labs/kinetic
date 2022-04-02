@@ -8,11 +8,28 @@ datasource db {
 }
 
 model App {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  index     Int      @unique
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  index     Int       @unique
   name      String
+  users     AppUser[]
+}
+
+model AppUser {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  role      AppUserRole
+  app       App         @relation(fields: [appId], references: [id])
+  appId     String
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+enum AppUserRole {
+  Member
+  Owner
 }
 
 model Airdrop {
@@ -46,7 +63,8 @@ model User {
   password  String?
   role      UserRole
   username  String      @unique
-  emails    UserEmail[] @relation("UserEmail_belongsTo_Owner")
+  apps      AppUser[]   @relation()
+  emails    UserEmail[] @relation()
 }
 
 model UserEmail {
@@ -54,7 +72,7 @@ model UserEmail {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
   email     String   @unique
-  owner     User     @relation(name: "UserEmail_belongsTo_Owner", fields: [ownerId], references: [id])
+  owner     User     @relation(fields: [ownerId], references: [id])
   ownerId   String
 }
 
