@@ -40,7 +40,6 @@ export class ApiTransactionDataAccessService {
   }
 
   async submitTransaction(body: SubmitPaymentRequest): Promise<string> {
-    console.log(body.tx)
     const txJson = JSON.parse(body.tx)
     const schema = new Map([
       [

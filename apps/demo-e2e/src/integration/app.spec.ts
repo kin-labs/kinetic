@@ -136,7 +136,6 @@ describe('demo', () => {
     cy.get('.get-account-history-btn').click()
     cy.get('[cy-data="panel-get-account-history"]').then((el) => {
       const accountHistory = JSON.parse(el[0].innerText)[0]
-      console.log(accountHistory)
       expect(accountHistory.history.length).to.equals(3)
       expect(accountHistory.account).to.equals('Eb2R6XuUb2fCR5o8JZ6uTP62u8xMuxXEUoko72kUR6pn')
     })
