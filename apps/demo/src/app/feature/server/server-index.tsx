@@ -23,7 +23,6 @@ export function ServerIndex() {
   const createServer = (endpoint: string) => {
     const { host } = new URL(endpoint)
     serverDb.server.add({ id: host, name: host, endpoint })
-    console.log({ id: host, name: host, endpoint })
     setServerCreateVisible(false)
   }
 
