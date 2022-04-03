@@ -7,7 +7,9 @@
       "executor": "@nrwl/cypress:cypress",
       "options": {
         "cypressConfig": "apps/admin-e2e/cypress.json",
-        "devServerTarget": "admin:serve"
+        "devServerTarget": "admin:serve",
+        "key": "9d80baaf-fd61-400f-8051-6e14db44040d",
+        "record": true
       },
       "configurations": {
         "production": {

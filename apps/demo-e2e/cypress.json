@@ -11,5 +11,6 @@
   "chromeWebSecurity": false,
   "experimentalStudio": true,
   "viewportWidth": 1280,
-  "viewportHeight": 800
+  "viewportHeight": 800,
+  "projectId": "cug8bj"
 }
