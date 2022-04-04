@@ -7,6 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Airdrop {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  amount           Int
+  date             String
+  fromOwner        String
+  fromPreSol       String
+  fromPreToken     String
+  fromPostSol      String
+  fromPostToken    String
+  fromTokenAccount String
+  mintId           String
+  signature        String
+  toOwner          String
+  toPreSol         String
+  toPreToken       String
+  toPostSol        String
+  toPostToken      String
+  toTokenAccount   String
+}
+
 model App {
   id        String    @id @default(cuid())
   createdAt DateTime  @default(now())
@@ -34,26 +56,14 @@ enum AppUserRole {
   Owner
 }
 
-model Airdrop {
+model NetworkStat {
   id               String   @id @default(cuid())
   createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  amount           Int
-  date             String
-  fromOwner        String
-  fromPreSol       String
-  fromPreToken     String
-  fromPostSol      String
-  fromPostToken    String
-  fromTokenAccount String
-  mintId           String
-  signature        String
-  toOwner          String
-  toPreSol         String
-  toPreToken       String
-  toPostSol        String
-  toPostToken      String
-  toTokenAccount   String
+  updatedAt        DateTime @default(now()) @updatedAt
+  numSlots         Int
+  numTransactions  Int
+  samplePeriodSecs Int
+  slot             Int
 }
 
 model User {

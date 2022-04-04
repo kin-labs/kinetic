@@ -81,10 +81,22 @@ type Mutation {
   updateUser(input: UserUpdateInput!, userId: String!): User
 }
 
+type NetworkStat {
+  createdAt: DateTime!
+  id: String!
+  numSlots: Float
+  numTransactions: Float!
+  samplePeriodSecs: Float!
+  slot: Float!
+  updatedAt: DateTime!
+}
+
 type Query {
   app(appId: String!): App
   apps: [App!]
   me: User
+  networkStat(networkStatId: String!): NetworkStat
+  networkStats: [NetworkStat!]
   uptime: Float!
   user(userId: String!): User
   users: [User!]

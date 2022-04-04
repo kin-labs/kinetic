@@ -1,5 +1,4 @@
 import { INestApplication } from '@nestjs/common'
-import { UserRole } from '@prisma/client'
 import { Uptime } from '../generated/api-sdk'
 import { ADMIN_EMAIL, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { initializeE2eApp } from '../helpers/'

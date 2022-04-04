@@ -9,7 +9,6 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ApiBody } from '@nestjs/swagger/dist/decorators/api-body.decorator'
 import { Commitment } from '@solana/web3.js'
-import BigNumber from 'bignumber.js'
 
 @ApiTags('account')
 @Controller('account')
