@@ -154,5 +154,8 @@
     "*.{js,json,css,scss,md,ts,html,graphql}": [
       "yarn format --uncommitted"
     ]
+  },
+  "prisma": {
+    "schema": "libs/api/core/data-access/src/prisma/schema.prisma"
   }
 }
