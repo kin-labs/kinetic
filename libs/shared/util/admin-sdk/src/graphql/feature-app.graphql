@@ -22,6 +22,9 @@ mutation CreateApp($input: AppCreateInput!) {
     users {
       ...AppUserDetails
     }
+    wallet {
+      ...WalletDetails
+    }
   }
 }
 
@@ -37,6 +40,9 @@ mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
     users {
       ...AppUserDetails
     }
+    wallet {
+      ...WalletDetails
+    }
   }
 }
 
@@ -45,6 +51,9 @@ query App($appId: String!) {
     ...AppDetails
     users {
       ...AppUserDetails
+    }
+    wallet {
+      ...WalletDetails
     }
   }
 }
@@ -72,6 +81,24 @@ mutation AppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
     ...AppDetails
     users {
       ...AppUserDetails
+    }
+  }
+}
+
+mutation AppWalletAdd($appId: String!, $walletId: String!) {
+  item: appWalletAdd(appId: $appId, walletId: $walletId) {
+    ...AppDetails
+    wallet {
+      ...WalletDetails
+    }
+  }
+}
+
+mutation AppWalletRemove($appId: String!, $walletId: String!) {
+  item: appWalletRemove(appId: $appId, walletId: $walletId) {
+    ...AppDetails
+    wallet {
+      ...WalletDetails
     }
   }
 }

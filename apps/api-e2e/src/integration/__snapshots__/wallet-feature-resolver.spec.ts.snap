@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Wallet (e2e) Unexpected usage Mall-formed Input should not delete a wallet 1`] = `
+Array [
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 23,
+        "line": 1,
+      },
+    ],
+    "message": "Variable \\"$walletId\\" of required type \\"String!\\" was not provided.",
+  },
+]
+`;
+
+exports[`Wallet (e2e) Unexpected usage Mall-formed Input should not find a wallet 1`] = `
+Array [
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 14,
+        "line": 1,
+      },
+    ],
+    "message": "Variable \\"$walletId\\" of required type \\"String!\\" was not provided.",
+  },
+]
+`;

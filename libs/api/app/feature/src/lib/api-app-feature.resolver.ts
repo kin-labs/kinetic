@@ -9,10 +9,11 @@ import {
 } from '@mogami/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
+import { Wallet } from '@mogami/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 
-@Resolver()
+@Resolver(() => App)
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiAppFeatureResolver {
   constructor(private readonly service: ApiAppDataAccessService) {}
@@ -53,7 +54,22 @@ export class ApiAppFeatureResolver {
   }
 
   @Mutation(() => App, { nullable: true })
+  appWalletAdd(@CtxUser() user: User, @Args('appId') appId: string, @Args('walletId') walletId: string) {
+    return this.service.appWalletAdd(user.id, appId, walletId)
+  }
+
+  @Mutation(() => App, { nullable: true })
+  appWalletRemove(@CtxUser() user: User, @Args('appId') appId: string, @Args('walletId') walletId: string) {
+    return this.service.appWalletRemove(user.id, appId, walletId)
+  }
+
+  @Mutation(() => App, { nullable: true })
   updateApp(@CtxUser() user: User, @Args('appId') appId: string, @Args('input') input: AppUpdateInput) {
     return this.service.updateApp(user.id, appId, input)
+  }
+
+  @ResolveField(() => Wallet, { nullable: true })
+  wallet(@Parent() app: App) {
+    return app.wallet
   }
 }

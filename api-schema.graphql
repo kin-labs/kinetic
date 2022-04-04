@@ -9,11 +9,13 @@ type App {
   name: String
   updatedAt: DateTime!
   users: [AppUser!]
+  wallet: Wallet
 }
 
 input AppCreateInput {
   index: Int!
   name: String!
+  skipWalletCreation: Boolean
 }
 
 input AppUpdateInput {
@@ -65,10 +67,14 @@ type Mutation {
   appUserAdd(appId: String!, input: AppUserAddInput!): App
   appUserRemove(appId: String!, input: AppUserRemoveInput!): App
   appUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
+  appWalletAdd(appId: String!, walletId: String!): App
+  appWalletRemove(appId: String!, walletId: String!): App
   createApp(input: AppCreateInput!): App
   createUser(input: UserCreateInput!): User
   deleteApp(appId: String!): App
   deleteUser(userId: String!): User
+  deleteWallet(walletId: String!): Wallet
+  generateWallet: Wallet
   login(input: LoginInput!): AuthToken
   logout: Boolean
   updateApp(appId: String!, input: AppUpdateInput!): App
@@ -82,6 +88,8 @@ type Query {
   uptime: Float!
   user(userId: String!): User
   users: [User!]
+  wallet(walletId: String!): Wallet
+  wallets: [Wallet!]
 }
 
 type User {
@@ -121,4 +129,11 @@ input UserUpdateInput {
   avatarUrl: String
   name: String
   role: UserRole
+}
+
+type Wallet {
+  createdAt: DateTime!
+  id: String!
+  publicKey: String
+  updatedAt: DateTime!
 }

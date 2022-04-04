@@ -14,6 +14,8 @@ model App {
   index     Int       @unique
   name      String
   users     AppUser[]
+  wallet    Wallet?   @relation(fields: [walletId], references: [id])
+  walletId  String?
 }
 
 model AppUser {
@@ -79,4 +81,13 @@ model UserEmail {
 enum UserRole {
   Admin
   User
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  mnemonic  String
+  publicKey String
+  apps      App[]    @relation()
 }
