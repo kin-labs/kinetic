@@ -3,7 +3,7 @@ import React from 'react'
 import { Hero } from 'react-daisyui'
 import { Link } from 'react-router-dom'
 
-export function HomeIndex() {
+export function AdminHomeFeature() {
   const [{ data }] = useUptimeQuery()
   const pages = [{ label: 'About', path: '/about' }]
   return (

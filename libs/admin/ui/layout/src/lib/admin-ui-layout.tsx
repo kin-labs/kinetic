@@ -1,14 +1,14 @@
+import { ThemeSwitcher } from '@mogami/admin/ui/theme-switcher'
 import React, { PropsWithChildren } from 'react'
 import { Navbar } from 'react-daisyui'
 import { NavLink } from 'react-router-dom'
-import { ThemeSwitcher } from '../theme-switcher/theme-switcher'
 
-export interface LayoutLink {
+export interface AdminUiLayoutLink {
   label: string
   path: string
 }
 
-export function Layout({ children, links }: PropsWithChildren<{ links: LayoutLink[] }>) {
+export function AdminUiLayout({ children, links }: PropsWithChildren<{ links: AdminUiLayoutLink[] }>) {
   const appName = 'Mogami Admin'
   const appFooter = <p>Kin Foundation &copy; 2022</p>
   return (
