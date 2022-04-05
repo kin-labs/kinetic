@@ -56,6 +56,10 @@ export class ApiConfigDataAccessService {
     return this.config.get('mogamiAirdropKeypair')
   }
 
+  get mogamiMainnet() {
+    return this.config.get('mogamiMainnet')
+  }
+
   get mogamiMintDecimals() {
     return this.config.get('mogamiMintDecimals')
   }
@@ -112,6 +116,7 @@ export class ApiConfigDataAccessService {
 
   getServiceConfig() {
     return {
+      mainnet: this.mogamiMainnet,
       mint: this.mogamiMintPublicKey,
       subsidizer: this.mogamiSubsidizerPublicKey.toBase58(),
       tokenProgram: TOKEN_PROGRAM_ID.toBase58(),

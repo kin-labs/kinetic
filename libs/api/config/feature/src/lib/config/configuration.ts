@@ -23,6 +23,7 @@ export default () => ({
   mogamiAirdropKeypair: process.env.MOGAMI_AIRDROP_SECRET_KEY
     ? Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.MOGAMI_AIRDROP_SECRET_KEY)))
     : null,
+  mogamiMainnet: process.env.MOGAMI_MAINNET === 'true',
   mogamiMintDecimals: process.env.MOGAMI_MINT_DECIMALS,
   mogamiMintPublicKey: process.env.MOGAMI_MINT_PUBLIC_KEY,
   mogamiSubsidizerKeypair: Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.MOGAMI_SUBSIDIZER_SECRET_KEY))),
