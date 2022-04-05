@@ -8,7 +8,7 @@ export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: Keypai
   const [result, setResult] = useState<unknown>(null)
   const [value, setValue] = useState<string>(keypair.publicKey)
   const getResult = () => {
-    sdk.account.tokenAccounts(value).then((res) => setResult(res.data))
+    sdk.tokenAccounts(value).then((res) => setResult(res.data))
   }
   return (
     <div className="flex flex-col space-y-3">

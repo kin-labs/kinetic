@@ -16,7 +16,7 @@ export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: Keypai
   const kp: Keypair = Keypair.fromMnemonicSet(keypair.mnemonic)[0]
 
   const getResult = () => {
-    sdk.account.create(kp).then((res) => {
+    sdk.createAccount(kp).then((res) => {
       setResult(res)
     })
   }

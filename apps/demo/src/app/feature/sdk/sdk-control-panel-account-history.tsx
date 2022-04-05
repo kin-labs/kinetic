@@ -8,7 +8,7 @@ export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: Keypa
   const [result, setResult] = useState<unknown>(null)
   const [value, setValue] = useState<string>(keypair.publicKey)
   const getResult = () => {
-    sdk.account.history(value).then((res) => setResult(res.data))
+    sdk.history(value).then((res) => setResult(res.data))
   }
   return (
     <div className="flex flex-col space-y-3">

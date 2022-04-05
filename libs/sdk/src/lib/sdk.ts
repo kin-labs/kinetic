@@ -1,34 +1,15 @@
+import { Keypair } from '@mogami/keypair'
 import { Solana } from '@mogami/solana'
-import { Configuration } from '../generated'
-import { AccountSdk, TransactionSdk } from './feature'
-import { AirdropSdk } from './feature/airdrop-sdk'
-import { ConfigSdk } from './feature/config-sdk'
-import { CoreSdk } from './feature/core-sdk'
-import { SdkConfig } from './interfaces/sdk-config'
+import { SdkConfig } from './interfaces'
+import { SdkInternal } from './sdk-internal'
 
 export class Sdk {
   solana: Solana | undefined
 
-  // Config object for exposed generated APIs
-  private readonly apiConfig: Configuration
-
-  // Exposed generated APIs
-  readonly airdrop: AirdropSdk
-  readonly account: AccountSdk
-  readonly core: CoreSdk
-  readonly config: ConfigSdk
-  readonly transaction: TransactionSdk
+  private readonly internal: SdkInternal
 
   constructor(readonly sdkConfig: SdkConfig) {
-    // Create the API Configuration
-    this.apiConfig = new Configuration({ basePath: sdkConfig.endpoint })
-
-    // Configure the APIs
-    this.airdrop = new AirdropSdk(this.apiConfig)
-    this.account = new AccountSdk(this.apiConfig)
-    this.config = new ConfigSdk(this.apiConfig)
-    this.core = new CoreSdk(this.apiConfig)
-    this.transaction = new TransactionSdk(this.apiConfig)
+    this.internal = new SdkInternal(sdkConfig)
   }
 
   get endpoint() {
@@ -37,6 +18,34 @@ export class Sdk {
 
   get solanaRpcEndpoint() {
     return this.sdkConfig.solanaRpcEndpoint || 'mainnet-beta'
+  }
+
+  airdropRequest(account: string, amount: string) {
+    return this.internal.airdropRequest(account, amount)
+  }
+
+  balance(account: string) {
+    return this.internal.balance(account)
+  }
+
+  config() {
+    return this.internal.config()
+  }
+
+  createAccount(kp: Keypair) {
+    return this.internal.createAccount(kp)
+  }
+
+  history(account: string) {
+    return this.internal.history(account)
+  }
+
+  submitTransaction({ amount, destination, owner }: { amount: string; destination: string; owner: Keypair }) {
+    return this.internal.submitTransaction({ amount, destination, owner })
+  }
+
+  tokenAccounts(account: string) {
+    return this.internal.tokenAccounts(account)
   }
 
   async init() {

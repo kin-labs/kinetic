@@ -6,7 +6,7 @@ import { SdkControlPanelResult } from './sdk-control-panel-result'
 export function SdkControlPanelServerConfig({ sdk }: { sdk: Sdk }) {
   const [result, setResult] = useState<unknown>(null)
   const getResult = () => {
-    sdk.config.config().then((res) => setResult(res.data))
+    sdk.config().then((res) => setResult(res.data))
   }
   return (
     <div className="flex flex-col space-y-3">

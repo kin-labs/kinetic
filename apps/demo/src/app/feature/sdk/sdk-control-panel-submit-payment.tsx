@@ -18,7 +18,7 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: Keypai
   const kp: Keypair = Keypair.fromMnemonicSet(keypair.mnemonic)[0]
 
   const getResult = async () => {
-    const res = await sdk.transaction.submit({
+    const res = await sdk.submitTransaction({
       amount,
       destination: accountId,
       owner: kp,
