@@ -307,42 +307,6 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
   return {
     /**
      *
-     * @param {CreateAccountRequest} createAccountRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiAccountFeatureControllerCreateAccount: async (
-      createAccountRequest: CreateAccountRequest,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'createAccountRequest' is not null or undefined
-      assertParamExists('apiAccountFeatureControllerCreateAccount', 'createAccountRequest', createAccountRequest)
-      const localVarPath = `/api/account/create`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      localVarHeaderParameter['Content-Type'] = 'application/json'
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-      localVarRequestOptions.data = serializeDataIfNeeded(createAccountRequest, localVarRequestOptions, configuration)
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
      * @param {string} accountId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -379,16 +343,49 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @param {CreateAccountRequest} createAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAccount: async (
+      createAccountRequest: CreateAccountRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createAccountRequest' is not null or undefined
+      assertParamExists('createAccount', 'createAccountRequest', createAccountRequest)
+      const localVarPath = `/api/account/create`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      localVarHeaderParameter['Content-Type'] = 'application/json'
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+      localVarRequestOptions.data = serializeDataIfNeeded(createAccountRequest, localVarRequestOptions, configuration)
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
      * @param {string} accountId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerGetBalance: async (
-      accountId: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    getBalance: async (accountId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'accountId' is not null or undefined
-      assertParamExists('apiAccountFeatureControllerGetBalance', 'accountId', accountId)
+      assertParamExists('getBalance', 'accountId', accountId)
       const localVarPath = `/api/account/balance/{accountId}`.replace(
         `{${'accountId'}}`,
         encodeURIComponent(String(accountId)),
@@ -419,12 +416,9 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerGetHistory: async (
-      accountId: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    getHistory: async (accountId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'accountId' is not null or undefined
-      assertParamExists('apiAccountFeatureControllerGetHistory', 'accountId', accountId)
+      assertParamExists('getHistory', 'accountId', accountId)
       const localVarPath = `/api/account/history/{accountId}`.replace(
         `{${'accountId'}}`,
         encodeURIComponent(String(accountId)),
@@ -455,12 +449,9 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerTokenAccounts: async (
-      accountId: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    tokenAccounts: async (accountId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'accountId' is not null or undefined
-      assertParamExists('apiAccountFeatureControllerTokenAccounts', 'accountId', accountId)
+      assertParamExists('tokenAccounts', 'accountId', accountId)
       const localVarPath = `/api/account/token-accounts/{accountId}`.replace(
         `{${'accountId'}}`,
         encodeURIComponent(String(accountId)),
@@ -497,22 +488,6 @@ export const AccountApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @param {CreateAccountRequest} createAccountRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiAccountFeatureControllerCreateAccount(
-      createAccountRequest: CreateAccountRequest,
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAccountResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerCreateAccount(
-        createAccountRequest,
-        options,
-      )
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
      * @param {string} accountId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -529,18 +504,28 @@ export const AccountApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @param {CreateAccountRequest} createAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createAccount(
+      createAccountRequest: CreateAccountRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAccountResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createAccount(createAccountRequest, options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
      * @param {string} accountId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiAccountFeatureControllerGetBalance(
+    async getBalance(
       accountId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BalanceResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerGetBalance(
-        accountId,
-        options,
-      )
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getBalance(accountId, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -549,14 +534,11 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiAccountFeatureControllerGetHistory(
+    async getHistory(
       accountId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HistoryResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerGetHistory(
-        accountId,
-        options,
-      )
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(accountId, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -565,14 +547,11 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiAccountFeatureControllerTokenAccounts(
+    async tokenAccounts(
       accountId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerTokenAccounts(
-        accountId,
-        options,
-      )
+      const localVarAxiosArgs = await localVarAxiosParamCreator.tokenAccounts(accountId, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
   }
@@ -587,20 +566,6 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
   return {
     /**
      *
-     * @param {CreateAccountRequest} createAccountRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiAccountFeatureControllerCreateAccount(
-      createAccountRequest: CreateAccountRequest,
-      options?: any,
-    ): AxiosPromise<CreateAccountResponse> {
-      return localVarFp
-        .apiAccountFeatureControllerCreateAccount(createAccountRequest, options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
      * @param {string} accountId
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -612,14 +577,12 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
-     * @param {string} accountId
+     * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerGetBalance(accountId: string, options?: any): AxiosPromise<BalanceResponse> {
-      return localVarFp
-        .apiAccountFeatureControllerGetBalance(accountId, options)
-        .then((request) => request(axios, basePath))
+    createAccount(createAccountRequest: CreateAccountRequest, options?: any): AxiosPromise<CreateAccountResponse> {
+      return localVarFp.createAccount(createAccountRequest, options).then((request) => request(axios, basePath))
     },
     /**
      *
@@ -627,10 +590,8 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerGetHistory(accountId: string, options?: any): AxiosPromise<HistoryResponse> {
-      return localVarFp
-        .apiAccountFeatureControllerGetHistory(accountId, options)
-        .then((request) => request(axios, basePath))
+    getBalance(accountId: string, options?: any): AxiosPromise<BalanceResponse> {
+      return localVarFp.getBalance(accountId, options).then((request) => request(axios, basePath))
     },
     /**
      *
@@ -638,10 +599,17 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAccountFeatureControllerTokenAccounts(accountId: string, options?: any): AxiosPromise<Array<string>> {
-      return localVarFp
-        .apiAccountFeatureControllerTokenAccounts(accountId, options)
-        .then((request) => request(axios, basePath))
+    getHistory(accountId: string, options?: any): AxiosPromise<HistoryResponse> {
+      return localVarFp.getHistory(accountId, options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @param {string} accountId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    tokenAccounts(accountId: string, options?: any): AxiosPromise<Array<string>> {
+      return localVarFp.tokenAccounts(accountId, options).then((request) => request(axios, basePath))
     },
   }
 }
@@ -653,22 +621,6 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class AccountApi extends BaseAPI {
-  /**
-   *
-   * @param {CreateAccountRequest} createAccountRequest
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof AccountApi
-   */
-  public apiAccountFeatureControllerCreateAccount(
-    createAccountRequest: CreateAccountRequest,
-    options?: AxiosRequestConfig,
-  ) {
-    return AccountApiFp(this.configuration)
-      .apiAccountFeatureControllerCreateAccount(createAccountRequest, options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
   /**
    *
    * @param {string} accountId
@@ -684,14 +636,14 @@ export class AccountApi extends BaseAPI {
 
   /**
    *
-   * @param {string} accountId
+   * @param {CreateAccountRequest} createAccountRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApi
    */
-  public apiAccountFeatureControllerGetBalance(accountId: string, options?: AxiosRequestConfig) {
+  public createAccount(createAccountRequest: CreateAccountRequest, options?: AxiosRequestConfig) {
     return AccountApiFp(this.configuration)
-      .apiAccountFeatureControllerGetBalance(accountId, options)
+      .createAccount(createAccountRequest, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -702,9 +654,9 @@ export class AccountApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof AccountApi
    */
-  public apiAccountFeatureControllerGetHistory(accountId: string, options?: AxiosRequestConfig) {
+  public getBalance(accountId: string, options?: AxiosRequestConfig) {
     return AccountApiFp(this.configuration)
-      .apiAccountFeatureControllerGetHistory(accountId, options)
+      .getBalance(accountId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -715,9 +667,22 @@ export class AccountApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof AccountApi
    */
-  public apiAccountFeatureControllerTokenAccounts(accountId: string, options?: AxiosRequestConfig) {
+  public getHistory(accountId: string, options?: AxiosRequestConfig) {
     return AccountApiFp(this.configuration)
-      .apiAccountFeatureControllerTokenAccounts(accountId, options)
+      .getHistory(accountId, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {string} accountId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApi
+   */
+  public tokenAccounts(accountId: string, options?: AxiosRequestConfig) {
+    return AccountApiFp(this.configuration)
+      .tokenAccounts(accountId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }
@@ -734,12 +699,9 @@ export const AirdropApiAxiosParamCreator = function (configuration?: Configurati
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAirdropFeatureControllerRequest: async (
-      airdropRequest: AirdropRequest,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    airdropRequest: async (airdropRequest: AirdropRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'airdropRequest' is not null or undefined
-      assertParamExists('apiAirdropFeatureControllerRequest', 'airdropRequest', airdropRequest)
+      assertParamExists('airdropRequest', 'airdropRequest', airdropRequest)
       const localVarPath = `/api/airdrop`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
@@ -769,7 +731,7 @@ export const AirdropApiAxiosParamCreator = function (configuration?: Configurati
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAirdropFeatureControllerStats: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    airdropStats: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/api/airdrop/stats`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
@@ -807,14 +769,11 @@ export const AirdropApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiAirdropFeatureControllerRequest(
+    async airdropRequest(
       airdropRequest: AirdropRequest,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AirdropResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAirdropFeatureControllerRequest(
-        airdropRequest,
-        options,
-      )
+      const localVarAxiosArgs = await localVarAxiosParamCreator.airdropRequest(airdropRequest, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -822,10 +781,10 @@ export const AirdropApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiAirdropFeatureControllerStats(
+    async airdropStats(
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AirdropStats>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAirdropFeatureControllerStats(options)
+      const localVarAxiosArgs = await localVarAxiosParamCreator.airdropStats(options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
   }
@@ -844,18 +803,16 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAirdropFeatureControllerRequest(airdropRequest: AirdropRequest, options?: any): AxiosPromise<AirdropResponse> {
-      return localVarFp
-        .apiAirdropFeatureControllerRequest(airdropRequest, options)
-        .then((request) => request(axios, basePath))
+    airdropRequest(airdropRequest: AirdropRequest, options?: any): AxiosPromise<AirdropResponse> {
+      return localVarFp.airdropRequest(airdropRequest, options).then((request) => request(axios, basePath))
     },
     /**
      *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAirdropFeatureControllerStats(options?: any): AxiosPromise<AirdropStats> {
-      return localVarFp.apiAirdropFeatureControllerStats(options).then((request) => request(axios, basePath))
+    airdropStats(options?: any): AxiosPromise<AirdropStats> {
+      return localVarFp.airdropStats(options).then((request) => request(axios, basePath))
     },
   }
 }
@@ -874,9 +831,9 @@ export class AirdropApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof AirdropApi
    */
-  public apiAirdropFeatureControllerRequest(airdropRequest: AirdropRequest, options?: AxiosRequestConfig) {
+  public airdropRequest(airdropRequest: AirdropRequest, options?: AxiosRequestConfig) {
     return AirdropApiFp(this.configuration)
-      .apiAirdropFeatureControllerRequest(airdropRequest, options)
+      .airdropRequest(airdropRequest, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -886,9 +843,9 @@ export class AirdropApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof AirdropApi
    */
-  public apiAirdropFeatureControllerStats(options?: AxiosRequestConfig) {
+  public airdropStats(options?: AxiosRequestConfig) {
     return AirdropApiFp(this.configuration)
-      .apiAirdropFeatureControllerStats(options)
+      .airdropStats(options)
       .then((request) => request(this.axios, this.basePath))
   }
 }
@@ -904,7 +861,7 @@ export const ConfigApiAxiosParamCreator = function (configuration?: Configuratio
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiConfigFeatureControllerConfig: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    config: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/api/config`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
@@ -941,10 +898,10 @@ export const ConfigApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiConfigFeatureControllerConfig(
+    async config(
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiConfigSummary>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiConfigFeatureControllerConfig(options)
+      const localVarAxiosArgs = await localVarAxiosParamCreator.config(options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
   }
@@ -962,8 +919,8 @@ export const ConfigApiFactory = function (configuration?: Configuration, basePat
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiConfigFeatureControllerConfig(options?: any): AxiosPromise<ApiConfigSummary> {
-      return localVarFp.apiConfigFeatureControllerConfig(options).then((request) => request(axios, basePath))
+    config(options?: any): AxiosPromise<ApiConfigSummary> {
+      return localVarFp.config(options).then((request) => request(axios, basePath))
     },
   }
 }
@@ -981,9 +938,9 @@ export class ConfigApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof ConfigApi
    */
-  public apiConfigFeatureControllerConfig(options?: AxiosRequestConfig) {
+  public config(options?: AxiosRequestConfig) {
     return ConfigApiFp(this.configuration)
-      .apiConfigFeatureControllerConfig(options)
+      .config(options)
       .then((request) => request(this.axios, this.basePath))
   }
 }
@@ -999,8 +956,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiCoreFeatureControllerHealthCheck: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/health-check`
+    apiCoreFeatureControllerUptime: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/uptime`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
       let baseOptions
@@ -1026,8 +983,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiCoreFeatureControllerUptime: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/uptime`
+    healthCheck: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/health-check`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
       let baseOptions
@@ -1063,10 +1020,10 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiCoreFeatureControllerHealthCheck(
+    async apiCoreFeatureControllerUptime(
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HealthCheckResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiCoreFeatureControllerHealthCheck(options)
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiCoreFeatureControllerUptime(options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -1074,10 +1031,10 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiCoreFeatureControllerUptime(
+    async healthCheck(
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiCoreFeatureControllerUptime(options)
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HealthCheckResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.healthCheck(options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
   }
@@ -1095,16 +1052,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiCoreFeatureControllerHealthCheck(options?: any): AxiosPromise<HealthCheckResponse> {
-      return localVarFp.apiCoreFeatureControllerHealthCheck(options).then((request) => request(axios, basePath))
+    apiCoreFeatureControllerUptime(options?: any): AxiosPromise<void> {
+      return localVarFp.apiCoreFeatureControllerUptime(options).then((request) => request(axios, basePath))
     },
     /**
      *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiCoreFeatureControllerUptime(options?: any): AxiosPromise<void> {
-      return localVarFp.apiCoreFeatureControllerUptime(options).then((request) => request(axios, basePath))
+    healthCheck(options?: any): AxiosPromise<HealthCheckResponse> {
+      return localVarFp.healthCheck(options).then((request) => request(axios, basePath))
     },
   }
 }
@@ -1122,9 +1079,9 @@ export class DefaultApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiCoreFeatureControllerHealthCheck(options?: AxiosRequestConfig) {
+  public apiCoreFeatureControllerUptime(options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiCoreFeatureControllerHealthCheck(options)
+      .apiCoreFeatureControllerUptime(options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -1134,9 +1091,9 @@ export class DefaultApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public apiCoreFeatureControllerUptime(options?: AxiosRequestConfig) {
+  public healthCheck(options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .apiCoreFeatureControllerUptime(options)
+      .healthCheck(options)
       .then((request) => request(this.axios, this.basePath))
   }
 }
@@ -1154,127 +1111,6 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
      */
     apiTransactionFeatureControllerGetHistory: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/api/transaction/history`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @param {number} dataLength
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetMinimumBalanceForRentExemption: async (
-      dataLength: number,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'dataLength' is not null or undefined
-      assertParamExists('apiTransactionFeatureControllerGetMinimumBalanceForRentExemption', 'dataLength', dataLength)
-      const localVarPath = `/api/transaction/minimum-balance-for-rent-exemption/{dataLength}`.replace(
-        `{${'dataLength'}}`,
-        encodeURIComponent(String(dataLength)),
-      )
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetMinimumKinVersion: async (
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
-      const localVarPath = `/api/transaction/minimum-kin-version`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetRecentBlockhash: async (
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
-      const localVarPath = `/api/transaction/recent-blockhash`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetServiceConfig: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/transaction/service-config`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
       let baseOptions
@@ -1324,20 +1160,133 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     },
     /**
      *
+     * @param {number} dataLength
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getMinimumBalanceForRentExemption: async (
+      dataLength: number,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'dataLength' is not null or undefined
+      assertParamExists('getMinimumBalanceForRentExemption', 'dataLength', dataLength)
+      const localVarPath = `/api/transaction/minimum-balance-for-rent-exemption/{dataLength}`.replace(
+        `{${'dataLength'}}`,
+        encodeURIComponent(String(dataLength)),
+      )
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getMinimumKinVersion: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/transaction/minimum-kin-version`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getRecentBlockhash: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/transaction/recent-blockhash`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getServiceConfig: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/transaction/service-config`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
      * @param {SubmitPaymentRequest} submitPaymentRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiTransactionFeatureControllerSubmitTransaction: async (
+    submitTransaction: async (
       submitPaymentRequest: SubmitPaymentRequest,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'submitPaymentRequest' is not null or undefined
-      assertParamExists(
-        'apiTransactionFeatureControllerSubmitTransaction',
-        'submitPaymentRequest',
-        submitPaymentRequest,
-      )
+      assertParamExists('submitTransaction', 'submitPaymentRequest', submitPaymentRequest)
       const localVarPath = `/api/transaction/submit-transaction`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
@@ -1385,60 +1334,6 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @param {number} dataLength
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(
-      dataLength: number,
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumBalanceForRentExemptionResponse>> {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(
-          dataLength,
-          options,
-        )
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiTransactionFeatureControllerGetMinimumKinVersion(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumKinVersionResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerGetMinimumKinVersion(
-        options,
-      )
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiTransactionFeatureControllerGetRecentBlockhash(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecentBlockhashResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerGetRecentBlockhash(
-        options,
-      )
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiTransactionFeatureControllerGetServiceConfig(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ServiceConfigResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerGetServiceConfig(options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1450,18 +1345,61 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @param {number} dataLength
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getMinimumBalanceForRentExemption(
+      dataLength: number,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumBalanceForRentExemptionResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getMinimumBalanceForRentExemption(dataLength, options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getMinimumKinVersion(
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumKinVersionResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getMinimumKinVersion(options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getRecentBlockhash(
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecentBlockhashResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getRecentBlockhash(options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getServiceConfig(
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ServiceConfigResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getServiceConfig(options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
      * @param {SubmitPaymentRequest} submitPaymentRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async apiTransactionFeatureControllerSubmitTransaction(
+    async submitTransaction(
       submitPaymentRequest: SubmitPaymentRequest,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerSubmitTransaction(
-        submitPaymentRequest,
-        options,
-      )
+      const localVarAxiosArgs = await localVarAxiosParamCreator.submitTransaction(submitPaymentRequest, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
   }
@@ -1488,50 +1426,6 @@ export const TransactionApiFactory = function (
     },
     /**
      *
-     * @param {number} dataLength
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(
-      dataLength: number,
-      options?: any,
-    ): AxiosPromise<MinimumBalanceForRentExemptionResponse> {
-      return localVarFp
-        .apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(dataLength, options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetMinimumKinVersion(options?: any): AxiosPromise<MinimumKinVersionResponse> {
-      return localVarFp
-        .apiTransactionFeatureControllerGetMinimumKinVersion(options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetRecentBlockhash(options?: any): AxiosPromise<RecentBlockhashResponse> {
-      return localVarFp
-        .apiTransactionFeatureControllerGetRecentBlockhash(options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetServiceConfig(options?: any): AxiosPromise<ServiceConfigResponse> {
-      return localVarFp
-        .apiTransactionFeatureControllerGetServiceConfig(options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1542,17 +1436,50 @@ export const TransactionApiFactory = function (
     },
     /**
      *
+     * @param {number} dataLength
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getMinimumBalanceForRentExemption(
+      dataLength: number,
+      options?: any,
+    ): AxiosPromise<MinimumBalanceForRentExemptionResponse> {
+      return localVarFp
+        .getMinimumBalanceForRentExemption(dataLength, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getMinimumKinVersion(options?: any): AxiosPromise<MinimumKinVersionResponse> {
+      return localVarFp.getMinimumKinVersion(options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getRecentBlockhash(options?: any): AxiosPromise<RecentBlockhashResponse> {
+      return localVarFp.getRecentBlockhash(options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getServiceConfig(options?: any): AxiosPromise<ServiceConfigResponse> {
+      return localVarFp.getServiceConfig(options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
      * @param {SubmitPaymentRequest} submitPaymentRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiTransactionFeatureControllerSubmitTransaction(
-      submitPaymentRequest: SubmitPaymentRequest,
-      options?: any,
-    ): AxiosPromise<object> {
-      return localVarFp
-        .apiTransactionFeatureControllerSubmitTransaction(submitPaymentRequest, options)
-        .then((request) => request(axios, basePath))
+    submitTransaction(submitPaymentRequest: SubmitPaymentRequest, options?: any): AxiosPromise<object> {
+      return localVarFp.submitTransaction(submitPaymentRequest, options).then((request) => request(axios, basePath))
     },
   }
 }
@@ -1578,58 +1505,6 @@ export class TransactionApi extends BaseAPI {
 
   /**
    *
-   * @param {number} dataLength
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TransactionApi
-   */
-  public apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(
-    dataLength: number,
-    options?: AxiosRequestConfig,
-  ) {
-    return TransactionApiFp(this.configuration)
-      .apiTransactionFeatureControllerGetMinimumBalanceForRentExemption(dataLength, options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TransactionApi
-   */
-  public apiTransactionFeatureControllerGetMinimumKinVersion(options?: AxiosRequestConfig) {
-    return TransactionApiFp(this.configuration)
-      .apiTransactionFeatureControllerGetMinimumKinVersion(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TransactionApi
-   */
-  public apiTransactionFeatureControllerGetRecentBlockhash(options?: AxiosRequestConfig) {
-    return TransactionApiFp(this.configuration)
-      .apiTransactionFeatureControllerGetRecentBlockhash(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TransactionApi
-   */
-  public apiTransactionFeatureControllerGetServiceConfig(options?: AxiosRequestConfig) {
-    return TransactionApiFp(this.configuration)
-      .apiTransactionFeatureControllerGetServiceConfig(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TransactionApi
@@ -1642,17 +1517,63 @@ export class TransactionApi extends BaseAPI {
 
   /**
    *
+   * @param {number} dataLength
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApi
+   */
+  public getMinimumBalanceForRentExemption(dataLength: number, options?: AxiosRequestConfig) {
+    return TransactionApiFp(this.configuration)
+      .getMinimumBalanceForRentExemption(dataLength, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApi
+   */
+  public getMinimumKinVersion(options?: AxiosRequestConfig) {
+    return TransactionApiFp(this.configuration)
+      .getMinimumKinVersion(options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApi
+   */
+  public getRecentBlockhash(options?: AxiosRequestConfig) {
+    return TransactionApiFp(this.configuration)
+      .getRecentBlockhash(options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApi
+   */
+  public getServiceConfig(options?: AxiosRequestConfig) {
+    return TransactionApiFp(this.configuration)
+      .getServiceConfig(options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
    * @param {SubmitPaymentRequest} submitPaymentRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TransactionApi
    */
-  public apiTransactionFeatureControllerSubmitTransaction(
-    submitPaymentRequest: SubmitPaymentRequest,
-    options?: AxiosRequestConfig,
-  ) {
+  public submitTransaction(submitPaymentRequest: SubmitPaymentRequest, options?: AxiosRequestConfig) {
     return TransactionApiFp(this.configuration)
-      .apiTransactionFeatureControllerSubmitTransaction(submitPaymentRequest, options)
+      .submitTransaction(submitPaymentRequest, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }

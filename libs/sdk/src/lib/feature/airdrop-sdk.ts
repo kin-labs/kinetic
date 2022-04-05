@@ -8,6 +8,6 @@ export class AirdropSdk {
   }
 
   request(request: AirdropRequest) {
-    return this.api.apiAirdropFeatureControllerRequest(request)
+    return this.api.airdropRequest(request)
   }
 }
