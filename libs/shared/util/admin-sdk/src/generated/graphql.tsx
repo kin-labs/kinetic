@@ -69,6 +69,7 @@ export type AppUserUpdateRoleInput = {
 export type AuthToken = {
   __typename?: 'AuthToken'
   token: Scalars['String']
+  user: User
 }
 
 export type LoginInput = {
