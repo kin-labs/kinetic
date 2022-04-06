@@ -7,6 +7,6 @@ export class ConfigSdk {
   }
 
   config() {
-    return this.api.apiConfigFeatureControllerConfig()
+    return this.api.config()
   }
 }

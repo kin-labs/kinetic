@@ -14,7 +14,8 @@
     },
     "/api/health-check": {
       "get": {
-        "operationId": "ApiCoreFeatureController_healthCheck",
+        "operationId": "healthCheck",
+        "summary": "",
         "parameters": [],
         "responses": {
           "default": {
@@ -53,7 +54,8 @@
     },
     "/api/account/create": {
       "post": {
-        "operationId": "ApiAccountFeatureController_createAccount",
+        "operationId": "createAccount",
+        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -82,7 +84,8 @@
     },
     "/api/account/balance/{accountId}": {
       "get": {
-        "operationId": "ApiAccountFeatureController_getBalance",
+        "operationId": "getBalance",
+        "summary": "",
         "parameters": [
           {
             "name": "accountId",
@@ -110,7 +113,8 @@
     },
     "/api/account/history/{accountId}": {
       "get": {
-        "operationId": "ApiAccountFeatureController_getHistory",
+        "operationId": "getHistory",
+        "summary": "",
         "parameters": [
           {
             "name": "accountId",
@@ -138,7 +142,8 @@
     },
     "/api/account/token-accounts/{accountId}": {
       "get": {
-        "operationId": "ApiAccountFeatureController_tokenAccounts",
+        "operationId": "tokenAccounts",
+        "summary": "",
         "parameters": [
           {
             "name": "accountId",
@@ -169,7 +174,8 @@
     },
     "/api/airdrop": {
       "post": {
-        "operationId": "ApiAirdropFeatureController_request",
+        "operationId": "airdropRequest",
+        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -198,7 +204,8 @@
     },
     "/api/airdrop/stats": {
       "get": {
-        "operationId": "ApiAirdropFeatureController_stats",
+        "operationId": "airdropStats",
+        "summary": "",
         "parameters": [],
         "responses": {
           "default": {
@@ -217,7 +224,8 @@
     },
     "/api/config": {
       "get": {
-        "operationId": "ApiConfigFeatureController_config",
+        "operationId": "config",
+        "summary": "",
         "parameters": [],
         "responses": {
           "default": {
@@ -236,7 +244,8 @@
     },
     "/api/transaction/service-config": {
       "get": {
-        "operationId": "ApiTransactionFeatureController_getServiceConfig",
+        "operationId": "getServiceConfig",
+        "summary": "",
         "parameters": [],
         "responses": {
           "default": {
@@ -255,7 +264,8 @@
     },
     "/api/transaction/minimum-kin-version": {
       "get": {
-        "operationId": "ApiTransactionFeatureController_getMinimumKinVersion",
+        "operationId": "getMinimumKinVersion",
+        "summary": "",
         "parameters": [],
         "responses": {
           "default": {
@@ -274,7 +284,8 @@
     },
     "/api/transaction/recent-blockhash": {
       "get": {
-        "operationId": "ApiTransactionFeatureController_getRecentBlockhash",
+        "operationId": "getRecentBlockhash",
+        "summary": "",
         "parameters": [],
         "responses": {
           "default": {
@@ -293,7 +304,8 @@
     },
     "/api/transaction/minimum-balance-for-rent-exemption/{dataLength}": {
       "get": {
-        "operationId": "ApiTransactionFeatureController_getMinimumBalanceForRentExemption",
+        "operationId": "getMinimumBalanceForRentExemption",
+        "summary": "",
         "parameters": [
           {
             "name": "dataLength",
@@ -345,7 +357,8 @@
     },
     "/api/transaction/submit-transaction": {
       "post": {
-        "operationId": "ApiTransactionFeatureController_submitTransaction",
+        "operationId": "submitTransaction",
+        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,

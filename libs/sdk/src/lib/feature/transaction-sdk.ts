@@ -13,8 +13,8 @@ export class TransactionSdk {
 
   async submit({ destination, amount, owner }: { destination: PublicKeyString; amount: string; owner: Keypair }) {
     const [{ mint, subsidizer }, { blockhash: recentBlockhash }] = await Promise.all([
-      this.tx.apiTransactionFeatureControllerGetServiceConfig().then((res) => res.data as ServiceConfigResponse),
-      this.tx.apiTransactionFeatureControllerGetRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
+      this.tx.getServiceConfig().then((res) => res.data as ServiceConfigResponse),
+      this.tx.getRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
     ])
 
     // Create objects from Response
@@ -53,7 +53,7 @@ export class TransactionSdk {
     const serialized = transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
 
     // Submit Transaction
-    const res = await this.tx.apiTransactionFeatureControllerSubmitTransaction({ tx: JSON.stringify(serialized) })
+    const res = await this.tx.submitTransaction({ tx: JSON.stringify(serialized) })
 
     return Promise.resolve({ mint, subsidizer, recentBlockhash, res })
   }
