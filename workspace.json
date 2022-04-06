@@ -2,6 +2,29 @@
   "version": 2,
   "projects": {
     "admin": "apps/admin",
+    "admin-app-feature": {
+      "root": "libs/admin/app/feature",
+      "sourceRoot": "libs/admin/app/feature/src",
+      "projectType": "library",
+      "tags": ["type:feature", "scope:admin"],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/admin/app/feature/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/admin/app/feature"],
+          "options": {
+            "jestConfig": "libs/admin/app/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "admin-e2e": "apps/admin-e2e",
     "admin-home-feature": {
       "root": "libs/admin/home/feature",
@@ -72,9 +95,9 @@
         }
       }
     },
-    "admin-ui-theme-switcher": {
-      "root": "libs/admin/ui/theme-switcher",
-      "sourceRoot": "libs/admin/ui/theme-switcher/src",
+    "admin-ui-loader": {
+      "root": "libs/admin/ui/loader",
+      "sourceRoot": "libs/admin/ui/loader/src",
       "projectType": "library",
       "tags": ["type:ui", "scope:admin"],
       "targets": {
@@ -82,14 +105,37 @@
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["libs/admin/ui/theme-switcher/**/*.{ts,tsx,js,jsx}"]
+            "lintFilePatterns": ["libs/admin/ui/loader/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/admin/ui/theme-switcher"],
+          "outputs": ["coverage/libs/admin/ui/loader"],
           "options": {
-            "jestConfig": "libs/admin/ui/theme-switcher/jest.config.js",
+            "jestConfig": "libs/admin/ui/loader/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "admin-user-feature": {
+      "root": "libs/admin/user/feature",
+      "sourceRoot": "libs/admin/user/feature/src",
+      "projectType": "library",
+      "tags": ["type:feature", "scope:admin"],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/admin/user/feature/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/admin/user/feature"],
+          "options": {
+            "jestConfig": "libs/admin/user/feature/jest.config.js",
             "passWithNoTests": true
           }
         }

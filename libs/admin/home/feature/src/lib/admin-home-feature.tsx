@@ -1,32 +1,22 @@
+import { Box } from '@chakra-ui/react'
 import { useUptimeQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
-import { Hero } from 'react-daisyui'
-import { Link } from 'react-router-dom'
 
 export function AdminHomeFeature() {
   const [{ data }] = useUptimeQuery()
-  const pages = [{ label: 'About', path: '/about' }]
   return (
     <div>
-      <Hero>
-        <Hero.Overlay className="bg-opacity-60" />
-        <Hero.Content className="text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Hello there!</h1>
-            <p className="py-6">For now, this is just a placeholder!</p>
-            <div className="flex space-x-2 justify-center">
-              {pages?.map(({ label, path }) => (
-                <div key={path}>
-                  <Link className="btn btn-primary" to={path}>
-                    {label}
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Hero.Content>
-      </Hero>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+        <Box p="6">
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+            Hello, Admin!
+          </Box>
+
+          <Box display="flex" mt="2" alignItems="center">
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+          </Box>
+        </Box>
+      </Box>
     </div>
   )
 }
