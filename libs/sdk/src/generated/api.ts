@@ -34,38 +34,6 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  *
  * @export
- * @interface AirdropRequest
- */
-export interface AirdropRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof AirdropRequest
-   */
-  account: string
-  /**
-   *
-   * @type {string}
-   * @memberof AirdropRequest
-   */
-  amount?: string
-}
-/**
- *
- * @export
- * @interface AirdropResponse
- */
-export interface AirdropResponse {
-  /**
-   *
-   * @type {string}
-   * @memberof AirdropResponse
-   */
-  signature: string
-}
-/**
- *
- * @export
  * @interface AirdropStats
  */
 export interface AirdropStats {
@@ -166,16 +134,22 @@ export interface CreateAccountRequest {
 export interface CreateAccountResponse {
   /**
    *
-   * @type {string}
-   * @memberof CreateAccountResponse
-   */
-  status: string
-  /**
-   *
    * @type {object}
    * @memberof CreateAccountResponse
    */
   account: object
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountResponse
+   */
+  signature: string
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountResponse
+   */
+  status: string
 }
 /**
  *
@@ -224,28 +198,41 @@ export interface HistoryResponse {
 /**
  *
  * @export
- * @interface MinimumBalanceForRentExemptionResponse
+ * @interface MakeTransferRequest
  */
-export interface MinimumBalanceForRentExemptionResponse {
+export interface MakeTransferRequest {
   /**
    *
-   * @type {number}
-   * @memberof MinimumBalanceForRentExemptionResponse
+   * @type {string}
+   * @memberof MakeTransferRequest
    */
-  lamports: number
+  tx: string
 }
 /**
  *
  * @export
- * @interface MinimumKinVersionResponse
+ * @interface MakeTransferResponse
  */
-export interface MinimumKinVersionResponse {
+export interface MakeTransferResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferResponse
+   */
+  signature: string
+}
+/**
+ *
+ * @export
+ * @interface MinimumRentExemptionBalanceResponse
+ */
+export interface MinimumRentExemptionBalanceResponse {
   /**
    *
    * @type {number}
-   * @memberof MinimumKinVersionResponse
+   * @memberof MinimumRentExemptionBalanceResponse
    */
-  version: number
+  lamports: number
 }
 /**
  *
@@ -259,6 +246,38 @@ export interface RecentBlockhashResponse {
    * @memberof RecentBlockhashResponse
    */
   blockhash: string
+}
+/**
+ *
+ * @export
+ * @interface RequestAirdropRequest
+ */
+export interface RequestAirdropRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof RequestAirdropRequest
+   */
+  account: string
+  /**
+   *
+   * @type {string}
+   * @memberof RequestAirdropRequest
+   */
+  amount?: string
+}
+/**
+ *
+ * @export
+ * @interface RequestAirdropResponse
+ */
+export interface RequestAirdropResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof RequestAirdropResponse
+   */
+  signature: string
 }
 /**
  *
@@ -284,19 +303,6 @@ export interface ServiceConfigResponse {
    * @memberof ServiceConfigResponse
    */
   tokenProgram: string
-}
-/**
- *
- * @export
- * @interface SubmitPaymentRequest
- */
-export interface SubmitPaymentRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof SubmitPaymentRequest
-   */
-  tx: string
 }
 
 /**
@@ -695,39 +701,6 @@ export const AirdropApiAxiosParamCreator = function (configuration?: Configurati
   return {
     /**
      *
-     * @param {AirdropRequest} airdropRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    airdropRequest: async (airdropRequest: AirdropRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      // verify required parameter 'airdropRequest' is not null or undefined
-      assertParamExists('airdropRequest', 'airdropRequest', airdropRequest)
-      const localVarPath = `/api/airdrop`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      localVarHeaderParameter['Content-Type'] = 'application/json'
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-      localVarRequestOptions.data = serializeDataIfNeeded(airdropRequest, localVarRequestOptions, configuration)
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -753,6 +726,42 @@ export const AirdropApiAxiosParamCreator = function (configuration?: Configurati
         options: localVarRequestOptions,
       }
     },
+    /**
+     *
+     * @param {RequestAirdropRequest} requestAirdropRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    requestAirdrop: async (
+      requestAirdropRequest: RequestAirdropRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'requestAirdropRequest' is not null or undefined
+      assertParamExists('requestAirdrop', 'requestAirdropRequest', requestAirdropRequest)
+      const localVarPath = `/api/airdrop`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      localVarHeaderParameter['Content-Type'] = 'application/json'
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+      localVarRequestOptions.data = serializeDataIfNeeded(requestAirdropRequest, localVarRequestOptions, configuration)
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
   }
 }
 
@@ -765,19 +774,6 @@ export const AirdropApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @param {AirdropRequest} airdropRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async airdropRequest(
-      airdropRequest: AirdropRequest,
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AirdropResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.airdropRequest(airdropRequest, options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -785,6 +781,19 @@ export const AirdropApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AirdropStats>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.airdropStats(options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
+     * @param {RequestAirdropRequest} requestAirdropRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async requestAirdrop(
+      requestAirdropRequest: RequestAirdropRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RequestAirdropResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.requestAirdrop(requestAirdropRequest, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
   }
@@ -799,20 +808,20 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
   return {
     /**
      *
-     * @param {AirdropRequest} airdropRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    airdropRequest(airdropRequest: AirdropRequest, options?: any): AxiosPromise<AirdropResponse> {
-      return localVarFp.airdropRequest(airdropRequest, options).then((request) => request(axios, basePath))
-    },
-    /**
-     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     airdropStats(options?: any): AxiosPromise<AirdropStats> {
       return localVarFp.airdropStats(options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @param {RequestAirdropRequest} requestAirdropRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    requestAirdrop(requestAirdropRequest: RequestAirdropRequest, options?: any): AxiosPromise<RequestAirdropResponse> {
+      return localVarFp.requestAirdrop(requestAirdropRequest, options).then((request) => request(axios, basePath))
     },
   }
 }
@@ -826,19 +835,6 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
 export class AirdropApi extends BaseAPI {
   /**
    *
-   * @param {AirdropRequest} airdropRequest
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof AirdropApi
-   */
-  public airdropRequest(airdropRequest: AirdropRequest, options?: AxiosRequestConfig) {
-    return AirdropApiFp(this.configuration)
-      .airdropRequest(airdropRequest, options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AirdropApi
@@ -846,6 +842,19 @@ export class AirdropApi extends BaseAPI {
   public airdropStats(options?: AxiosRequestConfig) {
     return AirdropApiFp(this.configuration)
       .airdropStats(options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {RequestAirdropRequest} requestAirdropRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AirdropApi
+   */
+  public requestAirdrop(requestAirdropRequest: RequestAirdropRequest, options?: AxiosRequestConfig) {
+    return AirdropApiFp(this.configuration)
+      .requestAirdrop(requestAirdropRequest, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }
@@ -1106,74 +1115,17 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
   return {
     /**
      *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetHistory: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/transaction/history`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerSignTransaction: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/transaction/sign-transaction`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
      * @param {number} dataLength
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getMinimumBalanceForRentExemption: async (
+    getMinimumRentExemptionBalance: async (
       dataLength: number,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'dataLength' is not null or undefined
-      assertParamExists('getMinimumBalanceForRentExemption', 'dataLength', dataLength)
-      const localVarPath = `/api/transaction/minimum-balance-for-rent-exemption/{dataLength}`.replace(
-        `{${'dataLength'}}`,
-        encodeURIComponent(String(dataLength)),
-      )
+      assertParamExists('getMinimumRentExemptionBalance', 'dataLength', dataLength)
+      const localVarPath = `/api/transaction/minimum-rent-exemption-balance`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
       let baseOptions
@@ -1185,32 +1137,9 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
+      if (dataLength !== undefined) {
+        localVarQueryParameter['dataLength'] = dataLength
       }
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getMinimumKinVersion: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/transaction/minimum-kin-version`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
 
       setSearchParams(localVarUrlObj, localVarQueryParameter)
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
@@ -1277,17 +1206,17 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     },
     /**
      *
-     * @param {SubmitPaymentRequest} submitPaymentRequest
+     * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    submitTransaction: async (
-      submitPaymentRequest: SubmitPaymentRequest,
+    makeTransfer: async (
+      makeTransferRequest: MakeTransferRequest,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
-      // verify required parameter 'submitPaymentRequest' is not null or undefined
-      assertParamExists('submitTransaction', 'submitPaymentRequest', submitPaymentRequest)
-      const localVarPath = `/api/transaction/submit-transaction`
+      // verify required parameter 'makeTransferRequest' is not null or undefined
+      assertParamExists('makeTransfer', 'makeTransferRequest', makeTransferRequest)
+      const localVarPath = `/api/transaction/make-transfer`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
       let baseOptions
@@ -1304,7 +1233,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
       setSearchParams(localVarUrlObj, localVarQueryParameter)
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-      localVarRequestOptions.data = serializeDataIfNeeded(submitPaymentRequest, localVarRequestOptions, configuration)
+      localVarRequestOptions.data = serializeDataIfNeeded(makeTransferRequest, localVarRequestOptions, configuration)
 
       return {
         url: toPathString(localVarUrlObj),
@@ -1323,48 +1252,15 @@ export const TransactionApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiTransactionFeatureControllerGetHistory(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerGetHistory(options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiTransactionFeatureControllerSignTransaction(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiTransactionFeatureControllerSignTransaction(options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
      * @param {number} dataLength
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async getMinimumBalanceForRentExemption(
+    async getMinimumRentExemptionBalance(
       dataLength: number,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumBalanceForRentExemptionResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getMinimumBalanceForRentExemption(dataLength, options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getMinimumKinVersion(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumKinVersionResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getMinimumKinVersion(options)
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumRentExemptionBalanceResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getMinimumRentExemptionBalance(dataLength, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -1391,15 +1287,15 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @param {SubmitPaymentRequest} submitPaymentRequest
+     * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async submitTransaction(
-      submitPaymentRequest: SubmitPaymentRequest,
+    async makeTransfer(
+      makeTransferRequest: MakeTransferRequest,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.submitTransaction(submitPaymentRequest, options)
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MakeTransferResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.makeTransfer(makeTransferRequest, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
   }
@@ -1418,43 +1314,15 @@ export const TransactionApiFactory = function (
   return {
     /**
      *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerGetHistory(options?: any): AxiosPromise<void> {
-      return localVarFp.apiTransactionFeatureControllerGetHistory(options).then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiTransactionFeatureControllerSignTransaction(options?: any): AxiosPromise<void> {
-      return localVarFp
-        .apiTransactionFeatureControllerSignTransaction(options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
      * @param {number} dataLength
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getMinimumBalanceForRentExemption(
+    getMinimumRentExemptionBalance(
       dataLength: number,
       options?: any,
-    ): AxiosPromise<MinimumBalanceForRentExemptionResponse> {
-      return localVarFp
-        .getMinimumBalanceForRentExemption(dataLength, options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getMinimumKinVersion(options?: any): AxiosPromise<MinimumKinVersionResponse> {
-      return localVarFp.getMinimumKinVersion(options).then((request) => request(axios, basePath))
+    ): AxiosPromise<MinimumRentExemptionBalanceResponse> {
+      return localVarFp.getMinimumRentExemptionBalance(dataLength, options).then((request) => request(axios, basePath))
     },
     /**
      *
@@ -1474,12 +1342,12 @@ export const TransactionApiFactory = function (
     },
     /**
      *
-     * @param {SubmitPaymentRequest} submitPaymentRequest
+     * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    submitTransaction(submitPaymentRequest: SubmitPaymentRequest, options?: any): AxiosPromise<object> {
-      return localVarFp.submitTransaction(submitPaymentRequest, options).then((request) => request(axios, basePath))
+    makeTransfer(makeTransferRequest: MakeTransferRequest, options?: any): AxiosPromise<MakeTransferResponse> {
+      return localVarFp.makeTransfer(makeTransferRequest, options).then((request) => request(axios, basePath))
     },
   }
 }
@@ -1493,50 +1361,14 @@ export const TransactionApiFactory = function (
 export class TransactionApi extends BaseAPI {
   /**
    *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TransactionApi
-   */
-  public apiTransactionFeatureControllerGetHistory(options?: AxiosRequestConfig) {
-    return TransactionApiFp(this.configuration)
-      .apiTransactionFeatureControllerGetHistory(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TransactionApi
-   */
-  public apiTransactionFeatureControllerSignTransaction(options?: AxiosRequestConfig) {
-    return TransactionApiFp(this.configuration)
-      .apiTransactionFeatureControllerSignTransaction(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
    * @param {number} dataLength
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TransactionApi
    */
-  public getMinimumBalanceForRentExemption(dataLength: number, options?: AxiosRequestConfig) {
+  public getMinimumRentExemptionBalance(dataLength: number, options?: AxiosRequestConfig) {
     return TransactionApiFp(this.configuration)
-      .getMinimumBalanceForRentExemption(dataLength, options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TransactionApi
-   */
-  public getMinimumKinVersion(options?: AxiosRequestConfig) {
-    return TransactionApiFp(this.configuration)
-      .getMinimumKinVersion(options)
+      .getMinimumRentExemptionBalance(dataLength, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -1566,14 +1398,14 @@ export class TransactionApi extends BaseAPI {
 
   /**
    *
-   * @param {SubmitPaymentRequest} submitPaymentRequest
+   * @param {MakeTransferRequest} makeTransferRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TransactionApi
    */
-  public submitTransaction(submitPaymentRequest: SubmitPaymentRequest, options?: AxiosRequestConfig) {
+  public makeTransfer(makeTransferRequest: MakeTransferRequest, options?: AxiosRequestConfig) {
     return TransactionApiFp(this.configuration)
-      .submitTransaction(submitPaymentRequest, options)
+      .makeTransfer(makeTransferRequest, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }

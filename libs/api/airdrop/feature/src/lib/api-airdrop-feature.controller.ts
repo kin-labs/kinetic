@@ -1,8 +1,8 @@
 import {
-  AirdropRequest,
-  AirdropResponse,
   AirdropStats,
   ApiAirdropDataAccessService,
+  RequestAirdropRequest,
+  RequestAirdropResponse,
 } from '@mogami/api/airdrop/data-access'
 import { Body, Controller, Get, Post } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -13,10 +13,10 @@ export class ApiAirdropFeatureController {
   constructor(private readonly service: ApiAirdropDataAccessService) {}
 
   @Post()
-  @ApiOperation({ operationId: 'airdropRequest' })
-  @ApiResponse({ type: AirdropResponse })
-  request(@Body() body: AirdropRequest) {
-    return this.service.request(body)
+  @ApiOperation({ operationId: 'requestAirdrop' })
+  @ApiResponse({ type: RequestAirdropResponse })
+  requestAirdrop(@Body() body: RequestAirdropRequest) {
+    return this.service.requestAirdrop(body)
   }
 
   @Get('stats')

@@ -8,7 +8,7 @@ export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: Keypa
   const [result, setResult] = useState<unknown>(null)
   const [amount, setAmount] = useState<string>('1')
   const getResult = () => {
-    sdk.airdropRequest(keypair.publicKey, amount).then((res) => setResult(res.data))
+    sdk.requestAirdrop(keypair.publicKey, amount).then((res) => setResult(res.data))
   }
   return (
     <div className="flex flex-col space-y-3">

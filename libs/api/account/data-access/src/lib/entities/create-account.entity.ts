@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+
 interface AccountInfo {
   id: string // publicKey
   balance: string
@@ -19,7 +20,9 @@ enum CreateAccountResultStatus {
 
 export class CreateAccountResponse {
   @ApiProperty()
-  status: CreateAccountResultStatus
-  @ApiProperty()
   account?: AccountInfo
+  @ApiProperty()
+  signature?: string
+  @ApiProperty()
+  status?: CreateAccountResultStatus
 }

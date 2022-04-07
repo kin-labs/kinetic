@@ -4,7 +4,7 @@ import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID 
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { kinToQuarks } from './kin-to-quarks'
 
-export async function serializeSubmitTransactionTransaction({
+export async function serializeMakeTransferTransaction({
   amount,
   destination,
   mint,

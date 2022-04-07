@@ -20,8 +20,8 @@ export class Sdk {
     return this.sdkConfig.solanaRpcEndpoint || 'mainnet-beta'
   }
 
-  airdropRequest(account: string, amount: string) {
-    return this.internal.airdropRequest(account, amount)
+  requestAirdrop(account: string, amount: string) {
+    return this.internal.requestAirdrop(account, amount)
   }
 
   balance(account: string) {
@@ -32,16 +32,16 @@ export class Sdk {
     return this.internal.config()
   }
 
-  createAccount(kp: Keypair) {
-    return this.internal.createAccount(kp)
+  createAccount(owner: Keypair) {
+    return this.internal.createAccount(owner)
   }
 
-  history(account: string) {
-    return this.internal.history(account)
+  getHistory(account: string) {
+    return this.internal.getHistory(account)
   }
 
-  submitTransaction({ amount, destination, owner }: { amount: string; destination: string; owner: Keypair }) {
-    return this.internal.submitTransaction({ amount, destination, owner })
+  makeTransfer({ amount, destination, owner }: { amount: string; destination: string; owner: Keypair }) {
+    return this.internal.makeTransfer({ amount, destination, owner })
   }
 
   tokenAccounts(account: string) {

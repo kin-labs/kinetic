@@ -10,7 +10,7 @@ import {
   ServiceConfigResponse,
   TransactionApi,
 } from '../generated'
-import { serializeCreateAccountTransaction, serializeSubmitTransactionTransaction } from './helpers'
+import { serializeCreateAccountTransaction, serializeMakeTransferTransaction } from './helpers'
 import { SdkConfig } from './interfaces'
 
 export class SdkInternal {
@@ -30,10 +30,6 @@ export class SdkInternal {
     this.configApi = new ConfigApi(apiConfig)
     this.defaultApi = new DefaultApi(apiConfig)
     this.transactionApi = new TransactionApi(apiConfig)
-  }
-
-  airdropRequest(account: string, amount: string) {
-    return this.airdropApi.airdropRequest({ account, amount })
   }
 
   balance(accountId: string) {
@@ -62,25 +58,17 @@ export class SdkInternal {
     return Promise.resolve({ mint, subsidizer, recentBlockhash, res })
   }
 
-  history(accountId: string) {
+  getHistory(accountId: string) {
     return this.accountApi.getHistory(accountId)
   }
 
-  async submitTransaction({
-    destination,
-    amount,
-    owner,
-  }: {
-    destination: PublicKeyString
-    amount: string
-    owner: Keypair
-  }) {
+  async makeTransfer({ destination, amount, owner }: { destination: PublicKeyString; amount: string; owner: Keypair }) {
     const [{ mint, subsidizer }, { blockhash: recentBlockhash }] = await Promise.all([
       this.transactionApi.getServiceConfig().then((res) => res.data as ServiceConfigResponse),
       this.transactionApi.getRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
     ])
 
-    const serialized = serializeSubmitTransactionTransaction({
+    const serialized = serializeMakeTransferTransaction({
       amount,
       destination,
       mint,
@@ -89,9 +77,13 @@ export class SdkInternal {
       subsidizer,
     })
 
-    const res = await this.transactionApi.submitTransaction({ tx: JSON.stringify(serialized) })
+    const res = await this.transactionApi.makeTransfer({ tx: JSON.stringify(serialized) })
 
     return Promise.resolve({ mint, subsidizer, recentBlockhash, res })
+  }
+
+  requestAirdrop(account: string, amount: string) {
+    return this.airdropApi.requestAirdrop({ account, amount })
   }
 
   tokenAccounts(account: string) {

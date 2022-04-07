@@ -2,13 +2,12 @@ import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Injectable } from '@nestjs/common'
 import { Transaction } from '@solana/web3.js'
 import * as borsh from 'borsh'
-import { SubmitPaymentRequest } from './dto/submit-payment-request.dto'
-import { HistoryResponse } from './entities/history.entity'
-import { MinimumBalanceForRentExemptionResponse } from './entities/minimum-balance-for-rent-exemption.entity'
-import { MinimumKinVersionResponse } from './entities/minimum-kin-version.entity'
+import { MakeTransferRequest } from './dto/make-transfer-request.dto'
+import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
+import { MakeTransferResponse } from './entities/make-transfer-response.entity'
+import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { RecentBlockhashResponse } from './entities/recent-blockhash.entity'
 import { ServiceConfigResponse } from './entities/service-config.entity'
-import { SignTransactionResponse } from './entities/sign-transaction.entity'
 
 @Injectable()
 export class ApiTransactionDataAccessService {
@@ -18,28 +17,19 @@ export class ApiTransactionDataAccessService {
     return this.data.config.getServiceConfig()
   }
 
-  getMinimumKinVersion(): MinimumKinVersionResponse {
-    return { version: 5 }
-  }
-
   getRecentBlockhash(): Promise<RecentBlockhashResponse> {
     return this.data.solana.getRecentBlockhash()
   }
 
-  async getMinimumBalanceForRentExemption(dataLength: number): Promise<MinimumBalanceForRentExemptionResponse> {
+  async getMinimumRentExemptionBalance({
+    dataLength,
+  }: MinimumRentExemptionBalanceRequest): Promise<MinimumRentExemptionBalanceResponse> {
     const lamports = await this.data.solana.getMinimumBalanceForRentExemption(dataLength)
-    return { lamports } as MinimumBalanceForRentExemptionResponse
+
+    return { lamports } as MinimumRentExemptionBalanceResponse
   }
 
-  getHistory(): HistoryResponse {
-    return {}
-  }
-
-  signTransaction(): SignTransactionResponse {
-    return {}
-  }
-
-  async submitTransaction(body: SubmitPaymentRequest): Promise<string> {
+  async makeTransfer(body: MakeTransferRequest): Promise<MakeTransferResponse> {
     const txJson = JSON.parse(body.tx)
     const schema = new Map([
       [
@@ -54,6 +44,8 @@ export class ApiTransactionDataAccessService {
     const buffer = borsh.serialize(schema, txJson)
     const tx = Transaction.from(buffer)
     tx.partialSign(...[this.data.config.mogamiSubsidizerKeypair])
-    return this.data.solana.submitTransaction(tx)
+    const signature = await this.data.solana.sendRawTransaction(tx)
+
+    return { signature }
   }
 }
