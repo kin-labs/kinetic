@@ -1,3 +1,1 @@
-import def from './lib/admin-user-feature'
-
-export default def
+export { AdminUserFeature as default } from './lib/admin-user-feature'

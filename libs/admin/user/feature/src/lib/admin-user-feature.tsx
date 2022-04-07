@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom'
 const AdminUserFeatureDetail = React.lazy(async () => import('./admin-user-feature-detail'))
 const AdminUserFeatureList = React.lazy(async () => import('./admin-user-feature-list'))
 
-export default function AdminUserFeature() {
+export function AdminUserFeature() {
   return (
     <Switch>
       <Route
