@@ -1,6 +1,5 @@
-import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiForm, AdminAppUiWallet } from '@mogami/admin/app/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
+import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
+import { AdminAppUiForm, AdminAppUiUsers, AdminAppUiWallet } from '@mogami/admin/app/ui'
 import { AppUpdateInput, useAppQuery, useUpdateAppMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
@@ -22,18 +21,30 @@ export default function AdminAppFeatureDetail() {
   return (
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
-        <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-          {data?.item?.name}
-        </Box>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+            {data?.item?.name}
+          </Box>
+          <code>App Index: {data?.item?.index}</code>
+        </Flex>
       </Box>
-      {fetching ? (
-        <AdminUiLoader />
-      ) : (
-        <>
-          <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />
-          {data?.item?.wallet && <AdminAppUiWallet wallet={data?.item?.wallet} />}
-        </>
-      )}
+
+      <Tabs isLazy colorScheme="teal">
+        <TabList>
+          <Tab>Wallet</Tab>
+          <Tab>Users</Tab>
+          <Tab>Settings</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>{data?.item?.wallet && <AdminAppUiWallet wallet={data?.item?.wallet} />}</TabPanel>
+          <TabPanel>
+            <AdminAppUiUsers users={data?.item?.users} />
+          </TabPanel>
+          <TabPanel>
+            <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Stack>
   )
 }

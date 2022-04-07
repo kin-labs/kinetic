@@ -5,7 +5,7 @@ import React from 'react'
 export function AdminHomeFeature() {
   const [{ data }] = useUptimeQuery()
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box p={6} borderWidth="1px" borderRadius="lg" overflow="hidden" m="10px auto">
       <Box p="6">
         <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
           Hello, Admin!

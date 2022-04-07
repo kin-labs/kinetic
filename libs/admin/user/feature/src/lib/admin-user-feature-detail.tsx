@@ -1,14 +1,13 @@
-import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminUserUiForm } from '@mogami/admin/user/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { UserUpdateInput, useUserQuery, useUpdateUserMutation } from '@mogami/shared/util/admin-sdk'
+import { Box, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
+import { AdminUserUiApps, AdminUserUiEmails, AdminUserUiForm } from '@mogami/admin/user/ui'
+import { UserUpdateInput, useUpdateUserMutation, useUserQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
 export default function AdminUserFeatureDetail() {
   const toast = useToast()
   const { userId } = useParams<{ userId: string }>()
-  const [{ data, fetching }] = useUserQuery({ variables: { userId } })
+  const [{ data }] = useUserQuery({ variables: { userId } })
   const [_, updateUserMutation] = useUpdateUserMutation()
 
   const onSubmit = async (input: UserUpdateInput) => {
@@ -27,7 +26,24 @@ export default function AdminUserFeatureDetail() {
         </Box>
       </Box>
 
-      <Box>{fetching ? <AdminUiLoader /> : <AdminUserUiForm user={data?.item} onSubmit={onSubmit} />}</Box>
+      <Tabs isLazy colorScheme="teal">
+        <TabList>
+          <Tab>Apps</Tab>
+          <Tab>Emails</Tab>
+          <Tab>Settings</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <AdminUserUiApps apps={data?.item?.apps} />
+          </TabPanel>
+          <TabPanel>
+            <AdminUserUiEmails emails={data?.item?.emails} />
+          </TabPanel>
+          <TabPanel>
+            <AdminUserUiForm user={data?.item} onSubmit={onSubmit} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Stack>
   )
 }

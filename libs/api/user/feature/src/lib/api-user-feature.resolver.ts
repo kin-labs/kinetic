@@ -1,3 +1,4 @@
+import { AppUser } from '@mogami/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { ApiUserDataAccessService, User, UserCreateInput, UserUpdateInput } from '@mogami/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
@@ -31,6 +32,11 @@ export class ApiUserFeatureResolver {
   @Mutation(() => User, { nullable: true })
   updateUser(@CtxUser() user: User, @Args('userId') userId: string, @Args('input') input: UserUpdateInput) {
     return this.service.updateUser(user.id, userId, input)
+  }
+
+  @ResolveField(() => [AppUser], { nullable: true })
+  apps(@Parent() user: User) {
+    return user.apps
   }
 
   @ResolveField(() => String, { nullable: true })

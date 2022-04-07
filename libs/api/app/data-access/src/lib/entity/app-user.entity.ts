@@ -1,6 +1,7 @@
 import { User } from '@mogami/api/user/data-access'
 import { Field, ObjectType } from '@nestjs/graphql'
 import { AppUserRole } from './app-user-role.enum'
+import { App } from './app.entity'
 
 @ObjectType()
 export class AppUser {
@@ -12,6 +13,8 @@ export class AppUser {
   updatedAt?: Date
   @Field(() => AppUserRole)
   role: AppUserRole
+  @Field(() => App, { nullable: true })
+  app: App
   @Field(() => User, { nullable: true })
   user: User
 }

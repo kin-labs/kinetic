@@ -23,6 +23,7 @@ input AppUpdateInput {
 }
 
 type AppUser {
+  app: App
   createdAt: DateTime!
   id: String!
   role: AppUserRole!
@@ -108,6 +109,7 @@ type Query {
 }
 
 type User {
+  apps: [AppUser!]
   avatarUrl: String
   createdAt: DateTime!
   email: String

@@ -1,4 +1,4 @@
-import { Button, Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import { Button, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
 import { User } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -22,9 +22,11 @@ export function AdminUserUiTable({ users, deleteUser }: AdminUserUiTableProps) {
           {users?.map((user) => (
             <Tr key={user.id}>
               <Td>
-                <Link to={'/users/' + user.id}>{user.username}</Link>
+                <Link to={'/users/' + user.id}>
+                  <Text color="teal.500">{user.username}</Text>
+                </Link>
               </Td>
-              <Td>
+              <Td isNumeric>
                 <Button size="xs" onClick={() => deleteUser(user.id)}>
                   Delete
                 </Button>

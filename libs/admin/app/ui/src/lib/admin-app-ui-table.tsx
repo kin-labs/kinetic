@@ -1,4 +1,4 @@
-import { Button, Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import { Button, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
 import { App } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -25,10 +25,12 @@ export function AdminAppUiTable({ apps, deleteApp }: AdminAppUiTableProps) {
             <Tr key={app.id}>
               <Td isNumeric>{app.index}</Td>
               <Td>
-                <Link to={'/apps/' + app.id}>{app.name}</Link>
+                <Link to={'/apps/' + app.id}>
+                  <Text color="teal.500">{app.name}</Text>
+                </Link>
               </Td>
               <Td>{app.wallet?.publicKey}</Td>
-              <Td>
+              <Td isNumeric>
                 <Button size="xs" onClick={() => deleteApp(app.id)}>
                   Delete
                 </Button>
