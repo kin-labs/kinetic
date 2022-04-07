@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import React from 'react'
 
-export default function AdminAppFeature() {
+export function AdminAppFeature() {
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
       <Box p="6">

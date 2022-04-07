@@ -1,3 +1,1 @@
-import def from './lib/admin-auth-feature'
-
-export default def
+export { AdminAuthFeature as default } from './lib/admin-auth-feature'
