@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@mogami/admin/app/feature": ["libs/admin/app/feature/src/index.ts"],
+      "@mogami/admin/auth/data-access": ["libs/admin/auth/data-access/src/index.ts"],
+      "@mogami/admin/auth/feature": ["libs/admin/auth/feature/src/index.ts"],
+      "@mogami/admin/auth/ui": ["libs/admin/auth/ui/src/index.ts"],
       "@mogami/admin/home/feature": ["libs/admin/home/feature/src/index.ts"],
       "@mogami/admin/shell/feature": ["libs/admin/shell/feature/src/index.ts"],
       "@mogami/admin/ui/layout": ["libs/admin/ui/layout/src/index.ts"],

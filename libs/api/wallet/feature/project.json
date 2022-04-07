@@ -1,0 +1,22 @@
+{
+  "root": "libs/api/wallet/feature",
+  "sourceRoot": "libs/api/wallet/feature/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/wallet/feature/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/wallet/feature"],
+      "options": {
+        "jestConfig": "libs/api/wallet/feature/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:api", "type:feature"]
+}

@@ -2,145 +2,16 @@
   "version": 2,
   "projects": {
     "admin": "apps/admin",
-    "admin-app-feature": {
-      "root": "libs/admin/app/feature",
-      "sourceRoot": "libs/admin/app/feature/src",
-      "projectType": "library",
-      "tags": ["type:feature", "scope:admin"],
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/admin/app/feature/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/admin/app/feature"],
-          "options": {
-            "jestConfig": "libs/admin/app/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
+    "admin-app-feature": "libs/admin/app/feature",
+    "admin-auth-data-access": "libs/admin/auth/data-access",
+    "admin-auth-feature": "libs/admin/auth/feature",
+    "admin-auth-ui": "libs/admin/auth/ui",
     "admin-e2e": "apps/admin-e2e",
-    "admin-home-feature": {
-      "root": "libs/admin/home/feature",
-      "sourceRoot": "libs/admin/home/feature/src",
-      "projectType": "library",
-      "tags": ["type:feature", "scope:admin"],
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/admin/home/feature/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/admin/home/feature"],
-          "options": {
-            "jestConfig": "libs/admin/home/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "admin-shell-feature": {
-      "root": "libs/admin/shell/feature",
-      "sourceRoot": "libs/admin/shell/feature/src",
-      "projectType": "library",
-      "tags": ["type:feature", "scope:admin"],
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/admin/shell/feature/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/admin/shell/feature"],
-          "options": {
-            "jestConfig": "libs/admin/shell/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "admin-ui-layout": {
-      "root": "libs/admin/ui/layout",
-      "sourceRoot": "libs/admin/ui/layout/src",
-      "projectType": "library",
-      "tags": ["type:ui", "scope:admin"],
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/admin/ui/layout/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/admin/ui/layout"],
-          "options": {
-            "jestConfig": "libs/admin/ui/layout/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "admin-ui-loader": {
-      "root": "libs/admin/ui/loader",
-      "sourceRoot": "libs/admin/ui/loader/src",
-      "projectType": "library",
-      "tags": ["type:ui", "scope:admin"],
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/admin/ui/loader/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/admin/ui/loader"],
-          "options": {
-            "jestConfig": "libs/admin/ui/loader/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "admin-user-feature": {
-      "root": "libs/admin/user/feature",
-      "sourceRoot": "libs/admin/user/feature/src",
-      "projectType": "library",
-      "tags": ["type:feature", "scope:admin"],
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/admin/user/feature/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/admin/user/feature"],
-          "options": {
-            "jestConfig": "libs/admin/user/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
+    "admin-home-feature": "libs/admin/home/feature",
+    "admin-shell-feature": "libs/admin/shell/feature",
+    "admin-ui-layout": "libs/admin/ui/layout",
+    "admin-ui-loader": "libs/admin/ui/loader",
+    "admin-user-feature": "libs/admin/user/feature",
     "airdrop": "libs/airdrop",
     "api": "apps/api",
     "api-account-data-access": "libs/api/account/data-access",
@@ -163,50 +34,8 @@
     "api-transaction-feature": "libs/api/transaction/feature",
     "api-user-data-access": "libs/api/user/data-access",
     "api-user-feature": "libs/api/user/feature",
-    "api-wallet-data-access": {
-      "root": "libs/api/wallet/data-access",
-      "sourceRoot": "libs/api/wallet/data-access/src",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/api/wallet/data-access/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/wallet/data-access"],
-          "options": {
-            "jestConfig": "libs/api/wallet/data-access/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      },
-      "tags": ["scope:api", "type:data-access"]
-    },
-    "api-wallet-feature": {
-      "root": "libs/api/wallet/feature",
-      "sourceRoot": "libs/api/wallet/feature/src",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["libs/api/wallet/feature/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/api/wallet/feature"],
-          "options": {
-            "jestConfig": "libs/api/wallet/feature/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      },
-      "tags": ["scope:api", "type:feature"]
-    },
+    "api-wallet-data-access": "libs/api/wallet/data-access",
+    "api-wallet-feature": "libs/api/wallet/feature",
     "demo": "apps/demo",
     "demo-e2e": "apps/demo-e2e",
     "keypair": "libs/keypair",

@@ -1,0 +1,23 @@
+{
+  "root": "libs/admin/auth/data-access",
+  "sourceRoot": "libs/admin/auth/data-access/src",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:admin"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/admin/auth/data-access/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/admin/auth/data-access"],
+      "options": {
+        "jestConfig": "libs/admin/auth/data-access/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

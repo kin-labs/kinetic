@@ -5,6 +5,7 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
 import { JwtService, JwtSignOptions } from '@nestjs/jwt'
 import { Response } from 'express'
 import { LoginInput } from './dto/login.input'
+import { AuthToken } from './entities/auth-token.entity'
 
 @Injectable()
 export class ApiAuthDataAccessService {
@@ -69,10 +70,10 @@ export class ApiAuthDataAccessService {
     return user
   }
 
-  async login(res: Response, input: LoginInput) {
+  async login(res: Response, input: LoginInput): Promise<AuthToken> {
     const user = await this.validateUser(input)
     const token = this.sign({ username: user.username, id: user.id })
     this.setCookie(res, token)
-    return { token }
+    return { token, user }
   }
 }

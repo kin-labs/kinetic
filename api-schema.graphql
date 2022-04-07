@@ -51,6 +51,7 @@ input AppUserUpdateRoleInput {
 
 type AuthToken {
   token: String!
+  user: User!
 }
 
 """

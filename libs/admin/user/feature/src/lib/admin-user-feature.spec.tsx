@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 
-import AdminUserFeature from './admin-user-feature'
+import { AdminUserFeature } from './admin-user-feature'
 
 describe('AdminUserFeature', () => {
   it('should render successfully', () => {

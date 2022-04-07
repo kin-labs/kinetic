@@ -1,23 +1,13 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Center,
-  Flex,
-  Heading,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Stack,
-  useColorModeValue,
-} from '@chakra-ui/react'
+import { Box, Flex, Heading, Stack, useColorModeValue } from '@chakra-ui/react'
+import { useAdminAuth } from '@mogami/admin/auth/data-access'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { AdminUiHeaderLink, AdminUiLink } from './admin-ui-header-link'
+import { AdminUiHeaderProfileMenu } from './admin-ui-header-profile-menu'
 
 export function AdminUiHeader({ links, name }: { links: AdminUiLink[]; name: string }) {
+  const { logout, user } = useAdminAuth()
+
   return (
     <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
       <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
@@ -35,26 +25,7 @@ export function AdminUiHeader({ links, name }: { links: AdminUiLink[]; name: str
         </Flex>
         <Flex alignItems={'center'}>
           <Stack direction={'row'} spacing={7}>
-            <Menu>
-              <MenuButton as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0}>
-                <Avatar bg="transparent" size={'sm'} src={'https://avatars.githubusercontent.com/u/82999948?v=4'} />
-              </MenuButton>
-              <MenuList alignItems={'center'}>
-                <br />
-                <Center>
-                  <Avatar bg="transparent" size={'2xl'} src={'https://avatars.githubusercontent.com/u/82999948?v=4'} />
-                </Center>
-                <br />
-                <Center>
-                  <p>Username</p>
-                </Center>
-                <br />
-                <MenuDivider />
-                <MenuItem>Your Servers</MenuItem>
-                <MenuItem>Account Settings</MenuItem>
-                <MenuItem>Logout</MenuItem>
-              </MenuList>
-            </Menu>
+            {user && <AdminUiHeaderProfileMenu logout={logout} user={user} />}
           </Stack>
         </Flex>
       </Flex>

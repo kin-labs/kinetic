@@ -8,17 +8,19 @@ export function AdminUiLayout({
   children,
   copyright,
   name,
-  links,
+  links = [],
 }: PropsWithChildren<{
   copyright: ReactNode
   name: string
-  links: AdminUiLink[]
+  links?: AdminUiLink[]
 }>) {
   return (
     <Flex direction="column" h="full">
       <AdminUiHeader links={links} name={name} />
       <Flex direction="column" grow={1} p={4}>
-        <Container maxW="container.xl">{children}</Container>
+        <Container maxW="container.xl" h="full">
+          {children}
+        </Container>
       </Flex>
       <AdminUiFooter copyright={copyright} />
     </Flex>

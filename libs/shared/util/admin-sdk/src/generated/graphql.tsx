@@ -69,6 +69,7 @@ export type AppUserUpdateRoleInput = {
 export type AuthToken = {
   __typename?: 'AuthToken'
   token: Scalars['String']
+  user: User
 }
 
 export type LoginInput = {
@@ -532,13 +533,48 @@ export type AppsQuery = {
   }> | null
 }
 
-export type AuthTokenDetailsFragment = { __typename?: 'AuthToken'; token: string }
+export type AuthTokenDetailsFragment = {
+  __typename?: 'AuthToken'
+  token: string
+  user: {
+    __typename?: 'User'
+    id: string
+    createdAt: any
+    updatedAt: any
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
+    username: string
+    role?: UserRole | null
+  }
+}
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput
 }>
 
-export type LoginMutation = { __typename?: 'Mutation'; login?: { __typename?: 'AuthToken'; token: string } | null }
+export type LoginMutation = {
+  __typename?: 'Mutation'
+  login?: {
+    __typename?: 'AuthToken'
+    token: string
+    user: {
+      __typename?: 'User'
+      id: string
+      createdAt: any
+      updatedAt: any
+      avatarUrl?: string | null
+      email?: string | null
+      name?: string | null
+      username: string
+      role?: UserRole | null
+    }
+  } | null
+}
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never }>
+
+export type LogoutMutation = { __typename?: 'Mutation'; logout?: boolean | null }
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>
 
@@ -752,7 +788,11 @@ export const AppUserDetailsFragmentDoc = gql`
 export const AuthTokenDetailsFragmentDoc = gql`
   fragment AuthTokenDetails on AuthToken {
     token
+    user {
+      ...UserDetails
+    }
   }
+  ${UserDetailsFragmentDoc}
 `
 export const UserEmailDetailsFragmentDoc = gql`
   fragment UserEmailDetails on UserEmail {
@@ -945,6 +985,15 @@ export const LoginDocument = gql`
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument)
+}
+export const LogoutDocument = gql`
+  mutation Logout {
+    logout
+  }
+`
+
+export function useLogoutMutation() {
+  return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument)
 }
 export const MeDocument = gql`
   query Me {

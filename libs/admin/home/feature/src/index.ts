@@ -1,1 +1,1 @@
-export * from './lib/admin-home-feature'
+export { AdminHomeFeature as default } from './lib/admin-home-feature'
