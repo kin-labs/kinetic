@@ -7,7 +7,7 @@ describe('AdminUiLayout', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <BrowserRouter>
-        <AdminUiLayout links={[]} />
+        <AdminUiLayout copyright={'Hi'} name={'Name'} links={[]} />
       </BrowserRouter>,
     )
     expect(baseElement).toBeTruthy()

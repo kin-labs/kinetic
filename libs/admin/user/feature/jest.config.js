@@ -1,9 +1,9 @@
 module.exports = {
-  displayName: 'admin-ui-theme-switcher',
+  displayName: 'admin-user-feature',
   preset: '../../../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/admin/ui/theme-switcher',
+  coverageDirectory: '../../../../coverage/libs/admin/user/feature',
 }
