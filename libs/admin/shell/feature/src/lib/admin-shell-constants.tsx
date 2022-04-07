@@ -5,4 +5,5 @@ export const copyright = <p>Kin Foundation &copy; 2022</p>
 export const links: AdminUiLink[] = [
   { label: 'Home', path: '/home' },
   { label: 'Apps', path: '/apps' },
+  { label: 'Users', path: '/users' },
 ]
