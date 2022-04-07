@@ -85,4 +85,8 @@ export class Solana {
     const res = await axios.get(`${this.endpoint}/health`)
     return res.data.toString() === 'ok'
   }
+
+  getRecentPerformanceSamples(numberOfSamples: number) {
+    return this.connection.getRecentPerformanceSamples(numberOfSamples)
+  }
 }

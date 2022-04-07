@@ -14,7 +14,9 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { ApiCoreFeatureController } from './api-core-feature.controller'
 import { ApiCoreFeatureResolver } from './api-core-feature.resolver'
+import { ScheduleModule } from '@nestjs/schedule'
 import { serveStaticFactory } from './serve-static.factory'
+import { ApiNetworkStatFeatureModule } from '@mogami/api/network-stat/feature'
 
 @Module({
   controllers: [ApiCoreFeatureController],
@@ -41,6 +43,8 @@ import { serveStaticFactory } from './serve-static.factory'
     ApiTransactionFeatureModule,
     ApiUserFeatureModule,
     ApiWalletFeatureModule,
+    ScheduleModule.forRoot(),
+    ApiNetworkStatFeatureModule,
   ],
 })
 export class ApiCoreFeatureModule {}
