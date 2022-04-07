@@ -1,3 +1,4 @@
+import { AdminAuthProvider } from '@mogami/admin/auth/data-access'
 import { render } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 
@@ -7,7 +8,9 @@ describe('AdminUiLayout', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <BrowserRouter>
-        <AdminUiLayout copyright={'Hi'} name={'Name'} links={[]} />
+        <AdminAuthProvider>
+          <AdminUiLayout copyright={'Hi'} name={'Name'} links={[]} />
+        </AdminAuthProvider>
       </BrowserRouter>,
     )
     expect(baseElement).toBeTruthy()
