@@ -1,0 +1,22 @@
+{
+  "root": "libs/api/wallet/data-access",
+  "sourceRoot": "libs/api/wallet/data-access/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/api/wallet/data-access/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/api/wallet/data-access"],
+      "options": {
+        "jestConfig": "libs/api/wallet/data-access/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:api", "type:data-access"]
+}
