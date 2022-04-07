@@ -177,6 +177,8 @@ export type Query = {
   user?: Maybe<User>
   users?: Maybe<Array<User>>
   wallet?: Maybe<Wallet>
+  walletAirdrop?: Maybe<WalletAirdropResponse>
+  walletBalance?: Maybe<WalletBalance>
   wallets?: Maybe<Array<Wallet>>
 }
 
@@ -193,6 +195,15 @@ export type QueryUserArgs = {
 }
 
 export type QueryWalletArgs = {
+  walletId: Scalars['String']
+}
+
+export type QueryWalletAirdropArgs = {
+  amount: Scalars['Float']
+  walletId: Scalars['String']
+}
+
+export type QueryWalletBalanceArgs = {
   walletId: Scalars['String']
 }
 
@@ -243,6 +254,16 @@ export type Wallet = {
   id: Scalars['String']
   publicKey?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
+}
+
+export type WalletAirdropResponse = {
+  __typename?: 'WalletAirdropResponse'
+  signature?: Maybe<Scalars['String']>
+}
+
+export type WalletBalance = {
+  __typename?: 'WalletBalance'
+  sol?: Maybe<Scalars['Float']>
 }
 
 export type AppDetailsFragment = {
@@ -738,6 +759,10 @@ export type WalletDetailsFragment = {
   publicKey?: string | null
 }
 
+export type WalletAirdropResponseDetailsFragment = { __typename?: 'WalletAirdropResponse'; signature?: string | null }
+
+export type WalletBalanceDetailsFragment = { __typename?: 'WalletBalance'; sol?: number | null }
+
 export type GenerateWalletMutationVariables = Exact<{ [key: string]: never }>
 
 export type GenerateWalletMutation = {
@@ -761,6 +786,25 @@ export type WalletQueryVariables = Exact<{
 export type WalletQuery = {
   __typename?: 'Query'
   item?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+}
+
+export type WalletAirdropQueryVariables = Exact<{
+  walletId: Scalars['String']
+  amount: Scalars['Float']
+}>
+
+export type WalletAirdropQuery = {
+  __typename?: 'Query'
+  response?: { __typename?: 'WalletAirdropResponse'; signature?: string | null } | null
+}
+
+export type WalletBalanceQueryVariables = Exact<{
+  walletId: Scalars['String']
+}>
+
+export type WalletBalanceQuery = {
+  __typename?: 'Query'
+  balance?: { __typename?: 'WalletBalance'; sol?: number | null } | null
 }
 
 export type WalletsQueryVariables = Exact<{ [key: string]: never }>
@@ -826,6 +870,16 @@ export const WalletDetailsFragmentDoc = gql`
     createdAt
     updatedAt
     publicKey
+  }
+`
+export const WalletAirdropResponseDetailsFragmentDoc = gql`
+  fragment WalletAirdropResponseDetails on WalletAirdropResponse {
+    signature
+  }
+`
+export const WalletBalanceDetailsFragmentDoc = gql`
+  fragment WalletBalanceDetails on WalletBalance {
+    sol
   }
 `
 export const CreateAppDocument = gql`
@@ -1137,6 +1191,30 @@ export const WalletDocument = gql`
 
 export function useWalletQuery(options: Omit<Urql.UseQueryArgs<WalletQueryVariables>, 'query'>) {
   return Urql.useQuery<WalletQuery>({ query: WalletDocument, ...options })
+}
+export const WalletAirdropDocument = gql`
+  query WalletAirdrop($walletId: String!, $amount: Float!) {
+    response: walletAirdrop(walletId: $walletId, amount: $amount) {
+      ...WalletAirdropResponseDetails
+    }
+  }
+  ${WalletAirdropResponseDetailsFragmentDoc}
+`
+
+export function useWalletAirdropQuery(options: Omit<Urql.UseQueryArgs<WalletAirdropQueryVariables>, 'query'>) {
+  return Urql.useQuery<WalletAirdropQuery>({ query: WalletAirdropDocument, ...options })
+}
+export const WalletBalanceDocument = gql`
+  query WalletBalance($walletId: String!) {
+    balance: walletBalance(walletId: $walletId) {
+      ...WalletBalanceDetails
+    }
+  }
+  ${WalletBalanceDetailsFragmentDoc}
+`
+
+export function useWalletBalanceQuery(options: Omit<Urql.UseQueryArgs<WalletBalanceQueryVariables>, 'query'>) {
+  return Urql.useQuery<WalletBalanceQuery>({ query: WalletBalanceDocument, ...options })
 }
 export const WalletsDocument = gql`
   query Wallets {

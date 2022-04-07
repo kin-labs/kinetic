@@ -5,6 +5,14 @@ fragment WalletDetails on Wallet {
   publicKey
 }
 
+fragment WalletAirdropResponseDetails on WalletAirdropResponse {
+  signature
+}
+
+fragment WalletBalanceDetails on WalletBalance {
+  sol
+}
+
 mutation GenerateWallet {
   generated: generateWallet {
     ...WalletDetails
@@ -20,6 +28,18 @@ mutation DeleteWallet($walletId: String!) {
 query Wallet($walletId: String!) {
   item: wallet(walletId: $walletId) {
     ...WalletDetails
+  }
+}
+
+query WalletAirdrop($walletId: String!, $amount: Float!) {
+  response: walletAirdrop(walletId: $walletId, amount: $amount) {
+    ...WalletAirdropResponseDetails
+  }
+}
+
+query WalletBalance($walletId: String!) {
+  balance: walletBalance(walletId: $walletId) {
+    ...WalletBalanceDetails
   }
 }
 

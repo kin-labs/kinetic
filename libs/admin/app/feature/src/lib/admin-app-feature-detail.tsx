@@ -1,5 +1,5 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiForm } from '@mogami/admin/app/ui'
+import { AdminAppUiForm, AdminAppUiWallet } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AppUpdateInput, useAppQuery, useUpdateAppMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
@@ -26,8 +26,14 @@ export default function AdminAppFeatureDetail() {
           {data?.item?.name}
         </Box>
       </Box>
-
-      <Box>{fetching ? <AdminUiLoader /> : <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />}</Box>
+      {fetching ? (
+        <AdminUiLoader />
+      ) : (
+        <>
+          <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />
+          {data?.item?.wallet && <AdminAppUiWallet wallet={data?.item?.wallet} />}
+        </>
+      )}
     </Stack>
   )
 }

@@ -1,6 +1,9 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Injectable, NotFoundException } from '@nestjs/common'
+import { LAMPORTS_PER_SOL } from '@solana/web3.js'
+import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
+import { WalletBalance } from './entity/wallet-balance.entity'
 
 @Injectable()
 export class ApiWalletDataAccessService {
@@ -21,6 +24,25 @@ export class ApiWalletDataAccessService {
   async wallet(userId: string, walletId: string) {
     await this.ensureWalletById(userId, walletId)
     return this.data.wallet.findUnique({ where: { id: walletId } })
+  }
+
+  async walletAirdrop(userId: string, walletId: string, amount: number): Promise<WalletAirdropResponse> {
+    const wallet = await this.ensureWalletById(userId, walletId)
+    const floatAmount = parseFloat(amount?.toString())
+    const signature = await this.data.solana.requestAirdrop(wallet.publicKey, floatAmount * LAMPORTS_PER_SOL)
+
+    return {
+      signature,
+    }
+  }
+
+  async walletBalance(userId: string, walletId: string): Promise<WalletBalance> {
+    const wallet = await this.ensureWalletById(userId, walletId)
+    const sol = await this.data.solana.getBalanceSol(wallet.publicKey)
+
+    return {
+      sol: sol / LAMPORTS_PER_SOL,
+    }
   }
 
   async wallets(userId: string) {
