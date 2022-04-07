@@ -1670,6 +1670,13 @@
   dependencies:
     "@chakra-ui/utils" "1.10.4"
 
+"@choc-ui/chakra-autocomplete@^4.20.1":
+  version "4.20.1"
+  resolved "https://registry.yarnpkg.com/@choc-ui/chakra-autocomplete/-/chakra-autocomplete-4.20.1.tgz#0fc59e894704da7a3da6bb0e26eea0b03faefcd4"
+  integrity sha512-8DdcPZP9SLQ8uBEZ2JdUDp3rTG4yOwk69O9XMzsI42tffnFsgrQ97oRqdg/yxA349g/hDrRUTVXGHq5Jfrnl/Q==
+  dependencies:
+    react-nanny "^2.9.0"
+
 "@choc-ui/paginator@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@choc-ui/paginator/-/paginator-3.4.0.tgz#3e542f995dfb13461825221f46d00b8d05e1b324"
@@ -13003,6 +13010,11 @@ react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-nanny@^2.9.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/react-nanny/-/react-nanny-2.12.0.tgz#8ee7d20319f81131fc1be50ddf3197f286a81dde"
+  integrity sha512-oQ3Mo2oBPVELl96IHc43zVsCJUt8BYoEXoeBtPJzTfTTVezQx3/CRZZ+4Ck6TITxawRTUiOcU8v7EPaGpDk01A==
 
 react-refresh@^0.10.0:
   version "0.10.0"

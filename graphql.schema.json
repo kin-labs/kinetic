@@ -404,14 +404,14 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "role",
+            "name": "appUserId",
             "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "ENUM",
-                "name": "AppUserRole",
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               }
             },
@@ -420,14 +420,14 @@
             "deprecationReason": null
           },
           {
-            "name": "userId",
+            "name": "role",
             "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "AppUserRole",
                 "ofType": null
               }
             },

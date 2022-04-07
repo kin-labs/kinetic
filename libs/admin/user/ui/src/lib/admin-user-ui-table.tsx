@@ -23,7 +23,7 @@ export function AdminUserUiTable({ users, deleteUser }: AdminUserUiTableProps) {
             <Tr key={user.id}>
               <Td>
                 <Link to={'/users/' + user.id}>
-                  <Text color="teal.500">{user.username}</Text>
+                  <Text color="teal.500">{user.name}</Text>
                 </Link>
               </Td>
               <Td isNumeric>

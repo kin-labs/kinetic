@@ -4,7 +4,7 @@ import { AppUserRole } from '../entity/app-user-role.enum'
 @InputType()
 export class AppUserUpdateRoleInput {
   @Field()
-  userId: string
+  appUserId: string
   @Field(() => AppUserRole)
   role: AppUserRole
 }

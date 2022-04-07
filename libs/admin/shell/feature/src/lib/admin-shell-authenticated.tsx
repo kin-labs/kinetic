@@ -11,35 +11,16 @@ const AdminUserFeature = React.lazy(async () => import('@mogami/admin/user/featu
 export function AdminShellAuthenticated() {
   return (
     <AdminUiLayout copyright={copyright} name={name} links={links}>
-      <Switch>
-        <Route path="/" exact>
-          <Redirect to="/home" />
-        </Route>
-        <Route
-          path="/apps"
-          render={() => (
-            <React.Suspense fallback={<AdminUiLoader />}>
-              <AdminAppFeature />
-            </React.Suspense>
-          )}
-        />
-        <Route
-          path="/home"
-          render={() => (
-            <React.Suspense fallback={<AdminUiLoader />}>
-              <AdminHomeFeature />
-            </React.Suspense>
-          )}
-        />
-        <Route
-          path="/users"
-          render={() => (
-            <React.Suspense fallback={<AdminUiLoader />}>
-              <AdminUserFeature />
-            </React.Suspense>
-          )}
-        />
-      </Switch>
+      <React.Suspense fallback={<AdminUiLoader />}>
+        <Switch>
+          <Route path="/" exact>
+            <Redirect to="/home" />
+          </Route>
+          <Route path="/apps" render={() => <AdminAppFeature />} />
+          <Route path="/home" render={() => <AdminHomeFeature />} />
+          <Route path="/users" render={() => <AdminUserFeature />} />
+        </Switch>
+      </React.Suspense>
     </AdminUiLayout>
   )
 }

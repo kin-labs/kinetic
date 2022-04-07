@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Input, Stack } from '@chakra-ui/react'
+import { Box, Button, ButtonGroup, Code, Input, Stack } from '@chakra-ui/react'
 import { useWalletAirdropQuery, useWalletBalanceQuery, Wallet } from '@mogami/shared/util/admin-sdk'
 import React, { ChangeEvent, useState } from 'react'
 
@@ -25,8 +25,8 @@ export function AdminAppUiWallet({ wallet }: AdminAppUiWalletProps) {
 
   return (
     <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
-      <Box mt="1" fontWeight="semibold" as="h5" lineHeight="tight" isTruncated>
-        {wallet?.publicKey}
+      <Box mt="1" isTruncated>
+        <Code colorScheme="teal">{wallet?.publicKey}</Code>
       </Box>
       <Stack direction="column" spacing={6}>
         <Box mt="1" fontWeight="semibold" as="h3" lineHeight="tight" isTruncated>

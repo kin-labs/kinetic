@@ -1,6 +1,15 @@
 import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
-import { AdminAppUiForm, AdminAppUiUsers, AdminAppUiWallet } from '@mogami/admin/app/ui'
-import { AppUpdateInput, useAppQuery, useUpdateAppMutation } from '@mogami/shared/util/admin-sdk'
+import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers, AdminAppUiWallet } from '@mogami/admin/app/ui'
+import { AdminUiLoader } from '@mogami/admin/ui/loader'
+import {
+  AppUpdateInput,
+  AppUserAddInput,
+  AppUserUpdateRoleInput,
+  useAppQuery,
+  useAppUserAddMutation,
+  useAppUserUpdateRoleMutation,
+  useUpdateAppMutation,
+} from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -8,7 +17,9 @@ export default function AdminAppFeatureDetail() {
   const toast = useToast()
   const { appId } = useParams<{ appId: string }>()
   const [{ data, fetching }] = useAppQuery({ variables: { appId } })
-  const [_, updateAppMutation] = useUpdateAppMutation()
+  const [, updateAppMutation] = useUpdateAppMutation()
+  const [, updateUserAddMutation] = useAppUserAddMutation()
+  const [, updateRoleMutation] = useAppUserUpdateRoleMutation()
 
   const onSubmit = async (input: AppUpdateInput) => {
     const res = await updateAppMutation({ appId, input })
@@ -16,6 +27,17 @@ export default function AdminAppFeatureDetail() {
       toast({ status: 'success', title: 'App updated' })
     }
     return res?.data?.updated
+  }
+
+  const addRole = async ({ role, userId }: AppUserAddInput) => {
+    await updateUserAddMutation({ appId, input: { role, userId } })
+  }
+  const updateRole = async ({ appUserId, role }: AppUserUpdateRoleInput) => {
+    await updateRoleMutation({ appId, input: { role, appUserId } })
+  }
+
+  if (fetching) {
+    return <AdminUiLoader />
   }
 
   return (
@@ -38,7 +60,14 @@ export default function AdminAppFeatureDetail() {
         <TabPanels>
           <TabPanel>{data?.item?.wallet && <AdminAppUiWallet wallet={data?.item?.wallet} />}</TabPanel>
           <TabPanel>
-            <AdminAppUiUsers users={data?.item?.users} />
+            <Stack direction="column" spacing={6}>
+              <Box w="full">
+                <AdminAppUiUsers updateRole={updateRole} users={data?.item?.users} />
+              </Box>
+              <Box>
+                <AdminAppUiUserModal addRole={addRole} />
+              </Box>
+            </Stack>
           </TabPanel>
           <TabPanel>
             <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />

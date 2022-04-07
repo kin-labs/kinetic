@@ -1,13 +1,15 @@
 import { Alert, Box, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
-import { AppUser } from '@mogami/shared/util/admin-sdk'
+import { AppUser, AppUserRole } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { AdminAppUiUserModal } from './admin-app-ui-user-modal'
 
 export interface AdminAppUiUsersProps {
+  updateRole: ({ role, appUserId }: { role: AppUserRole; appUserId: string }) => void
   users: AppUser[] | null | undefined
 }
 
-export function AdminAppUiUsers({ users }: AdminAppUiUsersProps) {
+export function AdminAppUiUsers({ updateRole, users }: AdminAppUiUsersProps) {
   if (!users?.length) {
     return <Alert>No users found.</Alert>
   }
@@ -26,11 +28,13 @@ export function AdminAppUiUsers({ users }: AdminAppUiUsersProps) {
               <Tr key={user?.id}>
                 <Td>
                   <Link to={'/users/' + user?.user?.id}>
-                    <Text color="teal.500">{user?.user?.name}</Text>
+                    <Text color="teal.500">
+                      {user?.user?.name} ({user?.role})
+                    </Text>
                   </Link>
                 </Td>
                 <Td isNumeric>
-                  <Text color="teal.500">{user?.role}</Text>
+                  <AdminAppUiUserModal user={user} updateRole={updateRole} />
                 </Td>
               </Tr>
             ))}
