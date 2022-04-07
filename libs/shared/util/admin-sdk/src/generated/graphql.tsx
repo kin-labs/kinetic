@@ -155,11 +155,24 @@ export type MutationUpdateUserArgs = {
   userId: Scalars['String']
 }
 
+export type NetworkStat = {
+  __typename?: 'NetworkStat'
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  numSlots?: Maybe<Scalars['Float']>
+  numTransactions: Scalars['Float']
+  samplePeriodSecs: Scalars['Float']
+  slot: Scalars['Float']
+  updatedAt: Scalars['DateTime']
+}
+
 export type Query = {
   __typename?: 'Query'
   app?: Maybe<App>
   apps?: Maybe<Array<App>>
   me?: Maybe<User>
+  networkStat?: Maybe<NetworkStat>
+  networkStats?: Maybe<Array<NetworkStat>>
   uptime: Scalars['Float']
   user?: Maybe<User>
   users?: Maybe<Array<User>>
@@ -169,6 +182,10 @@ export type Query = {
 
 export type QueryAppArgs = {
   appId: Scalars['String']
+}
+
+export type QueryNetworkStatArgs = {
+  networkStatId: Scalars['String']
 }
 
 export type QueryUserArgs = {
