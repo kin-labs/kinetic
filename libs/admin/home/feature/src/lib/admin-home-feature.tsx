@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import { useUptimeQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export default function AdminHomeFeature() {
+export function AdminHomeFeature() {
   const [{ data }] = useUptimeQuery()
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
