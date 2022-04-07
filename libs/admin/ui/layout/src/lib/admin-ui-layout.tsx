@@ -8,11 +8,11 @@ export function AdminUiLayout({
   children,
   copyright,
   name,
-  links,
+  links = [],
 }: PropsWithChildren<{
   copyright: ReactNode
   name: string
-  links: AdminUiLink[]
+  links?: AdminUiLink[]
 }>) {
   return (
     <Flex direction="column" h="full">

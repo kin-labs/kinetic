@@ -25,6 +25,75 @@
         }
       }
     },
+    "admin-auth-data-access": {
+      "root": "libs/admin/auth/data-access",
+      "sourceRoot": "libs/admin/auth/data-access/src",
+      "projectType": "library",
+      "tags": ["type:data-access", "scope:admin"],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/admin/auth/data-access/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/admin/auth/data-access"],
+          "options": {
+            "jestConfig": "libs/admin/auth/data-access/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "admin-auth-feature": {
+      "root": "libs/admin/auth/feature",
+      "sourceRoot": "libs/admin/auth/feature/src",
+      "projectType": "library",
+      "tags": ["type:feature", "scope:admin"],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/admin/auth/feature/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/admin/auth/feature"],
+          "options": {
+            "jestConfig": "libs/admin/auth/feature/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "admin-auth-ui": {
+      "root": "libs/admin/auth/ui",
+      "sourceRoot": "libs/admin/auth/ui/src",
+      "projectType": "library",
+      "tags": ["type:ui", "scope:admin"],
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/admin/auth/ui/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/admin/auth/ui"],
+          "options": {
+            "jestConfig": "libs/admin/auth/ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "admin-e2e": "apps/admin-e2e",
     "admin-home-feature": {
       "root": "libs/admin/home/feature",
