@@ -1,12 +1,14 @@
-/* eslint-disable-next-line */
-export interface AdminAppFeatureProps {}
+import { Box } from '@chakra-ui/react'
+import React from 'react'
 
-export function AdminAppFeature(props: AdminAppFeatureProps) {
+export default function AdminAppFeature() {
   return (
-    <div>
-      <h1>Welcome to AdminAppFeature!</h1>
-    </div>
+    <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+      <Box p="6">
+        <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+          App Management
+        </Box>
+      </Box>
+    </Box>
   )
 }
-
-export default AdminAppFeature
