@@ -360,41 +360,6 @@ export type UpdateAppMutation = {
   } | null
 }
 
-export type AppQueryVariables = Exact<{
-  appId: Scalars['String']
-}>
-
-export type AppQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'App'
-    id: string
-    createdAt: any
-    updatedAt: any
-    index: number
-    name?: string | null
-    users?: Array<{
-      __typename?: 'AppUser'
-      id: string
-      createdAt: any
-      updatedAt: any
-      role: AppUserRole
-      user?: {
-        __typename?: 'User'
-        id: string
-        createdAt: any
-        updatedAt: any
-        avatarUrl?: string | null
-        email?: string | null
-        name?: string | null
-        username: string
-        role?: UserRole | null
-      } | null
-    }> | null
-    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
-  } | null
-}
-
 export type AppUserAddMutationVariables = Exact<{
   appId: Scalars['String']
   input: AppUserAddInput
@@ -536,6 +501,41 @@ export type AppWalletRemoveMutation = {
   } | null
 }
 
+export type AppQueryVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type AppQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+  } | null
+}
+
 export type AppsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AppsQuery = {
@@ -547,6 +547,7 @@ export type AppsQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
   }> | null
 }
 
@@ -879,26 +880,6 @@ export const UpdateAppDocument = gql`
 export function useUpdateAppMutation() {
   return Urql.useMutation<UpdateAppMutation, UpdateAppMutationVariables>(UpdateAppDocument)
 }
-export const AppDocument = gql`
-  query App($appId: String!) {
-    item: app(appId: $appId) {
-      ...AppDetails
-      users {
-        ...AppUserDetails
-      }
-      wallet {
-        ...WalletDetails
-      }
-    }
-  }
-  ${AppDetailsFragmentDoc}
-  ${AppUserDetailsFragmentDoc}
-  ${WalletDetailsFragmentDoc}
-`
-
-export function useAppQuery(options: Omit<Urql.UseQueryArgs<AppQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppQuery>({ query: AppDocument, ...options })
-}
 export const AppUserAddDocument = gql`
   mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
     item: appUserAdd(appId: $appId, input: $input) {
@@ -979,13 +960,37 @@ export const AppWalletRemoveDocument = gql`
 export function useAppWalletRemoveMutation() {
   return Urql.useMutation<AppWalletRemoveMutation, AppWalletRemoveMutationVariables>(AppWalletRemoveDocument)
 }
+export const AppDocument = gql`
+  query App($appId: String!) {
+    item: app(appId: $appId) {
+      ...AppDetails
+      users {
+        ...AppUserDetails
+      }
+      wallet {
+        ...WalletDetails
+      }
+    }
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useAppQuery(options: Omit<Urql.UseQueryArgs<AppQueryVariables>, 'query'>) {
+  return Urql.useQuery<AppQuery>({ query: AppDocument, ...options })
+}
 export const AppsDocument = gql`
   query Apps {
     items: apps {
       ...AppDetails
+      wallet {
+        ...WalletDetails
+      }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
 `
 
 export function useAppsQuery(options?: Omit<Urql.UseQueryArgs<AppsQueryVariables>, 'query'>) {

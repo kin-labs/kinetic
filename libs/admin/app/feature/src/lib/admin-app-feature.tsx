@@ -1,14 +1,30 @@
-import { Box } from '@chakra-ui/react'
+import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+
+const AdminAppFeatureDetail = React.lazy(async () => import('./admin-app-feature-detail'))
+const AdminAppFeatureList = React.lazy(async () => import('./admin-app-feature-list'))
 
 export function AdminAppFeature() {
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
-      <Box p="6">
-        <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-          App Management
-        </Box>
-      </Box>
-    </Box>
+    <Switch>
+      <Route
+        path="/apps"
+        exact
+        render={() => (
+          <React.Suspense fallback={<AdminUiLoader />}>
+            <AdminAppFeatureList />
+          </React.Suspense>
+        )}
+      />
+      <Route
+        path="/apps/:appId"
+        render={() => (
+          <React.Suspense fallback={<AdminUiLoader />}>
+            <AdminAppFeatureDetail />
+          </React.Suspense>
+        )}
+      />
+    </Switch>
   )
 }
