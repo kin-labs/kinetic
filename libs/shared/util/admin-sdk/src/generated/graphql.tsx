@@ -63,8 +63,8 @@ export enum AppUserRole {
 }
 
 export type AppUserUpdateRoleInput = {
-  appUserId: Scalars['String']
   role: AppUserRole
+  userId: Scalars['String']
 }
 
 export type AuthToken = {

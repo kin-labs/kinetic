@@ -22,7 +22,7 @@ export function AdminAppUiUserModal({
   user,
 }: {
   addRole?: ({ role, userId }: { role: AppUserRole; userId: string }) => void
-  updateRole?: ({ role, appUserId }: { role: AppUserRole; appUserId: string }) => void
+  updateRole?: ({ role, userId }: { role: AppUserRole; userId: string }) => void
   user?: AppUser | null | undefined
 }) {
   const create = !user?.user
@@ -37,8 +37,8 @@ export function AdminAppUiUserModal({
       if (create && addRole) {
         addRole({ userId, role })
       }
-      if (!create && updateRole && user) {
-        updateRole({ role, appUserId: user.id })
+      if (!create && updateRole && user?.user?.id) {
+        updateRole({ role, userId: user?.user?.id })
       }
     }
   }
@@ -68,7 +68,7 @@ export function AdminAppUiUserModal({
           </ModalBody>
           {!user?.user && (
             <ModalBody>
-              <AutoComplete rollNavigation value={userId} onChange={(e) => setUserId(e)}>
+              <AutoComplete rollNavigation value={userId} onChange={(e: string) => setUserId(e)}>
                 <AutoCompleteInput variant="filled" placeholder="Search..." autoFocus />
                 <AutoCompleteList>
                   {userOptions.map((option, oid) => (

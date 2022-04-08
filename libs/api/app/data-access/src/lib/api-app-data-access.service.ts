@@ -69,7 +69,7 @@ export class ApiAppDataAccessService {
 
   async appUserUpdateRole(userId: string, appId: string, input: AppUserUpdateRoleInput) {
     await this.ensureAppById(userId, appId)
-    const existing = await this.data.appUser.findFirst({ where: { id: input.appUserId, appId: appId } })
+    const existing = await this.data.appUser.findFirst({ where: { userId: input.userId, appId: appId } })
     return this.data.app.update({
       where: { id: appId },
       data: {

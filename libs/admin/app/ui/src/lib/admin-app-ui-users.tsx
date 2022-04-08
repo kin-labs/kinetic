@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { AdminAppUiUserModal } from './admin-app-ui-user-modal'
 
 export interface AdminAppUiUsersProps {
-  updateRole: ({ role, appUserId }: { role: AppUserRole; appUserId: string }) => void
+  updateRole: ({ role, userId }: { role: AppUserRole; userId: string }) => void
   users: AppUser[] | null | undefined
 }
 

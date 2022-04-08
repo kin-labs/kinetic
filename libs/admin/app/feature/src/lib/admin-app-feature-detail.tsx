@@ -32,8 +32,8 @@ export default function AdminAppFeatureDetail() {
   const addRole = async ({ role, userId }: AppUserAddInput) => {
     await updateUserAddMutation({ appId, input: { role, userId } })
   }
-  const updateRole = async ({ appUserId, role }: AppUserUpdateRoleInput) => {
-    await updateRoleMutation({ appId, input: { role, appUserId } })
+  const updateRole = async ({ userId, role }: AppUserUpdateRoleInput) => {
+    await updateRoleMutation({ appId, input: { role, userId } })
   }
 
   if (fetching) {

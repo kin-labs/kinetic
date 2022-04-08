@@ -49,6 +49,8 @@ model AppUser {
   appId     String
   user      User        @relation(fields: [userId], references: [id])
   userId    String
+
+  @@unique([appId, userId])
 }
 
 enum AppUserRole {
