@@ -6,6 +6,7 @@ import { copyright, links, name } from './admin-shell-constants'
 
 const AdminAppFeature = React.lazy(async () => import('@mogami/admin/app/feature'))
 const AdminHomeFeature = React.lazy(async () => import('@mogami/admin/home/feature'))
+const AdminUserFeature = React.lazy(async () => import('@mogami/admin/user/feature'))
 
 export function AdminShellAuthenticated() {
   return (
@@ -27,6 +28,14 @@ export function AdminShellAuthenticated() {
           render={() => (
             <React.Suspense fallback={<AdminUiLoader />}>
               <AdminHomeFeature />
+            </React.Suspense>
+          )}
+        />
+        <Route
+          path="/users"
+          render={() => (
+            <React.Suspense fallback={<AdminUiLoader />}>
+              <AdminUserFeature />
             </React.Suspense>
           )}
         />

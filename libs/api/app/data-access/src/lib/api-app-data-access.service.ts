@@ -42,7 +42,7 @@ export class ApiAppDataAccessService {
 
   async apps(userId: string) {
     await this.data.ensureAdminUser(userId)
-    return this.data.app.findMany()
+    return this.data.app.findMany({ include: { wallet: true }, orderBy: { updatedAt: 'desc' } })
   }
 
   async app(userId: string, appId: string) {

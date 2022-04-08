@@ -17,7 +17,7 @@ export function AdminUiLayout({
   return (
     <Flex direction="column" h="full">
       <AdminUiHeader links={links} name={name} />
-      <Flex direction="column" grow={1} p={4}>
+      <Flex direction="column" grow={1} p={4} overflow="auto">
         <Container maxW="container.xl" h="full">
           {children}
         </Container>

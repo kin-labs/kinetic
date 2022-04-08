@@ -154,11 +154,24 @@ export type MutationUpdateUserArgs = {
   userId: Scalars['String']
 }
 
+export type NetworkStat = {
+  __typename?: 'NetworkStat'
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  numSlots?: Maybe<Scalars['Float']>
+  numTransactions: Scalars['Float']
+  samplePeriodSecs: Scalars['Float']
+  slot: Scalars['Float']
+  updatedAt: Scalars['DateTime']
+}
+
 export type Query = {
   __typename?: 'Query'
   app?: Maybe<App>
   apps?: Maybe<Array<App>>
   me?: Maybe<User>
+  networkStat?: Maybe<NetworkStat>
+  networkStats?: Maybe<Array<NetworkStat>>
   uptime: Scalars['Float']
   user?: Maybe<User>
   users?: Maybe<Array<User>>
@@ -168,6 +181,10 @@ export type Query = {
 
 export type QueryAppArgs = {
   appId: Scalars['String']
+}
+
+export type QueryNetworkStatArgs = {
+  networkStatId: Scalars['String']
 }
 
 export type QueryUserArgs = {
@@ -325,22 +342,6 @@ export const UpdateApp = gql`
   ${AppUserDetails}
   ${WalletDetails}
 `
-export const App = gql`
-  query App($appId: String!) {
-    item: app(appId: $appId) {
-      ...AppDetails
-      users {
-        ...AppUserDetails
-      }
-      wallet {
-        ...WalletDetails
-      }
-    }
-  }
-  ${AppDetails}
-  ${AppUserDetails}
-  ${WalletDetails}
-`
 export const AppUserAdd = gql`
   mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
     item: appUserAdd(appId: $appId, input: $input) {
@@ -401,13 +402,33 @@ export const AppWalletRemove = gql`
   ${AppDetails}
   ${WalletDetails}
 `
+export const App = gql`
+  query App($appId: String!) {
+    item: app(appId: $appId) {
+      ...AppDetails
+      users {
+        ...AppUserDetails
+      }
+      wallet {
+        ...WalletDetails
+      }
+    }
+  }
+  ${AppDetails}
+  ${AppUserDetails}
+  ${WalletDetails}
+`
 export const Apps = gql`
   query Apps {
     items: apps {
       ...AppDetails
+      wallet {
+        ...WalletDetails
+      }
     }
   }
   ${AppDetails}
+  ${WalletDetails}
 `
 export const Login = gql`
   mutation Login($input: LoginInput!) {
@@ -626,41 +647,6 @@ export type UpdateAppMutation = {
   } | null
 }
 
-export type AppQueryVariables = Exact<{
-  appId: Scalars['String']
-}>
-
-export type AppQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'App'
-    id: string
-    createdAt: any
-    updatedAt: any
-    index: number
-    name?: string | null
-    users?: Array<{
-      __typename?: 'AppUser'
-      id: string
-      createdAt: any
-      updatedAt: any
-      role: AppUserRole
-      user?: {
-        __typename?: 'User'
-        id: string
-        createdAt: any
-        updatedAt: any
-        avatarUrl?: string | null
-        email?: string | null
-        name?: string | null
-        username: string
-        role?: UserRole | null
-      } | null
-    }> | null
-    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
-  } | null
-}
-
 export type AppUserAddMutationVariables = Exact<{
   appId: Scalars['String']
   input: AppUserAddInput
@@ -802,6 +788,41 @@ export type AppWalletRemoveMutation = {
   } | null
 }
 
+export type AppQueryVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type AppQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+  } | null
+}
+
 export type AppsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AppsQuery = {
@@ -813,6 +834,7 @@ export type AppsQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
   }> | null
 }
 

@@ -46,18 +46,6 @@ mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
   }
 }
 
-query App($appId: String!) {
-  item: app(appId: $appId) {
-    ...AppDetails
-    users {
-      ...AppUserDetails
-    }
-    wallet {
-      ...WalletDetails
-    }
-  }
-}
-
 mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
   item: appUserAdd(appId: $appId, input: $input) {
     ...AppDetails
@@ -103,8 +91,23 @@ mutation AppWalletRemove($appId: String!, $walletId: String!) {
   }
 }
 
+query App($appId: String!) {
+  item: app(appId: $appId) {
+    ...AppDetails
+    users {
+      ...AppUserDetails
+    }
+    wallet {
+      ...WalletDetails
+    }
+  }
+}
+
 query Apps {
   items: apps {
     ...AppDetails
+    wallet {
+      ...WalletDetails
+    }
   }
 }
