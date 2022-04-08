@@ -1,7 +1,15 @@
-import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiForm } from '@mogami/admin/app/ui'
+import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
+import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers, AdminAppUiWallet } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AppUpdateInput, useAppQuery, useUpdateAppMutation } from '@mogami/shared/util/admin-sdk'
+import {
+  AppUpdateInput,
+  AppUserAddInput,
+  AppUserUpdateRoleInput,
+  useAppQuery,
+  useAppUserAddMutation,
+  useAppUserUpdateRoleMutation,
+  useUpdateAppMutation,
+} from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -9,7 +17,9 @@ export default function AdminAppFeatureDetail() {
   const toast = useToast()
   const { appId } = useParams<{ appId: string }>()
   const [{ data, fetching }] = useAppQuery({ variables: { appId } })
-  const [_, updateAppMutation] = useUpdateAppMutation()
+  const [, updateAppMutation] = useUpdateAppMutation()
+  const [, updateUserAddMutation] = useAppUserAddMutation()
+  const [, updateRoleMutation] = useAppUserUpdateRoleMutation()
 
   const onSubmit = async (input: AppUpdateInput) => {
     const res = await updateAppMutation({ appId, input })
@@ -19,15 +29,51 @@ export default function AdminAppFeatureDetail() {
     return res?.data?.updated
   }
 
+  const addRole = async ({ role, userId }: AppUserAddInput) => {
+    await updateUserAddMutation({ appId, input: { role, userId } })
+  }
+  const updateRole = async ({ userId, role }: AppUserUpdateRoleInput) => {
+    await updateRoleMutation({ appId, input: { role, userId } })
+  }
+
+  if (fetching) {
+    return <AdminUiLoader />
+  }
+
   return (
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
-        <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
-          {data?.item?.name}
-        </Box>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+            {data?.item?.name}
+          </Box>
+          <code>App Index: {data?.item?.index}</code>
+        </Flex>
       </Box>
 
-      <Box>{fetching ? <AdminUiLoader /> : <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />}</Box>
+      <Tabs isLazy colorScheme="teal">
+        <TabList>
+          <Tab>Wallet</Tab>
+          <Tab>Users</Tab>
+          <Tab>Settings</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>{data?.item?.wallet && <AdminAppUiWallet wallet={data?.item?.wallet} />}</TabPanel>
+          <TabPanel>
+            <Stack direction="column" spacing={6}>
+              <Box w="full">
+                <AdminAppUiUsers updateRole={updateRole} users={data?.item?.users} />
+              </Box>
+              <Box>
+                <AdminAppUiUserModal addRole={addRole} />
+              </Box>
+            </Stack>
+          </TabPanel>
+          <TabPanel>
+            <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Stack>
   )
 }

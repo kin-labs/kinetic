@@ -23,6 +23,7 @@ input AppUpdateInput {
 }
 
 type AppUser {
+  app: App
   createdAt: DateTime!
   id: String!
   role: AppUserRole!
@@ -102,10 +103,13 @@ type Query {
   user(userId: String!): User
   users: [User!]
   wallet(walletId: String!): Wallet
+  walletAirdrop(amount: Float!, walletId: String!): WalletAirdropResponse
+  walletBalance(walletId: String!): WalletBalance
   wallets: [Wallet!]
 }
 
 type User {
+  apps: [AppUser!]
   avatarUrl: String
   createdAt: DateTime!
   email: String
@@ -149,4 +153,12 @@ type Wallet {
   id: String!
   publicKey: String
   updatedAt: DateTime!
+}
+
+type WalletAirdropResponse {
+  signature: String
+}
+
+type WalletBalance {
+  sol: Float
 }

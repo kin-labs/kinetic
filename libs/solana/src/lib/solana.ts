@@ -24,14 +24,19 @@ export class Solana {
   }
 
   getAccountInfo(accountId: PublicKeyString, { commitment = 'single' }: { commitment?: Commitment }) {
-    this.config.logger?.log(`Getting account info: ${new PublicKey(accountId)}`)
+    this.config.logger?.log(`Getting account info: ${accountId}`)
     return this.connection.getParsedAccountInfo(new PublicKey(accountId), commitment)
   }
 
   async getBalance(accountId: PublicKeyString, mogamiMintPublicKey: PublicKeyString) {
-    this.config.logger?.log(`Getting account balance: ${new PublicKey(accountId)}`)
+    this.config.logger?.log(`Getting account balance: ${accountId}`)
     const balances = await this.getTokenBalances(new PublicKey(accountId), mogamiMintPublicKey)
     return balances.reduce((acc, curr) => acc.plus(curr.balance), new BigNumber(0))
+  }
+
+  async getBalanceSol(accountId: PublicKeyString): Promise<number> {
+    this.config.logger?.log(`Getting account balance: ${accountId}`)
+    return this.connection.getBalance(getPublicKey(accountId))
   }
 
   getMinimumBalanceForRentExemption(dataLength: number) {
@@ -73,6 +78,11 @@ export class Solana {
   async getTokenHistory(account: PublicKeyString, mint: PublicKeyString) {
     this.config.logger?.log(`Getting token history: ${getPublicKey(account)}`)
     return this.getTokenAccounts(account, mint).then((accounts) => this.getTokenAccountsHistory(accounts))
+  }
+
+  requestAirdrop(account: PublicKeyString, amount: number) {
+    this.config.logger?.log(`Request Airdrop: ${getPublicKey(account)} ${amount}`)
+    return this.connection.requestAirdrop(getPublicKey(account), amount)
   }
 
   sendRawTransaction(tx: Transaction) {

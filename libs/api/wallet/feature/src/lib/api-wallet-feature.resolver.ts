@@ -1,8 +1,13 @@
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
-import { ApiWalletDataAccessService, Wallet } from '@mogami/api/wallet/data-access'
+import {
+  ApiWalletDataAccessService,
+  Wallet,
+  WalletAirdropResponse,
+  WalletBalance,
+} from '@mogami/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Float, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()
 @UseGuards(ApiAuthGraphqlGuard)
@@ -22,6 +27,20 @@ export class ApiWalletFeatureResolver {
   @Query(() => Wallet, { nullable: true })
   wallet(@CtxUser() user: User, @Args('walletId') walletId: string) {
     return this.service.wallet(user.id, walletId)
+  }
+
+  @Query(() => WalletAirdropResponse, { nullable: true })
+  walletAirdrop(
+    @CtxUser() user: User,
+    @Args('walletId') walletId: string,
+    @Args({ name: 'amount', type: () => Float }) amount: number,
+  ) {
+    return this.service.walletAirdrop(user.id, walletId, amount)
+  }
+
+  @Query(() => WalletBalance, { nullable: true })
+  walletBalance(@CtxUser() user: User, @Args('walletId') walletId: string) {
+    return this.service.walletBalance(user.id, walletId)
   }
 
   @Query(() => [Wallet], { nullable: true })

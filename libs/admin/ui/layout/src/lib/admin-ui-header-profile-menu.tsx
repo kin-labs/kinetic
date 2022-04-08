@@ -17,7 +17,7 @@ export function AdminUiHeaderProfileMenu({ logout, user }: { logout: AdminAuthLo
         </Center>
         <br />
         <Center>
-          <p>{user?.username}</p>
+          <p>{user?.name}</p>
         </Center>
         <br />
         <MenuDivider />

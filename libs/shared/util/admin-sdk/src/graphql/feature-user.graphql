@@ -37,6 +37,9 @@ mutation UpdateUser($userId: String!, $input: UserUpdateInput!) {
 query User($userId: String!) {
   item: user(userId: $userId) {
     ...UserDetails
+    apps {
+      ...AppUserDetails
+    }
     emails {
       ...UserEmailDetails
     }

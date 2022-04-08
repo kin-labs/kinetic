@@ -39,6 +39,7 @@ export type AppUpdateInput = {
 
 export type AppUser = {
   __typename?: 'AppUser'
+  app?: Maybe<App>
   createdAt: Scalars['DateTime']
   id: Scalars['String']
   role: AppUserRole
@@ -176,6 +177,8 @@ export type Query = {
   user?: Maybe<User>
   users?: Maybe<Array<User>>
   wallet?: Maybe<Wallet>
+  walletAirdrop?: Maybe<WalletAirdropResponse>
+  walletBalance?: Maybe<WalletBalance>
   wallets?: Maybe<Array<Wallet>>
 }
 
@@ -195,8 +198,18 @@ export type QueryWalletArgs = {
   walletId: Scalars['String']
 }
 
+export type QueryWalletAirdropArgs = {
+  amount: Scalars['Float']
+  walletId: Scalars['String']
+}
+
+export type QueryWalletBalanceArgs = {
+  walletId: Scalars['String']
+}
+
 export type User = {
   __typename?: 'User'
+  apps?: Maybe<Array<AppUser>>
   avatarUrl?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
   email?: Maybe<Scalars['String']>
@@ -244,6 +257,16 @@ export type Wallet = {
   updatedAt: Scalars['DateTime']
 }
 
+export type WalletAirdropResponse = {
+  __typename?: 'WalletAirdropResponse'
+  signature?: Maybe<Scalars['String']>
+}
+
+export type WalletBalance = {
+  __typename?: 'WalletBalance'
+  sol?: Maybe<Scalars['Float']>
+}
+
 export const AppDetails = gql`
   fragment AppDetails on App {
     id
@@ -271,10 +294,14 @@ export const AppUserDetails = gql`
     createdAt
     updatedAt
     role
+    app {
+      ...AppDetails
+    }
     user {
       ...UserDetails
     }
   }
+  ${AppDetails}
   ${UserDetails}
 `
 export const AuthTokenDetails = gql`
@@ -300,6 +327,16 @@ export const WalletDetails = gql`
     createdAt
     updatedAt
     publicKey
+  }
+`
+export const WalletAirdropResponseDetails = gql`
+  fragment WalletAirdropResponseDetails on WalletAirdropResponse {
+    signature
+  }
+`
+export const WalletBalanceDetails = gql`
+  fragment WalletBalanceDetails on WalletBalance {
+    sol
   }
 `
 export const CreateApp = gql`
@@ -484,12 +521,16 @@ export const User = gql`
   query User($userId: String!) {
     item: user(userId: $userId) {
       ...UserDetails
+      apps {
+        ...AppUserDetails
+      }
       emails {
         ...UserEmailDetails
       }
     }
   }
   ${UserDetails}
+  ${AppUserDetails}
   ${UserEmailDetails}
 `
 export const Users = gql`
@@ -524,6 +565,22 @@ export const Wallet = gql`
   }
   ${WalletDetails}
 `
+export const WalletAirdrop = gql`
+  query WalletAirdrop($walletId: String!, $amount: Float!) {
+    response: walletAirdrop(walletId: $walletId, amount: $amount) {
+      ...WalletAirdropResponseDetails
+    }
+  }
+  ${WalletAirdropResponseDetails}
+`
+export const WalletBalance = gql`
+  query WalletBalance($walletId: String!) {
+    balance: walletBalance(walletId: $walletId) {
+      ...WalletBalanceDetails
+    }
+  }
+  ${WalletBalanceDetails}
+`
 export const Wallets = gql`
   query Wallets {
     items: wallets {
@@ -547,6 +604,7 @@ export type AppUserDetailsFragment = {
   createdAt: any
   updatedAt: any
   role: AppUserRole
+  app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
   user?: {
     __typename?: 'User'
     id: string
@@ -579,6 +637,14 @@ export type CreateAppMutation = {
       createdAt: any
       updatedAt: any
       role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
       user?: {
         __typename?: 'User'
         id: string
@@ -631,6 +697,14 @@ export type UpdateAppMutation = {
       createdAt: any
       updatedAt: any
       role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
       user?: {
         __typename?: 'User'
         id: string
@@ -667,6 +741,14 @@ export type AppUserAddMutation = {
       createdAt: any
       updatedAt: any
       role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
       user?: {
         __typename?: 'User'
         id: string
@@ -702,6 +784,14 @@ export type AppUserRemoveMutation = {
       createdAt: any
       updatedAt: any
       role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
       user?: {
         __typename?: 'User'
         id: string
@@ -737,6 +827,14 @@ export type AppUserUpdateRoleMutation = {
       createdAt: any
       updatedAt: any
       role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
       user?: {
         __typename?: 'User'
         id: string
@@ -807,6 +905,14 @@ export type AppQuery = {
       createdAt: any
       updatedAt: any
       role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
       user?: {
         __typename?: 'User'
         id: string
@@ -996,6 +1102,32 @@ export type UserQuery = {
     name?: string | null
     username: string
     role?: UserRole | null
+    apps?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
     emails?: Array<{ __typename?: 'UserEmail'; id: string; createdAt: any; updatedAt: any; email: string }> | null
   } | null
 }
@@ -1025,6 +1157,10 @@ export type WalletDetailsFragment = {
   publicKey?: string | null
 }
 
+export type WalletAirdropResponseDetailsFragment = { __typename?: 'WalletAirdropResponse'; signature?: string | null }
+
+export type WalletBalanceDetailsFragment = { __typename?: 'WalletBalance'; sol?: number | null }
+
 export type GenerateWalletMutationVariables = Exact<{ [key: string]: never }>
 
 export type GenerateWalletMutation = {
@@ -1048,6 +1184,25 @@ export type WalletQueryVariables = Exact<{
 export type WalletQuery = {
   __typename?: 'Query'
   item?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+}
+
+export type WalletAirdropQueryVariables = Exact<{
+  walletId: Scalars['String']
+  amount: Scalars['Float']
+}>
+
+export type WalletAirdropQuery = {
+  __typename?: 'Query'
+  response?: { __typename?: 'WalletAirdropResponse'; signature?: string | null } | null
+}
+
+export type WalletBalanceQueryVariables = Exact<{
+  walletId: Scalars['String']
+}>
+
+export type WalletBalanceQuery = {
+  __typename?: 'Query'
+  balance?: { __typename?: 'WalletBalance'; sol?: number | null } | null
 }
 
 export type WalletsQueryVariables = Exact<{ [key: string]: never }>

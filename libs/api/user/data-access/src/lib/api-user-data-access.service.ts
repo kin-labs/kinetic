@@ -63,7 +63,10 @@ export class ApiUserDataAccessService {
 
   private async ensureUserById(adminId: string, userId: string) {
     await this.data.ensureAdminUser(adminId)
-    const user = await this.data.user.findUnique({ where: { id: userId }, include: { emails: true } })
+    const user = await this.data.user.findUnique({
+      where: { id: userId },
+      include: { emails: true, apps: { include: { app: true } } },
+    })
     if (!user) {
       throw new NotFoundException(`User with id ${userId} does not exist.`)
     }

@@ -28,7 +28,7 @@ export default function AdminUserFeatureList() {
           Users
         </Box>
       </Box>
-      <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+      <Box borderWidth="1px" borderRadius="lg" overflow="hidden" m="10px auto">
         {fetching && !data?.items?.length ? (
           <AdminUiLoader />
         ) : (

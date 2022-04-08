@@ -11,6 +11,9 @@ fragment AppUserDetails on AppUser {
   createdAt
   updatedAt
   role
+  app {
+    ...AppDetails
+  }
   user {
     ...UserDetails
   }

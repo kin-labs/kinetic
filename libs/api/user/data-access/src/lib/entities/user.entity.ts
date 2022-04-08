@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, ObjectType } from '@nestjs/graphql'
 import { UserEmail } from './user-email.entity'
 import { UserRole } from './user-role.enum'
 
@@ -21,4 +21,7 @@ export class User {
 
   @Field(() => UserRole, { nullable: true })
   role: UserRole
+
+  @HideField()
+  apps?: any
 }
