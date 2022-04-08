@@ -1,3 +1,4 @@
+import { useAdminAuth } from '@mogami/admin/auth/data-access'
 import { AdminUiLayout } from '@mogami/admin/ui/layout'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import React from 'react'
@@ -9,8 +10,9 @@ const AdminHomeFeature = React.lazy(async () => import('@mogami/admin/home/featu
 const AdminUserFeature = React.lazy(async () => import('@mogami/admin/user/feature'))
 
 export function AdminShellAuthenticated() {
+  const { logout, user } = useAdminAuth()
   return (
-    <AdminUiLayout copyright={copyright} name={name} links={links}>
+    <AdminUiLayout copyright={copyright} name={name} links={links} logout={logout} user={user}>
       <React.Suspense fallback={<AdminUiLoader />}>
         <Switch>
           <Route path="/" exact>

@@ -1,1 +1,1 @@
-export const getHeader = () => cy.get('header')
+export const getHeader = () => cy.get('.chakra-heading')

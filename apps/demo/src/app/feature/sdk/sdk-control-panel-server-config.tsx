@@ -1,6 +1,6 @@
 import { Sdk } from '@mogami/sdk'
 import React, { useState } from 'react'
-import { Button } from 'react-daisyui'
+import { Button, Stack } from '@chakra-ui/react'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelServerConfig({ sdk }: { sdk: Sdk }) {
@@ -9,13 +9,13 @@ export function SdkControlPanelServerConfig({ sdk }: { sdk: Sdk }) {
     sdk.config().then((res) => setResult(res.data))
   }
   return (
-    <div className="flex flex-col space-y-3">
-      <div>
+    <Stack spacing={3}>
+      <Stack direction="row" spacing={2} alignItems="center">
         <Button className="get-server-config-btn" onClick={getResult}>
           Get Server Config
         </Button>
-      </div>
+      </Stack>
       <SdkControlPanelResult cyData="panel-get-server-config" data={result} />
-    </div>
+    </Stack>
   )
 }

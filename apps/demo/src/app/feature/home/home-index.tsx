@@ -1,3 +1,4 @@
+import { Button, Stack } from '@chakra-ui/react'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -7,16 +8,12 @@ export function HomeIndex() {
     { label: 'SDK', path: '/sdk' },
   ]
   return (
-    <div>
-      <div className="flex space-x-6">
-        {pages?.map(({ label, path }) => (
-          <div key={path}>
-            <Link className="btn btn-wide" to={path}>
-              {label}
-            </Link>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Stack direction="row" spacing={6}>
+      {pages?.map(({ label, path }) => (
+        <Link key={path} to={path}>
+          <Button>{label}</Button>
+        </Link>
+      ))}
+    </Stack>
   )
 }

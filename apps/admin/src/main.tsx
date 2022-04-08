@@ -1,14 +1,11 @@
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { StrictMode, Suspense } from 'react'
+import { StrictMode } from 'react'
 import * as ReactDOM from 'react-dom'
 
 import { App } from './app/app'
 
 ReactDOM.render(
   <StrictMode>
-    <Suspense fallback={<AdminUiLoader />}>
-      <App />
-    </Suspense>
+    <App />
   </StrictMode>,
   document.getElementById('root'),
 )

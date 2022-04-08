@@ -1,3 +1,4 @@
+import { Stack } from '@chakra-ui/react'
 import { Sdk } from '@mogami/sdk'
 import React from 'react'
 import { KeypairEntity } from '../../data-access/keypair'
@@ -12,7 +13,7 @@ import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts
 
 export function SdkControlPanel({ keypair, sdk }: { keypair: KeypairEntity; sdk: Sdk }) {
   return (
-    <div className="flex flex-col space-y-6">
+    <Stack spacing={6}>
       <UiAlert status="success" title="SDK Configured" message={`The SDK is connected to ${sdk.endpoint}`} />
       <SdkControlPanelServerConfig sdk={sdk} />
       <SdkControlPanelAccountBalance keypair={keypair} sdk={sdk} />
@@ -21,6 +22,6 @@ export function SdkControlPanel({ keypair, sdk }: { keypair: KeypairEntity; sdk:
       <SdkControlPanelRequestAirdrop keypair={keypair} sdk={sdk} />
       <SdkControlPanelCreateAccount keypair={keypair} sdk={sdk} />
       <SdkControlPanelSubmitPayment keypair={keypair} sdk={sdk} />
-    </div>
+    </Stack>
   )
 }

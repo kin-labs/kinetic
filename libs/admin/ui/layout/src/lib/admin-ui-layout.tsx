@@ -1,4 +1,6 @@
 import { Container, Flex } from '@chakra-ui/react'
+import { AdminAuthLogoutFn } from '@mogami/admin/auth/data-access'
+import { User } from '@mogami/shared/util/admin-sdk'
 import React, { PropsWithChildren, ReactNode } from 'react'
 import { AdminUiFooter } from './admin-ui-footer'
 import { AdminUiHeader } from './admin-ui-header'
@@ -9,15 +11,19 @@ export function AdminUiLayout({
   copyright,
   name,
   links = [],
+  logout,
+  user,
 }: PropsWithChildren<{
   copyright: ReactNode
   name: string
   links?: AdminUiLink[]
+  logout?: AdminAuthLogoutFn
+  user?: User
 }>) {
   return (
     <Flex direction="column" h="full">
-      <AdminUiHeader links={links} name={name} />
-      <Flex direction="column" grow={1} p={4} overflow="auto">
+      <AdminUiHeader links={links} logout={logout} name={name} user={user} />
+      <Flex direction="column" grow={1} p={4}>
         <Container maxW="container.xl" h="full">
           {children}
         </Container>
