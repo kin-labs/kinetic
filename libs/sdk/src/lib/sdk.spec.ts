@@ -1,4 +1,4 @@
-import { SdkConfig } from './interfaces/sdk-config'
+import { SdkConfig } from './interfaces'
 import { Sdk } from './sdk'
 
 const MOGAMI_SDK_ENDPOINT = 'http://localhost:3000'

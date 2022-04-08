@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class MinimumKinVersionResponse {
+export class MakeTransferResponse {
   @ApiProperty()
-  version: number
+  signature: string
 }

@@ -75,8 +75,8 @@ export class Solana {
     return this.getTokenAccounts(account, mint).then((accounts) => this.getTokenAccountsHistory(accounts))
   }
 
-  submitTransaction(tx: Transaction) {
-    this.config.logger?.log(`Submit Transaction`)
+  sendRawTransaction(tx: Transaction) {
+    this.config.logger?.log(`Send Raw Transaction`)
     return this.connection.sendRawTransaction(tx.serialize())
   }
 

@@ -8,7 +8,7 @@ export function SdkControlPanelAccountBalance({ keypair, sdk }: { keypair: Keypa
   const [result, setResult] = useState<unknown>(null)
   const [value, setValue] = useState<string>(keypair.publicKey)
   const getResult = () => {
-    sdk.account.balance(value).then((res) => setResult(res.data))
+    sdk.balance(value).then((res) => setResult(res.data))
   }
   return (
     <div className="flex flex-col space-y-3">

@@ -174,7 +174,7 @@
     },
     "/api/airdrop": {
       "post": {
-        "operationId": "airdropRequest",
+        "operationId": "requestAirdrop",
         "summary": "",
         "parameters": [],
         "requestBody": {
@@ -182,7 +182,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AirdropRequest"
+                "$ref": "#/components/schemas/RequestAirdropRequest"
               }
             }
           }
@@ -193,7 +193,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AirdropResponse"
+                  "$ref": "#/components/schemas/RequestAirdropResponse"
                 }
               }
             }
@@ -262,26 +262,6 @@
         "tags": ["transaction"]
       }
     },
-    "/api/transaction/minimum-kin-version": {
-      "get": {
-        "operationId": "getMinimumKinVersion",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MinimumKinVersionResponse"
-                }
-              }
-            }
-          }
-        },
-        "tags": ["transaction"]
-      }
-    },
     "/api/transaction/recent-blockhash": {
       "get": {
         "operationId": "getRecentBlockhash",
@@ -302,15 +282,15 @@
         "tags": ["transaction"]
       }
     },
-    "/api/transaction/minimum-balance-for-rent-exemption/{dataLength}": {
+    "/api/transaction/minimum-rent-exemption-balance": {
       "get": {
-        "operationId": "getMinimumBalanceForRentExemption",
+        "operationId": "getMinimumRentExemptionBalance",
         "summary": "",
         "parameters": [
           {
             "name": "dataLength",
+            "in": "query",
             "required": true,
-            "in": "path",
             "schema": {
               "type": "number"
             }
@@ -322,7 +302,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MinimumBalanceForRentExemptionResponse"
+                  "$ref": "#/components/schemas/MinimumRentExemptionBalanceResponse"
                 }
               }
             }
@@ -331,33 +311,9 @@
         "tags": ["transaction"]
       }
     },
-    "/api/transaction/history": {
-      "get": {
-        "operationId": "ApiTransactionFeatureController_getHistory",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": ["transaction"]
-      }
-    },
-    "/api/transaction/sign-transaction": {
+    "/api/transaction/make-transfer": {
       "post": {
-        "operationId": "ApiTransactionFeatureController_signTransaction",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": ["transaction"]
-      }
-    },
-    "/api/transaction/submit-transaction": {
-      "post": {
-        "operationId": "submitTransaction",
+        "operationId": "makeTransfer",
         "summary": "",
         "parameters": [],
         "requestBody": {
@@ -365,7 +321,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SubmitPaymentRequest"
+                "$ref": "#/components/schemas/MakeTransferRequest"
               }
             }
           }
@@ -376,7 +332,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubmitTransactionResponse"
+                  "$ref": "#/components/schemas/MakeTransferResponse"
                 }
               }
             }
@@ -438,14 +394,17 @@
       "CreateAccountResponse": {
         "type": "object",
         "properties": {
-          "status": {
-            "type": "string"
-          },
           "account": {
             "type": "object"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
           }
         },
-        "required": ["status", "account"]
+        "required": ["account", "signature", "status"]
       },
       "BalanceResponse": {
         "type": "object",
@@ -471,7 +430,7 @@
         },
         "required": ["account", "history"]
       },
-      "AirdropRequest": {
+      "RequestAirdropRequest": {
         "type": "object",
         "properties": {
           "account": {
@@ -483,7 +442,7 @@
         },
         "required": ["account"]
       },
-      "AirdropResponse": {
+      "RequestAirdropResponse": {
         "type": "object",
         "properties": {
           "signature": {
@@ -552,15 +511,6 @@
         },
         "required": ["mint", "subsidizer", "tokenProgram"]
       },
-      "MinimumKinVersionResponse": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "number"
-          }
-        },
-        "required": ["version"]
-      },
       "RecentBlockhashResponse": {
         "type": "object",
         "properties": {
@@ -570,7 +520,7 @@
         },
         "required": ["blockhash"]
       },
-      "MinimumBalanceForRentExemptionResponse": {
+      "MinimumRentExemptionBalanceResponse": {
         "type": "object",
         "properties": {
           "lamports": {
@@ -579,7 +529,7 @@
         },
         "required": ["lamports"]
       },
-      "SubmitPaymentRequest": {
+      "MakeTransferRequest": {
         "type": "object",
         "properties": {
           "tx": {
@@ -588,9 +538,14 @@
         },
         "required": ["tx"]
       },
-      "SubmitTransactionResponse": {
+      "MakeTransferResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "signature": {
+            "type": "string"
+          }
+        },
+        "required": ["signature"]
       }
     }
   }

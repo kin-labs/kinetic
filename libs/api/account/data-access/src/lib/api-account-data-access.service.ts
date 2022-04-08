@@ -2,8 +2,9 @@ import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
 import { Commitment, Transaction } from '@solana/web3.js'
-import { CreateAccountRequest } from './dto/create-account-request.dto'
 import * as borsh from 'borsh'
+import { CreateAccountRequest } from './dto/create-account-request.dto'
+import { CreateAccountResponse } from './entities/create-account.entity'
 
 @Injectable()
 export class ApiAccountDataAccessService {
@@ -26,7 +27,7 @@ export class ApiAccountDataAccessService {
     return this.data.solana.getTokenAccounts(accountId, this.data.config.mogamiMintPublicKey)
   }
 
-  async createAccount(body: CreateAccountRequest) {
+  async createAccount(body: CreateAccountRequest): Promise<CreateAccountResponse> {
     const txJson = JSON.parse(body.tx)
     const schema = new Map([
       [
@@ -41,7 +42,7 @@ export class ApiAccountDataAccessService {
     const buffer = borsh.serialize(schema, txJson)
     const tx = Transaction.from(buffer)
     tx.partialSign(...[this.data.config.mogamiSubsidizerKeypair])
-    await this.data.solana.submitTransaction(tx)
-    return true
+    const signature = await this.data.solana.sendRawTransaction(tx)
+    return { signature }
   }
 }

@@ -1,10 +1,11 @@
 import { Airdrop, AirdropConfig } from '@mogami/airdrop'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
-import { AirdropRequest } from './dto/airdrop-request.dto'
+import { RequestAirdropRequest } from './dto/request-airdrop-request.dto'
 import { AirdropStatsCounts } from './entity/airdrop-stats-counts.entity'
 import { AirdropStatsDate } from './entity/airdrop-stats-date.entity'
 import { AirdropStats } from './entity/airdrop-stats.entity'
+import { RequestAirdropResponse } from './entity/request-airdrop-response.entity'
 
 @Injectable()
 export class ApiAirdropDataAccessService {
@@ -22,7 +23,7 @@ export class ApiAirdropDataAccessService {
     }
   }
 
-  async request(request: AirdropRequest) {
+  async requestAirdrop(request: RequestAirdropRequest): Promise<RequestAirdropResponse> {
     if (!this.airdropConfig) {
       throw new BadRequestException(`Airdrop is disabled.`)
     }

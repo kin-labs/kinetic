@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class AirdropResponse {
+export class RequestAirdropResponse {
   @ApiProperty()
   signature: string
 }

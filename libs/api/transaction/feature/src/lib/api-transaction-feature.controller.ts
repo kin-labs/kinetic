@@ -1,14 +1,14 @@
 import {
   ApiTransactionDataAccessService,
+  MakeTransferRequest,
+  MakeTransferResponse,
+  MinimumRentExemptionBalanceRequest,
+  MinimumRentExemptionBalanceResponse,
   RecentBlockhashResponse,
   ServiceConfigResponse,
-  SubmitPaymentRequest,
-  MinimumKinVersionResponse,
-  MinimumBalanceForRentExemptionResponse,
-  SubmitTransactionResponse,
 } from '@mogami/api/transaction/data-access'
 import { Body, Controller, Get, Param, Post } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('transaction')
 @Controller('transaction')
@@ -22,13 +22,6 @@ export class ApiTransactionFeatureController {
     return this.service.getServiceConfig()
   }
 
-  @Get('minimum-kin-version')
-  @ApiOperation({ operationId: 'getMinimumKinVersion' })
-  @ApiResponse({ type: MinimumKinVersionResponse })
-  getMinimumKinVersion() {
-    return this.service.getMinimumKinVersion()
-  }
-
   @Get('recent-blockhash')
   @ApiOperation({ operationId: 'getRecentBlockhash' })
   @ApiResponse({ type: RecentBlockhashResponse })
@@ -36,28 +29,23 @@ export class ApiTransactionFeatureController {
     return this.service.getRecentBlockhash()
   }
 
-  @Get('minimum-balance-for-rent-exemption/:dataLength')
-  @ApiOperation({ operationId: 'getMinimumBalanceForRentExemption' })
-  @ApiResponse({ type: MinimumBalanceForRentExemptionResponse })
-  getMinimumBalanceForRentExemption(@Param('dataLength') dataLength: number) {
-    return this.service.getMinimumBalanceForRentExemption(dataLength)
+  @Get('minimum-rent-exemption-balance')
+  // @ApiParam({
+  //   name: 'input',
+  //   type: MinimumRentExemptionBalanceRequest,
+  // })
+  // @ApiBody({ type: MakeTransferRequest })
+  @ApiOperation({ operationId: 'getMinimumRentExemptionBalance' })
+  @ApiResponse({ type: MinimumRentExemptionBalanceResponse })
+  getMinimumRentExemptionBalance(@Param('input') input: MinimumRentExemptionBalanceRequest) {
+    return this.service.getMinimumRentExemptionBalance(input)
   }
 
-  @Get('history')
-  getHistory() {
-    return this.service.getHistory()
-  }
-
-  @Post('sign-transaction')
-  signTransaction() {
-    return this.service.signTransaction()
-  }
-
-  @Post('submit-transaction')
-  @ApiBody({ type: SubmitPaymentRequest })
-  @ApiOperation({ operationId: 'submitTransaction' })
-  @ApiResponse({ type: SubmitTransactionResponse })
-  submitTransaction(@Body() body: SubmitPaymentRequest) {
-    return this.service.submitTransaction(body)
+  @Post('make-transfer')
+  @ApiBody({ type: MakeTransferRequest })
+  @ApiOperation({ operationId: 'makeTransfer' })
+  @ApiResponse({ type: MakeTransferResponse })
+  makeTransfer(@Body() body: MakeTransferRequest) {
+    return this.service.makeTransfer(body)
   }
 }
