@@ -1,6 +1,6 @@
 import { Sdk } from '@mogami/sdk'
 import React, { ChangeEvent, useState } from 'react'
-import { Button, Input } from 'react-daisyui'
+import { Button, Input, Stack } from '@chakra-ui/react'
 import { KeypairEntity } from '../../data-access/keypair'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
@@ -11,21 +11,20 @@ export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: Keypa
     sdk.requestAirdrop(keypair.publicKey, amount).then((res) => setResult(res.data))
   }
   return (
-    <div className="flex flex-col space-y-3">
-      <div className="flex space-x-2 items-center">
+    <Stack spacing={3}>
+      <Stack direction="row" spacing={2} alignItems="center">
         <Button className="request-airdrop-btn" onClick={getResult}>
           Request Airdrop
         </Button>
         <Input
-          className="w-full"
-          bordered
+          w="full"
           type="number"
           value={amount}
           onChange={(ev: ChangeEvent<HTMLInputElement>) => setAmount(ev.target.value)}
           placeholder="Enter the amount (Max: 50000)"
         />
-      </div>
+      </Stack>
       <SdkControlPanelResult cyData="panel-request-airdrop" data={result} />
-    </div>
+    </Stack>
   )
 }

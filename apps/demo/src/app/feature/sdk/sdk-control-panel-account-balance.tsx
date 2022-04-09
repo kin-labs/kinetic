@@ -1,6 +1,6 @@
+import { Button, Input, Stack } from '@chakra-ui/react'
 import { Sdk } from '@mogami/sdk'
 import React, { ChangeEvent, useState } from 'react'
-import { Button, Input } from 'react-daisyui'
 import { KeypairEntity } from '../../data-access/keypair'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
@@ -11,20 +11,19 @@ export function SdkControlPanelAccountBalance({ keypair, sdk }: { keypair: Keypa
     sdk.balance(value).then((res) => setResult(res.data))
   }
   return (
-    <div className="flex flex-col space-y-3">
-      <div className="flex space-x-2 items-center">
+    <Stack spacing={3}>
+      <Stack direction="row" spacing={2} alignItems="center">
         <Button className="get-account-balance-btn" onClick={getResult}>
           Get Account Balance
         </Button>
         <Input
-          className="w-full"
-          bordered
+          w="full"
           value={value}
           onChange={(ev: ChangeEvent<HTMLInputElement>) => setValue(ev.target.value)}
           placeholder="Enter the accountId (Public Key for the Account owner)"
         />
-      </div>
+      </Stack>
       <SdkControlPanelResult cyData="panel-get-account-balance" data={result} />
-    </div>
+    </Stack>
   )
 }

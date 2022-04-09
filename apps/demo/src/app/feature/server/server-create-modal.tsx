@@ -1,5 +1,15 @@
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+} from '@chakra-ui/react'
 import React, { ChangeEvent, useState } from 'react'
-import { Input, Modal } from 'react-daisyui'
 
 export function ServerCreateModal({
   submit,
@@ -10,15 +20,23 @@ export function ServerCreateModal({
   toggle: () => void
   visible: boolean
 }) {
-  const [value, setValue] = useState<string>('http://localhost:3000/api')
+  const [value, setValue] = useState<string>('http://localhost:3000')
   return (
-    <Modal open={visible} acceptText="Add" onAccept={() => submit(value)} onCancel={toggle}>
-      <Input
-        className="w-full"
-        bordered
-        onChange={(ev: ChangeEvent<HTMLInputElement>) => setValue(ev.target.value)}
-        value={value}
-      />
+    <Modal isOpen={visible} onClose={toggle}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Add Server</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Input w="full" onChange={(ev: ChangeEvent<HTMLInputElement>) => setValue(ev.target.value)} value={value} />
+        </ModalBody>
+        <ModalFooter>
+          <Button className="submit" colorScheme="teal" mr={3} onClick={() => submit(value)}>
+            Add
+          </Button>
+          <Button onClick={toggle}>Close</Button>
+        </ModalFooter>
+      </ModalContent>
     </Modal>
   )
 }

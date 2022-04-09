@@ -1,5 +1,6 @@
+import { ChevronDownIcon } from '@chakra-ui/icons'
+import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import React from 'react'
-import { Dropdown } from 'react-daisyui'
 import { KeypairEntity } from '../../data-access/keypair'
 
 export function elipsify(str = '', len = 4) {
@@ -19,15 +20,17 @@ export function KeypairDropdown({
   selected: KeypairEntity
 }) {
   return (
-    <Dropdown hover>
-      <Dropdown.Toggle>{elipsify(selected.publicKey)}</Dropdown.Toggle>
-      <Dropdown.Menu className="w-52 bg-base-200">
+    <Menu>
+      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+        Select Mogami Server
+      </MenuButton>
+      <MenuList>
         {keypairs?.map((keypair) => (
-          <Dropdown.Item onClick={() => setKeypair(keypair)} key={keypair.id}>
-            {elipsify(keypair.publicKey)}
-          </Dropdown.Item>
+          <MenuItem onClick={() => setKeypair(keypair)} key={keypair.id}>
+            <span>{elipsify(keypair.publicKey)}</span>
+          </MenuItem>
         ))}
-      </Dropdown.Menu>
-    </Dropdown>
+      </MenuList>
+    </Menu>
   )
 }

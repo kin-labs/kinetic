@@ -1,7 +1,7 @@
+import { Button, Input, Stack } from '@chakra-ui/react'
 import { Keypair } from '@mogami/keypair'
 import { Sdk } from '@mogami/sdk'
 import React, { ChangeEvent, useState } from 'react'
-import { Button, Input } from 'react-daisyui'
 import { KeypairEntity } from '../../data-access/keypair'
 import { UiAlert } from '../../ui/ui-alert/ui-alert'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
@@ -27,27 +27,27 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: Keypai
   }
 
   return (
-    <div className="flex flex-col space-y-3">
-      <div className="flex space-x-2 items-center">
-        <Button className="submit-payment-btn" onClick={getResult}>
-          Submit Payment
-        </Button>
+    <Stack spacing={3}>
+      <Stack direction="row" spacing={2} alignItems="center">
+        <div>
+          <Button className="submit-payment-btn" onClick={getResult}>
+            Submit Payment
+          </Button>
+        </div>
         <Input
-          className="w-full"
-          bordered
+          w="full"
           value={accountId}
           onChange={(ev: ChangeEvent<HTMLInputElement>) => setAccountId(ev.target.value)}
           placeholder="Enter the destination accountId"
         />
         <Input
-          className="w-full"
-          bordered
+          w="full"
           value={amount}
           onChange={(ev: ChangeEvent<HTMLInputElement>) => setAmount(ev.target.value)}
           placeholder="Enter the amount"
         />
-      </div>
+      </Stack>
       <SdkControlPanelResult cyData="panel-submit-payment" data={result} />
-    </div>
+    </Stack>
   )
 }

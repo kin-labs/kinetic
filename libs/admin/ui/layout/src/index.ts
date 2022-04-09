@@ -1,5 +1,5 @@
 export * from './lib/admin-ui-footer'
 export * from './lib/admin-ui-header'
 export * from './lib/admin-ui-header-link'
+export * from './lib/admin-ui-header-profile-menu'
 export * from './lib/admin-ui-layout'
-export { AdminUiHeaderProfileMenu } from './lib/admin-ui-header-profile-menu'

@@ -1,5 +1,6 @@
+import { ChevronDownIcon } from '@chakra-ui/icons'
+import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import React from 'react'
-import { Dropdown } from 'react-daisyui'
 import { ServerEntity } from '../../data-access/server'
 
 export function ServerDropdown({
@@ -10,15 +11,17 @@ export function ServerDropdown({
   servers: ServerEntity[]
 }) {
   return (
-    <Dropdown hover>
-      <Dropdown.Toggle>Select Mogami Server</Dropdown.Toggle>
-      <Dropdown.Menu className="w-52 bg-base-200">
+    <Menu>
+      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+        Select Mogami Server
+      </MenuButton>
+      <MenuList>
         {servers?.map((server) => (
-          <Dropdown.Item onClick={() => setServer(server)} key={server.id}>
-            {server.name}
-          </Dropdown.Item>
+          <MenuItem onClick={() => setServer(server)} key={server.id}>
+            <span>{server.name}</span>
+          </MenuItem>
         ))}
-      </Dropdown.Menu>
-    </Dropdown>
+      </MenuList>
+    </Menu>
   )
 }

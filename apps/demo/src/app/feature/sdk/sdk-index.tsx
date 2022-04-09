@@ -1,7 +1,7 @@
+import { Box, Button, Flex, Stack, useColorModeValue } from '@chakra-ui/react'
 import { Sdk } from '@mogami/sdk'
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useState } from 'react'
-import { Button, Navbar } from 'react-daisyui'
 import { keypairDb, KeypairEntity } from '../../data-access/keypair'
 import { serverDb, ServerEntity } from '../../data-access/server'
 import { UiAlert } from '../../ui/ui-alert/ui-alert'
@@ -14,6 +14,7 @@ export function SdkIndex() {
   const [keypair, setKeypair] = useState<KeypairEntity | null>(null)
   const [server, setServer] = useState<ServerEntity | null>(null)
   const [sdk, setSdk] = useState<Sdk | null>(null)
+  const headerColor = useColorModeValue('gray.100', 'gray.900')
 
   const keypairs = useLiveQuery(() =>
     keypairDb.keypair.toArray().then((res) => {
@@ -81,24 +82,32 @@ export function SdkIndex() {
   }
 
   return (
-    <div className="flex flex-col space-y-6">
-      <Navbar className="shadow-lg bg-neutral text-neutral-content rounded-box">
-        <Navbar.Start>
+    <Stack spacing={6}>
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        bg={headerColor}
+        p={4}
+        borderWidth="1px"
+        borderRadius="md"
+      >
+        <Box>
           <Button color="ghost" disabled>
             {server?.name}
           </Button>
-        </Navbar.Start>
-        <Navbar.End>
-          <KeypairDropdown selected={keypair} setKeypair={selectKeypair} keypairs={keypairs} />
-          <ServerDropdown setServer={selectServer} servers={servers} />
-        </Navbar.End>
-      </Navbar>
-
+        </Box>
+        <Box>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <KeypairDropdown selected={keypair} setKeypair={selectKeypair} keypairs={keypairs} />
+            <ServerDropdown setServer={selectServer} servers={servers} />
+          </Stack>
+        </Box>
+      </Flex>
       {sdk ? (
         <SdkControlPanel keypair={keypair} sdk={sdk} />
       ) : (
         <UiAlert status="error" message={'No SDK configured.'} />
       )}
-    </div>
+    </Stack>
   )
 }

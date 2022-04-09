@@ -1,7 +1,7 @@
 import { Keypair } from '@mogami/keypair'
 import { Sdk } from '@mogami/sdk'
 import React, { useState } from 'react'
-import { Button } from 'react-daisyui'
+import { Button, Stack } from '@chakra-ui/react'
 import { KeypairEntity } from '../../data-access/keypair'
 import { UiAlert } from '../../ui/ui-alert/ui-alert'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
@@ -22,13 +22,13 @@ export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: Keypai
   }
 
   return (
-    <div className="flex flex-col space-y-3">
-      <div className="flex space-x-2 items-center">
+    <Stack spacing={3}>
+      <Stack direction="row" spacing={2} alignItems="center">
         <Button className="create-account-btn" onClick={getResult}>
           Create Account
         </Button>
-      </div>
+      </Stack>
       <SdkControlPanelResult cyData="panel-create-account" data={result} />
-    </div>
+    </Stack>
   )
 }

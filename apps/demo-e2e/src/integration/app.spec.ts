@@ -22,13 +22,13 @@ describe('demo', () => {
   it('should add dev Mogami server', () => {
     cy.get('[cy-data="cy-nav-btn-servers"]').click()
     cy.get('[cy-data="card-servers-warning"]').contains('No Servers found.')
-    cy.get('.flex-col > .flex > .btn').click()
-    cy.get('.input').click()
-    cy.get('.modal-open').click()
-    cy.get('.input').clear()
-    cy.get('.input').type('https://devnet.mogami.kin.org')
-    cy.get('.btn-primary').click()
-    cy.get('.card-body').contains('devnet.mogami.kin.org')
+    cy.get('.chakra-button.add-server-btn').click()
+    cy.get('.chakra-input').click()
+    cy.get('.chakra-modal__body').click()
+    cy.get('.chakra-input').clear()
+    cy.get('.chakra-input').type('https://devnet.mogami.kin.org')
+    cy.get('.chakra-button.submit').click()
+    cy.get('.chakra-code').contains('devnet.mogami.kin.org')
   })
 
   it('should generate a keypair', () => {
@@ -42,7 +42,7 @@ describe('demo', () => {
         const mnemonic = (text as string).split(' ')
         expect(mnemonic.length).equals(12)
       })
-    cy.get('.modal-box > :nth-child(1) > .modal-action > .btn').click()
+    cy.get('.chakra-button.close').click()
   })
 
   it('should import mnemonic', () => {
@@ -52,10 +52,10 @@ describe('demo', () => {
     cy.get('[cy-data="cy-nav-btn-keypair"]').click()
     cy.get('[cy-data="card-keypair-warning"]').contains('No Keypairs found.')
     cy.get('.import-mnemonic-btn').click()
-    cy.get('.modal-box > :nth-child(1) > .textarea') // .text-area-mnemonic
+    cy.get('.import-mnemonic') // .text-area-mnemonic
       .type('into actor clay vapor vacuum settle topple soon female chicken case flush')
-    cy.get('.btn-primary').click()
-    cy.get('.card-body').contains('CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY')
+    cy.get('.chakra-button.submit').click()
+    cy.get('.chakra-code').contains('CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY')
     cy.get('.keypair-eye-icon').click()
     cy.get('.text-area-secret-key')
       .invoke('val')

@@ -1,5 +1,5 @@
+import { Alert, AlertDescription, AlertTitle, Box } from '@chakra-ui/react'
 import React from 'react'
-import { Alert } from 'react-daisyui'
 
 export function UiAlert({
   message,
@@ -13,13 +13,15 @@ export function UiAlert({
   cyData?: string
 }) {
   return (
-    <Alert status={status}>
-      {title ? (
-        <div cy-data={cyData} className="font-bold text-lg">
-          {title}
-        </div>
-      ) : null}
-      <div>{message}</div>
+    <Alert status={status} colorScheme="teal">
+      <Box flex="1">
+        {title && (
+          <AlertTitle>
+            <div cy-data={cyData}>{title}</div>
+          </AlertTitle>
+        )}
+        {message && <AlertDescription display="block">{message}</AlertDescription>}
+      </Box>
     </Alert>
   )
 }

@@ -1,6 +1,6 @@
+import { Button, Stack, Text } from '@chakra-ui/react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useState } from 'react'
-import { Button } from 'react-daisyui'
 import { serverDb, ServerEntity } from '../../data-access/server'
 import { UiAlert } from '../../ui/ui-alert/ui-alert'
 import { ServerCreateModal } from './server-create-modal'
@@ -27,11 +27,13 @@ export function ServerIndex() {
   }
 
   return (
-    <div className="flex flex-col space-y-6">
-      <div className="">Here you can add and configure Mogami servers.</div>
-      <div className="flex space-x-2">
-        <Button onClick={() => setServerCreateVisible(true)}>Add Server</Button>
-      </div>
+    <Stack spacing={6}>
+      <Text>Here you can add and configure Mogami servers.</Text>
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Button className="add-server-btn" onClick={() => setServerCreateVisible(true)}>
+          Add Server
+        </Button>
+      </Stack>
       {result?.length ? (
         <ServerGrid servers={result} showServer={showServer} deleteServer={deleteServer} />
       ) : (
@@ -52,6 +54,6 @@ export function ServerIndex() {
         toggle={() => setServerDetailsVisible(false)}
         visible={serverDetailsVisible}
       />
-    </div>
+    </Stack>
   )
 }
