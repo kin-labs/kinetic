@@ -224,13 +224,22 @@
     },
     "/api/app/config": {
       "get": {
-        "operationId": "ApiAppFeatureController_app",
+        "operationId": "getAppConfig",
+        "summary": "",
         "parameters": [],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppConfig"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": ["app"]
       }
     },
     "/api/config": {
@@ -251,26 +260,6 @@
           }
         },
         "tags": ["config"]
-      }
-    },
-    "/api/transaction/service-config": {
-      "get": {
-        "operationId": "getServiceConfig",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServiceConfigResponse"
-                }
-              }
-            }
-          }
-        },
-        "tags": ["transaction"]
       }
     },
     "/api/transaction/recent-blockhash": {
@@ -492,6 +481,10 @@
         },
         "required": ["counts", "dates"]
       },
+      "AppConfig": {
+        "type": "object",
+        "properties": {}
+      },
       "ApiConfigSummary": {
         "type": "object",
         "properties": {
@@ -506,21 +499,6 @@
           }
         },
         "required": ["port", "environment", "solanaRpcEndpoint"]
-      },
-      "ServiceConfigResponse": {
-        "type": "object",
-        "properties": {
-          "mint": {
-            "type": "string"
-          },
-          "subsidizer": {
-            "type": "string"
-          },
-          "tokenProgram": {
-            "type": "string"
-          }
-        },
-        "required": ["mint", "subsidizer", "tokenProgram"]
       },
       "RecentBlockhashResponse": {
         "type": "object",

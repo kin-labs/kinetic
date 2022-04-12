@@ -7,15 +7,10 @@ import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption
 import { MakeTransferResponse } from './entities/make-transfer-response.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { RecentBlockhashResponse } from './entities/recent-blockhash.entity'
-import { ServiceConfigResponse } from './entities/service-config.entity'
 
 @Injectable()
 export class ApiTransactionDataAccessService {
   constructor(readonly data: ApiCoreDataAccessService) {}
-
-  getServiceConfig(): ServiceConfigResponse {
-    return this.data.config.getServiceConfig()
-  }
 
   getRecentBlockhash(): Promise<RecentBlockhashResponse> {
     return this.data.solana.getRecentBlockhash()

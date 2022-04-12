@@ -1,4 +1,4 @@
-export interface AppConfig {
+export class AppConfig {
   hostname: string
   env: string
   app: {
