@@ -26,9 +26,9 @@ describe('demo', () => {
     cy.get('.chakra-input').click()
     cy.get('.chakra-modal__body').click()
     cy.get('.chakra-input').clear()
-    cy.get('.chakra-input').type('https://devnet.mogami.kin.org')
+    cy.get('.chakra-input').type('http://localhost:3000')
     cy.get('.chakra-button.submit').click()
-    cy.get('.chakra-code').contains('devnet.mogami.kin.org')
+    cy.get('.chakra-code').contains('localhost:3000')
   })
 
   it('should generate a keypair', () => {
@@ -88,9 +88,9 @@ describe('demo', () => {
     cy.get('.get-server-config-btn').click()
     cy.get('[cy-data="panel-get-server-config"]').then((el) => {
       const config = JSON.parse(el[0].innerText)
-      expect(config.environment).to.equals('production')
+      expect(config.environment).to.equals('development')
       expect(config.port).to.satisfy(Number.isInteger)
-      expect(config.solanaRpcEndpoint).to.equals('devnet')
+      expect(config.solanaRpcEndpoint).to.equals('http://localhost:8899')
     })
   })
 

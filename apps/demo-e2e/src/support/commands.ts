@@ -49,8 +49,8 @@ Cypress.Commands.add('seedDb', () => {
     secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
   })
   serverDb.server.add({
-    id: 'devnet.mogami.kin.org',
-    name: 'devnet.mogami.kin.org',
-    endpoint: 'https://devnet.mogami.kin.org',
+    id: 'localhost:3000',
+    name: 'localhost:3000',
+    endpoint: 'http://localhost:3000',
   })
 })
