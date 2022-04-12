@@ -24,9 +24,9 @@ describe('demo', () => {
     cy.get('.chakra-input').click()
     cy.get('.chakra-modal__body').click()
     cy.get('.chakra-input').clear()
-    cy.get('.chakra-input').type('https://devnet.mogami.io')
+    cy.get('.chakra-input').type('http://localhost:3000')
     cy.get('.chakra-button.submit').click()
-    cy.get('.chakra-code').contains('devnet.mogami.io')
+    cy.get('.chakra-code').contains('localhost:3000')
   })
 
   it('should generate a keypair', () => {
@@ -86,14 +86,24 @@ describe('demo', () => {
     cy.get('.get-server-config-btn').click()
     cy.get('[cy-data="panel-get-server-config"]').then((el) => {
       const config = JSON.parse(el[0].innerText)
-      expect(config.environment).to.equals('production')
+      expect(config.environment).to.equals('development')
       expect(config.port).to.satisfy(Number.isInteger)
-      expect(config.solanaRpcEndpoint).to.equals('devnet')
+      expect(config.solanaRpcEndpoint).to.equals('http://localhost:8899')
     })
   })
 
   it('should create an account', () => {
-    cy.seedDb()
+    demoKeypairDb.keypair.add({
+      id: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
+      mnemonic: 'into actor clay vapor vacuum settle topple soon female chicken case flush',
+      publicKey: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
+      secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
+    })
+    demoServerDb.server.add({
+      id: 'localhost:3000',
+      name: 'localhost:3000',
+      endpoint: 'http://localhost:3000',
+    })
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
     cy.get('.create-account-btn')
     // .click()
@@ -114,7 +124,7 @@ describe('demo', () => {
     cy.get('.get-account-balance-btn').click()
     cy.get('[cy-data="panel-get-account-balance"]').then((el) => {
       const balance = JSON.parse(el[0].innerText)
-      expect(balance.value).to.equals('100000')
+      expect(balance.value).to.equals('10000000000')
     })
   })
 
@@ -124,7 +134,7 @@ describe('demo', () => {
     cy.get('.get-token-accounts-btn').click()
     cy.get('[cy-data="panel-get-token-accounts"]').then((el) => {
       const tokenAccounts = JSON.parse(el[0].innerText)
-      expect(tokenAccounts).to.include('Eb2R6XuUb2fCR5o8JZ6uTP62u8xMuxXEUoko72kUR6pn')
+      expect(tokenAccounts).to.include('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
     })
   })
 
@@ -134,13 +144,22 @@ describe('demo', () => {
     cy.get('.get-account-history-btn').click()
     cy.get('[cy-data="panel-get-account-history"]').then((el) => {
       const accountHistory = JSON.parse(el[0].innerText)[0]
-      expect(accountHistory.history.length).to.equals(3)
-      expect(accountHistory.account).to.equals('Eb2R6XuUb2fCR5o8JZ6uTP62u8xMuxXEUoko72kUR6pn')
+      expect(accountHistory.account).to.equals('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
     })
   })
 
   it('should submit a payment', () => {
-    cy.seedDb()
+    demoKeypairDb.keypair.add({
+      id: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
+      mnemonic: 'into actor clay vapor vacuum settle topple soon female chicken case flush',
+      publicKey: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
+      secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
+    })
+    demoServerDb.server.add({
+      id: 'localhost:3000',
+      name: 'localhost:3000',
+      endpoint: 'http://localhost:3000',
+    })
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
     cy.get('.submit-payment-btn')
     // .click()

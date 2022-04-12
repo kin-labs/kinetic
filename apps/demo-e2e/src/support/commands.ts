@@ -10,6 +10,7 @@
 
 import { demoKeypairDb } from '@mogami/demo/keypair/data-access'
 import { demoServerDb } from '@mogami/demo/server/data-access'
+import { Keypair } from '@mogami/keypair'
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
@@ -46,9 +47,15 @@ Cypress.Commands.add('seedDb', () => {
     publicKey: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
     secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
   })
+  const kp = Keypair.fromByteArray([
+    205, 213, 7, 246, 167, 206, 37, 209, 161, 129, 168, 160, 90, 103, 198, 142, 83, 177, 214, 203, 80, 29, 71, 245, 56,
+    152, 15, 8, 235, 174, 62, 79, 138, 198, 145, 111, 119, 33, 15, 237, 89, 201, 122, 89, 48, 221, 224, 71, 81, 128, 45,
+    97, 191, 105, 37, 228, 243, 238, 130, 151, 53, 221, 172, 125,
+  ])
+  demoKeypairDb.keypair.add({ id: kp.publicKey, publicKey: kp.publicKey, secretKey: kp.secretKey })
   demoServerDb.server.add({
-    id: 'devnet.mogami.io',
-    name: 'devnet.mogami.io',
-    endpoint: 'https://devnet.mogami.io',
+    id: 'localhost:3000',
+    name: 'localhost:3000',
+    endpoint: 'http://localhost:3000',
   })
 })
