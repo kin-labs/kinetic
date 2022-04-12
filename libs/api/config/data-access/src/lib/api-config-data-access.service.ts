@@ -56,6 +56,10 @@ export class ApiConfigDataAccessService {
     return this.config.get('mogamiAirdropKeypair')
   }
 
+  get mogamiDomain() {
+    return this.config.get('mogamiDomain')
+  }
+
   get mogamiMainnet() {
     return this.config.get('mogamiMainnet')
   }

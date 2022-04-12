@@ -222,6 +222,17 @@
         "tags": ["airdrop"]
       }
     },
+    "/api/app/config": {
+      "get": {
+        "operationId": "ApiAppFeatureController_app",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/config": {
       "get": {
         "operationId": "config",
