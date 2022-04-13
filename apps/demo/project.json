@@ -37,6 +37,14 @@
         }
       }
     },
+    "serve-e2e": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx run api:serve", "nx run demo:serve"],
+        "parallel": true,
+        "readyWhen": "API is running"
+      }
+    },
     "serve": {
       "executor": "@nrwl/web:dev-server",
       "options": {
