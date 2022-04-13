@@ -4,6 +4,7 @@
 
 type App {
   createdAt: DateTime!
+  envs: [AppEnv!]
   id: String!
   index: Int!
   name: String
@@ -16,6 +17,21 @@ input AppCreateInput {
   index: Int!
   name: String!
   skipWalletCreation: Boolean
+}
+
+type AppDomain {
+  createdAt: DateTime!
+  hostname: String!
+  id: String!
+  updatedAt: DateTime!
+}
+
+type AppEnv {
+  createdAt: DateTime!
+  domains: [AppDomain!]
+  id: String!
+  name: String!
+  updatedAt: DateTime!
 }
 
 input AppUpdateInput {

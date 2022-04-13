@@ -3,11 +3,12 @@ import { PublicKeyString } from '@mogami/solana'
 import {
   AccountApi,
   AirdropApi,
+  AppApi,
+  AppConfig,
   ConfigApi,
   Configuration,
   DefaultApi,
   RecentBlockhashResponse,
-  ServiceConfigResponse,
   TransactionApi,
 } from '../generated'
 import { serializeCreateAccountTransaction, serializeMakeTransferTransaction } from './helpers'
@@ -16,6 +17,7 @@ import { SdkConfig } from './interfaces'
 export class SdkInternal {
   private readonly accountApi: AccountApi
   private readonly airdropApi: AirdropApi
+  private readonly appApi: AppApi
   private readonly configApi: ConfigApi
   private readonly defaultApi: DefaultApi
   private readonly transactionApi: TransactionApi
@@ -25,6 +27,7 @@ export class SdkInternal {
     const apiConfig = new Configuration({ basePath: sdkConfig.endpoint })
 
     // Configure the APIs
+    this.appApi = new AppApi(apiConfig)
     this.airdropApi = new AirdropApi(apiConfig)
     this.accountApi = new AccountApi(apiConfig)
     this.configApi = new ConfigApi(apiConfig)
@@ -41,8 +44,13 @@ export class SdkInternal {
   }
 
   async createAccount(owner: Keypair) {
-    const [{ mint, subsidizer }, { blockhash: recentBlockhash }] = await Promise.all([
-      this.transactionApi.getServiceConfig().then((res) => res.data as ServiceConfigResponse),
+    const [
+      {
+        mint: { publicKey: mint, feePayer: subsidizer },
+      },
+      { blockhash: recentBlockhash },
+    ] = await Promise.all([
+      this.appApi.getAppConfig().then((res) => res.data as AppConfig),
       this.transactionApi.getRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
     ])
 
@@ -63,8 +71,13 @@ export class SdkInternal {
   }
 
   async makeTransfer({ destination, amount, owner }: { destination: PublicKeyString; amount: string; owner: Keypair }) {
-    const [{ mint, subsidizer }, { blockhash: recentBlockhash }] = await Promise.all([
-      this.transactionApi.getServiceConfig().then((res) => res.data as ServiceConfigResponse),
+    const [
+      {
+        mint: { publicKey: mint, feePayer: subsidizer },
+      },
+      { blockhash: recentBlockhash },
+    ] = await Promise.all([
+      this.appApi.getAppConfig().then((res) => res.data as AppConfig),
       this.transactionApi.getRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
     ])
 

@@ -2,7 +2,6 @@ import { AirdropConfig } from '@mogami/airdrop'
 import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 import { exec } from 'child_process'
 import * as fs from 'fs'
@@ -54,6 +53,10 @@ export class ApiConfigDataAccessService {
 
   get mogamiAirdropKeypair(): Keypair {
     return this.config.get('mogamiAirdropKeypair')
+  }
+
+  get mogamiDomain() {
+    return this.config.get('mogamiDomain')
   }
 
   get mogamiMainnet() {
@@ -112,14 +115,5 @@ export class ApiConfigDataAccessService {
       exec('prettier --write ./api-swagger.json', { cwd: process.cwd() })
     }
     SwaggerModule.setup(this.prefix, app, document)
-  }
-
-  getServiceConfig() {
-    return {
-      mainnet: this.mogamiMainnet,
-      mint: this.mogamiMintPublicKey,
-      subsidizer: this.mogamiSubsidizerPublicKey.toBase58(),
-      tokenProgram: TOKEN_PROGRAM_ID.toBase58(),
-    }
   }
 }
