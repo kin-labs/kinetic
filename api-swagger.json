@@ -481,9 +481,50 @@
         },
         "required": ["counts", "dates"]
       },
+      "AppConfigApp": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["index", "name"]
+      },
+      "AppConfigMint": {
+        "type": "object",
+        "properties": {
+          "feePayer": {
+            "type": "string"
+          },
+          "programId": {
+            "type": "string"
+          },
+          "publicKey": {
+            "type": "string"
+          }
+        },
+        "required": ["feePayer", "programId", "publicKey"]
+      },
       "AppConfig": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "hostname": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string"
+          },
+          "app": {
+            "$ref": "#/components/schemas/AppConfigApp"
+          },
+          "mint": {
+            "$ref": "#/components/schemas/AppConfigMint"
+          }
+        },
+        "required": ["hostname", "env", "app", "mint"]
       },
       "ApiConfigSummary": {
         "type": "object",

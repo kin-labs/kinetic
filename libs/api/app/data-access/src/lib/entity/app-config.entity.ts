@@ -1,13 +1,14 @@
+import { ApiProperty } from '@nestjs/swagger'
+import { AppConfigApp } from './app-config-app.entity'
+import { AppConfigMint } from './app-config-mint.entity'
+
 export class AppConfig {
+  @ApiProperty()
   hostname: string
+  @ApiProperty()
   env: string
-  app: {
-    index: number
-    name: string
-  }
-  mint: {
-    feePayer: string
-    programId: string
-    publicKey: string
-  }
+  @ApiProperty()
+  app: AppConfigApp
+  @ApiProperty()
+  mint: AppConfigMint
 }

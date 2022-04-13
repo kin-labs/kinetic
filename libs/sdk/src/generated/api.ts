@@ -103,6 +103,81 @@ export interface ApiConfigSummary {
 /**
  *
  * @export
+ * @interface AppConfig
+ */
+export interface AppConfig {
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfig
+   */
+  hostname: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfig
+   */
+  env: string
+  /**
+   *
+   * @type {AppConfigApp}
+   * @memberof AppConfig
+   */
+  app: AppConfigApp
+  /**
+   *
+   * @type {AppConfigMint}
+   * @memberof AppConfig
+   */
+  mint: AppConfigMint
+}
+/**
+ *
+ * @export
+ * @interface AppConfigApp
+ */
+export interface AppConfigApp {
+  /**
+   *
+   * @type {number}
+   * @memberof AppConfigApp
+   */
+  index: number
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigApp
+   */
+  name: string
+}
+/**
+ *
+ * @export
+ * @interface AppConfigMint
+ */
+export interface AppConfigMint {
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigMint
+   */
+  feePayer: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigMint
+   */
+  programId: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigMint
+   */
+  publicKey: string
+}
+/**
+ *
+ * @export
  * @interface BalanceResponse
  */
 export interface BalanceResponse {
@@ -884,7 +959,7 @@ export const AppApiFp = function (configuration?: Configuration) {
      */
     async getAppConfig(
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AppConfig>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getAppConfig(options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -903,7 +978,7 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getAppConfig(options?: any): AxiosPromise<object> {
+    getAppConfig(options?: any): AxiosPromise<AppConfig> {
       return localVarFp.getAppConfig(options).then((request) => request(axios, basePath))
     },
   }

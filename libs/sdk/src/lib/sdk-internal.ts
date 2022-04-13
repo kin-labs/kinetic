@@ -1,10 +1,10 @@
-import { AppConfig } from '@mogami/api/app/data-access'
 import { Keypair } from '@mogami/keypair'
 import { PublicKeyString } from '@mogami/solana'
 import {
   AccountApi,
   AirdropApi,
   AppApi,
+  AppConfig,
   ConfigApi,
   Configuration,
   DefaultApi,
