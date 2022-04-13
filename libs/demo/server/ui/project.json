@@ -1,0 +1,23 @@
+{
+  "root": "libs/demo/server/ui",
+  "sourceRoot": "libs/demo/server/ui/src",
+  "projectType": "library",
+  "tags": ["type:ui", "scope:demo"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/demo/server/ui/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/demo/server/ui"],
+      "options": {
+        "jestConfig": "libs/demo/server/ui/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

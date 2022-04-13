@@ -1,0 +1,23 @@
+{
+  "root": "libs/demo/keypair/data-access",
+  "sourceRoot": "libs/demo/keypair/data-access/src",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:demo"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/demo/keypair/data-access/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/demo/keypair/data-access"],
+      "options": {
+        "jestConfig": "libs/demo/keypair/data-access/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
