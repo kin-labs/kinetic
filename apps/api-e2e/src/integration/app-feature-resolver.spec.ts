@@ -140,6 +140,23 @@ describe('App (e2e)', () => {
             expect(data.index).toEqual(appIndex)
           })
       })
+
+      it('should create and delete the same app multiple times', async () => {
+        const index = randomAppIndex()
+        const input: AppCreateInput = { index, name: `App ${index}` }
+
+        // Create First
+        const created1 = await runGraphQLQueryAdmin(app, token, CreateApp, { input })
+
+        // Delete First
+        await runGraphQLQueryAdmin(app, token, DeleteApp, { appId: created1.body?.data?.created?.id })
+
+        // Create Second
+        const created2 = await runGraphQLQueryAdmin(app, token, CreateApp, { input })
+
+        // Delete Second
+        await runGraphQLQueryAdmin(app, token, DeleteApp, { appId: created2.body?.data?.created?.id })
+      })
     })
 
     describe('AppUsers', () => {
