@@ -1,13 +1,11 @@
+import { demoKeypairDb } from '@mogami/demo/keypair/data-access'
+import { demoServerDb } from '@mogami/demo/server/data-access'
 import { getHeader } from '../support/app.po'
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { serverDb } from '../../../demo/src/app/data-access/server'
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { keypairDb } from '../../../demo/src/app/data-access/keypair'
 
 describe('demo', () => {
   beforeEach(() => {
-    serverDb.server.clear()
-    keypairDb.keypair.clear()
+    demoServerDb.server.clear()
+    demoKeypairDb.keypair.clear()
     cy.visit('/')
   })
 
@@ -72,7 +70,7 @@ describe('demo', () => {
   })
 
   it('should make sure a server is configured to use the sdk', () => {
-    keypairDb.keypair.add({
+    demoKeypairDb.keypair.add({
       id: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
       mnemonic: 'into actor clay vapor vacuum settle topple soon female chicken case flush',
       publicKey: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',

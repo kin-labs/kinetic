@@ -8,10 +8,8 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { keypairDb } from 'apps/demo/src/app/data-access/keypair'
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { serverDb } from 'apps/demo/src/app/data-access/server'
+import { demoKeypairDb } from '@mogami/demo/keypair/data-access'
+import { demoServerDb } from '@mogami/demo/server/data-access'
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
@@ -42,13 +40,13 @@ Cypress.Commands.add('login', (email, password) => {
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('seedDb', () => {
-  keypairDb.keypair.add({
+  demoKeypairDb.keypair.add({
     id: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
     mnemonic: 'into actor clay vapor vacuum settle topple soon female chicken case flush',
     publicKey: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
     secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
   })
-  serverDb.server.add({
+  demoServerDb.server.add({
     id: 'devnet.mogami.kin.org',
     name: 'devnet.mogami.kin.org',
     endpoint: 'https://devnet.mogami.kin.org',

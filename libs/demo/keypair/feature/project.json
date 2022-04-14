@@ -1,0 +1,23 @@
+{
+  "root": "libs/demo/keypair/feature",
+  "sourceRoot": "libs/demo/keypair/feature/src",
+  "projectType": "library",
+  "tags": ["type:feature", "scope:demo"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/demo/keypair/feature/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/demo/keypair/feature"],
+      "options": {
+        "jestConfig": "libs/demo/keypair/feature/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
