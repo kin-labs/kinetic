@@ -59,6 +59,8 @@ export class ApiAppDataAccessService {
 
   async deleteApp(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
+    await this.data.appDomain.deleteMany({ where: { env: { appId } } })
+    await this.data.appEnv.deleteMany({ where: { appId } })
     await this.data.appUser.deleteMany({ where: { appId } })
     return this.data.app.delete({ where: { id: appId } })
   }
