@@ -75,7 +75,7 @@ describe('App (e2e)', () => {
             expect(data.envs.length).toEqual(1)
             expect(data.envs[0].name).toEqual('default')
             expect(data.envs[0].domains.length).toEqual(1)
-            expect(data.envs[0].domains[0].hostname).toEqual(`${appIndex}.local.mogami.kin.org`)
+            expect(data.envs[0].domains[0].hostname).toEqual(`${appIndex}.local.mogami.io`)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.wallet).toBeDefined()

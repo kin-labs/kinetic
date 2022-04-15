@@ -356,10 +356,10 @@
   ],
   "servers": [
     {
-      "url": "https://devnet.mogami.kin.org"
+      "url": "https://devnet.mogami.io"
     },
     {
-      "url": "https://mainnet.mogami.kin.org"
+      "url": "https://mainnet.mogami.io"
     },
     {
       "url": "http://localhost:3000"

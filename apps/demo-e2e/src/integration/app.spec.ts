@@ -24,9 +24,9 @@ describe('demo', () => {
     cy.get('.chakra-input').click()
     cy.get('.chakra-modal__body').click()
     cy.get('.chakra-input').clear()
-    cy.get('.chakra-input').type('https://devnet.mogami.kin.org')
+    cy.get('.chakra-input').type('https://devnet.mogami.io')
     cy.get('.chakra-button.submit').click()
-    cy.get('.chakra-code').contains('devnet.mogami.kin.org')
+    cy.get('.chakra-code').contains('devnet.mogami.io')
   })
 
   it('should generate a keypair', () => {
