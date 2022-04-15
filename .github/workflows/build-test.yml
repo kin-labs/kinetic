@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  ADMIN_EMAIL: 'mogami@kin.org'
+  ADMIN_EMAIL: 'admin@mogami.io'
   ADMIN_PASSWORD: 'Mogami@dmin1'
   COOKIE_DOMAIN: 'localhost'
   COOKIE_NAME: '__session'

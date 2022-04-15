@@ -47,8 +47,8 @@ Cypress.Commands.add('seedDb', () => {
     secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
   })
   demoServerDb.server.add({
-    id: 'devnet.mogami.kin.org',
-    name: 'devnet.mogami.kin.org',
-    endpoint: 'https://devnet.mogami.kin.org',
+    id: 'devnet.mogami.io',
+    name: 'devnet.mogami.io',
+    endpoint: 'https://devnet.mogami.io',
   })
 })

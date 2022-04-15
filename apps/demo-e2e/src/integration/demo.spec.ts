@@ -7,7 +7,7 @@ it.skip('demo', function () {
   cy.get('.input').click()
   cy.get('.modal-open').click()
   cy.get('.input').clear()
-  cy.get('.input').type('https://devnet.mogami.kin.org')
+  cy.get('.input').type('https://devnet.mogami.io')
   cy.get('.btn-primary').click()
   cy.get(':nth-child(2) > a').click()
   cy.get('.flex-col > .flex > :nth-child(1)').click()
