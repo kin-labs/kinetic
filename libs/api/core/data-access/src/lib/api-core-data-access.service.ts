@@ -1,7 +1,8 @@
+import { AppCreateInput, AppUserRole } from '@mogami/api/app/data-access'
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Solana } from '@mogami/solana'
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
-import { PrismaClient, UserRole } from '@prisma/client'
+import { BadRequestException, Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { Prisma, PrismaClient, UserRole } from '@prisma/client'
 
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
@@ -43,6 +44,10 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   getAppByIndex(index: number) {
     return this.app.findUnique({ where: { index } })
+  }
+
+  getDefaultHostname(index: number) {
+    return `${index}.${this.config.mogamiDomain}`
   }
 
   getUserByEmail(email: string) {

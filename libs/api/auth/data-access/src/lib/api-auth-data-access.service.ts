@@ -1,3 +1,4 @@
+import { ApiAppDataAccessService } from '@mogami/api/app/data-access'
 import { hashPassword, validatePassword } from '@mogami/api/auth/util'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { UserRole } from '@mogami/api/user/data-access'
@@ -17,7 +18,11 @@ export class ApiAuthDataAccessService {
   }
   private readonly jwtOptions: JwtSignOptions = {}
 
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly jwt: JwtService) {
+  constructor(
+    private readonly app: ApiAppDataAccessService,
+    private readonly data: ApiCoreDataAccessService,
+    private readonly jwt: JwtService,
+  ) {
     this.ensureAdmin()
   }
 
@@ -40,6 +45,7 @@ export class ApiAuthDataAccessService {
     if (existing < 1) {
       await this.data.user.create({
         data: {
+          id: 'admin',
           name: 'Admin',
           password: hashPassword(password),
           role: UserRole.Admin,
@@ -49,6 +55,7 @@ export class ApiAuthDataAccessService {
           },
         },
       })
+      await this.app.createApp('admin', { index: 1, name: 'Default App 1' })
       this.logger.verbose(`Created new Admin with email ${email} and password ${password}`)
       return
     }

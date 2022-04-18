@@ -1,6 +1,6 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { App, AppDomain, AppEnv, Prisma } from '@prisma/client'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppUpdateInput } from './dto/app-update.input'
@@ -13,6 +13,7 @@ import { AppUserRole } from './entity/app-user-role.enum'
 @Injectable()
 export class ApiAppDataAccessService {
   private readonly configs = new Map<string, AppConfig>()
+  private readonly logger = new Logger(ApiAppDataAccessService.name)
   private include: Prisma.AppInclude = {
     envs: { include: { domains: true } },
     users: { include: { user: true } },
@@ -39,10 +40,12 @@ export class ApiAppDataAccessService {
       const generated = await this.wallet.generateWallet(userId)
       wallet = { connect: { id: generated.id } }
     }
-    const hostname = `${input.index}.${this.data.config.mogamiDomain}`
+    const index = input.index
+    const name = input.name
+    const hostname = this.data.getDefaultHostname(input.index)
     const data: Prisma.AppCreateInput = {
-      index: input.index,
-      name: input.name,
+      index,
+      name,
       envs: {
         create: [
           {
@@ -54,7 +57,9 @@ export class ApiAppDataAccessService {
       users: { create: { role: AppUserRole.Owner, userId } },
       wallet,
     }
-    return this.data.app.create({ data, include: this.include })
+    const created = await this.data.app.create({ data, include: this.include })
+    this.logger.verbose(`Created app ${index} ${name}`)
+    return created
   }
 
   async deleteApp(userId: string, appId: string) {
@@ -67,7 +72,7 @@ export class ApiAppDataAccessService {
 
   async apps(userId: string) {
     await this.data.ensureAdminUser(userId)
-    return this.data.app.findMany({ include: { wallet: true }, orderBy: { updatedAt: 'desc' } })
+    return this.data.app.findMany({ include: this.include, orderBy: { updatedAt: 'desc' } })
   }
 
   async app(userId: string, appId: string) {
