@@ -37,7 +37,7 @@ export class ApiAccountFeatureController {
 
   @Get('history/:accountId')
   @ApiOperation({ operationId: 'getHistory' })
-  @ApiResponse({ type: HistoryResponse })
+  @ApiResponse({ type: HistoryResponse, isArray: true })
   getHistory(@Param('accountId') accountId: string) {
     return this.service.getHistory(accountId)
   }
