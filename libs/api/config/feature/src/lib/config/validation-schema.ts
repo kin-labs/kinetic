@@ -10,7 +10,6 @@ export const validationSchema = Joi.object({
   MOGAMI_AIRDROP_DEFAULT: Joi.number().default(1),
   MOGAMI_AIRDROP_MAX: Joi.number().default(50000),
   MOGAMI_AIRDROP_SECRET_KEY: Joi.string().optional(),
-  MOGAMI_DOMAIN: Joi.string().default('local.mogami.io'),
   MOGAMI_MAINNET: Joi.boolean().default(false),
   MOGAMI_MINT_DECIMALS: Joi.number().required(),
   MOGAMI_MINT_PUBLIC_KEY: Joi.string().required(),

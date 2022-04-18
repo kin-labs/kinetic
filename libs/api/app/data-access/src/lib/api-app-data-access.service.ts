@@ -1,32 +1,18 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { App, AppDomain, AppEnv, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppUpdateInput } from './dto/app-update.input'
 import { AppUserAddInput } from './dto/app-user-add.input'
 import { AppUserRemoveInput } from './dto/app-user-remove.input'
 import { AppUserUpdateRoleInput } from './dto/app-user-update-role.input'
-import { AppConfig } from './entity/app-config.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
 
 @Injectable()
 export class ApiAppDataAccessService {
-  private readonly configs = new Map<string, AppConfig>()
-  private include: Prisma.AppInclude = {
-    envs: { include: { domains: true } },
-    users: { include: { user: true } },
-    wallet: true,
-  }
+  private include: Prisma.AppInclude = { users: { include: { user: true } }, wallet: true }
   constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
-
-  getConfig(hostname): AppConfig {
-    return this.configs.get(hostname)
-  }
-
-  setConfig(hostname, config: AppConfig) {
-    this.configs.set(hostname, config)
-  }
 
   async createApp(userId: string, input: AppCreateInput) {
     await this.data.ensureAdminUser(userId)
@@ -39,18 +25,9 @@ export class ApiAppDataAccessService {
       const generated = await this.wallet.generateWallet(userId)
       wallet = { connect: { id: generated.id } }
     }
-    const hostname = `${input.index}.${this.data.config.mogamiDomain}`
     const data: Prisma.AppCreateInput = {
       index: input.index,
       name: input.name,
-      envs: {
-        create: [
-          {
-            name: 'default',
-            domains: { create: [{ hostname }] },
-          },
-        ],
-      },
       users: { create: { role: AppUserRole.Owner, userId } },
       wallet,
     }
@@ -59,8 +36,6 @@ export class ApiAppDataAccessService {
 
   async deleteApp(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
-    await this.data.appDomain.deleteMany({ where: { env: { appId } } })
-    await this.data.appEnv.deleteMany({ where: { appId } })
     await this.data.appUser.deleteMany({ where: { appId } })
     return this.data.app.delete({ where: { id: appId } })
   }
@@ -155,17 +130,6 @@ export class ApiAppDataAccessService {
       where: { id: appId },
       data: { wallet: { disconnect: true } },
       include: this.include,
-    })
-  }
-
-  findAppByDomain(hostname: string): Promise<AppDomain & { env: AppEnv & { app: App } }> {
-    return this.data.appDomain.findUnique({
-      where: { hostname },
-      include: {
-        env: {
-          include: { app: true },
-        },
-      },
     })
   }
 }

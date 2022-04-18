@@ -1,6 +1,7 @@
 export * from './lib/api-transaction-data-access.module'
 export * from './lib/api-transaction-data-access.service'
 export * from './lib/entities/recent-blockhash.entity'
+export * from './lib/entities/service-config.entity'
 export * from './lib/dto/make-transfer-request.dto'
 export * from './lib/dto/minimum-rent-exemption-balance-request.dto'
 export * from './lib/entities/minimum-rent-exemption-balance-response.entity'

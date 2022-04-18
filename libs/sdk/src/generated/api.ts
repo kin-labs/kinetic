@@ -103,81 +103,6 @@ export interface ApiConfigSummary {
 /**
  *
  * @export
- * @interface AppConfig
- */
-export interface AppConfig {
-  /**
-   *
-   * @type {string}
-   * @memberof AppConfig
-   */
-  hostname: string
-  /**
-   *
-   * @type {string}
-   * @memberof AppConfig
-   */
-  env: string
-  /**
-   *
-   * @type {AppConfigApp}
-   * @memberof AppConfig
-   */
-  app: AppConfigApp
-  /**
-   *
-   * @type {AppConfigMint}
-   * @memberof AppConfig
-   */
-  mint: AppConfigMint
-}
-/**
- *
- * @export
- * @interface AppConfigApp
- */
-export interface AppConfigApp {
-  /**
-   *
-   * @type {number}
-   * @memberof AppConfigApp
-   */
-  index: number
-  /**
-   *
-   * @type {string}
-   * @memberof AppConfigApp
-   */
-  name: string
-}
-/**
- *
- * @export
- * @interface AppConfigMint
- */
-export interface AppConfigMint {
-  /**
-   *
-   * @type {string}
-   * @memberof AppConfigMint
-   */
-  feePayer: string
-  /**
-   *
-   * @type {string}
-   * @memberof AppConfigMint
-   */
-  programId: string
-  /**
-   *
-   * @type {string}
-   * @memberof AppConfigMint
-   */
-  publicKey: string
-}
-/**
- *
- * @export
  * @interface BalanceResponse
  */
 export interface BalanceResponse {
@@ -353,6 +278,31 @@ export interface RequestAirdropResponse {
    * @memberof RequestAirdropResponse
    */
   signature: string
+}
+/**
+ *
+ * @export
+ * @interface ServiceConfigResponse
+ */
+export interface ServiceConfigResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof ServiceConfigResponse
+   */
+  mint: string
+  /**
+   *
+   * @type {string}
+   * @memberof ServiceConfigResponse
+   */
+  subsidizer: string
+  /**
+   *
+   * @type {string}
+   * @memberof ServiceConfigResponse
+   */
+  tokenProgram: string
 }
 
 /**
@@ -910,101 +860,6 @@ export class AirdropApi extends BaseAPI {
 }
 
 /**
- * AppApi - axios parameter creator
- * @export
- */
-export const AppApiAxiosParamCreator = function (configuration?: Configuration) {
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getAppConfig: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/app/config`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-  }
-}
-
-/**
- * AppApi - functional programming interface
- * @export
- */
-export const AppApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = AppApiAxiosParamCreator(configuration)
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getAppConfig(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AppConfig>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getAppConfig(options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-  }
-}
-
-/**
- * AppApi - factory interface
- * @export
- */
-export const AppApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-  const localVarFp = AppApiFp(configuration)
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getAppConfig(options?: any): AxiosPromise<AppConfig> {
-      return localVarFp.getAppConfig(options).then((request) => request(axios, basePath))
-    },
-  }
-}
-
-/**
- * AppApi - object-oriented interface
- * @export
- * @class AppApi
- * @extends {BaseAPI}
- */
-export class AppApi extends BaseAPI {
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof AppApi
-   */
-  public getAppConfig(options?: AxiosRequestConfig) {
-    return AppApiFp(this.configuration)
-      .getAppConfig(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-}
-
-/**
  * ConfigApi - axios parameter creator
  * @export
  */
@@ -1324,6 +1179,33 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     },
     /**
      *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getServiceConfig: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/transaction/service-config`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1394,6 +1276,17 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getServiceConfig(
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ServiceConfigResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getServiceConfig(options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1441,6 +1334,14 @@ export const TransactionApiFactory = function (
     },
     /**
      *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getServiceConfig(options?: any): AxiosPromise<ServiceConfigResponse> {
+      return localVarFp.getServiceConfig(options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1480,6 +1381,18 @@ export class TransactionApi extends BaseAPI {
   public getRecentBlockhash(options?: AxiosRequestConfig) {
     return TransactionApiFp(this.configuration)
       .getRecentBlockhash(options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApi
+   */
+  public getServiceConfig(options?: AxiosRequestConfig) {
+    return TransactionApiFp(this.configuration)
+      .getServiceConfig(options)
       .then((request) => request(this.axios, this.basePath))
   }
 
