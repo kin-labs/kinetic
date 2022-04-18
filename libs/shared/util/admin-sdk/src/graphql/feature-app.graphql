@@ -6,23 +6,6 @@ fragment AppDetails on App {
   name
 }
 
-fragment AppDomainDetails on AppDomain {
-  id
-  createdAt
-  updatedAt
-  hostname
-}
-
-fragment AppEnvDetails on AppEnv {
-  id
-  createdAt
-  updatedAt
-  name
-  domains {
-    ...AppDomainDetails
-  }
-}
-
 fragment AppUserDetails on AppUser {
   id
   createdAt
@@ -39,9 +22,6 @@ fragment AppUserDetails on AppUser {
 mutation CreateApp($input: AppCreateInput!) {
   created: createApp(input: $input) {
     ...AppDetails
-    envs {
-      ...AppEnvDetails
-    }
     users {
       ...AppUserDetails
     }
@@ -60,9 +40,6 @@ mutation DeleteApp($appId: String!) {
 mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
   updated: updateApp(appId: $appId, input: $input) {
     ...AppDetails
-    envs {
-      ...AppEnvDetails
-    }
     users {
       ...AppUserDetails
     }
@@ -120,9 +97,6 @@ mutation AppWalletRemove($appId: String!, $walletId: String!) {
 query App($appId: String!) {
   item: app(appId: $appId) {
     ...AppDetails
-    envs {
-      ...AppEnvDetails
-    }
     users {
       ...AppUserDetails
     }

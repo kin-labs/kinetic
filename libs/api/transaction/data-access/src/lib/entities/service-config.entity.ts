@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class AppConfigMint {
+export class ServiceConfigResponse {
   @ApiProperty()
-  feePayer: string
+  mint: string
   @ApiProperty()
-  programId: string
+  subsidizer: string
   @ApiProperty()
-  publicKey: string
+  tokenProgram: string
 }

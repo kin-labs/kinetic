@@ -20,7 +20,6 @@ export type Scalars = {
 export type App = {
   __typename?: 'App'
   createdAt: Scalars['DateTime']
-  envs?: Maybe<Array<AppEnv>>
   id: Scalars['String']
   index: Scalars['Int']
   name?: Maybe<Scalars['String']>
@@ -33,23 +32,6 @@ export type AppCreateInput = {
   index: Scalars['Int']
   name: Scalars['String']
   skipWalletCreation?: InputMaybe<Scalars['Boolean']>
-}
-
-export type AppDomain = {
-  __typename?: 'AppDomain'
-  createdAt: Scalars['DateTime']
-  hostname: Scalars['String']
-  id: Scalars['String']
-  updatedAt: Scalars['DateTime']
-}
-
-export type AppEnv = {
-  __typename?: 'AppEnv'
-  createdAt: Scalars['DateTime']
-  domains?: Maybe<Array<AppDomain>>
-  id: Scalars['String']
-  name: Scalars['String']
-  updatedAt: Scalars['DateTime']
 }
 
 export type AppUpdateInput = {
@@ -295,23 +277,6 @@ export type AppDetailsFragment = {
   name?: string | null
 }
 
-export type AppDomainDetailsFragment = {
-  __typename?: 'AppDomain'
-  id: string
-  createdAt: any
-  updatedAt: any
-  hostname: string
-}
-
-export type AppEnvDetailsFragment = {
-  __typename?: 'AppEnv'
-  id: string
-  createdAt: any
-  updatedAt: any
-  name: string
-  domains?: Array<{ __typename?: 'AppDomain'; id: string; createdAt: any; updatedAt: any; hostname: string }> | null
-}
-
 export type AppUserDetailsFragment = {
   __typename?: 'AppUser'
   id: string
@@ -345,14 +310,6 @@ export type CreateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    envs?: Array<{
-      __typename?: 'AppEnv'
-      id: string
-      createdAt: any
-      updatedAt: any
-      name: string
-      domains?: Array<{ __typename?: 'AppDomain'; id: string; createdAt: any; updatedAt: any; hostname: string }> | null
-    }> | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -413,14 +370,6 @@ export type UpdateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    envs?: Array<{
-      __typename?: 'AppEnv'
-      id: string
-      createdAt: any
-      updatedAt: any
-      name: string
-      domains?: Array<{ __typename?: 'AppDomain'; id: string; createdAt: any; updatedAt: any; hostname: string }> | null
-    }> | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -629,14 +578,6 @@ export type AppQuery = {
     updatedAt: any
     index: number
     name?: string | null
-    envs?: Array<{
-      __typename?: 'AppEnv'
-      id: string
-      createdAt: any
-      updatedAt: any
-      name: string
-      domains?: Array<{ __typename?: 'AppDomain'; id: string; createdAt: any; updatedAt: any; hostname: string }> | null
-    }> | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -950,26 +891,6 @@ export type WalletsQuery = {
   items?: Array<{ __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null }> | null
 }
 
-export const AppDomainDetailsFragmentDoc = gql`
-  fragment AppDomainDetails on AppDomain {
-    id
-    createdAt
-    updatedAt
-    hostname
-  }
-`
-export const AppEnvDetailsFragmentDoc = gql`
-  fragment AppEnvDetails on AppEnv {
-    id
-    createdAt
-    updatedAt
-    name
-    domains {
-      ...AppDomainDetails
-    }
-  }
-  ${AppDomainDetailsFragmentDoc}
-`
 export const AppDetailsFragmentDoc = gql`
   fragment AppDetails on App {
     id
@@ -1046,9 +967,6 @@ export const CreateAppDocument = gql`
   mutation CreateApp($input: AppCreateInput!) {
     created: createApp(input: $input) {
       ...AppDetails
-      envs {
-        ...AppEnvDetails
-      }
       users {
         ...AppUserDetails
       }
@@ -1058,7 +976,6 @@ export const CreateAppDocument = gql`
     }
   }
   ${AppDetailsFragmentDoc}
-  ${AppEnvDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
@@ -1082,9 +999,6 @@ export const UpdateAppDocument = gql`
   mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
     updated: updateApp(appId: $appId, input: $input) {
       ...AppDetails
-      envs {
-        ...AppEnvDetails
-      }
       users {
         ...AppUserDetails
       }
@@ -1094,7 +1008,6 @@ export const UpdateAppDocument = gql`
     }
   }
   ${AppDetailsFragmentDoc}
-  ${AppEnvDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
@@ -1186,9 +1099,6 @@ export const AppDocument = gql`
   query App($appId: String!) {
     item: app(appId: $appId) {
       ...AppDetails
-      envs {
-        ...AppEnvDetails
-      }
       users {
         ...AppUserDetails
       }
@@ -1198,7 +1108,6 @@ export const AppDocument = gql`
     }
   }
   ${AppDetailsFragmentDoc}
-  ${AppEnvDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `

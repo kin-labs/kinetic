@@ -35,29 +35,9 @@ model App {
   updatedAt DateTime  @updatedAt
   index     Int       @unique
   name      String
-  envs      AppEnv[]
   users     AppUser[]
   wallet    Wallet?   @relation(fields: [walletId], references: [id])
   walletId  String?
-}
-
-model AppDomain {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  hostname  String   @unique
-  env       AppEnv   @relation(fields: [envId], references: [id])
-  envId     String
-}
-
-model AppEnv {
-  id        String      @id @default(cuid())
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  name      String
-  domains   AppDomain[]
-  app       App?        @relation(fields: [appId], references: [id])
-  appId     String?
 }
 
 model AppUser {
