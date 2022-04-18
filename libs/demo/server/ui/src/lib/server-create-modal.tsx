@@ -20,7 +20,7 @@ export function ServerCreateModal({
   toggle: () => void
   visible: boolean
 }) {
-  const [value, setValue] = useState<string>('http://localhost:3000')
+  const [value, setValue] = useState<string>('http://1.local.mogami.kin.org:3000')
   return (
     <Modal isOpen={visible} onClose={toggle}>
       <ModalOverlay />

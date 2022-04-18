@@ -135,6 +135,9 @@ query App($appId: String!) {
 query Apps {
   items: apps {
     ...AppDetails
+    envs {
+      ...AppEnvDetails
+    }
     wallet {
       ...WalletDetails
     }

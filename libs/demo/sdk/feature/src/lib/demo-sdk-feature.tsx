@@ -1,5 +1,6 @@
-import { Box, Button, Flex, Stack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, Flex, Stack, useColorModeValue, useToast } from '@chakra-ui/react'
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
+import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { demoKeypairDb, DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
 import { KeypairDropdown } from '@mogami/demo/keypair/ui'
 import { SdkControlPanel } from '@mogami/demo/sdk/ui'
@@ -10,6 +11,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { useState } from 'react'
 
 export function DemoSdkFeature() {
+  const toast = useToast()
   const [loading, setLoading] = useState(true)
   const [keypair, setKeypair] = useState<DemoKeypairEntity | null>(null)
   const [server, setServer] = useState<DemoServerEntity | null>(null)
@@ -45,18 +47,26 @@ export function DemoSdkFeature() {
   }
 
   const selectServer = (server: DemoServerEntity) => {
+    setLoading(true)
     Sdk.setup({ endpoint: server.endpoint })
       .then((sdk) => {
         setSdk(sdk)
         setServer(server)
+        setLoading(false)
       })
       .catch((err) => {
         console.log('An error occurred:', err)
+        toast({
+          status: 'error',
+          title: 'An error occurred',
+          description: err.toString(),
+        })
+        setLoading(false)
       })
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return <AdminUiLoader />
   }
 
   if (!keypairs || !keypairs?.length || !keypair) {

@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
+import { Box, Code, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Td, Text, useToast } from '@chakra-ui/react'
 import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers, AdminAppUiWallet } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import {
@@ -49,6 +49,17 @@ export default function AdminAppFeatureDetail() {
           </Box>
           <code>App Index: {data?.item?.index}</code>
         </Flex>
+      </Box>
+
+      <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
+        {data?.item?.envs?.map((env) => (
+          <Box>
+            <Text>Environment: {env?.name}</Text>
+            {env?.domains?.map((domain) => (
+              <Code colorScheme="teal">{domain?.hostname}</Code>
+            ))}
+          </Box>
+        ))}
       </Box>
 
       <Tabs isLazy colorScheme="teal">

@@ -1,4 +1,5 @@
-import { Button, Code, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import { Box, Button, Code, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { App } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -9,14 +10,17 @@ export interface AdminAppUiTableProps {
 }
 
 export function AdminAppUiTable({ apps, deleteApp }: AdminAppUiTableProps) {
+  if (!apps?.length) {
+    return <AdminUiAlert message="No apps found" />
+  }
   return (
     <TableContainer>
       <Table variant="simple" colorScheme="teal">
         <Thead>
           <Tr>
-            <Th isNumeric>Index</Th>
+            <Th isNumeric>#</Th>
             <Th>Name</Th>
-            <Th>Public Key</Th>
+            <Th>Environment</Th>
             <Th />
           </Tr>
         </Thead>
@@ -30,7 +34,14 @@ export function AdminAppUiTable({ apps, deleteApp }: AdminAppUiTableProps) {
                 </Link>
               </Td>
               <Td>
-                <Code colorScheme="teal">{app.wallet?.publicKey}</Code>
+                {app.envs?.map((env) => (
+                  <Box>
+                    <Text>{env?.name}</Text>
+                    {env?.domains?.map((domain) => (
+                      <Code colorScheme="teal">{domain?.hostname}</Code>
+                    ))}
+                  </Box>
+                ))}
               </Td>
               <Td isNumeric>
                 <Button size="xs" onClick={() => deleteApp(app.id)}>
@@ -42,9 +53,9 @@ export function AdminAppUiTable({ apps, deleteApp }: AdminAppUiTableProps) {
         </Tbody>
         <Tfoot>
           <Tr>
-            <Th isNumeric>Index</Th>
+            <Th isNumeric>#</Th>
             <Th>Name</Th>
-            <Th>Public Key</Th>
+            <Th>Environment</Th>
             <Th />
           </Tr>
         </Tfoot>

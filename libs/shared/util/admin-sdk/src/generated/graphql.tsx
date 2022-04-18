@@ -678,6 +678,14 @@ export type AppsQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      name: string
+      domains?: Array<{ __typename?: 'AppDomain'; id: string; createdAt: any; updatedAt: any; hostname: string }> | null
+    }> | null
     wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
   }> | null
 }
@@ -1210,12 +1218,16 @@ export const AppsDocument = gql`
   query Apps {
     items: apps {
       ...AppDetails
+      envs {
+        ...AppEnvDetails
+      }
       wallet {
         ...WalletDetails
       }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
 

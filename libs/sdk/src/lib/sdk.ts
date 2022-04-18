@@ -1,9 +1,12 @@
 import { Keypair } from '@mogami/keypair'
 import { Solana } from '@mogami/solana'
+import { AppConfig } from '../generated'
 import { SdkConfig } from './interfaces'
 import { SdkInternal } from './sdk-internal'
 
 export class Sdk {
+  readonly loading = new Event('loading')
+  appConfig: AppConfig | undefined
   solana: Solana | undefined
 
   private readonly internal: SdkInternal
@@ -50,6 +53,7 @@ export class Sdk {
 
   async init() {
     try {
+      this.appConfig = await this.internal.appConfig()
       this.solana = new Solana(this.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)

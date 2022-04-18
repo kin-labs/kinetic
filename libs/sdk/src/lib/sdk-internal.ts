@@ -35,6 +35,10 @@ export class SdkInternal {
     this.transactionApi = new TransactionApi(apiConfig)
   }
 
+  appConfig() {
+    return this.appApi.getAppConfig().then((res) => res.data as AppConfig)
+  }
+
   balance(accountId: string) {
     return this.accountApi.getBalance(accountId)
   }

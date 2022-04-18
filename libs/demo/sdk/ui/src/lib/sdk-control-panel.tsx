@@ -8,7 +8,7 @@ import { SdkControlPanelAccountBalance } from './sdk-control-panel-account-balan
 import { SdkControlPanelAccountHistory } from './sdk-control-panel-account-history'
 import { SdkControlPanelCreateAccount } from './sdk-control-panel-create-account'
 import { SdkControlPanelRequestAirdrop } from './sdk-control-panel-request-airdrop'
-import { SdkControlPanelServerConfig } from './sdk-control-panel-server-config'
+import { SdkControlPanelAppConfig } from './sdk-control-panel-app-config'
 import { SdkControlPanelSubmitPayment } from './sdk-control-panel-submit-payment'
 import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts'
 
@@ -16,7 +16,7 @@ export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; 
   return (
     <Stack spacing={6}>
       <AdminUiAlert status="success" title="SDK Configured" message={`The SDK is connected to ${sdk.endpoint}`} />
-      <SdkControlPanelServerConfig sdk={sdk} />
+      <SdkControlPanelAppConfig sdk={sdk} />
       <SdkControlPanelAccountBalance keypair={keypair} sdk={sdk} />
       <SdkControlPanelTokenAccounts keypair={keypair} sdk={sdk} />
       <SdkControlPanelAccountHistory keypair={keypair} sdk={sdk} />
