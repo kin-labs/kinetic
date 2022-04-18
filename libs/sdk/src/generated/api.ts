@@ -593,7 +593,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     async getHistory(
       accountId: string,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HistoryResponse>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<HistoryResponse>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(accountId, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -655,7 +655,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getHistory(accountId: string, options?: any): AxiosPromise<HistoryResponse> {
+    getHistory(accountId: string, options?: any): AxiosPromise<Array<HistoryResponse>> {
       return localVarFp.getHistory(accountId, options).then((request) => request(axios, basePath))
     },
     /**
