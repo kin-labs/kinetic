@@ -225,6 +225,35 @@
         "tags": ["airdrop"]
       }
     },
+    "/api/app/config/{index}": {
+      "get": {
+        "operationId": "getAppConfig",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppConfig"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["app"]
+      }
+    },
     "/api/config": {
       "get": {
         "operationId": "config",
@@ -243,26 +272,6 @@
           }
         },
         "tags": ["config"]
-      }
-    },
-    "/api/transaction/service-config": {
-      "get": {
-        "operationId": "getServiceConfig",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServiceConfigResponse"
-                }
-              }
-            }
-          }
-        },
-        "tags": ["transaction"]
       }
     },
     "/api/transaction/latest-blockhash": {
@@ -488,6 +497,45 @@
         },
         "required": ["counts", "dates"]
       },
+      "AppConfigApp": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["index", "name"]
+      },
+      "AppConfigMint": {
+        "type": "object",
+        "properties": {
+          "feePayer": {
+            "type": "string"
+          },
+          "programId": {
+            "type": "string"
+          },
+          "publicKey": {
+            "type": "string"
+          }
+        },
+        "required": ["feePayer", "programId", "publicKey"]
+      },
+      "AppConfig": {
+        "type": "object",
+        "properties": {
+          "app": {
+            "$ref": "#/components/schemas/AppConfigApp"
+          },
+          "mint": {
+            "$ref": "#/components/schemas/AppConfigMint"
+          }
+        },
+        "required": ["app", "mint"]
+      },
       "ApiConfigSummary": {
         "type": "object",
         "properties": {
@@ -502,21 +550,6 @@
           }
         },
         "required": ["port", "environment", "solanaRpcEndpoint"]
-      },
-      "ServiceConfigResponse": {
-        "type": "object",
-        "properties": {
-          "mint": {
-            "type": "string"
-          },
-          "subsidizer": {
-            "type": "string"
-          },
-          "tokenProgram": {
-            "type": "string"
-          }
-        },
-        "required": ["mint", "subsidizer", "tokenProgram"]
       },
       "LatestBlockhashResponse": {
         "type": "object",

@@ -3,11 +3,12 @@ import { PublicKeyString } from '@mogami/solana'
 import {
   AccountApi,
   AirdropApi,
+  AppApi,
+  AppConfig,
   ConfigApi,
   Configuration,
   DefaultApi,
   LatestBlockhashResponse,
-  ServiceConfigResponse,
   TransactionApi,
 } from '../generated'
 import { serializeCreateAccountTransaction, serializeMakeTransferTransaction } from './helpers'
@@ -16,17 +17,21 @@ import { SdkConfig } from './interfaces'
 export class SdkInternal {
   private readonly accountApi: AccountApi
   private readonly airdropApi: AirdropApi
+  private readonly appApi: AppApi
   private readonly configApi: ConfigApi
   private readonly defaultApi: DefaultApi
   private readonly transactionApi: TransactionApi
+
+  private appConfig?: AppConfig
 
   constructor(readonly sdkConfig: SdkConfig) {
     // Create the API Configuration
     const apiConfig = new Configuration({ basePath: sdkConfig.endpoint })
 
     // Configure the APIs
-    this.airdropApi = new AirdropApi(apiConfig)
     this.accountApi = new AccountApi(apiConfig)
+    this.airdropApi = new AirdropApi(apiConfig)
+    this.appApi = new AppApi(apiConfig)
     this.configApi = new ConfigApi(apiConfig)
     this.defaultApi = new DefaultApi(apiConfig)
     this.transactionApi = new TransactionApi(apiConfig)
@@ -41,10 +46,13 @@ export class SdkInternal {
   }
 
   async createAccount(owner: Keypair) {
-    const [{ mint, subsidizer }, { blockhash: latestBlockhash }] = await Promise.all([
-      this.transactionApi.getServiceConfig().then((res) => res.data as ServiceConfigResponse),
-      this.transactionApi.getLatestBlockhash().then((res) => res.data as LatestBlockhashResponse),
-    ])
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    const { publicKey: mint, feePayer: subsidizer } = this.appConfig.mint
+    const { blockhash: latestBlockhash } = await this.transactionApi
+      .getLatestBlockhash()
+      .then((res) => res.data as LatestBlockhashResponse)
 
     const serialized = await serializeCreateAccountTransaction({
       mint,
@@ -58,15 +66,24 @@ export class SdkInternal {
     return Promise.resolve({ mint, subsidizer, latestBlockhash, res })
   }
 
+  async getAppConfig(index: number) {
+    const res = await this.appApi.getAppConfig(String(index))
+    this.appConfig = res.data
+    return this.appConfig
+  }
+
   getHistory(accountId: string) {
     return this.accountApi.getHistory(accountId)
   }
 
   async makeTransfer({ destination, amount, owner }: { destination: PublicKeyString; amount: string; owner: Keypair }) {
-    const [{ mint, subsidizer }, { blockhash: latestBlockhash }] = await Promise.all([
-      this.transactionApi.getServiceConfig().then((res) => res.data as ServiceConfigResponse),
-      this.transactionApi.getLatestBlockhash().then((res) => res.data as LatestBlockhashResponse),
-    ])
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    const { publicKey: mint, feePayer: subsidizer } = this.appConfig.mint
+    const { blockhash: latestBlockhash } = await this.transactionApi
+      .getLatestBlockhash()
+      .then((res) => res.data as LatestBlockhashResponse)
 
     const serialized = await serializeMakeTransferTransaction({
       amount,

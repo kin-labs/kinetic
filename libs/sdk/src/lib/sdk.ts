@@ -50,6 +50,7 @@ export class Sdk {
 
   async init() {
     try {
+      await this.internal.getAppConfig(this.sdkConfig.index)
       this.solana = new Solana(this.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
