@@ -46,14 +46,14 @@ export class SdkInternal {
       this.transactionApi.getRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
     ])
 
-    const serialized = serializeCreateAccountTransaction({
+    const serialized = await serializeCreateAccountTransaction({
       mint,
       owner,
       subsidizer,
       recentBlockhash,
     })
 
-    const res = await this.accountApi.createAccount({ tx: JSON.stringify(serialized) })
+    const res = await this.accountApi.createAccount({ tx: serialized })
 
     return Promise.resolve({ mint, subsidizer, recentBlockhash, res })
   }

@@ -124,7 +124,7 @@ export interface CreateAccountRequest {
    * @type {string}
    * @memberof CreateAccountRequest
    */
-  tx: string
+  tx: Uint8Array
 }
 /**
  *

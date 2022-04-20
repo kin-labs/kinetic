@@ -385,11 +385,15 @@
         },
         "required": ["isSolanaOk", "isMogamiOk", "time"]
       },
+      "Uint8Array": {
+        "type": "object",
+        "properties": {}
+      },
       "CreateAccountRequest": {
         "type": "object",
         "properties": {
           "tx": {
-            "type": "string"
+            "$ref": "#/components/schemas/Uint8Array"
           }
         },
         "required": ["tx"]
