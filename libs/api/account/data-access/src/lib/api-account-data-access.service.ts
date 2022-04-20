@@ -28,7 +28,6 @@ export class ApiAccountDataAccessService {
   }
 
   async createAccount(body: CreateAccountRequest): Promise<CreateAccountResponse> {
-    const txJson = JSON.parse(body.tx)
     const schema = new Map([
       [
         Object,
@@ -39,7 +38,7 @@ export class ApiAccountDataAccessService {
       ],
     ])
 
-    const buffer = borsh.serialize(schema, txJson)
+    const buffer = borsh.serialize(schema, body.tx)
     const tx = Transaction.from(buffer)
     tx.partialSign(...[this.data.config.mogamiSubsidizerKeypair])
     const signature = await this.data.solana.sendRawTransaction(tx)
