@@ -2,7 +2,7 @@ import { DeleteIcon, ViewIcon } from '@chakra-ui/icons'
 import { Box, Button, ButtonGroup, Code, Flex, SimpleGrid, Stack } from '@chakra-ui/react'
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { demoKeypairDb, DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
-import { ImportMnemonicModal, KeypairDetailsModal } from '@mogami/demo/keypair/ui'
+import { ImportMnemonicModal, KeypairDetailsModal, ImportByteArrayModal } from '@mogami/demo/keypair/ui'
 import { Keypair } from '@mogami/keypair'
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useState } from 'react'
@@ -11,7 +11,9 @@ export function DemoKeypairFeature() {
   const result = useLiveQuery(() => demoKeypairDb.keypair.toArray())
   const [keypairVisible, toggleKeypairVisible] = useState<boolean>(false)
   const [importVisible, toggleImportVisible] = useState<boolean>(false)
+  const [importByteArrayVisible, toggleImportByteArrayVisible] = useState<boolean>(false)
   const [mnemonicImport, setMnemonicImport] = useState<string>('')
+  const [byteArrayImport, setByteArrayImport] = useState<string>('')
   const [selectedKeypair, setSelectedKeypair] = useState<DemoKeypairEntity | null>()
 
   const deleteKeypair = (id: string) => demoKeypairDb.keypair.delete(id)
@@ -27,6 +29,15 @@ export function DemoKeypairFeature() {
     toggleImportVisible(false)
   }
 
+  const importByteArray = () => {
+    // Save it
+    storeByteArray(byteArrayImport)
+    // Reset input
+    setByteArrayImport('')
+    // Close Modal
+    toggleImportByteArrayVisible(false)
+  }
+
   const showKeypair = (kp: any) => {
     setSelectedKeypair(kp)
     toggleKeypairVisible(true)
@@ -34,6 +45,11 @@ export function DemoKeypairFeature() {
   const storeMnemonic = (mnemonic: string) => {
     const [kp] = Keypair.fromMnemonicSet(mnemonic, 0, 1)
     demoKeypairDb.keypair.add({ id: kp.publicKey, mnemonic, publicKey: kp.publicKey, secretKey: kp.secretKey })
+  }
+
+  const storeByteArray = (byteArray: string) => {
+    const kp = Keypair.fromByteArray(JSON.parse(byteArray))
+    demoKeypairDb.keypair.add({ id: kp.publicKey, publicKey: kp.publicKey, secretKey: kp.secretKey })
   }
 
   return (
@@ -47,6 +63,9 @@ export function DemoKeypairFeature() {
         </Button>
         <Button className={'import-mnemonic-btn'} onClick={() => toggleImportVisible(true)}>
           Import Mnemonic
+        </Button>
+        <Button className={'import-bytearray-btn'} onClick={() => toggleImportByteArrayVisible(true)}>
+          Import ByteArray
         </Button>
       </Stack>
       {result?.length ? (
@@ -86,6 +105,13 @@ export function DemoKeypairFeature() {
         value={mnemonicImport}
         toggle={() => toggleImportVisible(false)}
         visible={importVisible}
+      />
+      <ImportByteArrayModal
+        setValue={setByteArrayImport}
+        submit={importByteArray}
+        value={byteArrayImport}
+        toggle={() => toggleImportByteArrayVisible(false)}
+        visible={importByteArrayVisible}
       />
       <KeypairDetailsModal
         keypair={selectedKeypair}
