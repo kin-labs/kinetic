@@ -19,6 +19,7 @@ declare namespace Cypress {
     login(email: string, password: string): void
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface Chainable<Subject> {
     seedDb(): void
   }
@@ -47,6 +48,7 @@ Cypress.Commands.add('seedDb', () => {
     publicKey: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
     secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
   })
+  // import Alice - ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA
   const kp = Keypair.fromByteArray([
     205, 213, 7, 246, 167, 206, 37, 209, 161, 129, 168, 160, 90, 103, 198, 142, 83, 177, 214, 203, 80, 29, 71, 245, 56,
     152, 15, 8, 235, 174, 62, 79, 138, 198, 145, 111, 119, 33, 15, 237, 89, 201, 122, 89, 48, 221, 224, 71, 81, 128, 45,

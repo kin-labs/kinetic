@@ -68,7 +68,7 @@ export class SdkInternal {
       this.transactionApi.getRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
     ])
 
-    const serialized = serializeMakeTransferTransaction({
+    const serialized = await serializeMakeTransferTransaction({
       amount,
       destination,
       mint,
