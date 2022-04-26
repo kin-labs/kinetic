@@ -9,14 +9,14 @@ import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: Sdk }) {
   const [result, setResult] = useState<unknown>(null)
-  const [accountId, setAccountId] = useState<string>('FET3bRjswDCGwLJLZzJtGepb33YwP64kjrRHo314rXmS')
-  const [amount, setAmount] = useState<string>('45')
+  const [accountId, setAccountId] = useState<string>('BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y')
+  const [amount, setAmount] = useState<string>('1050')
 
-  if (!keypair.mnemonic) {
-    return <AdminUiAlert message="Mnemonic not found on DemoKeypairEntity" />
+  if (!keypair.secretKey) {
+    return <AdminUiAlert message="Invalid keypair found in DemoKeypairEntity" />
   }
 
-  const kp: Keypair = Keypair.fromMnemonicSet(keypair.mnemonic)[0]
+  const kp: Keypair = Keypair.fromSecretKey(keypair.secretKey)
 
   const getResult = async () => {
     const res = await sdk.makeTransfer({

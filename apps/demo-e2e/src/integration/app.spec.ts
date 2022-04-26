@@ -1,3 +1,4 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
 import { demoKeypairDb } from '@mogami/demo/keypair/data-access'
 import { demoServerDb } from '@mogami/demo/server/data-access'
 import { getHeader } from '../support/app.po'
@@ -77,6 +78,7 @@ describe('demo', () => {
       secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
     })
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
+    cy.wait(250)
     cy.get('[cy-data="card-sdk-warning"]').contains('No Servers configured.')
   })
 
@@ -105,17 +107,8 @@ describe('demo', () => {
       endpoint: 'http://localhost:3000',
     })
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
-    cy.get('.create-account-btn')
-    // .click()
-    // cy.get('[cy-data="panel-create-account"]')
-  })
-
-  it('should request an airdrop', () => {
-    cy.seedDb()
-    cy.get('[cy-data="cy-nav-btn-sdk"]').click()
-    cy.get('.request-airdrop-btn')
-    // .click()
-    // cy.get('[cy-data="panel-request-airdrop"]')
+    cy.get('.create-account-btn').click()
+    cy.get('[cy-data="panel-create-account"]')
   })
 
   it('should get balance from an account', () => {
@@ -126,6 +119,14 @@ describe('demo', () => {
       const balance = JSON.parse(el[0].innerText)
       expect(balance.value).to.equals('10000000000')
     })
+  })
+
+  it('should request an airdrop', () => {
+    cy.seedDb()
+    cy.get('[cy-data="cy-nav-btn-sdk"]').click()
+    cy.get('.request-airdrop-btn').click()
+    cy.wait(17000)
+    cy.get('[cy-data="panel-request-airdrop"]')
   })
 
   it('should get token accounts', () => {
@@ -149,20 +150,9 @@ describe('demo', () => {
   })
 
   it('should submit a payment', () => {
-    demoKeypairDb.keypair.add({
-      id: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
-      mnemonic: 'into actor clay vapor vacuum settle topple soon female chicken case flush',
-      publicKey: 'CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY',
-      secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
-    })
-    demoServerDb.server.add({
-      id: 'localhost:3000',
-      name: 'localhost:3000',
-      endpoint: 'http://localhost:3000',
-    })
+    cy.seedDb()
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
-    cy.get('.submit-payment-btn')
-    // .click()
-    // cy.get('[cy-data="panel-submit-payment"]')
+    cy.get('.submit-payment-btn').click()
+    cy.get('[cy-data="panel-submit-payment"]')
   })
 })
