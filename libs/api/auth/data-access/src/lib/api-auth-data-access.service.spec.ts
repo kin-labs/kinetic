@@ -1,3 +1,4 @@
+import { ApiAppDataAccessModule } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 import { JwtModule } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -8,7 +9,11 @@ describe('ApiAuthDataAccessService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [ApiCoreDataAccessModule, JwtModule.register({ secret: process.env.JWT_SECRET })],
+      imports: [
+        ApiAppDataAccessModule,
+        ApiCoreDataAccessModule,
+        JwtModule.register({ secret: process.env.JWT_SECRET }),
+      ],
       providers: [ApiAuthDataAccessService],
     }).compile()
 

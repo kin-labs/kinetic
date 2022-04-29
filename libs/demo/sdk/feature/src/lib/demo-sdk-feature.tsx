@@ -45,7 +45,7 @@ export function DemoSdkFeature() {
   }
 
   const selectServer = (server: DemoServerEntity) => {
-    Sdk.setup({ endpoint: server.endpoint })
+    Sdk.setup({ endpoint: server.endpoint, index: 1 })
       .then((sdk) => {
         setSdk(sdk)
         setServer(server)

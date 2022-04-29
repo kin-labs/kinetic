@@ -1,17 +1,20 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppUpdateInput } from './dto/app-update.input'
 import { AppUserAddInput } from './dto/app-user-add.input'
 import { AppUserRemoveInput } from './dto/app-user-remove.input'
 import { AppUserUpdateRoleInput } from './dto/app-user-update-role.input'
+import { AppConfig } from './entity/app-config.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
 
 @Injectable()
 export class ApiAppDataAccessService {
   private include: Prisma.AppInclude = { users: { include: { user: true } }, wallet: true }
+  private readonly logger = new Logger(ApiAppDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
 
   async createApp(userId: string, input: AppCreateInput) {
@@ -31,7 +34,9 @@ export class ApiAppDataAccessService {
       users: { create: { role: AppUserRole.Owner, userId } },
       wallet,
     }
-    return this.data.app.create({ data, include: this.include })
+    const created = await this.data.app.create({ data, include: this.include })
+    this.logger.verbose(`Created app "${created.name}" with index ${created.index}.`)
+    return created
   }
 
   async deleteApp(userId: string, appId: string) {
@@ -131,5 +136,21 @@ export class ApiAppDataAccessService {
       data: { wallet: { disconnect: true } },
       include: this.include,
     })
+  }
+
+  async getConfig(index: number): Promise<AppConfig> {
+    const { name } = await this.data.getAppByIndex(index)
+
+    return {
+      app: {
+        index,
+        name,
+      },
+      mint: {
+        feePayer: this.data.config.mogamiSubsidizerKeypair.publicKey?.toBase58(),
+        programId: TOKEN_PROGRAM_ID.toBase58(),
+        publicKey: this.data.config.mogamiMintPublicKey,
+      },
+    }
   }
 }

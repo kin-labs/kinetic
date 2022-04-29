@@ -1,3 +1,4 @@
+import { ApiAppDataAccessModule } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
@@ -9,6 +10,11 @@ import { ApiAuthJwtStrategy } from './strategies/api-auth-jwt.strategy'
 @Module({
   providers: [ApiAuthDataAccessService, ApiAuthGraphqlGuard, ApiAuthJwtStrategy],
   exports: [ApiAuthDataAccessService],
-  imports: [ApiCoreDataAccessModule, PassportModule, JwtModule.register({ secret: process.env.JWT_SECRET })],
+  imports: [
+    ApiAppDataAccessModule,
+    ApiCoreDataAccessModule,
+    PassportModule,
+    JwtModule.register({ secret: process.env.JWT_SECRET }),
+  ],
 })
 export class ApiAuthDataAccessModule {}
