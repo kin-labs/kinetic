@@ -15,7 +15,7 @@ describe('AppFeatureController (e2e)', () => {
   })
 
   it('/api/app/config/1 (GET)', () => {
-    const subsidizer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.MOGAMI_SUBSIDIZER_SECRET_KEY)))
+    const subsidizer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.APP_1_FEE_PAYER_BYTE_ARRAY)))
     return getEndpoint(app, '/api/app/config/1')
       .expect(200)
       .then((res) => {

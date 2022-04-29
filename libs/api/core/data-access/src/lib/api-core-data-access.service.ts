@@ -42,7 +42,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getAppByIndex(index: number) {
-    return this.app.findUnique({ where: { index } })
+    return this.app.findUnique({ where: { index }, include: { wallet: true } })
   }
 
   getUserByEmail(email: string) {

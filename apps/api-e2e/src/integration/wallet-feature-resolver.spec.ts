@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import { DeleteWallet, GenerateWallet, Wallet, Wallets } from '../generated/api-sdk'
 import { ADMIN_EMAIL, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
-import { uniq } from '../helpers/uniq'
+import { uniq, uniqInt } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {
   expect(res).toHaveProperty('text')
@@ -31,7 +31,7 @@ describe('Wallet (e2e)', () => {
   describe('Expected usage', () => {
     describe('CRUD', () => {
       it('should create a wallet', async () => {
-        return runGraphQLQueryAdmin(app, token, GenerateWallet)
+        return runGraphQLQueryAdmin(app, token, GenerateWallet, { index: 1 })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -129,7 +129,8 @@ describe('Wallet (e2e)', () => {
 
     describe('Unauthenticated Access', () => {
       it('should not create a wallet', async () => {
-        return runGraphQLQuery(app, GenerateWallet)
+        const index = uniqInt()
+        return runGraphQLQuery(app, GenerateWallet, { index })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('text')

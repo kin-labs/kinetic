@@ -99,7 +99,7 @@ model Wallet {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  mnemonic  String
   publicKey String
+  secretKey String
   apps      App[]    @relation()
 }

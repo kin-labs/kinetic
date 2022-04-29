@@ -25,7 +25,7 @@ export class ApiAppDataAccessService {
     }
     let wallet
     if (!input.skipWalletCreation) {
-      const generated = await this.wallet.generateWallet(userId)
+      const generated = await this.wallet.generateWallet(userId, input.index)
       wallet = { connect: { id: generated.id } }
     }
     const data: Prisma.AppCreateInput = {
@@ -139,7 +139,7 @@ export class ApiAppDataAccessService {
   }
 
   async getConfig(index: number): Promise<AppConfig> {
-    const { name } = await this.data.getAppByIndex(index)
+    const { name, wallet } = await this.data.getAppByIndex(index)
 
     return {
       app: {
@@ -147,7 +147,7 @@ export class ApiAppDataAccessService {
         name,
       },
       mint: {
-        feePayer: this.data.config.mogamiSubsidizerKeypair.publicKey?.toBase58(),
+        feePayer: wallet.publicKey,
         programId: TOKEN_PROGRAM_ID.toBase58(),
         publicKey: this.data.config.mogamiMintPublicKey,
       },

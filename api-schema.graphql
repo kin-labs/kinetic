@@ -76,7 +76,7 @@ type Mutation {
   deleteApp(appId: String!): App
   deleteUser(userId: String!): User
   deleteWallet(walletId: String!): Wallet
-  generateWallet: Wallet
+  generateWallet(index: Int!): Wallet
   login(input: LoginInput!): AuthToken
   logout: Boolean
   updateApp(appId: String!, input: AppUpdateInput!): App

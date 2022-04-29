@@ -28,7 +28,7 @@ import {
   runGraphQLQueryAdmin,
   runLoginQuery,
 } from '../helpers'
-import { uniq } from '../helpers/uniq'
+import { uniq, uniqInt } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {
   expect(res).toHaveProperty('text')
@@ -227,6 +227,7 @@ describe('App (e2e)', () => {
 
       it('should add a wallet to an app', async () => {
         const name = uniq('app-')
+        const index = uniqInt()
 
         // Create App - but skip automatic wallet generation
         const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
@@ -235,7 +236,7 @@ describe('App (e2e)', () => {
         appId = createdApp.body.data.created.id
 
         // Generate wallet
-        const createdWallet = await runGraphQLQueryAdmin(app, token, GenerateWallet)
+        const createdWallet = await runGraphQLQueryAdmin(app, token, GenerateWallet, { index })
         walletId = createdWallet.body.data.generated?.id
         walletPublicKey = createdWallet.body.data.generated?.publicKey
 
