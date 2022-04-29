@@ -5,10 +5,11 @@ import {
   CreateAccountResponse,
   HistoryResponse,
 } from '@mogami/api/account/data-access'
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Query, UsePipes } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ApiBody } from '@nestjs/swagger/dist/decorators/api-body.decorator'
 import { Commitment } from '@solana/web3.js'
+import { JoiValidationPipe, AccountIdSchema } from '@mogami/api/core/util'
 
 @ApiTags('account')
 @Controller('account')
@@ -16,6 +17,7 @@ export class ApiAccountFeatureController {
   constructor(private readonly service: ApiAccountDataAccessService) {}
 
   @Get('info/:accountId')
+  @UsePipes(new JoiValidationPipe(AccountIdSchema))
   getAccountInfo(@Param('accountId') accountId: string, @Query('commitment') commitment?: Commitment) {
     return this.service.getAccountInfo(accountId, commitment)
   }
@@ -29,6 +31,7 @@ export class ApiAccountFeatureController {
   }
 
   @Get('balance/:accountId')
+  @UsePipes(new JoiValidationPipe(AccountIdSchema))
   @ApiOperation({ operationId: 'getBalance' })
   @ApiResponse({ type: BalanceResponse })
   getBalance(@Param('accountId') accountId: string) {
@@ -36,6 +39,7 @@ export class ApiAccountFeatureController {
   }
 
   @Get('history/:accountId')
+  @UsePipes(new JoiValidationPipe(AccountIdSchema))
   @ApiOperation({ operationId: 'getHistory' })
   @ApiResponse({ type: HistoryResponse, isArray: true })
   getHistory(@Param('accountId') accountId: string) {
@@ -43,6 +47,7 @@ export class ApiAccountFeatureController {
   }
 
   @Get('token-accounts/:accountId')
+  @UsePipes(new JoiValidationPipe(AccountIdSchema))
   @ApiOperation({ operationId: 'tokenAccounts' })
   @ApiResponse({ type: String, isArray: true })
   tokenAccounts(@Param('accountId') accountId: string) {

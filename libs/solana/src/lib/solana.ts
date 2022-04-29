@@ -16,10 +16,14 @@ export class Solana {
 
   async getAccountHistory(account: PublicKeyString) {
     this.config.logger?.log(`Getting account history: ${getPublicKey(account)}`)
-    const history = await this.connection.getConfirmedSignaturesForAddress2(getPublicKey(account))
-    return {
-      account,
-      history,
+    try {
+      const history = await this.connection.getConfirmedSignaturesForAddress2(getPublicKey(account))
+      return {
+        account,
+        history,
+      }
+    } catch (error) {
+      return error
     }
   }
 
@@ -30,8 +34,12 @@ export class Solana {
 
   async getBalance(accountId: PublicKeyString, mogamiMintPublicKey: PublicKeyString) {
     this.config.logger?.log(`Getting account balance: ${accountId}`)
-    const balances = await this.getTokenBalances(new PublicKey(accountId), mogamiMintPublicKey)
-    return balances.reduce((acc, curr) => acc.plus(curr.balance), new BigNumber(0))
+    try {
+      const balances = await this.getTokenBalances(new PublicKey(accountId), mogamiMintPublicKey)
+      return balances.reduce((acc, curr) => acc.plus(curr.balance), new BigNumber(0))
+    } catch (error) {
+      throw new Error('No Kin token accounts found')
+    }
   }
 
   async getBalanceSol(accountId: PublicKeyString): Promise<number> {

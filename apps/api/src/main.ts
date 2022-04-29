@@ -1,15 +1,18 @@
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Logger, ValidationPipe } from '@nestjs/common'
-import { NestFactory } from '@nestjs/core'
+import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import redirectSSL from 'redirect-ssl'
 import cookieParser from 'cookie-parser'
 import { AppModule } from './app/app.module'
+import { AllExceptionsFilter } from './all-exceptions.filter'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ApiConfigDataAccessService)
   app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
+  const { httpAdapter } = app.get(HttpAdapterHost)
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter.getInstance()))
   app.enableCors({ origin: config.corsOrigins })
   app.use(redirectSSL.create({ enabled: config.environment === 'production' }))
   config.configureSwagger(app)

@@ -42,6 +42,7 @@
       "@mogami/api/config/feature": ["libs/api/config/feature/src/index.ts"],
       "@mogami/api/core/data-access": ["libs/api/core/data-access/src/index.ts"],
       "@mogami/api/core/feature": ["libs/api/core/feature/src/index.ts"],
+      "@mogami/api/core/util": ["libs/api/core/util/src/index.ts"],
       "@mogami/api/network-stat/data-access": ["libs/api/network-stat/data-access/src/index.ts"],
       "@mogami/api/network-stat/feature": ["libs/api/network-stat/feature/src/index.ts"],
       "@mogami/api/transaction/data-access": ["libs/api/transaction/data-access/src/index.ts"],
