@@ -7,12 +7,12 @@ import { Transaction, TransactionInstruction } from '@solana/web3.js'
 export async function serializeCreateAccountTransaction({
   mint,
   owner,
-  recentBlockhash,
+  latestBlockhash,
   subsidizer,
 }: {
   mint: PublicKeyString
   owner: Keypair
-  recentBlockhash: string
+  latestBlockhash: string
   subsidizer: PublicKeyString
 }) {
   // Create objects from Response
@@ -29,7 +29,7 @@ export async function serializeCreateAccountTransaction({
 
   const transaction = new Transaction({
     feePayer: subsidizerKey,
-    recentBlockhash,
+    recentBlockhash: latestBlockhash,
     signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
   }).add(...instructions)
 

@@ -6,7 +6,7 @@ import {
   ConfigApi,
   Configuration,
   DefaultApi,
-  RecentBlockhashResponse,
+  LatestBlockhashResponse,
   ServiceConfigResponse,
   TransactionApi,
 } from '../generated'
@@ -41,21 +41,21 @@ export class SdkInternal {
   }
 
   async createAccount(owner: Keypair) {
-    const [{ mint, subsidizer }, { blockhash: recentBlockhash }] = await Promise.all([
+    const [{ mint, subsidizer }, { blockhash: latestBlockhash }] = await Promise.all([
       this.transactionApi.getServiceConfig().then((res) => res.data as ServiceConfigResponse),
-      this.transactionApi.getRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
+      this.transactionApi.getLatestBlockhash().then((res) => res.data as LatestBlockhashResponse),
     ])
 
     const serialized = await serializeCreateAccountTransaction({
       mint,
       owner,
       subsidizer,
-      recentBlockhash,
+      latestBlockhash,
     })
 
     const res = await this.accountApi.createAccount({ tx: serialized })
 
-    return Promise.resolve({ mint, subsidizer, recentBlockhash, res })
+    return Promise.resolve({ mint, subsidizer, latestBlockhash, res })
   }
 
   getHistory(accountId: string) {
@@ -63,9 +63,9 @@ export class SdkInternal {
   }
 
   async makeTransfer({ destination, amount, owner }: { destination: PublicKeyString; amount: string; owner: Keypair }) {
-    const [{ mint, subsidizer }, { blockhash: recentBlockhash }] = await Promise.all([
+    const [{ mint, subsidizer }, { blockhash: latestBlockhash }] = await Promise.all([
       this.transactionApi.getServiceConfig().then((res) => res.data as ServiceConfigResponse),
-      this.transactionApi.getRecentBlockhash().then((res) => res.data as RecentBlockhashResponse),
+      this.transactionApi.getLatestBlockhash().then((res) => res.data as LatestBlockhashResponse),
     ])
 
     const serialized = await serializeMakeTransferTransaction({
@@ -73,13 +73,13 @@ export class SdkInternal {
       destination,
       mint,
       owner,
-      recentBlockhash,
+      latestBlockhash,
       subsidizer,
     })
 
     const res = await this.transactionApi.makeTransfer({ tx: JSON.stringify(serialized) })
 
-    return Promise.resolve({ mint, subsidizer, recentBlockhash, res })
+    return Promise.resolve({ mint, subsidizer, latestBlockhash, res })
   }
 
   requestAirdrop(account: string, amount: string) {

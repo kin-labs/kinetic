@@ -265,9 +265,9 @@
         "tags": ["transaction"]
       }
     },
-    "/api/transaction/recent-blockhash": {
+    "/api/transaction/latest-blockhash": {
       "get": {
-        "operationId": "getRecentBlockhash",
+        "operationId": "getLatestBlockhash",
         "summary": "",
         "parameters": [],
         "responses": {
@@ -276,7 +276,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecentBlockhashResponse"
+                  "$ref": "#/components/schemas/LatestBlockhashResponse"
                 }
               }
             }
@@ -518,7 +518,7 @@
         },
         "required": ["mint", "subsidizer", "tokenProgram"]
       },
-      "RecentBlockhashResponse": {
+      "LatestBlockhashResponse": {
         "type": "object",
         "properties": {
           "blockhash": {

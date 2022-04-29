@@ -44,9 +44,9 @@ export class Solana {
     return this.connection.getMinimumBalanceForRentExemption(dataLength)
   }
 
-  getRecentBlockhash() {
-    this.config.logger?.log(`Getting recent blockhash`)
-    return this.connection.getRecentBlockhash()
+  getLatestBlockhash() {
+    this.config.logger?.log(`Getting latest blockhash`)
+    return this.connection.getLatestBlockhash()
   }
 
   async getTokenAccounts(account: PublicKeyString, mint: PublicKeyString) {

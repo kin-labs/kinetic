@@ -9,14 +9,14 @@ export async function serializeMakeTransferTransaction({
   destination,
   mint,
   owner,
-  recentBlockhash,
+  latestBlockhash,
   subsidizer,
 }: {
   amount: string
   destination: PublicKeyString
   mint: PublicKeyString
   owner: Keypair
-  recentBlockhash: string
+  latestBlockhash: string
   subsidizer: PublicKeyString
 }) {
   // Create objects from Response
@@ -45,7 +45,7 @@ export async function serializeMakeTransferTransaction({
 
   const transaction = new Transaction({
     feePayer: subsidizerKey,
-    recentBlockhash,
+    recentBlockhash: latestBlockhash,
     signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
   }).add(...instructions)
 
