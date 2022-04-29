@@ -4,7 +4,7 @@ import {
   MakeTransferResponse,
   MinimumRentExemptionBalanceRequest,
   MinimumRentExemptionBalanceResponse,
-  RecentBlockhashResponse,
+  LatestBlockhashResponse,
   ServiceConfigResponse,
 } from '@mogami/api/transaction/data-access'
 import { Body, Controller, Get, Param, Post } from '@nestjs/common'
@@ -22,11 +22,11 @@ export class ApiTransactionFeatureController {
     return this.service.getServiceConfig()
   }
 
-  @Get('recent-blockhash')
-  @ApiOperation({ operationId: 'getRecentBlockhash' })
-  @ApiResponse({ type: RecentBlockhashResponse })
-  getRecentBlockhash() {
-    return this.service.getRecentBlockhash()
+  @Get('latest-blockhash')
+  @ApiOperation({ operationId: 'getLatestBlockhash' })
+  @ApiResponse({ type: LatestBlockhashResponse })
+  getLatestBlockhash() {
+    return this.service.getLatestBlockhash()
   }
 
   @Get('minimum-rent-exemption-balance')

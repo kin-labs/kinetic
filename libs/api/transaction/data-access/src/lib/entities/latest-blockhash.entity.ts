@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class RecentBlockhashResponse {
+export class LatestBlockhashResponse {
   @ApiProperty()
   blockhash: string
 }

@@ -121,10 +121,10 @@ export interface BalanceResponse {
 export interface CreateAccountRequest {
   /**
    *
-   * @type {string}
+   * @type {object}
    * @memberof CreateAccountRequest
    */
-  tx: Uint8Array
+  tx: object
 }
 /**
  *
@@ -198,6 +198,19 @@ export interface HistoryResponse {
 /**
  *
  * @export
+ * @interface LatestBlockhashResponse
+ */
+export interface LatestBlockhashResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof LatestBlockhashResponse
+   */
+  blockhash: string
+}
+/**
+ *
+ * @export
  * @interface MakeTransferRequest
  */
 export interface MakeTransferRequest {
@@ -233,19 +246,6 @@ export interface MinimumRentExemptionBalanceResponse {
    * @memberof MinimumRentExemptionBalanceResponse
    */
   lamports: number
-}
-/**
- *
- * @export
- * @interface RecentBlockhashResponse
- */
-export interface RecentBlockhashResponse {
-  /**
-   *
-   * @type {string}
-   * @memberof RecentBlockhashResponse
-   */
-  blockhash: string
 }
 /**
  *
@@ -1115,6 +1115,33 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
   return {
     /**
      *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getLatestBlockhash: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      const localVarPath = `/api/transaction/latest-blockhash`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
      * @param {number} dataLength
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1140,33 +1167,6 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
       if (dataLength !== undefined) {
         localVarQueryParameter['dataLength'] = dataLength
       }
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getRecentBlockhash: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/transaction/recent-blockhash`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
 
       setSearchParams(localVarUrlObj, localVarQueryParameter)
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
@@ -1252,6 +1252,17 @@ export const TransactionApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getLatestBlockhash(
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LatestBlockhashResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getLatestBlockhash(options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
      * @param {number} dataLength
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1261,17 +1272,6 @@ export const TransactionApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MinimumRentExemptionBalanceResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getMinimumRentExemptionBalance(dataLength, options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getRecentBlockhash(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecentBlockhashResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getRecentBlockhash(options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -1314,6 +1314,14 @@ export const TransactionApiFactory = function (
   return {
     /**
      *
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getLatestBlockhash(options?: any): AxiosPromise<LatestBlockhashResponse> {
+      return localVarFp.getLatestBlockhash(options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
      * @param {number} dataLength
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1323,14 +1331,6 @@ export const TransactionApiFactory = function (
       options?: any,
     ): AxiosPromise<MinimumRentExemptionBalanceResponse> {
       return localVarFp.getMinimumRentExemptionBalance(dataLength, options).then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getRecentBlockhash(options?: any): AxiosPromise<RecentBlockhashResponse> {
-      return localVarFp.getRecentBlockhash(options).then((request) => request(axios, basePath))
     },
     /**
      *
@@ -1361,6 +1361,18 @@ export const TransactionApiFactory = function (
 export class TransactionApi extends BaseAPI {
   /**
    *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApi
+   */
+  public getLatestBlockhash(options?: AxiosRequestConfig) {
+    return TransactionApiFp(this.configuration)
+      .getLatestBlockhash(options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
    * @param {number} dataLength
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1369,18 +1381,6 @@ export class TransactionApi extends BaseAPI {
   public getMinimumRentExemptionBalance(dataLength: number, options?: AxiosRequestConfig) {
     return TransactionApiFp(this.configuration)
       .getMinimumRentExemptionBalance(dataLength, options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TransactionApi
-   */
-  public getRecentBlockhash(options?: AxiosRequestConfig) {
-    return TransactionApiFp(this.configuration)
-      .getRecentBlockhash(options)
       .then((request) => request(this.axios, this.basePath))
   }
 
