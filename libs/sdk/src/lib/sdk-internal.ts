@@ -49,7 +49,7 @@ export class SdkInternal {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    const { publicKey: mint, feePayer: subsidizer } = this.appConfig.mint
+    const { publicKey: mint, feePayer } = this.appConfig.mint
     const { blockhash: latestBlockhash } = await this.transactionApi
       .getLatestBlockhash()
       .then((res) => res.data as LatestBlockhashResponse)
@@ -57,13 +57,13 @@ export class SdkInternal {
     const serialized = await serializeCreateAccountTransaction({
       mint,
       owner,
-      subsidizer,
+      feePayer,
       latestBlockhash,
     })
 
     const res = await this.accountApi.createAccount({ tx: serialized })
 
-    return Promise.resolve({ mint, subsidizer, latestBlockhash, res })
+    return Promise.resolve({ mint, feePayer, latestBlockhash, res })
   }
 
   async getAppConfig(index: number) {
@@ -80,7 +80,7 @@ export class SdkInternal {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    const { publicKey: mint, feePayer: subsidizer } = this.appConfig.mint
+    const { publicKey: mint, feePayer } = this.appConfig.mint
     const { blockhash: latestBlockhash } = await this.transactionApi
       .getLatestBlockhash()
       .then((res) => res.data as LatestBlockhashResponse)
@@ -91,12 +91,12 @@ export class SdkInternal {
       mint,
       owner,
       latestBlockhash,
-      subsidizer,
+      feePayer,
     })
 
     const res = await this.transactionApi.makeTransfer({ tx: JSON.stringify(serialized) })
 
-    return Promise.resolve({ mint, subsidizer, latestBlockhash, res })
+    return Promise.resolve({ mint, feePayer, latestBlockhash, res })
   }
 
   requestAirdrop(account: string, amount: string) {

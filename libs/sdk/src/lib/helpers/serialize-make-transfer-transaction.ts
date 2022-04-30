@@ -10,18 +10,18 @@ export async function serializeMakeTransferTransaction({
   mint,
   owner,
   latestBlockhash,
-  subsidizer,
+  feePayer,
 }: {
   amount: string
   destination: PublicKeyString
   mint: PublicKeyString
   owner: Keypair
   latestBlockhash: string
-  subsidizer: PublicKeyString
+  feePayer: PublicKeyString
 }) {
   // Create objects from Response
   const mintKey = getPublicKey(mint)
-  const subsidizerKey = getPublicKey(subsidizer)
+  const feePayerKey = getPublicKey(feePayer)
 
   // Get TokenAccount from Owner and Destination
   const [ownerTokenAccount, destinationTokenAccount] = await Promise.all([
@@ -44,7 +44,7 @@ export async function serializeMakeTransferTransaction({
   ]
 
   const transaction = new Transaction({
-    feePayer: subsidizerKey,
+    feePayer: feePayerKey,
     recentBlockhash: latestBlockhash,
     signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
   }).add(...instructions)

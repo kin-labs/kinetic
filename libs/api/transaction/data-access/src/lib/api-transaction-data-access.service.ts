@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { Keypair } from '@mogami/keypair'
 import { Injectable } from '@nestjs/common'
 import { Transaction } from '@solana/web3.js'
 import * as borsh from 'borsh'
@@ -24,8 +25,10 @@ export class ApiTransactionDataAccessService {
     return { lamports } as MinimumRentExemptionBalanceResponse
   }
 
-  async makeTransfer(body: MakeTransferRequest): Promise<MakeTransferResponse> {
-    const txJson = JSON.parse(body.tx)
+  async makeTransfer(input: MakeTransferRequest): Promise<MakeTransferResponse> {
+    const app = await this.data.getAppByIndex(input.index)
+    const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
+    const txJson = JSON.parse(input.tx)
     const schema = new Map([
       [
         Object,
@@ -38,7 +41,7 @@ export class ApiTransactionDataAccessService {
 
     const buffer = borsh.serialize(schema, txJson)
     const tx = Transaction.from(buffer)
-    tx.partialSign(...[this.data.config.mogamiSubsidizerKeypair])
+    tx.partialSign(...[keyPair.solana])
     const signature = await this.data.solana.sendRawTransaction(tx)
 
     return { signature }

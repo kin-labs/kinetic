@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 export class MakeTransferRequest {
-  // Signed account create transaction created by the SDK.
+  @ApiProperty()
+  index: number
   @ApiProperty()
   tx: string
 }
