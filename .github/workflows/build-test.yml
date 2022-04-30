@@ -67,7 +67,7 @@ jobs:
       # - run: yarn nx-cloud start-ci-run
       - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx affected --target=e2e --parallel --max-parallel=3
+      - run: yarn nx run-many --target=e2e --all --parallel=3
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
@@ -108,7 +108,7 @@ jobs:
       # - run: yarn nx-cloud start-ci-run
       - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx affected --target=e2e --parallel --max-parallel=3
+      - run: yarn nx run-many --target=e2e --all --parallel=3
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
