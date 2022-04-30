@@ -38,9 +38,8 @@ jobs:
         ports: ['5432:5432']
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       solana:
-        image: solanalabs/solana:v1.9.9
+        image: ghcr.io/kin-labs/mogami-solana-network:latest
         ports: ['8899:8899', '8900:8900']
-        options: --entrypoint="solana-test-validator"
     steps:
       - uses: actions/checkout@v3
         name: Checkout [main]
@@ -68,7 +67,7 @@ jobs:
       # - run: yarn nx-cloud start-ci-run
       - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx affected --target=e2e --parallel --max-parallel=3
+      - run: yarn nx run-many --target=e2e --all --parallel=3
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
@@ -109,7 +108,7 @@ jobs:
       # - run: yarn nx-cloud start-ci-run
       - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx affected --target=e2e --parallel --max-parallel=3
+      - run: yarn nx run-many --target=e2e --all --parallel=3
       - run: yarn nx affected --target=build --parallel --max-parallel=3
       - run: yarn nx affected --target=lint --parallel --max-parallel=3
       - run: yarn nx affected --target=test --parallel --max-parallel=2
