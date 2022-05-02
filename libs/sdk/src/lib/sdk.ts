@@ -29,7 +29,7 @@ export class Sdk {
   }
 
   config() {
-    return this.internal.config()
+    return this.internal.appConfig
   }
 
   createAccount(owner: Keypair) {

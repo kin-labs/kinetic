@@ -401,11 +401,14 @@
       "CreateAccountRequest": {
         "type": "object",
         "properties": {
+          "index": {
+            "type": "number"
+          },
           "tx": {
             "$ref": "#/components/schemas/Uint8Array"
           }
         },
-        "required": ["tx"]
+        "required": ["index", "tx"]
       },
       "CreateAccountResponse": {
         "type": "object",
@@ -572,11 +575,14 @@
       "MakeTransferRequest": {
         "type": "object",
         "properties": {
+          "index": {
+            "type": "number"
+          },
           "tx": {
             "type": "string"
           }
         },
-        "required": ["tx"]
+        "required": ["index", "tx"]
       },
       "MakeTransferResponse": {
         "type": "object",

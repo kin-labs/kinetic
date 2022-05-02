@@ -7,8 +7,10 @@ import {
   AppConfig,
   ConfigApi,
   Configuration,
+  CreateAccountRequest,
   DefaultApi,
   LatestBlockhashResponse,
+  MakeTransferRequest,
   TransactionApi,
 } from '../generated'
 import { serializeCreateAccountTransaction, serializeMakeTransferTransaction } from './helpers'
@@ -18,11 +20,10 @@ export class SdkInternal {
   private readonly accountApi: AccountApi
   private readonly airdropApi: AirdropApi
   private readonly appApi: AppApi
-  private readonly configApi: ConfigApi
   private readonly defaultApi: DefaultApi
   private readonly transactionApi: TransactionApi
 
-  private appConfig?: AppConfig
+  appConfig?: AppConfig
 
   constructor(readonly sdkConfig: SdkConfig) {
     // Create the API Configuration
@@ -32,17 +33,12 @@ export class SdkInternal {
     this.accountApi = new AccountApi(apiConfig)
     this.airdropApi = new AirdropApi(apiConfig)
     this.appApi = new AppApi(apiConfig)
-    this.configApi = new ConfigApi(apiConfig)
     this.defaultApi = new DefaultApi(apiConfig)
     this.transactionApi = new TransactionApi(apiConfig)
   }
 
   balance(accountId: string) {
     return this.accountApi.getBalance(accountId)
-  }
-
-  config() {
-    return this.configApi.config()
   }
 
   async createAccount(owner: Keypair) {
@@ -54,14 +50,19 @@ export class SdkInternal {
       .getLatestBlockhash()
       .then((res) => res.data as LatestBlockhashResponse)
 
-    const serialized = await serializeCreateAccountTransaction({
+    const tx = await serializeCreateAccountTransaction({
       mint,
       owner,
       feePayer,
       latestBlockhash,
     })
 
-    const res = await this.accountApi.createAccount({ tx: serialized })
+    const request: CreateAccountRequest = {
+      index: this.appConfig.app.index,
+      tx,
+    }
+
+    const res = await this.accountApi.createAccount(request)
 
     return Promise.resolve({ mint, feePayer, latestBlockhash, res })
   }
@@ -85,7 +86,7 @@ export class SdkInternal {
       .getLatestBlockhash()
       .then((res) => res.data as LatestBlockhashResponse)
 
-    const serialized = await serializeMakeTransferTransaction({
+    const tx = await serializeMakeTransferTransaction({
       amount,
       destination,
       mint,
@@ -94,7 +95,12 @@ export class SdkInternal {
       feePayer,
     })
 
-    const res = await this.transactionApi.makeTransfer({ tx: JSON.stringify(serialized) })
+    const request: MakeTransferRequest = {
+      index: this.appConfig.app.index,
+      tx: JSON.stringify(tx),
+    }
+
+    const res = await this.transactionApi.makeTransfer(request)
 
     return Promise.resolve({ mint, feePayer, latestBlockhash, res })
   }

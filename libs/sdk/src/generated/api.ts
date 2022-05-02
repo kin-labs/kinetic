@@ -184,6 +184,12 @@ export interface BalanceResponse {
 export interface CreateAccountRequest {
   /**
    *
+   * @type {number}
+   * @memberof CreateAccountRequest
+   */
+  index: number
+  /**
+   *
    * @type {object}
    * @memberof CreateAccountRequest
    */
@@ -277,6 +283,12 @@ export interface LatestBlockhashResponse {
  * @interface MakeTransferRequest
  */
 export interface MakeTransferRequest {
+  /**
+   *
+   * @type {number}
+   * @memberof MakeTransferRequest
+   */
+  index: number
   /**
    *
    * @type {string}
