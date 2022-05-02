@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common'
+import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { AppModule } from '@mogami/api-app-module'
 
@@ -8,6 +8,7 @@ export async function initializeE2eApp(): Promise<INestApplication> {
   }).compile()
 
   const app = moduleFixture.createNestApplication()
+  app.useGlobalPipes(new ValidationPipe({ transform: true }))
   app.setGlobalPrefix('api')
   await app.init()
   return app
