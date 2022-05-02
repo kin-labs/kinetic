@@ -30,14 +30,17 @@ model Airdrop {
 }
 
 model App {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  index     Int       @unique
-  name      String
-  users     AppUser[]
-  wallet    Wallet?   @relation(fields: [walletId], references: [id])
-  walletId  String?
+  id               String    @id @default(cuid())
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  index            Int       @unique
+  name             String
+  users            AppUser[]
+  webhookEventUrl  String?
+  webhookSecret    String?
+  webhookVerifyUrl String?
+  wallet           Wallet?   @relation(fields: [walletId], references: [id])
+  walletId         String?
 }
 
 model AppUser {

@@ -32,6 +32,18 @@ export default function AdminAppFeatureDetail() {
     if (res?.data?.updated) {
       toast({ status: 'success', title: 'App updated' })
     }
+    if (res?.error) {
+      const errors = (res.error.graphQLErrors[0]?.extensions as any).response.message ?? [
+        res.error?.message?.toString(),
+      ]
+      for (const error of errors) {
+        toast({
+          status: 'error',
+          title: 'App update failed',
+          description: error,
+        })
+      }
+    }
     return res?.data?.updated
   }
 
