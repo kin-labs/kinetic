@@ -9,11 +9,11 @@ export interface AdminAppUiWalletProps {
 
 export function AdminAppUiWallet({ wallet }: AdminAppUiWalletProps) {
   const [amount, setAmount] = useState<number>(1)
-  const [{ data }, refreshWallet] = useWalletBalanceQuery({ variables: { walletId: wallet?.id! } })
+  const [{ data }, refreshWallet] = useWalletBalanceQuery({ variables: { walletId: wallet.id! } })
   const [{ data: airdropData, error: airdropError, fetching: airdropFetching }, requestAirdropMutation] =
     useWalletAirdropQuery({
       variables: {
-        walletId: wallet?.id!,
+        walletId: wallet.id!,
         amount,
       },
       pause: true,
