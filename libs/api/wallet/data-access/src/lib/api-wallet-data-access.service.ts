@@ -1,6 +1,7 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
+import { Cron } from '@nestjs/schedule'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
 import { WalletBalance } from './entity/wallet-balance.entity'
@@ -9,6 +10,21 @@ import { WalletBalance } from './entity/wallet-balance.entity'
 export class ApiWalletDataAccessService {
   private readonly logger = new Logger(ApiWalletDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService) {}
+
+  @Cron('25 * * * * *')
+  async checkBalance() {
+    const wallets = await this.data.wallet.findMany({
+      include: { balances: { orderBy: { createdAt: 'desc' }, take: 1 } },
+    })
+    for (const wallet of wallets) {
+      const current = wallet.balances?.length ? wallet.balances[0].balance : 0
+      const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
+      if (balance !== current) {
+        const stored = await this.storeWalletBalance(wallet.id, balance)
+        this.logger.verbose(`Stored Wallet Balance: ${wallet.publicKey} ${current} => ${balance} [${stored.id}]`)
+      }
+    }
+  }
 
   async deleteWallet(userId: string, walletId: string) {
     await this.ensureWalletById(userId, walletId)
@@ -68,5 +84,9 @@ export class ApiWalletDataAccessService {
     }
     this.logger.verbose(`getAppKeypair for app with index ${index} generated new keypair`)
     return Keypair.generate()
+  }
+
+  private storeWalletBalance(walletId: string, balance: number) {
+    return this.data.walletBalance.create({ data: { balance, walletId } })
   }
 }
