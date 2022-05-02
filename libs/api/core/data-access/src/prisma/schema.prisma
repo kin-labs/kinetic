@@ -30,17 +30,65 @@ model Airdrop {
 }
 
 model App {
-  id               String    @id @default(cuid())
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  index            Int       @unique
+  id               String        @id @default(cuid())
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  index            Int           @unique
+  creations        AppCreation[]
   name             String
+  payments         AppPayment[]
   users            AppUser[]
   webhookEventUrl  String?
   webhookSecret    String?
   webhookVerifyUrl String?
-  wallet           Wallet?   @relation(fields: [walletId], references: [id])
+  wallet           Wallet?       @relation(fields: [walletId], references: [id])
   walletId         String?
+}
+
+model AppCreation {
+  id          String            @id @default(cuid())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  errors      Json?
+  feePayer    String?
+  mint        String?
+  signature   String?
+  solanaStart DateTime?
+  solanaEnd   DateTime?
+  source      String?
+  status      AppCreationStatus @default(Pending)
+  app         App               @relation(fields: [appId], references: [id])
+  appId       String
+}
+
+enum AppCreationStatus {
+  Failed
+  Pending
+  Succeed
+}
+
+model AppPayment {
+  id          String           @id @default(cuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  amount      Int?
+  destination String?
+  errors      Json?
+  feePayer    String?
+  mint        String?
+  source      String?
+  signature   String?
+  solanaStart DateTime?
+  solanaEnd   DateTime?
+  status      AppPaymentStatus @default(Pending)
+  app         App              @relation(fields: [appId], references: [id])
+  appId       String
+}
+
+enum AppPaymentStatus {
+  Failed
+  Pending
+  Succeed
 }
 
 model AppUser {

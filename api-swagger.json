@@ -420,10 +420,49 @@
             "type": "string"
           },
           "status": {
+            "type": "object"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "feePayer": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mint": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "solanaStart": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "solanaEnd": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "source": {
             "type": "string"
           }
         },
-        "required": ["account", "signature", "status"]
+        "required": [
+          "account",
+          "signature",
+          "status",
+          "errors",
+          "feePayer",
+          "mint",
+          "solanaStart",
+          "solanaEnd",
+          "source"
+        ]
       },
       "BalanceResponse": {
         "type": "object",

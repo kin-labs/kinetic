@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { AppCreationStatus } from '@prisma/client'
 
 interface AccountInfo {
   id: string // publicKey
@@ -7,22 +8,23 @@ interface AccountInfo {
   closeAuthority: string // publicKey
 }
 
-enum CreateAccountResultStatus {
-  ok = 'ok',
-  exists = 'exists',
-  // Indicates that the service will not subsidize the transaction, and that
-  // the caller should fund the transaction themselves.
-  payerRequired = 'payerRequired',
-  // Indicates the nonce/blockhash used in the transaction is invalid, and should
-  // be refetched
-  badNonce = 'badNonce',
-}
-
 export class CreateAccountResponse {
   @ApiProperty()
   account?: AccountInfo
   @ApiProperty()
   signature?: string
   @ApiProperty()
-  status?: CreateAccountResultStatus
+  status?: AppCreationStatus
+  @ApiProperty()
+  errors?: string[]
+  @ApiProperty()
+  feePayer?: string[]
+  @ApiProperty()
+  mint?: string[]
+  @ApiProperty()
+  solanaStart?: Date
+  @ApiProperty()
+  solanaEnd?: Date
+  @ApiProperty()
+  source?: string
 }
