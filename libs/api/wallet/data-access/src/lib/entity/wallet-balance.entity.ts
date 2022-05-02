@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class WalletBalance {
@@ -8,6 +8,6 @@ export class WalletBalance {
   createdAt?: Date
   @Field({ nullable: true })
   updatedAt?: Date
-  @Field(() => Int, { nullable: true })
+  @Field(() => Float, { nullable: true })
   balance?: number
 }

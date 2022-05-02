@@ -62,7 +62,15 @@ export class ApiWalletDataAccessService {
 
   async walletBalances(userId: string, walletId: string): Promise<WalletBalance[]> {
     const wallet = await this.ensureWalletById(userId, walletId)
-    return this.data.walletBalance.findMany({ where: { walletId: wallet.id }, orderBy: { createdAt: 'desc' } })
+    const balances = await this.data.walletBalance.findMany({
+      where: { walletId: wallet.id },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return balances.map((item) => ({
+      ...item,
+      balance: parseInt(item.balance.toString()),
+    }))
   }
 
   async wallets(userId: string) {

@@ -109,7 +109,7 @@ model WalletBalance {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  balance   Int
+  balance   BigInt
   wallet    Wallet?  @relation(fields: [walletId], references: [id])
   walletId  String?
 }

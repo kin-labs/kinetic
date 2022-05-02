@@ -273,7 +273,7 @@ export type WalletAirdropResponse = {
 
 export type WalletBalance = {
   __typename?: 'WalletBalance'
-  balance?: Maybe<Scalars['Int']>
+  balance?: Maybe<Scalars['Float']>
   createdAt?: Maybe<Scalars['DateTime']>
   id?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>

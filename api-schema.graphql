@@ -161,7 +161,7 @@ type WalletAirdropResponse {
 }
 
 type WalletBalance {
-  balance: Int
+  balance: Float
   createdAt: DateTime
   id: String
   updatedAt: DateTime

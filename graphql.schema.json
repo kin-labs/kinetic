@@ -2086,7 +2086,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "Float",
               "ofType": null
             },
             "isDeprecated": false,
