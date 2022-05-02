@@ -97,10 +97,8 @@ export class ApiWalletDataAccessService {
   private async updateWalletBalance(wallet: Wallet) {
     const current = wallet.balances?.length ? wallet.balances[0].balance : 0
     const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
-    console.log('UpdateWalletBalance', balance)
     if (BigInt(balance) !== current) {
       const stored = await this.storeWalletBalance(wallet.id, balance)
-      console.log('stored', stored)
       this.logger.verbose(`Stored Wallet Balance: ${wallet.publicKey} ${current} => ${balance} [${stored.id}]`)
     }
   }
