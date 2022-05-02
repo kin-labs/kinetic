@@ -105,6 +105,7 @@ type Query {
   wallet(walletId: String!): Wallet
   walletAirdrop(amount: Float!, walletId: String!): WalletAirdropResponse
   walletBalance(walletId: String!): WalletBalance
+  walletBalances(walletId: String!): [WalletBalance!]
   wallets: [Wallet!]
 }
 
@@ -160,5 +161,8 @@ type WalletAirdropResponse {
 }
 
 type WalletBalance {
-  sol: Float
+  balance: Int
+  createdAt: DateTime
+  id: String
+  updatedAt: DateTime
 }

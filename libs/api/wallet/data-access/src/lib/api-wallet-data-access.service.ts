@@ -55,11 +55,14 @@ export class ApiWalletDataAccessService {
 
   async walletBalance(userId: string, walletId: string): Promise<WalletBalance> {
     const wallet = await this.ensureWalletById(userId, walletId)
-    const sol = await this.data.solana.getBalanceSol(wallet.publicKey)
+    const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
 
-    return {
-      sol: sol / LAMPORTS_PER_SOL,
-    }
+    return { balance }
+  }
+
+  async walletBalances(userId: string, walletId: string): Promise<WalletBalance[]> {
+    const wallet = await this.ensureWalletById(userId, walletId)
+    return this.data.walletBalance.findMany({ where: { walletId: wallet.id }, orderBy: { createdAt: 'desc' } })
   }
 
   async wallets(userId: string) {
