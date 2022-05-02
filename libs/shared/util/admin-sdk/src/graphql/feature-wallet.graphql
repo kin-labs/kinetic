@@ -10,7 +10,10 @@ fragment WalletAirdropResponseDetails on WalletAirdropResponse {
 }
 
 fragment WalletBalanceDetails on WalletBalance {
-  sol
+  id
+  createdAt
+  updatedAt
+  balance
 }
 
 mutation GenerateWallet($index: Int!) {
@@ -39,6 +42,12 @@ query WalletAirdrop($walletId: String!, $amount: Float!) {
 
 query WalletBalance($walletId: String!) {
   balance: walletBalance(walletId: $walletId) {
+    ...WalletBalanceDetails
+  }
+}
+
+query WalletBalances($walletId: String!) {
+  balances: walletBalances(walletId: $walletId) {
     ...WalletBalanceDetails
   }
 }

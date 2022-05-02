@@ -43,6 +43,11 @@ export class ApiWalletFeatureResolver {
     return this.service.walletBalance(user.id, walletId)
   }
 
+  @Query(() => [WalletBalance], { nullable: true })
+  walletBalances(@CtxUser() user: User, @Args('walletId') walletId: string) {
+    return this.service.walletBalances(user.id, walletId)
+  }
+
   @Query(() => [Wallet], { nullable: true })
   wallets(@CtxUser() user: User) {
     return this.service.wallets(user.id)

@@ -1,5 +1,11 @@
 import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
-import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers, AdminAppUiWallet } from '@mogami/admin/app/ui'
+import {
+  AdminAppUiForm,
+  AdminAppUiUserModal,
+  AdminAppUiUsers,
+  AdminAppUiWallet,
+  AdminAppUiWalletBalances,
+} from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import {
   AppUpdateInput,
@@ -58,7 +64,14 @@ export default function AdminAppFeatureDetail() {
           <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>{data?.item?.wallet && <AdminAppUiWallet wallet={data?.item?.wallet} />}</TabPanel>
+          <TabPanel>
+            {data?.item?.wallet && (
+              <Box>
+                <AdminAppUiWallet wallet={data?.item?.wallet} />
+                <AdminAppUiWalletBalances wallet={data?.item?.wallet} />
+              </Box>
+            )}
+          </TabPanel>
           <TabPanel>
             <Stack direction="column" spacing={6}>
               <Box w="full">

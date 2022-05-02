@@ -96,10 +96,20 @@ enum UserRole {
 }
 
 model Wallet {
+  id        String          @id @default(cuid())
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  publicKey String
+  secretKey String
+  apps      App[]           @relation()
+  balances  WalletBalance[]
+}
+
+model WalletBalance {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  publicKey String
-  secretKey String
-  apps      App[]    @relation()
+  balance   BigInt
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
+  walletId  String?
 }
