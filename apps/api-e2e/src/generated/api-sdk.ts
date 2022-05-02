@@ -141,6 +141,10 @@ export type MutationDeleteWalletArgs = {
   walletId: Scalars['String']
 }
 
+export type MutationGenerateWalletArgs = {
+  index: Scalars['Int']
+}
+
 export type MutationLoginArgs = {
   input: LoginInput
 }
@@ -542,8 +546,8 @@ export const Users = gql`
   ${UserDetails}
 `
 export const GenerateWallet = gql`
-  mutation GenerateWallet {
-    generated: generateWallet {
+  mutation GenerateWallet($index: Int!) {
+    generated: generateWallet(index: $index) {
       ...WalletDetails
     }
   }
@@ -1161,7 +1165,9 @@ export type WalletAirdropResponseDetailsFragment = { __typename?: 'WalletAirdrop
 
 export type WalletBalanceDetailsFragment = { __typename?: 'WalletBalance'; sol?: number | null }
 
-export type GenerateWalletMutationVariables = Exact<{ [key: string]: never }>
+export type GenerateWalletMutationVariables = Exact<{
+  index: Scalars['Int']
+}>
 
 export type GenerateWalletMutation = {
   __typename?: 'Mutation'

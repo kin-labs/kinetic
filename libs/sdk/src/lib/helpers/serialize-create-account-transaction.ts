@@ -8,27 +8,27 @@ export async function serializeCreateAccountTransaction({
   mint,
   owner,
   latestBlockhash,
-  subsidizer,
+  feePayer,
 }: {
   mint: PublicKeyString
   owner: Keypair
   latestBlockhash: string
-  subsidizer: PublicKeyString
+  feePayer: PublicKeyString
 }) {
   // Create objects from Response
   const mintKey = getPublicKey(mint)
-  const subsidizerKey = getPublicKey(subsidizer)
+  const feePayerKey = getPublicKey(feePayer)
 
   // Get AssociatedTokenAccount
   const associatedTokenAccount = await getAssociatedTokenAddress(mintKey, owner.solanaPublicKey)
 
   // Create Transaction
   const instructions: TransactionInstruction[] = [
-    createAssociatedTokenAccountInstruction(subsidizerKey, associatedTokenAccount, owner.solanaPublicKey, mintKey),
+    createAssociatedTokenAccountInstruction(feePayerKey, associatedTokenAccount, owner.solanaPublicKey, mintKey),
   ]
 
   const transaction = new Transaction({
-    feePayer: subsidizerKey,
+    feePayer: feePayerKey,
     recentBlockhash: latestBlockhash,
     signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
   }).add(...instructions)

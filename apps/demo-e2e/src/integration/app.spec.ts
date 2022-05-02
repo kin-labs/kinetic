@@ -1,6 +1,7 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 import { demoKeypairDb } from '@mogami/demo/keypair/data-access'
 import { demoServerDb } from '@mogami/demo/server/data-access'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { getHeader } from '../support/app.po'
 
 describe('demo', () => {
@@ -82,15 +83,17 @@ describe('demo', () => {
     cy.get('[cy-data="card-sdk-warning"]').contains('No Servers configured.')
   })
 
-  it('should get the server configuration', () => {
+  it('should get the app configuration', () => {
     cy.seedDb()
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
-    cy.get('.get-server-config-btn').click()
-    cy.get('[cy-data="panel-get-server-config"]').then((el) => {
+    cy.get('.get-app-config-btn').click()
+    cy.get('[cy-data="panel-get-app-config"]').then((el) => {
       const config = JSON.parse(el[0].innerText)
-      expect(config.environment).to.equals('development')
-      expect(config.port).to.satisfy(Number.isInteger)
-      expect(config.solanaRpcEndpoint).to.equals('http://localhost:8899')
+      expect(config.app.index).to.equals(1)
+      expect(config.app.name).to.equals('App 1')
+      expect(config.mint.feePayer).to.equals('oWNEYV3aMze3CppdgyFAiEj9xUJXkn85es1KscRHt8m')
+      expect(config.mint.programId).to.equals(TOKEN_PROGRAM_ID.toBase58())
+      expect(config.mint.publicKey).to.equals('MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek')
     })
   })
 

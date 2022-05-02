@@ -67,10 +67,6 @@ export class ApiConfigDataAccessService {
     return this.config.get('mogamiMintPublicKey')
   }
 
-  get mogamiSubsidizerKeypair(): Keypair {
-    return this.config.get('mogamiSubsidizerKeypair')
-  }
-
   get port() {
     return this.config.get('port')
   }

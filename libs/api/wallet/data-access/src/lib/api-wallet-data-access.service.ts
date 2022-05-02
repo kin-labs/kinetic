@@ -1,12 +1,13 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
 import { WalletBalance } from './entity/wallet-balance.entity'
 
 @Injectable()
 export class ApiWalletDataAccessService {
+  private readonly logger = new Logger(ApiWalletDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async deleteWallet(userId: string, walletId: string) {
@@ -14,11 +15,11 @@ export class ApiWalletDataAccessService {
     return this.data.wallet.delete({ where: { id: walletId } })
   }
 
-  async generateWallet(userId: string) {
+  async generateWallet(userId: string, index: number) {
     await this.data.ensureAdminUser(userId)
-    const mnemonic = Keypair.generateMnemonic()
-    const keyPair = Keypair.fromMnemonicSet(mnemonic, 0, 1)[0]
-    return this.data.wallet.create({ data: { mnemonic, publicKey: keyPair.publicKey } })
+    const { publicKey, secretKey } = this.getAppKeypair(index)
+
+    return this.data.wallet.create({ data: { secretKey, publicKey } })
   }
 
   async wallet(userId: string, walletId: string) {
@@ -57,5 +58,15 @@ export class ApiWalletDataAccessService {
       throw new NotFoundException(`Wallet with id ${walletId} does not exist.`)
     }
     return wallet
+  }
+
+  private getAppKeypair(index: number): Keypair {
+    const envVar = process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]
+    if (envVar) {
+      this.logger.verbose(`getAppKeypair for app with index ${index} from env var`)
+      return Keypair.fromByteArray(JSON.parse(envVar))
+    }
+    this.logger.verbose(`getAppKeypair for app with index ${index} generated new keypair`)
+    return Keypair.generate()
   }
 }

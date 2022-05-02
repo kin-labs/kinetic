@@ -13,8 +13,8 @@ fragment WalletBalanceDetails on WalletBalance {
   sol
 }
 
-mutation GenerateWallet {
-  generated: generateWallet {
+mutation GenerateWallet($index: Int!) {
+  generated: generateWallet(index: $index) {
     ...WalletDetails
   }
 }

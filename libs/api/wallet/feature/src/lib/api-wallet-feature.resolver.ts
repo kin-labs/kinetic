@@ -7,7 +7,7 @@ import {
   WalletBalance,
 } from '@mogami/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
-import { Args, Float, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Float, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()
 @UseGuards(ApiAuthGraphqlGuard)
@@ -15,8 +15,8 @@ export class ApiWalletFeatureResolver {
   constructor(private readonly service: ApiWalletDataAccessService) {}
 
   @Mutation(() => Wallet, { nullable: true })
-  generateWallet(@CtxUser() user: User) {
-    return this.service.generateWallet(user.id)
+  generateWallet(@CtxUser() user: User, @Args({ name: 'index', type: () => Int }) index: number) {
+    return this.service.generateWallet(user.id, index)
   }
 
   @Mutation(() => Wallet, { nullable: true })
