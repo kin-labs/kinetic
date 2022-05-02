@@ -1,4 +1,5 @@
-import { Field, Float, Int, ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType } from '@nestjs/graphql'
+import { GraphQLBigInt } from 'graphql-scalars'
 
 @ObjectType()
 export class WalletBalance {
@@ -8,6 +9,6 @@ export class WalletBalance {
   createdAt?: Date
   @Field({ nullable: true })
   updatedAt?: Date
-  @Field(() => Float, { nullable: true })
-  balance?: number
+  @Field(() => GraphQLBigInt, { nullable: true })
+  balance?: BigInt
 }

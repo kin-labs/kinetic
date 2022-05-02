@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
+  BigInt: any
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any
 }
@@ -260,10 +262,11 @@ export type UserUpdateInput = {
 
 export type Wallet = {
   __typename?: 'Wallet'
-  createdAt: Scalars['DateTime']
-  id: Scalars['String']
+  balances?: Maybe<Array<WalletBalance>>
+  createdAt?: Maybe<Scalars['DateTime']>
+  id?: Maybe<Scalars['String']>
   publicKey?: Maybe<Scalars['String']>
-  updatedAt: Scalars['DateTime']
+  updatedAt?: Maybe<Scalars['DateTime']>
 }
 
 export type WalletAirdropResponse = {
@@ -273,7 +276,7 @@ export type WalletAirdropResponse = {
 
 export type WalletBalance = {
   __typename?: 'WalletBalance'
-  balance?: Maybe<Scalars['Float']>
+  balance?: Maybe<Scalars['BigInt']>
   createdAt?: Maybe<Scalars['DateTime']>
   id?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
@@ -680,7 +683,13 @@ export type CreateAppMutation = {
         role?: UserRole | null
       } | null
     }> | null
-    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+    wallet?: {
+      __typename?: 'Wallet'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+    } | null
   } | null
 }
 
@@ -740,7 +749,13 @@ export type UpdateAppMutation = {
         role?: UserRole | null
       } | null
     }> | null
-    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+    wallet?: {
+      __typename?: 'Wallet'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+    } | null
   } | null
 }
 
@@ -887,7 +902,13 @@ export type AppWalletAddMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+    wallet?: {
+      __typename?: 'Wallet'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+    } | null
   } | null
 }
 
@@ -905,7 +926,13 @@ export type AppWalletRemoveMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+    wallet?: {
+      __typename?: 'Wallet'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+    } | null
   } | null
 }
 
@@ -948,7 +975,13 @@ export type AppQuery = {
         role?: UserRole | null
       } | null
     }> | null
-    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+    wallet?: {
+      __typename?: 'Wallet'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+    } | null
   } | null
 }
 
@@ -963,7 +996,13 @@ export type AppsQuery = {
     updatedAt: any
     index: number
     name?: string | null
-    wallet?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+    wallet?: {
+      __typename?: 'Wallet'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+    } | null
   }> | null
 }
 
@@ -1174,9 +1213,9 @@ export type UsersQuery = {
 
 export type WalletDetailsFragment = {
   __typename?: 'Wallet'
-  id: string
-  createdAt: any
-  updatedAt: any
+  id?: string | null
+  createdAt?: any | null
+  updatedAt?: any | null
   publicKey?: string | null
 }
 
@@ -1187,7 +1226,7 @@ export type WalletBalanceDetailsFragment = {
   id?: string | null
   createdAt?: any | null
   updatedAt?: any | null
-  balance?: number | null
+  balance?: any | null
 }
 
 export type GenerateWalletMutationVariables = Exact<{
@@ -1196,7 +1235,13 @@ export type GenerateWalletMutationVariables = Exact<{
 
 export type GenerateWalletMutation = {
   __typename?: 'Mutation'
-  generated?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+  generated?: {
+    __typename?: 'Wallet'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  } | null
 }
 
 export type DeleteWalletMutationVariables = Exact<{
@@ -1205,7 +1250,13 @@ export type DeleteWalletMutationVariables = Exact<{
 
 export type DeleteWalletMutation = {
   __typename?: 'Mutation'
-  deleted?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+  deleted?: {
+    __typename?: 'Wallet'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  } | null
 }
 
 export type WalletQueryVariables = Exact<{
@@ -1214,7 +1265,13 @@ export type WalletQueryVariables = Exact<{
 
 export type WalletQuery = {
   __typename?: 'Query'
-  item?: { __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null } | null
+  item?: {
+    __typename?: 'Wallet'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  } | null
 }
 
 export type WalletAirdropQueryVariables = Exact<{
@@ -1238,7 +1295,7 @@ export type WalletBalanceQuery = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
-    balance?: number | null
+    balance?: any | null
   } | null
 }
 
@@ -1253,7 +1310,7 @@ export type WalletBalancesQuery = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
-    balance?: number | null
+    balance?: any | null
   }> | null
 }
 
@@ -1261,7 +1318,13 @@ export type WalletsQueryVariables = Exact<{ [key: string]: never }>
 
 export type WalletsQuery = {
   __typename?: 'Query'
-  items?: Array<{ __typename?: 'Wallet'; id: string; createdAt: any; updatedAt: any; publicKey?: string | null }> | null
+  items?: Array<{
+    __typename?: 'Wallet'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  }> | null
 }
 
 export interface PossibleTypesResultData {

@@ -1,13 +1,16 @@
 import { Field, ObjectType } from '@nestjs/graphql'
+import { WalletBalance } from './wallet-balance.entity'
 
 @ObjectType()
 export class Wallet {
-  @Field()
+  @Field({ nullable: true })
   id?: string
-  @Field()
+  @Field({ nullable: true })
   createdAt?: Date
-  @Field()
+  @Field({ nullable: true })
   updatedAt?: Date
   @Field({ nullable: true })
   publicKey: string
+  @Field(() => [WalletBalance], { nullable: true })
+  balances?: WalletBalance[]
 }

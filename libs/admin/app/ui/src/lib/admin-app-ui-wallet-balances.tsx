@@ -9,7 +9,7 @@ export interface AdminAppUiWalletBalancesProps {
 
 export function AdminAppUiWalletBalances({ wallet }: AdminAppUiWalletBalancesProps) {
   const [{ data }] = useWalletBalancesQuery({
-    variables: { walletId: wallet?.id },
+    variables: { walletId: wallet?.id! },
   })
 
   return (

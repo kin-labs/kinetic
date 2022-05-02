@@ -5,6 +5,7 @@ import { Cron } from '@nestjs/schedule'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
 import { WalletBalance } from './entity/wallet-balance.entity'
+import { Wallet } from './entity/wallet.entity'
 
 @Injectable()
 export class ApiWalletDataAccessService {
@@ -17,12 +18,7 @@ export class ApiWalletDataAccessService {
       include: { balances: { orderBy: { createdAt: 'desc' }, take: 1 } },
     })
     for (const wallet of wallets) {
-      const current = wallet.balances?.length ? wallet.balances[0].balance : 0
-      const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
-      if (balance !== current) {
-        const stored = await this.storeWalletBalance(wallet.id, balance)
-        this.logger.verbose(`Stored Wallet Balance: ${wallet.publicKey} ${current} => ${balance} [${stored.id}]`)
-      }
+      await this.updateWalletBalance(wallet)
     }
   }
 
@@ -35,7 +31,9 @@ export class ApiWalletDataAccessService {
     await this.data.ensureAdminUser(userId)
     const { publicKey, secretKey } = this.getAppKeypair(index)
 
-    return this.data.wallet.create({ data: { secretKey, publicKey } })
+    const created = await this.data.wallet.create({ data: { secretKey, publicKey } })
+    await this.updateWalletBalance(created)
+    return created
   }
 
   async wallet(userId: string, walletId: string) {
@@ -57,20 +55,15 @@ export class ApiWalletDataAccessService {
     const wallet = await this.ensureWalletById(userId, walletId)
     const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
 
-    return { balance }
+    return { balance: BigInt(balance) }
   }
 
   async walletBalances(userId: string, walletId: string): Promise<WalletBalance[]> {
     const wallet = await this.ensureWalletById(userId, walletId)
-    const balances = await this.data.walletBalance.findMany({
+    return this.data.walletBalance.findMany({
       where: { walletId: wallet.id },
       orderBy: { createdAt: 'desc' },
     })
-
-    return balances.map((item) => ({
-      ...item,
-      balance: parseInt(item.balance.toString()),
-    }))
   }
 
   async wallets(userId: string) {
@@ -99,5 +92,16 @@ export class ApiWalletDataAccessService {
 
   private storeWalletBalance(walletId: string, balance: number) {
     return this.data.walletBalance.create({ data: { balance, walletId } })
+  }
+
+  private async updateWalletBalance(wallet: Wallet) {
+    const current = wallet.balances?.length ? wallet.balances[0].balance : 0
+    const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
+    console.log('UpdateWalletBalance', balance)
+    if (BigInt(balance) !== current) {
+      const stored = await this.storeWalletBalance(wallet.id, balance)
+      console.log('stored', stored)
+      this.logger.verbose(`Stored Wallet Balance: ${wallet.publicKey} ${current} => ${balance} [${stored.id}]`)
+    }
   }
 }
