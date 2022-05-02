@@ -17,14 +17,14 @@
 import './commands'
 import '@cypress/code-coverage/support'
 
-/*
-module.exports = (on, config) => {
-  require('@cypress/code-coverage/task')(on, config)
+/// <reference types="cypress" />
 
-  // add other tasks to be registered here
-
-  // IMPORTANT to return the config object
-  // with the any changed environment variables
-  return config
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable {
+      login(email: string, password: string): void
+      seedDb(): Chainable<Element>
+    }
+  }
 }
-*/
