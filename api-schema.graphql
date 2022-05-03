@@ -10,6 +10,9 @@ type App {
   updatedAt: DateTime!
   users: [AppUser!]
   wallet: Wallet
+  webhookEventUrl: String
+  webhookSecret: String
+  webhookVerifyUrl: String
 }
 
 input AppCreateInput {
@@ -20,6 +23,9 @@ input AppCreateInput {
 
 input AppUpdateInput {
   name: String
+  webhookEventUrl: String
+  webhookSecret: String
+  webhookVerifyUrl: String
 }
 
 type AppUser {

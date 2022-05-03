@@ -1,5 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`App (e2e) Unexpected usage CRUD Constraints should not update an app with invalid webhook urls 1`] = `
+Array [
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+      "response": Object {
+        "error": "Bad Request",
+        "message": Array [
+          "webhookEventUrl must be a url",
+          "webhookVerifyUrl must be a url",
+        ],
+        "statusCode": 400,
+      },
+    },
+    "message": "Bad Request Exception",
+  },
+]
+`;
+
 exports[`App (e2e) Unexpected usage Mall-formed Input should not create an app 1`] = `
 Array [
   Object {

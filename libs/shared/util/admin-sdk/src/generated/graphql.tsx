@@ -28,6 +28,9 @@ export type App = {
   updatedAt: Scalars['DateTime']
   users?: Maybe<Array<AppUser>>
   wallet?: Maybe<Wallet>
+  webhookEventUrl?: Maybe<Scalars['String']>
+  webhookSecret?: Maybe<Scalars['String']>
+  webhookVerifyUrl?: Maybe<Scalars['String']>
 }
 
 export type AppCreateInput = {
@@ -38,6 +41,9 @@ export type AppCreateInput = {
 
 export type AppUpdateInput = {
   name?: InputMaybe<Scalars['String']>
+  webhookEventUrl?: InputMaybe<Scalars['String']>
+  webhookSecret?: InputMaybe<Scalars['String']>
+  webhookVerifyUrl?: InputMaybe<Scalars['String']>
 }
 
 export type AppUser = {
@@ -290,6 +296,9 @@ export type AppDetailsFragment = {
   updatedAt: any
   index: number
   name?: string | null
+  webhookEventUrl?: string | null
+  webhookSecret?: string | null
+  webhookVerifyUrl?: string | null
 }
 
 export type AppUserDetailsFragment = {
@@ -298,7 +307,17 @@ export type AppUserDetailsFragment = {
   createdAt: any
   updatedAt: any
   role: AppUserRole
-  app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+  app?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
+  } | null
   user?: {
     __typename?: 'User'
     id: string
@@ -325,6 +344,9 @@ export type CreateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -338,6 +360,9 @@ export type CreateAppMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        webhookEventUrl?: string | null
+        webhookSecret?: string | null
+        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -374,6 +399,9 @@ export type DeleteAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
   } | null
 }
 
@@ -391,6 +419,9 @@ export type UpdateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -404,6 +435,9 @@ export type UpdateAppMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        webhookEventUrl?: string | null
+        webhookSecret?: string | null
+        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -441,6 +475,9 @@ export type AppUserAddMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -454,6 +491,9 @@ export type AppUserAddMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        webhookEventUrl?: string | null
+        webhookSecret?: string | null
+        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -484,6 +524,9 @@ export type AppUserRemoveMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -497,6 +540,9 @@ export type AppUserRemoveMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        webhookEventUrl?: string | null
+        webhookSecret?: string | null
+        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -527,6 +573,9 @@ export type AppUserUpdateRoleMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -540,6 +589,9 @@ export type AppUserUpdateRoleMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        webhookEventUrl?: string | null
+        webhookSecret?: string | null
+        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -570,6 +622,9 @@ export type AppWalletAddMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     wallet?: {
       __typename?: 'Wallet'
       id?: string | null
@@ -594,6 +649,9 @@ export type AppWalletRemoveMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     wallet?: {
       __typename?: 'Wallet'
       id?: string | null
@@ -617,6 +675,9 @@ export type AppQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -630,6 +691,9 @@ export type AppQuery = {
         updatedAt: any
         index: number
         name?: string | null
+        webhookEventUrl?: string | null
+        webhookSecret?: string | null
+        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -664,6 +728,9 @@ export type AppsQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyUrl?: string | null
     wallet?: {
       __typename?: 'Wallet'
       id?: string | null
@@ -845,6 +912,9 @@ export type UserQuery = {
         updatedAt: any
         index: number
         name?: string | null
+        webhookEventUrl?: string | null
+        webhookSecret?: string | null
+        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1002,6 +1072,9 @@ export const AppDetailsFragmentDoc = gql`
     updatedAt
     index
     name
+    webhookEventUrl
+    webhookSecret
+    webhookVerifyUrl
   }
 `
 export const UserDetailsFragmentDoc = gql`

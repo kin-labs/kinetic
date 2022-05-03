@@ -4,6 +4,9 @@ fragment AppDetails on App {
   updatedAt
   index
   name
+  webhookEventUrl
+  webhookSecret
+  webhookVerifyUrl
 }
 
 fragment AppUserDetails on AppUser {
