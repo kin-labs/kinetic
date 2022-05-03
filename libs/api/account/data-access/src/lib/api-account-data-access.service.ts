@@ -30,7 +30,12 @@ export class ApiAccountDataAccessService {
 
   async createAccount(input: CreateAccountRequest): Promise<CreateAccountResponse> {
     const app = await this.data.getAppByIndex(Number(input.index))
-    const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
+    let keyPair
+    try {
+      keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
+    } catch (error) {
+      keyPair = Keypair.fromByteArray(app.wallet.secretKey as any)
+    }
     const schema = new Map([
       [
         Object,
