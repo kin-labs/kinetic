@@ -4,6 +4,7 @@ import { PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
 import { Commitment, Transaction } from '@solana/web3.js'
 import * as borsh from 'borsh'
+import { number } from 'joi'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 import { CreateAccountResponse } from './entities/create-account.entity'
 
@@ -29,7 +30,7 @@ export class ApiAccountDataAccessService {
   }
 
   async createAccount(input: CreateAccountRequest): Promise<CreateAccountResponse> {
-    const app = await this.data.getAppByIndex(input.index)
+    const app = await this.data.getAppByIndex(Number(input.index))
     const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
     const schema = new Map([
       [
