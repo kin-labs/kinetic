@@ -46,7 +46,7 @@ export class ApiUserFeatureResolver {
 
   @ResolveField(() => String, { nullable: true })
   email(@Parent() user: User) {
-    return user.emails.length ? user.emails[0].email : null
+    return user?.emails?.length ? user.emails[0].email : null
   }
 
   @ResolveField(() => String, { nullable: true })

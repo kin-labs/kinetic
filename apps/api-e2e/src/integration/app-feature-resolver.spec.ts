@@ -80,7 +80,12 @@ describe('App (e2e)', () => {
       })
 
       it('should update an app', async () => {
-        const input: AppUpdateInput = { name: `App ${appIndex} edited` }
+        const input: AppUpdateInput = {
+          name: `App ${appIndex} edited`,
+          webhookSecret: 'WebHookSecret',
+          webhookEventUrl: 'http://local.mogami.io/api/app/1/hooks/event',
+          webhookVerifyUrl: 'http://local.mogami.io/api/app/1/hooks/verify',
+        }
 
         return runGraphQLQueryAdmin(app, token, UpdateApp, { appId, input })
           .expect(200)
@@ -90,6 +95,9 @@ describe('App (e2e)', () => {
 
             expect(data.index).toEqual(appIndex)
             expect(data.name).toEqual(input.name)
+            expect(data.webhookSecret).toEqual(input.webhookSecret)
+            expect(data.webhookEventUrl).toEqual(input.webhookEventUrl)
+            expect(data.webhookVerifyUrl).toEqual(input.webhookVerifyUrl)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.wallet).toBeDefined()
@@ -291,6 +299,24 @@ describe('App (e2e)', () => {
             expect(res).toHaveProperty('error')
             const errors = JSON.parse(res.text).errors
             expect(errors[0].message).toEqual(`App with id ${testAppId} does not exist.`)
+          })
+      })
+
+      it('should not update an app with invalid webhook urls', async () => {
+        const name = uniq('app-')
+        const index = uniqInt()
+        const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
+          input: { index, name },
+        })
+        const createdAppId = createdApp.body.data.created.id
+
+        const input: AppUpdateInput = { webhookVerifyUrl: 'test', webhookEventUrl: 'test' }
+
+        return runGraphQLQueryAdmin(app, token, UpdateApp, { appId: createdAppId, input })
+          .expect(200)
+          .expect((res) => {
+            const errors = JSON.parse(res.text).errors
+            expect(errors).toMatchSnapshot()
           })
       })
 
