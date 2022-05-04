@@ -1,5 +1,4 @@
 {
-  "root": "libs/admin/ui/loader",
   "sourceRoot": "libs/admin/ui/loader/src",
   "projectType": "library",
   "tags": ["type:ui", "scope:admin"],

@@ -1,5 +1,4 @@
 {
-  "root": "libs/shared/util/admin-sdk",
   "sourceRoot": "libs/shared/util/admin-sdk/src",
   "projectType": "library",
   "tags": ["type:util", "scope:shared"],

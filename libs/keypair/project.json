@@ -1,5 +1,4 @@
 {
-  "root": "libs/keypair",
   "sourceRoot": "libs/keypair/src",
   "projectType": "library",
   "targets": {

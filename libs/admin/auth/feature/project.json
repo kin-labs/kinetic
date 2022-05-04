@@ -1,5 +1,4 @@
 {
-  "root": "libs/admin/auth/feature",
   "sourceRoot": "libs/admin/auth/feature/src",
   "projectType": "library",
   "tags": ["type:feature", "scope:admin"],

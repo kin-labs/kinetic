@@ -1,5 +1,4 @@
 {
-  "root": "apps/admin",
   "sourceRoot": "apps/admin/src",
   "projectType": "application",
   "targets": {

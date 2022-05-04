@@ -1,5 +1,4 @@
 {
-  "root": "apps/api-e2e",
   "sourceRoot": "apps/api-e2e/src",
   "projectType": "application",
   "targets": {

@@ -1,5 +1,4 @@
 {
-  "root": "libs/admin/auth/data-access",
   "sourceRoot": "libs/admin/auth/data-access/src",
   "projectType": "library",
   "tags": ["type:data-access", "scope:admin"],
