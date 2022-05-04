@@ -12,19 +12,6 @@ import { demoKeypairDb } from '@mogami/demo/keypair/data-access'
 import { demoServerDb } from '@mogami/demo/server/data-access'
 import { Keypair } from '@mogami/keypair'
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace Cypress {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface Chainable<Subject> {
-    login(email: string, password: string): void
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface Chainable<Subject> {
-    seedDb(): void
-  }
-}
-//
 // -- This is a parent command --
 Cypress.Commands.add('login', (email, password) => {
   console.log('Custom command example: Login', email, password)
