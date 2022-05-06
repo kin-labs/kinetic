@@ -50,8 +50,38 @@ export class ApiAppDataAccessService {
     return this.data.app.findMany({ include: { wallet: true }, orderBy: { updatedAt: 'desc' } })
   }
 
-  async app(userId: string, appId: string) {
+  app(userId: string, appId: string) {
     return this.ensureAppById(userId, appId)
+  }
+
+  async appCreation(userId: string, appId: string, appCreationId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.appCreation.findUnique({
+      where: { id: appCreationId },
+    })
+  }
+
+  async appCreations(userId: string, appId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.appCreation.findMany({
+      where: { appId },
+      take: 100,
+    })
+  }
+
+  async appPayment(userId: string, appId: string, appPaymentId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.appPayment.findUnique({
+      where: { id: appPaymentId },
+    })
+  }
+
+  async appPayments(userId: string, appId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.appPayment.findMany({
+      where: { appId },
+      take: 100,
+    })
   }
 
   async appUserAdd(userId: string, appId: string, input: AppUserAddInput) {
