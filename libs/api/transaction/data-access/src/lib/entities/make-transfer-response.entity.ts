@@ -1,6 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { AppPaymentStatus } from '@prisma/client'
 
 export class MakeTransferResponse {
   @ApiProperty()
-  signature: string
+  amount?: number
+  @ApiProperty()
+  destination?: string
+  @ApiProperty()
+  errors?: any
+  @ApiProperty()
+  feePayer?: string
+  @ApiProperty()
+  mint?: string
+  @ApiProperty()
+  signature?: string
+  @ApiProperty()
+  solanaStart?: Date
+  @ApiProperty()
+  solanaEnd?: Date
+  @ApiProperty()
+  source?: string
+  @ApiProperty()
+  status?: AppPaymentStatus
 }

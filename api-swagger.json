@@ -413,17 +413,34 @@
       "CreateAccountResponse": {
         "type": "object",
         "properties": {
-          "account": {
+          "errors": {
             "type": "object"
+          },
+          "feePayer": {
+            "type": "string"
+          },
+          "mint": {
+            "type": "string"
           },
           "signature": {
             "type": "string"
           },
-          "status": {
+          "solanaStart": {
+            "format": "date-time",
             "type": "string"
+          },
+          "solanaEnd": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "status": {
+            "type": "object"
           }
         },
-        "required": ["account", "signature", "status"]
+        "required": ["errors", "feePayer", "mint", "signature", "solanaStart", "solanaEnd", "source", "status"]
       },
       "BalanceResponse": {
         "type": "object",
@@ -587,11 +604,51 @@
       "MakeTransferResponse": {
         "type": "object",
         "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object"
+          },
+          "feePayer": {
+            "type": "string"
+          },
+          "mint": {
+            "type": "string"
+          },
           "signature": {
             "type": "string"
+          },
+          "solanaStart": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "solanaEnd": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "status": {
+            "type": "object"
           }
         },
-        "required": ["signature"]
+        "required": [
+          "amount",
+          "destination",
+          "errors",
+          "feePayer",
+          "mint",
+          "signature",
+          "solanaStart",
+          "solanaEnd",
+          "source",
+          "status"
+        ]
       }
     }
   }
