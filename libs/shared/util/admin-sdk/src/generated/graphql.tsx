@@ -127,6 +127,21 @@ export type AppUserUpdateRoleInput = {
   userId: Scalars['String']
 }
 
+export type AppWebhookIncoming = {
+  __typename?: 'AppWebhookIncoming'
+  createdAt: Scalars['DateTime']
+  headers: Scalars['JSON']
+  id: Scalars['String']
+  payload: Scalars['JSON']
+  type: AppWebhookType
+  updatedAt: Scalars['DateTime']
+}
+
+export enum AppWebhookType {
+  Event = 'Event',
+  Verify = 'Verify',
+}
+
 export type AuthToken = {
   __typename?: 'AuthToken'
   token: Scalars['String']
@@ -238,6 +253,8 @@ export type Query = {
   appCreations?: Maybe<Array<AppCreation>>
   appPayment?: Maybe<AppPayment>
   appPayments?: Maybe<Array<AppPayment>>
+  appWebhookIncoming?: Maybe<AppWebhookIncoming>
+  appWebhooksIncoming?: Maybe<Array<AppWebhookIncoming>>
   apps?: Maybe<Array<App>>
   me?: Maybe<User>
   networkStat?: Maybe<NetworkStat>
@@ -271,6 +288,15 @@ export type QueryAppPaymentArgs = {
 }
 
 export type QueryAppPaymentsArgs = {
+  appId: Scalars['String']
+}
+
+export type QueryAppWebhookIncomingArgs = {
+  appId: Scalars['String']
+  appWebhookIncomingId: Scalars['String']
+}
+
+export type QueryAppWebhooksIncomingArgs = {
   appId: Scalars['String']
 }
 
@@ -441,6 +467,16 @@ export type AppUserDetailsFragment = {
     username: string
     role?: UserRole | null
   } | null
+}
+
+export type AppWebhookIncomingDetailsFragment = {
+  __typename?: 'AppWebhookIncoming'
+  id: string
+  createdAt: any
+  updatedAt: any
+  headers: any
+  payload: any
+  type: AppWebhookType
 }
 
 export type CreateAppMutationVariables = Exact<{
@@ -935,6 +971,41 @@ export type AppPaymentsQuery = {
   }> | null
 }
 
+export type AppWebhookIncomingQueryVariables = Exact<{
+  appId: Scalars['String']
+  appWebhookIncomingId: Scalars['String']
+}>
+
+export type AppWebhookIncomingQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'AppWebhookIncoming'
+    id: string
+    createdAt: any
+    updatedAt: any
+    headers: any
+    payload: any
+    type: AppWebhookType
+  } | null
+}
+
+export type AppWebhooksIncomingQueryVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type AppWebhooksIncomingQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'AppWebhookIncoming'
+    id: string
+    createdAt: any
+    updatedAt: any
+    headers: any
+    payload: any
+    type: AppWebhookType
+  }> | null
+}
+
 export type AppsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AppsQuery = {
@@ -1361,6 +1432,16 @@ export const AppUserDetailsFragmentDoc = gql`
   ${AppDetailsFragmentDoc}
   ${UserDetailsFragmentDoc}
 `
+export const AppWebhookIncomingDetailsFragmentDoc = gql`
+  fragment AppWebhookIncomingDetails on AppWebhookIncoming {
+    id
+    createdAt
+    updatedAt
+    headers
+    payload
+    type
+  }
+`
 export const AuthTokenDetailsFragmentDoc = gql`
   fragment AuthTokenDetails on AuthToken {
     token
@@ -1598,6 +1679,34 @@ export const AppPaymentsDocument = gql`
 
 export function useAppPaymentsQuery(options: Omit<Urql.UseQueryArgs<AppPaymentsQueryVariables>, 'query'>) {
   return Urql.useQuery<AppPaymentsQuery>({ query: AppPaymentsDocument, ...options })
+}
+export const AppWebhookIncomingDocument = gql`
+  query AppWebhookIncoming($appId: String!, $appWebhookIncomingId: String!) {
+    item: appWebhookIncoming(appId: $appId, appWebhookIncomingId: $appWebhookIncomingId) {
+      ...AppWebhookIncomingDetails
+    }
+  }
+  ${AppWebhookIncomingDetailsFragmentDoc}
+`
+
+export function useAppWebhookIncomingQuery(
+  options: Omit<Urql.UseQueryArgs<AppWebhookIncomingQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<AppWebhookIncomingQuery>({ query: AppWebhookIncomingDocument, ...options })
+}
+export const AppWebhooksIncomingDocument = gql`
+  query AppWebhooksIncoming($appId: String!) {
+    items: appWebhooksIncoming(appId: $appId) {
+      ...AppWebhookIncomingDetails
+    }
+  }
+  ${AppWebhookIncomingDetailsFragmentDoc}
+`
+
+export function useAppWebhooksIncomingQuery(
+  options: Omit<Urql.UseQueryArgs<AppWebhooksIncomingQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<AppWebhooksIncomingQuery>({ query: AppWebhooksIncomingDocument, ...options })
 }
 export const AppsDocument = gql`
   query Apps {

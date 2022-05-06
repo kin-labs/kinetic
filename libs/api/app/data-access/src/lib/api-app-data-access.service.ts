@@ -1,8 +1,9 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
-import { Prisma } from '@prisma/client'
+import { AppWebhookType, Prisma } from '@prisma/client'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { IncomingHttpHeaders } from 'http'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppUpdateInput } from './dto/app-update.input'
 import { AppUserAddInput } from './dto/app-user-add.input'
@@ -10,6 +11,12 @@ import { AppUserRemoveInput } from './dto/app-user-remove.input'
 import { AppUserUpdateRoleInput } from './dto/app-user-update-role.input'
 import { AppConfig } from './entity/app-config.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
+
+function isValidAppWebhookType(type: string) {
+  return Object.keys(AppWebhookType)
+    .map((item) => item.toLowerCase())
+    .includes(type.toLowerCase())
+}
 
 @Injectable()
 export class ApiAppDataAccessService {
@@ -79,6 +86,21 @@ export class ApiAppDataAccessService {
   async appPayments(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
     return this.data.appPayment.findMany({
+      where: { appId },
+      take: 100,
+    })
+  }
+
+  async appWebhookIncoming(userId: string, appId: string, appWebhookIncomingId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.appWebhookIncoming.findUnique({
+      where: { id: appWebhookIncomingId },
+    })
+  }
+
+  async appWebhooksIncoming(userId: string, appId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.appWebhookIncoming.findMany({
       where: { appId },
       take: 100,
     })
@@ -182,5 +204,25 @@ export class ApiAppDataAccessService {
         publicKey: this.data.config.mogamiMintPublicKey,
       },
     }
+  }
+
+  async storeIncomingWebhook(index: number, type: string, headers: IncomingHttpHeaders, payload: any) {
+    // Make sure the webhook type is valid
+    if (!isValidAppWebhookType(type)) {
+      return new BadRequestException(`Unknown AppWebhookType`)
+    }
+
+    // Get the app by Index
+    const app = await this.data.getAppByIndex(index)
+
+    // Store the incoming webhook
+    return this.data.appWebhookIncoming.create({
+      data: {
+        appId: app.id,
+        headers,
+        payload,
+        type: type === 'event' ? AppWebhookType.Event : AppWebhookType.Verify,
+      },
+    })
   }
 }

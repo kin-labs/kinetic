@@ -1,6 +1,7 @@
 import { ApiAppDataAccessService, AppConfig } from '@mogami/api/app/data-access'
-import { Controller, Get, Param } from '@nestjs/common'
+import { Controller, Get, Param, ParseIntPipe, Post, Req } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Request } from 'express'
 
 @ApiTags('app')
 @Controller('app')
@@ -12,5 +13,10 @@ export class ApiAppFeatureController {
   @ApiResponse({ type: AppConfig })
   app(@Param('index') index: string) {
     return this.service.getConfig(Number(index))
+  }
+
+  @Post(':index/webhook/:type')
+  async appWebhook(@Req() req: Request, @Param('index', ParseIntPipe) index: number, @Param('type') type: string) {
+    return this.service.storeIncomingWebhook(index, type, req.headers, req.body)
   }
 }

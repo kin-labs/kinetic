@@ -8,6 +8,7 @@ import {
   AppUserAddInput,
   AppUserRemoveInput,
   AppUserUpdateRoleInput,
+  AppWebhookIncoming,
 } from '@mogami/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
@@ -58,6 +59,20 @@ export class ApiAppFeatureResolver {
   @Query(() => [AppPayment], { nullable: true })
   appPayments(@CtxUser() user: User, @Args('appId') appId: string) {
     return this.service.appPayments(user.id, appId)
+  }
+
+  @Query(() => AppWebhookIncoming, { nullable: true })
+  appWebhookIncoming(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appWebhookIncomingId') appWebhookIncomingId: string,
+  ) {
+    return this.service.appWebhookIncoming(user.id, appId, appWebhookIncomingId)
+  }
+
+  @Query(() => [AppWebhookIncoming], { nullable: true })
+  appWebhooksIncoming(@CtxUser() user: User, @Args('appId') appId: string) {
+    return this.service.appWebhooksIncoming(user.id, appId)
   }
 
   @Mutation(() => App, { nullable: true })

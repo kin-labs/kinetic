@@ -254,6 +254,35 @@
         "tags": ["app"]
       }
     },
+    "/api/app/{index}/webhook/{type}": {
+      "post": {
+        "operationId": "ApiAppFeatureController_appWebhook",
+        "parameters": [
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "type",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": ["app"]
+      }
+    },
     "/api/config": {
       "get": {
         "operationId": "config",

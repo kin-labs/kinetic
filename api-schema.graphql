@@ -104,6 +104,20 @@ input AppUserUpdateRoleInput {
   userId: String!
 }
 
+type AppWebhookIncoming {
+  createdAt: DateTime!
+  headers: JSON!
+  id: String!
+  payload: JSON!
+  type: AppWebhookType!
+  updatedAt: DateTime!
+}
+
+enum AppWebhookType {
+  Event
+  Verify
+}
+
 type AuthToken {
   token: String!
   user: User!
@@ -163,6 +177,8 @@ type Query {
   appCreations(appId: String!): [AppCreation!]
   appPayment(appId: String!, appPaymentId: String!): AppPayment
   appPayments(appId: String!): [AppPayment!]
+  appWebhookIncoming(appId: String!, appWebhookIncomingId: String!): AppWebhookIncoming
+  appWebhooksIncoming(appId: String!): [AppWebhookIncoming!]
   apps: [App!]
   me: User
   networkStat(networkStatId: String!): NetworkStat

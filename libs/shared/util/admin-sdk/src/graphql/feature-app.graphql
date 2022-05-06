@@ -58,6 +58,15 @@ fragment AppUserDetails on AppUser {
   }
 }
 
+fragment AppWebhookIncomingDetails on AppWebhookIncoming {
+  id
+  createdAt
+  updatedAt
+  headers
+  payload
+  type
+}
+
 mutation CreateApp($input: AppCreateInput!) {
   created: createApp(input: $input) {
     ...AppDetails
@@ -162,9 +171,22 @@ query AppPayment($appId: String!, $appPaymentId: String!) {
     ...AppPaymentDetails
   }
 }
+
 query AppPayments($appId: String!) {
   items: appPayments(appId: $appId) {
     ...AppPaymentDetails
+  }
+}
+
+query AppWebhookIncoming($appId: String!, $appWebhookIncomingId: String!) {
+  item: appWebhookIncoming(appId: $appId, appWebhookIncomingId: $appWebhookIncomingId) {
+    ...AppWebhookIncomingDetails
+  }
+}
+
+query AppWebhooksIncoming($appId: String!) {
+  items: appWebhooksIncoming(appId: $appId) {
+    ...AppWebhookIncomingDetails
   }
 }
 
