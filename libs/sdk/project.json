@@ -1,5 +1,4 @@
 {
-  "root": "libs/sdk",
   "sourceRoot": "libs/sdk/src",
   "projectType": "library",
   "targets": {

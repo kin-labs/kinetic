@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/airdrop/data-access",
   "sourceRoot": "libs/api/airdrop/data-access/src",
   "targets": {
     "lint": {

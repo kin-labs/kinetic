@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/app/feature",
   "sourceRoot": "libs/api/app/feature/src",
   "targets": {
     "lint": {

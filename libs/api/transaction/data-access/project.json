@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/transaction/data-access",
   "sourceRoot": "libs/api/transaction/data-access/src",
   "projectType": "library",
   "targets": {

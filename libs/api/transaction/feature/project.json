@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/transaction/feature",
   "sourceRoot": "libs/api/transaction/feature/src",
   "projectType": "library",
   "targets": {

@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/wallet/feature",
   "sourceRoot": "libs/api/wallet/feature/src",
   "targets": {
     "lint": {

@@ -1,5 +1,4 @@
 {
-  "root": "libs/admin/user/feature",
   "sourceRoot": "libs/admin/user/feature/src",
   "projectType": "library",
   "tags": ["type:feature", "scope:admin"],

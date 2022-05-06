@@ -1,5 +1,4 @@
 {
-  "root": "libs/admin/ui/alert",
   "sourceRoot": "libs/admin/ui/alert/src",
   "projectType": "library",
   "tags": ["type:ui", "scope:admin"],

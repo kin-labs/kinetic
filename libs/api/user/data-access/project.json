@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/user/data-access",
   "sourceRoot": "libs/api/user/data-access/src",
   "targets": {
     "lint": {
