@@ -21,6 +21,54 @@ input AppCreateInput {
   skipWalletCreation: Boolean
 }
 
+type AppCreation {
+  createdAt: DateTime!
+  errors: JSON!
+  feePayer: String!
+  id: String!
+  mint: String!
+  processingDuration: Int
+  signature: String!
+  solanaDuration: Int
+  solanaEnd: DateTime!
+  solanaStart: DateTime!
+  source: String!
+  status: AppCreationStatus!
+  totalDuration: Int
+  updatedAt: DateTime!
+}
+
+enum AppCreationStatus {
+  Failed
+  Pending
+  Succeed
+}
+
+type AppPayment {
+  amount: Int!
+  createdAt: DateTime!
+  destination: String!
+  errors: JSON!
+  feePayer: String!
+  id: String!
+  mint: String!
+  processingDuration: Int
+  signature: String!
+  solanaDuration: Int
+  solanaEnd: DateTime!
+  solanaStart: DateTime!
+  source: String!
+  status: AppPaymentStatus!
+  totalDuration: Int
+  updatedAt: DateTime!
+}
+
+enum AppPaymentStatus {
+  Failed
+  Pending
+  Succeed
+}
+
 input AppUpdateInput {
   name: String
   webhookEventUrl: String
@@ -71,6 +119,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
 input LoginInput {
   email: String!
   password: String!
@@ -106,6 +159,10 @@ type NetworkStat {
 
 type Query {
   app(appId: String!): App
+  appCreation(appCreationId: String!, appId: String!): AppCreation
+  appCreations(appId: String!): [AppCreation!]
+  appPayment(appId: String!, appPaymentId: String!): AppPayment
+  appPayments(appId: String!): [AppPayment!]
   apps: [App!]
   me: User
   networkStat(networkStatId: String!): NetworkStat

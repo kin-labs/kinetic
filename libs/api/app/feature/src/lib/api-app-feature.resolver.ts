@@ -2,6 +2,8 @@ import {
   ApiAppDataAccessService,
   App,
   AppCreateInput,
+  AppCreation,
+  AppPayment,
   AppUpdateInput,
   AppUserAddInput,
   AppUserRemoveInput,
@@ -36,6 +38,26 @@ export class ApiAppFeatureResolver {
   @Query(() => App, { nullable: true })
   app(@CtxUser() user: User, @Args('appId') appId: string) {
     return this.service.app(user.id, appId)
+  }
+
+  @Query(() => AppCreation, { nullable: true })
+  appCreation(@CtxUser() user: User, @Args('appId') appId: string, @Args('appCreationId') appCreationId: string) {
+    return this.service.appCreation(user.id, appId, appCreationId)
+  }
+
+  @Query(() => [AppCreation], { nullable: true })
+  appCreations(@CtxUser() user: User, @Args('appId') appId: string) {
+    return this.service.appCreations(user.id, appId)
+  }
+
+  @Query(() => AppPayment, { nullable: true })
+  appPayment(@CtxUser() user: User, @Args('appId') appId: string, @Args('appPaymentId') appPaymentId: string) {
+    return this.service.appPayment(user.id, appId, appPaymentId)
+  }
+
+  @Query(() => [AppPayment], { nullable: true })
+  appPayments(@CtxUser() user: User, @Args('appId') appId: string) {
+    return this.service.appPayments(user.id, appId)
   }
 
   @Mutation(() => App, { nullable: true })

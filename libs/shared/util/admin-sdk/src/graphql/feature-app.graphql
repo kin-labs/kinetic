@@ -9,6 +9,42 @@ fragment AppDetails on App {
   webhookVerifyUrl
 }
 
+fragment AppCreationDetails on AppCreation {
+  id
+  createdAt
+  updatedAt
+  errors
+  feePayer
+  mint
+  signature
+  processingDuration
+  solanaDuration
+  solanaEnd
+  solanaStart
+  source
+  status
+  totalDuration
+}
+
+fragment AppPaymentDetails on AppPayment {
+  id
+  createdAt
+  updatedAt
+  amount
+  destination
+  errors
+  feePayer
+  mint
+  processingDuration
+  signature
+  solanaDuration
+  solanaEnd
+  solanaStart
+  source
+  status
+  totalDuration
+}
+
 fragment AppUserDetails on AppUser {
   id
   createdAt
@@ -106,6 +142,29 @@ query App($appId: String!) {
     wallet {
       ...WalletDetails
     }
+  }
+}
+
+query AppCreation($appId: String!, $appCreationId: String!) {
+  item: appCreation(appId: $appId, appCreationId: $appCreationId) {
+    ...AppCreationDetails
+  }
+}
+
+query AppCreations($appId: String!) {
+  items: appCreations(appId: $appId) {
+    ...AppCreationDetails
+  }
+}
+
+query AppPayment($appId: String!, $appPaymentId: String!) {
+  item: appPayment(appId: $appId, appPaymentId: $appPaymentId) {
+    ...AppPaymentDetails
+  }
+}
+query AppPayments($appId: String!) {
+  items: appPayments(appId: $appId) {
+    ...AppPaymentDetails
   }
 }
 

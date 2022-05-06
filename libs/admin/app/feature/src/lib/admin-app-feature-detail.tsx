@@ -1,6 +1,8 @@
 import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
 import {
+  AdminAppUiCreations,
   AdminAppUiForm,
+  AdminAppUiPayments,
   AdminAppUiUserModal,
   AdminAppUiUsers,
   AdminAppUiWallet,
@@ -11,6 +13,8 @@ import {
   AppUpdateInput,
   AppUserAddInput,
   AppUserUpdateRoleInput,
+  useAppCreationsQuery,
+  useAppPaymentsQuery,
   useAppQuery,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
@@ -72,6 +76,8 @@ export default function AdminAppFeatureDetail() {
       <Tabs isLazy colorScheme="teal">
         <TabList>
           <Tab>Wallet</Tab>
+          <Tab>Creations</Tab>
+          <Tab>Payments</Tab>
           <Tab>Users</Tab>
           <Tab>Settings</Tab>
         </TabList>
@@ -83,6 +89,12 @@ export default function AdminAppFeatureDetail() {
                 <AdminAppUiWalletBalances wallet={data?.item?.wallet} />
               </Box>
             )}
+          </TabPanel>
+          <TabPanel>
+            <AppCreationsTab appId={appId} />
+          </TabPanel>
+          <TabPanel>
+            <AppPaymentsTab appId={appId} />
           </TabPanel>
           <TabPanel>
             <Stack direction="column" spacing={6}>
@@ -101,4 +113,19 @@ export default function AdminAppFeatureDetail() {
       </Tabs>
     </Stack>
   )
+}
+
+function AppCreationsTab({ appId }: { appId: string }) {
+  const [{ data, fetching }] = useAppCreationsQuery({ variables: { appId } })
+  if (fetching) {
+    return <AdminUiLoader />
+  }
+  return <AdminAppUiCreations appId={appId} creations={data?.items} />
+}
+function AppPaymentsTab({ appId }: { appId: string }) {
+  const [{ data, fetching }] = useAppPaymentsQuery({ variables: { appId } })
+  if (fetching) {
+    return <AdminUiLoader />
+  }
+  return <AdminAppUiPayments appId={appId} payments={data?.items} />
 }
