@@ -1,5 +1,4 @@
 {
-  "root": "libs/demo/keypair/data-access",
   "sourceRoot": "libs/demo/keypair/data-access/src",
   "projectType": "library",
   "tags": ["type:data-access", "scope:demo"],

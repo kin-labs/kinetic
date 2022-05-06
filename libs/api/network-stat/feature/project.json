@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/network-stat/feature",
   "sourceRoot": "libs/api/network-stat/feature/src",
   "targets": {
     "lint": {

@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/core/feature",
   "sourceRoot": "libs/api/core/feature/src",
   "projectType": "library",
   "targets": {

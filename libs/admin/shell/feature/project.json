@@ -1,5 +1,4 @@
 {
-  "root": "libs/admin/shell/feature",
   "sourceRoot": "libs/admin/shell/feature/src",
   "projectType": "library",
   "tags": ["type:feature", "scope:admin"],

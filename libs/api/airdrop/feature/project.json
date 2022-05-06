@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/airdrop/feature",
   "sourceRoot": "libs/api/airdrop/feature/src",
   "targets": {
     "lint": {

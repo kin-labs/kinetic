@@ -1,5 +1,4 @@
 {
-  "root": "libs/demo/keypair/feature",
   "sourceRoot": "libs/demo/keypair/feature/src",
   "projectType": "library",
   "tags": ["type:feature", "scope:demo"],

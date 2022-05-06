@@ -1,5 +1,4 @@
 {
-  "root": "libs/demo/shell/feature",
   "sourceRoot": "libs/demo/shell/feature/src",
   "projectType": "library",
   "tags": ["type:feature", "scope:demo"],

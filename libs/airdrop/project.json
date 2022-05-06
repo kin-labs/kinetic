@@ -1,5 +1,4 @@
 {
-  "root": "libs/airdrop",
   "sourceRoot": "libs/airdrop/src",
   "projectType": "library",
   "targets": {

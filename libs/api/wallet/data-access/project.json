@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/wallet/data-access",
   "sourceRoot": "libs/api/wallet/data-access/src",
   "targets": {
     "lint": {

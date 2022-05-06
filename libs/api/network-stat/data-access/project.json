@@ -1,5 +1,4 @@
 {
-  "root": "libs/api/network-stat/data-access",
   "sourceRoot": "libs/api/network-stat/data-access/src",
   "targets": {
     "lint": {
