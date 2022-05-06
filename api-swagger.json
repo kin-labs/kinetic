@@ -413,32 +413,17 @@
       "CreateAccountResponse": {
         "type": "object",
         "properties": {
-          "account": {
+          "errors": {
             "type": "object"
+          },
+          "feePayer": {
+            "type": "string"
+          },
+          "mint": {
+            "type": "string"
           },
           "signature": {
             "type": "string"
-          },
-          "status": {
-            "type": "object"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "feePayer": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "mint": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           },
           "solanaStart": {
             "format": "date-time",
@@ -450,19 +435,12 @@
           },
           "source": {
             "type": "string"
+          },
+          "status": {
+            "type": "object"
           }
         },
-        "required": [
-          "account",
-          "signature",
-          "status",
-          "errors",
-          "feePayer",
-          "mint",
-          "solanaStart",
-          "solanaEnd",
-          "source"
-        ]
+        "required": ["errors", "feePayer", "mint", "signature", "solanaStart", "solanaEnd", "source", "status"]
       },
       "BalanceResponse": {
         "type": "object",
@@ -626,11 +604,51 @@
       "MakeTransferResponse": {
         "type": "object",
         "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object"
+          },
+          "feePayer": {
+            "type": "string"
+          },
+          "mint": {
+            "type": "string"
+          },
           "signature": {
             "type": "string"
+          },
+          "solanaStart": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "solanaEnd": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "status": {
+            "type": "object"
           }
         },
-        "required": ["signature"]
+        "required": [
+          "amount",
+          "destination",
+          "errors",
+          "feePayer",
+          "mint",
+          "signature",
+          "solanaStart",
+          "solanaEnd",
+          "source",
+          "status"
+        ]
       }
     }
   }

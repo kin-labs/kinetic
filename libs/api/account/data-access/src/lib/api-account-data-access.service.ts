@@ -5,7 +5,6 @@ import { Injectable } from '@nestjs/common'
 import { AppCreationStatus } from '@prisma/client'
 import { Commitment, Transaction } from '@solana/web3.js'
 import * as borsh from 'borsh'
-import { number } from 'joi'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 import { CreateAccountResponse } from './entities/create-account.entity'
 
@@ -63,7 +62,7 @@ export class ApiAccountDataAccessService {
       errors.push(error.toString())
     }
 
-    const updated = await this.data.appCreation.update({
+    return this.data.appCreation.update({
       where: { id: created.id },
       data: {
         errors,
@@ -76,7 +75,5 @@ export class ApiAccountDataAccessService {
         status,
       },
     })
-
-    return updated as unknown as CreateAccountResponse
   }
 }

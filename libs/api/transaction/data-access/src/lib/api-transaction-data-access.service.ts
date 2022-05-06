@@ -63,7 +63,7 @@ export class ApiTransactionDataAccessService {
       errors.push(error.toString())
     }
 
-    const updated = await this.data.appPayment.update({
+    return this.data.appPayment.update({
       where: { id: created.id },
       data: {
         amount,
@@ -78,7 +78,5 @@ export class ApiTransactionDataAccessService {
         status,
       },
     })
-
-    return updated
   }
 }

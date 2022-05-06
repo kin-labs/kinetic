@@ -206,7 +206,19 @@ export interface CreateAccountResponse {
    * @type {object}
    * @memberof CreateAccountResponse
    */
-  account: object
+  errors: object
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountResponse
+   */
+  feePayer: string
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountResponse
+   */
+  mint: string
   /**
    *
    * @type {string}
@@ -218,7 +230,25 @@ export interface CreateAccountResponse {
    * @type {string}
    * @memberof CreateAccountResponse
    */
-  status: string
+  solanaStart: string
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountResponse
+   */
+  solanaEnd: string
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountResponse
+   */
+  source: string
+  /**
+   *
+   * @type {object}
+   * @memberof CreateAccountResponse
+   */
+  status: object
 }
 /**
  *
@@ -304,10 +334,64 @@ export interface MakeTransferRequest {
 export interface MakeTransferResponse {
   /**
    *
+   * @type {number}
+   * @memberof MakeTransferResponse
+   */
+  amount: number
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferResponse
+   */
+  destination: string
+  /**
+   *
+   * @type {object}
+   * @memberof MakeTransferResponse
+   */
+  errors: object
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferResponse
+   */
+  feePayer: string
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferResponse
+   */
+  mint: string
+  /**
+   *
    * @type {string}
    * @memberof MakeTransferResponse
    */
   signature: string
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferResponse
+   */
+  solanaStart: string
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferResponse
+   */
+  solanaEnd: string
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferResponse
+   */
+  source: string
+  /**
+   *
+   * @type {object}
+   * @memberof MakeTransferResponse
+   */
+  status: object
 }
 /**
  *
