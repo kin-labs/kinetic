@@ -38,7 +38,7 @@ export class ApiAccountDataAccessService {
         Object,
         {
           kind: 'struct',
-          fields: [['data', [432]]],
+          fields: [['data', [511]]],
         },
       ],
     ])

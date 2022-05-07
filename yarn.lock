@@ -2728,6 +2728,16 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@kin-tools/kin-memo@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@kin-tools/kin-memo/-/kin-memo-1.5.0.tgz#a6cdce3b9960f7df92725d24f6641f3d0408f5c5"
+  integrity sha512-KfZ9G+EyMP0r10tNf14P9+LJ3L8dyCJzLpvrJE4s4UAeIR6ftlzXyz0unp37rWfeEMJGH8asGK1sqwyM+0poSQ==
+
+"@kin-tools/kin-transaction@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@kin-tools/kin-transaction/-/kin-transaction-1.5.0.tgz#dc11e73cd9625b3646897b96a429cca0b0430575"
+  integrity sha512-QZsEppFedgEEhCcjeQ1FjFnXnODZzJlQoSmdLg8+E85eMwYzgQWOLV0YDeLxIyBeaXpC37jaY62Dh7NH9yM67A==
+
 "@mapbox/node-pre-gyp@^1.0.0":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.9.tgz#09a8781a3a036151cdebbe8719d6f8b25d4058bc"

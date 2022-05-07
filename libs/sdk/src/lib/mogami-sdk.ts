@@ -1,3 +1,4 @@
+import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@mogami/keypair'
 import { Solana } from '@mogami/solana'
 import { getSolanaRpcEndpoint } from './helpers/get-solana-rpc-endpoint'
@@ -42,8 +43,18 @@ export class MogamiSdk {
     return this.internal.getHistory(account)
   }
 
-  makeTransfer({ amount, destination, owner }: { amount: string; destination: string; owner: Keypair }) {
-    return this.internal.makeTransfer({ amount, destination, owner })
+  makeTransfer({
+    amount,
+    destination,
+    owner,
+    type,
+  }: {
+    amount: string
+    destination: string
+    owner: Keypair
+    type: TransactionType
+  }) {
+    return this.internal.makeTransfer({ amount, destination, owner, type })
   }
 
   tokenAccounts(account: string) {

@@ -3,6 +3,8 @@ import { getPublicKey, PublicKeyString } from '@mogami/solana'
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { kinToQuarks } from './kin-to-quarks'
+import { TransactionType } from '@kin-tools/kin-memo'
+import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 
 export async function serializeMakeTransferTransaction({
   amount,
@@ -11,6 +13,8 @@ export async function serializeMakeTransferTransaction({
   owner,
   latestBlockhash,
   feePayer,
+  appIndex,
+  type,
 }: {
   amount: string
   destination: PublicKeyString
@@ -18,6 +22,8 @@ export async function serializeMakeTransferTransaction({
   owner: Keypair
   latestBlockhash: string
   feePayer: PublicKeyString
+  appIndex: number
+  type: TransactionType
 }) {
   // Create objects from Response
   const mintKey = getPublicKey(mint)
@@ -31,8 +37,14 @@ export async function serializeMakeTransferTransaction({
 
   const quarks = kinToQuarks(amount)
 
+  const appIndexMemoInstruction = generateKinMemoInstruction({
+    appIndex,
+    type: TransactionType.None,
+  })
+
   // Create Transaction
   const instructions: TransactionInstruction[] = [
+    appIndexMemoInstruction,
     createTransferInstruction(
       ownerTokenAccount,
       destinationTokenAccount,

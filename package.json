@@ -43,6 +43,8 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@heroicons/react": "^1.0.6",
+    "@kin-tools/kin-memo": "^1.5.0",
+    "@kin-tools/kin-transaction": "^1.5.0",
     "@nestjs/apollo": "^10.0.9",
     "@nestjs/common": "^8.4.4",
     "@nestjs/config": "^2.0.0",
