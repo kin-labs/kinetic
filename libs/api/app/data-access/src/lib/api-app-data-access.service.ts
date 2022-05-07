@@ -3,6 +3,7 @@ import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { AppWebhookType, Prisma } from '@prisma/client'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppUpdateInput } from './dto/app-update.input'
@@ -206,23 +207,37 @@ export class ApiAppDataAccessService {
     }
   }
 
-  async storeIncomingWebhook(index: number, type: string, headers: IncomingHttpHeaders, payload: any) {
+  async storeIncomingWebhook(
+    index: number,
+    type: string,
+    headers: IncomingHttpHeaders,
+    payload: object,
+    res: Response,
+  ) {
     // Make sure the webhook type is valid
     if (!isValidAppWebhookType(type)) {
-      return new BadRequestException(`Unknown AppWebhookType`)
+      res.statusCode = 400
+      return res.send(new BadRequestException(`Unknown AppWebhookType`))
     }
 
-    // Get the app by Index
-    const app = await this.data.getAppByIndex(index)
+    try {
+      // Get the app by Index
+      const app = await this.data.getAppByIndex(index)
 
-    // Store the incoming webhook
-    return this.data.appWebhookIncoming.create({
-      data: {
-        appId: app.id,
-        headers,
-        payload,
-        type: type === 'event' ? AppWebhookType.Event : AppWebhookType.Verify,
-      },
-    })
+      // Store the incoming webhook
+      const created = await this.data.appWebhookIncoming.create({
+        data: {
+          appId: app.id,
+          headers,
+          payload,
+          type: type === 'event' ? AppWebhookType.Event : AppWebhookType.Verify,
+        },
+      })
+      res.statusCode = 200
+      return res.send(created)
+    } catch (e) {
+      res.statusCode = 400
+      return res.send(new BadRequestException(`Something went wrong storing incoming webhook`))
+    }
   }
 }
