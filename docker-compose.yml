@@ -3,10 +3,15 @@ services:
   postgres:
     image: postgres
     ports:
-      - 5432:5432
+      - '5432:5432'
     environment:
       POSTGRES_DB: prisma
       POSTGRES_USER: prisma
       POSTGRES_PASSWORD: prisma
     volumes:
       - ./tmp/postgres:/var/lib/postgresql/data
+  solana:
+    image: ghcr.io/kin-labs/mogami-solana-network
+    ports:
+      - '8899:8899'
+      - '8900:8900'

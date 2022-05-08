@@ -14,6 +14,8 @@
     "dev:demo": "nx serve demo",
     "dev:sdk": "nodemon --watch ./api-swagger.json -x 'yarn build:sdk'",
     "dev:services": "docker compose up",
+    "dev:services:postgres": "docker compose up postgres",
+    "dev:services:solana": "docker compose up solana",
     "docker:build": "docker build . -t ghcr.io/kin-labs/mogami",
     "docker:push": "docker push ghcr.io/kin-labs/mogami",
     "docker:run": "docker run -it -p 8000:3000 ghcr.io/kin-labs/mogami",
