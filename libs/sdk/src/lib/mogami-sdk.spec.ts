@@ -1,22 +1,22 @@
-import { SdkConfig } from './interfaces'
-import { Sdk } from './sdk'
+import { MogamiSdkConfig } from './interfaces'
+import { MogamiSdk } from './mogami-sdk'
 
 const MOGAMI_APP_INDEX = 1
 const MOGAMI_SDK_ENDPOINT = 'http://localhost:3000'
 const SOLANA_RPC_NAME = 'mainnet-beta'
 const SOLANA_RPC_ENDPOINT = 'https://api.mainnet-beta.solana.com/'
 
-function expectConfiguredSdk(sdk: Sdk) {
+function expectConfiguredSdk(sdk: MogamiSdk) {
   expect(sdk.solana.endpoint).toEqual(SOLANA_RPC_ENDPOINT)
   expect(sdk.solana.connection).toBeDefined()
   expect(sdk.solanaRpcEndpoint).toEqual(SOLANA_RPC_NAME)
 }
 
 xdescribe('sdk', () => {
-  let sdk: Sdk
+  let sdk: MogamiSdk
 
   beforeEach(async () => {
-    sdk = await Sdk.setup({ endpoint: MOGAMI_SDK_ENDPOINT, index: MOGAMI_APP_INDEX })
+    sdk = await MogamiSdk.setup({ endpoint: MOGAMI_SDK_ENDPOINT, index: MOGAMI_APP_INDEX })
   })
 
   describe('initializing', () => {
@@ -27,8 +27,8 @@ xdescribe('sdk', () => {
       })
 
       it('should connect with a logger configured', async () => {
-        const config: SdkConfig = { endpoint: MOGAMI_SDK_ENDPOINT, index: MOGAMI_APP_INDEX, logger: console }
-        sdk = await Sdk.setup(config)
+        const config: MogamiSdkConfig = { endpoint: MOGAMI_SDK_ENDPOINT, index: MOGAMI_APP_INDEX, logger: console }
+        sdk = await MogamiSdk.setup(config)
 
         expectConfiguredSdk(sdk)
         expect(sdk.sdkConfig.logger).toBeDefined()

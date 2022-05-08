@@ -1,10 +1,10 @@
 import { Button, Input, Stack } from '@chakra-ui/react'
-import { Sdk } from '@mogami/sdk'
+import { MogamiSdk } from '@mogami/sdk'
 import React, { ChangeEvent, useState } from 'react'
 import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: Sdk }) {
+export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [value, setValue] = useState<string>(keypair.publicKey)
   const getResult = () => {

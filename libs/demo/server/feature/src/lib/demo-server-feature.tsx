@@ -1,7 +1,8 @@
 import { Button, Stack, Text } from '@chakra-ui/react'
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { DemoServerEntity, demoServerDb } from '@mogami/demo/server/data-access'
+import { demoServerDb, DemoServerEntity } from '@mogami/demo/server/data-access'
 import { ServerCreateModal, ServerDetailsModal, ServerGrid } from '@mogami/demo/server/ui'
+import { MogamiSdkEndpoint, parseMogamiSdkEndpoint } from '@mogami/sdk'
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useState } from 'react'
 
@@ -18,8 +19,9 @@ export function DemoServerFeature() {
     setServerDetailsVisible(true)
   }
 
-  const createServer = (endpoint: string) => {
-    const { host } = new URL(endpoint)
+  const createServer = (endpoint: MogamiSdkEndpoint) => {
+    const url = parseMogamiSdkEndpoint(endpoint)
+    const { host } = new URL(url)
     demoServerDb.server.add({ id: host, name: host, endpoint })
     setServerCreateVisible(false)
   }

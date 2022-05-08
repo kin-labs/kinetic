@@ -1,15 +1,17 @@
 import { Keypair } from '@mogami/keypair'
 import { Solana } from '@mogami/solana'
-import { SdkConfig } from './interfaces'
-import { SdkInternal } from './sdk-internal'
+import { getSolanaRpcEndpoint } from './helpers/get-solana-rpc-endpoint'
+import { MogamiSdkConfig } from './interfaces'
+import { MogamiSdkInternal } from './mogami-sdk-internal'
 
-export class Sdk {
+export class MogamiSdk {
   solana: Solana | undefined
 
-  private readonly internal: SdkInternal
+  private readonly internal: MogamiSdkInternal
 
-  constructor(readonly sdkConfig: SdkConfig) {
-    this.internal = new SdkInternal(sdkConfig)
+  constructor(readonly sdkConfig: MogamiSdkConfig) {
+    this.internal = new MogamiSdkInternal(sdkConfig)
+    this.sdkConfig.solanaRpcEndpoint = getSolanaRpcEndpoint(sdkConfig.endpoint)
   }
 
   get endpoint() {
@@ -50,16 +52,17 @@ export class Sdk {
 
   async init() {
     try {
-      await this.internal.getAppConfig(this.sdkConfig.index)
+      const { app } = await this.internal.getAppConfig(this.sdkConfig.index)
       this.solana = new Solana(this.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
+      this.sdkConfig?.logger?.log(`MogamiSdk: endpoint '${this.sdkConfig.endpoint}', index: ${app.index}`)
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
       throw new Error(`Error initializing Server.`)
     }
   }
 
-  static async setup(config: SdkConfig): Promise<Sdk> {
-    const sdk = new Sdk(config)
+  static async setup(config: MogamiSdkConfig): Promise<MogamiSdk> {
+    const sdk = new MogamiSdk(config)
     try {
       await sdk.init().then(() => config.logger?.log(`SDK Setup done.`))
       return sdk

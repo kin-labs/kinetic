@@ -1,9 +1,9 @@
-import { Sdk } from '@mogami/sdk'
+import { MogamiSdk } from '@mogami/sdk'
 import React, { useState } from 'react'
 import { Button, Stack } from '@chakra-ui/react'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelAppConfig({ sdk }: { sdk: Sdk }) {
+export function SdkControlPanelAppConfig({ sdk }: { sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const getResult = () => {
     setResult(sdk.config())

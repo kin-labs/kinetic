@@ -1,2 +1,3 @@
-export * from './sdk-config'
-export * from './sdk-logger'
+export * from './mogami-sdk-config'
+export * from './mogami-sdk-endpoint'
+export * from './mogami-sdk-logger'
