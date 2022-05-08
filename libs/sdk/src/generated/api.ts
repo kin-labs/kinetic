@@ -1001,6 +1001,45 @@ export const AppApiAxiosParamCreator = function (configuration?: Configuration) 
   return {
     /**
      *
+     * @param {number} index
+     * @param {string} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiAppFeatureControllerAppWebhook: async (
+      index: number,
+      type: string,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'index' is not null or undefined
+      assertParamExists('apiAppFeatureControllerAppWebhook', 'index', index)
+      // verify required parameter 'type' is not null or undefined
+      assertParamExists('apiAppFeatureControllerAppWebhook', 'type', type)
+      const localVarPath = `/api/app/{index}/webhook/{type}`
+        .replace(`{${'index'}}`, encodeURIComponent(String(index)))
+        .replace(`{${'type'}}`, encodeURIComponent(String(type)))
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
      * @param {string} index
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1041,6 +1080,21 @@ export const AppApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @param {number} index
+     * @param {string} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async apiAppFeatureControllerAppWebhook(
+      index: number,
+      type: string,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAppFeatureControllerAppWebhook(index, type, options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
      * @param {string} index
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1064,6 +1118,18 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
   return {
     /**
      *
+     * @param {number} index
+     * @param {string} type
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    apiAppFeatureControllerAppWebhook(index: number, type: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .apiAppFeatureControllerAppWebhook(index, type, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     *
      * @param {string} index
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1081,6 +1147,20 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
  * @extends {BaseAPI}
  */
 export class AppApi extends BaseAPI {
+  /**
+   *
+   * @param {number} index
+   * @param {string} type
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AppApi
+   */
+  public apiAppFeatureControllerAppWebhook(index: number, type: string, options?: AxiosRequestConfig) {
+    return AppApiFp(this.configuration)
+      .apiAppFeatureControllerAppWebhook(index, type, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
   /**
    *
    * @param {string} index

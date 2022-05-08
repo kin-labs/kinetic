@@ -30,18 +30,19 @@ model Airdrop {
 }
 
 model App {
-  id               String        @id @default(cuid())
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  index            Int           @unique
+  id               String               @id @default(cuid())
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  index            Int                  @unique
   creations        AppCreation[]
+  incomingWebhooks AppWebhookIncoming[]
   name             String
   payments         AppPayment[]
   users            AppUser[]
   webhookEventUrl  String?
   webhookSecret    String?
   webhookVerifyUrl String?
-  wallet           Wallet?       @relation(fields: [walletId], references: [id])
+  wallet           Wallet?              @relation(fields: [walletId], references: [id])
   walletId         String?
 }
 
@@ -89,6 +90,22 @@ enum AppPaymentStatus {
   Failed
   Pending
   Succeed
+}
+
+model AppWebhookIncoming {
+  id        String         @id @default(cuid())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  headers   Json?
+  payload   Json?
+  type      AppWebhookType
+  app       App            @relation(fields: [appId], references: [id])
+  appId     String
+}
+
+enum AppWebhookType {
+  Event
+  Verify
 }
 
 model AppUser {

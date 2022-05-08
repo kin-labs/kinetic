@@ -7,6 +7,7 @@ import {
   AdminAppUiUsers,
   AdminAppUiWallet,
   AdminAppUiWalletBalances,
+  AdminAppUiWebhooksIncoming,
 } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import {
@@ -18,6 +19,7 @@ import {
   useAppQuery,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
+  useAppWebhooksIncomingQuery,
   useUpdateAppMutation,
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
@@ -78,6 +80,7 @@ export default function AdminAppFeatureDetail() {
           <Tab>Wallet</Tab>
           <Tab>Creations</Tab>
           <Tab>Payments</Tab>
+          <Tab>Webhooks Incoming</Tab>
           <Tab>Users</Tab>
           <Tab>Settings</Tab>
         </TabList>
@@ -95,6 +98,9 @@ export default function AdminAppFeatureDetail() {
           </TabPanel>
           <TabPanel>
             <AppPaymentsTab appId={appId} />
+          </TabPanel>
+          <TabPanel>
+            <AppWebhooksIncomingTab appId={appId} />
           </TabPanel>
           <TabPanel>
             <Stack direction="column" spacing={6}>
@@ -122,10 +128,19 @@ function AppCreationsTab({ appId }: { appId: string }) {
   }
   return <AdminAppUiCreations appId={appId} creations={data?.items} />
 }
+
 function AppPaymentsTab({ appId }: { appId: string }) {
   const [{ data, fetching }] = useAppPaymentsQuery({ variables: { appId } })
   if (fetching) {
     return <AdminUiLoader />
   }
   return <AdminAppUiPayments appId={appId} payments={data?.items} />
+}
+
+function AppWebhooksIncomingTab({ appId }: { appId: string }) {
+  const [{ data, fetching }] = useAppWebhooksIncomingQuery({ variables: { appId } })
+  if (fetching) {
+    return <AdminUiLoader />
+  }
+  return <AdminAppUiWebhooksIncoming appId={appId} webhooks={data?.items} />
 }

@@ -126,6 +126,21 @@ export type AppUserUpdateRoleInput = {
   userId: Scalars['String']
 }
 
+export type AppWebhookIncoming = {
+  __typename?: 'AppWebhookIncoming'
+  createdAt: Scalars['DateTime']
+  headers: Scalars['JSON']
+  id: Scalars['String']
+  payload: Scalars['JSON']
+  type: AppWebhookType
+  updatedAt: Scalars['DateTime']
+}
+
+export enum AppWebhookType {
+  Event = 'Event',
+  Verify = 'Verify',
+}
+
 export type AuthToken = {
   __typename?: 'AuthToken'
   token: Scalars['String']
@@ -237,6 +252,8 @@ export type Query = {
   appCreations?: Maybe<Array<AppCreation>>
   appPayment?: Maybe<AppPayment>
   appPayments?: Maybe<Array<AppPayment>>
+  appWebhookIncoming?: Maybe<AppWebhookIncoming>
+  appWebhooksIncoming?: Maybe<Array<AppWebhookIncoming>>
   apps?: Maybe<Array<App>>
   me?: Maybe<User>
   networkStat?: Maybe<NetworkStat>
@@ -270,6 +287,15 @@ export type QueryAppPaymentArgs = {
 }
 
 export type QueryAppPaymentsArgs = {
+  appId: Scalars['String']
+}
+
+export type QueryAppWebhookIncomingArgs = {
+  appId: Scalars['String']
+  appWebhookIncomingId: Scalars['String']
+}
+
+export type QueryAppWebhooksIncomingArgs = {
   appId: Scalars['String']
 }
 
@@ -439,6 +465,16 @@ export const AppUserDetails = gql`
   }
   ${AppDetails}
   ${UserDetails}
+`
+export const AppWebhookIncomingDetails = gql`
+  fragment AppWebhookIncomingDetails on AppWebhookIncoming {
+    id
+    createdAt
+    updatedAt
+    headers
+    payload
+    type
+  }
 `
 export const AuthTokenDetails = gql`
   fragment AuthTokenDetails on AuthToken {
@@ -625,6 +661,22 @@ export const AppPayments = gql`
     }
   }
   ${AppPaymentDetails}
+`
+export const AppWebhookIncoming = gql`
+  query AppWebhookIncoming($appId: String!, $appWebhookIncomingId: String!) {
+    item: appWebhookIncoming(appId: $appId, appWebhookIncomingId: $appWebhookIncomingId) {
+      ...AppWebhookIncomingDetails
+    }
+  }
+  ${AppWebhookIncomingDetails}
+`
+export const AppWebhooksIncoming = gql`
+  query AppWebhooksIncoming($appId: String!) {
+    items: appWebhooksIncoming(appId: $appId) {
+      ...AppWebhookIncomingDetails
+    }
+  }
+  ${AppWebhookIncomingDetails}
 `
 export const Apps = gql`
   query Apps {
@@ -846,6 +898,16 @@ export type AppUserDetailsFragment = {
     username: string
     role?: UserRole | null
   } | null
+}
+
+export type AppWebhookIncomingDetailsFragment = {
+  __typename?: 'AppWebhookIncoming'
+  id: string
+  createdAt: any
+  updatedAt: any
+  headers: any
+  payload: any
+  type: AppWebhookType
 }
 
 export type CreateAppMutationVariables = Exact<{
@@ -1337,6 +1399,41 @@ export type AppPaymentsQuery = {
     source: string
     status: AppPaymentStatus
     totalDuration?: number | null
+  }> | null
+}
+
+export type AppWebhookIncomingQueryVariables = Exact<{
+  appId: Scalars['String']
+  appWebhookIncomingId: Scalars['String']
+}>
+
+export type AppWebhookIncomingQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'AppWebhookIncoming'
+    id: string
+    createdAt: any
+    updatedAt: any
+    headers: any
+    payload: any
+    type: AppWebhookType
+  } | null
+}
+
+export type AppWebhooksIncomingQueryVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type AppWebhooksIncomingQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'AppWebhookIncoming'
+    id: string
+    createdAt: any
+    updatedAt: any
+    headers: any
+    payload: any
+    type: AppWebhookType
   }> | null
 }
 

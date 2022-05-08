@@ -3,6 +3,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import AdminAppFeatureCreationDetail from './admin-app-feature-creation-detail'
 import AdminAppFeaturePaymentDetail from './admin-app-feature-payment-detail'
+import AdminAppFeatureWebhookIncomingDetail from './admin-app-feature-webhook-incoming-detail'
 
 const AdminAppFeatureDetail = React.lazy(async () => import('./admin-app-feature-detail'))
 const AdminAppFeatureList = React.lazy(async () => import('./admin-app-feature-list'))
@@ -41,6 +42,14 @@ export function AdminAppFeature() {
         render={() => (
           <React.Suspense fallback={<AdminUiLoader />}>
             <AdminAppFeaturePaymentDetail />
+          </React.Suspense>
+        )}
+      />
+      <Route
+        path="/apps/:appId/webhook-incoming/:appWebhookIncomingId"
+        render={() => (
+          <React.Suspense fallback={<AdminUiLoader />}>
+            <AdminAppFeatureWebhookIncomingDetail />
           </React.Suspense>
         )}
       />
