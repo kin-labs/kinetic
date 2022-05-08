@@ -1,7 +1,7 @@
 import { Stack } from '@chakra-ui/react'
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
-import { Sdk } from '@mogami/sdk'
+import { MogamiSdk } from '@mogami/sdk'
 import React from 'react'
 
 import { SdkControlPanelAccountBalance } from './sdk-control-panel-account-balance'
@@ -12,7 +12,7 @@ import { SdkControlPanelAppConfig } from './sdk-control-panel-app-config'
 import { SdkControlPanelSubmitPayment } from './sdk-control-panel-submit-payment'
 import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts'
 
-export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: Sdk }) {
+export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   return (
     <Stack spacing={6}>
       <AdminUiAlert status="success" title="SDK Configured" message={`The SDK is connected to ${sdk.endpoint}`} />

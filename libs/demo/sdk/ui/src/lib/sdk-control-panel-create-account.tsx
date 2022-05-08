@@ -1,13 +1,13 @@
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
 import { Keypair } from '@mogami/keypair'
-import { Sdk } from '@mogami/sdk'
+import { MogamiSdk } from '@mogami/sdk'
 import React, { useState } from 'react'
 import { Button, Stack } from '@chakra-ui/react'
 
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: Sdk }) {
+export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
 
   if (!keypair.secretKey) {

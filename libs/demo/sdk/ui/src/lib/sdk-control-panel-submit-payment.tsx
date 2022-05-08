@@ -2,12 +2,12 @@ import { Button, Input, Stack } from '@chakra-ui/react'
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
 import { Keypair } from '@mogami/keypair'
-import { Sdk } from '@mogami/sdk'
+import { MogamiSdk } from '@mogami/sdk'
 import React, { ChangeEvent, useState } from 'react'
 
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: Sdk }) {
+export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [accountId, setAccountId] = useState<string>('BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y')
   const [amount, setAmount] = useState<string>('1050')

@@ -1,15 +1,15 @@
 import { Keypair } from '@mogami/keypair'
 import { Solana } from '@mogami/solana'
-import { SdkConfig } from './interfaces'
-import { SdkInternal } from './sdk-internal'
+import { MogamiSdkConfig } from './interfaces'
+import { MogamiSdkInternal } from './mogami-sdk-internal'
 
-export class Sdk {
+export class MogamiSdk {
   solana: Solana | undefined
 
-  private readonly internal: SdkInternal
+  private readonly internal: MogamiSdkInternal
 
-  constructor(readonly sdkConfig: SdkConfig) {
-    this.internal = new SdkInternal(sdkConfig)
+  constructor(readonly sdkConfig: MogamiSdkConfig) {
+    this.internal = new MogamiSdkInternal(sdkConfig)
   }
 
   get endpoint() {
@@ -58,8 +58,8 @@ export class Sdk {
     }
   }
 
-  static async setup(config: SdkConfig): Promise<Sdk> {
-    const sdk = new Sdk(config)
+  static async setup(config: MogamiSdkConfig): Promise<MogamiSdk> {
+    const sdk = new MogamiSdk(config)
     try {
       await sdk.init().then(() => config.logger?.log(`SDK Setup done.`))
       return sdk

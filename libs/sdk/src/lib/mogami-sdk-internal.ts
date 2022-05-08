@@ -5,7 +5,6 @@ import {
   AirdropApi,
   AppApi,
   AppConfig,
-  ConfigApi,
   Configuration,
   CreateAccountRequest,
   DefaultApi,
@@ -14,9 +13,9 @@ import {
   TransactionApi,
 } from '../generated'
 import { serializeCreateAccountTransaction, serializeMakeTransferTransaction } from './helpers'
-import { SdkConfig } from './interfaces'
+import { MogamiSdkConfig } from './interfaces'
 
-export class SdkInternal {
+export class MogamiSdkInternal {
   private readonly accountApi: AccountApi
   private readonly airdropApi: AirdropApi
   private readonly appApi: AppApi
@@ -25,7 +24,7 @@ export class SdkInternal {
 
   appConfig?: AppConfig
 
-  constructor(readonly sdkConfig: SdkConfig) {
+  constructor(readonly sdkConfig: MogamiSdkConfig) {
     // Create the API Configuration
     const apiConfig = new Configuration({ basePath: sdkConfig.endpoint })
 

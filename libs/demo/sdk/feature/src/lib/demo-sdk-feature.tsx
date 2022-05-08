@@ -5,7 +5,7 @@ import { KeypairDropdown } from '@mogami/demo/keypair/ui'
 import { SdkControlPanel } from '@mogami/demo/sdk/ui'
 import { demoServerDb, DemoServerEntity } from '@mogami/demo/server/data-access'
 import { ServerDropdown } from '@mogami/demo/server/ui'
-import { Sdk } from '@mogami/sdk'
+import { MogamiSdk } from '@mogami/sdk'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useState } from 'react'
 
@@ -13,7 +13,7 @@ export function DemoSdkFeature() {
   const [loading, setLoading] = useState(true)
   const [keypair, setKeypair] = useState<DemoKeypairEntity | null>(null)
   const [server, setServer] = useState<DemoServerEntity | null>(null)
-  const [sdk, setSdk] = useState<Sdk | null>(null)
+  const [sdk, setSdk] = useState<MogamiSdk | null>(null)
   const headerColor = useColorModeValue('gray.100', 'gray.900')
 
   const keypairs = useLiveQuery(() =>
@@ -45,7 +45,7 @@ export function DemoSdkFeature() {
   }
 
   const selectServer = (server: DemoServerEntity) => {
-    Sdk.setup({ endpoint: server.endpoint, index: 1 })
+    MogamiSdk.setup({ endpoint: server.endpoint, index: 1 })
       .then((sdk) => {
         setSdk(sdk)
         setServer(server)
