@@ -1,5 +1,6 @@
 import { Keypair } from '@mogami/keypair'
 import { Solana } from '@mogami/solana'
+import { getSolanaRpcEndpoint } from './helpers/get-solana-rpc-endpoint'
 import { MogamiSdkConfig } from './interfaces'
 import { MogamiSdkInternal } from './mogami-sdk-internal'
 
@@ -10,6 +11,7 @@ export class MogamiSdk {
 
   constructor(readonly sdkConfig: MogamiSdkConfig) {
     this.internal = new MogamiSdkInternal(sdkConfig)
+    this.sdkConfig.solanaRpcEndpoint = getSolanaRpcEndpoint(sdkConfig.endpoint)
   }
 
   get endpoint() {
@@ -50,8 +52,9 @@ export class MogamiSdk {
 
   async init() {
     try {
-      await this.internal.getAppConfig(this.sdkConfig.index)
+      const { app } = await this.internal.getAppConfig(this.sdkConfig.index)
       this.solana = new Solana(this.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
+      this.sdkConfig?.logger?.log(`MogamiSdk: endpoint '${this.sdkConfig.endpoint}', index: ${app.index}`)
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
       throw new Error(`Error initializing Server.`)

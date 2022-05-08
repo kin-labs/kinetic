@@ -13,6 +13,7 @@ import {
   TransactionApi,
 } from '../generated'
 import { serializeCreateAccountTransaction, serializeMakeTransferTransaction } from './helpers'
+import { parseMogamiSdkEndpoint } from './helpers/parse-mogami-sdk-endpoint'
 import { MogamiSdkConfig } from './interfaces'
 
 export class MogamiSdkInternal {
@@ -26,7 +27,7 @@ export class MogamiSdkInternal {
 
   constructor(readonly sdkConfig: MogamiSdkConfig) {
     // Create the API Configuration
-    const apiConfig = new Configuration({ basePath: sdkConfig.endpoint })
+    const apiConfig = new Configuration({ basePath: parseMogamiSdkEndpoint(sdkConfig.endpoint) })
 
     // Configure the APIs
     this.accountApi = new AccountApi(apiConfig)
