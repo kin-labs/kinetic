@@ -45,22 +45,22 @@ enum AppCreationStatus {
 }
 
 type AppPayment {
-  amount: Int!
-  createdAt: DateTime!
-  destination: String!
-  errors: JSON!
-  feePayer: String!
-  id: String!
-  mint: String!
+  amount: Int
+  createdAt: DateTime
+  destination: String
+  errors: JSON
+  feePayer: String
+  id: String
+  mint: String
   processingDuration: Int
-  signature: String!
+  signature: String
   solanaDuration: Int
-  solanaEnd: DateTime!
-  solanaStart: DateTime!
-  source: String!
+  solanaEnd: DateTime
+  solanaStart: DateTime
+  source: String
   status: AppPaymentStatus!
   totalDuration: Int
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 enum AppPaymentStatus {
