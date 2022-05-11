@@ -472,7 +472,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "AppPayment",
+        "name": "AppTransaction",
         "description": null,
         "fields": [
           {
@@ -640,7 +640,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "AppPaymentStatus",
+                "name": "AppTransactionStatus",
                 "ofType": null
               }
             },
@@ -679,7 +679,7 @@
       },
       {
         "kind": "ENUM",
-        "name": "AppPaymentStatus",
+        "name": "AppTransactionStatus",
         "description": null,
         "fields": null,
         "inputFields": null,
@@ -2053,7 +2053,7 @@
             "deprecationReason": null
           },
           {
-            "name": "appPayment",
+            "name": "appTransaction",
             "description": null,
             "args": [
               {
@@ -2073,7 +2073,7 @@
                 "deprecationReason": null
               },
               {
-                "name": "appPaymentId",
+                "name": "appTransactionId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -2091,14 +2091,14 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "AppPayment",
+              "name": "AppTransaction",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "appPayments",
+            "name": "appTransactions",
             "description": null,
             "args": [
               {
@@ -2126,7 +2126,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "AppPayment",
+                  "name": "AppTransaction",
                   "ofType": null
                 }
               }

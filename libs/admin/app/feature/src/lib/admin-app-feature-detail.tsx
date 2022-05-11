@@ -2,7 +2,7 @@ import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } f
 import {
   AdminAppUiCreations,
   AdminAppUiForm,
-  AdminAppUiPayments,
+  AdminAppUiTransactions,
   AdminAppUiUserModal,
   AdminAppUiUsers,
   AdminAppUiWallet,
@@ -15,7 +15,7 @@ import {
   AppUserAddInput,
   AppUserUpdateRoleInput,
   useAppCreationsQuery,
-  useAppPaymentsQuery,
+  useAppTransactionsQuery,
   useAppQuery,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
@@ -79,7 +79,7 @@ export default function AdminAppFeatureDetail() {
         <TabList>
           <Tab>Wallet</Tab>
           <Tab>Creations</Tab>
-          <Tab>Payments</Tab>
+          <Tab>Transactions</Tab>
           <Tab>Webhooks Incoming</Tab>
           <Tab>Users</Tab>
           <Tab>Settings</Tab>
@@ -97,7 +97,7 @@ export default function AdminAppFeatureDetail() {
             <AppCreationsTab appId={appId} />
           </TabPanel>
           <TabPanel>
-            <AppPaymentsTab appId={appId} />
+            <AppTransactionsTab appId={appId} />
           </TabPanel>
           <TabPanel>
             <AppWebhooksIncomingTab appId={appId} />
@@ -129,12 +129,12 @@ function AppCreationsTab({ appId }: { appId: string }) {
   return <AdminAppUiCreations appId={appId} creations={data?.items} />
 }
 
-function AppPaymentsTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppPaymentsQuery({ variables: { appId } })
+function AppTransactionsTab({ appId }: { appId: string }) {
+  const [{ data, fetching }] = useAppTransactionsQuery({ variables: { appId } })
   if (fetching) {
     return <AdminUiLoader />
   }
-  return <AdminAppUiPayments appId={appId} payments={data?.items} />
+  return <AdminAppUiTransactions appId={appId} transactions={data?.items} />
 }
 
 function AppWebhooksIncomingTab({ appId }: { appId: string }) {

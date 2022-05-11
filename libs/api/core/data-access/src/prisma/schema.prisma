@@ -37,7 +37,7 @@ model App {
   creations        AppCreation[]
   incomingWebhooks AppWebhookIncoming[]
   name             String
-  payments         AppPayment[]
+  transaction      AppTransaction[]
   users            AppUser[]
   webhookEventUrl  String?
   webhookSecret    String?
@@ -68,10 +68,10 @@ enum AppCreationStatus {
   Succeed
 }
 
-model AppPayment {
-  id          String           @id @default(cuid())
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+model AppTransaction {
+  id          String               @id @default(cuid())
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
   amount      Int?
   destination String?
   errors      Json?
@@ -81,12 +81,12 @@ model AppPayment {
   signature   String?
   solanaStart DateTime?
   solanaEnd   DateTime?
-  status      AppPaymentStatus @default(Pending)
-  app         App              @relation(fields: [appId], references: [id])
+  status      AppTransactionStatus @default(Pending)
+  app         App                  @relation(fields: [appId], references: [id])
   appId       String
 }
 
-enum AppPaymentStatus {
+enum AppTransactionStatus {
   Failed
   Pending
   Succeed

@@ -2,7 +2,7 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import AdminAppFeatureCreationDetail from './admin-app-feature-creation-detail'
-import AdminAppFeaturePaymentDetail from './admin-app-feature-payment-detail'
+import AdminAppFeatureTransactionDetail from './admin-app-feature-transaction-detail'
 import AdminAppFeatureWebhookIncomingDetail from './admin-app-feature-webhook-incoming-detail'
 
 const AdminAppFeatureDetail = React.lazy(async () => import('./admin-app-feature-detail'))
@@ -38,10 +38,10 @@ export function AdminAppFeature() {
         )}
       />
       <Route
-        path="/apps/:appId/payments/:appPaymentId"
+        path="/apps/:appId/transactions/:appTransactionId"
         render={() => (
           <React.Suspense fallback={<AdminUiLoader />}>
-            <AdminAppFeaturePaymentDetail />
+            <AdminAppFeatureTransactionDetail />
           </React.Suspense>
         )}
       />

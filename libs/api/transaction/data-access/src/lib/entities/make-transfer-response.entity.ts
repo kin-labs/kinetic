@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { AppPaymentStatus } from '@prisma/client'
+import { AppTransactionStatus } from '@prisma/client'
 
 export class MakeTransferResponse {
   @ApiProperty()
@@ -21,5 +21,5 @@ export class MakeTransferResponse {
   @ApiProperty()
   source?: string
   @ApiProperty()
-  status?: AppPaymentStatus
+  status?: AppTransactionStatus
 }

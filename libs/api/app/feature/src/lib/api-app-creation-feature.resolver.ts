@@ -1,10 +1,10 @@
-import { AppCreation, AppPayment } from '@mogami/api/app/data-access'
+import { AppCreation, AppTransaction } from '@mogami/api/app/data-access'
 import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => AppCreation)
 export class ApiAppCreationFeatureResolver {
   @ResolveField(() => Int, { nullable: true })
-  processingDuration(@Parent() creation: AppPayment) {
+  processingDuration(@Parent() creation: AppTransaction) {
     return creation?.solanaStart?.getTime() - creation?.createdAt?.getTime()
   }
 
@@ -14,7 +14,7 @@ export class ApiAppCreationFeatureResolver {
   }
 
   @ResolveField(() => Int, { nullable: true })
-  totalDuration(@Parent() creation: AppPayment) {
+  totalDuration(@Parent() creation: AppTransaction) {
     return creation?.updatedAt?.getTime() - creation?.createdAt?.getTime()
   }
 }

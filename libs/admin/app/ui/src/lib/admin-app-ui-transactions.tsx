@@ -1,16 +1,16 @@
 import { Alert, Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
-import { AppPayment } from '@mogami/shared/util/admin-sdk'
+import { AppTransaction } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export interface AdminAppUiPaymentsProps {
+export interface AdminAppUiTransactionsProps {
   appId: string
-  payments: AppPayment[] | null | undefined
+  transactions: AppTransaction[] | null | undefined
 }
 
-export function AdminAppUiPayments({ appId, payments }: AdminAppUiPaymentsProps) {
-  if (!payments?.length) {
-    return <Alert>No payments found.</Alert>
+export function AdminAppUiTransactions({ appId, transactions }: AdminAppUiTransactionsProps) {
+  if (!transactions?.length) {
+    return <Alert>No transactions found.</Alert>
   }
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden" m="10px auto">
@@ -23,14 +23,14 @@ export function AdminAppUiPayments({ appId, payments }: AdminAppUiPaymentsProps)
             </Tr>
           </Thead>
           <Tbody>
-            {payments?.map((payment) => (
-              <Tr key={payment?.id}>
+            {transactions?.map((transaction) => (
+              <Tr key={transaction?.id}>
                 <Td>
-                  <Link to={`/apps/${appId}/payments/${payment.id}`}>
-                    <Text color="teal.500">{payment.status}</Text>
+                  <Link to={`/apps/${appId}/transactions/${transaction.id}`}>
+                    <Text color="teal.500">{transaction.status}</Text>
                   </Link>
                 </Td>
-                <Td>{payment.source}</Td>
+                <Td>{transaction.source}</Td>
               </Tr>
             ))}
           </Tbody>

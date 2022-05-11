@@ -26,7 +26,7 @@ fragment AppCreationDetails on AppCreation {
   totalDuration
 }
 
-fragment AppPaymentDetails on AppPayment {
+fragment AppTransactionDetails on AppTransaction {
   id
   createdAt
   updatedAt
@@ -166,15 +166,15 @@ query AppCreations($appId: String!) {
   }
 }
 
-query AppPayment($appId: String!, $appPaymentId: String!) {
-  item: appPayment(appId: $appId, appPaymentId: $appPaymentId) {
-    ...AppPaymentDetails
+query AppTransaction($appId: String!, $appTransactionId: String!) {
+  item: appTransaction(appId: $appId, appTransactionId: $appTransactionId) {
+    ...AppTransactionDetails
   }
 }
 
-query AppPayments($appId: String!) {
-  items: appPayments(appId: $appId) {
-    ...AppPaymentDetails
+query AppTransactions($appId: String!) {
+  items: appTransactions(appId: $appId) {
+    ...AppTransactionDetails
   }
 }
 

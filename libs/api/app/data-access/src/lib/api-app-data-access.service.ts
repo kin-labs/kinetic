@@ -77,16 +77,16 @@ export class ApiAppDataAccessService {
     })
   }
 
-  async appPayment(userId: string, appId: string, appPaymentId: string) {
+  async appTransaction(userId: string, appId: string, appTransactionId: string) {
     await this.ensureAppById(userId, appId)
-    return this.data.appPayment.findUnique({
-      where: { id: appPaymentId },
+    return this.data.appTransaction.findUnique({
+      where: { id: appTransactionId },
     })
   }
 
-  async appPayments(userId: string, appId: string) {
+  async appTransactions(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
-    return this.data.appPayment.findMany({
+    return this.data.appTransaction.findMany({
       where: { appId },
       take: 100,
     })

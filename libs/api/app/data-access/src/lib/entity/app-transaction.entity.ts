@@ -1,9 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import GraphQLJSON from 'graphql-type-json'
-import { AppPaymentStatus } from './app-payment-status.enum'
+import { AppTransactionStatus } from './app-transaction-status.enum'
 
 @ObjectType()
-export class AppPayment {
+export class AppTransaction {
   @Field({ nullable: true })
   id?: string
   @Field({ nullable: true })
@@ -28,6 +28,6 @@ export class AppPayment {
   solanaEnd?: Date
   @Field({ nullable: true })
   source?: string
-  @Field(() => AppPaymentStatus)
-  status: AppPaymentStatus
+  @Field(() => AppTransactionStatus)
+  status: AppTransactionStatus
 }
