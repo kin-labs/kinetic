@@ -34,7 +34,6 @@ model App {
   createdAt        DateTime             @default(now())
   updatedAt        DateTime             @updatedAt
   index            Int                  @unique
-  creations        AppCreation[]
   incomingWebhooks AppWebhookIncoming[]
   name             String
   transaction      AppTransaction[]
@@ -44,28 +43,6 @@ model App {
   webhookVerifyUrl String?
   wallet           Wallet?              @relation(fields: [walletId], references: [id])
   walletId         String?
-}
-
-model AppCreation {
-  id          String            @id @default(cuid())
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  errors      Json?
-  feePayer    String?
-  mint        String?
-  signature   String?
-  solanaStart DateTime?
-  solanaEnd   DateTime?
-  source      String?
-  status      AppCreationStatus @default(Pending)
-  app         App               @relation(fields: [appId], references: [id])
-  appId       String
-}
-
-enum AppCreationStatus {
-  Failed
-  Pending
-  Succeed
 }
 
 model AppTransaction {

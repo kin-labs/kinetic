@@ -1,7 +1,6 @@
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import AdminAppFeatureCreationDetail from './admin-app-feature-creation-detail'
 import AdminAppFeatureTransactionDetail from './admin-app-feature-transaction-detail'
 import AdminAppFeatureWebhookIncomingDetail from './admin-app-feature-webhook-incoming-detail'
 
@@ -26,14 +25,6 @@ export function AdminAppFeature() {
         render={() => (
           <React.Suspense fallback={<AdminUiLoader />}>
             <AdminAppFeatureDetail />
-          </React.Suspense>
-        )}
-      />
-      <Route
-        path="/apps/:appId/creations/:appCreationId"
-        render={() => (
-          <React.Suspense fallback={<AdminUiLoader />}>
-            <AdminAppFeatureCreationDetail />
           </React.Suspense>
         )}
       />

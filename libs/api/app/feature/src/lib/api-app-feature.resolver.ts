@@ -2,7 +2,6 @@ import {
   ApiAppDataAccessService,
   App,
   AppCreateInput,
-  AppCreation,
   AppTransaction,
   AppUpdateInput,
   AppUserAddInput,
@@ -39,16 +38,6 @@ export class ApiAppFeatureResolver {
   @Query(() => App, { nullable: true })
   app(@CtxUser() user: User, @Args('appId') appId: string) {
     return this.service.app(user.id, appId)
-  }
-
-  @Query(() => AppCreation, { nullable: true })
-  appCreation(@CtxUser() user: User, @Args('appId') appId: string, @Args('appCreationId') appCreationId: string) {
-    return this.service.appCreation(user.id, appId, appCreationId)
-  }
-
-  @Query(() => [AppCreation], { nullable: true })
-  appCreations(@CtxUser() user: User, @Args('appId') appId: string) {
-    return this.service.appCreations(user.id, appId)
   }
 
   @Query(() => AppTransaction, { nullable: true })

@@ -1,6 +1,5 @@
 import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
 import {
-  AdminAppUiCreations,
   AdminAppUiForm,
   AdminAppUiTransactions,
   AdminAppUiUserModal,
@@ -14,9 +13,8 @@ import {
   AppUpdateInput,
   AppUserAddInput,
   AppUserUpdateRoleInput,
-  useAppCreationsQuery,
-  useAppTransactionsQuery,
   useAppQuery,
+  useAppTransactionsQuery,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
   useAppWebhooksIncomingQuery,
@@ -78,7 +76,6 @@ export default function AdminAppFeatureDetail() {
       <Tabs isLazy colorScheme="teal">
         <TabList>
           <Tab>Wallet</Tab>
-          <Tab>Creations</Tab>
           <Tab>Transactions</Tab>
           <Tab>Webhooks Incoming</Tab>
           <Tab>Users</Tab>
@@ -92,9 +89,6 @@ export default function AdminAppFeatureDetail() {
                 <AdminAppUiWalletBalances wallet={data?.item?.wallet} />
               </Box>
             )}
-          </TabPanel>
-          <TabPanel>
-            <AppCreationsTab appId={appId} />
           </TabPanel>
           <TabPanel>
             <AppTransactionsTab appId={appId} />
@@ -119,14 +113,6 @@ export default function AdminAppFeatureDetail() {
       </Tabs>
     </Stack>
   )
-}
-
-function AppCreationsTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppCreationsQuery({ variables: { appId } })
-  if (fetching) {
-    return <AdminUiLoader />
-  }
-  return <AdminAppUiCreations appId={appId} creations={data?.items} />
 }
 
 function AppTransactionsTab({ appId }: { appId: string }) {

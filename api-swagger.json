@@ -73,7 +73,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateAccountResponse"
+                  "$ref": "#/components/schemas/AppTransaction"
                 }
               }
             }
@@ -439,9 +439,26 @@
         },
         "required": ["index", "tx"]
       },
-      "CreateAccountResponse": {
+      "AppTransaction": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "destination": {
+            "type": "string"
+          },
           "errors": {
             "type": "object"
           },
@@ -469,7 +486,21 @@
             "type": "object"
           }
         },
-        "required": ["errors", "feePayer", "mint", "signature", "solanaStart", "solanaEnd", "source", "status"]
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "amount",
+          "destination",
+          "errors",
+          "feePayer",
+          "mint",
+          "signature",
+          "solanaStart",
+          "solanaEnd",
+          "source",
+          "status"
+        ]
       },
       "BalanceResponse": {
         "type": "object",

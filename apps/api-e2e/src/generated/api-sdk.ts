@@ -40,30 +40,6 @@ export type AppCreateInput = {
   skipWalletCreation?: InputMaybe<Scalars['Boolean']>
 }
 
-export type AppCreation = {
-  __typename?: 'AppCreation'
-  createdAt: Scalars['DateTime']
-  errors: Scalars['JSON']
-  feePayer: Scalars['String']
-  id: Scalars['String']
-  mint: Scalars['String']
-  processingDuration?: Maybe<Scalars['Int']>
-  signature: Scalars['String']
-  solanaDuration?: Maybe<Scalars['Int']>
-  solanaEnd: Scalars['DateTime']
-  solanaStart: Scalars['DateTime']
-  source: Scalars['String']
-  status: AppCreationStatus
-  totalDuration?: Maybe<Scalars['Int']>
-  updatedAt: Scalars['DateTime']
-}
-
-export enum AppCreationStatus {
-  Failed = 'Failed',
-  Pending = 'Pending',
-  Succeed = 'Succeed',
-}
-
 export type AppTransaction = {
   __typename?: 'AppTransaction'
   amount?: Maybe<Scalars['Int']>
@@ -248,8 +224,6 @@ export type NetworkStat = {
 export type Query = {
   __typename?: 'Query'
   app?: Maybe<App>
-  appCreation?: Maybe<AppCreation>
-  appCreations?: Maybe<Array<AppCreation>>
   appTransaction?: Maybe<AppTransaction>
   appTransactions?: Maybe<Array<AppTransaction>>
   appWebhookIncoming?: Maybe<AppWebhookIncoming>
@@ -269,15 +243,6 @@ export type Query = {
 }
 
 export type QueryAppArgs = {
-  appId: Scalars['String']
-}
-
-export type QueryAppCreationArgs = {
-  appCreationId: Scalars['String']
-  appId: Scalars['String']
-}
-
-export type QueryAppCreationsArgs = {
   appId: Scalars['String']
 }
 
@@ -388,24 +353,6 @@ export type WalletBalance = {
   updatedAt?: Maybe<Scalars['DateTime']>
 }
 
-export const AppCreationDetails = gql`
-  fragment AppCreationDetails on AppCreation {
-    id
-    createdAt
-    updatedAt
-    errors
-    feePayer
-    mint
-    signature
-    processingDuration
-    solanaDuration
-    solanaEnd
-    solanaStart
-    source
-    status
-    totalDuration
-  }
-`
 export const AppTransactionDetails = gql`
   fragment AppTransactionDetails on AppTransaction {
     id
@@ -630,22 +577,6 @@ export const App = gql`
   ${AppUserDetails}
   ${WalletDetails}
 `
-export const AppCreation = gql`
-  query AppCreation($appId: String!, $appCreationId: String!) {
-    item: appCreation(appId: $appId, appCreationId: $appCreationId) {
-      ...AppCreationDetails
-    }
-  }
-  ${AppCreationDetails}
-`
-export const AppCreations = gql`
-  query AppCreations($appId: String!) {
-    items: appCreations(appId: $appId) {
-      ...AppCreationDetails
-    }
-  }
-  ${AppCreationDetails}
-`
 export const AppTransaction = gql`
   query AppTransaction($appId: String!, $appTransactionId: String!) {
     item: appTransaction(appId: $appId, appTransactionId: $appTransactionId) {
@@ -830,24 +761,6 @@ export type AppDetailsFragment = {
   webhookEventUrl?: string | null
   webhookSecret?: string | null
   webhookVerifyUrl?: string | null
-}
-
-export type AppCreationDetailsFragment = {
-  __typename?: 'AppCreation'
-  id: string
-  createdAt: any
-  updatedAt: any
-  errors: any
-  feePayer: string
-  mint: string
-  signature: string
-  processingDuration?: number | null
-  solanaDuration?: number | null
-  solanaEnd: any
-  solanaStart: any
-  source: string
-  status: AppCreationStatus
-  totalDuration?: number | null
 }
 
 export type AppTransactionDetailsFragment = {
@@ -1294,57 +1207,6 @@ export type AppQuery = {
       publicKey?: string | null
     } | null
   } | null
-}
-
-export type AppCreationQueryVariables = Exact<{
-  appId: Scalars['String']
-  appCreationId: Scalars['String']
-}>
-
-export type AppCreationQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'AppCreation'
-    id: string
-    createdAt: any
-    updatedAt: any
-    errors: any
-    feePayer: string
-    mint: string
-    signature: string
-    processingDuration?: number | null
-    solanaDuration?: number | null
-    solanaEnd: any
-    solanaStart: any
-    source: string
-    status: AppCreationStatus
-    totalDuration?: number | null
-  } | null
-}
-
-export type AppCreationsQueryVariables = Exact<{
-  appId: Scalars['String']
-}>
-
-export type AppCreationsQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'AppCreation'
-    id: string
-    createdAt: any
-    updatedAt: any
-    errors: any
-    feePayer: string
-    mint: string
-    signature: string
-    processingDuration?: number | null
-    solanaDuration?: number | null
-    solanaEnd: any
-    solanaStart: any
-    source: string
-    status: AppCreationStatus
-    totalDuration?: number | null
-  }> | null
 }
 
 export type AppTransactionQueryVariables = Exact<{
