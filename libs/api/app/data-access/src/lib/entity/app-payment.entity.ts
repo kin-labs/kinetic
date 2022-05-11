@@ -4,29 +4,29 @@ import { AppPaymentStatus } from './app-payment-status.enum'
 
 @ObjectType()
 export class AppPayment {
-  @Field()
+  @Field({ nullable: true })
   id?: string
-  @Field()
+  @Field({ nullable: true })
   createdAt?: Date
-  @Field()
+  @Field({ nullable: true })
   updatedAt?: Date
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   amount?: number
-  @Field()
+  @Field({ nullable: true })
   destination?: string
-  @Field(() => GraphQLJSON)
+  @Field(() => GraphQLJSON, { nullable: true })
   errors?: any
-  @Field()
+  @Field({ nullable: true })
   feePayer?: string
-  @Field()
+  @Field({ nullable: true })
   mint?: string
-  @Field()
+  @Field({ nullable: true })
   signature?: string
-  @Field()
+  @Field({ nullable: true })
   solanaStart?: Date
-  @Field()
+  @Field({ nullable: true })
   solanaEnd?: Date
-  @Field()
+  @Field({ nullable: true })
   source?: string
   @Field(() => AppPaymentStatus)
   status: AppPaymentStatus

@@ -66,22 +66,22 @@ export enum AppCreationStatus {
 
 export type AppPayment = {
   __typename?: 'AppPayment'
-  amount: Scalars['Int']
-  createdAt: Scalars['DateTime']
-  destination: Scalars['String']
-  errors: Scalars['JSON']
-  feePayer: Scalars['String']
-  id: Scalars['String']
-  mint: Scalars['String']
+  amount?: Maybe<Scalars['Int']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  destination?: Maybe<Scalars['String']>
+  errors?: Maybe<Scalars['JSON']>
+  feePayer?: Maybe<Scalars['String']>
+  id?: Maybe<Scalars['String']>
+  mint?: Maybe<Scalars['String']>
   processingDuration?: Maybe<Scalars['Int']>
-  signature: Scalars['String']
+  signature?: Maybe<Scalars['String']>
   solanaDuration?: Maybe<Scalars['Int']>
-  solanaEnd: Scalars['DateTime']
-  solanaStart: Scalars['DateTime']
-  source: Scalars['String']
+  solanaEnd?: Maybe<Scalars['DateTime']>
+  solanaStart?: Maybe<Scalars['DateTime']>
+  source?: Maybe<Scalars['String']>
   status: AppPaymentStatus
   totalDuration?: Maybe<Scalars['Int']>
-  updatedAt: Scalars['DateTime']
+  updatedAt?: Maybe<Scalars['DateTime']>
 }
 
 export enum AppPaymentStatus {
@@ -852,20 +852,20 @@ export type AppCreationDetailsFragment = {
 
 export type AppPaymentDetailsFragment = {
   __typename?: 'AppPayment'
-  id: string
-  createdAt: any
-  updatedAt: any
-  amount: number
-  destination: string
-  errors: any
-  feePayer: string
-  mint: string
+  id?: string | null
+  createdAt?: any | null
+  updatedAt?: any | null
+  amount?: number | null
+  destination?: string | null
+  errors?: any | null
+  feePayer?: string | null
+  mint?: string | null
   processingDuration?: number | null
-  signature: string
+  signature?: string | null
   solanaDuration?: number | null
-  solanaEnd: any
-  solanaStart: any
-  source: string
+  solanaEnd?: any | null
+  solanaStart?: any | null
+  source?: string | null
   status: AppPaymentStatus
   totalDuration?: number | null
 }
@@ -1356,20 +1356,20 @@ export type AppPaymentQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'AppPayment'
-    id: string
-    createdAt: any
-    updatedAt: any
-    amount: number
-    destination: string
-    errors: any
-    feePayer: string
-    mint: string
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    amount?: number | null
+    destination?: string | null
+    errors?: any | null
+    feePayer?: string | null
+    mint?: string | null
     processingDuration?: number | null
-    signature: string
+    signature?: string | null
     solanaDuration?: number | null
-    solanaEnd: any
-    solanaStart: any
-    source: string
+    solanaEnd?: any | null
+    solanaStart?: any | null
+    source?: string | null
     status: AppPaymentStatus
     totalDuration?: number | null
   } | null
@@ -1383,20 +1383,20 @@ export type AppPaymentsQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'AppPayment'
-    id: string
-    createdAt: any
-    updatedAt: any
-    amount: number
-    destination: string
-    errors: any
-    feePayer: string
-    mint: string
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    amount?: number | null
+    destination?: string | null
+    errors?: any | null
+    feePayer?: string | null
+    mint?: string | null
     processingDuration?: number | null
-    signature: string
+    signature?: string | null
     solanaDuration?: number | null
-    solanaEnd: any
-    solanaStart: any
-    source: string
+    solanaEnd?: any | null
+    solanaStart?: any | null
+    source?: string | null
     status: AppPaymentStatus
     totalDuration?: number | null
   }> | null
