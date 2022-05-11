@@ -14,7 +14,7 @@ describe('solana', () => {
       'ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA',
       process.env.MOGAMI_MINT_PUBLIC_KEY,
     )
-    expect(balance.toString()).toEqual('10000000000')
+    expect(balance.toString()).toEqual('9895100000')
   })
 
   it('should throw "No Kin token accounts found"', async () => {

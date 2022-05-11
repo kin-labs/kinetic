@@ -1,4 +1,5 @@
 import { Button, Input, Stack } from '@chakra-ui/react'
+import { TransactionType } from '@kin-tools/kin-memo'
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
 import { Keypair } from '@mogami/keypair'
@@ -23,6 +24,7 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: DemoKe
       amount,
       destination: accountId,
       owner: kp,
+      type: TransactionType.Spend,
     })
     setResult(res)
   }

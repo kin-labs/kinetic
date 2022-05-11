@@ -9,7 +9,7 @@ import { MakeTransferResponse } from './entities/make-transfer-response.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { AppPaymentStatus } from '@prisma/client'
-import { decodeTransferInstruction } from '@solana/spl-token'
+import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 
 @Injectable()
 export class ApiTransactionDataAccessService {
@@ -37,7 +37,7 @@ export class ApiTransactionDataAccessService {
         Object,
         {
           kind: 'struct',
-          fields: [['data', [341]]],
+          fields: [['data', [420]]],
         },
       ],
     ])
@@ -50,7 +50,7 @@ export class ApiTransactionDataAccessService {
     let status: AppPaymentStatus = AppPaymentStatus.Pending
     let signature
 
-    const decodedInstruction = decodeTransferInstruction(tx.instructions[0])
+    const decodedInstruction = decodeTransferInstruction(tx.instructions[1], TOKEN_PROGRAM_ID)
     const { source, destination } = decodedInstruction.keys
     const amount = Number(decodedInstruction.data.amount)
 
