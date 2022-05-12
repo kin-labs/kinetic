@@ -1,10 +1,9 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
-import { PublicKeyString } from '@mogami/solana'
+import { deserializeAndSignTransaction, PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
 import { AppCreationStatus } from '@prisma/client'
-import { Commitment, Transaction } from '@solana/web3.js'
-import * as borsh from 'borsh'
+import { Commitment } from '@solana/web3.js'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 import { CreateAccountResponse } from './entities/create-account.entity'
 
@@ -33,22 +32,15 @@ export class ApiAccountDataAccessService {
     const app = await this.data.getAppByIndex(Number(input.index))
     const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
     const created = await this.data.appCreation.create({ data: { appId: app.id } })
-    const schema = new Map([
-      [
-        Object,
-        {
-          kind: 'struct',
-          fields: [['data', [511]]],
-        },
-      ],
-    ])
+
+    const { feePayer, tx } = deserializeAndSignTransaction(keyPair, input.tx, 'creation')
 
     const errors: string[] = []
-    const buffer = borsh.serialize(schema, input.tx)
-    const tx = Transaction.from(buffer)
-    tx.partialSign(...[keyPair.solana])
+    // const buffer = borsh.serialize(schema, input.tx)
+    // const tx = Transaction.from(buffer)
+    // tx.partialSign(...[keyPair.solana])
 
-    const feePayer = tx.feePayer.toBase58()
+    // const feePayer = tx.feePayer.toBase58()
     let status: AppCreationStatus = AppCreationStatus.Pending
     let signature: string
     const source = tx.instructions[0].programId.toBase58()

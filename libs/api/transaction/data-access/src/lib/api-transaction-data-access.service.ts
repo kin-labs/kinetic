@@ -1,15 +1,13 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Injectable } from '@nestjs/common'
-import { Transaction } from '@solana/web3.js'
-import * as borsh from 'borsh'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { MakeTransferResponse } from './entities/make-transfer-response.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { AppPaymentStatus } from '@prisma/client'
-import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { deserializeAndSignTransaction } from '@mogami/solana'
 
 @Injectable()
 export class ApiTransactionDataAccessService {
@@ -31,28 +29,12 @@ export class ApiTransactionDataAccessService {
     const app = await this.data.getAppByIndex(input.index)
     const created = await this.data.appPayment.create({ data: { appId: app.id } })
     const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
-    const txJson = JSON.parse(input.tx)
-    const schema = new Map([
-      [
-        Object,
-        {
-          kind: 'struct',
-          fields: [['data', [420]]],
-        },
-      ],
-    ])
 
     const errors: string[] = []
-    const buffer = borsh.serialize(schema, txJson)
-    const tx = Transaction.from(buffer)
-    tx.partialSign(...[keyPair.solana])
-    const feePayer = tx.feePayer.toBase58()
     let status: AppPaymentStatus = AppPaymentStatus.Pending
     let signature
 
-    const decodedInstruction = decodeTransferInstruction(tx.instructions[1], TOKEN_PROGRAM_ID)
-    const { source, destination } = decodedInstruction.keys
-    const amount = Number(decodedInstruction.data.amount)
+    const { amount, destination, feePayer, source, tx } = deserializeAndSignTransaction(keyPair, input.tx, 'transfer')
 
     const solanaStart = new Date()
     try {
