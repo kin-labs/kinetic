@@ -1,8 +1,7 @@
 import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
 import {
-  AdminAppUiCreations,
   AdminAppUiForm,
-  AdminAppUiPayments,
+  AdminAppUiTransactions,
   AdminAppUiUserModal,
   AdminAppUiUsers,
   AdminAppUiWallet,
@@ -14,9 +13,8 @@ import {
   AppUpdateInput,
   AppUserAddInput,
   AppUserUpdateRoleInput,
-  useAppCreationsQuery,
-  useAppPaymentsQuery,
   useAppQuery,
+  useAppTransactionsQuery,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
   useAppWebhooksIncomingQuery,
@@ -78,8 +76,7 @@ export default function AdminAppFeatureDetail() {
       <Tabs isLazy colorScheme="teal">
         <TabList>
           <Tab>Wallet</Tab>
-          <Tab>Creations</Tab>
-          <Tab>Payments</Tab>
+          <Tab>Transactions</Tab>
           <Tab>Webhooks Incoming</Tab>
           <Tab>Users</Tab>
           <Tab>Settings</Tab>
@@ -94,10 +91,7 @@ export default function AdminAppFeatureDetail() {
             )}
           </TabPanel>
           <TabPanel>
-            <AppCreationsTab appId={appId} />
-          </TabPanel>
-          <TabPanel>
-            <AppPaymentsTab appId={appId} />
+            <AppTransactionsTab appId={appId} />
           </TabPanel>
           <TabPanel>
             <AppWebhooksIncomingTab appId={appId} />
@@ -121,20 +115,12 @@ export default function AdminAppFeatureDetail() {
   )
 }
 
-function AppCreationsTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppCreationsQuery({ variables: { appId } })
+function AppTransactionsTab({ appId }: { appId: string }) {
+  const [{ data, fetching }] = useAppTransactionsQuery({ variables: { appId } })
   if (fetching) {
     return <AdminUiLoader />
   }
-  return <AdminAppUiCreations appId={appId} creations={data?.items} />
-}
-
-function AppPaymentsTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppPaymentsQuery({ variables: { appId } })
-  if (fetching) {
-    return <AdminUiLoader />
-  }
-  return <AdminAppUiPayments appId={appId} payments={data?.items} />
+  return <AdminAppUiTransactions appId={appId} transactions={data?.items} />
 }
 
 function AppWebhooksIncomingTab({ appId }: { appId: string }) {

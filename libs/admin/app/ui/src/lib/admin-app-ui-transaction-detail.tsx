@@ -1,8 +1,8 @@
 import { Code, Table, TableContainer, Tbody, Td, Th, Tr } from '@chakra-ui/react'
-import { AppCreation } from '@mogami/shared/util/admin-sdk'
+import { AppTransaction } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export function AdminAppUiCreationDetail({ item }: { item: AppCreation }) {
+export function AdminAppUiTransactionDetail({ item }: { item: AppTransaction }) {
   const fields: { label: string; field: 'feePayer' | 'mint' | 'source' }[] = [
     { label: 'Fee Payer', field: 'feePayer' },
     { label: 'Mint', field: 'mint' },

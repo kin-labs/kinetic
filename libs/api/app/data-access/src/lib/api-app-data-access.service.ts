@@ -62,31 +62,16 @@ export class ApiAppDataAccessService {
     return this.ensureAppById(userId, appId)
   }
 
-  async appCreation(userId: string, appId: string, appCreationId: string) {
+  async appTransaction(userId: string, appId: string, appTransactionId: string) {
     await this.ensureAppById(userId, appId)
-    return this.data.appCreation.findUnique({
-      where: { id: appCreationId },
+    return this.data.appTransaction.findUnique({
+      where: { id: appTransactionId },
     })
   }
 
-  async appCreations(userId: string, appId: string) {
+  async appTransactions(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
-    return this.data.appCreation.findMany({
-      where: { appId },
-      take: 100,
-    })
-  }
-
-  async appPayment(userId: string, appId: string, appPaymentId: string) {
-    await this.ensureAppById(userId, appId)
-    return this.data.appPayment.findUnique({
-      where: { id: appPaymentId },
-    })
-  }
-
-  async appPayments(userId: string, appId: string) {
-    await this.ensureAppById(userId, appId)
-    return this.data.appPayment.findMany({
+    return this.data.appTransaction.findMany({
       where: { appId },
       take: 100,
     })

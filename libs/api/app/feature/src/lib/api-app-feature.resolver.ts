@@ -2,8 +2,7 @@ import {
   ApiAppDataAccessService,
   App,
   AppCreateInput,
-  AppCreation,
-  AppPayment,
+  AppTransaction,
   AppUpdateInput,
   AppUserAddInput,
   AppUserRemoveInput,
@@ -41,24 +40,18 @@ export class ApiAppFeatureResolver {
     return this.service.app(user.id, appId)
   }
 
-  @Query(() => AppCreation, { nullable: true })
-  appCreation(@CtxUser() user: User, @Args('appId') appId: string, @Args('appCreationId') appCreationId: string) {
-    return this.service.appCreation(user.id, appId, appCreationId)
+  @Query(() => AppTransaction, { nullable: true })
+  appTransaction(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appTransactionId') appTransactionId: string,
+  ) {
+    return this.service.appTransaction(user.id, appId, appTransactionId)
   }
 
-  @Query(() => [AppCreation], { nullable: true })
-  appCreations(@CtxUser() user: User, @Args('appId') appId: string) {
-    return this.service.appCreations(user.id, appId)
-  }
-
-  @Query(() => AppPayment, { nullable: true })
-  appPayment(@CtxUser() user: User, @Args('appId') appId: string, @Args('appPaymentId') appPaymentId: string) {
-    return this.service.appPayment(user.id, appId, appPaymentId)
-  }
-
-  @Query(() => [AppPayment], { nullable: true })
-  appPayments(@CtxUser() user: User, @Args('appId') appId: string) {
-    return this.service.appPayments(user.id, appId)
+  @Query(() => [AppTransaction], { nullable: true })
+  appTransactions(@CtxUser() user: User, @Args('appId') appId: string) {
+    return this.service.appTransactions(user.id, appId)
   }
 
   @Query(() => AppWebhookIncoming, { nullable: true })

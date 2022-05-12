@@ -1,9 +1,9 @@
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import { List, ListIcon, ListItem } from '@chakra-ui/react'
-import { AppPayment } from '@mogami/shared/util/admin-sdk'
+import { AppTransaction } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export function AdminAppUiPaymentTimeline({ item }: { item: AppPayment }) {
+export function AdminAppUiTransactionTimeline({ item }: { item: AppTransaction }) {
   return (
     <List spacing={3}>
       <ListItem>

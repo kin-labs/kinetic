@@ -8,7 +8,7 @@ import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption
 import { MakeTransferResponse } from './entities/make-transfer-response.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
-import { AppPaymentStatus } from '@prisma/client'
+import { AppTransactionStatus } from '@prisma/client'
 import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 
 @Injectable()
@@ -29,7 +29,7 @@ export class ApiTransactionDataAccessService {
 
   async makeTransfer(input: MakeTransferRequest): Promise<MakeTransferResponse> {
     const app = await this.data.getAppByIndex(input.index)
-    const created = await this.data.appPayment.create({ data: { appId: app.id } })
+    const created = await this.data.appTransaction.create({ data: { appId: app.id } })
     const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
     const txJson = JSON.parse(input.tx)
     const schema = new Map([
@@ -47,7 +47,7 @@ export class ApiTransactionDataAccessService {
     const tx = Transaction.from(buffer)
     tx.partialSign(...[keyPair.solana])
     const feePayer = tx.feePayer.toBase58()
-    let status: AppPaymentStatus = AppPaymentStatus.Pending
+    let status: AppTransactionStatus = AppTransactionStatus.Pending
     let signature
 
     const decodedInstruction = decodeTransferInstruction(tx.instructions[1], TOKEN_PROGRAM_ID)
@@ -57,13 +57,13 @@ export class ApiTransactionDataAccessService {
     const solanaStart = new Date()
     try {
       signature = await this.data.solana.sendRawTransaction(tx)
-      status = AppPaymentStatus.Succeed
+      status = AppTransactionStatus.Succeed
     } catch (error) {
-      status = AppPaymentStatus.Failed
+      status = AppTransactionStatus.Failed
       errors.push(error.toString())
     }
 
-    return this.data.appPayment.update({
+    return this.data.appTransaction.update({
       where: { id: created.id },
       data: {
         amount,

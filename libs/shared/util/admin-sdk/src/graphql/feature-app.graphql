@@ -9,24 +9,7 @@ fragment AppDetails on App {
   webhookVerifyUrl
 }
 
-fragment AppCreationDetails on AppCreation {
-  id
-  createdAt
-  updatedAt
-  errors
-  feePayer
-  mint
-  signature
-  processingDuration
-  solanaDuration
-  solanaEnd
-  solanaStart
-  source
-  status
-  totalDuration
-}
-
-fragment AppPaymentDetails on AppPayment {
+fragment AppTransactionDetails on AppTransaction {
   id
   createdAt
   updatedAt
@@ -154,27 +137,15 @@ query App($appId: String!) {
   }
 }
 
-query AppCreation($appId: String!, $appCreationId: String!) {
-  item: appCreation(appId: $appId, appCreationId: $appCreationId) {
-    ...AppCreationDetails
+query AppTransaction($appId: String!, $appTransactionId: String!) {
+  item: appTransaction(appId: $appId, appTransactionId: $appTransactionId) {
+    ...AppTransactionDetails
   }
 }
 
-query AppCreations($appId: String!) {
-  items: appCreations(appId: $appId) {
-    ...AppCreationDetails
-  }
-}
-
-query AppPayment($appId: String!, $appPaymentId: String!) {
-  item: appPayment(appId: $appId, appPaymentId: $appPaymentId) {
-    ...AppPaymentDetails
-  }
-}
-
-query AppPayments($appId: String!) {
-  items: appPayments(appId: $appId) {
-    ...AppPaymentDetails
+query AppTransactions($appId: String!) {
+  items: appTransactions(appId: $appId) {
+    ...AppTransactionDetails
   }
 }
 

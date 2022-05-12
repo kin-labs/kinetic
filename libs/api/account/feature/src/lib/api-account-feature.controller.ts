@@ -2,14 +2,14 @@ import {
   ApiAccountDataAccessService,
   BalanceResponse,
   CreateAccountRequest,
-  CreateAccountResponse,
   HistoryResponse,
 } from '@mogami/api/account/data-access'
+import { AppTransaction } from '@mogami/api/app/data-access'
+import { AccountIdSchema, JoiValidationPipe } from '@mogami/api/core/util'
 import { Body, Controller, Get, Param, Post, Query, UsePipes } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { ApiBody } from '@nestjs/swagger/dist/decorators/api-body.decorator'
 import { Commitment } from '@solana/web3.js'
-import { JoiValidationPipe, AccountIdSchema } from '@mogami/api/core/util'
 
 @ApiTags('account')
 @Controller('account')
@@ -25,7 +25,7 @@ export class ApiAccountFeatureController {
   @Post('create')
   @ApiBody({ type: CreateAccountRequest })
   @ApiOperation({ operationId: 'createAccount' })
-  @ApiResponse({ type: CreateAccountResponse })
+  @ApiResponse({ type: AppTransaction })
   createAccount(@Body() body: CreateAccountRequest) {
     return this.service.createAccount(body)
   }

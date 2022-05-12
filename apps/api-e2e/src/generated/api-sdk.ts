@@ -40,32 +40,8 @@ export type AppCreateInput = {
   skipWalletCreation?: InputMaybe<Scalars['Boolean']>
 }
 
-export type AppCreation = {
-  __typename?: 'AppCreation'
-  createdAt: Scalars['DateTime']
-  errors: Scalars['JSON']
-  feePayer: Scalars['String']
-  id: Scalars['String']
-  mint: Scalars['String']
-  processingDuration?: Maybe<Scalars['Int']>
-  signature: Scalars['String']
-  solanaDuration?: Maybe<Scalars['Int']>
-  solanaEnd: Scalars['DateTime']
-  solanaStart: Scalars['DateTime']
-  source: Scalars['String']
-  status: AppCreationStatus
-  totalDuration?: Maybe<Scalars['Int']>
-  updatedAt: Scalars['DateTime']
-}
-
-export enum AppCreationStatus {
-  Failed = 'Failed',
-  Pending = 'Pending',
-  Succeed = 'Succeed',
-}
-
-export type AppPayment = {
-  __typename?: 'AppPayment'
+export type AppTransaction = {
+  __typename?: 'AppTransaction'
   amount?: Maybe<Scalars['Int']>
   createdAt?: Maybe<Scalars['DateTime']>
   destination?: Maybe<Scalars['String']>
@@ -79,12 +55,12 @@ export type AppPayment = {
   solanaEnd?: Maybe<Scalars['DateTime']>
   solanaStart?: Maybe<Scalars['DateTime']>
   source?: Maybe<Scalars['String']>
-  status: AppPaymentStatus
+  status: AppTransactionStatus
   totalDuration?: Maybe<Scalars['Int']>
   updatedAt?: Maybe<Scalars['DateTime']>
 }
 
-export enum AppPaymentStatus {
+export enum AppTransactionStatus {
   Failed = 'Failed',
   Pending = 'Pending',
   Succeed = 'Succeed',
@@ -248,10 +224,8 @@ export type NetworkStat = {
 export type Query = {
   __typename?: 'Query'
   app?: Maybe<App>
-  appCreation?: Maybe<AppCreation>
-  appCreations?: Maybe<Array<AppCreation>>
-  appPayment?: Maybe<AppPayment>
-  appPayments?: Maybe<Array<AppPayment>>
+  appTransaction?: Maybe<AppTransaction>
+  appTransactions?: Maybe<Array<AppTransaction>>
   appWebhookIncoming?: Maybe<AppWebhookIncoming>
   appWebhooksIncoming?: Maybe<Array<AppWebhookIncoming>>
   apps?: Maybe<Array<App>>
@@ -272,21 +246,12 @@ export type QueryAppArgs = {
   appId: Scalars['String']
 }
 
-export type QueryAppCreationArgs = {
-  appCreationId: Scalars['String']
+export type QueryAppTransactionArgs = {
   appId: Scalars['String']
+  appTransactionId: Scalars['String']
 }
 
-export type QueryAppCreationsArgs = {
-  appId: Scalars['String']
-}
-
-export type QueryAppPaymentArgs = {
-  appId: Scalars['String']
-  appPaymentId: Scalars['String']
-}
-
-export type QueryAppPaymentsArgs = {
+export type QueryAppTransactionsArgs = {
   appId: Scalars['String']
 }
 
@@ -388,26 +353,8 @@ export type WalletBalance = {
   updatedAt?: Maybe<Scalars['DateTime']>
 }
 
-export const AppCreationDetails = gql`
-  fragment AppCreationDetails on AppCreation {
-    id
-    createdAt
-    updatedAt
-    errors
-    feePayer
-    mint
-    signature
-    processingDuration
-    solanaDuration
-    solanaEnd
-    solanaStart
-    source
-    status
-    totalDuration
-  }
-`
-export const AppPaymentDetails = gql`
-  fragment AppPaymentDetails on AppPayment {
+export const AppTransactionDetails = gql`
+  fragment AppTransactionDetails on AppTransaction {
     id
     createdAt
     updatedAt
@@ -630,37 +577,21 @@ export const App = gql`
   ${AppUserDetails}
   ${WalletDetails}
 `
-export const AppCreation = gql`
-  query AppCreation($appId: String!, $appCreationId: String!) {
-    item: appCreation(appId: $appId, appCreationId: $appCreationId) {
-      ...AppCreationDetails
+export const AppTransaction = gql`
+  query AppTransaction($appId: String!, $appTransactionId: String!) {
+    item: appTransaction(appId: $appId, appTransactionId: $appTransactionId) {
+      ...AppTransactionDetails
     }
   }
-  ${AppCreationDetails}
+  ${AppTransactionDetails}
 `
-export const AppCreations = gql`
-  query AppCreations($appId: String!) {
-    items: appCreations(appId: $appId) {
-      ...AppCreationDetails
+export const AppTransactions = gql`
+  query AppTransactions($appId: String!) {
+    items: appTransactions(appId: $appId) {
+      ...AppTransactionDetails
     }
   }
-  ${AppCreationDetails}
-`
-export const AppPayment = gql`
-  query AppPayment($appId: String!, $appPaymentId: String!) {
-    item: appPayment(appId: $appId, appPaymentId: $appPaymentId) {
-      ...AppPaymentDetails
-    }
-  }
-  ${AppPaymentDetails}
-`
-export const AppPayments = gql`
-  query AppPayments($appId: String!) {
-    items: appPayments(appId: $appId) {
-      ...AppPaymentDetails
-    }
-  }
-  ${AppPaymentDetails}
+  ${AppTransactionDetails}
 `
 export const AppWebhookIncoming = gql`
   query AppWebhookIncoming($appId: String!, $appWebhookIncomingId: String!) {
@@ -832,26 +763,8 @@ export type AppDetailsFragment = {
   webhookVerifyUrl?: string | null
 }
 
-export type AppCreationDetailsFragment = {
-  __typename?: 'AppCreation'
-  id: string
-  createdAt: any
-  updatedAt: any
-  errors: any
-  feePayer: string
-  mint: string
-  signature: string
-  processingDuration?: number | null
-  solanaDuration?: number | null
-  solanaEnd: any
-  solanaStart: any
-  source: string
-  status: AppCreationStatus
-  totalDuration?: number | null
-}
-
-export type AppPaymentDetailsFragment = {
-  __typename?: 'AppPayment'
+export type AppTransactionDetailsFragment = {
+  __typename?: 'AppTransaction'
   id?: string | null
   createdAt?: any | null
   updatedAt?: any | null
@@ -866,7 +779,7 @@ export type AppPaymentDetailsFragment = {
   solanaEnd?: any | null
   solanaStart?: any | null
   source?: string | null
-  status: AppPaymentStatus
+  status: AppTransactionStatus
   totalDuration?: number | null
 }
 
@@ -1296,66 +1209,15 @@ export type AppQuery = {
   } | null
 }
 
-export type AppCreationQueryVariables = Exact<{
+export type AppTransactionQueryVariables = Exact<{
   appId: Scalars['String']
-  appCreationId: Scalars['String']
+  appTransactionId: Scalars['String']
 }>
 
-export type AppCreationQuery = {
+export type AppTransactionQuery = {
   __typename?: 'Query'
   item?: {
-    __typename?: 'AppCreation'
-    id: string
-    createdAt: any
-    updatedAt: any
-    errors: any
-    feePayer: string
-    mint: string
-    signature: string
-    processingDuration?: number | null
-    solanaDuration?: number | null
-    solanaEnd: any
-    solanaStart: any
-    source: string
-    status: AppCreationStatus
-    totalDuration?: number | null
-  } | null
-}
-
-export type AppCreationsQueryVariables = Exact<{
-  appId: Scalars['String']
-}>
-
-export type AppCreationsQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'AppCreation'
-    id: string
-    createdAt: any
-    updatedAt: any
-    errors: any
-    feePayer: string
-    mint: string
-    signature: string
-    processingDuration?: number | null
-    solanaDuration?: number | null
-    solanaEnd: any
-    solanaStart: any
-    source: string
-    status: AppCreationStatus
-    totalDuration?: number | null
-  }> | null
-}
-
-export type AppPaymentQueryVariables = Exact<{
-  appId: Scalars['String']
-  appPaymentId: Scalars['String']
-}>
-
-export type AppPaymentQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'AppPayment'
+    __typename?: 'AppTransaction'
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
@@ -1370,19 +1232,19 @@ export type AppPaymentQuery = {
     solanaEnd?: any | null
     solanaStart?: any | null
     source?: string | null
-    status: AppPaymentStatus
+    status: AppTransactionStatus
     totalDuration?: number | null
   } | null
 }
 
-export type AppPaymentsQueryVariables = Exact<{
+export type AppTransactionsQueryVariables = Exact<{
   appId: Scalars['String']
 }>
 
-export type AppPaymentsQuery = {
+export type AppTransactionsQuery = {
   __typename?: 'Query'
   items?: Array<{
-    __typename?: 'AppPayment'
+    __typename?: 'AppTransaction'
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
@@ -1397,7 +1259,7 @@ export type AppPaymentsQuery = {
     solanaEnd?: any | null
     solanaStart?: any | null
     source?: string | null
-    status: AppPaymentStatus
+    status: AppTransactionStatus
     totalDuration?: number | null
   }> | null
 }

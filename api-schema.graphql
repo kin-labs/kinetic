@@ -21,30 +21,7 @@ input AppCreateInput {
   skipWalletCreation: Boolean
 }
 
-type AppCreation {
-  createdAt: DateTime!
-  errors: JSON!
-  feePayer: String!
-  id: String!
-  mint: String!
-  processingDuration: Int
-  signature: String!
-  solanaDuration: Int
-  solanaEnd: DateTime!
-  solanaStart: DateTime!
-  source: String!
-  status: AppCreationStatus!
-  totalDuration: Int
-  updatedAt: DateTime!
-}
-
-enum AppCreationStatus {
-  Failed
-  Pending
-  Succeed
-}
-
-type AppPayment {
+type AppTransaction {
   amount: Int
   createdAt: DateTime
   destination: String
@@ -58,12 +35,12 @@ type AppPayment {
   solanaEnd: DateTime
   solanaStart: DateTime
   source: String
-  status: AppPaymentStatus!
+  status: AppTransactionStatus!
   totalDuration: Int
   updatedAt: DateTime
 }
 
-enum AppPaymentStatus {
+enum AppTransactionStatus {
   Failed
   Pending
   Succeed
@@ -173,10 +150,8 @@ type NetworkStat {
 
 type Query {
   app(appId: String!): App
-  appCreation(appCreationId: String!, appId: String!): AppCreation
-  appCreations(appId: String!): [AppCreation!]
-  appPayment(appId: String!, appPaymentId: String!): AppPayment
-  appPayments(appId: String!): [AppPayment!]
+  appTransaction(appId: String!, appTransactionId: String!): AppTransaction
+  appTransactions(appId: String!): [AppTransaction!]
   appWebhookIncoming(appId: String!, appWebhookIncomingId: String!): AppWebhookIncoming
   appWebhooksIncoming(appId: String!): [AppWebhookIncoming!]
   apps: [App!]

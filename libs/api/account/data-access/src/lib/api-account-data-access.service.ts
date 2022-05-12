@@ -1,12 +1,11 @@
+import { AppTransaction, AppTransactionStatus } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
-import { AppCreationStatus } from '@prisma/client'
 import { Commitment, Transaction } from '@solana/web3.js'
 import * as borsh from 'borsh'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
-import { CreateAccountResponse } from './entities/create-account.entity'
 
 @Injectable()
 export class ApiAccountDataAccessService {
@@ -29,10 +28,10 @@ export class ApiAccountDataAccessService {
     return this.data.solana.getTokenAccounts(accountId, this.data.config.mogamiMintPublicKey)
   }
 
-  async createAccount(input: CreateAccountRequest): Promise<CreateAccountResponse> {
+  async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
     const app = await this.data.getAppByIndex(Number(input.index))
     const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
-    const created = await this.data.appCreation.create({ data: { appId: app.id } })
+    const created = await this.data.appTransaction.create({ data: { appId: app.id } })
     const schema = new Map([
       [
         Object,
@@ -49,20 +48,20 @@ export class ApiAccountDataAccessService {
     tx.partialSign(...[keyPair.solana])
 
     const feePayer = tx.feePayer.toBase58()
-    let status: AppCreationStatus = AppCreationStatus.Pending
+    let status: AppTransactionStatus
     let signature: string
     const source = tx.instructions[0].programId.toBase58()
     const solanaStart = new Date()
 
     try {
       signature = await this.data.solana.sendRawTransaction(tx)
-      status = AppCreationStatus.Succeed
+      status = AppTransactionStatus.Succeed
     } catch (error) {
-      status = AppCreationStatus.Failed
+      status = AppTransactionStatus.Failed
       errors.push(error.toString())
     }
 
-    return this.data.appCreation.update({
+    return this.data.appTransaction.update({
       where: { id: created.id },
       data: {
         errors,
