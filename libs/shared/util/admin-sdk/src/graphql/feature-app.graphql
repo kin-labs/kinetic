@@ -4,8 +4,11 @@ fragment AppDetails on App {
   updatedAt
   index
   name
+  webhookAcceptIncoming
+  webhookEventEnabled
   webhookEventUrl
   webhookSecret
+  webhookVerifyEnabled
   webhookVerifyUrl
 }
 
@@ -26,6 +29,12 @@ fragment AppTransactionDetails on AppTransaction {
   source
   status
   totalDuration
+  webhookEventDuration
+  webhookEventEnd
+  webhookEventStart
+  webhookVerifyDuration
+  webhookVerifyEnd
+  webhookVerifyStart
 }
 
 fragment AppUserDetails on AppUser {
@@ -41,12 +50,16 @@ fragment AppUserDetails on AppUser {
   }
 }
 
-fragment AppWebhookIncomingDetails on AppWebhookIncoming {
+fragment AppWebhookDetails on AppWebhook {
   id
   createdAt
   updatedAt
+  direction
   headers
   payload
+  responseError
+  responsePayload
+  responseStatus
   type
 }
 
@@ -149,15 +162,15 @@ query AppTransactions($appId: String!) {
   }
 }
 
-query AppWebhookIncoming($appId: String!, $appWebhookIncomingId: String!) {
-  item: appWebhookIncoming(appId: $appId, appWebhookIncomingId: $appWebhookIncomingId) {
-    ...AppWebhookIncomingDetails
+query AppWebhook($appId: String!, $appWebhookId: String!) {
+  item: appWebhook(appId: $appId, appWebhookId: $appWebhookId) {
+    ...AppWebhookDetails
   }
 }
 
-query AppWebhooksIncoming($appId: String!) {
-  items: appWebhooksIncoming(appId: $appId) {
-    ...AppWebhookIncomingDetails
+query AppWebhooks($appId: String!) {
+  items: appWebhooks(appId: $appId) {
+    ...AppWebhookDetails
   }
 }
 

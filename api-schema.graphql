@@ -10,8 +10,11 @@ type App {
   updatedAt: DateTime!
   users: [AppUser!]
   wallet: Wallet
+  webhookAcceptIncoming: Boolean
+  webhookEventEnabled: Boolean
   webhookEventUrl: String
   webhookSecret: String
+  webhookVerifyEnabled: Boolean
   webhookVerifyUrl: String
 }
 
@@ -25,7 +28,7 @@ type AppTransaction {
   amount: Int
   createdAt: DateTime
   destination: String
-  errors: JSON
+  errors: [String!]
   feePayer: String
   id: String
   mint: String
@@ -38,6 +41,12 @@ type AppTransaction {
   status: AppTransactionStatus!
   totalDuration: Int
   updatedAt: DateTime
+  webhookEventDuration: Int
+  webhookEventEnd: DateTime
+  webhookEventStart: DateTime
+  webhookVerifyDuration: Int
+  webhookVerifyEnd: DateTime
+  webhookVerifyStart: DateTime
 }
 
 enum AppTransactionStatus {
@@ -48,8 +57,11 @@ enum AppTransactionStatus {
 
 input AppUpdateInput {
   name: String
+  webhookAcceptIncoming: Boolean
+  webhookEventEnabled: Boolean
   webhookEventUrl: String
   webhookSecret: String
+  webhookVerifyEnabled: Boolean
   webhookVerifyUrl: String
 }
 
@@ -81,13 +93,22 @@ input AppUserUpdateRoleInput {
   userId: String!
 }
 
-type AppWebhookIncoming {
+type AppWebhook {
   createdAt: DateTime!
-  headers: JSON!
+  direction: AppWebhookDirection!
+  headers: JSON
   id: String!
-  payload: JSON!
+  payload: JSON
+  responseError: String
+  responsePayload: JSON
+  responseStatus: Int
   type: AppWebhookType!
   updatedAt: DateTime!
+}
+
+enum AppWebhookDirection {
+  Incoming
+  Outgoing
 }
 
 enum AppWebhookType {
@@ -152,8 +173,8 @@ type Query {
   app(appId: String!): App
   appTransaction(appId: String!, appTransactionId: String!): AppTransaction
   appTransactions(appId: String!): [AppTransaction!]
-  appWebhookIncoming(appId: String!, appWebhookIncomingId: String!): AppWebhookIncoming
-  appWebhooksIncoming(appId: String!): [AppWebhookIncoming!]
+  appWebhook(appId: String!, appWebhookId: String!): AppWebhook
+  appWebhooks(appId: String!): [AppWebhook!]
   apps: [App!]
   me: User
   networkStat(networkStatId: String!): NetworkStat

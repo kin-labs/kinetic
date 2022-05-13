@@ -14,9 +14,15 @@ export class App {
   @Field({ nullable: true })
   name: string
   @Field({ nullable: true })
+  webhookAcceptIncoming?: boolean
+  @Field({ nullable: true })
+  webhookEventEnabled?: boolean
+  @Field({ nullable: true })
   webhookEventUrl?: string
   @Field({ nullable: true })
   webhookSecret?: string
+  @Field({ nullable: true })
+  webhookVerifyEnabled?: boolean
   @Field({ nullable: true })
   webhookVerifyUrl?: string
   @Field(() => [AppUser], { nullable: true })

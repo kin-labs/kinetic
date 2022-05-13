@@ -30,37 +30,44 @@ model Airdrop {
 }
 
 model App {
-  id               String               @id @default(cuid())
-  createdAt        DateTime             @default(now())
-  updatedAt        DateTime             @updatedAt
-  index            Int                  @unique
-  incomingWebhooks AppWebhookIncoming[]
-  name             String
-  transaction      AppTransaction[]
-  users            AppUser[]
-  webhookEventUrl  String?
-  webhookSecret    String?
-  webhookVerifyUrl String?
-  wallet           Wallet?              @relation(fields: [walletId], references: [id])
-  walletId         String?
+  id                    String           @id @default(cuid())
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  index                 Int              @unique
+  name                  String
+  transaction           AppTransaction[]
+  users                 AppUser[]
+  webhookAcceptIncoming Boolean          @default(false)
+  webhookEventEnabled   Boolean          @default(false)
+  webhookEventUrl       String?
+  webhookSecret         String?
+  webhookVerifyEnabled  Boolean          @default(false)
+  webhookVerifyUrl      String?
+  webhooks              AppWebhook[]
+  wallet                Wallet?          @relation(fields: [walletId], references: [id])
+  walletId              String?
 }
 
 model AppTransaction {
-  id          String               @id @default(cuid())
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
-  amount      Int?
-  destination String?
-  errors      Json?
-  feePayer    String?
-  mint        String?
-  source      String?
-  signature   String?
-  solanaStart DateTime?
-  solanaEnd   DateTime?
-  status      AppTransactionStatus @default(Pending)
-  app         App                  @relation(fields: [appId], references: [id])
-  appId       String
+  id                 String               @id @default(cuid())
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  amount             Int?
+  destination        String?
+  errors             String[]
+  feePayer           String?
+  mint               String?
+  source             String?
+  signature          String?
+  solanaStart        DateTime?
+  solanaEnd          DateTime?
+  status             AppTransactionStatus @default(Pending)
+  webhookEventStart  DateTime?
+  webhookEventEnd    DateTime?
+  webhookVerifyStart DateTime?
+  webhookVerifyEnd   DateTime?
+  app                App                  @relation(fields: [appId], references: [id])
+  appId              String
 }
 
 enum AppTransactionStatus {
@@ -69,15 +76,24 @@ enum AppTransactionStatus {
   Succeed
 }
 
-model AppWebhookIncoming {
-  id        String         @id @default(cuid())
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  headers   Json?
-  payload   Json?
-  type      AppWebhookType
-  app       App            @relation(fields: [appId], references: [id])
-  appId     String
+model AppWebhook {
+  id              String              @id @default(cuid())
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  direction       AppWebhookDirection
+  headers         Json?
+  payload         Json?
+  responsePayload Json?
+  responseError   String?
+  responseStatus  Int?
+  type            AppWebhookType
+  app             App                 @relation(fields: [appId], references: [id])
+  appId           String
+}
+
+enum AppWebhookDirection {
+  Incoming
+  Outgoing
 }
 
 enum AppWebhookType {

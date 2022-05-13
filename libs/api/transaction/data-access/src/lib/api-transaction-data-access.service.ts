@@ -1,19 +1,20 @@
+import { ApiAppWebhookDataAccessService, AppWebhookType } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Injectable } from '@nestjs/common'
+import { App, AppTransactionStatus, Prisma } from '@prisma/client'
+import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Transaction } from '@solana/web3.js'
 import * as borsh from 'borsh'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
+import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MakeTransferResponse } from './entities/make-transfer-response.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
-import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
-import { AppTransactionStatus } from '@prisma/client'
-import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 
 @Injectable()
 export class ApiTransactionDataAccessService {
-  constructor(readonly data: ApiCoreDataAccessService) {}
+  constructor(readonly data: ApiCoreDataAccessService, private readonly appWebhook: ApiAppWebhookDataAccessService) {}
 
   getLatestBlockhash(): Promise<LatestBlockhashResponse> {
     return this.data.solana.getLatestBlockhash()
@@ -47,36 +48,86 @@ export class ApiTransactionDataAccessService {
     const tx = Transaction.from(buffer)
     tx.partialSign(...[keyPair.solana])
     const feePayer = tx.feePayer.toBase58()
-    let status: AppTransactionStatus = AppTransactionStatus.Pending
+    let status: AppTransactionStatus
     let signature
 
     const decodedInstruction = decodeTransferInstruction(tx.instructions[1], TOKEN_PROGRAM_ID)
     const { source, destination } = decodedInstruction.keys
     const amount = Number(decodedInstruction.data.amount)
 
-    const solanaStart = new Date()
-    try {
-      signature = await this.data.solana.sendRawTransaction(tx)
-      status = AppTransactionStatus.Succeed
-    } catch (error) {
-      status = AppTransactionStatus.Failed
-      errors.push(error.toString())
+    const appTransaction: Prisma.AppTransactionUpdateInput = {
+      amount,
+      destination: destination.pubkey.toBase58(),
+      errors: [],
+      feePayer,
+      mint: this.data.config.mogamiMintPublicKey,
+      source: source.pubkey.toBase58(),
     }
 
+    // Send Verify Webhook
+    if (app.webhookVerifyEnabled && app.webhookVerifyUrl) {
+      appTransaction.webhookVerifyStart = new Date()
+      try {
+        await this.sendVerifyWebhook(app, appTransaction)
+        appTransaction.webhookVerifyEnd = new Date()
+      } catch (err) {
+        appTransaction.webhookVerifyEnd = new Date()
+        return this.updateAppTransaction(created.id, {
+          ...appTransaction,
+          status: AppTransactionStatus.Failed,
+          errors: [app.webhookVerifyUrl, err.toString()],
+        })
+      }
+    }
+
+    // Solana Transaction
+    appTransaction.solanaStart = new Date()
+    try {
+      appTransaction.signature = await this.data.solana.sendRawTransaction(tx)
+      appTransaction.status = AppTransactionStatus.Succeed
+      appTransaction.solanaEnd = new Date()
+    } catch (error) {
+      appTransaction.errors = [error.toString()]
+      appTransaction.status = AppTransactionStatus.Failed
+      appTransaction.solanaEnd = new Date()
+    }
+
+    // Send Event Webhook
+    if (app.webhookEventEnabled && app.webhookEventUrl) {
+      appTransaction.webhookEventStart = new Date()
+      const updated = await this.updateAppTransaction(created.id, {
+        ...appTransaction,
+      })
+
+      try {
+        await this.sendEventWebhook(app, updated)
+        appTransaction.webhookEventEnd = new Date()
+      } catch (err) {
+        appTransaction.webhookEventEnd = new Date()
+        return this.updateAppTransaction(created.id, {
+          ...appTransaction,
+          status: AppTransactionStatus.Failed,
+          errors: [app.webhookEventUrl, err.toString()],
+        })
+      }
+    }
+
+    // Return object
+    return this.updateAppTransaction(created.id, { ...appTransaction })
+  }
+
+  updateAppTransaction(id: string, data: Prisma.AppTransactionUpdateInput) {
     return this.data.appTransaction.update({
-      where: { id: created.id },
-      data: {
-        amount,
-        destination: destination.pubkey.toBase58(),
-        errors,
-        feePayer,
-        mint: this.data.config.mogamiMintPublicKey,
-        signature,
-        solanaStart,
-        solanaEnd: new Date(),
-        source: source.pubkey.toBase58(),
-        status,
-      },
+      where: { id },
+      data: { ...data },
     })
+  }
+
+  sendEventWebhook(app: App, payload: Prisma.AppTransactionUpdateInput) {
+    return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Event, payload })
+  }
+
+  sendVerifyWebhook(app: App, payload: Prisma.AppTransactionUpdateInput) {
+    return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Verify, payload })
   }
 }

@@ -1,7 +1,7 @@
 import { Box, ButtonGroup, Stack } from '@chakra-ui/react'
 import { App, AppUpdateInput } from '@mogami/shared/util/admin-sdk'
 import { Formik } from 'formik'
-import { InputControl, NumberInputControl, SubmitButton } from 'formik-chakra-ui'
+import { CheckboxSingleControl, InputControl, NumberInputControl, SubmitButton } from 'formik-chakra-ui'
 
 import * as Yup from 'yup'
 
@@ -13,8 +13,11 @@ export interface AdminAppUiProps {
 const validationSchema = Yup.object({
   name: Yup.string().required(),
   index: Yup.number().required(),
-  webhookEventUrl: Yup.string(),
+  webhookAcceptIncoming: Yup.boolean().optional(),
+  webhookEventEnabled: Yup.boolean().optional(),
+  webhookEventUrl: Yup.string().optional(),
   webhookSecret: Yup.string(),
+  webhookVerifyEnabled: Yup.boolean().optional(),
   webhookVerifyUrl: Yup.string(),
 })
 
@@ -24,15 +27,21 @@ export function AdminAppUiForm({ app, onSubmit }: AdminAppUiProps) {
       initialValues={{
         index: app?.index,
         name: app?.name,
+        webhookAcceptIncoming: app?.webhookAcceptIncoming,
+        webhookEventEnabled: app?.webhookEventEnabled,
         webhookEventUrl: app?.webhookEventUrl,
         webhookSecret: app?.webhookSecret,
+        webhookVerifyEnabled: app?.webhookVerifyEnabled,
         webhookVerifyUrl: app?.webhookVerifyUrl,
       }}
       onSubmit={(values) =>
         onSubmit({
           name: values.name,
+          webhookAcceptIncoming: values?.webhookAcceptIncoming,
+          webhookEventEnabled: values?.webhookEventEnabled,
           webhookEventUrl: values?.webhookEventUrl,
           webhookSecret: values?.webhookSecret,
+          webhookVerifyEnabled: values?.webhookVerifyEnabled,
           webhookVerifyUrl: values?.webhookVerifyUrl,
         })
       }
@@ -49,9 +58,24 @@ export function AdminAppUiForm({ app, onSubmit }: AdminAppUiProps) {
             </Box>
             <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
               <Stack direction="column" spacing={6}>
-                <InputControl name="webhookSecret" label="Webhook Secret" />
-                <InputControl name="webhookEventUrl" label="Webhook Event Url" />
-                <InputControl name="webhookVerifyUrl" label="Webhook Verify Url" />
+                <CheckboxSingleControl name="webhookEventEnabled" label="Event Webhook Enabled" />
+                <InputControl
+                  display={values.webhookEventEnabled ? 'block' : 'none'}
+                  name="webhookEventUrl"
+                  label="Event Webhook Url"
+                />
+                <CheckboxSingleControl name="webhookVerifyEnabled" label="Verify Webhook Enabled" />
+                <InputControl
+                  display={values.webhookVerifyEnabled ? 'block' : 'none'}
+                  name="webhookVerifyUrl"
+                  label="Verify Webhook Url"
+                />
+                <InputControl
+                  display={values.webhookEventEnabled || values.webhookVerifyEnabled ? 'block' : 'none'}
+                  name="webhookSecret"
+                  label="Webhook Secret"
+                />
+                <CheckboxSingleControl name="webhookAcceptIncoming" label="Accept Incoming Webhooks" />
               </Stack>
             </Box>
             <ButtonGroup>

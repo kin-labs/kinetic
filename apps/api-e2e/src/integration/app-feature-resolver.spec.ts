@@ -83,7 +83,10 @@ describe('App (e2e)', () => {
         const input: AppUpdateInput = {
           name: `App ${appIndex} edited`,
           webhookSecret: 'WebHookSecret',
+          webhookAcceptIncoming: true,
+          webhookEventEnabled: true,
           webhookEventUrl: 'http://local.mogami.io/api/app/1/hooks/event',
+          webhookVerifyEnabled: true,
           webhookVerifyUrl: 'http://local.mogami.io/api/app/1/hooks/verify',
         }
 
@@ -95,8 +98,11 @@ describe('App (e2e)', () => {
 
             expect(data.index).toEqual(appIndex)
             expect(data.name).toEqual(input.name)
+            expect(data.webhookAcceptIncoming).toEqual(input.webhookAcceptIncoming)
             expect(data.webhookSecret).toEqual(input.webhookSecret)
+            expect(data.webhookEventEnabled).toEqual(input.webhookEventEnabled)
             expect(data.webhookEventUrl).toEqual(input.webhookEventUrl)
+            expect(data.webhookVerifyEnabled).toEqual(input.webhookVerifyEnabled)
             expect(data.webhookVerifyUrl).toEqual(input.webhookVerifyUrl)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
