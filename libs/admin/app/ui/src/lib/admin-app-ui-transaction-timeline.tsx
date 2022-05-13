@@ -16,9 +16,16 @@ export function AdminAppUiTransactionTimeline({ item }: { item: AppTransaction }
       </ListItem>
       <ListItem>
         <ListIcon as={CheckCircleIcon} color="green.500" />
+        Webhook Verify {item?.webhookVerifyDuration}ms
+      </ListItem>
+      <ListItem>
+        <ListIcon as={CheckCircleIcon} color="green.500" />
         Solana {item?.solanaDuration}ms
       </ListItem>
-      {/* You can also use custom icons from react-icons */}
+      <ListItem>
+        <ListIcon as={CheckCircleIcon} color="green.500" />
+        Webhook Event {item?.webhookEventDuration}ms
+      </ListItem>
       <ListItem>
         <ListIcon as={CheckCircleIcon} color="green.500" />
         Done {item?.totalDuration}ms

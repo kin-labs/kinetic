@@ -17,4 +17,14 @@ export class ApiAppTransactionFeatureResolver {
   totalDuration(@Parent() tx: AppTransaction) {
     return tx?.updatedAt?.getTime() - tx?.createdAt?.getTime()
   }
+
+  @ResolveField(() => Int, { nullable: true })
+  webhookEventDuration(@Parent() tx: AppTransaction) {
+    return tx?.webhookEventEnd?.getTime() - tx?.webhookEventStart?.getTime()
+  }
+
+  @ResolveField(() => Int, { nullable: true })
+  webhookVerifyDuration(@Parent() tx: AppTransaction) {
+    return tx?.webhookVerifyEnd?.getTime() - tx?.webhookVerifyStart?.getTime()
+  }
 }

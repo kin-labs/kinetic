@@ -58,6 +58,12 @@ export type AppTransaction = {
   status: AppTransactionStatus
   totalDuration?: Maybe<Scalars['Int']>
   updatedAt?: Maybe<Scalars['DateTime']>
+  webhookEventDuration?: Maybe<Scalars['Int']>
+  webhookEventEnd?: Maybe<Scalars['DateTime']>
+  webhookEventStart?: Maybe<Scalars['DateTime']>
+  webhookVerifyDuration?: Maybe<Scalars['Int']>
+  webhookVerifyEnd?: Maybe<Scalars['DateTime']>
+  webhookVerifyStart?: Maybe<Scalars['DateTime']>
 }
 
 export enum AppTransactionStatus {
@@ -102,14 +108,23 @@ export type AppUserUpdateRoleInput = {
   userId: Scalars['String']
 }
 
-export type AppWebhookIncoming = {
-  __typename?: 'AppWebhookIncoming'
+export type AppWebhook = {
+  __typename?: 'AppWebhook'
   createdAt: Scalars['DateTime']
-  headers: Scalars['JSON']
+  direction: AppWebhookDirection
+  headers?: Maybe<Scalars['JSON']>
   id: Scalars['String']
-  payload: Scalars['JSON']
+  payload?: Maybe<Scalars['JSON']>
+  responseError?: Maybe<Scalars['String']>
+  responsePayload?: Maybe<Scalars['JSON']>
+  responseStatus?: Maybe<Scalars['Int']>
   type: AppWebhookType
   updatedAt: Scalars['DateTime']
+}
+
+export enum AppWebhookDirection {
+  Incoming = 'Incoming',
+  Outgoing = 'Outgoing',
 }
 
 export enum AppWebhookType {
@@ -226,8 +241,8 @@ export type Query = {
   app?: Maybe<App>
   appTransaction?: Maybe<AppTransaction>
   appTransactions?: Maybe<Array<AppTransaction>>
-  appWebhookIncoming?: Maybe<AppWebhookIncoming>
-  appWebhooksIncoming?: Maybe<Array<AppWebhookIncoming>>
+  appWebhook?: Maybe<AppWebhook>
+  appWebhooks?: Maybe<Array<AppWebhook>>
   apps?: Maybe<Array<App>>
   me?: Maybe<User>
   networkStat?: Maybe<NetworkStat>
@@ -255,12 +270,12 @@ export type QueryAppTransactionsArgs = {
   appId: Scalars['String']
 }
 
-export type QueryAppWebhookIncomingArgs = {
+export type QueryAppWebhookArgs = {
   appId: Scalars['String']
-  appWebhookIncomingId: Scalars['String']
+  appWebhookId: Scalars['String']
 }
 
-export type QueryAppWebhooksIncomingArgs = {
+export type QueryAppWebhooksArgs = {
   appId: Scalars['String']
 }
 
@@ -371,6 +386,12 @@ export const AppTransactionDetails = gql`
     source
     status
     totalDuration
+    webhookEventDuration
+    webhookEventEnd
+    webhookEventStart
+    webhookVerifyDuration
+    webhookVerifyEnd
+    webhookVerifyStart
   }
 `
 export const AppDetails = gql`
@@ -413,13 +434,17 @@ export const AppUserDetails = gql`
   ${AppDetails}
   ${UserDetails}
 `
-export const AppWebhookIncomingDetails = gql`
-  fragment AppWebhookIncomingDetails on AppWebhookIncoming {
+export const AppWebhookDetails = gql`
+  fragment AppWebhookDetails on AppWebhook {
     id
     createdAt
     updatedAt
+    direction
     headers
     payload
+    responseError
+    responsePayload
+    responseStatus
     type
   }
 `
@@ -593,21 +618,21 @@ export const AppTransactions = gql`
   }
   ${AppTransactionDetails}
 `
-export const AppWebhookIncoming = gql`
-  query AppWebhookIncoming($appId: String!, $appWebhookIncomingId: String!) {
-    item: appWebhookIncoming(appId: $appId, appWebhookIncomingId: $appWebhookIncomingId) {
-      ...AppWebhookIncomingDetails
+export const AppWebhook = gql`
+  query AppWebhook($appId: String!, $appWebhookId: String!) {
+    item: appWebhook(appId: $appId, appWebhookId: $appWebhookId) {
+      ...AppWebhookDetails
     }
   }
-  ${AppWebhookIncomingDetails}
+  ${AppWebhookDetails}
 `
-export const AppWebhooksIncoming = gql`
-  query AppWebhooksIncoming($appId: String!) {
-    items: appWebhooksIncoming(appId: $appId) {
-      ...AppWebhookIncomingDetails
+export const AppWebhooks = gql`
+  query AppWebhooks($appId: String!) {
+    items: appWebhooks(appId: $appId) {
+      ...AppWebhookDetails
     }
   }
-  ${AppWebhookIncomingDetails}
+  ${AppWebhookDetails}
 `
 export const Apps = gql`
   query Apps {
@@ -781,6 +806,12 @@ export type AppTransactionDetailsFragment = {
   source?: string | null
   status: AppTransactionStatus
   totalDuration?: number | null
+  webhookEventDuration?: number | null
+  webhookEventEnd?: any | null
+  webhookEventStart?: any | null
+  webhookVerifyDuration?: number | null
+  webhookVerifyEnd?: any | null
+  webhookVerifyStart?: any | null
 }
 
 export type AppUserDetailsFragment = {
@@ -813,13 +844,17 @@ export type AppUserDetailsFragment = {
   } | null
 }
 
-export type AppWebhookIncomingDetailsFragment = {
-  __typename?: 'AppWebhookIncoming'
+export type AppWebhookDetailsFragment = {
+  __typename?: 'AppWebhook'
   id: string
   createdAt: any
   updatedAt: any
-  headers: any
-  payload: any
+  direction: AppWebhookDirection
+  headers?: any | null
+  payload?: any | null
+  responseError?: string | null
+  responsePayload?: any | null
+  responseStatus?: number | null
   type: AppWebhookType
 }
 
@@ -1234,6 +1269,12 @@ export type AppTransactionQuery = {
     source?: string | null
     status: AppTransactionStatus
     totalDuration?: number | null
+    webhookEventDuration?: number | null
+    webhookEventEnd?: any | null
+    webhookEventStart?: any | null
+    webhookVerifyDuration?: number | null
+    webhookVerifyEnd?: any | null
+    webhookVerifyStart?: any | null
   } | null
 }
 
@@ -1261,40 +1302,54 @@ export type AppTransactionsQuery = {
     source?: string | null
     status: AppTransactionStatus
     totalDuration?: number | null
+    webhookEventDuration?: number | null
+    webhookEventEnd?: any | null
+    webhookEventStart?: any | null
+    webhookVerifyDuration?: number | null
+    webhookVerifyEnd?: any | null
+    webhookVerifyStart?: any | null
   }> | null
 }
 
-export type AppWebhookIncomingQueryVariables = Exact<{
+export type AppWebhookQueryVariables = Exact<{
   appId: Scalars['String']
-  appWebhookIncomingId: Scalars['String']
+  appWebhookId: Scalars['String']
 }>
 
-export type AppWebhookIncomingQuery = {
+export type AppWebhookQuery = {
   __typename?: 'Query'
   item?: {
-    __typename?: 'AppWebhookIncoming'
+    __typename?: 'AppWebhook'
     id: string
     createdAt: any
     updatedAt: any
-    headers: any
-    payload: any
+    direction: AppWebhookDirection
+    headers?: any | null
+    payload?: any | null
+    responseError?: string | null
+    responsePayload?: any | null
+    responseStatus?: number | null
     type: AppWebhookType
   } | null
 }
 
-export type AppWebhooksIncomingQueryVariables = Exact<{
+export type AppWebhooksQueryVariables = Exact<{
   appId: Scalars['String']
 }>
 
-export type AppWebhooksIncomingQuery = {
+export type AppWebhooksQuery = {
   __typename?: 'Query'
   items?: Array<{
-    __typename?: 'AppWebhookIncoming'
+    __typename?: 'AppWebhook'
     id: string
     createdAt: any
     updatedAt: any
-    headers: any
-    payload: any
+    direction: AppWebhookDirection
+    headers?: any | null
+    payload?: any | null
+    responseError?: string | null
+    responsePayload?: any | null
+    responseStatus?: number | null
     type: AppWebhookType
   }> | null
 }

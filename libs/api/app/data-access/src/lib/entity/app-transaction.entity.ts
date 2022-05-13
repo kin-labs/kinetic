@@ -44,4 +44,16 @@ export class AppTransaction {
   @ApiProperty()
   @Field(() => AppTransactionStatus)
   status: AppTransactionStatus
+  @ApiProperty()
+  @Field({ nullable: true })
+  webhookEventStart?: Date
+  @ApiProperty()
+  @Field({ nullable: true })
+  webhookEventEnd?: Date
+  @ApiProperty()
+  @Field({ nullable: true })
+  webhookVerifyStart?: Date
+  @ApiProperty()
+  @Field({ nullable: true })
+  webhookVerifyEnd?: Date
 }

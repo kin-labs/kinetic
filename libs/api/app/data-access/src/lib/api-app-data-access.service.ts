@@ -12,6 +12,7 @@ import { AppUserRemoveInput } from './dto/app-user-remove.input'
 import { AppUserUpdateRoleInput } from './dto/app-user-update-role.input'
 import { AppConfig } from './entity/app-config.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
+import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
 
 function isValidAppWebhookType(type: string) {
   return Object.keys(AppWebhookType)
@@ -77,18 +78,23 @@ export class ApiAppDataAccessService {
     })
   }
 
-  async appWebhookIncoming(userId: string, appId: string, appWebhookIncomingId: string) {
+  async appWebhook(userId: string, appId: string, appWebhookId: string) {
     await this.ensureAppById(userId, appId)
-    return this.data.appWebhookIncoming.findUnique({
-      where: { id: appWebhookIncomingId },
+    const data = await this.data.appWebhook.findUnique({
+      where: { id: appWebhookId },
+    })
+    console.log('data', data)
+    return this.data.appWebhook.findUnique({
+      where: { id: appWebhookId },
     })
   }
 
-  async appWebhooksIncoming(userId: string, appId: string) {
+  async appWebhooks(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
-    return this.data.appWebhookIncoming.findMany({
+    return this.data.appWebhook.findMany({
       where: { appId },
       take: 100,
+      orderBy: { updatedAt: 'desc' },
     })
   }
 
@@ -210,8 +216,9 @@ export class ApiAppDataAccessService {
       const app = await this.data.getAppByIndex(index)
 
       // Store the incoming webhook
-      const created = await this.data.appWebhookIncoming.create({
+      const created = await this.data.appWebhook.create({
         data: {
+          direction: AppWebhookDirection.Incoming,
           appId: app.id,
           headers,
           payload,

@@ -484,6 +484,22 @@
           },
           "status": {
             "type": "object"
+          },
+          "webhookEventStart": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "webhookEventEnd": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "webhookVerifyStart": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "webhookVerifyEnd": {
+            "format": "date-time",
+            "type": "string"
           }
         },
         "required": [
@@ -499,7 +515,11 @@
           "solanaStart",
           "solanaEnd",
           "source",
-          "status"
+          "status",
+          "webhookEventStart",
+          "webhookEventEnd",
+          "webhookVerifyStart",
+          "webhookVerifyEnd"
         ]
       },
       "BalanceResponse": {

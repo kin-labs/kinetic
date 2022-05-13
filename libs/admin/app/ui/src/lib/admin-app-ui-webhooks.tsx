@@ -1,14 +1,14 @@
 import { Alert, Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
-import { AppWebhookIncoming } from '@mogami/shared/util/admin-sdk'
+import { AppWebhook } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export interface AdminAppUiWebhooksIncomingProps {
+export interface AdminAppUiWebhooksProps {
   appId: string
-  webhooks: AppWebhookIncoming[] | null | undefined
+  webhooks: AppWebhook[] | null | undefined
 }
 
-export function AdminAppUiWebhooksIncoming({ appId, webhooks }: AdminAppUiWebhooksIncomingProps) {
+export function AdminAppUiWebhooks({ appId, webhooks }: AdminAppUiWebhooksProps) {
   if (!webhooks?.length) {
     return <Alert>No webhooks found.</Alert>
   }
@@ -18,19 +18,23 @@ export function AdminAppUiWebhooksIncoming({ appId, webhooks }: AdminAppUiWebhoo
         <Table variant="simple" colorScheme="teal">
           <Thead>
             <Tr>
+              <Th>ID</Th>
+              <Th>Direction</Th>
+              <Th>Type</Th>
               <Th>Status</Th>
-              <Th>Source</Th>
             </Tr>
           </Thead>
           <Tbody>
             {webhooks?.map((webhook) => (
               <Tr key={webhook?.id}>
                 <Td>
-                  <Link to={`/apps/${appId}/webhook-incoming/${webhook.id}`}>
+                  <Link to={`/apps/${appId}/webhook/${webhook.id}`}>
                     <Text color="teal.500">{webhook.id}</Text>
                   </Link>
                 </Td>
+                <Td>{webhook.direction}</Td>
                 <Td>{webhook.type}</Td>
+                <Td>{webhook.responseStatus}</Td>
               </Tr>
             ))}
           </Tbody>
