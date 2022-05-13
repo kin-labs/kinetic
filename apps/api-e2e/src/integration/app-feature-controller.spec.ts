@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Keypair } from '@solana/web3.js'
-import { AppWebhookType } from '../generated/api-sdk'
-import { getEndpoint, initializeE2eApp, postEndpoint } from '../helpers'
+import { AppWebhookType, UpdateApp } from '../generated/api-sdk'
+import { getEndpoint, initializeE2eApp, postEndpoint, runGraphQLQueryAdmin } from '../helpers'
 
 describe('AppFeatureController (e2e)', () => {
   let app: INestApplication
@@ -28,28 +28,20 @@ describe('AppFeatureController (e2e)', () => {
       })
   })
 
-  it('Should receive Incoming App Event Webhooks ', () => {
+  it('Should not receive Incoming App Event Webhooks by default', () => {
     const payload = { foreignKey: 'some-foreign-key' }
     const headers = { authorization: 'Bearer Test' }
     return postEndpoint(app, '/api/app/1/webhook/event', payload, headers)
-      .expect(200)
-      .then((res) => {
-        expect(res.body.type).toEqual(AppWebhookType.Event)
-        expect(res.body.payload.foreignKey).toEqual(payload.foreignKey)
-        expect(res.body.headers.authorization).toEqual(headers.authorization)
-      })
+      .expect(400)
+      .then((res) => expect(res.error).toMatchSnapshot())
   })
 
-  it('Should receive Incoming App Verify Webhooks ', () => {
+  it('Should not receive Incoming App Verify Webhooks by default', () => {
     const payload = { foreignKey: 'some-foreign-key' }
     const headers = { authorization: 'Bearer Test' }
     return postEndpoint(app, '/api/app/1/webhook/verify', payload, headers)
-      .expect(200)
-      .then((res) => {
-        expect(res.body.type).toEqual(AppWebhookType.Verify)
-        expect(res.body.payload.foreignKey).toEqual(payload.foreignKey)
-        expect(res.body.headers.authorization).toEqual(headers.authorization)
-      })
+      .expect(400)
+      .then((res) => expect(res.error).toMatchSnapshot())
   })
 
   it('Should not receive unknown Incoming App Webhooks ', () => {
