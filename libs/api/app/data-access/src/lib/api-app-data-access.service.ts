@@ -75,6 +75,7 @@ export class ApiAppDataAccessService {
     return this.data.appTransaction.findMany({
       where: { appId },
       take: 100,
+      orderBy: { updatedAt: 'desc' },
     })
   }
 
@@ -214,6 +215,11 @@ export class ApiAppDataAccessService {
     try {
       // Get the app by Index
       const app = await this.data.getAppByIndex(index)
+      if (!app.webhookAcceptIncoming) {
+        this.logger.warn(`storeIncomingWebhook ignoring request, webhookAcceptIncoming is disabled`)
+        res.statusCode = 400
+        return res.send(new Error(`webhookAcceptIncoming is disabled`))
+      }
 
       // Store the incoming webhook
       const created = await this.data.appWebhook.create({

@@ -30,19 +30,22 @@ model Airdrop {
 }
 
 model App {
-  id               String           @id @default(cuid())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  index            Int              @unique
-  name             String
-  transaction      AppTransaction[]
-  users            AppUser[]
-  webhookEventUrl  String?
-  webhookSecret    String?
-  webhookVerifyUrl String?
-  webhooks         AppWebhook[]
-  wallet           Wallet?          @relation(fields: [walletId], references: [id])
-  walletId         String?
+  id                    String           @id @default(cuid())
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  index                 Int              @unique
+  name                  String
+  transaction           AppTransaction[]
+  users                 AppUser[]
+  webhookAcceptIncoming Boolean          @default(false)
+  webhookEventEnabled   Boolean          @default(false)
+  webhookEventUrl       String?
+  webhookSecret         String?
+  webhookVerifyEnabled  Boolean          @default(false)
+  webhookVerifyUrl      String?
+  webhooks              AppWebhook[]
+  wallet                Wallet?          @relation(fields: [walletId], references: [id])
+  walletId              String?
 }
 
 model AppTransaction {
@@ -51,7 +54,7 @@ model AppTransaction {
   updatedAt          DateTime             @updatedAt
   amount             Int?
   destination        String?
-  errors             Json?
+  errors             String[]
   feePayer           String?
   mint               String?
   source             String?

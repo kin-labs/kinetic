@@ -460,7 +460,10 @@
             "type": "string"
           },
           "errors": {
-            "type": "object"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "feePayer": {
             "type": "string"

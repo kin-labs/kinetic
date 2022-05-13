@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger'
-import GraphQLJSON from 'graphql-type-json'
 import { AppTransactionStatus } from './app-transaction-status.enum'
 
 @ObjectType()
@@ -21,8 +20,8 @@ export class AppTransaction {
   @Field({ nullable: true })
   destination?: string
   @ApiProperty()
-  @Field(() => GraphQLJSON, { nullable: true })
-  errors?: any
+  @Field(() => [String], { nullable: true })
+  errors?: string[]
   @ApiProperty()
   @Field({ nullable: true })
   feePayer?: string

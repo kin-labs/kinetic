@@ -20,6 +20,7 @@ export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: DemoKe
   const kp: Keypair = Keypair.fromSecretKey(keypair.secretKey)
 
   const getResult = async () => {
+    setResult(null)
     const res = await sdk.makeTransfer({
       amount,
       destination: accountId,

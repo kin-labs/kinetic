@@ -10,8 +10,11 @@ type App {
   updatedAt: DateTime!
   users: [AppUser!]
   wallet: Wallet
+  webhookAcceptIncoming: Boolean
+  webhookEventEnabled: Boolean
   webhookEventUrl: String
   webhookSecret: String
+  webhookVerifyEnabled: Boolean
   webhookVerifyUrl: String
 }
 
@@ -25,7 +28,7 @@ type AppTransaction {
   amount: Int
   createdAt: DateTime
   destination: String
-  errors: JSON
+  errors: [String!]
   feePayer: String
   id: String
   mint: String
@@ -54,8 +57,11 @@ enum AppTransactionStatus {
 
 input AppUpdateInput {
   name: String
+  webhookAcceptIncoming: Boolean
+  webhookEventEnabled: Boolean
   webhookEventUrl: String
   webhookSecret: String
+  webhookVerifyEnabled: Boolean
   webhookVerifyUrl: String
 }
 

@@ -2,7 +2,7 @@ import { ApiAppWebhookDataAccessService, AppWebhookType } from '@mogami/api/app/
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Injectable } from '@nestjs/common'
-import { AppTransactionStatus, Prisma } from '@prisma/client'
+import { App, AppTransactionStatus, Prisma } from '@prisma/client'
 import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Transaction } from '@solana/web3.js'
 import * as borsh from 'borsh'
@@ -58,24 +58,25 @@ export class ApiTransactionDataAccessService {
     const appTransaction: Prisma.AppTransactionUpdateInput = {
       amount,
       destination: destination.pubkey.toBase58(),
-      errors,
+      errors: [],
       feePayer,
       mint: this.data.config.mogamiMintPublicKey,
       source: source.pubkey.toBase58(),
     }
 
     // Send Verify Webhook
-    if (app.webhookVerifyUrl) {
+    if (app.webhookVerifyEnabled && app.webhookVerifyUrl) {
       appTransaction.webhookVerifyStart = new Date()
       try {
-        await this.appWebhook.sendWebhook(app, {
-          type: AppWebhookType.Verify,
-          payload: appTransaction,
-          headers: { 'mogami-webhook-type': AppWebhookType.Verify },
-        })
+        await this.sendVerifyWebhook(app, appTransaction)
         appTransaction.webhookVerifyEnd = new Date()
-      } catch (e) {
-        return this.updateAppTransaction(created.id, { status: AppTransactionStatus.Failed, ...appTransaction })
+      } catch (err) {
+        appTransaction.webhookVerifyEnd = new Date()
+        return this.updateAppTransaction(created.id, {
+          status: AppTransactionStatus.Failed,
+          ...appTransaction,
+          errors: [app.webhookVerifyUrl, err.toString()],
+        })
       }
     }
 
@@ -85,26 +86,27 @@ export class ApiTransactionDataAccessService {
       appTransaction.signature = await this.data.solana.sendRawTransaction(tx)
       appTransaction.status = AppTransactionStatus.Succeed
     } catch (error) {
+      appTransaction.errors = [error.toString()]
       appTransaction.status = AppTransactionStatus.Failed
-      errors.push(error.toString())
     }
 
     // Send Event Webhook
-    if (app.webhookEventUrl) {
+    if (app.webhookEventEnabled && app.webhookEventUrl) {
       appTransaction.webhookEventStart = new Date()
       const updated = await this.updateAppTransaction(created.id, {
         ...appTransaction,
       })
 
       try {
-        await this.appWebhook.sendWebhook(app, {
-          type: AppWebhookType.Event,
-          payload: updated,
-          headers: { 'mogami-webhook-type': AppWebhookType.Event },
-        })
+        await this.sendEventWebhook(app, updated)
         appTransaction.webhookEventEnd = new Date()
-      } catch (e) {
-        return this.updateAppTransaction(created.id, { status: AppTransactionStatus.Failed, ...appTransaction })
+      } catch (err) {
+        appTransaction.webhookEventEnd = new Date()
+        return this.updateAppTransaction(created.id, {
+          status: AppTransactionStatus.Failed,
+          errors: [app.webhookVerifyUrl, err.toString()],
+          ...appTransaction,
+        })
       }
     }
 
@@ -117,5 +119,13 @@ export class ApiTransactionDataAccessService {
       where: { id },
       data: { ...data },
     })
+  }
+
+  sendEventWebhook(app: App, payload: Prisma.AppTransactionUpdateInput) {
+    return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Event, payload })
+  }
+
+  sendVerifyWebhook(app: App, payload: Prisma.AppTransactionUpdateInput) {
+    return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Verify, payload })
   }
 }

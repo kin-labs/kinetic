@@ -20,6 +20,7 @@ export function AdminAppUiTransactions({ appId, transactions }: AdminAppUiTransa
             <Tr>
               <Th>Status</Th>
               <Th>Source</Th>
+              <Th isNumeric>Created</Th>
               <Th isNumeric>Duration</Th>
             </Tr>
           </Thead>
@@ -32,6 +33,7 @@ export function AdminAppUiTransactions({ appId, transactions }: AdminAppUiTransa
                   </Link>
                 </Td>
                 <Td>{transaction.source}</Td>
+                <Td isNumeric>{transaction.createdAt} ms</Td>
                 <Td isNumeric>{transaction.totalDuration} ms</Td>
               </Tr>
             ))}

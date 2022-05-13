@@ -4,8 +4,11 @@ fragment AppDetails on App {
   updatedAt
   index
   name
+  webhookAcceptIncoming
+  webhookEventEnabled
   webhookEventUrl
   webhookSecret
+  webhookVerifyEnabled
   webhookVerifyUrl
 }
 
