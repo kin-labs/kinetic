@@ -2,6 +2,7 @@ import { Alert, Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } fro
 import { AppTransaction } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { AdminAppUiTransactionStatus } from './admin-app-ui-transaction-status'
 
 export interface AdminAppUiTransactionsProps {
   appId: string
@@ -29,7 +30,7 @@ export function AdminAppUiTransactions({ appId, transactions }: AdminAppUiTransa
               <Tr key={transaction?.id}>
                 <Td>
                   <Link to={`/apps/${appId}/transactions/${transaction.id}`}>
-                    <Text color="teal.500">{transaction.status}</Text>
+                    <AdminAppUiTransactionStatus status={transaction?.status} />
                   </Link>
                 </Td>
                 <Td>{transaction.source}</Td>

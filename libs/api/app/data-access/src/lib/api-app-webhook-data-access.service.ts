@@ -48,11 +48,7 @@ export class ApiAppWebhookDataAccessService {
     return new Promise((resolve, reject) => {
       this.http
         .post(app.webhookEventUrl, options.payload, {
-          headers: {
-            ...options.headers,
-            'content-type': 'application/json',
-            'mogami-webhook-type': options.type,
-          },
+          headers: this.getHeaders(app, options),
         })
         .pipe(
           switchMap((res) =>
@@ -79,11 +75,7 @@ export class ApiAppWebhookDataAccessService {
     return new Promise((resolve, reject) =>
       this.http
         .post(app.webhookVerifyUrl, options.payload, {
-          headers: {
-            ...options.headers,
-            'content-type': 'application/json',
-            'mogami-webhook-type': options.type,
-          },
+          headers: this.getHeaders(app, options),
         })
         .pipe(
           switchMap((res) =>
@@ -105,4 +97,11 @@ export class ApiAppWebhookDataAccessService {
         }),
     )
   }
+
+  private getHeaders = (app: App, options: WebhookOptions) => ({
+    ...options.headers,
+    'content-type': 'application/json',
+    'mogami-app-index': app.index,
+    'mogami-webhook-type': options.type,
+  })
 }

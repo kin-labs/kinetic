@@ -12,19 +12,19 @@ export function AdminAppUiTransactionTimeline({ item }: { item: AppTransaction }
       </ListItem>
       <ListItem>
         <ListIcon as={CheckCircleIcon} color="green.500" />
-        Processing {item?.processingDuration}ms
+        Processing: {item?.processingDuration}ms
       </ListItem>
       <ListItem>
-        <ListIcon as={CheckCircleIcon} color="green.500" />
-        Webhook Verify {item?.webhookVerifyDuration}ms
+        <ListIcon as={CheckCircleIcon} color={item?.webhookVerifyDuration ? 'green.500' : 'gray.500'} />
+        Verify Webhook: {item?.webhookVerifyDuration ? `${item?.webhookVerifyDuration}ms` : 'disabled'}
       </ListItem>
       <ListItem>
         <ListIcon as={CheckCircleIcon} color="green.500" />
         Solana {item?.solanaDuration}ms
       </ListItem>
       <ListItem>
-        <ListIcon as={CheckCircleIcon} color="green.500" />
-        Webhook Event {item?.webhookEventDuration}ms
+        <ListIcon as={CheckCircleIcon} color={item?.webhookEventDuration ? 'green.500' : 'gray.500'} />
+        Event Webhook: {item?.webhookEventDuration ? `${item?.webhookEventDuration}ms` : 'disabled'}
       </ListItem>
       <ListItem>
         <ListIcon as={CheckCircleIcon} color="green.500" />

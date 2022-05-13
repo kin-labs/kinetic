@@ -73,8 +73,8 @@ export class ApiTransactionDataAccessService {
       } catch (err) {
         appTransaction.webhookVerifyEnd = new Date()
         return this.updateAppTransaction(created.id, {
-          status: AppTransactionStatus.Failed,
           ...appTransaction,
+          status: AppTransactionStatus.Failed,
           errors: [app.webhookVerifyUrl, err.toString()],
         })
       }
@@ -85,9 +85,11 @@ export class ApiTransactionDataAccessService {
     try {
       appTransaction.signature = await this.data.solana.sendRawTransaction(tx)
       appTransaction.status = AppTransactionStatus.Succeed
+      appTransaction.solanaEnd = new Date()
     } catch (error) {
       appTransaction.errors = [error.toString()]
       appTransaction.status = AppTransactionStatus.Failed
+      appTransaction.solanaEnd = new Date()
     }
 
     // Send Event Webhook
@@ -103,9 +105,9 @@ export class ApiTransactionDataAccessService {
       } catch (err) {
         appTransaction.webhookEventEnd = new Date()
         return this.updateAppTransaction(created.id, {
-          status: AppTransactionStatus.Failed,
-          errors: [app.webhookVerifyUrl, err.toString()],
           ...appTransaction,
+          status: AppTransactionStatus.Failed,
+          errors: [app.webhookEventUrl, err.toString()],
         })
       }
     }
