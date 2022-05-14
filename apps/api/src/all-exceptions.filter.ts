@@ -12,6 +12,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const httpStatus = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR
 
+    console.error(exception)
+
     response.status(httpStatus).json({
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),

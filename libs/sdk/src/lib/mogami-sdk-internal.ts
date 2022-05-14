@@ -111,7 +111,7 @@ export class MogamiSdkInternal {
 
     const request: MakeTransferRequest = {
       index: this.appConfig.app.index,
-      tx: JSON.stringify(tx),
+      tx,
     }
 
     const res = await this.transactionApi.makeTransfer(request)

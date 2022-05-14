@@ -166,6 +166,115 @@ export interface AppConfigMint {
 /**
  *
  * @export
+ * @interface AppTransaction
+ */
+export interface AppTransaction {
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  id: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  createdAt: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  updatedAt: string
+  /**
+   *
+   * @type {number}
+   * @memberof AppTransaction
+   */
+  amount: number
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  destination: string
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof AppTransaction
+   */
+  errors: Array<string>
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  feePayer: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  mint: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  signature: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  solanaStart: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  solanaEnd: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  source: string
+  /**
+   *
+   * @type {object}
+   * @memberof AppTransaction
+   */
+  status: object
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  webhookEventStart: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  webhookEventEnd: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  webhookVerifyStart: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  webhookVerifyEnd: string
+}
+/**
+ *
+ * @export
  * @interface BalanceResponse
  */
 export interface BalanceResponse {
@@ -194,61 +303,6 @@ export interface CreateAccountRequest {
    * @memberof CreateAccountRequest
    */
   tx: object
-}
-/**
- *
- * @export
- * @interface CreateAccountResponse
- */
-export interface CreateAccountResponse {
-  /**
-   *
-   * @type {object}
-   * @memberof CreateAccountResponse
-   */
-  errors: object
-  /**
-   *
-   * @type {string}
-   * @memberof CreateAccountResponse
-   */
-  feePayer: string
-  /**
-   *
-   * @type {string}
-   * @memberof CreateAccountResponse
-   */
-  mint: string
-  /**
-   *
-   * @type {string}
-   * @memberof CreateAccountResponse
-   */
-  signature: string
-  /**
-   *
-   * @type {string}
-   * @memberof CreateAccountResponse
-   */
-  solanaStart: string
-  /**
-   *
-   * @type {string}
-   * @memberof CreateAccountResponse
-   */
-  solanaEnd: string
-  /**
-   *
-   * @type {string}
-   * @memberof CreateAccountResponse
-   */
-  source: string
-  /**
-   *
-   * @type {object}
-   * @memberof CreateAccountResponse
-   */
-  status: object
 }
 /**
  *
@@ -321,10 +375,10 @@ export interface MakeTransferRequest {
   index: number
   /**
    *
-   * @type {string}
+   * @type {object}
    * @memberof MakeTransferRequest
    */
-  tx: string
+  tx: object
 }
 /**
  *
@@ -651,7 +705,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     async createAccount(
       createAccountRequest: CreateAccountRequest,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAccountResponse>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AppTransaction>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createAccount(createAccountRequest, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -721,7 +775,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createAccount(createAccountRequest: CreateAccountRequest, options?: any): AxiosPromise<CreateAccountResponse> {
+    createAccount(createAccountRequest: CreateAccountRequest, options?: any): AxiosPromise<AppTransaction> {
       return localVarFp.createAccount(createAccountRequest, options).then((request) => request(axios, basePath))
     },
     /**

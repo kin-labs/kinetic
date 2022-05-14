@@ -4,7 +4,6 @@ import { Keypair } from '@mogami/keypair'
 import { PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
 import { Commitment, Transaction } from '@solana/web3.js'
-import * as borsh from 'borsh'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
@@ -32,19 +31,9 @@ export class ApiAccountDataAccessService {
     const app = await this.data.getAppByIndex(Number(input.index))
     const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
     const created = await this.data.appTransaction.create({ data: { appId: app.id } })
-    const schema = new Map([
-      [
-        Object,
-        {
-          kind: 'struct',
-          fields: [['data', [511]]],
-        },
-      ],
-    ])
 
     const errors: string[] = []
-    const buffer = borsh.serialize(schema, input.tx)
-    const tx = Transaction.from(buffer)
+    const tx = Transaction.from(Buffer.from(input.tx))
     tx.partialSign(...[keyPair.solana])
 
     const feePayer = tx.feePayer.toBase58()
