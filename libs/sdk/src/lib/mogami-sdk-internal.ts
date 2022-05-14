@@ -83,7 +83,7 @@ export class MogamiSdkInternal {
     destination,
     amount,
     owner,
-    type = TransactionType.None,
+    type,
   }: {
     destination: PublicKeyString
     amount: string

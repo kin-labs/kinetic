@@ -47,12 +47,12 @@ export class MogamiSdk {
     amount,
     destination,
     owner,
-    type,
+    type = TransactionType.None,
   }: {
     amount: string
     destination: string
     owner: Keypair
-    type: TransactionType
+    type?: TransactionType
   }) {
     return this.internal.makeTransfer({ amount, destination, owner, type })
   }

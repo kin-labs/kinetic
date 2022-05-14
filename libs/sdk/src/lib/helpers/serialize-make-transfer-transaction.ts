@@ -8,21 +8,21 @@ import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 
 export async function serializeMakeTransferTransaction({
   amount,
+  appIndex,
   destination,
+  feePayer,
+  latestBlockhash,
   mint,
   owner,
-  latestBlockhash,
-  feePayer,
-  appIndex,
   type,
 }: {
   amount: string
+  appIndex: number
   destination: PublicKeyString
+  feePayer: PublicKeyString
+  latestBlockhash: string
   mint: PublicKeyString
   owner: Keypair
-  latestBlockhash: string
-  feePayer: PublicKeyString
-  appIndex: number
   type: TransactionType
 }) {
   // Create objects from Response
@@ -39,7 +39,7 @@ export async function serializeMakeTransferTransaction({
 
   const appIndexMemoInstruction = generateKinMemoInstruction({
     appIndex,
-    type: TransactionType.None,
+    type,
   })
 
   // Create Transaction
