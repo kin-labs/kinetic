@@ -1,7 +1,7 @@
 import { ApiAppWebhookDataAccessService, AppWebhookType } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
-import { parseIncomingTransaction } from '@mogami/solana'
+import { parseAndSignTokenTransfer } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
 import { App, AppTransactionStatus, Prisma } from '@prisma/client'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
@@ -31,7 +31,7 @@ export class ApiTransactionDataAccessService {
     const created = await this.data.appTransaction.create({ data: { appId: app.id } })
     const signer = Keypair.fromSecretKey(app.wallet.secretKey)
 
-    const { amount, destination, feePayer, source, transaction } = parseIncomingTransaction({
+    const { amount, destination, feePayer, source, transaction } = parseAndSignTokenTransfer({
       tx: input.tx,
       signer: signer.solana,
     })

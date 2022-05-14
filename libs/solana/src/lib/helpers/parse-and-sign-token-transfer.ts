@@ -1,31 +1,16 @@
 import { SolanaKeypair } from '@mogami/keypair'
 import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { AccountMeta, Transaction } from '@solana/web3.js'
+import { parseAndSignTransaction } from './parse-and-sign-transaction'
 
-export function parseIncomingTransaction({ tx, signer }: { tx: Buffer; signer: SolanaKeypair }): {
+export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: SolanaKeypair }): {
   amount: number
   destination: AccountMeta
   feePayer: string
   source: string
   transaction: Transaction
 } {
-  // Decode the transaction
-  const transaction = Transaction.from(Buffer.from(tx))
-
-  // Sign it
-  transaction.partialSign(...[signer])
-
-  // Get the fee payer
-  const feePayer = transaction?.feePayer?.toBase58()
-  if (!feePayer) {
-    throw new Error(`parseIncomingTransaction: Can't find token feePayer`)
-  }
-
-  // Get the source
-  const source = transaction.signatures.find((signature) => signature.publicKey.toBase58() !== feePayer)
-  if (!source) {
-    throw new Error(`parseIncomingTransaction: Can't find transaction source`)
-  }
+  const { feePayer, source, transaction } = parseAndSignTransaction({ tx, signer })
 
   // Get the first token account transfer
   const instruction = transaction.instructions.find(
@@ -45,7 +30,7 @@ export function parseIncomingTransaction({ tx, signer }: { tx: Buffer; signer: S
     amount: Number(amount),
     destination,
     feePayer,
-    source: source?.publicKey?.toBase58(),
+    source,
     transaction,
   }
 }

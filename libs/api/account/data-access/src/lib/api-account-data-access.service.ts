@@ -1,9 +1,9 @@
 import { AppTransaction, AppTransactionStatus } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
-import { PublicKeyString } from '@mogami/solana'
+import { parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
-import { Commitment, Transaction } from '@solana/web3.js'
+import { Commitment } from '@solana/web3.js'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
@@ -29,21 +29,19 @@ export class ApiAccountDataAccessService {
 
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
     const app = await this.data.getAppByIndex(Number(input.index))
-    const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
     const created = await this.data.appTransaction.create({ data: { appId: app.id } })
+    const signer = Keypair.fromSecretKey(app.wallet.secretKey)
 
+    const { feePayer, source, transaction } = parseAndSignTransaction({ tx: input.tx, signer: signer.solana })
     const errors: string[] = []
-    const tx = Transaction.from(Buffer.from(input.tx))
-    tx.partialSign(...[keyPair.solana])
 
-    const feePayer = tx.feePayer.toBase58()
     let status: AppTransactionStatus
     let signature: string
-    const source = tx.instructions[0].programId.toBase58()
+
     const solanaStart = new Date()
 
     try {
-      signature = await this.data.solana.sendRawTransaction(tx)
+      signature = await this.data.solana.sendRawTransaction(transaction)
       status = AppTransactionStatus.Succeed
     } catch (error) {
       status = AppTransactionStatus.Failed
