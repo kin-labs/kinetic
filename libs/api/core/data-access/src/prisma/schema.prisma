@@ -119,6 +119,51 @@ enum AppUserRole {
   Owner
 }
 
+model Cluster {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @default(now()) @updatedAt
+  name      String
+  endpoint  String
+  status    ClusterStatus @default(Active)
+  type      ClusterType
+  mints     Mint[]
+}
+
+enum ClusterStatus {
+  Active
+  Inactive
+}
+
+enum ClusterType {
+  Custom
+  SolanaDevnet
+  SolanaMainnet
+  SolanaTestnet
+}
+
+model Mint {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  address     String
+  coingeckoId String?
+  decimals    Int
+  logoUrl     String?
+  name        String
+  symbol      String
+  type        MintType
+  cluster     Cluster  @relation(fields: [clusterId], references: [id])
+  clusterId   String
+
+  @@unique([address, clusterId])
+  @@unique([address, symbol])
+}
+
+enum MintType {
+  SplToken
+}
+
 model NetworkStat {
   id               String   @id @default(cuid())
   createdAt        DateTime @default(now())

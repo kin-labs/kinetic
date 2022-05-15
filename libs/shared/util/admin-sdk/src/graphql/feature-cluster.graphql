@@ -1,0 +1,58 @@
+fragment ClusterDetails on Cluster {
+  id
+  createdAt
+  updatedAt
+  endpoint
+  name
+  status
+  type
+}
+
+fragment MintDetails on Mint {
+  id
+  createdAt
+  updatedAt
+  address
+  coingeckoId
+  decimals
+  logoUrl
+  name
+  symbol
+  type
+}
+
+mutation CreateCluster($input: ClusterCreateInput!) {
+  created: createCluster(input: $input) {
+    ...ClusterDetails
+  }
+}
+
+mutation DeleteCluster($clusterId: String!) {
+  deleted: deleteCluster(clusterId: $clusterId) {
+    ...ClusterDetails
+  }
+}
+
+mutation UpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
+  updated: updateCluster(clusterId: $clusterId, input: $input) {
+    ...ClusterDetails
+  }
+}
+
+query Cluster($clusterId: String!) {
+  item: cluster(clusterId: $clusterId) {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
+  }
+}
+
+query Clusters {
+  items: clusters {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
+  }
+}

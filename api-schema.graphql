@@ -126,6 +126,41 @@ The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
 scalar BigInt
 
+type Cluster {
+  createdAt: DateTime
+  endpoint: String
+  id: String
+  mints: [Mint!]
+  name: String
+  status: ClusterStatus
+  type: ClusterType
+  updatedAt: DateTime
+}
+
+input ClusterCreateInput {
+  endpoint: String!
+  name: String!
+  type: ClusterType!
+}
+
+enum ClusterStatus {
+  Active
+  Inactive
+}
+
+enum ClusterType {
+  Custom
+  SolanaDevnet
+  SolanaMainnet
+  SolanaTestnet
+}
+
+input ClusterUpdateInput {
+  endpoint: String
+  name: String
+  status: ClusterStatus
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -141,6 +176,23 @@ input LoginInput {
   password: String!
 }
 
+type Mint {
+  address: String
+  coingeckoId: String
+  createdAt: DateTime
+  decimals: Int
+  id: String
+  logoUrl: String
+  name: String
+  symbol: String
+  type: MintType
+  updatedAt: DateTime
+}
+
+enum MintType {
+  SplToken
+}
+
 type Mutation {
   appUserAdd(appId: String!, input: AppUserAddInput!): App
   appUserRemove(appId: String!, input: AppUserRemoveInput!): App
@@ -148,14 +200,17 @@ type Mutation {
   appWalletAdd(appId: String!, walletId: String!): App
   appWalletRemove(appId: String!, walletId: String!): App
   createApp(input: AppCreateInput!): App
+  createCluster(input: ClusterCreateInput!): Cluster
   createUser(input: UserCreateInput!): User
   deleteApp(appId: String!): App
+  deleteCluster(clusterId: String!): Cluster
   deleteUser(userId: String!): User
   deleteWallet(walletId: String!): Wallet
   generateWallet(index: Int!): Wallet
   login(input: LoginInput!): AuthToken
   logout: Boolean
   updateApp(appId: String!, input: AppUpdateInput!): App
+  updateCluster(clusterId: String!, input: ClusterUpdateInput!): Cluster
   updateUser(input: UserUpdateInput!, userId: String!): User
 }
 
@@ -176,6 +231,8 @@ type Query {
   appWebhook(appId: String!, appWebhookId: String!): AppWebhook
   appWebhooks(appId: String!): [AppWebhook!]
   apps: [App!]
+  cluster(clusterId: String!): Cluster
+  clusters: [Cluster!]
   me: User
   networkStat(networkStatId: String!): NetworkStat
   networkStats: [NetworkStat!]
