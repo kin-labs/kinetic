@@ -3,8 +3,8 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { useClusterQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { ClusterMintsTab } from './cluster-mints-tab'
-import { ClusterSettingsTab } from './cluster-settings-tab'
+import { AdminClusterFeatureMintsTab } from './admin-cluster-feature-mints-tab'
+import { AdminClusterFeatureSettingsTab } from './admin-cluster-feature-settings-tab'
 
 export default function AdminClusterFeatureDetail() {
   const { clusterId } = useParams<{ clusterId: string }>()
@@ -34,10 +34,10 @@ export default function AdminClusterFeatureDetail() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <ClusterMintsTab clusterId={clusterId} />
+            <AdminClusterFeatureMintsTab clusterId={clusterId} />
           </TabPanel>
           <TabPanel>
-            <ClusterSettingsTab clusterId={clusterId}></ClusterSettingsTab>
+            <AdminClusterFeatureSettingsTab clusterId={clusterId}></AdminClusterFeatureSettingsTab>
           </TabPanel>
         </TabPanels>
       </Tabs>

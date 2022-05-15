@@ -8,6 +8,36 @@ fragment ClusterDetails on Cluster {
   type
 }
 
+fragment ClusterTokenDetails on ClusterToken {
+  address
+  name
+  decimals
+  symbol
+  logoURI
+  tags
+  extensions {
+    ...ClusterTokenExtensionsDetails
+  }
+}
+
+fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
+  address
+  assetContract
+  bridgeContract
+  coingeckoId
+  description
+  discord
+  explorer
+  github
+  imageUrl
+  medium
+  serumV3Usdc
+  serumV3Usdt
+  tgann
+  tggroup
+  twitter
+  website
+}
 fragment MintDetails on Mint {
   id
   createdAt
@@ -19,6 +49,15 @@ fragment MintDetails on Mint {
   name
   symbol
   type
+}
+
+mutation addClusterMint($input: MintAddInput!) {
+  addClusterMint(input: $input) {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
+  }
 }
 
 mutation CreateCluster($input: ClusterCreateInput!) {
@@ -45,6 +84,12 @@ query Cluster($clusterId: String!) {
     mints {
       ...MintDetails
     }
+  }
+}
+
+query ClusterTokens($input: ClusterTokenInput!) {
+  items: clusterTokens(input: $input) {
+    ...ClusterTokenDetails
   }
 }
 

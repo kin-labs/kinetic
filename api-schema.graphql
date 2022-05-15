@@ -148,6 +148,42 @@ enum ClusterStatus {
   Inactive
 }
 
+type ClusterToken {
+  address: String
+  decimals: Int
+  extensions: ClusterTokenExtensions
+  logoURI: String
+  name: String
+  symbol: String
+  tags: [String!]
+}
+
+type ClusterTokenExtensions {
+  address: String
+  assetContract: String
+  bridgeContract: String
+  coingeckoId: String
+  description: String
+  discord: String
+  explorer: String
+  github: String
+  imageUrl: String
+  medium: String
+  serumV3Usdc: String
+  serumV3Usdt: String
+  tgann: String
+  tggroup: String
+  twitter: String
+  website: String
+}
+
+input ClusterTokenInput {
+  address: String
+  name: String
+  symbol: String
+  type: ClusterType!
+}
+
 enum ClusterType {
   Custom
   SolanaDevnet
@@ -189,11 +225,19 @@ type Mint {
   updatedAt: DateTime
 }
 
+input MintAddInput {
+  address: String!
+  clusterId: String!
+  name: String!
+  symbol: String!
+}
+
 enum MintType {
   SplToken
 }
 
 type Mutation {
+  addClusterMint(input: MintAddInput!): Cluster
   appUserAdd(appId: String!, input: AppUserAddInput!): App
   appUserRemove(appId: String!, input: AppUserRemoveInput!): App
   appUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
@@ -232,6 +276,7 @@ type Query {
   appWebhooks(appId: String!): [AppWebhook!]
   apps: [App!]
   cluster(clusterId: String!): Cluster
+  clusterTokens(input: ClusterTokenInput!): [ClusterToken!]
   clusters: [Cluster!]
   me: User
   networkStat(networkStatId: String!): NetworkStat

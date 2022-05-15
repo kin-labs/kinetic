@@ -4,9 +4,9 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { ClusterUpdateInput, useClusterQuery, useUpdateClusterMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export function ClusterSettingsTab({ clusterId }: { clusterId: string }) {
+export function AdminClusterFeatureSettingsTab({ clusterId }: { clusterId: string }) {
   const toast = useToast()
-  const [{ data, fetching }, refresh] = useClusterQuery({ variables: { clusterId } })
+  const [{ data, fetching }] = useClusterQuery({ variables: { clusterId } })
   const [{ fetching: updateFetching }, updateCluster] = useUpdateClusterMutation()
   const update = async (input: ClusterUpdateInput) => {
     try {

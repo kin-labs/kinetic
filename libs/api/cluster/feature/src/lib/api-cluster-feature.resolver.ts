@@ -1,10 +1,20 @@
-import { ApiClusterDataAccessService } from '@mogami/api/cluster/data-access'
+import {
+  ApiClusterDataAccessService,
+  ClusterToken,
+  ClusterTokenInput,
+  MintAddInput,
+} from '@mogami/api/cluster/data-access'
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql'
 import { ClusterCreateInput, ClusterUpdateInput, Cluster } from '@mogami/api/cluster/data-access'
 
 @Resolver()
 export class ApiClusterFeatureResolver {
   constructor(private readonly service: ApiClusterDataAccessService) {}
+
+  @Mutation(() => Cluster, { nullable: true })
+  addClusterMint(@Args('input') input: MintAddInput) {
+    return this.service.addClusterMint(input)
+  }
 
   @Mutation(() => Cluster, { nullable: true })
   createCluster(@Args('input') input: ClusterCreateInput) {
@@ -24,6 +34,11 @@ export class ApiClusterFeatureResolver {
   @Query(() => Cluster, { nullable: true })
   cluster(@Args('clusterId') clusterId: string) {
     return this.service.cluster(clusterId)
+  }
+
+  @Query(() => [ClusterToken], { nullable: true })
+  clusterTokens(@Args('input') input: ClusterTokenInput) {
+    return this.service.clusterTokens(input)
   }
 
   @Mutation(() => Cluster, { nullable: true })

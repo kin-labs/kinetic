@@ -60,6 +60,7 @@
     "@prisma/client": "^3.11.1",
     "@solana/buffer-layout": "^4.0.0",
     "@solana/spl-token": "^0.2.0",
+    "@solana/spl-token-registry": "^0.2.3961",
     "@solana/web3.js": "^1.37.0",
     "apollo-server-express": "^3.6.7",
     "axios": "^0.26.1",
