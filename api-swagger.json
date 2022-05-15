@@ -423,7 +423,7 @@
         },
         "required": ["isSolanaOk", "isMogamiOk", "time"]
       },
-      "Uint8Array": {
+      "Buffer": {
         "type": "object",
         "properties": {}
       },
@@ -434,7 +434,7 @@
             "type": "number"
           },
           "tx": {
-            "$ref": "#/components/schemas/Uint8Array"
+            "$ref": "#/components/schemas/Buffer"
           }
         },
         "required": ["index", "tx"]
@@ -679,7 +679,7 @@
             "type": "number"
           },
           "tx": {
-            "type": "string"
+            "$ref": "#/components/schemas/Buffer"
           }
         },
         "required": ["index", "tx"]

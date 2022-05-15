@@ -1,11 +1,9 @@
 import { ApiAppWebhookDataAccessService, AppWebhookType } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
+import { parseAndSignTokenTransfer } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
 import { App, AppTransactionStatus, Prisma } from '@prisma/client'
-import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { Transaction } from '@solana/web3.js'
-import * as borsh from 'borsh'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
@@ -31,29 +29,12 @@ export class ApiTransactionDataAccessService {
   async makeTransfer(input: MakeTransferRequest): Promise<MakeTransferResponse> {
     const app = await this.data.getAppByIndex(input.index)
     const created = await this.data.appTransaction.create({ data: { appId: app.id } })
-    const keyPair = Keypair.fromSecretKey(app.wallet.secretKey)
-    const txJson = JSON.parse(input.tx)
-    const schema = new Map([
-      [
-        Object,
-        {
-          kind: 'struct',
-          fields: [['data', [420]]],
-        },
-      ],
-    ])
+    const signer = Keypair.fromSecretKey(app.wallet.secretKey)
 
-    const errors: string[] = []
-    const buffer = borsh.serialize(schema, txJson)
-    const tx = Transaction.from(buffer)
-    tx.partialSign(...[keyPair.solana])
-    const feePayer = tx.feePayer.toBase58()
-    let status: AppTransactionStatus
-    let signature
-
-    const decodedInstruction = decodeTransferInstruction(tx.instructions[1], TOKEN_PROGRAM_ID)
-    const { source, destination } = decodedInstruction.keys
-    const amount = Number(decodedInstruction.data.amount)
+    const { amount, destination, feePayer, source, transaction } = parseAndSignTokenTransfer({
+      tx: input.tx,
+      signer: signer.solana,
+    })
 
     const appTransaction: Prisma.AppTransactionUpdateInput = {
       amount,
@@ -61,7 +42,7 @@ export class ApiTransactionDataAccessService {
       errors: [],
       feePayer,
       mint: this.data.config.mogamiMintPublicKey,
-      source: source.pubkey.toBase58(),
+      source,
     }
 
     // Send Verify Webhook
@@ -83,7 +64,7 @@ export class ApiTransactionDataAccessService {
     // Solana Transaction
     appTransaction.solanaStart = new Date()
     try {
-      appTransaction.signature = await this.data.solana.sendRawTransaction(tx)
+      appTransaction.signature = await this.data.solana.sendRawTransaction(transaction)
       appTransaction.status = AppTransactionStatus.Succeed
       appTransaction.solanaEnd = new Date()
     } catch (error) {

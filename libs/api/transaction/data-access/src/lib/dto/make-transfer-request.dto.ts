@@ -4,5 +4,5 @@ export class MakeTransferRequest {
   @ApiProperty()
   index: number
   @ApiProperty()
-  tx: string
+  tx: Buffer
 }

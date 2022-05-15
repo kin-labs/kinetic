@@ -1,4 +1,3 @@
-import * as borsh from 'borsh'
 import { Keypair } from '@mogami/keypair'
 import { getPublicKey, PublicKeyString } from '@mogami/solana'
 import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress } from '@solana/spl-token'
@@ -47,17 +46,5 @@ export async function serializeCreateAccountTransaction({
   // Sign and Serialize Transaction
   transaction.partialSign(...[owner.solana])
 
-  const serialized = transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
-
-  const schema = new Map([
-    [
-      Object,
-      {
-        kind: 'struct',
-        fields: [['data', [511]]],
-      },
-    ],
-  ])
-
-  return borsh.serialize(schema, JSON.parse(JSON.stringify(serialized)))
+  return transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
 }

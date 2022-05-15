@@ -83,7 +83,7 @@ export class MogamiSdkInternal {
     destination,
     amount,
     owner,
-    type = TransactionType.None,
+    type,
   }: {
     destination: PublicKeyString
     amount: string
@@ -111,7 +111,7 @@ export class MogamiSdkInternal {
 
     const request: MakeTransferRequest = {
       index: this.appConfig.app.index,
-      tx: JSON.stringify(tx),
+      tx,
     }
 
     const res = await this.transactionApi.makeTransfer(request)
