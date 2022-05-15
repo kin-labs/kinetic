@@ -7,6 +7,8 @@
     "admin-auth-data-access": "libs/admin/auth/data-access",
     "admin-auth-feature": "libs/admin/auth/feature",
     "admin-auth-ui": "libs/admin/auth/ui",
+    "admin-cluster-feature": "libs/admin/cluster/feature",
+    "admin-cluster-ui": "libs/admin/cluster/ui",
     "admin-e2e": "apps/admin-e2e",
     "admin-home-feature": "libs/admin/home/feature",
     "admin-shell-feature": "libs/admin/shell/feature",

@@ -1,0 +1,22 @@
+{
+  "sourceRoot": "libs/admin/cluster/feature/src",
+  "projectType": "library",
+  "tags": ["type:feature", "scope:admin"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/admin/cluster/feature/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/admin/cluster/feature"],
+      "options": {
+        "jestConfig": "libs/admin/cluster/feature/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

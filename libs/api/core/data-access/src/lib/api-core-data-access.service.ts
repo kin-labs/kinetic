@@ -2,6 +2,7 @@ import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { PrismaClient, UserRole } from '@prisma/client'
+import { omit } from 'lodash'
 
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
@@ -62,16 +63,15 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   private async configureClusters() {
     return Promise.all(
-      this.config.clusters.map((defaultCluster) => {
-        const { status, ...cluster } = defaultCluster
-        return this.cluster
+      this.config.clusters.map((cluster) =>
+        this.cluster
           .upsert({
-            where: { id: defaultCluster.id },
-            update: { ...cluster },
-            create: { ...defaultCluster },
+            where: { id: cluster.id },
+            update: { ...omit(cluster, 'status') },
+            create: { ...cluster },
           })
-          .then((res) => this.logger.verbose(`Configured cluster ${res.name}`))
-      }),
+          .then((res) => this.logger.verbose(`Configured cluster ${res.name} (${res.status})`)),
+      ),
     )
   }
 

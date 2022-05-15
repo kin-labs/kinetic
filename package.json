@@ -84,6 +84,7 @@
     "graphql-type-json": "^0.3.2",
     "joi": "^17.6.0",
     "json-bigint-patch": "^0.0.8",
+    "lodash": "^4.17.21",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
