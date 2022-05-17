@@ -16,26 +16,31 @@ export class ApiClusterDataAccessService {
     this.configureTokenLists()
   }
 
-  createCluster(data: ClusterCreateInput) {
+  async createCluster(userId: string, data: ClusterCreateInput) {
+    await this.data.ensureAdminUser(userId)
     return this.data.cluster.create({ data })
   }
 
-  deleteCluster(id: string) {
-    return this.data.cluster.delete({ where: { id } })
+  async deleteCluster(userId: string, clusterId: string) {
+    await this.data.ensureAdminUser(userId)
+    return this.data.cluster.delete({ where: { id: clusterId } })
   }
 
-  clusters() {
+  async clusters(userId: string) {
+    await this.data.ensureAdminUser(userId)
     return this.data.cluster.findMany({
       include: { mints: true },
       orderBy: { name: 'asc' },
     })
   }
 
-  cluster(id: string) {
-    return this.data.cluster.findUnique({ where: { id }, include: { mints: true } })
+  async cluster(userId: string, clusterId: string) {
+    await this.data.ensureAdminUser(userId)
+    return this.data.cluster.findUnique({ where: { id: clusterId }, include: { mints: true } })
   }
 
-  clusterTokens(input: ClusterTokenInput): ClusterToken[] {
+  async clusterTokens(userId: string, input: ClusterTokenInput): Promise<ClusterToken[]> {
+    await this.data.ensureAdminUser(userId)
     let tokens = this.tokens.get(input.type)
     if (input.address) {
       tokens = tokens.filter((item) => item.address === input.address)
@@ -49,22 +54,17 @@ export class ApiClusterDataAccessService {
     return (tokens || []).slice(0, 100)
   }
 
-  updateCluster(id: string, data: ClusterUpdateInput) {
-    return this.data.cluster.update({ where: { id }, data })
+  async updateCluster(userId: string, clusterId: string, data: ClusterUpdateInput) {
+    await this.data.ensureAdminUser(userId)
+    return this.data.cluster.update({ where: { id: clusterId }, data })
   }
 
-  private configureTokenLists() {
-    new TokenListProvider().resolve().then((tokens) => {
-      this.tokens.set(ClusterType.SolanaDevnet, tokens.filterByClusterSlug('devnet').getList())
-      this.tokens.set(ClusterType.SolanaMainnet, tokens.filterByClusterSlug('mainnet-beta').getList())
-    })
-  }
-
-  async addClusterMint(input: MintAddInput) {
-    const cluster = await this.cluster(input.clusterId)
+  async addClusterMint(userId: string, input: MintAddInput) {
+    const cluster = await this.cluster(userId, input.clusterId)
     if (!cluster) {
       throw new BadRequestException('Cluster not found')
     }
+
     if (cluster.status !== ClusterStatus.Active) {
       throw new BadRequestException('Cluster must be active to add Mints')
     }
@@ -88,6 +88,13 @@ export class ApiClusterDataAccessService {
       data: { mints: { create: mint } },
       where: { id: cluster.id },
       include: { mints: true },
+    })
+  }
+
+  private configureTokenLists() {
+    new TokenListProvider().resolve().then((tokens) => {
+      this.tokens.set(ClusterType.SolanaDevnet, tokens.filterByClusterSlug('devnet').getList())
+      this.tokens.set(ClusterType.SolanaMainnet, tokens.filterByClusterSlug('mainnet-beta').getList())
     })
   }
 
