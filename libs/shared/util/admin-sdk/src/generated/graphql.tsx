@@ -145,28 +145,135 @@ export type AuthToken = {
   user: User
 }
 
+export type Cluster = {
+  __typename?: 'Cluster'
+  createdAt?: Maybe<Scalars['DateTime']>
+  endpoint?: Maybe<Scalars['String']>
+  id?: Maybe<Scalars['String']>
+  mints?: Maybe<Array<Mint>>
+  name?: Maybe<Scalars['String']>
+  status?: Maybe<ClusterStatus>
+  type?: Maybe<ClusterType>
+  updatedAt?: Maybe<Scalars['DateTime']>
+}
+
+export type ClusterCreateInput = {
+  endpoint: Scalars['String']
+  name: Scalars['String']
+  type: ClusterType
+}
+
+export enum ClusterStatus {
+  Active = 'Active',
+  Inactive = 'Inactive',
+}
+
+export type ClusterToken = {
+  __typename?: 'ClusterToken'
+  address?: Maybe<Scalars['String']>
+  decimals?: Maybe<Scalars['Int']>
+  extensions?: Maybe<ClusterTokenExtensions>
+  logoURI?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+  symbol?: Maybe<Scalars['String']>
+  tags?: Maybe<Array<Scalars['String']>>
+}
+
+export type ClusterTokenExtensions = {
+  __typename?: 'ClusterTokenExtensions'
+  address?: Maybe<Scalars['String']>
+  assetContract?: Maybe<Scalars['String']>
+  bridgeContract?: Maybe<Scalars['String']>
+  coingeckoId?: Maybe<Scalars['String']>
+  description?: Maybe<Scalars['String']>
+  discord?: Maybe<Scalars['String']>
+  explorer?: Maybe<Scalars['String']>
+  github?: Maybe<Scalars['String']>
+  imageUrl?: Maybe<Scalars['String']>
+  medium?: Maybe<Scalars['String']>
+  serumV3Usdc?: Maybe<Scalars['String']>
+  serumV3Usdt?: Maybe<Scalars['String']>
+  tgann?: Maybe<Scalars['String']>
+  tggroup?: Maybe<Scalars['String']>
+  twitter?: Maybe<Scalars['String']>
+  website?: Maybe<Scalars['String']>
+}
+
+export type ClusterTokenInput = {
+  address?: InputMaybe<Scalars['String']>
+  name?: InputMaybe<Scalars['String']>
+  symbol?: InputMaybe<Scalars['String']>
+  type: ClusterType
+}
+
+export enum ClusterType {
+  Custom = 'Custom',
+  SolanaDevnet = 'SolanaDevnet',
+  SolanaMainnet = 'SolanaMainnet',
+  SolanaTestnet = 'SolanaTestnet',
+}
+
+export type ClusterUpdateInput = {
+  endpoint?: InputMaybe<Scalars['String']>
+  name?: InputMaybe<Scalars['String']>
+  status?: InputMaybe<ClusterStatus>
+}
+
 export type LoginInput = {
   email: Scalars['String']
   password: Scalars['String']
 }
 
+export type Mint = {
+  __typename?: 'Mint'
+  address?: Maybe<Scalars['String']>
+  coingeckoId?: Maybe<Scalars['String']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  decimals?: Maybe<Scalars['Int']>
+  id?: Maybe<Scalars['String']>
+  logoUrl?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+  symbol?: Maybe<Scalars['String']>
+  type?: Maybe<MintType>
+  updatedAt?: Maybe<Scalars['DateTime']>
+}
+
+export type MintAddInput = {
+  address: Scalars['String']
+  clusterId: Scalars['String']
+  name: Scalars['String']
+  symbol: Scalars['String']
+}
+
+export enum MintType {
+  SplToken = 'SplToken',
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
+  addClusterMint?: Maybe<Cluster>
   appUserAdd?: Maybe<App>
   appUserRemove?: Maybe<App>
   appUserUpdateRole?: Maybe<App>
   appWalletAdd?: Maybe<App>
   appWalletRemove?: Maybe<App>
   createApp?: Maybe<App>
+  createCluster?: Maybe<Cluster>
   createUser?: Maybe<User>
   deleteApp?: Maybe<App>
+  deleteCluster?: Maybe<Cluster>
   deleteUser?: Maybe<User>
   deleteWallet?: Maybe<Wallet>
   generateWallet?: Maybe<Wallet>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
   updateApp?: Maybe<App>
+  updateCluster?: Maybe<Cluster>
   updateUser?: Maybe<User>
+}
+
+export type MutationAddClusterMintArgs = {
+  input: MintAddInput
 }
 
 export type MutationAppUserAddArgs = {
@@ -198,12 +305,20 @@ export type MutationCreateAppArgs = {
   input: AppCreateInput
 }
 
+export type MutationCreateClusterArgs = {
+  input: ClusterCreateInput
+}
+
 export type MutationCreateUserArgs = {
   input: UserCreateInput
 }
 
 export type MutationDeleteAppArgs = {
   appId: Scalars['String']
+}
+
+export type MutationDeleteClusterArgs = {
+  clusterId: Scalars['String']
 }
 
 export type MutationDeleteUserArgs = {
@@ -225,6 +340,11 @@ export type MutationLoginArgs = {
 export type MutationUpdateAppArgs = {
   appId: Scalars['String']
   input: AppUpdateInput
+}
+
+export type MutationUpdateClusterArgs = {
+  clusterId: Scalars['String']
+  input: ClusterUpdateInput
 }
 
 export type MutationUpdateUserArgs = {
@@ -251,6 +371,9 @@ export type Query = {
   appWebhook?: Maybe<AppWebhook>
   appWebhooks?: Maybe<Array<AppWebhook>>
   apps?: Maybe<Array<App>>
+  cluster?: Maybe<Cluster>
+  clusterTokens?: Maybe<Array<ClusterToken>>
+  clusters?: Maybe<Array<Cluster>>
   me?: Maybe<User>
   networkStat?: Maybe<NetworkStat>
   networkStats?: Maybe<Array<NetworkStat>>
@@ -284,6 +407,14 @@ export type QueryAppWebhookArgs = {
 
 export type QueryAppWebhooksArgs = {
   appId: Scalars['String']
+}
+
+export type QueryClusterArgs = {
+  clusterId: Scalars['String']
+}
+
+export type QueryClusterTokensArgs = {
+  input: ClusterTokenInput
 }
 
 export type QueryNetworkStatArgs = {
@@ -1091,6 +1222,262 @@ export type MeQuery = {
   } | null
 }
 
+export type ClusterDetailsFragment = {
+  __typename?: 'Cluster'
+  id?: string | null
+  createdAt?: any | null
+  updatedAt?: any | null
+  endpoint?: string | null
+  name?: string | null
+  status?: ClusterStatus | null
+  type?: ClusterType | null
+}
+
+export type ClusterTokenDetailsFragment = {
+  __typename?: 'ClusterToken'
+  address?: string | null
+  name?: string | null
+  decimals?: number | null
+  symbol?: string | null
+  logoURI?: string | null
+  tags?: Array<string> | null
+  extensions?: {
+    __typename?: 'ClusterTokenExtensions'
+    address?: string | null
+    assetContract?: string | null
+    bridgeContract?: string | null
+    coingeckoId?: string | null
+    description?: string | null
+    discord?: string | null
+    explorer?: string | null
+    github?: string | null
+    imageUrl?: string | null
+    medium?: string | null
+    serumV3Usdc?: string | null
+    serumV3Usdt?: string | null
+    tgann?: string | null
+    tggroup?: string | null
+    twitter?: string | null
+    website?: string | null
+  } | null
+}
+
+export type ClusterTokenExtensionsDetailsFragment = {
+  __typename?: 'ClusterTokenExtensions'
+  address?: string | null
+  assetContract?: string | null
+  bridgeContract?: string | null
+  coingeckoId?: string | null
+  description?: string | null
+  discord?: string | null
+  explorer?: string | null
+  github?: string | null
+  imageUrl?: string | null
+  medium?: string | null
+  serumV3Usdc?: string | null
+  serumV3Usdt?: string | null
+  tgann?: string | null
+  tggroup?: string | null
+  twitter?: string | null
+  website?: string | null
+}
+
+export type MintDetailsFragment = {
+  __typename?: 'Mint'
+  id?: string | null
+  createdAt?: any | null
+  updatedAt?: any | null
+  address?: string | null
+  coingeckoId?: string | null
+  decimals?: number | null
+  logoUrl?: string | null
+  name?: string | null
+  symbol?: string | null
+  type?: MintType | null
+}
+
+export type AddClusterMintMutationVariables = Exact<{
+  input: MintAddInput
+}>
+
+export type AddClusterMintMutation = {
+  __typename?: 'Mutation'
+  addClusterMint?: {
+    __typename?: 'Cluster'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    endpoint?: string | null
+    name?: string | null
+    status?: ClusterStatus | null
+    type?: ClusterType | null
+    mints?: Array<{
+      __typename?: 'Mint'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      address?: string | null
+      coingeckoId?: string | null
+      decimals?: number | null
+      logoUrl?: string | null
+      name?: string | null
+      symbol?: string | null
+      type?: MintType | null
+    }> | null
+  } | null
+}
+
+export type CreateClusterMutationVariables = Exact<{
+  input: ClusterCreateInput
+}>
+
+export type CreateClusterMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Cluster'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    endpoint?: string | null
+    name?: string | null
+    status?: ClusterStatus | null
+    type?: ClusterType | null
+  } | null
+}
+
+export type DeleteClusterMutationVariables = Exact<{
+  clusterId: Scalars['String']
+}>
+
+export type DeleteClusterMutation = {
+  __typename?: 'Mutation'
+  deleted?: {
+    __typename?: 'Cluster'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    endpoint?: string | null
+    name?: string | null
+    status?: ClusterStatus | null
+    type?: ClusterType | null
+  } | null
+}
+
+export type UpdateClusterMutationVariables = Exact<{
+  clusterId: Scalars['String']
+  input: ClusterUpdateInput
+}>
+
+export type UpdateClusterMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Cluster'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    endpoint?: string | null
+    name?: string | null
+    status?: ClusterStatus | null
+    type?: ClusterType | null
+  } | null
+}
+
+export type ClusterQueryVariables = Exact<{
+  clusterId: Scalars['String']
+}>
+
+export type ClusterQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Cluster'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    endpoint?: string | null
+    name?: string | null
+    status?: ClusterStatus | null
+    type?: ClusterType | null
+    mints?: Array<{
+      __typename?: 'Mint'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      address?: string | null
+      coingeckoId?: string | null
+      decimals?: number | null
+      logoUrl?: string | null
+      name?: string | null
+      symbol?: string | null
+      type?: MintType | null
+    }> | null
+  } | null
+}
+
+export type ClusterTokensQueryVariables = Exact<{
+  input: ClusterTokenInput
+}>
+
+export type ClusterTokensQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'ClusterToken'
+    address?: string | null
+    name?: string | null
+    decimals?: number | null
+    symbol?: string | null
+    logoURI?: string | null
+    tags?: Array<string> | null
+    extensions?: {
+      __typename?: 'ClusterTokenExtensions'
+      address?: string | null
+      assetContract?: string | null
+      bridgeContract?: string | null
+      coingeckoId?: string | null
+      description?: string | null
+      discord?: string | null
+      explorer?: string | null
+      github?: string | null
+      imageUrl?: string | null
+      medium?: string | null
+      serumV3Usdc?: string | null
+      serumV3Usdt?: string | null
+      tgann?: string | null
+      tggroup?: string | null
+      twitter?: string | null
+      website?: string | null
+    } | null
+  }> | null
+}
+
+export type ClustersQueryVariables = Exact<{ [key: string]: never }>
+
+export type ClustersQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'Cluster'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    endpoint?: string | null
+    name?: string | null
+    status?: ClusterStatus | null
+    type?: ClusterType | null
+    mints?: Array<{
+      __typename?: 'Mint'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      address?: string | null
+      coingeckoId?: string | null
+      decimals?: number | null
+      logoUrl?: string | null
+      name?: string | null
+      symbol?: string | null
+      type?: MintType | null
+    }> | null
+  }> | null
+}
+
 export type UptimeQueryVariables = Exact<{ [key: string]: never }>
 
 export type UptimeQuery = { __typename?: 'Query'; uptime: number }
@@ -1450,6 +1837,65 @@ export const AuthTokenDetailsFragmentDoc = gql`
   }
   ${UserDetailsFragmentDoc}
 `
+export const ClusterDetailsFragmentDoc = gql`
+  fragment ClusterDetails on Cluster {
+    id
+    createdAt
+    updatedAt
+    endpoint
+    name
+    status
+    type
+  }
+`
+export const ClusterTokenExtensionsDetailsFragmentDoc = gql`
+  fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
+    address
+    assetContract
+    bridgeContract
+    coingeckoId
+    description
+    discord
+    explorer
+    github
+    imageUrl
+    medium
+    serumV3Usdc
+    serumV3Usdt
+    tgann
+    tggroup
+    twitter
+    website
+  }
+`
+export const ClusterTokenDetailsFragmentDoc = gql`
+  fragment ClusterTokenDetails on ClusterToken {
+    address
+    name
+    decimals
+    symbol
+    logoURI
+    tags
+    extensions {
+      ...ClusterTokenExtensionsDetails
+    }
+  }
+  ${ClusterTokenExtensionsDetailsFragmentDoc}
+`
+export const MintDetailsFragmentDoc = gql`
+  fragment MintDetails on Mint {
+    id
+    createdAt
+    updatedAt
+    address
+    coingeckoId
+    decimals
+    logoUrl
+    name
+    symbol
+    type
+  }
+`
 export const UserEmailDetailsFragmentDoc = gql`
   fragment UserEmailDetails on UserEmail {
     id
@@ -1727,6 +2173,102 @@ export const MeDocument = gql`
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options })
+}
+export const AddClusterMintDocument = gql`
+  mutation addClusterMint($input: MintAddInput!) {
+    addClusterMint(input: $input) {
+      ...ClusterDetails
+      mints {
+        ...MintDetails
+      }
+    }
+  }
+  ${ClusterDetailsFragmentDoc}
+  ${MintDetailsFragmentDoc}
+`
+
+export function useAddClusterMintMutation() {
+  return Urql.useMutation<AddClusterMintMutation, AddClusterMintMutationVariables>(AddClusterMintDocument)
+}
+export const CreateClusterDocument = gql`
+  mutation CreateCluster($input: ClusterCreateInput!) {
+    created: createCluster(input: $input) {
+      ...ClusterDetails
+    }
+  }
+  ${ClusterDetailsFragmentDoc}
+`
+
+export function useCreateClusterMutation() {
+  return Urql.useMutation<CreateClusterMutation, CreateClusterMutationVariables>(CreateClusterDocument)
+}
+export const DeleteClusterDocument = gql`
+  mutation DeleteCluster($clusterId: String!) {
+    deleted: deleteCluster(clusterId: $clusterId) {
+      ...ClusterDetails
+    }
+  }
+  ${ClusterDetailsFragmentDoc}
+`
+
+export function useDeleteClusterMutation() {
+  return Urql.useMutation<DeleteClusterMutation, DeleteClusterMutationVariables>(DeleteClusterDocument)
+}
+export const UpdateClusterDocument = gql`
+  mutation UpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
+    updated: updateCluster(clusterId: $clusterId, input: $input) {
+      ...ClusterDetails
+    }
+  }
+  ${ClusterDetailsFragmentDoc}
+`
+
+export function useUpdateClusterMutation() {
+  return Urql.useMutation<UpdateClusterMutation, UpdateClusterMutationVariables>(UpdateClusterDocument)
+}
+export const ClusterDocument = gql`
+  query Cluster($clusterId: String!) {
+    item: cluster(clusterId: $clusterId) {
+      ...ClusterDetails
+      mints {
+        ...MintDetails
+      }
+    }
+  }
+  ${ClusterDetailsFragmentDoc}
+  ${MintDetailsFragmentDoc}
+`
+
+export function useClusterQuery(options: Omit<Urql.UseQueryArgs<ClusterQueryVariables>, 'query'>) {
+  return Urql.useQuery<ClusterQuery>({ query: ClusterDocument, ...options })
+}
+export const ClusterTokensDocument = gql`
+  query ClusterTokens($input: ClusterTokenInput!) {
+    items: clusterTokens(input: $input) {
+      ...ClusterTokenDetails
+    }
+  }
+  ${ClusterTokenDetailsFragmentDoc}
+`
+
+export function useClusterTokensQuery(options: Omit<Urql.UseQueryArgs<ClusterTokensQueryVariables>, 'query'>) {
+  return Urql.useQuery<ClusterTokensQuery>({ query: ClusterTokensDocument, ...options })
+}
+export const ClustersDocument = gql`
+  query Clusters {
+    items: clusters {
+      ...ClusterDetails
+      mints {
+        ...MintDetails
+      }
+    }
+  }
+  ${ClusterDetailsFragmentDoc}
+  ${MintDetailsFragmentDoc}
+`
+
+export function useClustersQuery(options?: Omit<Urql.UseQueryArgs<ClustersQueryVariables>, 'query'>) {
+  return Urql.useQuery<ClustersQuery>({ query: ClustersDocument, ...options })
 }
 export const UptimeDocument = gql`
   query Uptime {

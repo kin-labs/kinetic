@@ -1,0 +1,103 @@
+fragment ClusterDetails on Cluster {
+  id
+  createdAt
+  updatedAt
+  endpoint
+  name
+  status
+  type
+}
+
+fragment ClusterTokenDetails on ClusterToken {
+  address
+  name
+  decimals
+  symbol
+  logoURI
+  tags
+  extensions {
+    ...ClusterTokenExtensionsDetails
+  }
+}
+
+fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
+  address
+  assetContract
+  bridgeContract
+  coingeckoId
+  description
+  discord
+  explorer
+  github
+  imageUrl
+  medium
+  serumV3Usdc
+  serumV3Usdt
+  tgann
+  tggroup
+  twitter
+  website
+}
+fragment MintDetails on Mint {
+  id
+  createdAt
+  updatedAt
+  address
+  coingeckoId
+  decimals
+  logoUrl
+  name
+  symbol
+  type
+}
+
+mutation addClusterMint($input: MintAddInput!) {
+  addClusterMint(input: $input) {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
+  }
+}
+
+mutation CreateCluster($input: ClusterCreateInput!) {
+  created: createCluster(input: $input) {
+    ...ClusterDetails
+  }
+}
+
+mutation DeleteCluster($clusterId: String!) {
+  deleted: deleteCluster(clusterId: $clusterId) {
+    ...ClusterDetails
+  }
+}
+
+mutation UpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
+  updated: updateCluster(clusterId: $clusterId, input: $input) {
+    ...ClusterDetails
+  }
+}
+
+query Cluster($clusterId: String!) {
+  item: cluster(clusterId: $clusterId) {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
+  }
+}
+
+query ClusterTokens($input: ClusterTokenInput!) {
+  items: clusterTokens(input: $input) {
+    ...ClusterTokenDetails
+  }
+}
+
+query Clusters {
+  items: clusters {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
+  }
+}

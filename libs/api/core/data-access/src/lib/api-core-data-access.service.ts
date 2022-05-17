@@ -2,9 +2,11 @@ import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { PrismaClient, UserRole } from '@prisma/client'
+import { omit } from 'lodash'
 
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
+  private readonly logger = new Logger(ApiCoreDataAccessService.name)
   readonly solana: Solana
 
   constructor(readonly config: ApiConfigDataAccessService) {
@@ -20,6 +22,8 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async onModuleInit() {
     await this.$connect()
+    await this.configureClusters()
+    await this.configureMints()
   }
 
   async healthCheck() {
@@ -55,5 +59,34 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   getUserByUsername(username: string) {
     return this.user.findUnique({ where: { username }, include: { emails: true } })
+  }
+
+  private async configureClusters() {
+    return Promise.all(
+      this.config.clusters.map((cluster) =>
+        this.cluster
+          .upsert({
+            where: { id: cluster.id },
+            update: { ...omit(cluster, 'status') },
+            create: { ...cluster },
+          })
+          .then((res) => this.logger.verbose(`Configured cluster ${res.name} (${res.status})`)),
+      ),
+    )
+  }
+
+  private async configureMints() {
+    return Promise.all(
+      this.config.mints.map((mint) =>
+        this.mint
+          .upsert({
+            where: { id: mint.id },
+            update: { ...mint },
+            create: { ...mint },
+            include: { cluster: true },
+          })
+          .then((res) => this.logger.verbose(`Configured mint ${res.name} on ${res.cluster?.name}`)),
+      ),
+    )
   }
 }

@@ -1,13 +1,34 @@
 import { AirdropConfig } from '@mogami/airdrop'
+import { createMintKin } from '@mogami/api/cluster/util'
 import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { ClusterStatus, ClusterType, Prisma } from '@prisma/client'
 import { Connection, Keypair } from '@solana/web3.js'
 import { exec } from 'child_process'
 import * as fs from 'fs'
 
 @Injectable()
 export class ApiConfigDataAccessService {
+  readonly clusters: Prisma.ClusterCreateInput[] = [
+    {
+      id: 'solana-devnet',
+      name: 'Solana Devnet',
+      endpoint: 'devnet',
+      type: ClusterType.SolanaDevnet,
+    },
+    {
+      id: 'solana-mainnet',
+      name: 'Solana Mainnet',
+      endpoint: 'mainnet',
+      type: ClusterType.SolanaMainnet,
+      status: ClusterStatus.Inactive,
+    },
+  ]
+  readonly mints: Prisma.MintCreateInput[] = [
+    createMintKin('solana-devnet', 'KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX'),
+    createMintKin('solana-mainnet', 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6'),
+  ]
   constructor(private readonly config: ConfigService) {}
 
   get adminEmail(): string {

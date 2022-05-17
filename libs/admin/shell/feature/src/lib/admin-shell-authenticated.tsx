@@ -6,6 +6,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { copyright, links, name } from './admin-shell-constants'
 
 const AdminAppFeature = React.lazy(async () => import('@mogami/admin/app/feature'))
+const AdminClusterFeature = React.lazy(async () => import('@mogami/admin/cluster/feature'))
 const AdminHomeFeature = React.lazy(async () => import('@mogami/admin/home/feature'))
 const AdminUserFeature = React.lazy(async () => import('@mogami/admin/user/feature'))
 
@@ -19,6 +20,7 @@ export function AdminShellAuthenticated() {
             <Redirect to="/home" />
           </Route>
           <Route path="/apps" render={() => <AdminAppFeature />} />
+          <Route path="/clusters" render={() => <AdminClusterFeature />} />
           <Route path="/home" render={() => <AdminHomeFeature />} />
           <Route path="/users" render={() => <AdminUserFeature />} />
         </Switch>
