@@ -35,6 +35,8 @@ export async function serializeMakeTransferTransaction({
     getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
   ])
 
+  console.log(destination, destinationTokenAccount.toString())
+
   const quarks = kinToQuarks(amount)
 
   const appIndexMemoInstruction = generateKinMemoInstruction({

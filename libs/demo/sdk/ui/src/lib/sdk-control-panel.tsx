@@ -11,6 +11,7 @@ import { SdkControlPanelRequestAirdrop } from './sdk-control-panel-request-airdr
 import { SdkControlPanelAppConfig } from './sdk-control-panel-app-config'
 import { SdkControlPanelSubmitPayment } from './sdk-control-panel-submit-payment'
 import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts'
+import { SdkControlPanelBatchPayments } from './sdk-control-panel-batch-payments'
 
 export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   return (
@@ -23,6 +24,7 @@ export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; 
       <SdkControlPanelRequestAirdrop keypair={keypair} sdk={sdk} />
       <SdkControlPanelCreateAccount keypair={keypair} sdk={sdk} />
       <SdkControlPanelSubmitPayment keypair={keypair} sdk={sdk} />
+      <SdkControlPanelBatchPayments keypair={keypair} sdk={sdk} />
     </Stack>
   )
 }
