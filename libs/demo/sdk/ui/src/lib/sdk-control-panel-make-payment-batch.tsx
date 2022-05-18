@@ -13,9 +13,8 @@ export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: Dem
   const [result, setResult] = useState<unknown>(null)
   const [payments, setPayments] = useState<Payment[]>([
     { destination: 'BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y', amount: '42' },
-    { destination: 'Akvroph4nnerMa16JC5ztjMuD6PpSEwP6oyY1xma8NUp', amount: '34' },
-    { destination: 'EKJ9qSMfQEtczS8D1FYobWamoUXTYknAndqNQTTyacD7', amount: '51' },
-    { destination: 'Eq5jM9QKyRj7JhXW4RPxFmGMytzh3smdWBpVRQFieRsv', amount: '87' },
+    { destination: 'CharYfTvJSiH6LtDpkGUiVVZmeCn5Cenu2TzdJSbDJnG', amount: '34' },
+    { destination: 'DAVEXJQuNAzUaVZsFeDiUr67WikDH3cj4L1YHyx5t2Nj', amount: '51' },
   ])
 
   if (!keypair.secretKey) {
@@ -43,7 +42,7 @@ export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: Dem
           </Button>
         </div>
       </Stack>
-      <SdkControlPanelResult cyData="panel-submit-payment" data={result} />
+      <SdkControlPanelResult cyData="panel-submit-payment-batch" data={result} />
     </Stack>
   )
 }
