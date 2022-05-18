@@ -1,11 +1,11 @@
+import { TransactionType } from '@kin-tools/kin-memo'
+import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import { Keypair } from '@mogami/keypair'
 import { getPublicKey, Payment, PublicKeyString } from '@mogami/solana'
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
-import { kinToQuarks } from './kin-to-quarks'
-import { TransactionType } from '@kin-tools/kin-memo'
-import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import BigNumber from 'bignumber.js'
+import { kinToQuarks } from './kin-to-quarks'
 
 export async function serializeMakeTransferBatchTransactions({
   appIndex,
@@ -30,51 +30,41 @@ export async function serializeMakeTransferBatchTransactions({
   const mintKey = getPublicKey(mint)
   const feePayerKey = getPublicKey(feePayer)
 
+  // Get TokenAccount from Owner
   const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, owner.solanaPublicKey)
-  // Get TokenAccount from Owner and Destination
 
-  const promises: Promise<PublicKey>[] = []
-  const quarksAmounts: { [key: string]: BigNumber } = {}
-  // const destinationsTokenAccounts: {[key:string]: PublicKey} = {}
-  payments.map(async (payment) => {
-    promises.push(getAssociatedTokenAddress(mintKey, getPublicKey(payment.destination)))
-    quarksAmounts[payment.destination.toString()] = kinToQuarks(payment.amount)
-    // destinationsTokenAccounts[payment.destination.toString()] = await getAssociatedTokenAddress(mintKey, getPublicKey(payment.destination))
-  })
+  // Get TokenAccount from Destination
+  const paymentInfo: { amount: BigNumber; destination: PublicKey }[] = await Promise.all(
+    payments.map(async ({ amount, destination }) => ({
+      amount: kinToQuarks(amount),
+      destination: await getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
+    })),
+  )
 
-  console.log({ promises, quarksAmounts })
   const appIndexMemoInstruction = generateKinMemoInstruction({
     appIndex,
     type,
   })
 
-  const destinationsTokenAccounts = await Promise.all(promises)
-  const instructions: TransactionInstruction[] = []
-
-  console.log({ destinationsTokenAccounts, instructions })
-  let i = 0
-  for (const payment of payments) {
-    instructions.push(
+  const instructions: TransactionInstruction[] = [
+    appIndexMemoInstruction,
+    ...paymentInfo.map((payment) =>
       createTransferInstruction(
         ownerTokenAccount,
-        destinationsTokenAccounts[i++],
+        payment.destination,
         owner.solanaPublicKey,
-        Number(quarksAmounts[payment.destination.toString()]),
+        payment.amount.toNumber(),
         [],
         TOKEN_PROGRAM_ID,
       ),
-    )
-  }
+    ),
+  ]
 
   const transaction = new Transaction({
     feePayer: feePayerKey,
     recentBlockhash: latestBlockhash,
     signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
-  })
-    .add(appIndexMemoInstruction)
-    .add(...instructions)
-
-  console.log({ transaction })
+  }).add(...instructions)
 
   // Sign and Serialize Transaction
   transaction.partialSign(...[owner.solana])
