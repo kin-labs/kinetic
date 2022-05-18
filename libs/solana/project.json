@@ -6,6 +6,7 @@
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "buildableProjectDepsInPackageJsonType": "dependencies",
         "outputPath": "dist/libs/solana",
         "tsConfig": "libs/solana/tsconfig.lib.json",
         "packageJson": "libs/solana/package.json",

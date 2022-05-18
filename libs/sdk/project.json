@@ -6,6 +6,7 @@
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "buildableProjectDepsInPackageJsonType": "dependencies",
         "outputPath": "dist/libs/sdk",
         "tsConfig": "libs/sdk/tsconfig.lib.json",
         "packageJson": "libs/sdk/package.json",
