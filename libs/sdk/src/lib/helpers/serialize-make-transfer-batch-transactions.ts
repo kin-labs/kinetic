@@ -7,7 +7,7 @@ import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import BigNumber from 'bignumber.js'
 
-export async function serializeBatchTransferTransactions({
+export async function serializeMakeTransferBatchTransactions({
   appIndex,
   payments,
   feePayer,
@@ -42,6 +42,7 @@ export async function serializeBatchTransferTransactions({
     // destinationsTokenAccounts[payment.destination.toString()] = await getAssociatedTokenAddress(mintKey, getPublicKey(payment.destination))
   })
 
+  console.log({ promises, quarksAmounts })
   const appIndexMemoInstruction = generateKinMemoInstruction({
     appIndex,
     type,
@@ -50,6 +51,7 @@ export async function serializeBatchTransferTransactions({
   const destinationsTokenAccounts = await Promise.all(promises)
   const instructions: TransactionInstruction[] = []
 
+  console.log({ destinationsTokenAccounts, instructions })
   let i = 0
   for (const payment of payments) {
     instructions.push(

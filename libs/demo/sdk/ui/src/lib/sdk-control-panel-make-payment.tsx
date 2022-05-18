@@ -8,7 +8,7 @@ import React, { ChangeEvent, useState } from 'react'
 
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelSubmitPayment({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
+export function SdkControlPanelMakePayment({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [accountId, setAccountId] = useState<string>('BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y')
   const [amount, setAmount] = useState<string>('1050')

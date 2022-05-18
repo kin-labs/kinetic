@@ -9,7 +9,7 @@ import React, { useState } from 'react'
 
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelBatchPayments({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
+export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [payments, setPayments] = useState<Payment[]>([
     { destination: 'BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y', amount: '42' },
@@ -26,7 +26,7 @@ export function SdkControlPanelBatchPayments({ keypair, sdk }: { keypair: DemoKe
 
   const getResult = async () => {
     setResult(null)
-    const res = await sdk.makeBatchTransfers({
+    const res = await sdk.makeTransferBatch({
       payments,
       owner: kp,
       type: TransactionType.Spend,
@@ -39,7 +39,7 @@ export function SdkControlPanelBatchPayments({ keypair, sdk }: { keypair: DemoKe
       <Stack direction="row" spacing={2} alignItems="center">
         <div>
           <Button className="submit-batch-payments-btn" onClick={getResult}>
-            Submit Batch Payments
+            Submit Payment Batch
           </Button>
         </div>
       </Stack>

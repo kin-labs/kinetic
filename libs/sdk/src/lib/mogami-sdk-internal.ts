@@ -16,7 +16,7 @@ import {
   serializeCreateAccountTransaction,
   serializeMakeTransferTransaction,
   parseMogamiSdkEndpoint,
-  serializeBatchTransferTransactions,
+  serializeMakeTransferBatchTransactions,
 } from './helpers'
 import { MogamiSdkConfig } from './interfaces'
 import { TransactionType } from '@kin-tools/kin-memo'
@@ -123,7 +123,7 @@ export class MogamiSdkInternal {
     return Promise.resolve({ mint, feePayer, latestBlockhash, res })
   }
 
-  async makeBatchTransfers({ payments, owner, type }: { payments: Payment[]; owner: Keypair; type: TransactionType }) {
+  async makeTransferBatch({ payments, owner, type }: { payments: Payment[]; owner: Keypair; type: TransactionType }) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
@@ -132,7 +132,7 @@ export class MogamiSdkInternal {
       .getLatestBlockhash()
       .then((res) => res.data as LatestBlockhashResponse)
 
-    const tx = await serializeBatchTransferTransactions({
+    const tx = await serializeMakeTransferBatchTransactions({
       payments,
       mint,
       owner,

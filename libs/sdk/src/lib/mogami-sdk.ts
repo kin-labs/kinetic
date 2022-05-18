@@ -57,7 +57,7 @@ export class MogamiSdk {
     return this.internal.makeTransfer({ amount, destination, owner, type })
   }
 
-  makeBatchTransfers({
+  makeTransferBatch({
     payments,
     owner,
     type = TransactionType.Earn,
@@ -66,7 +66,7 @@ export class MogamiSdk {
     owner: Keypair
     type?: TransactionType
   }) {
-    return this.internal.makeBatchTransfers({ payments, owner, type })
+    return this.internal.makeTransferBatch({ payments, owner, type })
   }
 
   tokenAccounts(account: string) {
