@@ -9,8 +9,9 @@ import { SdkControlPanelAccountHistory } from './sdk-control-panel-account-histo
 import { SdkControlPanelCreateAccount } from './sdk-control-panel-create-account'
 import { SdkControlPanelRequestAirdrop } from './sdk-control-panel-request-airdrop'
 import { SdkControlPanelAppConfig } from './sdk-control-panel-app-config'
-import { SdkControlPanelSubmitPayment } from './sdk-control-panel-submit-payment'
+import { SdkControlPanelMakePayment } from './sdk-control-panel-make-payment'
 import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts'
+import { SdkControlPanelMakePaymentBatch } from './sdk-control-panel-make-payment-batch'
 
 export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   return (
@@ -22,7 +23,8 @@ export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; 
       <SdkControlPanelAccountHistory keypair={keypair} sdk={sdk} />
       <SdkControlPanelRequestAirdrop keypair={keypair} sdk={sdk} />
       <SdkControlPanelCreateAccount keypair={keypair} sdk={sdk} />
-      <SdkControlPanelSubmitPayment keypair={keypair} sdk={sdk} />
+      <SdkControlPanelMakePayment keypair={keypair} sdk={sdk} />
+      <SdkControlPanelMakePaymentBatch keypair={keypair} sdk={sdk} />
     </Stack>
   )
 }

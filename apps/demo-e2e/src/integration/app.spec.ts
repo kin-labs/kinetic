@@ -79,8 +79,7 @@ describe('demo', () => {
       secretKey: '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
     })
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
-    cy.wait(250)
-    cy.get('[cy-data="card-sdk-warning"]').contains('No Servers configured.')
+    cy.contains('No Servers configured.')
   })
 
   it('should get the app configuration', () => {
@@ -156,6 +155,21 @@ describe('demo', () => {
     cy.seedDb()
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
     cy.get('.submit-payment-btn').click()
-    cy.get('[cy-data="panel-submit-payment"]')
+    cy.get('[cy-data="panel-submit-payment"]').then((el) => {
+      const text = JSON.parse(el[0].innerText)
+      assert.isString(text.res.data.signature)
+      assert.isEmpty(text.res.data.errors)
+    })
+  })
+
+  it('should submit a payment batch', () => {
+    cy.seedDb()
+    cy.get('[cy-data="cy-nav-btn-sdk"]').click()
+    cy.get('.submit-batch-payments-btn').click()
+    cy.get('[cy-data="panel-submit-payment-batch"]').then((el) => {
+      const text = JSON.parse(el[0].innerText)
+      assert.isString(text.res.data.signature)
+      assert.isEmpty(text.res.data.errors)
+    })
   })
 })

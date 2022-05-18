@@ -81,10 +81,6 @@ export class ApiAppDataAccessService {
 
   async appWebhook(userId: string, appId: string, appWebhookId: string) {
     await this.ensureAppById(userId, appId)
-    const data = await this.data.appWebhook.findUnique({
-      where: { id: appWebhookId },
-    })
-    console.log('data', data)
     return this.data.appWebhook.findUnique({
       where: { id: appWebhookId },
     })

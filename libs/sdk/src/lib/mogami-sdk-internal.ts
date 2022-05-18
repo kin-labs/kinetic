@@ -1,5 +1,5 @@
 import { Keypair } from '@mogami/keypair'
-import { PublicKeyString } from '@mogami/solana'
+import { Payment, PublicKeyString } from '@mogami/solana'
 import {
   AccountApi,
   AirdropApi,
@@ -12,8 +12,12 @@ import {
   MakeTransferRequest,
   TransactionApi,
 } from '../generated'
-import { serializeCreateAccountTransaction, serializeMakeTransferTransaction } from './helpers'
-import { parseMogamiSdkEndpoint } from './helpers/parse-mogami-sdk-endpoint'
+import {
+  serializeCreateAccountTransaction,
+  serializeMakeTransferTransaction,
+  parseMogamiSdkEndpoint,
+  serializeMakeTransferBatchTransactions,
+} from './helpers'
 import { MogamiSdkConfig } from './interfaces'
 import { TransactionType } from '@kin-tools/kin-memo'
 
@@ -101,6 +105,35 @@ export class MogamiSdkInternal {
     const tx = await serializeMakeTransferTransaction({
       amount,
       destination,
+      mint,
+      owner,
+      latestBlockhash,
+      feePayer,
+      appIndex: this.appConfig.app.index,
+      type,
+    })
+
+    const request: MakeTransferRequest = {
+      index: this.appConfig.app.index,
+      tx,
+    }
+
+    const res = await this.transactionApi.makeTransfer(request)
+
+    return Promise.resolve({ mint, feePayer, latestBlockhash, res })
+  }
+
+  async makeTransferBatch({ payments, owner, type }: { payments: Payment[]; owner: Keypair; type: TransactionType }) {
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    const { publicKey: mint, feePayer } = this.appConfig.mint
+    const { blockhash: latestBlockhash } = await this.transactionApi
+      .getLatestBlockhash()
+      .then((res) => res.data as LatestBlockhashResponse)
+
+    const tx = await serializeMakeTransferBatchTransactions({
+      payments,
       mint,
       owner,
       latestBlockhash,
