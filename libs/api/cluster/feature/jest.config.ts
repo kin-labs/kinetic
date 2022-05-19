@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   displayName: 'api-cluster-feature',
   preset: '../../../../jest.preset.js',
   globals: {
