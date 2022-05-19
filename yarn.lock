@@ -2933,6 +2933,11 @@
     optional "0.1.4"
     tslib "2.3.1"
 
+"@noble/hashes@~1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.0.0.tgz#d5e38bfbdaba174805a4e649f13be9a9ed3351ae"
+  integrity sha512-DZVbtY62kc3kkBtMHqwCOfXrT/hnoORy5BJ4+HU1IR59X0KWAOqsfzQPcUl/lQLlG7qXbe/fZ3r/emxtAl+sqg==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -3503,6 +3508,19 @@
   integrity sha512-c/qwwcHyafOQuVQJj0IlBjf5yYgBI7YPJ77k4fOJYesb41jio65eaJODRUmfYKhTOFBrIZ66kgvGPlNbjuoRdQ==
   dependencies:
     any-observable "^0.3.0"
+
+"@scure/base@~1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.0.0.tgz#109fb595021de285f05a7db6806f2f48296fcee7"
+  integrity sha512-gIVaYhUsy+9s58m/ETjSJVKHhKTBMmcRb9cEV5/5dwvfDlfORjKrFsDeDHWRrm6RjcPvCLZFwGJjAjLj1gg4HA==
+
+"@scure/bip39@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@scure/bip39/-/bip39-1.0.0.tgz#47504e58de9a56a4bbed95159d2d6829fa491bb0"
+  integrity sha512-HrtcikLbd58PWOkl02k9V6nXWQyoa7A0+Ek9VF7z17DDk9XZAFUcIdqfh0jJXLypmizc5/8P6OxoUeKliiWv4w==
+  dependencies:
+    "@noble/hashes" "~1.0.0"
+    "@scure/base" "~1.0.0"
 
 "@sideway/address@^4.1.3":
   version "4.1.4"
@@ -5611,16 +5629,6 @@ bip39@3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/bip39/-/bip39-3.0.2.tgz#2baf42ff3071fc9ddd5103de92e8f80d9257ee32"
   integrity sha512-J4E1r2N0tUylTKt07ibXvhpT2c5pyAFgvuA5q1H9uDy6dEGpjV8jmymh3MTYJDLCNbIVClSB9FbND49I6N24MQ==
-  dependencies:
-    "@types/node" "11.11.6"
-    create-hash "^1.1.0"
-    pbkdf2 "^3.0.9"
-    randombytes "^2.0.1"
-
-bip39@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/bip39/-/bip39-3.0.4.tgz#5b11fed966840b5e1b8539f0f54ab6392969b2a0"
-  integrity sha512-YZKQlb752TrUWqHWj7XAwCSjYEgGAk+/Aas3V7NyjQeZYsztO8JnQUaCWhcnL4T+jL8nvB8typ2jRPzTlgugNw==
   dependencies:
     "@types/node" "11.11.6"
     create-hash "^1.1.0"
