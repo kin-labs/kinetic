@@ -1,5 +1,4 @@
-/* eslint-disable */
-export default {
+module.exports = {
   displayName: 'sdk-e2e',
   preset: '../../jest.preset.js',
   globals: {
