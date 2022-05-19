@@ -26,5 +26,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": ["demo"]
+  "implicitDependencies": ["demo", "api", "solana", "sdk", "keypair"]
 }
