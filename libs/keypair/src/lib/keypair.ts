@@ -1,5 +1,6 @@
 import { Keypair as SolanaKeypair, PublicKey as SolanaPublicKey } from '@solana/web3.js'
-import * as bip39 from 'bip39'
+import * as bip39 from '@scure/bip39'
+import { wordlist } from '@scure/bip39/wordlists/english'
 import * as bs58 from 'bs58'
 import { derivePath } from 'ed25519-hd-key'
 
@@ -35,7 +36,7 @@ export class Keypair {
   static fromMnemonic(mnemonic: string): Keypair {
     const seed = bip39.mnemonicToSeedSync(mnemonic, '')
 
-    return this.fromSeed(seed.slice(0, 32))
+    return this.fromSeed(Buffer.from(seed).slice(0, 32))
   }
 
   static fromMnemonicSet(mnemonic: string, from = 0, to = 10): Keypair[] {
@@ -49,7 +50,7 @@ export class Keypair {
 
     for (let i = from; i < to; i++) {
       const path = `m/44'/501'/${i}'/0'`
-      keys.push(this.derive(seed, path))
+      keys.push(this.derive(Buffer.from(seed), path))
     }
     return keys
   }
@@ -71,6 +72,6 @@ export class Keypair {
   }
 
   static generateMnemonic(strength: 128 | 256 = 128): string {
-    return bip39.generateMnemonic(strength)
+    return bip39.generateMnemonic(wordlist, strength)
   }
 }
