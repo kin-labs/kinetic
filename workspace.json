@@ -59,6 +59,7 @@
     "demo-shell-feature": "libs/demo/shell/feature",
     "keypair": "libs/keypair",
     "sdk": "libs/sdk",
+    "sdk-e2e": "apps/sdk-e2e",
     "shared-util-admin-sdk": "libs/shared/util/admin-sdk",
     "solana": "libs/solana"
   }
