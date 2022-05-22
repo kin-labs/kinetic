@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 export function DemoHomeFeature() {
   const pages = [
-    { label: 'Keypair', path: '/keypair' },
-    { label: 'SDK', path: '/sdk' },
+    { label: 'Keypair', path: '/demo/keypair' },
+    { label: 'SDK', path: '/demo/sdk' },
   ]
   return (
     <Stack direction="row" spacing={6}>

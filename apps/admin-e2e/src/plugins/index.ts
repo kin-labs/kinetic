@@ -1,10 +1,10 @@
-import task from '@cypress/code-coverage/task'
+module.exports = (on, config) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('@cypress/code-coverage/task')(on, config)
 
-export default function (on, config) {
-  task(on, config)
-  config.env = {
-    ...process.env,
-    ...config.env, // Don't overwrite `codeCoverageTasksRegistered` set by `@cypress/code-coverage/task`
-  }
+  // add other tasks to be registered here
+
+  // IMPORTANT to return the config object
+  // with the any changed environment variables
   return config
 }

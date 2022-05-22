@@ -5,8 +5,9 @@
     "e2e": {
       "executor": "@nrwl/cypress:cypress",
       "options": {
+        "baseUrl": "http://localhost:4200",
         "cypressConfig": "apps/admin-e2e/cypress.json",
-        "devServerTarget": "admin:serve",
+        "devServerTarget": "admin:serve-e2e",
         "key": "9d80baaf-fd61-400f-8051-6e14db44040d",
         "record": true
       },
@@ -25,5 +26,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": ["admin"]
+  "implicitDependencies": ["admin", "api", "solana", "sdk", "keypair"]
 }

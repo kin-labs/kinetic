@@ -15,3 +15,16 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+import '@cypress/code-coverage/support'
+
+/// <reference types="cypress" />
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable {
+      login(email: string, password: string): void
+      seedDb(): Chainable<Element>
+    }
+  }
+}

@@ -9,20 +9,20 @@ const DemoServerFeature = React.lazy(async () => import('@mogami/demo/server/fea
 
 export function DemoShellFeature() {
   const links: AdminUiLink[] = [
-    { label: 'Home', path: '/home', cyData: 'cy-nav-btn-home' },
-    { label: 'Keypair', path: '/keypair', cyData: 'cy-nav-btn-keypair' },
-    { label: 'SDK', path: '/sdk', cyData: 'cy-nav-btn-sdk' },
-    { label: 'Servers', path: '/servers', cyData: 'cy-nav-btn-servers' },
+    { label: 'Home', path: '/demo/home', cyData: 'cy-nav-btn-home' },
+    { label: 'Keypair', path: '/demo/keypair', cyData: 'cy-nav-btn-keypair' },
+    { label: 'SDK', path: '/demo/sdk', cyData: 'cy-nav-btn-sdk' },
+    { label: 'Servers', path: '/demo/servers', cyData: 'cy-nav-btn-servers' },
   ]
   return (
     <AdminUiLayout links={links} copyright={<div>Kin Foundation &copy; 2022</div>} name={'Mogami'}>
-      <Route path="/" exact>
-        <Redirect to="/home" />
+      <Route path="/demo/" exact>
+        <Redirect to="/demo/home" />
       </Route>
-      <Route path="/home" render={() => <DemoHomeFeature />} />
-      <Route path="/keypair" render={() => <DemoKeypairFeature />} />
-      <Route path="/sdk" render={() => <DemoSdkFeature />} />
-      <Route path="/servers" render={() => <DemoServerFeature />} />
+      <Route path="/demo/home" render={() => <DemoHomeFeature />} />
+      <Route path="/demo/keypair" render={() => <DemoKeypairFeature />} />
+      <Route path="/demo/sdk" render={() => <DemoSdkFeature />} />
+      <Route path="/demo/servers" render={() => <DemoServerFeature />} />
     </AdminUiLayout>
   )
 }

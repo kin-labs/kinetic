@@ -57,9 +57,9 @@ jobs:
       - uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./apps/demo-e2e/coverage/
+          directory: ./apps/admin-e2e/coverage/
           files: ./clover.xml
-          path_to_write_report: ./apps/demo-e2e/coverage/codecov_report.txt
+          path_to_write_report: ./apps/admin-e2e/coverage/codecov_report.txt
           verbose: true
       - run: yarn install --frozen-lockfile
       - run: yarn format:check

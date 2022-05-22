@@ -17,7 +17,7 @@
         "assets": ["apps/admin/src/favicon.ico", "apps/admin/src/assets"],
         "styles": ["apps/admin/src/styles.css"],
         "scripts": [],
-        "webpackConfig": "@nrwl/react/plugins/webpack"
+        "webpackConfig": "apps/admin/webpack.config.js"
       },
       "configurations": {
         "production": {
@@ -36,12 +36,20 @@
         }
       }
     },
+    "serve-e2e": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx run api:serve", "nx run admin:serve"],
+        "parallel": true,
+        "readyWhen": "webpack compiled"
+      }
+    },
     "serve": {
       "executor": "@nrwl/web:dev-server",
       "options": {
         "buildTarget": "admin:build",
         "hmr": true,
-        "port": 4400,
+        "port": 4200,
         "proxyConfig": "apps/admin/proxy.conf.js"
       },
       "configurations": {

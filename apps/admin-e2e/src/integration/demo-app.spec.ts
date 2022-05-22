@@ -8,7 +8,7 @@ describe('demo', () => {
   beforeEach(() => {
     demoServerDb.server.clear()
     demoKeypairDb.keypair.clear()
-    cy.visit('/')
+    cy.visit('/demo')
   })
 
   it('should display welcome message', () => {
