@@ -12,7 +12,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/api/user/data-access"],
       "options": {
-        "jestConfig": "libs/api/user/data-access/jest.config.js",
+        "jestConfig": "libs/api/user/data-access/jest.config.ts",
         "passWithNoTests": true
       }
     }

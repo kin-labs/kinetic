@@ -24,7 +24,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/airdrop"],
       "options": {
-        "jestConfig": "libs/airdrop/jest.config.js",
+        "jestConfig": "libs/airdrop/jest.config.ts",
         "passWithNoTests": true
       }
     }

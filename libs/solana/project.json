@@ -25,7 +25,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/solana"],
       "options": {
-        "jestConfig": "libs/solana/jest.config.js",
+        "jestConfig": "libs/solana/jest.config.ts",
         "passWithNoTests": true
       }
     }

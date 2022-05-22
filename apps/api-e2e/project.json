@@ -5,7 +5,7 @@
     "e2e": {
       "executor": "@nrwl/jest:jest",
       "options": {
-        "jestConfig": "apps/api-e2e/jest.config.js",
+        "jestConfig": "apps/api-e2e/jest.config.ts",
         "passWithNoTests": true
       }
     },
