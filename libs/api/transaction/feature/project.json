@@ -13,7 +13,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/api/transaction/feature"],
       "options": {
-        "jestConfig": "libs/api/transaction/feature/jest.config.js",
+        "jestConfig": "libs/api/transaction/feature/jest.config.ts",
         "passWithNoTests": true
       }
     }

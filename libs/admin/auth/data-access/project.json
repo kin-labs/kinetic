@@ -14,7 +14,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/admin/auth/data-access"],
       "options": {
-        "jestConfig": "libs/admin/auth/data-access/jest.config.js",
+        "jestConfig": "libs/admin/auth/data-access/jest.config.ts",
         "passWithNoTests": true
       }
     }

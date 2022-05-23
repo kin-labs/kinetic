@@ -25,7 +25,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/keypair"],
       "options": {
-        "jestConfig": "libs/keypair/jest.config.js",
+        "jestConfig": "libs/keypair/jest.config.ts",
         "passWithNoTests": true
       }
     }

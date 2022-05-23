@@ -14,7 +14,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/demo/shell/feature"],
       "options": {
-        "jestConfig": "libs/demo/shell/feature/jest.config.js",
+        "jestConfig": "libs/demo/shell/feature/jest.config.ts",
         "passWithNoTests": true
       }
     }

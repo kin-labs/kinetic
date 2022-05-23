@@ -12,7 +12,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/api/airdrop/data-access"],
       "options": {
-        "jestConfig": "libs/api/airdrop/data-access/jest.config.js",
+        "jestConfig": "libs/api/airdrop/data-access/jest.config.ts",
         "passWithNoTests": true
       }
     }

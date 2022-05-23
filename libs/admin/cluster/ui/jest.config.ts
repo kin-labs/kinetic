@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   displayName: 'admin-cluster-ui',
   preset: '../../../../jest.preset.js',
   transform: {

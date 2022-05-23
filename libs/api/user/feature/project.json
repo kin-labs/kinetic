@@ -12,7 +12,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/api/user/feature"],
       "options": {
-        "jestConfig": "libs/api/user/feature/jest.config.js",
+        "jestConfig": "libs/api/user/feature/jest.config.ts",
         "passWithNoTests": true
       }
     }
