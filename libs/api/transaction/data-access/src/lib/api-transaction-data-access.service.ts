@@ -68,7 +68,7 @@ export class ApiTransactionDataAccessService {
       appTransaction.status = AppTransactionStatus.Confirming
       appTransaction.solanaEnd = new Date()
     } catch (error) {
-      appTransaction.errors = [error.toString()]
+      appTransaction.errors = [this.parseError(error)]
       appTransaction.status = AppTransactionStatus.Failed
       appTransaction.solanaEnd = new Date()
     }
@@ -110,5 +110,19 @@ export class ApiTransactionDataAccessService {
 
   sendVerifyWebhook(app: App, payload: Prisma.AppTransactionUpdateInput) {
     return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Verify, payload })
+  }
+
+  parseError(error) {
+    const description = error.toString()
+    if (description.includes('invalid account data for instruction')) {
+      const instructionIndex = description.split(' ')[11]
+      return {
+        description,
+        type: 'DestinationDoesNotExist',
+        instructionIndex,
+      }
+    }
+
+    return error.toString()
   }
 }

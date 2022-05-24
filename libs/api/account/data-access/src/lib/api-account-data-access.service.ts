@@ -33,7 +33,7 @@ export class ApiAccountDataAccessService {
     const signer = Keypair.fromSecretKey(app.wallet.secretKey)
 
     const { feePayer, source, transaction } = parseAndSignTransaction({ tx: input.tx, signer: signer.solana })
-    const errors: string[] = []
+    const errors = []
 
     let status: AppTransactionStatus
     let signature: string

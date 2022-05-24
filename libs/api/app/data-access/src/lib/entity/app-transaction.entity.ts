@@ -22,7 +22,7 @@ export class AppTransaction {
   destination?: string
   @ApiProperty()
   @Field(() => [String], { nullable: true })
-  errors?: string[]
+  errors?: any
   @ApiProperty()
   @Field({ nullable: true })
   feePayer?: string
