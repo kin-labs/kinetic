@@ -106,4 +106,8 @@ describe('MogamiSdk (e2e)', () => {
       expect(error.toString()).toContain('Error: Maximum number of payments exceeded')
     }
   })
+
+  it('empty', () => {
+    expect(true).toBeTruthy()
+  })
 })
