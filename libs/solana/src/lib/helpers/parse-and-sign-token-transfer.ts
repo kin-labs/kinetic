@@ -17,7 +17,7 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
     (instruction) => instruction?.programId?.toBase58() === TOKEN_PROGRAM_ID?.toBase58(),
   )
   if (!instruction) {
-    throw new Error(`parseIncomingTransaction: Can't find token transfer`)
+    throw new Error(`parseAndSignTokenTransfer: Can't find token transfer instruction`)
   }
 
   // Get the amount and destination from the instruction

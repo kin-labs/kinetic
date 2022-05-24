@@ -474,13 +474,20 @@
           "signature": {
             "type": "string"
           },
-          "solanaStart": {
+          "solanaFinalized": {
             "format": "date-time",
             "type": "string"
           },
           "solanaEnd": {
             "format": "date-time",
             "type": "string"
+          },
+          "solanaStart": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "solanaTransaction": {
+            "type": "object"
           },
           "source": {
             "type": "string"
@@ -515,8 +522,10 @@
           "feePayer",
           "mint",
           "signature",
-          "solanaStart",
+          "solanaFinalized",
           "solanaEnd",
+          "solanaStart",
+          "solanaTransaction",
           "source",
           "status",
           "webhookEventStart",

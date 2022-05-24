@@ -34,9 +34,12 @@ type AppTransaction {
   mint: String
   processingDuration: Int
   signature: String
-  solanaDuration: Int
+  solanaCommittedDuration: Int
   solanaEnd: DateTime
+  solanaFinalized: DateTime
+  solanaFinalizedDuration: Int
   solanaStart: DateTime
+  solanaTransaction: JSON
   source: String
   status: AppTransactionStatus!
   totalDuration: Int
@@ -50,9 +53,10 @@ type AppTransaction {
 }
 
 enum AppTransactionStatus {
+  Confirming
   Failed
+  Finalized
   Pending
-  Succeed
 }
 
 input AppUpdateInput {

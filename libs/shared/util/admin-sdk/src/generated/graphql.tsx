@@ -55,9 +55,12 @@ export type AppTransaction = {
   mint?: Maybe<Scalars['String']>
   processingDuration?: Maybe<Scalars['Int']>
   signature?: Maybe<Scalars['String']>
-  solanaDuration?: Maybe<Scalars['Int']>
+  solanaCommittedDuration?: Maybe<Scalars['Int']>
   solanaEnd?: Maybe<Scalars['DateTime']>
+  solanaFinalized?: Maybe<Scalars['DateTime']>
+  solanaFinalizedDuration?: Maybe<Scalars['Int']>
   solanaStart?: Maybe<Scalars['DateTime']>
+  solanaTransaction?: Maybe<Scalars['JSON']>
   source?: Maybe<Scalars['String']>
   status: AppTransactionStatus
   totalDuration?: Maybe<Scalars['Int']>
@@ -71,9 +74,10 @@ export type AppTransaction = {
 }
 
 export enum AppTransactionStatus {
+  Confirming = 'Confirming',
   Failed = 'Failed',
+  Finalized = 'Finalized',
   Pending = 'Pending',
-  Succeed = 'Succeed',
 }
 
 export type AppUpdateInput = {
@@ -533,9 +537,12 @@ export type AppTransactionDetailsFragment = {
   mint?: string | null
   processingDuration?: number | null
   signature?: string | null
-  solanaDuration?: number | null
+  solanaCommittedDuration?: number | null
+  solanaFinalized?: any | null
+  solanaFinalizedDuration?: number | null
   solanaEnd?: any | null
   solanaStart?: any | null
+  solanaTransaction?: any | null
   source?: string | null
   status: AppTransactionStatus
   totalDuration?: number | null
@@ -1044,9 +1051,12 @@ export type AppTransactionQuery = {
     mint?: string | null
     processingDuration?: number | null
     signature?: string | null
-    solanaDuration?: number | null
+    solanaCommittedDuration?: number | null
+    solanaFinalized?: any | null
+    solanaFinalizedDuration?: number | null
     solanaEnd?: any | null
     solanaStart?: any | null
+    solanaTransaction?: any | null
     source?: string | null
     status: AppTransactionStatus
     totalDuration?: number | null
@@ -1077,9 +1087,12 @@ export type AppTransactionsQuery = {
     mint?: string | null
     processingDuration?: number | null
     signature?: string | null
-    solanaDuration?: number | null
+    solanaCommittedDuration?: number | null
+    solanaFinalized?: any | null
+    solanaFinalizedDuration?: number | null
     solanaEnd?: any | null
     solanaStart?: any | null
+    solanaTransaction?: any | null
     source?: string | null
     status: AppTransactionStatus
     totalDuration?: number | null
@@ -1757,9 +1770,12 @@ export const AppTransactionDetailsFragmentDoc = gql`
     mint
     processingDuration
     signature
-    solanaDuration
+    solanaCommittedDuration
+    solanaFinalized
+    solanaFinalizedDuration
     solanaEnd
     solanaStart
+    solanaTransaction
     source
     status
     totalDuration

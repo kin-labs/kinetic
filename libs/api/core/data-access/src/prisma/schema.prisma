@@ -59,8 +59,10 @@ model AppTransaction {
   mint               String?
   source             String?
   signature          String?
-  solanaStart        DateTime?
+  solanaFinalized    DateTime?
   solanaEnd          DateTime?
+  solanaStart        DateTime?
+  solanaTransaction  Json?
   status             AppTransactionStatus @default(Pending)
   webhookEventStart  DateTime?
   webhookEventEnd    DateTime?
@@ -71,9 +73,10 @@ model AppTransaction {
 }
 
 enum AppTransactionStatus {
+  Confirming
   Failed
+  Finalized
   Pending
-  Succeed
 }
 
 model AppWebhook {

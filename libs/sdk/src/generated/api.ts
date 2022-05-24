@@ -228,13 +228,25 @@ export interface AppTransaction {
    * @type {string}
    * @memberof AppTransaction
    */
-  solanaStart: string
+  solanaFinalized: string
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
   solanaEnd: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  solanaStart: string
+  /**
+   *
+   * @type {object}
+   * @memberof AppTransaction
+   */
+  solanaTransaction: object
   /**
    *
    * @type {string}

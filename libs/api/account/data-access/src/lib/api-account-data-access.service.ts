@@ -42,7 +42,7 @@ export class ApiAccountDataAccessService {
 
     try {
       signature = await this.data.solana.sendRawTransaction(transaction)
-      status = AppTransactionStatus.Succeed
+      status = AppTransactionStatus.Confirming
     } catch (error) {
       status = AppTransactionStatus.Failed
       errors.push(error.toString())

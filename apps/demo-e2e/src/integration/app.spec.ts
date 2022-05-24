@@ -157,8 +157,8 @@ describe('demo', () => {
     cy.get('.submit-payment-btn').click()
     cy.get('[cy-data="panel-submit-payment"]').then((el) => {
       const text = JSON.parse(el[0].innerText)
-      assert.isString(text.res.data.signature)
-      assert.isEmpty(text.res.data.errors)
+      assert.isString(text.signature)
+      assert.isEmpty(text.errors)
     })
   })
 
@@ -168,8 +168,8 @@ describe('demo', () => {
     cy.get('.submit-batch-payments-btn').click()
     cy.get('[cy-data="panel-submit-payment-batch"]').then((el) => {
       const text = JSON.parse(el[0].innerText)
-      assert.isString(text.res.data.signature)
-      assert.isEmpty(text.res.data.errors)
+      assert.isString(text.signature)
+      assert.isEmpty(text.errors)
     })
   })
 })

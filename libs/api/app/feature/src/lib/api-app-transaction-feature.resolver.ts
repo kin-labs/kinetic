@@ -10,14 +10,20 @@ export class ApiAppTransactionFeatureResolver {
   }
 
   @ResolveField(() => Int, { nullable: true })
-  solanaDuration(@Parent() tx: AppTransaction) {
+  solanaCommittedDuration(@Parent() tx: AppTransaction) {
     if (!tx.solanaEnd || !tx.solanaStart) return null
     return tx?.solanaEnd?.getTime() - tx?.solanaStart?.getTime()
   }
 
   @ResolveField(() => Int, { nullable: true })
+  solanaFinalizedDuration(@Parent() tx: AppTransaction) {
+    if (!tx.solanaFinalized || !tx.solanaStart) return null
+    return tx?.solanaFinalized?.getTime() - tx?.solanaStart?.getTime()
+  }
+
+  @ResolveField(() => Int, { nullable: true })
   totalDuration(@Parent() tx: AppTransaction) {
-    return tx?.updatedAt?.getTime() - tx?.createdAt?.getTime()
+    return tx?.solanaFinalized?.getTime() - tx?.createdAt?.getTime()
   }
 
   @ResolveField(() => Int, { nullable: true })

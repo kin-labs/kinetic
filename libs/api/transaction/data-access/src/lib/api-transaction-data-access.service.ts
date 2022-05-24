@@ -65,7 +65,7 @@ export class ApiTransactionDataAccessService {
     appTransaction.solanaStart = new Date()
     try {
       appTransaction.signature = await this.data.solana.sendRawTransaction(transaction)
-      appTransaction.status = AppTransactionStatus.Succeed
+      appTransaction.status = AppTransactionStatus.Confirming
       appTransaction.solanaEnd = new Date()
     } catch (error) {
       appTransaction.errors = [error.toString()]

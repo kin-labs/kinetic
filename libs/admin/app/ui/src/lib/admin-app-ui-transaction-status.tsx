@@ -7,7 +7,7 @@ export function AdminAppUiTransactionStatus({ status }: { status?: AppTransactio
   let borderColor = 'yellow.500'
   let color = 'yellow.200'
 
-  if (status && status === AppTransactionStatus.Succeed) {
+  if (status && status === AppTransactionStatus.Finalized) {
     bgColor = 'green.800'
     borderColor = 'green.500'
     color = 'green.200'

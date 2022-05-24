@@ -23,9 +23,12 @@ fragment AppTransactionDetails on AppTransaction {
   mint
   processingDuration
   signature
-  solanaDuration
+  solanaCommittedDuration
+  solanaFinalized
+  solanaFinalizedDuration
   solanaEnd
   solanaStart
+  solanaTransaction
   source
   status
   totalDuration
