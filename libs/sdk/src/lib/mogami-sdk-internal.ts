@@ -70,7 +70,7 @@ export class MogamiSdkInternal {
 
     const res = await this.accountApi.createAccount(request)
 
-    return Promise.resolve({ mint, feePayer, latestBlockhash, res })
+    return Promise.resolve(res.data)
   }
 
   async getAppConfig(index: number) {
@@ -120,7 +120,7 @@ export class MogamiSdkInternal {
 
     const res = await this.transactionApi.makeTransfer(request)
 
-    return Promise.resolve({ mint, feePayer, latestBlockhash, res })
+    return Promise.resolve(res.data)
   }
 
   async makeTransferBatch({ payments, owner, type }: { payments: Payment[]; owner: Keypair; type: TransactionType }) {
@@ -149,7 +149,7 @@ export class MogamiSdkInternal {
 
     const res = await this.transactionApi.makeTransfer(request)
 
-    return Promise.resolve({ mint, feePayer, latestBlockhash, res })
+    return Promise.resolve(res.data)
   }
 
   requestAirdrop(account: string, amount: string) {

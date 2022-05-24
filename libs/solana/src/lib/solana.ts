@@ -1,8 +1,8 @@
 import { Commitment, Connection, PublicKey, Transaction } from '@solana/web3.js'
+import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { getPublicKey, parseEndpoint } from './helpers'
 import { PublicKeyString, SolanaConfig, TokenBalance } from './interfaces'
-import axios from 'axios'
 
 export class Solana {
   readonly endpoint: string
@@ -12,6 +12,10 @@ export class Solana {
     this.endpoint = parseEndpoint(endpoint)
     this.connection = new Connection(this.endpoint)
     config.logger?.log(`Solana RPC Endpoint: ${this.endpoint}`)
+  }
+
+  confirmTransaction(signature: string, finalized: Commitment = 'finalized') {
+    return this.connection.confirmTransaction(signature, finalized)
   }
 
   async getAccountHistory(account: PublicKeyString) {

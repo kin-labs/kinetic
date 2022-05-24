@@ -376,7 +376,7 @@
             "deprecationReason": null
           },
           {
-            "name": "solanaDuration",
+            "name": "solanaCommittedDuration",
             "description": null,
             "args": [],
             "type": {
@@ -400,12 +400,48 @@
             "deprecationReason": null
           },
           {
+            "name": "solanaFinalized",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "solanaFinalizedDuration",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "solanaStart",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "solanaTransaction",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JSON",
               "ofType": null
             },
             "isDeprecated": false,
@@ -550,19 +586,25 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "Confirming",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "Failed",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Pending",
+            "name": "Finalized",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Succeed",
+            "name": "Pending",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

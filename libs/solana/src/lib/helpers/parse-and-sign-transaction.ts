@@ -15,7 +15,7 @@ export function parseAndSignTransaction({ tx, signer }: { tx: Buffer; signer: So
   // Get the fee payer
   const feePayer = transaction?.feePayer?.toBase58()
   if (!feePayer) {
-    throw new Error(`parseIncomingTransaction: Can't find token feePayer`)
+    throw new Error(`parseAndSignTransaction: Can't find token feePayer`)
   }
 
   // Get the source
@@ -23,7 +23,7 @@ export function parseAndSignTransaction({ tx, signer }: { tx: Buffer; signer: So
     .find((signature) => signature.publicKey.toBase58() !== feePayer)
     ?.publicKey?.toBase58()
   if (!source) {
-    throw new Error(`parseIncomingTransaction: Can't find transaction source`)
+    throw new Error(`parseAndSignTransaction: Can't find transaction source`)
   }
 
   return { feePayer, source, transaction }

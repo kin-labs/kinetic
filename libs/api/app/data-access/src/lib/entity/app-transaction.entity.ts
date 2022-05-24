@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger'
+import { GraphQLJSON } from 'graphql-type-json'
 import { AppTransactionStatus } from './app-transaction-status.enum'
 
 @ObjectType()
@@ -33,10 +34,16 @@ export class AppTransaction {
   signature?: string
   @ApiProperty()
   @Field({ nullable: true })
-  solanaStart?: Date
+  solanaFinalized?: Date
   @ApiProperty()
   @Field({ nullable: true })
   solanaEnd?: Date
+  @ApiProperty()
+  @Field({ nullable: true })
+  solanaStart?: Date
+  @ApiProperty()
+  @Field(() => GraphQLJSON, { nullable: true })
+  solanaTransaction?: any
   @ApiProperty()
   @Field({ nullable: true })
   source?: string

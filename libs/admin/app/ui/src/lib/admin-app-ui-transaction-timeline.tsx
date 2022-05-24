@@ -20,14 +20,18 @@ export function AdminAppUiTransactionTimeline({ item }: { item: AppTransaction }
       </ListItem>
       <ListItem>
         <ListIcon as={CheckCircleIcon} color="green.500" />
-        Solana {item?.solanaDuration}ms
+        Solana Committed {item?.solanaCommittedDuration}ms
       </ListItem>
       <ListItem>
         <ListIcon as={CheckCircleIcon} color={item?.webhookEventDuration ? 'green.500' : 'gray.500'} />
         Event Webhook: {item?.webhookEventDuration ? `${item?.webhookEventDuration}ms` : 'disabled'}
       </ListItem>
       <ListItem>
-        <ListIcon as={CheckCircleIcon} color="green.500" />
+        <ListIcon as={CheckCircleIcon} color={item?.solanaFinalizedDuration ? 'green.500' : 'yellow.500'} />
+        Solana Finalized {item?.solanaFinalizedDuration}ms
+      </ListItem>
+      <ListItem>
+        <ListIcon as={CheckCircleIcon} color={item?.solanaFinalizedDuration ? 'green.500' : 'yellow.500'} />
         Done {item?.totalDuration}ms
       </ListItem>
     </List>
