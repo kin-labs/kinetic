@@ -2,9 +2,17 @@
   "sourceRoot": "apps/sdk-e2e/src",
   "projectType": "application",
   "targets": {
-    "e2e": {
-      "executor": "@nrwl/jest:jest",
+    "serve-api": {
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
+        "commands": ["nx run api:serve"],
+        "readyWhen": "API is running"
+      }
+    },
+    "e2e": {
+      "executor": "@mogami-dev/jest:build",
+      "options": {
+        "devServerTarget": "sdk-e2e:serve-api",
         "jestConfig": "apps/sdk-e2e/jest.config.ts",
         "passWithNoTests": true
       }

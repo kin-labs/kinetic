@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "dev-jest",
+  "version": "0.0.1",
+  "generators": {
+    "dev-jest": {
+      "factory": "./src/generators/dev-jest/generator",
+      "schema": "./src/generators/dev-jest/schema.json",
+      "description": "dev-jest generator"
+    }
+  }
+}

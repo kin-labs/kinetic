@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@mogami-dev/jest": ["libs/dev/jest/src/index.ts"],
       "@mogami/admin/app/feature": ["libs/admin/app/feature/src/index.ts"],
       "@mogami/admin/app/ui": ["libs/admin/app/ui/src/index.ts"],
       "@mogami/admin/auth/data-access": ["libs/admin/auth/data-access/src/index.ts"],

@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/dev/jest/src",
+  "projectType": "library",
+  "targets": {
+    "run-build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/dev/jest",
+        "main": "libs/dev/jest/src/index.ts",
+        "tsConfig": "libs/dev/jest/tsconfig.lib.json",
+        "assets": [
+          "libs/dev/jest/*.md",
+          {
+            "input": "./libs/dev/jest/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/dev/jest/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/dev/jest",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./libs/dev/jest",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/dev/jest/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/dev/jest"],
+      "options": {
+        "jestConfig": "libs/dev/jest/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
