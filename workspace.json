@@ -57,6 +57,7 @@
     "demo-server-feature": "libs/demo/server/feature",
     "demo-server-ui": "libs/demo/server/ui",
     "demo-shell-feature": "libs/demo/shell/feature",
+    "dev-jest": "libs/dev/jest",
     "keypair": "libs/keypair",
     "sdk": "libs/sdk",
     "sdk-e2e": "apps/sdk-e2e",
