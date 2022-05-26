@@ -54,7 +54,7 @@ model AppTransaction {
   updatedAt          DateTime              @updatedAt
   amount             Int?
   destination        String?
-  errors             Json?
+  errors             AppTransactionError[]
   feePayer           String?
   mint               String?
   source             String?
@@ -77,6 +77,23 @@ enum AppTransactionStatus {
   Failed
   Finalized
   Pending
+}
+
+enum AppTransactionErrorType {
+  BadNonce
+  InvalidAccount
+  SomeError
+  Unknown
+  WebhookFailed
+}
+
+model AppTransactionError {
+  id               String                  @id @default(cuid())
+  description      String
+  type             AppTransactionErrorType @default(Unknown)
+  instruction      Int?
+  appTransaction   AppTransaction          @relation(fields: [appTransactionId], references: [id])
+  appTransactionId String
 }
 
 model AppWebhook {

@@ -1,4 +1,4 @@
-import { AppTransaction, AppTransactionStatus } from '@mogami/api/app/data-access'
+import { AppTransaction, AppTransactionError, AppTransactionStatus } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
@@ -29,11 +29,11 @@ export class ApiAccountDataAccessService {
 
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
     const app = await this.data.getAppByIndex(Number(input.index))
-    const created = await this.data.appTransaction.create({ data: { appId: app.id } })
+    const created = await this.data.appTransaction.create({ data: { appId: app.id }, include: { errors: true } })
     const signer = Keypair.fromSecretKey(app.wallet.secretKey)
 
     const { feePayer, source, transaction } = parseAndSignTransaction({ tx: input.tx, signer: signer.solana })
-    const errors = []
+    let errors
 
     let status: AppTransactionStatus
     let signature: string
@@ -45,7 +45,7 @@ export class ApiAccountDataAccessService {
       status = AppTransactionStatus.Confirming
     } catch (error) {
       status = AppTransactionStatus.Failed
-      errors.push(error.toString())
+      errors = new AppTransactionError(error).getParsedError()
     }
 
     return this.data.appTransaction.update({
@@ -60,6 +60,7 @@ export class ApiAccountDataAccessService {
         source,
         status,
       },
+      include: { errors: true },
     })
   }
 }

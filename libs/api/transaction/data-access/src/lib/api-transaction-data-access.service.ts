@@ -1,9 +1,9 @@
-import { ApiAppWebhookDataAccessService, AppWebhookType } from '@mogami/api/app/data-access'
+import { ApiAppWebhookDataAccessService, AppTransactionError, AppWebhookType } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { parseAndSignTokenTransfer } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
-import { App, AppTransactionStatus, Prisma } from '@prisma/client'
+import { App, AppTransactionErrorType, AppTransactionStatus, Prisma } from '@prisma/client'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
@@ -28,7 +28,7 @@ export class ApiTransactionDataAccessService {
 
   async makeTransfer(input: MakeTransferRequest): Promise<MakeTransferResponse> {
     const app = await this.data.getAppByIndex(input.index)
-    const created = await this.data.appTransaction.create({ data: { appId: app.id } })
+    const created = await this.data.appTransaction.create({ data: { appId: app.id }, include: { errors: true } })
     const signer = Keypair.fromSecretKey(app.wallet.secretKey)
 
     const { amount, destination, feePayer, source, transaction } = parseAndSignTokenTransfer({
@@ -39,7 +39,6 @@ export class ApiTransactionDataAccessService {
     const appTransaction: Prisma.AppTransactionUpdateInput = {
       amount,
       destination: destination.pubkey.toBase58(),
-      errors: [],
       feePayer,
       mint: this.data.config.mogamiMintPublicKey,
       source,
@@ -56,7 +55,9 @@ export class ApiTransactionDataAccessService {
         return this.updateAppTransaction(created.id, {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
-          errors: [app.webhookVerifyUrl, err.toString()],
+          errors: {
+            create: [new AppTransactionError(err, AppTransactionErrorType.WebhookFailed).getParsedError()],
+          },
         })
       }
     }
@@ -68,7 +69,9 @@ export class ApiTransactionDataAccessService {
       appTransaction.status = AppTransactionStatus.Confirming
       appTransaction.solanaEnd = new Date()
     } catch (error) {
-      appTransaction.errors = [this.parseError(error)]
+      appTransaction.errors = {
+        create: [new AppTransactionError(error).getParsedError()],
+      }
       appTransaction.status = AppTransactionStatus.Failed
       appTransaction.solanaEnd = new Date()
     }
@@ -88,7 +91,9 @@ export class ApiTransactionDataAccessService {
         return this.updateAppTransaction(created.id, {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
-          errors: [app.webhookEventUrl, err.toString()],
+          errors: {
+            create: [new AppTransactionError(err, AppTransactionErrorType.WebhookFailed).getParsedError()],
+          },
         })
       }
     }
@@ -101,28 +106,15 @@ export class ApiTransactionDataAccessService {
     return this.data.appTransaction.update({
       where: { id },
       data: { ...data },
+      include: { errors: true },
     })
   }
 
-  sendEventWebhook(app: App, payload: Prisma.AppTransactionUpdateInput) {
+  sendEventWebhook(app: App, payload: any) {
     return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Event, payload })
   }
 
   sendVerifyWebhook(app: App, payload: Prisma.AppTransactionUpdateInput) {
     return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Verify, payload })
-  }
-
-  parseError(error) {
-    const description = error.toString()
-    if (description.includes('invalid account data for instruction')) {
-      const instructionIndex = description.split(' ')[11]
-      return {
-        description,
-        type: 'DestinationDoesNotExist',
-        instructionIndex,
-      }
-    }
-
-    return error.toString()
   }
 }
