@@ -1,4 +1,4 @@
-name: test-sdk-e2e
+name: test-demo-e2e
 
 on:
   pull_request:
@@ -11,6 +11,7 @@ env:
   ADMIN_EMAIL: 'admin@mogami.io'
   ADMIN_PASSWORD: 'Mogami@dmin1'
   APP_1_FEE_PAYER_BYTE_ARRAY: '[24,20,238,188,26,234,120,209,88,63,170,46,66,98,21,113,194,120,143,228,231,37,91,0,242,32,180,99,243,179,57,144,11,233,235,235,203,20,105,33,47,140,152,253,12,148,72,175,141,253,242,110,225,110,21,211,118,87,111,206,208,166,190,78]'
+  CODECOV_TOKEN: 'c5aaa429-ec49-4821-ba14-5ade2ffb1b54'
   COOKIE_DOMAIN: 'localhost'
   COOKIE_NAME: '__session'
   DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=mogami'
@@ -51,9 +52,17 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./apps/demo-e2e/coverage/
+          files: ./clover.xml
+          path_to_write_report: ./apps/demo-e2e/coverage/codecov_report.txt
+          verbose: true
       - run: yarn install --frozen-lockfile
+      - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx e2e sdk-e2e
+      - run: yarn nx e2e demo-e2e
   pr:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'pull_request' }}
@@ -79,6 +88,14 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./apps/demo-e2e/coverage/
+          files: ./clover.xml
+          path_to_write_report: ./apps/demo-e2e/coverage/codecov_report.txt
+          verbose: true
       - run: yarn install --frozen-lockfile
+      - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx e2e sdk-e2e
+      - run: yarn nx e2e demo-e2e
