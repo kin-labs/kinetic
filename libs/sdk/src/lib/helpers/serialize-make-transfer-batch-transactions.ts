@@ -24,8 +24,6 @@ export async function serializeMakeTransferBatchTransactions({
   owner: Keypair
   type: TransactionType
 }) {
-  if (payments?.length > 15) throw new Error('Maximum number of payments exceeded')
-
   // Create objects from Response
   const mintKey = getPublicKey(mint)
   const feePayerKey = getPublicKey(feePayer)

@@ -127,6 +127,10 @@ export class MogamiSdkInternal {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
+    if (payments?.length > 15) {
+      throw new Error('Maximum number of payments exceeded')
+    }
+
     const { publicKey: mint, feePayer } = this.appConfig.mint
     const { blockhash: latestBlockhash } = await this.transactionApi
       .getLatestBlockhash()
