@@ -31,7 +31,7 @@ describe('MogamiSdk (e2e)', () => {
     const tx = await sdk.makeTransfer({ amount: '43', destination: bobKey.publicKey, owner: aliceKey })
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(mogamiMint)
-    const { signature, errors, amount, source } = tx.res.data
+    const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
     expect(Number(amount)).toBe(4300000)
@@ -54,7 +54,7 @@ describe('MogamiSdk (e2e)', () => {
     const tx = await sdk.makeTransferBatch({ payments, owner: aliceKey })
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(mogamiMint)
-    const { signature, errors, amount, source } = tx.res.data
+    const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
     expect(Number(amount)).toBe(5100000)
@@ -65,7 +65,7 @@ describe('MogamiSdk (e2e)', () => {
     const tx = await sdk.createAccount(Keypair.generate())
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(mogamiMint)
-    const { signature, errors } = tx.res.data
+    const { signature, errors } = tx
     console.log(signature)
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
