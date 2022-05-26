@@ -1,4 +1,4 @@
-import { AppTransaction, AppTransactionError, AppTransactionStatus } from '@mogami/api/app/data-access'
+import { AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
@@ -45,7 +45,7 @@ export class ApiAccountDataAccessService {
       status = AppTransactionStatus.Confirming
     } catch (error) {
       status = AppTransactionStatus.Failed
-      errors = new AppTransactionError(error).getParsedError()
+      errors = parseError(error)
     }
 
     return this.data.appTransaction.update({

@@ -1,4 +1,4 @@
-import { ApiAppWebhookDataAccessService, AppTransactionError, AppWebhookType } from '@mogami/api/app/data-access'
+import { ApiAppWebhookDataAccessService, AppTransaction, AppWebhookType, parseError } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { parseAndSignTokenTransfer } from '@mogami/solana'
@@ -7,7 +7,6 @@ import { App, AppTransactionErrorType, AppTransactionStatus, Prisma } from '@pri
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
-import { MakeTransferResponse } from './entities/make-transfer-response.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 
 @Injectable()
@@ -26,7 +25,7 @@ export class ApiTransactionDataAccessService {
     return { lamports } as MinimumRentExemptionBalanceResponse
   }
 
-  async makeTransfer(input: MakeTransferRequest): Promise<MakeTransferResponse> {
+  async makeTransfer(input: MakeTransferRequest): Promise<AppTransaction> {
     const app = await this.data.getAppByIndex(input.index)
     const created = await this.data.appTransaction.create({ data: { appId: app.id }, include: { errors: true } })
     const signer = Keypair.fromSecretKey(app.wallet.secretKey)
@@ -56,7 +55,7 @@ export class ApiTransactionDataAccessService {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
           errors: {
-            create: [new AppTransactionError(err, AppTransactionErrorType.WebhookFailed).getParsedError()],
+            create: [parseError(err, AppTransactionErrorType.WebhookFailed)],
           },
         })
       }
@@ -70,7 +69,7 @@ export class ApiTransactionDataAccessService {
       appTransaction.solanaEnd = new Date()
     } catch (error) {
       appTransaction.errors = {
-        create: [new AppTransactionError(error).getParsedError()],
+        create: [parseError(error)],
       }
       appTransaction.status = AppTransactionStatus.Failed
       appTransaction.solanaEnd = new Date()
@@ -92,7 +91,7 @@ export class ApiTransactionDataAccessService {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
           errors: {
-            create: [new AppTransactionError(err, AppTransactionErrorType.WebhookFailed).getParsedError()],
+            create: [parseError(err, AppTransactionErrorType.WebhookFailed)],
           },
         })
       }

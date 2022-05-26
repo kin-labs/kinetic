@@ -49,7 +49,7 @@ export type AppTransaction = {
   amount?: Maybe<Scalars['Int']>
   createdAt?: Maybe<Scalars['DateTime']>
   destination?: Maybe<Scalars['String']>
-  errors?: Maybe<Array<Scalars['String']>>
+  errors?: Maybe<Array<AppTransactionError>>
   feePayer?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['String']>
   mint?: Maybe<Scalars['String']>
@@ -71,6 +71,22 @@ export type AppTransaction = {
   webhookVerifyDuration?: Maybe<Scalars['Int']>
   webhookVerifyEnd?: Maybe<Scalars['DateTime']>
   webhookVerifyStart?: Maybe<Scalars['DateTime']>
+}
+
+export type AppTransactionError = {
+  __typename?: 'AppTransactionError'
+  description?: Maybe<Scalars['String']>
+  id?: Maybe<Scalars['String']>
+  instruction?: Maybe<Scalars['Int']>
+  type: AppTransactionErrorType
+}
+
+export enum AppTransactionErrorType {
+  BadNonce = 'BadNonce',
+  InvalidAccount = 'InvalidAccount',
+  SomeError = 'SomeError',
+  Unknown = 'Unknown',
+  WebhookFailed = 'WebhookFailed',
 }
 
 export enum AppTransactionStatus {
@@ -532,7 +548,6 @@ export type AppTransactionDetailsFragment = {
   updatedAt?: any | null
   amount?: number | null
   destination?: string | null
-  errors?: Array<string> | null
   feePayer?: string | null
   mint?: string | null
   processingDuration?: number | null
@@ -552,6 +567,21 @@ export type AppTransactionDetailsFragment = {
   webhookVerifyDuration?: number | null
   webhookVerifyEnd?: any | null
   webhookVerifyStart?: any | null
+  errors?: Array<{
+    __typename?: 'AppTransactionError'
+    id?: string | null
+    description?: string | null
+    type: AppTransactionErrorType
+    instruction?: number | null
+  }> | null
+}
+
+export type AppTransactionErrorDetailsFragment = {
+  __typename?: 'AppTransactionError'
+  id?: string | null
+  description?: string | null
+  type: AppTransactionErrorType
+  instruction?: number | null
 }
 
 export type AppUserDetailsFragment = {
@@ -1046,7 +1076,6 @@ export type AppTransactionQuery = {
     updatedAt?: any | null
     amount?: number | null
     destination?: string | null
-    errors?: Array<string> | null
     feePayer?: string | null
     mint?: string | null
     processingDuration?: number | null
@@ -1066,6 +1095,13 @@ export type AppTransactionQuery = {
     webhookVerifyDuration?: number | null
     webhookVerifyEnd?: any | null
     webhookVerifyStart?: any | null
+    errors?: Array<{
+      __typename?: 'AppTransactionError'
+      id?: string | null
+      description?: string | null
+      type: AppTransactionErrorType
+      instruction?: number | null
+    }> | null
   } | null
 }
 
@@ -1082,7 +1118,6 @@ export type AppTransactionsQuery = {
     updatedAt?: any | null
     amount?: number | null
     destination?: string | null
-    errors?: Array<string> | null
     feePayer?: string | null
     mint?: string | null
     processingDuration?: number | null
@@ -1102,6 +1137,13 @@ export type AppTransactionsQuery = {
     webhookVerifyDuration?: number | null
     webhookVerifyEnd?: any | null
     webhookVerifyStart?: any | null
+    errors?: Array<{
+      __typename?: 'AppTransactionError'
+      id?: string | null
+      description?: string | null
+      type: AppTransactionErrorType
+      instruction?: number | null
+    }> | null
   }> | null
 }
 
@@ -1758,6 +1800,14 @@ export type WalletsQuery = {
   }> | null
 }
 
+export const AppTransactionErrorDetailsFragmentDoc = gql`
+  fragment AppTransactionErrorDetails on AppTransactionError {
+    id
+    description
+    type
+    instruction
+  }
+`
 export const AppTransactionDetailsFragmentDoc = gql`
   fragment AppTransactionDetails on AppTransaction {
     id
@@ -1765,7 +1815,9 @@ export const AppTransactionDetailsFragmentDoc = gql`
     updatedAt
     amount
     destination
-    errors
+    errors {
+      ...AppTransactionErrorDetails
+    }
     feePayer
     mint
     processingDuration
@@ -1786,6 +1838,7 @@ export const AppTransactionDetailsFragmentDoc = gql`
     webhookVerifyEnd
     webhookVerifyStart
   }
+  ${AppTransactionErrorDetailsFragmentDoc}
 `
 export const AppDetailsFragmentDoc = gql`
   fragment AppDetails on App {

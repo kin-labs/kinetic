@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger'
 import { GraphQLJSON } from 'graphql-type-json'
+import { AppTransactionError } from './app-transaction-error.entity'
 import { AppTransactionStatus } from './app-transaction-status.enum'
 
 @ObjectType()
@@ -21,8 +22,8 @@ export class AppTransaction {
   @Field({ nullable: true })
   destination?: string
   @ApiProperty()
-  @Field(() => [String], { nullable: true })
-  errors?: any
+  @Field(() => [AppTransactionError], { nullable: true })
+  errors?: AppTransactionError[]
   @ApiProperty()
   @Field({ nullable: true })
   feePayer?: string
