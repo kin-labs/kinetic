@@ -1,4 +1,4 @@
-name: build-test
+name: test-sdk-e2e
 
 on:
   pull_request:
@@ -22,10 +22,9 @@ env:
   MOGAMI_MINT_PUBLIC_KEY: 'MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek'
   NX_CLOUD_DISTRIBUTED_EXECUTION: false
   SOLANA_RPC_ENDPOINT: 'http://localhost:8899'
-  CODECOV_TOKEN: 'c5aaa429-ec49-4821-ba14-5ade2ffb1b54'
 
 jobs:
-  main-build-test:
+  main-sdk-e2e:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name != 'pull_request' }}
     services:
@@ -45,8 +44,6 @@ jobs:
         name: Checkout [main]
         with:
           fetch-depth: 0
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v2
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
@@ -54,25 +51,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
-      - uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./apps/demo-e2e/coverage/
-          files: ./clover.xml
-          path_to_write_report: ./apps/demo-e2e/coverage/codecov_report.txt
-          verbose: true
       - run: yarn install --frozen-lockfile
-      - run: yarn format:check
-      - run: yarn build
-      # - run: yarn nx-cloud start-ci-run
-      - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx run-many --target=e2e --all --exclude sdk-e2e --parallel=3
-      - run: yarn nx affected --target=build --parallel --max-parallel=3
-      - run: yarn nx affected --target=lint --parallel --max-parallel=3
-      - run: yarn nx affected --target=test --parallel --max-parallel=2
-      # - run: yarn nx-cloud stop-all-agents
-  pr-build-test:
+      - run: yarn nx e2e sdk-e2e
+  pr-sdk-e2e:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'pull_request' }}
     services:
@@ -90,11 +72,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Checkout pr
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v2
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
@@ -103,46 +80,5 @@ jobs:
         with:
           node-version: '14'
       - run: yarn install --frozen-lockfile
-      - run: yarn format:check
-      - run: yarn build
-      # - run: yarn nx-cloud start-ci-run
-      - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx run-many --target=e2e --all --exclude sdk-e2e --parallel=3
-      - run: yarn nx affected --target=build --parallel --max-parallel=3
-      - run: yarn nx affected --target=lint --parallel --max-parallel=3
-      - run: yarn nx affected --target=test --parallel --max-parallel=2
-      # - run: yarn nx-cloud stop-all-agents
-#  agents:
-#    runs-on: ubuntu-20.04
-#    name: Agent 1
-#    timeout-minutes: 60
-#    services:
-#      postgres:
-#        image: postgres:12
-#        env:
-#          POSTGRES_DB: prisma
-#          POSTGRES_USER: prisma
-#          POSTGRES_PASSWORD: prisma
-#        ports: ['5432:5432']
-#        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-#      solana:
-#        image: solanalabs/solana:v1.9.9
-#        ports: ['8899:8899', '8900:8900']
-#        options: --entrypoint="solana-test-validator"
-#    strategy:
-#      matrix:
-#        agent: [1, 2, 3]
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/cache@v2
-#        with:
-#          path: '**/node_modules'
-#          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-#      - uses: actions/setup-node@v1
-#        with:
-#          node-version: '14'
-#      - run: yarn install --frozen-lockfile
-#      - run: yarn build
-#      - name: Start Nx Agent ${{ matrix.agent }}
-#        run: yarn nx-cloud start-agent
+      - run: yarn nx e2e sdk-e2e
