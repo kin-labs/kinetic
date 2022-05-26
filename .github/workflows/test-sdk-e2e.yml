@@ -53,7 +53,7 @@ jobs:
           node-version: '14'
       - run: yarn install --frozen-lockfile
       - run: yarn prisma db push
-      - run: yarn nx e2e sdk-e2e
+      - run: yarn nx e2e sdk-e2e --skip-nx-cache
   pr:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'pull_request' }}
@@ -81,4 +81,4 @@ jobs:
           node-version: '14'
       - run: yarn install --frozen-lockfile
       - run: yarn prisma db push
-      - run: yarn nx e2e sdk-e2e
+      - run: yarn nx e2e sdk-e2e --skip-nx-cache

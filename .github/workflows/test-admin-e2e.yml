@@ -54,7 +54,7 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx e2e admin-e2e
+      - run: yarn nx e2e admin-e2e --skip-nx-cache
   pr:
     runs-on: ubuntu-20.04
     if: ${{ github.event_name == 'pull_request' }}
@@ -83,4 +83,4 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn cypress install
       - run: yarn prisma db push
-      - run: yarn nx e2e admin-e2e
+      - run: yarn nx e2e admin-e2e --skip-nx-cache
