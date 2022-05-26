@@ -6,7 +6,10 @@ export default async function jestDevServer(options: BuildExecutorSchema, contex
   for await (const started of startDevServer(options, context)) {
     logger.debug(`Started api ${started}`)
     try {
-      await jestExecutor(options, context)
+      const result = await jestExecutor(options, context)
+      if (!result.success) {
+        return { success: false }
+      }
     } catch (e) {
       logger.error(e.message)
 
