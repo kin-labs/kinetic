@@ -2653,7 +2653,7 @@
   resolved "https://registry.yarnpkg.com/@n1ru4l/graphql-live-query/-/graphql-live-query-0.9.0.tgz#defaebdd31f625bee49e6745934f36312532b2bc"
   integrity sha512-BTpWy1e+FxN82RnLz4x1+JcEewVdfmUhV1C6/XYD5AjS7PQp9QFF7K8bCD6gzPTr2l+prvqOyVueQhFJxB1vfg==
 
-"@nestjs/apollo@^10.0.12":
+"@nestjs/apollo@^10.0.13":
   version "10.0.13"
   resolved "https://registry.yarnpkg.com/@nestjs/apollo/-/apollo-10.0.13.tgz#0726559f9d2f03d3003638d1dbf0b8f25aa72621"
   integrity sha512-XSlPOrPhNgnZHcSnbbx5GSP2+CMW15ueYu0/5/u2F9Cid/2cfg+xJ9uiWZg2QGH6wQcd5YlK3vNu+X/QhsLH2g==
@@ -2725,7 +2725,7 @@
     tslib "2.4.0"
     uuid "8.3.2"
 
-"@nestjs/graphql@^10.0.12":
+"@nestjs/graphql@^10.0.13":
   version "10.0.13"
   resolved "https://registry.yarnpkg.com/@nestjs/graphql/-/graphql-10.0.13.tgz#da415cf21da00f320f1a48e10594bb3d501da9c2"
   integrity sha512-jTC055SMacsk1me7p49KHq+6IbOT7QNyI0sBeQkvsHilhucJVTIxzNF9vwm7Rc0zsvhJ4DL8Awm7SKpzaa0nGA==
