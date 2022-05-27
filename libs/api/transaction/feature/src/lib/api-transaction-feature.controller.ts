@@ -1,7 +1,7 @@
+import { AppTransaction } from '@mogami/api/app/data-access'
 import {
   ApiTransactionDataAccessService,
   MakeTransferRequest,
-  MakeTransferResponse,
   MinimumRentExemptionBalanceRequest,
   MinimumRentExemptionBalanceResponse,
   LatestBlockhashResponse,
@@ -36,7 +36,7 @@ export class ApiTransactionFeatureController {
   @Post('make-transfer')
   @ApiBody({ type: MakeTransferRequest })
   @ApiOperation({ operationId: 'makeTransfer' })
-  @ApiResponse({ type: MakeTransferResponse })
+  @ApiResponse({ type: AppTransaction })
   makeTransfer(@Body() body: MakeTransferRequest) {
     return this.service.makeTransfer(body)
   }

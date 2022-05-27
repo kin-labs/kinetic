@@ -67,6 +67,7 @@ export class ApiAppDataAccessService {
     await this.ensureAppById(userId, appId)
     return this.data.appTransaction.findUnique({
       where: { id: appTransactionId },
+      include: { errors: true },
     })
   }
 
@@ -76,6 +77,7 @@ export class ApiAppDataAccessService {
       where: { appId },
       take: 100,
       orderBy: { updatedAt: 'desc' },
+      include: { errors: true },
     })
   }
 

@@ -18,7 +18,9 @@ fragment AppTransactionDetails on AppTransaction {
   updatedAt
   amount
   destination
-  errors
+  errors {
+    ...AppTransactionErrorDetails
+  }
   feePayer
   mint
   processingDuration
@@ -38,6 +40,13 @@ fragment AppTransactionDetails on AppTransaction {
   webhookVerifyDuration
   webhookVerifyEnd
   webhookVerifyStart
+}
+
+fragment AppTransactionErrorDetails on AppTransactionError {
+  id
+  message
+  type
+  instruction
 }
 
 fragment AppUserDetails on AppUser {

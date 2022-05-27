@@ -28,7 +28,7 @@ type AppTransaction {
   amount: Int
   createdAt: DateTime
   destination: String
-  errors: [String!]
+  errors: [AppTransactionError!]
   feePayer: String
   id: String
   mint: String
@@ -50,6 +50,21 @@ type AppTransaction {
   webhookVerifyDuration: Int
   webhookVerifyEnd: DateTime
   webhookVerifyStart: DateTime
+}
+
+type AppTransactionError {
+  id: String
+  instruction: Int
+  message: String
+  type: AppTransactionErrorType!
+}
+
+enum AppTransactionErrorType {
+  BadNonce
+  InvalidAccount
+  SomeError
+  Unknown
+  WebhookFailed
 }
 
 enum AppTransactionStatus {

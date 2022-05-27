@@ -49,12 +49,12 @@ model App {
 }
 
 model AppTransaction {
-  id                 String               @id @default(cuid())
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
+  id                 String                @id @default(cuid())
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
   amount             Int?
   destination        String?
-  errors             String[]
+  errors             AppTransactionError[]
   feePayer           String?
   mint               String?
   source             String?
@@ -63,12 +63,12 @@ model AppTransaction {
   solanaEnd          DateTime?
   solanaStart        DateTime?
   solanaTransaction  Json?
-  status             AppTransactionStatus @default(Pending)
+  status             AppTransactionStatus  @default(Pending)
   webhookEventStart  DateTime?
   webhookEventEnd    DateTime?
   webhookVerifyStart DateTime?
   webhookVerifyEnd   DateTime?
-  app                App                  @relation(fields: [appId], references: [id])
+  app                App                   @relation(fields: [appId], references: [id])
   appId              String
 }
 
@@ -77,6 +77,23 @@ enum AppTransactionStatus {
   Failed
   Finalized
   Pending
+}
+
+enum AppTransactionErrorType {
+  BadNonce
+  InvalidAccount
+  SomeError
+  Unknown
+  WebhookFailed
+}
+
+model AppTransactionError {
+  id               String                  @id @default(cuid())
+  message          String
+  type             AppTransactionErrorType @default(Unknown)
+  instruction      Int?
+  appTransaction   AppTransaction          @relation(fields: [appTransactionId], references: [id])
+  appTransactionId String
 }
 
 model AppWebhook {

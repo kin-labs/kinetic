@@ -38,6 +38,7 @@ export class ApiAppTransactionDataAccess {
           solanaTransaction: JSON.parse(JSON.stringify(solanaTransaction)),
           status: AppTransactionStatus.Finalized,
         },
+        include: { errors: true },
       })
       this.confirming.delete(tx.id)
     } catch (error) {

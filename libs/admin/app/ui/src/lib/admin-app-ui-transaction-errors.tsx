@@ -8,9 +8,9 @@ export function AdminAppUiTransactionErrors({ item }: { item: AppTransaction }) 
     <List spacing={3}>
       {item.errors?.length ? (
         item.errors?.map((error, i) => (
-          <ListItem key={error + i}>
+          <ListItem key={i}>
             <ListIcon as={CloseIcon} color="red.500" />
-            {error}
+            {error.type} {error.message}
           </ListItem>
         ))
       ) : (
