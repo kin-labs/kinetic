@@ -10,7 +10,7 @@ export function AdminAppUiTransactionErrors({ item }: { item: AppTransaction }) 
         item.errors?.map((error, i) => (
           <ListItem key={i}>
             <ListIcon as={CloseIcon} color="red.500" />
-            {error.type} {error.description}
+            {error.type} {error.message}
           </ListItem>
         ))
       ) : (

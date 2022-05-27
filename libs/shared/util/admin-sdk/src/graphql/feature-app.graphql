@@ -44,7 +44,7 @@ fragment AppTransactionDetails on AppTransaction {
 
 fragment AppTransactionErrorDetails on AppTransactionError {
   id
-  description
+  message
   type
   instruction
 }

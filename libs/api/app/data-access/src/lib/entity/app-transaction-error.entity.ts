@@ -9,7 +9,7 @@ export class AppTransactionError {
   id?: string
   @ApiProperty()
   @Field({ nullable: true })
-  description?: string
+  message?: string
   @ApiProperty()
   @Field(() => AppTransactionErrorType)
   type: AppTransactionErrorType

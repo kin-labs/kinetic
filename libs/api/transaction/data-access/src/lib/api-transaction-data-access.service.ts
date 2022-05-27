@@ -55,7 +55,7 @@ export class ApiTransactionDataAccessService {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
           errors: {
-            create: [parseError(err, AppTransactionErrorType.WebhookFailed)],
+            create: parseError(err, AppTransactionErrorType.WebhookFailed),
           },
         })
       }
@@ -69,7 +69,7 @@ export class ApiTransactionDataAccessService {
       appTransaction.solanaEnd = new Date()
     } catch (error) {
       appTransaction.errors = {
-        create: [parseError(error)],
+        create: parseError(error),
       }
       appTransaction.status = AppTransactionStatus.Failed
       appTransaction.solanaEnd = new Date()
@@ -91,7 +91,7 @@ export class ApiTransactionDataAccessService {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
           errors: {
-            create: [parseError(err, AppTransactionErrorType.WebhookFailed)],
+            create: parseError(err, AppTransactionErrorType.WebhookFailed),
           },
         })
       }

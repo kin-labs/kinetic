@@ -445,14 +445,14 @@
           "id": {
             "type": "string"
           },
-          "description": {
+          "message": {
             "type": "string"
           },
           "type": {
             "type": "object"
           }
         },
-        "required": ["id", "description", "type"]
+        "required": ["id", "message", "type"]
       },
       "AppTransaction": {
         "type": "object",

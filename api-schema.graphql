@@ -53,9 +53,9 @@ type AppTransaction {
 }
 
 type AppTransactionError {
-  description: String
   id: String
   instruction: Int
+  message: String
   type: AppTransactionErrorType!
 }
 

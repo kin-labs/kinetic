@@ -89,7 +89,7 @@ enum AppTransactionErrorType {
 
 model AppTransactionError {
   id               String                  @id @default(cuid())
-  description      String
+  message          String
   type             AppTransactionErrorType @default(Unknown)
   instruction      Int?
   appTransaction   AppTransaction          @relation(fields: [appTransactionId], references: [id])

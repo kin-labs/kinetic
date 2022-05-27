@@ -301,7 +301,7 @@ export interface AppTransactionError {
    * @type {string}
    * @memberof AppTransactionError
    */
-  description: string
+  message: string
   /**
    *
    * @type {object}
