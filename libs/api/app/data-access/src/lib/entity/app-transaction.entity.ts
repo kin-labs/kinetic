@@ -21,7 +21,9 @@ export class AppTransaction {
   @ApiProperty()
   @Field({ nullable: true })
   destination?: string
-  @ApiProperty()
+  @ApiProperty({
+    type: [AppTransactionError],
+  })
   @Field(() => [AppTransactionError], { nullable: true })
   errors?: AppTransactionError[]
   @ApiProperty()

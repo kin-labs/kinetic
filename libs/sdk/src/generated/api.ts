@@ -201,10 +201,10 @@ export interface AppTransaction {
   destination: string
   /**
    *
-   * @type {Array<string>}
+   * @type {Array<AppTransactionError>}
    * @memberof AppTransaction
    */
-  errors: Array<string>
+  errors: Array<AppTransactionError>
   /**
    *
    * @type {string}
@@ -283,6 +283,31 @@ export interface AppTransaction {
    * @memberof AppTransaction
    */
   webhookVerifyEnd: string
+}
+/**
+ *
+ * @export
+ * @interface AppTransactionError
+ */
+export interface AppTransactionError {
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransactionError
+   */
+  id: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransactionError
+   */
+  description: string
+  /**
+   *
+   * @type {object}
+   * @memberof AppTransactionError
+   */
+  type: object
 }
 /**
  *
@@ -391,73 +416,6 @@ export interface MakeTransferRequest {
    * @memberof MakeTransferRequest
    */
   tx: object
-}
-/**
- *
- * @export
- * @interface MakeTransferResponse
- */
-export interface MakeTransferResponse {
-  /**
-   *
-   * @type {number}
-   * @memberof MakeTransferResponse
-   */
-  amount: number
-  /**
-   *
-   * @type {string}
-   * @memberof MakeTransferResponse
-   */
-  destination: string
-  /**
-   *
-   * @type {object}
-   * @memberof MakeTransferResponse
-   */
-  errors: object
-  /**
-   *
-   * @type {string}
-   * @memberof MakeTransferResponse
-   */
-  feePayer: string
-  /**
-   *
-   * @type {string}
-   * @memberof MakeTransferResponse
-   */
-  mint: string
-  /**
-   *
-   * @type {string}
-   * @memberof MakeTransferResponse
-   */
-  signature: string
-  /**
-   *
-   * @type {string}
-   * @memberof MakeTransferResponse
-   */
-  solanaStart: string
-  /**
-   *
-   * @type {string}
-   * @memberof MakeTransferResponse
-   */
-  solanaEnd: string
-  /**
-   *
-   * @type {string}
-   * @memberof MakeTransferResponse
-   */
-  source: string
-  /**
-   *
-   * @type {object}
-   * @memberof MakeTransferResponse
-   */
-  status: object
 }
 /**
  *
@@ -1638,7 +1596,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     async makeTransfer(
       makeTransferRequest: MakeTransferRequest,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MakeTransferResponse>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AppTransaction>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.makeTransfer(makeTransferRequest, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -1682,7 +1640,7 @@ export const TransactionApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    makeTransfer(makeTransferRequest: MakeTransferRequest, options?: any): AxiosPromise<MakeTransferResponse> {
+    makeTransfer(makeTransferRequest: MakeTransferRequest, options?: any): AxiosPromise<AppTransaction> {
       return localVarFp.makeTransfer(makeTransferRequest, options).then((request) => request(axios, basePath))
     },
   }

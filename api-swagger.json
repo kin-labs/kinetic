@@ -439,6 +439,21 @@
         },
         "required": ["index", "tx"]
       },
+      "AppTransactionError": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "object"
+          }
+        },
+        "required": ["id", "description", "type"]
+      },
       "AppTransaction": {
         "type": "object",
         "properties": {
@@ -462,7 +477,7 @@
           "errors": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/AppTransactionError"
             }
           },
           "feePayer": {
