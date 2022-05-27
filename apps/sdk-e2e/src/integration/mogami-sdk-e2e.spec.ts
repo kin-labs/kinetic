@@ -106,4 +106,38 @@ describe('MogamiSdk (e2e)', () => {
       expect(error.toString()).toContain('Error: Maximum number of payments exceeded')
     }
   })
+
+  it('should fail when one account does not exist in batch transfer', async () => {
+    try {
+      const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
+      const payments: Payment[] = []
+      payments.push({ destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' })
+      const kp = Keypair.generate()
+      payments.push({ destination: kp.publicKey, amount: '12' })
+      await sdk.makeTransferBatch({ payments, owner: aliceKey })
+    } catch (error) {
+      const errorData = error.response.data.error
+      expect(errorData).toContain("type: 'InvalidAccount'")
+      expect(errorData).toContain("instruction: '2")
+    }
+  })
+
+  it('should request for an airdrop', async () => {
+    const daveKey = Keypair.fromByteArray(keys.DAVE_KEY)
+    const airdrop = await sdk.requestAirdrop(daveKey.publicKey, '1000')
+    expect(airdrop.data.signature).not.toBeNull()
+    expect(typeof airdrop.data.signature).toBe('string')
+    const { account, amount } = JSON.parse(airdrop.config.data)
+    expect(account).toBe(daveKey.publicKey)
+    expect(amount).toBe('1000')
+  }, 30000)
+
+  it('should fail not funds for an airdrop', async () => {
+    try {
+      const daveKey = Keypair.fromByteArray(keys.DAVE_KEY)
+      await sdk.requestAirdrop(daveKey.publicKey, '50001')
+    } catch (error) {
+      expect(error.response.data.error).toBe('BadRequestException: Try requesting 50000 or less.')
+    }
+  })
 })
