@@ -8,7 +8,7 @@ import { AdminClusterFeatureSettingsTab } from './admin-cluster-feature-settings
 
 export default function AdminClusterFeatureDetail() {
   const { clusterId } = useParams<{ clusterId: string }>()
-  const [{ data, fetching }] = useClusterQuery({ variables: { clusterId } })
+  const [{ data, fetching }] = useClusterQuery({ variables: { clusterId: clusterId! } })
 
   if (!data || fetching) {
     return <AdminUiLoader />
@@ -34,10 +34,10 @@ export default function AdminClusterFeatureDetail() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <AdminClusterFeatureMintsTab clusterId={clusterId} />
+            <AdminClusterFeatureMintsTab clusterId={clusterId!} />
           </TabPanel>
           <TabPanel>
-            <AdminClusterFeatureSettingsTab clusterId={clusterId}></AdminClusterFeatureSettingsTab>
+            <AdminClusterFeatureSettingsTab clusterId={clusterId!}></AdminClusterFeatureSettingsTab>
           </TabPanel>
         </TabPanels>
       </Tabs>

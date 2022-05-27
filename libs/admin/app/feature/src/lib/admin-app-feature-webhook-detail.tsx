@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 
 export default function AdminAppFeatureWebhookDetail() {
   const { appId, appWebhookId } = useParams<{ appId: string; appWebhookId: string }>()
-  const [{ data, fetching }] = useAppWebhookQuery({ variables: { appId, appWebhookId } })
+  const [{ data, fetching }] = useAppWebhookQuery({ variables: { appId: appId!, appWebhookId: appWebhookId! } })
 
   if (fetching) {
     return <AdminUiLoader />
@@ -22,7 +22,7 @@ export default function AdminAppFeatureWebhookDetail() {
           </Box>
         </Flex>
       </Box>
-      {data?.item && <AdminAppUiWebhookDetail appId={appId} webhook={data?.item} />}
+      {data?.item && <AdminAppUiWebhookDetail appId={appId!} webhook={data?.item} />}
     </Stack>
   )
 }

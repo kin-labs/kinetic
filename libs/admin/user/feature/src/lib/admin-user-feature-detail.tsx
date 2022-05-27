@@ -7,11 +7,11 @@ import { useParams } from 'react-router-dom'
 export default function AdminUserFeatureDetail() {
   const toast = useToast()
   const { userId } = useParams<{ userId: string }>()
-  const [{ data }] = useUserQuery({ variables: { userId } })
+  const [{ data }] = useUserQuery({ variables: { userId: userId! } })
   const [_, updateUserMutation] = useUpdateUserMutation()
 
   const onSubmit = async (input: UserUpdateInput) => {
-    const res = await updateUserMutation({ userId, input })
+    const res = await updateUserMutation({ userId: userId!, input })
     if (res?.data?.updated) {
       toast({ status: 'success', title: 'User updated' })
     }

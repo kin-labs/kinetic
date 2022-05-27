@@ -5,6 +5,9 @@ import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { getHeader } from '../support/app.po'
 
 describe('demo', () => {
+  before(() => {
+    cy.wait(5000)
+  })
   beforeEach(() => {
     demoServerDb.server.clear()
     demoKeypairDb.keypair.clear()

@@ -26,13 +26,13 @@ import { useParams } from 'react-router-dom'
 export default function AdminAppFeatureDetail() {
   const toast = useToast()
   const { appId } = useParams<{ appId: string }>()
-  const [{ data, fetching }] = useAppQuery({ variables: { appId } })
+  const [{ data, fetching }] = useAppQuery({ variables: { appId: appId! } })
   const [, updateAppMutation] = useUpdateAppMutation()
   const [, updateUserAddMutation] = useAppUserAddMutation()
   const [, updateRoleMutation] = useAppUserUpdateRoleMutation()
 
   const onSubmit = async (input: AppUpdateInput) => {
-    const res = await updateAppMutation({ appId, input })
+    const res = await updateAppMutation({ appId: appId!, input })
     if (res?.data?.updated) {
       toast({ status: 'success', title: 'App updated' })
     }
@@ -52,10 +52,10 @@ export default function AdminAppFeatureDetail() {
   }
 
   const addRole = async ({ role, userId }: AppUserAddInput) => {
-    await updateUserAddMutation({ appId, input: { role, userId } })
+    await updateUserAddMutation({ appId: appId!, input: { role, userId } })
   }
   const updateRole = async ({ userId, role }: AppUserUpdateRoleInput) => {
-    await updateRoleMutation({ appId, input: { role, userId } })
+    await updateRoleMutation({ appId: appId!, input: { role, userId } })
   }
 
   if (fetching) {
@@ -91,10 +91,10 @@ export default function AdminAppFeatureDetail() {
             )}
           </TabPanel>
           <TabPanel>
-            <AppTransactionsTab appId={appId} />
+            <AppTransactionsTab appId={appId!} />
           </TabPanel>
           <TabPanel>
-            <AppWebhooksTab appId={appId} />
+            <AppWebhooksTab appId={appId!} />
           </TabPanel>
           <TabPanel>
             <Stack direction="column" spacing={6}>
