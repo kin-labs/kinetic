@@ -1,3 +1,4 @@
+// eslint-disable @typescript-eslint/no-explicit-any
 import { Box, ButtonGroup, Stack } from '@chakra-ui/react'
 import { ClusterTokenInput } from '@mogami/shared/util/admin-sdk'
 import { Formik } from 'formik'
@@ -7,7 +8,7 @@ import * as Yup from 'yup'
 
 export interface AdminClusterUiProps {
   input: Partial<ClusterTokenInput>
-  onSubmit: (input: Partial<ClusterTokenInput>) => any
+  onSubmit: (input: Partial<ClusterTokenInput>) => unknown
 }
 
 const validationSchema = Yup.object({

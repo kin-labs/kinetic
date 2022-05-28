@@ -1,4 +1,4 @@
-import { Alert, Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
+import { Alert, Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { AppTransaction } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'

@@ -26,17 +26,20 @@ import { useParams } from 'react-router-dom'
 export default function AdminAppFeatureDetail() {
   const toast = useToast()
   const { appId } = useParams<{ appId: string }>()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data, fetching }] = useAppQuery({ variables: { appId: appId! } })
   const [, updateAppMutation] = useUpdateAppMutation()
   const [, updateUserAddMutation] = useAppUserAddMutation()
   const [, updateRoleMutation] = useAppUserUpdateRoleMutation()
 
   const onSubmit = async (input: AppUpdateInput) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await updateAppMutation({ appId: appId!, input })
     if (res?.data?.updated) {
       toast({ status: 'success', title: 'App updated' })
     }
     if (res?.error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const errors = (res.error.graphQLErrors[0]?.extensions as any).response.message ?? [
         res.error?.message?.toString(),
       ]
@@ -52,9 +55,11 @@ export default function AdminAppFeatureDetail() {
   }
 
   const addRole = async ({ role, userId }: AppUserAddInput) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await updateUserAddMutation({ appId: appId!, input: { role, userId } })
   }
   const updateRole = async ({ userId, role }: AppUserUpdateRoleInput) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await updateRoleMutation({ appId: appId!, input: { role, userId } })
   }
 
@@ -90,12 +95,8 @@ export default function AdminAppFeatureDetail() {
               </Box>
             )}
           </TabPanel>
-          <TabPanel>
-            <AppTransactionsTab appId={appId!} />
-          </TabPanel>
-          <TabPanel>
-            <AppWebhooksTab appId={appId!} />
-          </TabPanel>
+          <TabPanel>{appId && <AppTransactionsTab appId={appId} />}</TabPanel>
+          <TabPanel>{appId && <AppWebhooksTab appId={appId} />}</TabPanel>
           <TabPanel>
             <Stack direction="column" spacing={6}>
               <Box w="full">

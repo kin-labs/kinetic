@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom'
 export default function AdminAppFeatureTransactionDetail() {
   const { appId, appTransactionId } = useParams<{ appId: string; appTransactionId: string }>()
   const [{ data, fetching }] = useAppTransactionQuery({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     variables: { appId: appId!, appTransactionId: appTransactionId! },
   })
 
