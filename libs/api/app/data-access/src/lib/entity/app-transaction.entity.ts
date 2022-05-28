@@ -40,7 +40,7 @@ export class AppTransaction {
   solanaFinalized?: Date
   @ApiProperty()
   @Field({ nullable: true })
-  solanaEnd?: Date
+  solanaCommitted?: Date
   @ApiProperty()
   @Field({ nullable: true })
   solanaStart?: Date

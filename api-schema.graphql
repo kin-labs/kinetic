@@ -34,8 +34,8 @@ type AppTransaction {
   mint: String
   processingDuration: Int
   signature: String
+  solanaCommitted: DateTime
   solanaCommittedDuration: Int
-  solanaEnd: DateTime
   solanaFinalized: DateTime
   solanaFinalizedDuration: Int
   solanaStart: DateTime
@@ -68,10 +68,11 @@ enum AppTransactionErrorType {
 }
 
 enum AppTransactionStatus {
-  Confirming
+  Committed
+  Confirmed
   Failed
   Finalized
-  Pending
+  Processing
 }
 
 input AppUpdateInput {

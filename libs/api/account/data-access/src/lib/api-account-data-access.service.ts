@@ -41,7 +41,7 @@ export class ApiAccountDataAccessService {
 
     try {
       signature = await this.data.solana.sendRawTransaction(transaction)
-      status = AppTransactionStatus.Confirming
+      status = AppTransactionStatus.Committed
     } catch (error) {
       status = AppTransactionStatus.Failed
       errors = parseError(error)
@@ -55,7 +55,7 @@ export class ApiAccountDataAccessService {
         mint: this.data.config.mogamiMintPublicKey,
         signature,
         solanaStart,
-        solanaEnd: new Date(),
+        solanaCommitted: new Date(),
         source,
         status,
       },

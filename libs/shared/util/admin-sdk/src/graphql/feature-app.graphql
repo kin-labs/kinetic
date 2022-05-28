@@ -28,7 +28,7 @@ fragment AppTransactionDetails on AppTransaction {
   solanaCommittedDuration
   solanaFinalized
   solanaFinalizedDuration
-  solanaEnd
+  solanaCommitted
   solanaStart
   solanaTransaction
   source

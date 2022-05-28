@@ -56,8 +56,8 @@ export type AppTransaction = {
   mint?: Maybe<Scalars['String']>
   processingDuration?: Maybe<Scalars['Int']>
   signature?: Maybe<Scalars['String']>
+  solanaCommitted?: Maybe<Scalars['DateTime']>
   solanaCommittedDuration?: Maybe<Scalars['Int']>
-  solanaEnd?: Maybe<Scalars['DateTime']>
   solanaFinalized?: Maybe<Scalars['DateTime']>
   solanaFinalizedDuration?: Maybe<Scalars['Int']>
   solanaStart?: Maybe<Scalars['DateTime']>
@@ -91,10 +91,11 @@ export enum AppTransactionErrorType {
 }
 
 export enum AppTransactionStatus {
-  Confirming = 'Confirming',
+  Committed = 'Committed',
+  Confirmed = 'Confirmed',
   Failed = 'Failed',
   Finalized = 'Finalized',
-  Pending = 'Pending',
+  Processing = 'Processing',
 }
 
 export type AppUpdateInput = {
@@ -556,7 +557,7 @@ export type AppTransactionDetailsFragment = {
   solanaCommittedDuration?: number | null
   solanaFinalized?: any | null
   solanaFinalizedDuration?: number | null
-  solanaEnd?: any | null
+  solanaCommitted?: any | null
   solanaStart?: any | null
   solanaTransaction?: any | null
   source?: string | null
@@ -1084,7 +1085,7 @@ export type AppTransactionQuery = {
     solanaCommittedDuration?: number | null
     solanaFinalized?: any | null
     solanaFinalizedDuration?: number | null
-    solanaEnd?: any | null
+    solanaCommitted?: any | null
     solanaStart?: any | null
     solanaTransaction?: any | null
     source?: string | null
@@ -1126,7 +1127,7 @@ export type AppTransactionsQuery = {
     solanaCommittedDuration?: number | null
     solanaFinalized?: any | null
     solanaFinalizedDuration?: number | null
-    solanaEnd?: any | null
+    solanaCommitted?: any | null
     solanaStart?: any | null
     solanaTransaction?: any | null
     source?: string | null
@@ -1826,7 +1827,7 @@ export const AppTransactionDetailsFragmentDoc = gql`
     solanaCommittedDuration
     solanaFinalized
     solanaFinalizedDuration
-    solanaEnd
+    solanaCommitted
     solanaStart
     solanaTransaction
     source

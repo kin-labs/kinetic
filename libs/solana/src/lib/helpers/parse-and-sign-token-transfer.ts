@@ -5,6 +5,7 @@ import { parseAndSignTransaction } from './parse-and-sign-transaction'
 
 export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: SolanaKeypair }): {
   amount: number
+  blockhash: string
   destination: AccountMeta
   feePayer: string
   source: string
@@ -28,6 +29,8 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
 
   return {
     amount: Number(amount),
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    blockhash: transaction.recentBlockhash!.toString(),
     destination,
     feePayer,
     source,

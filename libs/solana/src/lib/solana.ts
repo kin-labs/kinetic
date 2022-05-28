@@ -14,8 +14,22 @@ export class Solana {
     config.logger?.log(`Solana RPC Endpoint: ${this.endpoint}`)
   }
 
-  confirmTransaction(signature: string, commitment: Commitment = Commitment.Finalized) {
-    return this.connection.confirmTransaction(signature, convertCommitment(commitment))
+  confirmTransaction(
+    {
+      blockhash,
+      lastValidBlockHeight,
+      signature,
+    }: { blockhash: string; lastValidBlockHeight: number; signature: string },
+    commitment: Commitment,
+  ) {
+    return this.connection.confirmTransaction(
+      {
+        blockhash,
+        lastValidBlockHeight,
+        signature,
+      },
+      convertCommitment(commitment),
+    )
   }
 
   async getAccountHistory(account: PublicKeyString) {
