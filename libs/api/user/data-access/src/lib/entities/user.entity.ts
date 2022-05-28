@@ -15,13 +15,10 @@ export class User {
   @Field()
   username?: string
   avatarUrl?: string
-
   @Field(() => [UserEmail], { nullable: true })
   emails: UserEmail[]
-
   @Field(() => UserRole, { nullable: true })
   role: UserRole
-
   @HideField()
   apps?: any
 }

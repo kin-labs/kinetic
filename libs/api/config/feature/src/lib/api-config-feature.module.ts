@@ -7,7 +7,6 @@ import { validationSchema } from './config/validation-schema'
 
 @Module({
   controllers: [ApiConfigFeatureController],
-  providers: [],
   imports: [
     ApiConfigDataAccessModule,
     ConfigModule.forRoot({

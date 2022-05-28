@@ -45,10 +45,10 @@ export interface AirdropStats {
   counts: AirdropStatsCounts
   /**
    *
-   * @type {Array<string>}
+   * @type {Array<AirdropStatsDate>}
    * @memberof AirdropStats
    */
-  dates: Array<string>
+  dates: Array<AirdropStatsDate>
 }
 /**
  *
@@ -74,6 +74,25 @@ export interface AirdropStatsCounts {
    * @memberof AirdropStatsCounts
    */
   totalValue: number
+}
+/**
+ *
+ * @export
+ * @interface AirdropStatsDate
+ */
+export interface AirdropStatsDate {
+  /**
+   *
+   * @type {string}
+   * @memberof AirdropStatsDate
+   */
+  date: string
+  /**
+   *
+   * @type {number}
+   * @memberof AirdropStatsDate
+   */
+  count: number
 }
 /**
  *

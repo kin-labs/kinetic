@@ -3,7 +3,6 @@ import { ApiClusterDataAccessService } from './api-cluster-data-access.service'
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 
 @Module({
-  controllers: [],
   providers: [ApiClusterDataAccessService],
   exports: [ApiClusterDataAccessService],
   imports: [ApiCoreDataAccessModule],
