@@ -10,5 +10,5 @@ export class WalletBalance {
   @Field({ nullable: true })
   updatedAt?: Date
   @Field(() => GraphQLBigInt, { nullable: true })
-  balance?: BigInt
+  balance?: bigint
 }

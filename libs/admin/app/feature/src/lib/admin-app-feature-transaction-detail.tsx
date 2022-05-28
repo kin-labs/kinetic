@@ -12,7 +12,9 @@ import { useParams } from 'react-router-dom'
 
 export default function AdminAppFeatureTransactionDetail() {
   const { appId, appTransactionId } = useParams<{ appId: string; appTransactionId: string }>()
-  const [{ data, fetching }] = useAppTransactionQuery({ variables: { appId, appTransactionId } })
+  const [{ data, fetching }] = useAppTransactionQuery({
+    variables: { appId: appId!, appTransactionId: appTransactionId! },
+  })
 
   if (fetching) {
     return <AdminUiLoader />
