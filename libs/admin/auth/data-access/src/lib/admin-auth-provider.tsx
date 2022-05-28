@@ -11,6 +11,7 @@ interface AdminAuthProps {
   user: User | undefined
 }
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const AdminAuthContext = React.createContext<AdminAuthProps>(null!)
 
 const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
@@ -46,7 +47,7 @@ const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(data.me)
       setLoading(false)
     }
-  }, [data, error, user, refreshMe])
+  }, [data, error, loading, refreshMe, user])
 
   return <AdminAuthContext.Provider value={{ login, logout, loading, user }}>{children}</AdminAuthContext.Provider>
 }

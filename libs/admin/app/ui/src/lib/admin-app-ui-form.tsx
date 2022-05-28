@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 
 export interface AdminAppUiProps {
   app?: App | null | undefined
-  onSubmit: (input: AppUpdateInput) => Promise<any>
+  onSubmit: (input: AppUpdateInput) => Promise<unknown>
 }
 
 const validationSchema = Yup.object({

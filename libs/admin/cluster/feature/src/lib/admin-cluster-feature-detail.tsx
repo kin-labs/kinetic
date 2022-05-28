@@ -8,6 +8,7 @@ import { AdminClusterFeatureSettingsTab } from './admin-cluster-feature-settings
 
 export default function AdminClusterFeatureDetail() {
   const { clusterId } = useParams<{ clusterId: string }>()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data, fetching }] = useClusterQuery({ variables: { clusterId: clusterId! } })
 
   if (!data || fetching) {
@@ -33,11 +34,9 @@ export default function AdminClusterFeatureDetail() {
           <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
+          <TabPanel>{clusterId && <AdminClusterFeatureMintsTab clusterId={clusterId!} />}</TabPanel>
           <TabPanel>
-            <AdminClusterFeatureMintsTab clusterId={clusterId!} />
-          </TabPanel>
-          <TabPanel>
-            <AdminClusterFeatureSettingsTab clusterId={clusterId!}></AdminClusterFeatureSettingsTab>
+            {clusterId && <AdminClusterFeatureSettingsTab clusterId={clusterId!}></AdminClusterFeatureSettingsTab>}
           </TabPanel>
         </TabPanels>
       </Tabs>

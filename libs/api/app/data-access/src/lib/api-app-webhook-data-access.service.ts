@@ -8,6 +8,7 @@ import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
 
 interface WebhookOptions {
   headers?: AxiosRequestHeaders
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any
   type: AppWebhookType
 }

@@ -4,7 +4,6 @@ import { ApiTransactionDataAccessModule } from '@mogami/api/transaction/data-acc
 
 @Module({
   controllers: [ApiTransactionFeatureController],
-  providers: [],
   imports: [ApiTransactionDataAccessModule],
 })
 export class ApiTransactionFeatureModule {}

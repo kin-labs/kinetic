@@ -22,11 +22,6 @@ export class ApiTransactionFeatureController {
   }
 
   @Get('minimum-rent-exemption-balance')
-  // @ApiParam({
-  //   name: 'input',
-  //   type: MinimumRentExemptionBalanceRequest,
-  // })
-  // @ApiBody({ type: MakeTransferRequest })
   @ApiOperation({ operationId: 'getMinimumRentExemptionBalance' })
   @ApiResponse({ type: MinimumRentExemptionBalanceResponse })
   getMinimumRentExemptionBalance(@Param('input') input: MinimumRentExemptionBalanceRequest) {

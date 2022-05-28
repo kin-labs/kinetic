@@ -24,6 +24,7 @@ export interface AdminClusterUiMintModalProps {
 
 export function AdminClusterUiMintModal({ cluster }: AdminClusterUiMintModalProps) {
   const toast = useToast()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const defaultInput: ClusterTokenInput = { type: cluster.type!, address: '', name: '', symbol: '' }
   const [, addClusterMint] = useAddClusterMintMutation()
 
@@ -34,13 +35,12 @@ export function AdminClusterUiMintModal({ cluster }: AdminClusterUiMintModalProp
     return <Alert>No cluster found.</Alert>
   }
 
-  const existing: string[] = cluster?.mints
-    ?.filter((mint) => !!mint.address)
-    ?.map(({ address }) => address!) as string[]
+  const existing: string[] = cluster?.mints?.filter((mint) => !!mint.address)?.map((mint) => mint.address) as string[]
 
   function searchMint(input: Partial<ClusterTokenInput>) {
+    if (!cluster.type) return
     setInput({
-      type: cluster.type!,
+      type: cluster.type,
       address: input.address,
       symbol: input.symbol,
       name: input.name,
@@ -48,13 +48,14 @@ export function AdminClusterUiMintModal({ cluster }: AdminClusterUiMintModalProp
     return
   }
   const confirmToken = async (token: ClusterToken) => {
+    if (!cluster.id || !token.address || !token.name || !token.symbol) return
     try {
-      const result = await addClusterMint({
+      await addClusterMint({
         input: {
-          address: token.address!,
-          clusterId: cluster.id!,
-          name: token.name!,
-          symbol: token.symbol!,
+          address: token.address,
+          clusterId: cluster.id,
+          name: token.name,
+          symbol: token.symbol,
         },
       })
       toast({
@@ -62,6 +63,7 @@ export function AdminClusterUiMintModal({ cluster }: AdminClusterUiMintModalProp
         title: 'Mint Added',
       })
       onClose()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
         status: 'error',

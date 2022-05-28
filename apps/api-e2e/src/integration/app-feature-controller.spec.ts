@@ -1,8 +1,7 @@
 import { INestApplication } from '@nestjs/common'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Keypair } from '@solana/web3.js'
-import { AppWebhookType, UpdateApp } from '../generated/api-sdk'
-import { getEndpoint, initializeE2eApp, postEndpoint, runGraphQLQueryAdmin } from '../helpers'
+import { getEndpoint, initializeE2eApp, postEndpoint } from '../helpers'
 
 describe('AppFeatureController (e2e)', () => {
   let app: INestApplication

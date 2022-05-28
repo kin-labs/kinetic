@@ -9,10 +9,12 @@ export interface AdminAppUiWalletProps {
 
 export function AdminAppUiWallet({ wallet }: AdminAppUiWalletProps) {
   const [amount, setAmount] = useState<number>(1)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data }, refreshWallet] = useWalletBalanceQuery({ variables: { walletId: wallet.id! } })
   const [{ data: airdropData, error: airdropError, fetching: airdropFetching }, requestAirdropMutation] =
     useWalletAirdropQuery({
       variables: {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         walletId: wallet.id!,
         amount,
       },

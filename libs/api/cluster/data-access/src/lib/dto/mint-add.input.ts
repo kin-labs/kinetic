@@ -1,5 +1,4 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { ClusterType } from '../entity/cluster-type.enum'
 
 @InputType()
 export class MintAddInput {

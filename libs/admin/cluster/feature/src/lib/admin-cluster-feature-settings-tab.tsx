@@ -15,6 +15,7 @@ export function AdminClusterFeatureSettingsTab({ clusterId }: { clusterId: strin
         status: 'success',
         title: 'Cluster updated',
       })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
         status: 'error',

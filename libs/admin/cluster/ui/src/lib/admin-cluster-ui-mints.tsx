@@ -27,9 +27,7 @@ export function AdminClusterUiMints({ mints }: AdminClusterUiMintsProps) {
           <Tbody>
             {mints?.map((mint) => (
               <Tr key={mint?.id}>
-                <Td width={10}>
-                  <Avatar src={mint!.logoUrl!} />
-                </Td>
+                <Td width={10}>{mint?.logoUrl && <Avatar src={mint.logoUrl} />}</Td>
                 <Td>{mint?.name}</Td>
                 <Td>{mint?.symbol}</Td>
                 <Td>

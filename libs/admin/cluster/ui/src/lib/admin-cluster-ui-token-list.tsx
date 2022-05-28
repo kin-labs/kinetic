@@ -14,14 +14,17 @@ export function AdminClusterUiTokenList({
 }) {
   return (
     <Stack spacing={4}>
-      {tokens?.map((item) => (
-        <AdminClusterUiTokenItem
-          key={item.address}
-          existing={existing.includes(item.address!)}
-          token={item}
-          selectToken={selectToken}
-        />
-      ))}
+      {tokens?.map(
+        (item) =>
+          item.address && (
+            <AdminClusterUiTokenItem
+              key={item.address}
+              existing={existing.includes(item.address)}
+              token={item}
+              selectToken={selectToken}
+            />
+          ),
+      )}
     </Stack>
   )
 }

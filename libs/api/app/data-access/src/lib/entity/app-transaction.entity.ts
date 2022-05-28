@@ -46,6 +46,7 @@ export class AppTransaction {
   solanaStart?: Date
   @ApiProperty()
   @Field(() => GraphQLJSON, { nullable: true })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   solanaTransaction?: any
   @ApiProperty()
   @Field({ nullable: true })

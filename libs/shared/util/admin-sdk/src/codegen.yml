@@ -13,6 +13,8 @@ generates:
       - fragment-matcher
   libs/shared/util/admin-sdk/src/generated/graphql.tsx:
     plugins:
+      - add:
+          content: '/* eslint-disable */'
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-urql'

@@ -7,10 +7,13 @@ import { useParams } from 'react-router-dom'
 export default function AdminUserFeatureDetail() {
   const toast = useToast()
   const { userId } = useParams<{ userId: string }>()
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data }] = useUserQuery({ variables: { userId: userId! } })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, updateUserMutation] = useUpdateUserMutation()
 
   const onSubmit = async (input: UserUpdateInput) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await updateUserMutation({ userId: userId!, input })
     if (res?.data?.updated) {
       toast({ status: 'success', title: 'User updated' })

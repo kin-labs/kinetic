@@ -16,7 +16,8 @@ export function DemoKeypairFeature() {
   const [byteArrayImport, setByteArrayImport] = useState<string>('')
   const [selectedKeypair, setSelectedKeypair] = useState<DemoKeypairEntity | null>()
 
-  const deleteKeypair = (id: string) => demoKeypairDb.keypair.delete(id)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const deleteKeypair = (kp: DemoKeypairEntity) => demoKeypairDb.keypair.delete(kp.id!)
 
   const generateMnemonic = async () => storeMnemonic(Keypair.generateMnemonic())
 
@@ -38,7 +39,7 @@ export function DemoKeypairFeature() {
     toggleImportByteArrayVisible(false)
   }
 
-  const showKeypair = (kp: any) => {
+  const showKeypair = (kp: DemoKeypairEntity) => {
     setSelectedKeypair(kp)
     toggleKeypairVisible(true)
   }
@@ -80,7 +81,7 @@ export function DemoKeypairFeature() {
                   <Button size="xs" onClick={() => showKeypair(kp)} colorScheme="teal">
                     <ViewIcon className="keypair-eye-icon" />
                   </Button>
-                  <Button size="xs" onClick={() => deleteKeypair(kp.id!)}>
+                  <Button size="xs" onClick={() => deleteKeypair(kp)}>
                     <DeleteIcon />
                   </Button>
                 </ButtonGroup>

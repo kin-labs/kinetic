@@ -15,10 +15,13 @@ export class AppWebhook {
   @Field(() => AppWebhookDirection)
   direction: AppWebhookDirection
   @Field(() => GraphQLJSON, { nullable: true })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   headers?: any
   @Field(() => GraphQLJSON, { nullable: true })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload?: any
   @Field(() => GraphQLJSON, { nullable: true })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   responsePayload: any
   @Field({ nullable: true })
   responseError: string

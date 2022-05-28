@@ -4,7 +4,6 @@ import { ApiAccountDataAccessModule } from '@mogami/api/account/data-access'
 
 @Module({
   controllers: [ApiAccountFeatureController],
-  providers: [],
   imports: [ApiAccountDataAccessModule],
 })
 export class ApiAccountFeatureModule {}

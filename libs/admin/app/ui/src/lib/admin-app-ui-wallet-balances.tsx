@@ -9,6 +9,7 @@ export interface AdminAppUiWalletBalancesProps {
 
 export function AdminAppUiWalletBalances({ wallet }: AdminAppUiWalletBalancesProps) {
   const [{ data }] = useWalletBalancesQuery({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     variables: { walletId: wallet.id! },
   })
 
