@@ -109,6 +109,7 @@ export class ApiTransactionDataAccessService {
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sendEventWebhook(app: App, payload: any) {
     return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Event, payload })
   }

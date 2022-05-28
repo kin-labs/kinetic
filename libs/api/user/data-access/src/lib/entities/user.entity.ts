@@ -20,5 +20,6 @@ export class User {
   @Field(() => UserRole, { nullable: true })
   role: UserRole
   @HideField()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   apps?: any
 }
