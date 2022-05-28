@@ -1,9 +1,8 @@
 import { AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
-import { parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
+import { Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
-import { Commitment } from '@solana/web3.js'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()

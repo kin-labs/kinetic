@@ -1,8 +1,8 @@
-import { Commitment, Connection, PublicKey, Transaction } from '@solana/web3.js'
+import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
-import { getPublicKey, parseEndpoint } from './helpers'
-import { PublicKeyString, SolanaConfig, TokenBalance } from './interfaces'
+import { convertCommitment, getPublicKey, parseEndpoint } from './helpers'
+import { Commitment, PublicKeyString, SolanaConfig, TokenBalance } from './interfaces'
 
 export class Solana {
   readonly endpoint: string
@@ -14,8 +14,8 @@ export class Solana {
     config.logger?.log(`Solana RPC Endpoint: ${this.endpoint}`)
   }
 
-  confirmTransaction(signature: string, finalized: Commitment = 'finalized') {
-    return this.connection.confirmTransaction(signature, finalized)
+  confirmTransaction(signature: string, commitment: Commitment = Commitment.Finalized) {
+    return this.connection.confirmTransaction(signature, convertCommitment(commitment))
   }
 
   async getAccountHistory(account: PublicKeyString) {
@@ -31,9 +31,9 @@ export class Solana {
     }
   }
 
-  getAccountInfo(accountId: PublicKeyString, { commitment = 'single' }: { commitment?: Commitment }) {
+  getAccountInfo(accountId: PublicKeyString, { commitment = Commitment.Confirmed }: { commitment?: Commitment }) {
     this.config.logger?.log(`Getting account info: ${accountId}`)
-    return this.connection.getParsedAccountInfo(new PublicKey(accountId), commitment)
+    return this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
   }
 
   async getBalance(accountId: PublicKeyString, mogamiMintPublicKey: PublicKeyString) {

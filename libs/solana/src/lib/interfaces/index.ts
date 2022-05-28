@@ -1,3 +1,4 @@
+export * from './commitment.enum'
 export * from './public-key-string'
 export * from './solana-config'
 export * from './solana-logger'
