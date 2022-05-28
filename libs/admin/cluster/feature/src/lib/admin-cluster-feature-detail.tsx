@@ -18,10 +18,10 @@ export default function AdminClusterFeatureDetail() {
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Flex justifyContent="space-between" alignItems="center">
-          <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+          <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
             Cluster: {data?.item?.name}
           </Box>
-          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1}>
             <Image src={'/assets/solana-logo.svg'} h={8} />
           </Box>
         </Flex>

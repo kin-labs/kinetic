@@ -24,7 +24,7 @@ export default function AdminAppFeatureTransactionDetail() {
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Flex justifyContent="space-between" alignItems="center">
-          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
             Transaction {data?.item?.id}
           </Box>
           <Box justifyContent={'end'} mt="1" fontWeight="semibold" as="h4" lineHeight="tight">

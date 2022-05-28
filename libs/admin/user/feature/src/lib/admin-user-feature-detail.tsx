@@ -21,7 +21,7 @@ export default function AdminUserFeatureDetail() {
   return (
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
-        <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+        <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1}>
           {data?.item?.name}
         </Box>
       </Box>

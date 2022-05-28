@@ -66,7 +66,7 @@ export default function AdminAppFeatureDetail() {
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Flex justifyContent="space-between" alignItems="center">
-          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
             {data?.item?.name}
           </Box>
           <code>App Index: {data?.item?.index}</code>
