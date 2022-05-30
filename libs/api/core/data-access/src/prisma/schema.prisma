@@ -49,9 +49,9 @@ model App {
 }
 
 model AppTransaction {
-  id                 String                @id @default(cuid())
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @updatedAt
+  id                 String                    @id @default(cuid())
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
   amount             Int?
   commitment         AppTransactionCommitment?
   destination        String?
@@ -65,12 +65,12 @@ model AppTransaction {
   solanaFinalized    DateTime?
   solanaStart        DateTime?
   solanaTransaction  Json?
-  status             AppTransactionStatus  @default(Processing)
+  status             AppTransactionStatus      @default(Processing)
   webhookEventStart  DateTime?
   webhookEventEnd    DateTime?
   webhookVerifyStart DateTime?
   webhookVerifyEnd   DateTime?
-  app                App                   @relation(fields: [appId], references: [id])
+  app                App                       @relation(fields: [appId], references: [id])
   appId              String
 }
 
