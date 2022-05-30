@@ -1,7 +1,7 @@
 import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@mogami/keypair'
-import { Payment, Solana } from '@mogami/solana'
-import { getSolanaRpcEndpoint } from './helpers/get-solana-rpc-endpoint'
+import { Commitment, Payment, Solana } from '@mogami/solana'
+import { getSolanaRpcEndpoint } from './helpers'
 import { MogamiSdkConfig } from './interfaces'
 import { MogamiSdkInternal } from './mogami-sdk-internal'
 
@@ -45,28 +45,43 @@ export class MogamiSdk {
 
   makeTransfer({
     amount,
+    commitment = Commitment.Confirmed,
     destination,
     owner,
     type = TransactionType.None,
   }: {
     amount: string
+    commitment?: Commitment
     destination: string
     owner: Keypair
     type?: TransactionType
   }) {
-    return this.internal.makeTransfer({ amount, destination, owner, type })
+    return this.internal.makeTransfer({
+      amount,
+      commitment,
+      destination,
+      owner,
+      type,
+    })
   }
 
   makeTransferBatch({
-    payments,
+    commitment = Commitment.Confirmed,
     owner,
+    payments,
     type = TransactionType.Earn,
   }: {
-    payments: Payment[]
+    commitment?: Commitment
     owner: Keypair
+    payments: Payment[]
     type?: TransactionType
   }) {
-    return this.internal.makeTransferBatch({ payments, owner, type })
+    return this.internal.makeTransferBatch({
+      commitment,
+      owner,
+      payments,
+      type,
+    })
   }
 
   tokenAccounts(account: string) {

@@ -493,7 +493,7 @@
             "format": "date-time",
             "type": "string"
           },
-          "solanaEnd": {
+          "solanaCommitted": {
             "format": "date-time",
             "type": "string"
           },
@@ -538,7 +538,7 @@
           "mint",
           "signature",
           "solanaFinalized",
-          "solanaEnd",
+          "solanaCommitted",
           "solanaStart",
           "solanaTransaction",
           "source",
@@ -695,9 +695,12 @@
         "properties": {
           "blockhash": {
             "type": "string"
+          },
+          "lastValidBlockHeight": {
+            "type": "number"
           }
         },
-        "required": ["blockhash"]
+        "required": ["blockhash", "lastValidBlockHeight"]
       },
       "MinimumRentExemptionBalanceResponse": {
         "type": "object",
@@ -711,14 +714,21 @@
       "MakeTransferRequest": {
         "type": "object",
         "properties": {
+          "commitment": {
+            "type": "string",
+            "enum": ["Confirmed", "Finalized", "Processed"]
+          },
           "index": {
+            "type": "number"
+          },
+          "lastValidBlockHeight": {
             "type": "number"
           },
           "tx": {
             "$ref": "#/components/schemas/Buffer"
           }
         },
-        "required": ["index", "tx"]
+        "required": ["commitment", "index", "lastValidBlockHeight", "tx"]
       }
     }
   }

@@ -253,7 +253,7 @@ export interface AppTransaction {
    * @type {string}
    * @memberof AppTransaction
    */
-  solanaEnd: string
+  solanaCommitted: string
   /**
    *
    * @type {string}
@@ -416,6 +416,12 @@ export interface LatestBlockhashResponse {
    * @memberof LatestBlockhashResponse
    */
   blockhash: string
+  /**
+   *
+   * @type {number}
+   * @memberof LatestBlockhashResponse
+   */
+  lastValidBlockHeight: number
 }
 /**
  *
@@ -425,10 +431,22 @@ export interface LatestBlockhashResponse {
 export interface MakeTransferRequest {
   /**
    *
+   * @type {string}
+   * @memberof MakeTransferRequest
+   */
+  commitment: MakeTransferRequestCommitmentEnum
+  /**
+   *
    * @type {number}
    * @memberof MakeTransferRequest
    */
   index: number
+  /**
+   *
+   * @type {number}
+   * @memberof MakeTransferRequest
+   */
+  lastValidBlockHeight: number
   /**
    *
    * @type {object}
@@ -436,6 +454,16 @@ export interface MakeTransferRequest {
    */
   tx: object
 }
+
+export const MakeTransferRequestCommitmentEnum = {
+  Confirmed: 'Confirmed',
+  Finalized: 'Finalized',
+  Processed: 'Processed',
+} as const
+
+export type MakeTransferRequestCommitmentEnum =
+  typeof MakeTransferRequestCommitmentEnum[keyof typeof MakeTransferRequestCommitmentEnum]
+
 /**
  *
  * @export

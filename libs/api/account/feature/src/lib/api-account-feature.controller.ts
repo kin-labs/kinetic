@@ -6,9 +6,9 @@ import {
 } from '@mogami/api/account/data-access'
 import { AppTransaction } from '@mogami/api/app/data-access'
 import { AccountIdSchema, JoiValidationPipe } from '@mogami/api/core/util'
+import { Commitment } from '@mogami/solana'
 import { Body, Controller, Get, Param, Post, Query, UsePipes } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { Commitment } from '@solana/web3.js'
 
 @ApiTags('account')
 @Controller('account')

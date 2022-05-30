@@ -53,17 +53,19 @@ model AppTransaction {
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
   amount             Int?
+  commitment         AppTransactionCommitment?
   destination        String?
   errors             AppTransactionError[]
   feePayer           String?
   mint               String?
   source             String?
   signature          String?
+  solanaCommitted    DateTime?
+  solanaConfirmed    DateTime?
   solanaFinalized    DateTime?
-  solanaEnd          DateTime?
   solanaStart        DateTime?
   solanaTransaction  Json?
-  status             AppTransactionStatus  @default(Pending)
+  status             AppTransactionStatus  @default(Processing)
   webhookEventStart  DateTime?
   webhookEventEnd    DateTime?
   webhookVerifyStart DateTime?
@@ -72,11 +74,18 @@ model AppTransaction {
   appId              String
 }
 
+enum AppTransactionCommitment {
+  Confirmed
+  Finalized
+  Processed
+}
+
 enum AppTransactionStatus {
-  Confirming
+  Committed
+  Confirmed
   Failed
   Finalized
-  Pending
+  Processing
 }
 
 enum AppTransactionErrorType {

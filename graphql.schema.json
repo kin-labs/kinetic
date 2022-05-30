@@ -376,24 +376,24 @@
             "deprecationReason": null
           },
           {
-            "name": "solanaCommittedDuration",
+            "name": "solanaCommitted",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "DateTime",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "solanaEnd",
+            "name": "solanaCommittedDuration",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "DateTime",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
@@ -690,7 +690,13 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "Confirming",
+            "name": "Committed",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Confirmed",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -708,7 +714,7 @@
             "deprecationReason": null
           },
           {
-            "name": "Pending",
+            "name": "Processing",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

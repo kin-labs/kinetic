@@ -11,8 +11,8 @@ export class ApiAppTransactionFeatureResolver {
 
   @ResolveField(() => Int, { nullable: true })
   solanaCommittedDuration(@Parent() tx: AppTransaction) {
-    if (!tx.solanaEnd || !tx.solanaStart) return null
-    return tx?.solanaEnd?.getTime() - tx?.solanaStart?.getTime()
+    if (!tx.solanaCommitted || !tx.solanaStart) return null
+    return tx?.solanaCommitted?.getTime() - tx?.solanaStart?.getTime()
   }
 
   @ResolveField(() => Int, { nullable: true })

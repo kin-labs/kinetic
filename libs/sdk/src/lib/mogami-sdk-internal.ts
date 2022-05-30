@@ -1,5 +1,5 @@
 import { Keypair } from '@mogami/keypair'
-import { Payment, PublicKeyString } from '@mogami/solana'
+import { Commitment, Payment, PublicKeyString } from '@mogami/solana'
 import {
   AccountApi,
   AirdropApi,
@@ -84,13 +84,15 @@ export class MogamiSdkInternal {
   }
 
   async makeTransfer({
-    destination,
     amount,
+    commitment,
+    destination,
     owner,
     type,
   }: {
-    destination: PublicKeyString
     amount: string
+    commitment: Commitment
+    destination: PublicKeyString
     owner: Keypair
     type: TransactionType
   }) {
@@ -98,7 +100,7 @@ export class MogamiSdkInternal {
       throw new Error(`AppConfig not initialized`)
     }
     const { publicKey: mint, feePayer } = this.appConfig.mint
-    const { blockhash: latestBlockhash } = await this.transactionApi
+    const { blockhash: latestBlockhash, lastValidBlockHeight } = await this.transactionApi
       .getLatestBlockhash()
       .then((res) => res.data as LatestBlockhashResponse)
 
@@ -114,7 +116,9 @@ export class MogamiSdkInternal {
     })
 
     const request: MakeTransferRequest = {
+      commitment,
       index: this.appConfig.app.index,
+      lastValidBlockHeight,
       tx,
     }
 
@@ -123,7 +127,17 @@ export class MogamiSdkInternal {
     return Promise.resolve(res.data)
   }
 
-  async makeTransferBatch({ payments, owner, type }: { payments: Payment[]; owner: Keypair; type: TransactionType }) {
+  async makeTransferBatch({
+    commitment,
+    owner,
+    payments,
+    type,
+  }: {
+    commitment: Commitment
+    owner: Keypair
+    payments: Payment[]
+    type: TransactionType
+  }) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
@@ -132,7 +146,7 @@ export class MogamiSdkInternal {
     }
 
     const { publicKey: mint, feePayer } = this.appConfig.mint
-    const { blockhash: latestBlockhash } = await this.transactionApi
+    const { blockhash: latestBlockhash, lastValidBlockHeight } = await this.transactionApi
       .getLatestBlockhash()
       .then((res) => res.data as LatestBlockhashResponse)
 
@@ -147,7 +161,9 @@ export class MogamiSdkInternal {
     })
 
     const request: MakeTransferRequest = {
+      commitment,
       index: this.appConfig.app.index,
+      lastValidBlockHeight,
       tx,
     }
 
