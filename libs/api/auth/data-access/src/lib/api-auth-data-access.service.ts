@@ -43,11 +43,9 @@ export class ApiAuthDataAccessService {
     const password = this.data.config.adminPassword
     const existing = await this.data.user.count({ where: { role: UserRole.Admin } })
     if (existing < 1) {
-      const adminId = 'admin'
-      const adminAppIndex = 1
       await this.data.user.create({
         data: {
-          id: adminId,
+          id: 'admin',
           name: 'Admin',
           password: hashPassword(password),
           role: UserRole.Admin,
@@ -58,7 +56,6 @@ export class ApiAuthDataAccessService {
         },
       })
       this.logger.verbose(`Created new Admin with email ${email} and password ${password}`)
-      await this.apps.createApp(adminId, { index: adminAppIndex, name: `App ${adminAppIndex}` })
       return
     }
     this.logger.verbose(`Log in as Admin with email ${email} and password ${password}`)

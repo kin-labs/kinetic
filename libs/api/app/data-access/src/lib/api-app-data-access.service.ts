@@ -1,8 +1,10 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { UserRole } from '@mogami/api/user/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { AppWebhookType, Prisma } from '@prisma/client'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { Keypair } from '@solana/web3.js'
 import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
 import { AppCreateInput } from './dto/app-create.input'
@@ -21,10 +23,14 @@ function isValidAppWebhookType(type: string) {
 }
 
 @Injectable()
-export class ApiAppDataAccessService {
+export class ApiAppDataAccessService implements OnModuleInit {
   private include: Prisma.AppInclude = { users: { include: { user: true } }, wallet: true }
   private readonly logger = new Logger(ApiAppDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
+
+  async onModuleInit() {
+    await this.configureProvisionedApps()
+  }
 
   async createApp(userId: string, input: AppCreateInput) {
     await this.data.ensureAdminUser(userId)
@@ -32,6 +38,7 @@ export class ApiAppDataAccessService {
     if (app) {
       throw new BadRequestException(`App with index ${input.index} already exists`)
     }
+    this.logger.verbose(`app ${input.index}: creating ${input.name}...`)
     let wallet
     if (!input.skipWalletCreation) {
       const generated = await this.wallet.generateWallet(userId, input.index)
@@ -44,7 +51,7 @@ export class ApiAppDataAccessService {
       wallet,
     }
     const created = await this.data.app.create({ data, include: this.include })
-    this.logger.verbose(`Created app "${created.name}" with index ${created.index}.`)
+    this.logger.verbose(`app ${created.index}: created app ${created.name}`)
     return created
   }
 
@@ -235,5 +242,27 @@ export class ApiAppDataAccessService {
       res.statusCode = 400
       return res.send(new BadRequestException(`Something went wrong storing incoming webhook`))
     }
+  }
+
+  private async configureProvisionedApps() {
+    let adminId
+    return Promise.all(
+      this.data.config.provisionedApps.map(async (app) => {
+        const found = await this.data.getAppByIndex(app.index)
+        if (found) {
+          const { publicKey } = Keypair.fromSecretKey(Buffer.from(app.feePayerByteArray))
+          this.logger.verbose(`Provisioned app ${app.index} (${app.name}) found: ${publicKey}`)
+        } else {
+          if (!adminId) {
+            const admin = await this.data.user.findFirst({
+              where: { role: UserRole.Admin },
+              orderBy: { createdAt: 'asc' },
+            })
+            adminId = admin.id
+          }
+          await this.createApp(adminId, { index: app.index, name: app.name })
+        }
+      }),
+    )
   }
 }

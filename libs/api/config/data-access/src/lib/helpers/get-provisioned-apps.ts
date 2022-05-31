@@ -1,0 +1,19 @@
+import { ProvisionedApp } from '../entities/provisioned-app.entity'
+
+export function getProvisionedApps(envVars: string[]): ProvisionedApp[] {
+  const appInfo = envVars.filter((item) => item.startsWith('APP_'))
+
+  const appIds = appInfo
+    // get the second item in `APP_1_SOMETHING
+    .map((item) => item.split('_')[1])
+    // only distinct values
+    .filter((v, i, a) => a.indexOf(v) === i)
+    // convert to number
+    .map((id) => Number(id))
+
+  return appIds.map((index) => ({
+    feePayerByteArray: JSON.parse(process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]),
+    index,
+    name: process.env[`APP_${index}_NAME`],
+  }))
+}
