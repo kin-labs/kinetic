@@ -24,7 +24,20 @@ function isValidAppWebhookType(type: string) {
 
 @Injectable()
 export class ApiAppDataAccessService implements OnModuleInit {
-  private include: Prisma.AppInclude = { users: { include: { user: true } }, wallet: true }
+  private include: Prisma.AppInclude = {
+    users: { include: { user: true } },
+    envs: {
+      include: {
+        cluster: true,
+        mints: {
+          include: {
+            wallet: true,
+          },
+        },
+      },
+    },
+    wallets: true,
+  }
   private readonly logger = new Logger(ApiAppDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
 
@@ -38,32 +51,91 @@ export class ApiAppDataAccessService implements OnModuleInit {
     if (app) {
       throw new BadRequestException(`App with index ${input.index} already exists`)
     }
+    const clusters = await this.data.getActiveClusters()
     this.logger.verbose(`app ${input.index}: creating ${input.name}...`)
-    let wallet
+    let wallets
     if (!input.skipWalletCreation) {
       const generated = await this.wallet.generateWallet(userId, input.index)
-      wallet = { connect: { id: generated.id } }
+      wallets = { connect: { id: generated.id } }
+      this.logger.verbose(`app ${input.index}: connecting wallet ${generated.publicKey}...`)
     }
+
     const data: Prisma.AppCreateInput = {
       index: input.index,
       name: input.name,
       users: { create: { role: AppUserRole.Owner, userId } },
-      wallet,
+      envs: {
+        create: [
+          ...clusters.map((cluster) => ({
+            cluster: { connect: { id: cluster.id } },
+            name: cluster.type.toLowerCase().replace('solana-', ''),
+            wallets,
+            mints: {
+              create: [
+                ...cluster.mints.map((mint) => ({
+                  mint: {
+                    connect: {
+                      id: mint.id,
+                    },
+                  },
+                  wallet: wallets,
+                })),
+              ],
+            },
+          })),
+        ],
+      },
+      wallets,
     }
-    const created = await this.data.app.create({ data, include: this.include })
+    const created = await this.data.app.create({
+      data,
+      include: {
+        users: { include: { user: true } },
+        envs: {
+          include: {
+            cluster: true,
+            mints: {
+              include: {
+                wallet: true,
+              },
+            },
+            wallets: true,
+          },
+        },
+        wallets: true,
+      },
+    })
     this.logger.verbose(`app ${created.index}: created app ${created.name}`)
+    this.logger.verbose(JSON.stringify(created, null, 2))
     return created
   }
 
   async deleteApp(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
     await this.data.appUser.deleteMany({ where: { appId } })
+    await this.data.appEnv.deleteMany({ where: { appId } })
     return this.data.app.delete({ where: { id: appId } })
   }
 
   async apps(userId: string) {
     await this.data.ensureAdminUser(userId)
-    return this.data.app.findMany({ include: { wallet: true }, orderBy: { updatedAt: 'desc' } })
+    return this.data.app.findMany({
+      include: {
+        envs: {
+          include: {
+            cluster: true,
+            mints: {
+              include: {
+                wallet: true,
+              },
+            },
+            wallets: true,
+          },
+        },
+        wallets: true,
+      },
+      orderBy: { updatedAt: 'desc' },
+    })
   }
 
   app(userId: string, appId: string) {
@@ -146,10 +218,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
   private async ensureAppById(userId: string, appId: string) {
     await this.data.ensureAdminUser(userId)
-    const app = await this.data.app.findUnique({
-      where: { id: appId },
-      include: this.include,
-    })
+    const app = await this.data.getAppById(appId)
     if (!app) {
       throw new NotFoundException(`App with id ${appId} does not exist.`)
     }
@@ -158,8 +227,9 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
   async appWalletAdd(userId: string, appId: string, walletId: string) {
     const app = await this.ensureAppById(userId, appId)
-    if (app.walletId) {
-      throw new BadRequestException(`App already has a wallet`)
+    const found = app.wallets.find((item) => item.id === walletId)
+    if (found) {
+      throw new BadRequestException(`App already has a wallet with id ${walletId}`)
     }
     const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
@@ -167,15 +237,16 @@ export class ApiAppDataAccessService implements OnModuleInit {
     }
     return this.data.app.update({
       where: { id: appId },
-      data: { walletId: wallet.id },
+      data: { wallets: { connect: { id: wallet.id } } },
       include: this.include,
     })
   }
 
   async appWalletRemove(userId: string, appId: string, walletId: string) {
     const app = await this.ensureAppById(userId, appId)
-    if (!app.walletId) {
-      throw new BadRequestException(`App already has no wallet`)
+    const found = app.wallets.find((item) => item.id === walletId)
+    if (!found) {
+      throw new BadRequestException(`App has no wallet with id ${walletId}`)
     }
     const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
@@ -183,13 +254,16 @@ export class ApiAppDataAccessService implements OnModuleInit {
     }
     return this.data.app.update({
       where: { id: appId },
-      data: { wallet: { disconnect: true } },
+      data: { wallets: { disconnect: { id: wallet.id } } },
       include: this.include,
     })
   }
 
   async getConfig(index: number): Promise<AppConfig> {
-    const { name, wallet } = await this.data.getAppByIndex(index)
+    const {
+      name,
+      wallets: [wallet],
+    } = await this.data.getAppByIndex(index)
 
     return {
       app: {
@@ -252,6 +326,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
         if (found) {
           const { publicKey } = Keypair.fromSecretKey(Buffer.from(app.feePayerByteArray))
           this.logger.verbose(`Provisioned app ${app.index} (${app.name}) found: ${publicKey}`)
+          this.logger.verbose(JSON.stringify(found, null, 2))
         } else {
           if (!adminId) {
             const admin = await this.data.user.findFirst({

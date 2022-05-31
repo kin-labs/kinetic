@@ -30,7 +30,7 @@ export function AdminAppUiTable({ apps, deleteApp }: AdminAppUiTableProps) {
                 </Link>
               </Td>
               <Td>
-                <Code colorScheme="teal">{app.wallet?.publicKey}</Code>
+                <Code colorScheme="teal">{app.wallets?.[0]?.publicKey}</Code>
               </Td>
               <Td isNumeric>
                 <Button size="xs" onClick={() => deleteApp(app.id)}>

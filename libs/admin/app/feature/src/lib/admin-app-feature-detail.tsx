@@ -19,6 +19,7 @@ import {
   useAppUserUpdateRoleMutation,
   useAppWebhooksQuery,
   useUpdateAppMutation,
+  Wallet,
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
@@ -88,12 +89,13 @@ export default function AdminAppFeatureDetail() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            {data?.item?.wallet && (
-              <Box>
-                <AdminAppUiWallet wallet={data?.item?.wallet} />
-                <AdminAppUiWalletBalances wallet={data?.item?.wallet} />
-              </Box>
-            )}
+            {data?.item?.wallets &&
+              data?.item?.wallets.map((wallet: Wallet) => (
+                <Box key={wallet.id}>
+                  <AdminAppUiWallet wallet={wallet} />
+                  <AdminAppUiWalletBalances wallet={wallet} />
+                </Box>
+              ))}
           </TabPanel>
           <TabPanel>{appId && <AppTransactionsTab appId={appId} />}</TabPanel>
           <TabPanel>{appId && <AppWebhooksTab appId={appId} />}</TabPanel>

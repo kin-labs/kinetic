@@ -29,7 +29,7 @@ export class ApiAccountDataAccessService {
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
     const app = await this.data.getAppByIndex(Number(input.index))
     const created = await this.data.appTransaction.create({ data: { appId: app.id }, include: { errors: true } })
-    const signer = Keypair.fromSecretKey(app.wallet.secretKey)
+    const signer = Keypair.fromSecretKey(app.wallets[0].secretKey)
 
     const { feePayer, source, transaction } = parseAndSignTransaction({ tx: input.tx, signer: signer.solana })
     let errors

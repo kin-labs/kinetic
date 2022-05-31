@@ -4,12 +4,13 @@
 
 type App {
   createdAt: DateTime!
+  envs: [AppEnv!]
   id: String!
   index: Int!
   name: String
   updatedAt: DateTime!
   users: [AppUser!]
-  wallet: Wallet
+  wallets: [Wallet!]
   webhookAcceptIncoming: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String
@@ -22,6 +23,29 @@ input AppCreateInput {
   index: Int!
   name: String!
   skipWalletCreation: Boolean
+}
+
+type AppEnv {
+  cluster: Cluster
+  createdAt: DateTime!
+  id: String!
+  mints: [AppMint!]
+  name: String
+  updatedAt: DateTime!
+  webhookAcceptIncoming: Boolean
+  webhookEventEnabled: Boolean
+  webhookEventUrl: String
+  webhookSecret: String
+  webhookVerifyEnabled: Boolean
+  webhookVerifyUrl: String
+}
+
+type AppMint {
+  createdAt: DateTime!
+  id: String!
+  mint: Mint
+  updatedAt: DateTime!
+  wallet: Wallet
 }
 
 type AppTransaction {

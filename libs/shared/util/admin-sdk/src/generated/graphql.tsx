@@ -25,12 +25,13 @@ export type Scalars = {
 export type App = {
   __typename?: 'App'
   createdAt: Scalars['DateTime']
+  envs?: Maybe<Array<AppEnv>>
   id: Scalars['String']
   index: Scalars['Int']
   name?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
   users?: Maybe<Array<AppUser>>
-  wallet?: Maybe<Wallet>
+  wallets?: Maybe<Array<Wallet>>
   webhookAcceptIncoming?: Maybe<Scalars['Boolean']>
   webhookEventEnabled?: Maybe<Scalars['Boolean']>
   webhookEventUrl?: Maybe<Scalars['String']>
@@ -43,6 +44,31 @@ export type AppCreateInput = {
   index: Scalars['Int']
   name: Scalars['String']
   skipWalletCreation?: InputMaybe<Scalars['Boolean']>
+}
+
+export type AppEnv = {
+  __typename?: 'AppEnv'
+  cluster?: Maybe<Cluster>
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  mints?: Maybe<Array<AppMint>>
+  name?: Maybe<Scalars['String']>
+  updatedAt: Scalars['DateTime']
+  webhookAcceptIncoming?: Maybe<Scalars['Boolean']>
+  webhookEventEnabled?: Maybe<Scalars['Boolean']>
+  webhookEventUrl?: Maybe<Scalars['String']>
+  webhookSecret?: Maybe<Scalars['String']>
+  webhookVerifyEnabled?: Maybe<Scalars['Boolean']>
+  webhookVerifyUrl?: Maybe<Scalars['String']>
+}
+
+export type AppMint = {
+  __typename?: 'AppMint'
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  mint?: Maybe<Mint>
+  updatedAt: Scalars['DateTime']
+  wallet?: Maybe<Wallet>
 }
 
 export type AppTransaction = {
@@ -543,6 +569,20 @@ export type AppDetailsFragment = {
   webhookVerifyUrl?: string | null
 }
 
+export type AppEnvDetailsFragment = {
+  __typename?: 'AppEnv'
+  id: string
+  createdAt: any
+  updatedAt: any
+  name?: string | null
+  webhookAcceptIncoming?: boolean | null
+  webhookEventEnabled?: boolean | null
+  webhookEventUrl?: string | null
+  webhookSecret?: string | null
+  webhookVerifyEnabled?: boolean | null
+  webhookVerifyUrl?: string | null
+}
+
 export type AppTransactionDetailsFragment = {
   __typename?: 'AppTransaction'
   id?: string | null
@@ -652,6 +692,19 @@ export type CreateAppMutation = {
     webhookSecret?: string | null
     webhookVerifyEnabled?: boolean | null
     webhookVerifyUrl?: string | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+    }> | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -684,13 +737,13 @@ export type CreateAppMutation = {
         role?: UserRole | null
       } | null
     }> | null
-    wallet?: {
+    wallets?: Array<{
       __typename?: 'Wallet'
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
-    } | null
+    }> | null
   } | null
 }
 
@@ -736,6 +789,19 @@ export type UpdateAppMutation = {
     webhookSecret?: string | null
     webhookVerifyEnabled?: boolean | null
     webhookVerifyUrl?: string | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+    }> | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -768,13 +834,13 @@ export type UpdateAppMutation = {
         role?: UserRole | null
       } | null
     }> | null
-    wallet?: {
+    wallets?: Array<{
       __typename?: 'Wallet'
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
-    } | null
+    }> | null
   } | null
 }
 
@@ -963,13 +1029,26 @@ export type AppWalletAddMutation = {
     webhookSecret?: string | null
     webhookVerifyEnabled?: boolean | null
     webhookVerifyUrl?: string | null
-    wallet?: {
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+    }> | null
+    wallets?: Array<{
       __typename?: 'Wallet'
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
-    } | null
+    }> | null
   } | null
 }
 
@@ -993,13 +1072,26 @@ export type AppWalletRemoveMutation = {
     webhookSecret?: string | null
     webhookVerifyEnabled?: boolean | null
     webhookVerifyUrl?: string | null
-    wallet?: {
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+    }> | null
+    wallets?: Array<{
       __typename?: 'Wallet'
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
-    } | null
+    }> | null
   } | null
 }
 
@@ -1022,6 +1114,19 @@ export type AppQuery = {
     webhookSecret?: string | null
     webhookVerifyEnabled?: boolean | null
     webhookVerifyUrl?: string | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+    }> | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -1054,13 +1159,13 @@ export type AppQuery = {
         role?: UserRole | null
       } | null
     }> | null
-    wallet?: {
+    wallets?: Array<{
       __typename?: 'Wallet'
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
-    } | null
+    }> | null
   } | null
 }
 
@@ -1209,13 +1314,26 @@ export type AppsQuery = {
     webhookSecret?: string | null
     webhookVerifyEnabled?: boolean | null
     webhookVerifyUrl?: string | null
-    wallet?: {
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+    }> | null
+    wallets?: Array<{
       __typename?: 'Wallet'
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
-    } | null
+    }> | null
   }> | null
 }
 
@@ -1802,6 +1920,20 @@ export type WalletsQuery = {
   }> | null
 }
 
+export const AppEnvDetailsFragmentDoc = gql`
+  fragment AppEnvDetails on AppEnv {
+    id
+    createdAt
+    updatedAt
+    name
+    webhookAcceptIncoming
+    webhookEventEnabled
+    webhookEventUrl
+    webhookSecret
+    webhookVerifyEnabled
+    webhookVerifyUrl
+  }
+`
 export const AppTransactionErrorDetailsFragmentDoc = gql`
   fragment AppTransactionErrorDetails on AppTransactionError {
     id
@@ -2000,15 +2132,19 @@ export const CreateAppDocument = gql`
   mutation CreateApp($input: AppCreateInput!) {
     created: createApp(input: $input) {
       ...AppDetails
+      envs {
+        ...AppEnvDetails
+      }
       users {
         ...AppUserDetails
       }
-      wallet {
+      wallets {
         ...WalletDetails
       }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
@@ -2032,15 +2168,19 @@ export const UpdateAppDocument = gql`
   mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
     updated: updateApp(appId: $appId, input: $input) {
       ...AppDetails
+      envs {
+        ...AppEnvDetails
+      }
       users {
         ...AppUserDetails
       }
-      wallet {
+      wallets {
         ...WalletDetails
       }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
@@ -2100,12 +2240,16 @@ export const AppWalletAddDocument = gql`
   mutation AppWalletAdd($appId: String!, $walletId: String!) {
     item: appWalletAdd(appId: $appId, walletId: $walletId) {
       ...AppDetails
-      wallet {
+      envs {
+        ...AppEnvDetails
+      }
+      wallets {
         ...WalletDetails
       }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
 
@@ -2116,12 +2260,16 @@ export const AppWalletRemoveDocument = gql`
   mutation AppWalletRemove($appId: String!, $walletId: String!) {
     item: appWalletRemove(appId: $appId, walletId: $walletId) {
       ...AppDetails
-      wallet {
+      envs {
+        ...AppEnvDetails
+      }
+      wallets {
         ...WalletDetails
       }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
 
@@ -2132,15 +2280,19 @@ export const AppDocument = gql`
   query App($appId: String!) {
     item: app(appId: $appId) {
       ...AppDetails
+      envs {
+        ...AppEnvDetails
+      }
       users {
         ...AppUserDetails
       }
-      wallet {
+      wallets {
         ...WalletDetails
       }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
@@ -2200,12 +2352,16 @@ export const AppsDocument = gql`
   query Apps {
     items: apps {
       ...AppDetails
-      wallet {
+      envs {
+        ...AppEnvDetails
+      }
+      wallets {
         ...WalletDetails
       }
     }
   }
   ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
 
