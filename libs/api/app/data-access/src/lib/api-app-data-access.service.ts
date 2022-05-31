@@ -31,9 +31,11 @@ export class ApiAppDataAccessService implements OnModuleInit {
         cluster: true,
         mints: {
           include: {
+            mint: true,
             wallet: true,
           },
         },
+        wallets: true,
       },
     },
     wallets: true,
@@ -71,7 +73,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
             // Connect the cluster
             cluster: { connect: { id: cluster.id } },
             // Set the name based on the type, so 'SolanaDevnet' => 'devnet'
-            name: cluster.type.toLowerCase().replace('solana-', ''),
+            name: cluster.type.toLowerCase().replace('solana', ''),
             // Connect the wallet
             wallets,
             // Create the KIN mint and connect it to the wallet
@@ -88,27 +90,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
       },
       wallets,
     }
-    const created = await this.data.app.create({
-      data,
-      include: {
-        users: { include: { user: true } },
-        envs: {
-          include: {
-            cluster: true,
-            mints: {
-              include: {
-                mint: true,
-                wallet: true,
-              },
-            },
-            wallets: true,
-          },
-        },
-        wallets: true,
-      },
-    })
+    const created = await this.data.app.create({ data, include: this.include })
     this.logger.verbose(`app ${created.index}: created app ${created.name}`)
-    this.logger.verbose(JSON.stringify(created, null, 2))
     return created
   }
 
@@ -122,21 +105,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   async apps(userId: string) {
     await this.data.ensureAdminUser(userId)
     return this.data.app.findMany({
-      include: {
-        envs: {
-          include: {
-            cluster: true,
-            mints: {
-              include: {
-                mint: true,
-                wallet: true,
-              },
-            },
-            wallets: true,
-          },
-        },
-        wallets: true,
-      },
+      include: this.include,
       orderBy: { updatedAt: 'desc' },
     })
   }
@@ -328,8 +297,11 @@ export class ApiAppDataAccessService implements OnModuleInit {
         const found = await this.data.getAppByIndex(app.index)
         if (found) {
           const { publicKey } = Keypair.fromSecretKey(Buffer.from(app.feePayerByteArray))
-          this.logger.verbose(`Provisioned app ${app.index} (${app.name}) found: ${publicKey}`)
-          this.logger.verbose(JSON.stringify(found, null, 2))
+          this.logger.verbose(
+            `Provisioned app ${app.index} (${app.name}) found: ${publicKey} ${found.envs
+              .map((env) => `=> ${env.name}: ${env.mints.map((mint) => mint.mint.symbol).join(', ')}`)
+              .join(', ')}`,
+          )
         } else {
           if (!adminId) {
             const admin = await this.data.user.findFirst({
