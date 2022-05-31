@@ -83,10 +83,10 @@ export class ApiWalletDataAccessService {
   private getAppKeypair(index: number): Keypair {
     const envVar = process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]
     if (envVar) {
-      this.logger.verbose(`getAppKeypair for app with index ${index} from env var`)
+      this.logger.verbose(`getAppKeypair app ${index}: read from env var`)
       return Keypair.fromByteArray(JSON.parse(envVar))
     }
-    this.logger.verbose(`getAppKeypair for app with index ${index} generated new keypair`)
+    this.logger.verbose(`getAppKeypair app ${index}: generated new keypair`)
     return Keypair.generate()
   }
 
@@ -98,8 +98,8 @@ export class ApiWalletDataAccessService {
     const current = wallet.balances?.length ? wallet.balances[0].balance : 0
     const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
     if (BigInt(balance) !== current) {
-      const stored = await this.storeWalletBalance(wallet.id, balance)
-      this.logger.verbose(`Stored Wallet Balance: ${wallet.publicKey} ${current} => ${balance} [${stored.id}]`)
+      await this.storeWalletBalance(wallet.id, balance)
+      this.logger.verbose(`Updated Wallet Balance: ${wallet.publicKey} ${current} => ${balance}`)
     }
   }
 }
