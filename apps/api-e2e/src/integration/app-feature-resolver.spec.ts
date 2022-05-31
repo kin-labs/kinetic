@@ -14,6 +14,7 @@ import {
   AppUserUpdateRoleInput,
   AppWalletAdd,
   AppWalletRemove,
+  ClusterType,
   CreateApp,
   CreateUser,
   DeleteApp,
@@ -72,6 +73,10 @@ describe('App (e2e)', () => {
             appId = data.id
             expect(data.index).toEqual(input.index)
             expect(data.name).toEqual(input.name)
+            expect(data.envs.length).toEqual(1)
+            expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
+            expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
+            expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.wallets).toBeDefined()
@@ -120,6 +125,10 @@ describe('App (e2e)', () => {
 
             expect(data.id).toEqual(appId)
             expect(data.index).toEqual(appIndex)
+            expect(data.envs.length).toEqual(1)
+            expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
+            expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
+            expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.wallets).toBeDefined()

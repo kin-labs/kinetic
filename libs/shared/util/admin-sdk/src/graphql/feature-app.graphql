@@ -25,6 +25,18 @@ fragment AppEnvDetails on AppEnv {
   webhookVerifyUrl
 }
 
+fragment AppMintDetails on AppMint {
+  id
+  createdAt
+  updatedAt
+  mint {
+    ...MintDetails
+  }
+  wallet {
+    ...WalletDetails
+  }
+}
+
 fragment AppTransactionDetails on AppTransaction {
   id
   createdAt
@@ -93,6 +105,12 @@ mutation CreateApp($input: AppCreateInput!) {
     ...AppDetails
     envs {
       ...AppEnvDetails
+      cluster {
+        ...ClusterDetails
+      }
+      mints {
+        ...AppMintDetails
+      }
     }
     users {
       ...AppUserDetails
@@ -180,6 +198,12 @@ query App($appId: String!) {
     ...AppDetails
     envs {
       ...AppEnvDetails
+      cluster {
+        ...ClusterDetails
+      }
+      mints {
+        ...AppMintDetails
+      }
     }
     users {
       ...AppUserDetails

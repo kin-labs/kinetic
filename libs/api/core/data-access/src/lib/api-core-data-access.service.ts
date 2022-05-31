@@ -58,6 +58,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
             cluster: true,
             mints: {
               include: {
+                mint: true,
                 wallet: true,
               },
             },
@@ -79,6 +80,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
             cluster: true,
             mints: {
               include: {
+                mint: true,
                 wallet: true,
               },
             },

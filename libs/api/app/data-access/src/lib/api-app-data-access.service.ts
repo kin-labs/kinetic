@@ -65,22 +65,23 @@ export class ApiAppDataAccessService implements OnModuleInit {
       name: input.name,
       users: { create: { role: AppUserRole.Owner, userId } },
       envs: {
+        // Create an app environment for each active cluster
         create: [
           ...clusters.map((cluster) => ({
+            // Connect the cluster
             cluster: { connect: { id: cluster.id } },
+            // Set the name based on the type, so 'SolanaDevnet' => 'devnet'
             name: cluster.type.toLowerCase().replace('solana-', ''),
+            // Connect the wallet
             wallets,
+            // Create the KIN mint and connect it to the wallet
             mints: {
-              create: [
-                ...cluster.mints.map((mint) => ({
-                  mint: {
-                    connect: {
-                      id: mint.id,
-                    },
-                  },
+              create: cluster.mints
+                .filter((mint) => mint.symbol === 'KIN')
+                .map((mint) => ({
+                  mint: { connect: { id: mint.id } },
                   wallet: wallets,
                 })),
-              ],
             },
           })),
         ],
@@ -96,6 +97,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
             cluster: true,
             mints: {
               include: {
+                mint: true,
                 wallet: true,
               },
             },
@@ -126,6 +128,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
             cluster: true,
             mints: {
               include: {
+                mint: true,
                 wallet: true,
               },
             },

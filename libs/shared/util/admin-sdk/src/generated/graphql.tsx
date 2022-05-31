@@ -583,6 +583,33 @@ export type AppEnvDetailsFragment = {
   webhookVerifyUrl?: string | null
 }
 
+export type AppMintDetailsFragment = {
+  __typename?: 'AppMint'
+  id: string
+  createdAt: any
+  updatedAt: any
+  mint?: {
+    __typename?: 'Mint'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    address?: string | null
+    coingeckoId?: string | null
+    decimals?: number | null
+    logoUrl?: string | null
+    name?: string | null
+    symbol?: string | null
+    type?: MintType | null
+  } | null
+  wallet?: {
+    __typename?: 'Wallet'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  } | null
+}
+
 export type AppTransactionDetailsFragment = {
   __typename?: 'AppTransaction'
   id?: string | null
@@ -704,6 +731,42 @@ export type CreateAppMutation = {
       webhookSecret?: string | null
       webhookVerifyEnabled?: boolean | null
       webhookVerifyUrl?: string | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        endpoint?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          logoUrl?: string | null
+          name?: string | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
     }> | null
     users?: Array<{
       __typename?: 'AppUser'
@@ -1126,6 +1189,42 @@ export type AppQuery = {
       webhookSecret?: string | null
       webhookVerifyEnabled?: boolean | null
       webhookVerifyUrl?: string | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        endpoint?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          logoUrl?: string | null
+          name?: string | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
     }> | null
     users?: Array<{
       __typename?: 'AppUser'
@@ -1934,6 +2033,43 @@ export const AppEnvDetailsFragmentDoc = gql`
     webhookVerifyUrl
   }
 `
+export const MintDetailsFragmentDoc = gql`
+  fragment MintDetails on Mint {
+    id
+    createdAt
+    updatedAt
+    address
+    coingeckoId
+    decimals
+    logoUrl
+    name
+    symbol
+    type
+  }
+`
+export const WalletDetailsFragmentDoc = gql`
+  fragment WalletDetails on Wallet {
+    id
+    createdAt
+    updatedAt
+    publicKey
+  }
+`
+export const AppMintDetailsFragmentDoc = gql`
+  fragment AppMintDetails on AppMint {
+    id
+    createdAt
+    updatedAt
+    mint {
+      ...MintDetails
+    }
+    wallet {
+      ...WalletDetails
+    }
+  }
+  ${MintDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
+`
 export const AppTransactionErrorDetailsFragmentDoc = gql`
   fragment AppTransactionErrorDetails on AppTransactionError {
     id
@@ -2085,34 +2221,12 @@ export const ClusterTokenDetailsFragmentDoc = gql`
   }
   ${ClusterTokenExtensionsDetailsFragmentDoc}
 `
-export const MintDetailsFragmentDoc = gql`
-  fragment MintDetails on Mint {
-    id
-    createdAt
-    updatedAt
-    address
-    coingeckoId
-    decimals
-    logoUrl
-    name
-    symbol
-    type
-  }
-`
 export const UserEmailDetailsFragmentDoc = gql`
   fragment UserEmailDetails on UserEmail {
     id
     createdAt
     updatedAt
     email
-  }
-`
-export const WalletDetailsFragmentDoc = gql`
-  fragment WalletDetails on Wallet {
-    id
-    createdAt
-    updatedAt
-    publicKey
   }
 `
 export const WalletAirdropResponseDetailsFragmentDoc = gql`
@@ -2134,6 +2248,12 @@ export const CreateAppDocument = gql`
       ...AppDetails
       envs {
         ...AppEnvDetails
+        cluster {
+          ...ClusterDetails
+        }
+        mints {
+          ...AppMintDetails
+        }
       }
       users {
         ...AppUserDetails
@@ -2145,6 +2265,8 @@ export const CreateAppDocument = gql`
   }
   ${AppDetailsFragmentDoc}
   ${AppEnvDetailsFragmentDoc}
+  ${ClusterDetailsFragmentDoc}
+  ${AppMintDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
@@ -2282,6 +2404,12 @@ export const AppDocument = gql`
       ...AppDetails
       envs {
         ...AppEnvDetails
+        cluster {
+          ...ClusterDetails
+        }
+        mints {
+          ...AppMintDetails
+        }
       }
       users {
         ...AppUserDetails
@@ -2293,6 +2421,8 @@ export const AppDocument = gql`
   }
   ${AppDetailsFragmentDoc}
   ${AppEnvDetailsFragmentDoc}
+  ${ClusterDetailsFragmentDoc}
+  ${AppMintDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
   ${WalletDetailsFragmentDoc}
 `
