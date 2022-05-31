@@ -64,6 +64,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
             wallets: true,
           },
         },
+        users: true,
         wallets: true,
       },
     })
@@ -84,6 +85,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
             wallets: true,
           },
         },
+        users: true,
         wallets: true,
       },
     })

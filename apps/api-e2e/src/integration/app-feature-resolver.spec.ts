@@ -74,8 +74,8 @@ describe('App (e2e)', () => {
             expect(data.name).toEqual(input.name)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
-            expect(data.wallet).toBeDefined()
-            expect(data.wallet.publicKey).toBeDefined()
+            expect(data.wallets).toBeDefined()
+            expect(data.wallets[0].publicKey).toBeDefined()
           })
       })
 
@@ -106,8 +106,8 @@ describe('App (e2e)', () => {
             expect(data.webhookVerifyUrl).toEqual(input.webhookVerifyUrl)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
-            expect(data.wallet).toBeDefined()
-            expect(data.wallet.publicKey).toBeDefined()
+            expect(data.wallets).toBeDefined()
+            expect(data.wallets[0].publicKey).toBeDefined()
           })
       })
 
@@ -122,8 +122,8 @@ describe('App (e2e)', () => {
             expect(data.index).toEqual(appIndex)
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
-            expect(data.wallet).toBeDefined()
-            expect(data.wallet.publicKey).toBeDefined()
+            expect(data.wallets).toBeDefined()
+            expect(data.wallets[0].publicKey).toBeDefined()
           })
       })
 
@@ -259,9 +259,9 @@ describe('App (e2e)', () => {
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.item
-            expect(data.wallet).toBeDefined()
-            expect(data.wallet.id).toEqual(walletId)
-            expect(data.wallet.publicKey).toEqual(walletPublicKey)
+            expect(data.wallets).toBeDefined()
+            expect(data.wallets[0].id).toEqual(walletId)
+            expect(data.wallets[0].publicKey).toEqual(walletPublicKey)
           })
       })
 
@@ -271,7 +271,7 @@ describe('App (e2e)', () => {
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.item
-            expect(data.wallet).toBeFalsy()
+            expect(data.wallets).toEqual([])
           })
       })
     })
