@@ -11,8 +11,8 @@ export class ApiAppFeatureController {
   @Get('config/:index')
   @ApiOperation({ operationId: 'getAppConfig' })
   @ApiResponse({ type: AppConfig })
-  app(@Param('index') index: string) {
-    return this.service.getConfig(Number(index))
+  app(@Param('environment') environment: string, @Param('index', ParseIntPipe) index: number) {
+    return this.service.getAppConfig(environment, index)
   }
 
   @Post(':index/webhook/:type')

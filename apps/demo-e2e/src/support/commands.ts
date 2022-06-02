@@ -46,5 +46,6 @@ Cypress.Commands.add('seedDb', () => {
     id: 'localhost:3000',
     name: 'localhost:3000',
     endpoint: 'http://localhost:3000',
+    environment: 'devnet',
   })
 })

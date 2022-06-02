@@ -6,7 +6,7 @@ import {
   MinimumRentExemptionBalanceResponse,
   LatestBlockhashResponse,
 } from '@mogami/api/transaction/data-access'
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('transaction')
@@ -14,18 +14,22 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 export class ApiTransactionFeatureController {
   constructor(private readonly service: ApiTransactionDataAccessService) {}
 
-  @Get('latest-blockhash')
+  @Get('latest-blockhash/:environment/:index')
   @ApiOperation({ operationId: 'getLatestBlockhash' })
   @ApiResponse({ type: LatestBlockhashResponse })
-  getLatestBlockhash() {
-    return this.service.getLatestBlockhash()
+  getLatestBlockhash(@Param('environment') environment: string, @Param('index', ParseIntPipe) index: number) {
+    return this.service.getLatestBlockhash(environment, index)
   }
 
-  @Get('minimum-rent-exemption-balance')
+  @Get('minimum-rent-exemption-balance/:environment/:index')
   @ApiOperation({ operationId: 'getMinimumRentExemptionBalance' })
   @ApiResponse({ type: MinimumRentExemptionBalanceResponse })
-  getMinimumRentExemptionBalance(@Param('input') input: MinimumRentExemptionBalanceRequest) {
-    return this.service.getMinimumRentExemptionBalance(input)
+  getMinimumRentExemptionBalance(
+    @Param('environment') environment: string,
+    @Param('index', ParseIntPipe) index: number,
+    @Param('input') input: MinimumRentExemptionBalanceRequest,
+  ) {
+    return this.service.getMinimumRentExemptionBalance(environment, index, input)
   }
 
   @Post('make-transfer')

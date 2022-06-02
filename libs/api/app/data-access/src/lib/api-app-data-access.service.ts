@@ -252,22 +252,36 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  async getConfig(index: number): Promise<AppConfig> {
-    const {
-      name,
-      wallets: [wallet],
-    } = await this.data.getAppByIndex(index)
+  async getAppConfig(environment: string, index: number): Promise<AppConfig> {
+    const env = await this.data.getAppByEnvironmentIndex(environment, index)
+
+    const mints = env.mints?.map(({ mint, wallet }) => ({
+      feePayer: wallet.publicKey,
+      logoUrl: mint?.logoUrl,
+      programId: TOKEN_PROGRAM_ID.toBase58(),
+      publicKey: mint?.address,
+      symbol: mint?.symbol,
+    }))
+
+    if (!mints.length) {
+      throw new Error(`No mints found for environment ${environment}, index ${index}`)
+    }
 
     return {
       app: {
-        index,
-        name,
+        index: env.app.index,
+        name: env.app.name,
       },
-      mint: {
-        feePayer: wallet.publicKey,
-        programId: TOKEN_PROGRAM_ID.toBase58(),
-        publicKey: this.data.config.mogamiMintPublicKey,
+      environment: {
+        name: env.name,
+        cluster: {
+          id: env.cluster.id,
+          name: env.cluster.name,
+          type: env.cluster.type,
+        },
       },
+      mint: mints[0],
+      mints,
     }
   }
 

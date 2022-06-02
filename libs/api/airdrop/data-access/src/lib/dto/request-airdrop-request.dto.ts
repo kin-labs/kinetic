@@ -5,4 +5,8 @@ export class RequestAirdropRequest {
   account: string
   @ApiProperty({ required: false })
   amount?: string
+  @ApiProperty({ required: true })
+  environment: string
+  @ApiProperty()
+  index: number
 }

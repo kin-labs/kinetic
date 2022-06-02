@@ -31,10 +31,26 @@
         }
       }
     },
-    "/api/account/info/{accountId}": {
+    "/api/account/info/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_getAccountInfo",
         "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
           {
             "name": "accountId",
             "required": true,
@@ -82,11 +98,27 @@
         "tags": ["account"]
       }
     },
-    "/api/account/balance/{accountId}": {
+    "/api/account/balance/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "getBalance",
         "summary": "",
         "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
           {
             "name": "accountId",
             "required": true,
@@ -111,11 +143,27 @@
         "tags": ["account"]
       }
     },
-    "/api/account/history/{accountId}": {
+    "/api/account/history/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "getHistory",
         "summary": "",
         "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
           {
             "name": "accountId",
             "required": true,
@@ -143,11 +191,27 @@
         "tags": ["account"]
       }
     },
-    "/api/account/token-accounts/{accountId}": {
+    "/api/account/token-accounts/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "tokenAccounts",
         "summary": "",
         "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
           {
             "name": "accountId",
             "required": true,
@@ -231,11 +295,19 @@
         "summary": "",
         "parameters": [
           {
-            "name": "index",
+            "name": "environment",
             "required": true,
             "in": "path",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
@@ -303,11 +375,28 @@
         "tags": ["config"]
       }
     },
-    "/api/transaction/latest-blockhash": {
+    "/api/transaction/latest-blockhash/{environment}/{index}": {
       "get": {
         "operationId": "getLatestBlockhash",
         "summary": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "default": {
             "description": "",
@@ -323,11 +412,27 @@
         "tags": ["transaction"]
       }
     },
-    "/api/transaction/minimum-rent-exemption-balance": {
+    "/api/transaction/minimum-rent-exemption-balance/{environment}/{index}": {
       "get": {
         "operationId": "getMinimumRentExemptionBalance",
         "summary": "",
         "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
           {
             "name": "dataLength",
             "in": "query",
@@ -430,14 +535,20 @@
       "CreateAccountRequest": {
         "type": "object",
         "properties": {
+          "environment": {
+            "type": "string"
+          },
           "index": {
             "type": "number"
+          },
+          "mint": {
+            "type": "string"
           },
           "tx": {
             "$ref": "#/components/schemas/Buffer"
           }
         },
-        "required": ["index", "tx"]
+        "required": ["environment", "index", "mint", "tx"]
       },
       "AppTransactionError": {
         "type": "object",
@@ -581,9 +692,15 @@
           },
           "amount": {
             "type": "string"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "index": {
+            "type": "number"
           }
         },
-        "required": ["account"]
+        "required": ["account", "environment", "index"]
       },
       "RequestAirdropResponse": {
         "type": "object",
@@ -648,10 +765,40 @@
         },
         "required": ["index", "name"]
       },
+      "AppConfigCluster": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "object"
+          }
+        },
+        "required": ["id", "name", "type"]
+      },
+      "AppConfigEnvironment": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "cluster": {
+            "$ref": "#/components/schemas/AppConfigCluster"
+          }
+        },
+        "required": ["name", "cluster"]
+      },
       "AppConfigMint": {
         "type": "object",
         "properties": {
           "feePayer": {
+            "type": "string"
+          },
+          "logoUrl": {
             "type": "string"
           },
           "programId": {
@@ -659,9 +806,12 @@
           },
           "publicKey": {
             "type": "string"
+          },
+          "symbol": {
+            "type": "string"
           }
         },
-        "required": ["feePayer", "programId", "publicKey"]
+        "required": ["feePayer", "logoUrl", "programId", "publicKey", "symbol"]
       },
       "AppConfig": {
         "type": "object",
@@ -669,11 +819,20 @@
           "app": {
             "$ref": "#/components/schemas/AppConfigApp"
           },
+          "environment": {
+            "$ref": "#/components/schemas/AppConfigEnvironment"
+          },
           "mint": {
             "$ref": "#/components/schemas/AppConfigMint"
+          },
+          "mints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppConfigMint"
+            }
           }
         },
-        "required": ["app", "mint"]
+        "required": ["app", "environment", "mint", "mints"]
       },
       "ApiConfigSummary": {
         "type": "object",
@@ -718,8 +877,14 @@
             "type": "string",
             "enum": ["Confirmed", "Finalized", "Processed"]
           },
+          "environment": {
+            "type": "string"
+          },
           "index": {
             "type": "number"
+          },
+          "mint": {
+            "type": "string"
           },
           "lastValidBlockHeight": {
             "type": "number"
@@ -728,7 +893,7 @@
             "$ref": "#/components/schemas/Buffer"
           }
         },
-        "required": ["commitment", "index", "lastValidBlockHeight", "tx"]
+        "required": ["commitment", "environment", "index", "mint", "lastValidBlockHeight", "tx"]
       }
     }
   }

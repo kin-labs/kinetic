@@ -45,7 +45,12 @@ export function DemoSdkFeature() {
   }
 
   const selectServer = (server: DemoServerEntity) => {
-    MogamiSdk.setup({ endpoint: server.endpoint, index: 1, logger: console })
+    MogamiSdk.setup({
+      endpoint: server.endpoint,
+      environment: server.environment,
+      index: 1,
+      logger: console,
+    })
       .then((sdk) => {
         setSdk(sdk)
         setServer(server)

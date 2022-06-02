@@ -7,6 +7,7 @@ import { omit } from 'lodash'
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger(ApiCoreDataAccessService.name)
+  readonly connections = new Map<string, Solana>()
   readonly solana: Solana
 
   constructor(readonly config: ApiConfigDataAccessService) {
@@ -71,6 +72,23 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     })
   }
 
+  getAppByEnvironmentIndex(environment: string, index: number) {
+    return this.appEnv.findFirst({
+      where: { app: { index }, name: environment },
+      include: {
+        app: true,
+        cluster: true,
+        mints: {
+          include: {
+            mint: true,
+            wallet: true,
+          },
+        },
+        wallets: true,
+      },
+    })
+  }
+
   getAppByIndex(index: number) {
     return this.app.findUnique({
       where: { index },
@@ -91,6 +109,24 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
         wallets: true,
       },
     })
+  }
+
+  getAppKey(environment: string, index: number): string {
+    return `app-${environment}-${index}`
+  }
+
+  async getSolanaConnection(environment: string, index: number): Promise<Solana> {
+    const key = this.getAppKey(environment, index)
+    if (!this.connections.has(key)) {
+      const env = await this.getAppByEnvironmentIndex(environment, index)
+      this.connections.set(
+        key,
+        new Solana(env.cluster.endpoint, {
+          logger: new Logger(`@mogami/solana: environment: ${environment}, index: ${index}`),
+        }),
+      )
+    }
+    return this.connections.get(key)
   }
 
   getUserByEmail(email: string) {
