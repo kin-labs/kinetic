@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom'
 
 export interface AdminAppUiWebhooksProps {
   appId: string
+  envId: string
   webhooks: AppWebhook[] | null | undefined
 }
 
-export function AdminAppUiWebhooks({ appId, webhooks }: AdminAppUiWebhooksProps) {
+export function AdminAppUiWebhooks({ appId, envId, webhooks }: AdminAppUiWebhooksProps) {
   if (!webhooks?.length) {
     return <Alert>No webhooks found.</Alert>
   }
@@ -28,7 +29,7 @@ export function AdminAppUiWebhooks({ appId, webhooks }: AdminAppUiWebhooksProps)
             {webhooks?.map((webhook) => (
               <Tr key={webhook?.id}>
                 <Td>
-                  <Link to={`/apps/${appId}/webhook/${webhook.id}`}>
+                  <Link to={`/apps/${appId}/environments/${envId}/webhooks/${webhook.id}`}>
                     <Text color="teal.500">{webhook.id}</Text>
                   </Link>
                 </Td>

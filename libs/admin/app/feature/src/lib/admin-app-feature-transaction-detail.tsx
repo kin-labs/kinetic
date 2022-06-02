@@ -1,20 +1,23 @@
 import { Box, Flex, Stack } from '@chakra-ui/react'
 import {
-  AdminAppUiTransactionErrors,
   AdminAppUiTransactionDetail,
+  AdminAppUiTransactionErrors,
   AdminAppUiTransactionStatus,
   AdminAppUiTransactionTimeline,
 } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { useAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
-import { useParams } from 'react-router-dom'
 
-export default function AdminAppFeatureTransactionDetail() {
-  const { appId, appTransactionId } = useParams<{ appId: string; appTransactionId: string }>()
+export default function AdminAppFeatureTransactionDetail({
+  appId,
+  appTransactionId,
+}: {
+  appId: string
+  appTransactionId: string
+}) {
   const [{ data, fetching }] = useAppTransactionQuery({
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    variables: { appId: appId!, appTransactionId: appTransactionId! },
+    variables: { appId: appId!, appTransactionId: appTransactionId },
   })
 
   if (fetching) {

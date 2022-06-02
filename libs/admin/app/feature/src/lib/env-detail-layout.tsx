@@ -8,7 +8,7 @@ import { AppHeader } from './app-header'
 export function EnvDetailLayout({ children }: PropsWithChildren<any>) {
   const { env, tabs } = useAppEnv()
   const { url } = useRouteMatch()
-  const defaultIndex = tabs.findIndex((item) => item.path === url) || 0
+  const defaultIndex = tabs.findIndex((item) => url.startsWith(item.path)) || 0
   return (
     <Stack direction="column" spacing={6}>
       {env.app && <AppHeader app={env.app} />}

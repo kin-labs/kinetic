@@ -11,7 +11,7 @@ const AppEnvContext = React.createContext<AppEnvProviderContext>({} as AppEnvPro
 
 function AppEnvProvider({ baseUrl, env, children }: { baseUrl: string; children: ReactNode; env: AppEnv }) {
   const tabs = [
-    { path: `${baseUrl}`, label: 'Overview' },
+    { path: `${baseUrl}/overview`, label: 'Overview' },
     { path: `${baseUrl}/transactions`, label: 'Transactions' },
     { path: `${baseUrl}/wallets`, label: 'Wallets' },
     { path: `${baseUrl}/webhooks`, label: 'Webhooks' },
