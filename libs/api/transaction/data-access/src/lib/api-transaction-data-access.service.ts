@@ -35,7 +35,7 @@ export class ApiTransactionDataAccessService {
       },
       include: { errors: true },
     })
-    const signer = Keypair.fromSecretKey(app.wallet.secretKey)
+    const signer = Keypair.fromSecretKey(app.wallets[0].secretKey)
 
     const { amount, blockhash, destination, feePayer, source, transaction } = parseAndSignTokenTransfer({
       tx: input.tx,

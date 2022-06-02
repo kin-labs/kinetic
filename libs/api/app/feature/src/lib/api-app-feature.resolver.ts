@@ -94,8 +94,8 @@ export class ApiAppFeatureResolver {
     return this.service.updateApp(user.id, appId, input)
   }
 
-  @ResolveField(() => Wallet, { nullable: true })
-  wallet(@Parent() app: App) {
-    return app.wallet
+  @ResolveField(() => [Wallet], { nullable: true })
+  wallets(@Parent() app: App) {
+    return app.wallets
   }
 }

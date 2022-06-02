@@ -1,7 +1,7 @@
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
-import { PrismaClient, UserRole } from '@prisma/client'
+import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
 
 @Injectable()
@@ -45,8 +45,52 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     return user
   }
 
+  getActiveClusters() {
+    return this.cluster.findMany({ where: { status: ClusterStatus.Active }, include: { mints: true } })
+  }
+
+  getAppById(id: string) {
+    return this.app.findUnique({
+      where: { id },
+      include: {
+        envs: {
+          include: {
+            cluster: true,
+            mints: {
+              include: {
+                mint: true,
+                wallet: true,
+              },
+            },
+            wallets: true,
+          },
+        },
+        users: true,
+        wallets: true,
+      },
+    })
+  }
+
   getAppByIndex(index: number) {
-    return this.app.findUnique({ where: { index }, include: { wallet: true } })
+    return this.app.findUnique({
+      where: { index },
+      include: {
+        envs: {
+          include: {
+            cluster: true,
+            mints: {
+              include: {
+                mint: true,
+                wallet: true,
+              },
+            },
+            wallets: true,
+          },
+        },
+        users: true,
+        wallets: true,
+      },
+    })
   }
 
   getUserByEmail(email: string) {

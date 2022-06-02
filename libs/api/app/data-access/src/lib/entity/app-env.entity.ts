@@ -1,19 +1,16 @@
-import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
-import { AppEnv } from './app-env.entity'
-import { AppUser } from './app-user.entity'
+import { Cluster } from '@mogami/api/cluster/data-access'
+import { Field, ObjectType } from '@nestjs/graphql'
+import { AppMint } from './app-mint.entity'
+import { App } from './app.entity'
 
 @ObjectType()
-export class App {
+export class AppEnv {
   @Field()
   id?: string
   @Field()
   createdAt?: Date
   @Field()
   updatedAt?: Date
-  @Field(() => [AppEnv], { nullable: true })
-  envs: AppEnv[]
-  @Field(() => Int)
-  index: number
   @Field({ nullable: true })
   name: string
   @Field({ nullable: true })
@@ -28,8 +25,9 @@ export class App {
   webhookVerifyEnabled?: boolean
   @Field({ nullable: true })
   webhookVerifyUrl?: string
-  @Field(() => [AppUser], { nullable: true })
-  users: AppUser[]
-  @HideField()
-  wallets
+  @Field(() => Cluster, { nullable: true })
+  cluster?: Cluster
+  @Field(() => [AppMint], { nullable: true })
+  mints: AppMint[]
+  app: App
 }

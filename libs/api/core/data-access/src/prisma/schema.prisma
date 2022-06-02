@@ -38,10 +38,12 @@ model App {
   id                    String           @id @default(cuid())
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
+  envs                  AppEnv[]
   index                 Int              @unique
   name                  String
   transaction           AppTransaction[]
   users                 AppUser[]
+  wallets               Wallet[]
   webhookAcceptIncoming Boolean          @default(false)
   webhookEventEnabled   Boolean          @default(false)
   webhookEventUrl       String?
@@ -49,8 +51,42 @@ model App {
   webhookVerifyEnabled  Boolean          @default(false)
   webhookVerifyUrl      String?
   webhooks              AppWebhook[]
-  wallet                Wallet?          @relation(fields: [walletId], references: [id])
-  walletId              String?
+}
+
+model AppEnv {
+  id                    String           @id @default(cuid())
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  name                  String
+  mints                 AppMint[]
+  transaction           AppTransaction[]
+  webhookAcceptIncoming Boolean          @default(false)
+  webhookEventEnabled   Boolean          @default(false)
+  webhookEventUrl       String?
+  webhookSecret         String?
+  webhookVerifyEnabled  Boolean          @default(false)
+  webhookVerifyUrl      String?
+  webhooks              AppWebhook[]
+  app                   App              @relation(fields: [appId], references: [id])
+  appId                 String
+  cluster               Cluster          @relation(fields: [clusterId], references: [id])
+  clusterId             String
+  wallets               Wallet[]
+
+  @@unique([appId, clusterId])
+  @@unique([appId, name])
+}
+
+model AppMint {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  mint      Mint?    @relation(fields: [mintId], references: [id])
+  mintId    String?
+  appEnv    AppEnv?  @relation(fields: [appEnvId], references: [id])
+  appEnvId  String?
+  wallet    Wallet?  @relation(fields: [walletId], references: [id])
+  walletId  String?
 }
 
 model AppTransaction {
@@ -77,6 +113,8 @@ model AppTransaction {
   webhookVerifyEnd   DateTime?
   app                App                       @relation(fields: [appId], references: [id])
   appId              String
+  appEnv             AppEnv?                   @relation(fields: [appEnvId], references: [id])
+  appEnvId           String?
 }
 
 enum AppTransactionCommitment {
@@ -123,6 +161,8 @@ model AppWebhook {
   type            AppWebhookType
   app             App                 @relation(fields: [appId], references: [id])
   appId           String
+  appEnv          AppEnv?             @relation(fields: [appEnvId], references: [id])
+  appEnvId        String?
 }
 
 enum AppWebhookDirection {
@@ -157,11 +197,12 @@ model Cluster {
   id        String        @id @default(cuid())
   createdAt DateTime      @default(now())
   updatedAt DateTime      @default(now()) @updatedAt
-  name      String
   endpoint  String
+  envs      AppEnv[]
+  mints     Mint[]
+  name      String
   status    ClusterStatus @default(Active)
   type      ClusterType
-  mints     Mint[]
 }
 
 enum ClusterStatus {
@@ -177,17 +218,18 @@ enum ClusterType {
 }
 
 model Mint {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
   address     String
+  appMints    AppMint[]
   coingeckoId String?
   decimals    Int
   logoUrl     String?
   name        String
   symbol      String
   type        MintType
-  cluster     Cluster  @relation(fields: [clusterId], references: [id])
+  cluster     Cluster   @relation(fields: [clusterId], references: [id])
   clusterId   String
 
   @@unique([address, clusterId])
@@ -241,7 +283,10 @@ model Wallet {
   updatedAt DateTime        @updatedAt
   publicKey String
   secretKey String
+  appMints  AppMint[]
   apps      App[]           @relation()
+  appEnv    AppEnv?         @relation(fields: [appEnvId], references: [id])
+  appEnvId  String?
   balances  WalletBalance[]
 }
 

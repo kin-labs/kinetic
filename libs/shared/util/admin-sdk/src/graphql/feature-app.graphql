@@ -12,6 +12,31 @@ fragment AppDetails on App {
   webhookVerifyUrl
 }
 
+fragment AppEnvDetails on AppEnv {
+  id
+  createdAt
+  updatedAt
+  name
+  webhookAcceptIncoming
+  webhookEventEnabled
+  webhookEventUrl
+  webhookSecret
+  webhookVerifyEnabled
+  webhookVerifyUrl
+}
+
+fragment AppMintDetails on AppMint {
+  id
+  createdAt
+  updatedAt
+  mint {
+    ...MintDetails
+  }
+  wallet {
+    ...WalletDetails
+  }
+}
+
 fragment AppTransactionDetails on AppTransaction {
   id
   createdAt
@@ -78,10 +103,19 @@ fragment AppWebhookDetails on AppWebhook {
 mutation CreateApp($input: AppCreateInput!) {
   created: createApp(input: $input) {
     ...AppDetails
+    envs {
+      ...AppEnvDetails
+      cluster {
+        ...ClusterDetails
+      }
+      mints {
+        ...AppMintDetails
+      }
+    }
     users {
       ...AppUserDetails
     }
-    wallet {
+    wallets {
       ...WalletDetails
     }
   }
@@ -96,10 +130,13 @@ mutation DeleteApp($appId: String!) {
 mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
   updated: updateApp(appId: $appId, input: $input) {
     ...AppDetails
+    envs {
+      ...AppEnvDetails
+    }
     users {
       ...AppUserDetails
     }
-    wallet {
+    wallets {
       ...WalletDetails
     }
   }
@@ -135,7 +172,10 @@ mutation AppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
 mutation AppWalletAdd($appId: String!, $walletId: String!) {
   item: appWalletAdd(appId: $appId, walletId: $walletId) {
     ...AppDetails
-    wallet {
+    envs {
+      ...AppEnvDetails
+    }
+    wallets {
       ...WalletDetails
     }
   }
@@ -144,7 +184,10 @@ mutation AppWalletAdd($appId: String!, $walletId: String!) {
 mutation AppWalletRemove($appId: String!, $walletId: String!) {
   item: appWalletRemove(appId: $appId, walletId: $walletId) {
     ...AppDetails
-    wallet {
+    envs {
+      ...AppEnvDetails
+    }
+    wallets {
       ...WalletDetails
     }
   }
@@ -153,10 +196,19 @@ mutation AppWalletRemove($appId: String!, $walletId: String!) {
 query App($appId: String!) {
   item: app(appId: $appId) {
     ...AppDetails
+    envs {
+      ...AppEnvDetails
+      cluster {
+        ...ClusterDetails
+      }
+      mints {
+        ...AppMintDetails
+      }
+    }
     users {
       ...AppUserDetails
     }
-    wallet {
+    wallets {
       ...WalletDetails
     }
   }
@@ -189,7 +241,10 @@ query AppWebhooks($appId: String!) {
 query Apps {
   items: apps {
     ...AppDetails
-    wallet {
+    envs {
+      ...AppEnvDetails
+    }
+    wallets {
       ...WalletDetails
     }
   }
