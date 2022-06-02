@@ -255,7 +255,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   async getAppConfig(environment: string, index: number): Promise<AppConfig> {
     const env = await this.data.getAppByEnvironmentIndex(environment, index)
 
-    const mints = env.mints?.map(({ mint, wallet }) => ({
+    const mints = env?.mints?.map(({ mint, wallet }) => ({
       feePayer: wallet.publicKey,
       logoUrl: mint?.logoUrl,
       programId: TOKEN_PROGRAM_ID.toBase58(),
@@ -286,6 +286,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   async storeIncomingWebhook(
+    environment: string,
     index: number,
     type: string,
     headers: IncomingHttpHeaders,
@@ -300,8 +301,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
     try {
       // Get the app by Index
-      const app = await this.data.getAppByIndex(index)
-      if (!app.webhookAcceptIncoming) {
+      const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
+      if (!appEnv.webhookAcceptIncoming) {
         this.logger.warn(`storeIncomingWebhook ignoring request, webhookAcceptIncoming is disabled`)
         res.statusCode = 400
         return res.send(new Error(`webhookAcceptIncoming is disabled`))
@@ -311,7 +312,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
       const created = await this.data.appWebhook.create({
         data: {
           direction: AppWebhookDirection.Incoming,
-          appId: app.id,
+          appId: appEnv.app.id,
+          appEnvId: appEnv.id,
           headers,
           payload,
           type: type === 'event' ? AppWebhookType.Event : AppWebhookType.Verify,

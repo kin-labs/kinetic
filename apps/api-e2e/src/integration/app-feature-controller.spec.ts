@@ -14,9 +14,9 @@ describe('AppFeatureController (e2e)', () => {
     return app.close()
   })
 
-  it('/api/app/config/1 (GET)', () => {
+  it('/api/app/config/devnet/1 (GET)', () => {
     const feePayer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.APP_1_FEE_PAYER_BYTE_ARRAY)))
-    return getEndpoint(app, '/api/app/config/1')
+    return getEndpoint(app, '/api/app/config/devnet/1')
       .expect(200)
       .then((res) => {
         expect(res.body.app.index).toEqual(1)
@@ -30,7 +30,7 @@ describe('AppFeatureController (e2e)', () => {
   it('Should not receive Incoming App Event Webhooks by default', () => {
     const payload = { foreignKey: 'some-foreign-key' }
     const headers = { authorization: 'Bearer Test' }
-    return postEndpoint(app, '/api/app/1/webhook/event', payload, headers)
+    return postEndpoint(app, '/api/app/devnet/1/webhook/event', payload, headers)
       .expect(400)
       .then((res) => expect(res.error).toMatchSnapshot())
   })
@@ -38,13 +38,13 @@ describe('AppFeatureController (e2e)', () => {
   it('Should not receive Incoming App Verify Webhooks by default', () => {
     const payload = { foreignKey: 'some-foreign-key' }
     const headers = { authorization: 'Bearer Test' }
-    return postEndpoint(app, '/api/app/1/webhook/verify', payload, headers)
+    return postEndpoint(app, '/api/app/devnet/1/webhook/verify', payload, headers)
       .expect(400)
       .then((res) => expect(res.error).toMatchSnapshot())
   })
 
   it('Should not receive unknown Incoming App Webhooks ', () => {
-    return postEndpoint(app, '/api/app/1/webhook/unknown')
+    return postEndpoint(app, '/api/app/devnet/1/webhook/unknown')
       .expect(400)
       .then((res) => {
         expect(res.body).toMatchSnapshot()
