@@ -2,6 +2,7 @@ import {
   ApiAppDataAccessService,
   App,
   AppCreateInput,
+  AppEnv,
   AppTransaction,
   AppUpdateInput,
   AppUserAddInput,
@@ -38,6 +39,11 @@ export class ApiAppFeatureResolver {
   @Query(() => App, { nullable: true })
   app(@CtxUser() user: User, @Args('appId') appId: string) {
     return this.service.app(user.id, appId)
+  }
+
+  @Query(() => AppEnv, { nullable: true })
+  appEnv(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
+    return this.service.appEnv(user.id, appId, appEnvId)
   }
 
   @Query(() => AppTransaction, { nullable: true })

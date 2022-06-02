@@ -29,5 +29,6 @@ export class AppEnv {
   cluster?: Cluster
   @Field(() => [AppMint], { nullable: true })
   mints: AppMint[]
+  @Field(() => App, { nullable: true })
   app: App
 }

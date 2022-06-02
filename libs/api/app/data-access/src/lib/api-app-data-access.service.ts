@@ -98,6 +98,9 @@ export class ApiAppDataAccessService implements OnModuleInit {
   async deleteApp(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
     await this.data.appUser.deleteMany({ where: { appId } })
+    await this.data.appTransactionError.deleteMany({ where: { appTransaction: { appId } } })
+    await this.data.appTransaction.deleteMany({ where: { appId } })
+    await this.data.appWebhook.deleteMany({ where: { appId } })
     await this.data.appEnv.deleteMany({ where: { appId } })
     return this.data.app.delete({ where: { id: appId } })
   }
@@ -112,6 +115,24 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
   app(userId: string, appId: string) {
     return this.ensureAppById(userId, appId)
+  }
+
+  async appEnv(userId: string, appId: string, appEnvId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.appEnv.findUnique({
+      where: { id: appEnvId },
+      include: {
+        app: true,
+        cluster: true,
+        mints: {
+          include: {
+            mint: true,
+            wallet: true,
+          },
+        },
+        wallets: true,
+      },
+    })
   }
 
   async appTransaction(userId: string, appId: string, appTransactionId: string) {

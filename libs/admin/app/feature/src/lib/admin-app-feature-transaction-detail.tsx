@@ -1,23 +1,34 @@
 import { Box, Flex, Stack } from '@chakra-ui/react'
 import {
-  AdminAppUiTransactionErrors,
   AdminAppUiTransactionDetail,
+  AdminAppUiTransactionErrors,
   AdminAppUiTransactionStatus,
   AdminAppUiTransactionTimeline,
 } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import { AppTransactionStatus, useAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
+import React, { useEffect } from 'react'
 
-export default function AdminAppFeatureTransactionDetail() {
-  const { appId, appTransactionId } = useParams<{ appId: string; appTransactionId: string }>()
-  const [{ data, fetching }] = useAppTransactionQuery({
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    variables: { appId: appId!, appTransactionId: appTransactionId! },
+export default function AdminAppFeatureTransactionDetail({
+  appId,
+  appTransactionId,
+}: {
+  appId: string
+  appTransactionId: string
+}) {
+  const [{ data, fetching }, refresh] = useAppTransactionQuery({
+    variables: { appId: appId!, appTransactionId: appTransactionId },
   })
 
-  if (fetching) {
+  useEffect(() => {
+    if (!fetching && data?.item?.status !== AppTransactionStatus.Finalized) {
+      const id = setTimeout(() => refresh(), 5000)
+      return () => clearTimeout(id)
+    }
+    return
+  }, [data?.item, fetching, refresh])
+
+  if (fetching && !data?.item) {
     return <AdminUiLoader />
   }
 
@@ -42,9 +53,9 @@ export default function AdminAppFeatureTransactionDetail() {
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         {data?.item && <AdminAppUiTransactionTimeline item={data?.item} />}
       </Box>
-      <Box as="pre" p="6" borderWidth="1px" borderRadius="lg" overflow="hidden" fontSize="xs">
-        {JSON.stringify(data?.item, null, 2)}
-      </Box>
+      {/*<Box as="pre" p="6" borderWidth="1px" borderRadius="lg" overflow="hidden" fontSize="xs">*/}
+      {/*  {JSON.stringify(data?.item, null, 2)}*/}
+      {/*</Box>*/}
     </Stack>
   )
 }

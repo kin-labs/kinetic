@@ -49,6 +49,11 @@ export function AdminAppUiForm({ app, onSubmit }: AdminAppUiProps) {
     >
       {({ handleSubmit, values, errors, dirty }) => (
         <Box as="form" onSubmit={handleSubmit as any}>
+          {errors && (
+            <Box as="pre" p="6" borderWidth="1px" borderRadius="lg" overflow="hidden" fontSize="xs">
+              {JSON.stringify(errors, null, 2)}
+            </Box>
+          )}
           <Stack display="block" direction="column" justify="normal" spacing={6}>
             <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
               <Stack direction="column" spacing={6}>

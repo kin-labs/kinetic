@@ -1,28 +1,19 @@
-import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
-import {
-  AdminAppUiForm,
-  AdminAppUiTransactions,
-  AdminAppUiUserModal,
-  AdminAppUiUsers,
-  AdminAppUiWallet,
-  AdminAppUiWalletBalances,
-  AdminAppUiWebhooks,
-} from '@mogami/admin/app/ui'
+import { Box, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
+import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import {
   AppUpdateInput,
   AppUserAddInput,
   AppUserUpdateRoleInput,
   useAppQuery,
-  useAppTransactionsQuery,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
-  useAppWebhooksQuery,
   useUpdateAppMutation,
-  Wallet,
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { AppEnvironmentsTab } from './app-environments-tab'
+import { AppHeader } from './app-header'
 
 export default function AdminAppFeatureDetail() {
   const toast = useToast()
@@ -35,7 +26,14 @@ export default function AdminAppFeatureDetail() {
 
   const onSubmit = async (input: AppUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const res = await updateAppMutation({ appId: appId!, input })
+    const res = await updateAppMutation({
+      appId: appId!,
+      input: {
+        ...input,
+        webhookEventUrl: input.webhookEventUrl?.trim(),
+        webhookVerifyUrl: input.webhookVerifyUrl?.trim(),
+      },
+    })
     if (res?.data?.updated) {
       toast({ status: 'success', title: 'App updated' })
     }
@@ -68,37 +66,21 @@ export default function AdminAppFeatureDetail() {
     return <AdminUiLoader />
   }
 
+  if (!data?.item) {
+    return <div>App not found :(</div>
+  }
+
   return (
     <Stack direction="column" spacing={6}>
-      <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
-        <Flex justifyContent="space-between" alignItems="center">
-          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
-            {data?.item?.name}
-          </Box>
-          <code>App Index: {data?.item?.index}</code>
-        </Flex>
-      </Box>
-
+      <AppHeader app={data?.item} />
       <Tabs isLazy colorScheme="teal">
         <TabList>
-          <Tab>Wallet</Tab>
-          <Tab>Transactions</Tab>
-          <Tab>Webhooks </Tab>
+          <Tab>Environments</Tab>
           <Tab>Users</Tab>
           <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>
-            {data?.item?.wallets &&
-              data?.item?.wallets.map((wallet: Wallet) => (
-                <Box key={wallet.id}>
-                  <AdminAppUiWallet wallet={wallet} />
-                  <AdminAppUiWalletBalances wallet={wallet} />
-                </Box>
-              ))}
-          </TabPanel>
-          <TabPanel>{appId && <AppTransactionsTab appId={appId} />}</TabPanel>
-          <TabPanel>{appId && <AppWebhooksTab appId={appId} />}</TabPanel>
+          <TabPanel>{appId && <AppEnvironmentsTab appId={appId} />}</TabPanel>
           <TabPanel>
             <Stack direction="column" spacing={6}>
               <Box w="full">
@@ -116,20 +98,4 @@ export default function AdminAppFeatureDetail() {
       </Tabs>
     </Stack>
   )
-}
-
-function AppTransactionsTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppTransactionsQuery({ variables: { appId } })
-  if (fetching) {
-    return <AdminUiLoader />
-  }
-  return <AdminAppUiTransactions appId={appId} transactions={data?.items} />
-}
-
-function AppWebhooksTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppWebhooksQuery({ variables: { appId } })
-  if (fetching) {
-    return <AdminUiLoader />
-  }
-  return <AdminAppUiWebhooks appId={appId} webhooks={data?.items} />
 }
