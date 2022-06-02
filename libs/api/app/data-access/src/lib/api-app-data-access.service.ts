@@ -114,6 +114,24 @@ export class ApiAppDataAccessService implements OnModuleInit {
     return this.ensureAppById(userId, appId)
   }
 
+  async appEnv(userId: string, appId: string, appEnvId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.appEnv.findUnique({
+      where: { id: appEnvId },
+      include: {
+        app: true,
+        cluster: true,
+        mints: {
+          include: {
+            mint: true,
+            wallet: true,
+          },
+        },
+        wallets: true,
+      },
+    })
+  }
+
   async appTransaction(userId: string, appId: string, appTransactionId: string) {
     await this.ensureAppById(userId, appId)
     return this.data.appTransaction.findUnique({

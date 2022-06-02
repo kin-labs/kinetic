@@ -16,6 +16,19 @@ fragment AppEnvDetails on AppEnv {
   id
   createdAt
   updatedAt
+  app {
+    id
+    createdAt
+    updatedAt
+    index
+    name
+  }
+  cluster {
+    ...ClusterDetails
+  }
+  mints {
+    ...AppMintDetails
+  }
   name
   webhookAcceptIncoming
   webhookEventEnabled
@@ -105,12 +118,6 @@ mutation CreateApp($input: AppCreateInput!) {
     ...AppDetails
     envs {
       ...AppEnvDetails
-      cluster {
-        ...ClusterDetails
-      }
-      mints {
-        ...AppMintDetails
-      }
     }
     users {
       ...AppUserDetails
@@ -198,12 +205,6 @@ query App($appId: String!) {
     ...AppDetails
     envs {
       ...AppEnvDetails
-      cluster {
-        ...ClusterDetails
-      }
-      mints {
-        ...AppMintDetails
-      }
     }
     users {
       ...AppUserDetails
@@ -211,6 +212,12 @@ query App($appId: String!) {
     wallets {
       ...WalletDetails
     }
+  }
+}
+
+query AppEnv($appId: String!, $appEnvId: String!) {
+  item: appEnv(appId: $appId, appEnvId: $appEnvId) {
+    ...AppEnvDetails
   }
 }
 

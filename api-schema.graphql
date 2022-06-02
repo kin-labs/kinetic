@@ -26,6 +26,7 @@ input AppCreateInput {
 }
 
 type AppEnv {
+  app: App
   cluster: Cluster
   createdAt: DateTime!
   id: String!
@@ -314,6 +315,7 @@ type NetworkStat {
 
 type Query {
   app(appId: String!): App
+  appEnv(appEnvId: String!, appId: String!): AppEnv
   appTransaction(appId: String!, appTransactionId: String!): AppTransaction
   appTransactions(appId: String!): [AppTransaction!]
   appWebhook(appId: String!, appWebhookId: String!): AppWebhook
