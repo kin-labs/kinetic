@@ -98,6 +98,9 @@ export class ApiAppDataAccessService implements OnModuleInit {
   async deleteApp(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
     await this.data.appUser.deleteMany({ where: { appId } })
+    await this.data.appTransactionError.deleteMany({ where: { appTransaction: { appId } } })
+    await this.data.appTransaction.deleteMany({ where: { appId } })
+    await this.data.appWebhook.deleteMany({ where: { appId } })
     await this.data.appEnv.deleteMany({ where: { appId } })
     return this.data.app.delete({ where: { id: appId } })
   }

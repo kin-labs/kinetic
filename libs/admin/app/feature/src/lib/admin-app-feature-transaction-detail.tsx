@@ -6,8 +6,8 @@ import {
   AdminAppUiTransactionTimeline,
 } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
-import React from 'react'
+import { AppTransactionStatus, useAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
+import React, { useEffect } from 'react'
 
 export default function AdminAppFeatureTransactionDetail({
   appId,
@@ -16,11 +16,19 @@ export default function AdminAppFeatureTransactionDetail({
   appId: string
   appTransactionId: string
 }) {
-  const [{ data, fetching }] = useAppTransactionQuery({
+  const [{ data, fetching }, refresh] = useAppTransactionQuery({
     variables: { appId: appId!, appTransactionId: appTransactionId },
   })
 
-  if (fetching) {
+  useEffect(() => {
+    if (!fetching && data?.item?.status !== AppTransactionStatus.Finalized) {
+      const id = setTimeout(() => refresh(), 5000)
+      return () => clearTimeout(id)
+    }
+    return
+  }, [data?.item, fetching, refresh])
+
+  if (fetching && !data?.item) {
     return <AdminUiLoader />
   }
 
@@ -45,9 +53,9 @@ export default function AdminAppFeatureTransactionDetail({
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         {data?.item && <AdminAppUiTransactionTimeline item={data?.item} />}
       </Box>
-      <Box as="pre" p="6" borderWidth="1px" borderRadius="lg" overflow="hidden" fontSize="xs">
-        {JSON.stringify(data?.item, null, 2)}
-      </Box>
+      {/*<Box as="pre" p="6" borderWidth="1px" borderRadius="lg" overflow="hidden" fontSize="xs">*/}
+      {/*  {JSON.stringify(data?.item, null, 2)}*/}
+      {/*</Box>*/}
     </Stack>
   )
 }
