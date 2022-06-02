@@ -105,6 +105,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
             wallets: true,
           },
         },
+        users: true,
+        wallets: true,
       },
     })
     this.logger.verbose(
