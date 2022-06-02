@@ -1,11 +1,13 @@
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { useAppEnvQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
-import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { AppEnvProvider } from './app-env-provider'
 import { EnvDetailOverview } from './env-detail-overview'
+import { EnvDetailTransaction } from './env-detail-transaction'
 import { EnvDetailTransactions } from './env-detail-transactions'
 import { EnvDetailWallets } from './env-detail-wallets'
+import { EnvDetailWebhook } from './env-detail-webhook'
 import { EnvDetailWebhooks } from './env-detail-webhooks'
 
 export default function AdminAppFeatureEnvDetail() {
@@ -19,9 +21,12 @@ export default function AdminAppFeatureEnvDetail() {
       {!fetching && data?.item ? (
         <AppEnvProvider env={data.item} baseUrl={url}>
           <Switch>
-            <Route path={path} exact render={() => <EnvDetailOverview />} />
+            <Route path={path} exact render={() => <Redirect to={`${url}/overview`} />} />
+            <Route path={`${path}/overview`} render={() => <EnvDetailOverview />} />
+            <Route path={`${path}/transactions/:appTransactionId`} render={() => <EnvDetailTransaction />} />
             <Route path={`${path}/transactions`} render={() => <EnvDetailTransactions />} />
             <Route path={`${path}/wallets`} render={() => <EnvDetailWallets />} />
+            <Route path={`${path}/webhooks/:appWebhookId`} render={() => <EnvDetailWebhook />} />
             <Route path={`${path}/webhooks`} render={() => <EnvDetailWebhooks />} />
           </Switch>
         </AppEnvProvider>

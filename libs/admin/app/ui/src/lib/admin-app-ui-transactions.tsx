@@ -6,10 +6,11 @@ import { AdminAppUiTransactionStatus } from './admin-app-ui-transaction-status'
 
 export interface AdminAppUiTransactionsProps {
   appId: string
+  envId: string
   transactions: AppTransaction[] | null | undefined
 }
 
-export function AdminAppUiTransactions({ appId, transactions }: AdminAppUiTransactionsProps) {
+export function AdminAppUiTransactions({ appId, envId, transactions }: AdminAppUiTransactionsProps) {
   if (!transactions?.length) {
     return <Alert>No transactions found.</Alert>
   }
@@ -29,7 +30,7 @@ export function AdminAppUiTransactions({ appId, transactions }: AdminAppUiTransa
             {transactions?.map((transaction) => (
               <Tr key={transaction?.id}>
                 <Td>
-                  <Link to={`/apps/${appId}/transactions/${transaction.id}`}>
+                  <Link to={`/apps/${appId}/environments/${envId}/transactions/${transaction.id}`}>
                     <AdminAppUiTransactionStatus status={transaction?.status} />
                   </Link>
                 </Td>

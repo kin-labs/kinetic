@@ -10,7 +10,6 @@ export default function AdminAppFeatureEnvTransactionList() {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data, error, fetching }] = useAppEnvQuery({ variables: { appId: appId!, appEnvId: appEnvId! } })
 
-  console.log({ data, error, fetching })
   if (fetching) {
     return <AdminUiLoader />
   }

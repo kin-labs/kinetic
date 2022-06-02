@@ -1,13 +1,9 @@
-import { Box } from '@chakra-ui/react'
 import React from 'react'
+import { useAppEnv } from './app-env-provider'
+import { AppWalletsTab } from './app-wallets-tab'
 import { EnvDetailLayout } from './env-detail-layout'
 
 export function EnvDetailWallets() {
-  return (
-    <EnvDetailLayout>
-      <Box p="6" borderWidth="1px" borderRadius="lg">
-        Wallets
-      </Box>
-    </EnvDetailLayout>
-  )
+  const { env } = useAppEnv()
+  return <EnvDetailLayout>{env.app?.id && <AppWalletsTab appId={env.app.id} />}</EnvDetailLayout>
 }

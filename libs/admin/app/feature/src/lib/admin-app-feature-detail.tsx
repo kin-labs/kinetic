@@ -1,29 +1,18 @@
-import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
-import {
-  AdminAppUiEnvironments,
-  AdminAppUiForm,
-  AdminAppUiTransactions,
-  AdminAppUiUserModal,
-  AdminAppUiUsers,
-  AdminAppUiWallet,
-  AdminAppUiWalletBalances,
-  AdminAppUiWebhooks,
-} from '@mogami/admin/app/ui'
+import { Box, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
+import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import {
   AppUpdateInput,
   AppUserAddInput,
   AppUserUpdateRoleInput,
   useAppQuery,
-  useAppTransactionsQuery,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
-  useAppWebhooksQuery,
   useUpdateAppMutation,
-  Wallet,
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { AppEnvironmentsTab } from './app-environments-tab'
 import { AppHeader } from './app-header'
 
 export default function AdminAppFeatureDetail() {
@@ -37,7 +26,14 @@ export default function AdminAppFeatureDetail() {
 
   const onSubmit = async (input: AppUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const res = await updateAppMutation({ appId: appId!, input })
+    const res = await updateAppMutation({
+      appId: appId!,
+      input: {
+        ...input,
+        webhookEventUrl: input.webhookEventUrl?.trim(),
+        webhookVerifyUrl: input.webhookVerifyUrl?.trim(),
+      },
+    })
     if (res?.data?.updated) {
       toast({ status: 'success', title: 'App updated' })
     }
@@ -80,25 +76,11 @@ export default function AdminAppFeatureDetail() {
       <Tabs isLazy colorScheme="teal">
         <TabList>
           <Tab>Environments</Tab>
-          <Tab>Wallet</Tab>
-          <Tab>Transactions</Tab>
-          <Tab>Webhooks </Tab>
           <Tab>Users</Tab>
           <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>{appId && <AppEnvironmentsTab appId={appId} />}</TabPanel>
-          <TabPanel>
-            {data?.item?.wallets &&
-              data?.item?.wallets.map((wallet: Wallet) => (
-                <Box key={wallet.id}>
-                  <AdminAppUiWallet wallet={wallet} />
-                  <AdminAppUiWalletBalances wallet={wallet} />
-                </Box>
-              ))}
-          </TabPanel>
-          <TabPanel>{appId && <AppTransactionsTab appId={appId} />}</TabPanel>
-          <TabPanel>{appId && <AppWebhooksTab appId={appId} />}</TabPanel>
           <TabPanel>
             <Stack direction="column" spacing={6}>
               <Box w="full">
@@ -116,28 +98,4 @@ export default function AdminAppFeatureDetail() {
       </Tabs>
     </Stack>
   )
-}
-
-function AppEnvironmentsTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppQuery({ variables: { appId } })
-  if (fetching) {
-    return <AdminUiLoader />
-  }
-  return <AdminAppUiEnvironments appId={appId} environments={data?.item?.envs} />
-}
-
-function AppTransactionsTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppTransactionsQuery({ variables: { appId } })
-  if (fetching) {
-    return <AdminUiLoader />
-  }
-  return <AdminAppUiTransactions appId={appId} transactions={data?.items} />
-}
-
-function AppWebhooksTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppWebhooksQuery({ variables: { appId } })
-  if (fetching) {
-    return <AdminUiLoader />
-  }
-  return <AdminAppUiWebhooks appId={appId} webhooks={data?.items} />
 }
