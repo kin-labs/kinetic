@@ -201,6 +201,7 @@ export class MogamiSdkInternal {
     return this.airdropApi.requestAirdrop({
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
+      mint: this.appConfig.mint.symbol,
       account,
       amount,
     })

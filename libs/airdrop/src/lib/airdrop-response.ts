@@ -1,6 +1,6 @@
 export interface AirdropResponse {
   config: {
-    airdropDefault: number
+    airdropAmount: number
     airdropMax: number
     decimals: number
     feePayer: string

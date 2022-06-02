@@ -6,7 +6,4 @@ export class ApiConfigSummary {
 
   @ApiProperty()
   environment: string
-
-  @ApiProperty()
-  solanaRpcEndpoint: string
 }

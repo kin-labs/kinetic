@@ -6,7 +6,7 @@ import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
-  const [amount, setAmount] = useState<string>('1')
+  const [amount, setAmount] = useState<string>('12345')
   const getResult = () => {
     sdk.requestAirdrop(keypair.publicKey, amount).then((res) => setResult(res.data))
   }

@@ -706,9 +706,12 @@
           },
           "index": {
             "type": "number"
+          },
+          "mint": {
+            "type": "string"
           }
         },
-        "required": ["account", "environment", "index"]
+        "required": ["account", "environment", "index", "mint"]
       },
       "RequestAirdropResponse": {
         "type": "object",
@@ -803,6 +806,9 @@
       "AppConfigMint": {
         "type": "object",
         "properties": {
+          "airdrop": {
+            "type": "boolean"
+          },
           "feePayer": {
             "type": "string"
           },
@@ -819,7 +825,7 @@
             "type": "string"
           }
         },
-        "required": ["feePayer", "logoUrl", "programId", "publicKey", "symbol"]
+        "required": ["airdrop", "feePayer", "logoUrl", "programId", "publicKey", "symbol"]
       },
       "AppConfig": {
         "type": "object",
@@ -850,12 +856,9 @@
           },
           "environment": {
             "type": "string"
-          },
-          "solanaRpcEndpoint": {
-            "type": "string"
           }
         },
-        "required": ["port", "environment", "solanaRpcEndpoint"]
+        "required": ["port", "environment"]
       },
       "LatestBlockhashResponse": {
         "type": "object",

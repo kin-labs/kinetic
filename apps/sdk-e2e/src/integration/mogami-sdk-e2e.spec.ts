@@ -5,7 +5,7 @@ import { Payment } from '@mogami/solana'
 
 describe('MogamiSdk (e2e)', () => {
   let sdk: MogamiSdk
-  const mogamiMint = process.env.MOGAMI_MINT_PUBLIC_KEY
+  const defaultMint = process.env.DEFAULT_MINT_PUBLIC_KEY
 
   beforeEach(async () => {
     sdk = await MogamiSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
@@ -21,10 +21,10 @@ describe('MogamiSdk (e2e)', () => {
     expect(res.environment.cluster.name).toEqual('Solana Devnet')
     expect(res.environment.cluster.type).toEqual('SolanaDevnet')
     expect(res.mint.symbol).toEqual('KIN')
-    expect(res.mint.publicKey).toEqual(mogamiMint)
+    expect(res.mint.publicKey).toEqual(defaultMint)
     expect(res.mints.length).toEqual(1)
     expect(res.mints[0].symbol).toEqual('KIN')
-    expect(res.mints[0].publicKey).toEqual(mogamiMint)
+    expect(res.mints[0].publicKey).toEqual(defaultMint)
   })
 
   it('should get account balance', async () => {
@@ -40,7 +40,7 @@ describe('MogamiSdk (e2e)', () => {
     const bobKey = Keypair.fromByteArray(keys.BOB_KEY)
     const tx = await sdk.makeTransfer({ amount: '43', destination: bobKey.publicKey, owner: aliceKey })
     expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(mogamiMint)
+    expect(tx.mint).toBe(defaultMint)
     const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
@@ -63,7 +63,7 @@ describe('MogamiSdk (e2e)', () => {
 
     const tx = await sdk.makeTransferBatch({ payments, owner: aliceKey })
     expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(mogamiMint)
+    expect(tx.mint).toBe(defaultMint)
     const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
@@ -74,7 +74,7 @@ describe('MogamiSdk (e2e)', () => {
   it('should create an account', async () => {
     const tx = await sdk.createAccount(Keypair.generate())
     expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(mogamiMint)
+    expect(tx.mint).toBe(defaultMint)
     const { signature, errors } = tx
     console.log(signature)
     expect(typeof signature).toBe('string')

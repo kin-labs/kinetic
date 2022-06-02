@@ -8,7 +8,7 @@ export class ApiNetworkStatDataAccessService {
 
   @Cron('55 * * * * *')
   async handleCron() {
-    if (this.data.config.environment === 'production') {
+    if (this.data.config.isProduction) {
       const performanceSamples = await this.data.solana.getRecentPerformanceSamples(10)
       if (performanceSamples?.length) {
         this.data.networkStat.createMany({

@@ -50,18 +50,18 @@ export class Solana {
     return this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
   }
 
-  async getBalance(accountId: PublicKeyString, mogamiMintPublicKey: PublicKeyString) {
-    this.config.logger?.log(`Getting account balance: ${accountId} for mint ${mogamiMintPublicKey}`)
+  async getBalance(accountId: PublicKeyString, mint: PublicKeyString) {
+    this.config.logger?.log(`Getting account balance: ${accountId} for mint ${mint}`)
     try {
-      const balances = await this.getTokenBalances(new PublicKey(accountId), mogamiMintPublicKey)
+      const balances = await this.getTokenBalances(new PublicKey(accountId), mint)
       return balances.reduce((acc, curr) => acc.plus(curr.balance), new BigNumber(0))
     } catch (error) {
-      throw new Error(`No token accounts found for mint ${mogamiMintPublicKey}`)
+      throw new Error(`No token accounts found for mint ${mint}`)
     }
   }
 
   async getBalanceSol(accountId: PublicKeyString): Promise<number> {
-    this.config.logger?.log(`Getting account balance: ${accountId}`)
+    this.config.logger?.log(`Getting account balance: ${accountId} (SOL)`)
     return this.connection.getBalance(getPublicKey(accountId))
   }
 

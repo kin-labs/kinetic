@@ -16,7 +16,7 @@ export class Airdrop {
   }
 
   async airdrop(account: PublicKeyString, amount?: number | string): Promise<AirdropResponse> {
-    amount = amount && amount?.toString()?.length && Number(amount) > 0 ? Number(amount) : this.config.airdropDefault
+    amount = amount && amount?.toString()?.length && Number(amount) > 0 ? Number(amount) : this.config.airdropAmount
     if (Number(amount) > this.config.airdropMax) {
       throw new Error(`Try requesting ${this.config.airdropMax} or less.`)
     }
@@ -61,7 +61,7 @@ export class Airdrop {
 
     return {
       config: {
-        airdropDefault: this.config.airdropDefault,
+        airdropAmount: this.config.airdropAmount,
         airdropMax: this.config.airdropMax,
         decimals: this.config.decimals,
         feePayer: this.config.feePayer.publicKey.toBase58(),

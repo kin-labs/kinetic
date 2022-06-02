@@ -1,4 +1,4 @@
-import { Airdrop, AirdropConfig } from '@mogami/airdrop'
+import { Airdrop } from '@mogami/airdrop'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { RequestAirdropRequest } from './dto/request-airdrop-request.dto'
@@ -9,29 +9,46 @@ import { RequestAirdropResponse } from './entity/request-airdrop-response.entity
 
 @Injectable()
 export class ApiAirdropDataAccessService {
-  private readonly airdrop: Airdrop
-  private readonly airdropConfig: AirdropConfig
+  private readonly airdrop = new Map<string, Airdrop>()
   private readonly logger = new Logger(ApiAirdropDataAccessService.name)
 
-  constructor(private readonly data: ApiCoreDataAccessService) {
-    this.airdropConfig = this.data.config.mogamiAirdropConfig(this.data.solana.connection)
-    if (this.airdropConfig) {
-      this.airdrop = new Airdrop(this.airdropConfig)
-      this.logger.verbose(`Airdrop account ${this.airdropConfig.feePayer.publicKey.toBase58()}`)
-    } else {
-      this.logger.verbose(`Airdrop disabled.`)
-    }
-  }
+  constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async requestAirdrop(request: RequestAirdropRequest): Promise<RequestAirdropResponse> {
-    if (!this.airdropConfig) {
-      throw new BadRequestException(`Airdrop is disabled.`)
+    const { environment, index } = request
+    const solana = await this.data.getSolanaConnection(environment, index)
+    const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
+
+    // Make sure the requested mint is enabled for this app
+    const appMint = appEnv.mints.find(({ mint }) => mint.symbol === request.mint)
+    if (!appMint) {
+      throw new Error(`Can't find mint ${request.mint} in environment ${environment} for index ${index}`)
     }
-    try {
-      const result = await this.airdrop.airdrop(
-        request.account,
-        request.amount ? request.amount : this.data.config.mogamiAirdropDefault,
+    const mint = appMint.mint
+
+    // Make sure there is an airdrop config for this mint
+    const airdropConfig = this.data.airdropConfig.get(mint.id)
+    if (!airdropConfig) {
+      throw new BadRequestException(`Airdrop configuration not found.`)
+    }
+
+    // Make sure there is an Airdrop configured with a Solana connection
+    if (!this.airdrop.get(mint.id)) {
+      this.logger.verbose(`Creating airdrop for ${mint.symbol} on ${environment}`)
+      this.airdrop.set(
+        mint.id,
+        new Airdrop({
+          ...airdropConfig,
+          connection: solana.connection,
+        }),
       )
+    }
+
+    try {
+      const account = request.account
+      const amount = request.amount ? request.amount : 1
+      this.logger.verbose(`Requesting airdrop: ${account} ${amount} ${mint.symbol} on ${environment}`)
+      const result = await this.airdrop.get(mint.id).airdrop(account, amount)
       await this.data.airdrop.create({
         data: {
           amount: result.amount,

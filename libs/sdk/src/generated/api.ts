@@ -112,12 +112,6 @@ export interface ApiConfigSummary {
    * @memberof ApiConfigSummary
    */
   environment: string
-  /**
-   *
-   * @type {string}
-   * @memberof ApiConfigSummary
-   */
-  solanaRpcEndpoint: string
 }
 /**
  *
@@ -219,6 +213,12 @@ export interface AppConfigEnvironment {
  * @interface AppConfigMint
  */
 export interface AppConfigMint {
+  /**
+   *
+   * @type {boolean}
+   * @memberof AppConfigMint
+   */
+  airdrop: boolean
   /**
    *
    * @type {string}
@@ -599,6 +599,12 @@ export interface RequestAirdropRequest {
    * @memberof RequestAirdropRequest
    */
   index: number
+  /**
+   *
+   * @type {string}
+   * @memberof RequestAirdropRequest
+   */
+  mint: string
 }
 /**
  *

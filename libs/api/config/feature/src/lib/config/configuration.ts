@@ -18,14 +18,15 @@ export default () => ({
   jwt: {
     secret: process.env.JWT_SECRET,
   },
-  mogamiAirdropDefault: process.env.MOGAMI_AIRDROP_DEFAULT,
-  mogamiAirdropMax: process.env.MOGAMI_AIRDROP_MAX,
-  mogamiAirdropKeypair: process.env.MOGAMI_AIRDROP_SECRET_KEY
-    ? Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.MOGAMI_AIRDROP_SECRET_KEY)))
+  defaultMintDecimals: Number(process.env.DEFAULT_MINT_DECIMALS),
+  defaultMintPublicKey: process.env.DEFAULT_MINT_PUBLIC_KEY,
+  defaultMintAirdropAmount: process.env.DEFAULT_MINT_AIRDROP_AMOUNT,
+  defaultMintAirdropMax: process.env.DEFAULT_MINT_AIRDROP_MAX,
+  defaultMintAirdropKeypair: process.env.DEFAULT_MINT_AIRDROP_SECRET_KEY
+    ? Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.DEFAULT_MINT_AIRDROP_SECRET_KEY)))
     : null,
-  mogamiMainnet: process.env.MOGAMI_MAINNET === 'true',
-  mogamiMintDecimals: process.env.MOGAMI_MINT_DECIMALS,
-  mogamiMintPublicKey: process.env.MOGAMI_MINT_PUBLIC_KEY,
   port: parseInt(process.env.PORT, 10),
-  solanaRpcEndpoint: process.env.SOLANA_RPC_ENDPOINT,
+  solanaRpcEndpoint: process.env.SOLANA_DEVNET_RPC_ENDPOINT,
+  solanaDevnetRpcEndpoint: process.env.SOLANA_DEVNET_RPC_ENDPOINT,
+  solanaMainnetRpcEndpoint: process.env.SOLANA_MAINNET_RPC_ENDPOINT,
 })

@@ -11,6 +11,7 @@ export function getSolanaRpcEndpoint(endpoint: MogamiSdkEndpoint): Cluster | str
     case 'devnet':
       return 'devnet'
     case 'mainnet':
+    case 'mainnet-beta':
       return 'mainnet-beta'
     default:
       if (endpoint.startsWith('http')) {

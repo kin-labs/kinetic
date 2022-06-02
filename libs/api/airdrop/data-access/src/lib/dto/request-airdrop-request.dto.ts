@@ -9,4 +9,6 @@ export class RequestAirdropRequest {
   environment: string
   @ApiProperty()
   index: number
+  @ApiProperty()
+  mint: string
 }

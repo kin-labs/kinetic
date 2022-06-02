@@ -218,19 +218,22 @@ enum ClusterType {
 }
 
 model Mint {
-  id          String    @id @default(cuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
-  address     String
-  appMints    AppMint[]
-  coingeckoId String?
-  decimals    Int
-  logoUrl     String?
-  name        String
-  symbol      String
-  type        MintType
-  cluster     Cluster   @relation(fields: [clusterId], references: [id])
-  clusterId   String
+  id               String    @id @default(cuid())
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
+  address          String
+  airdropAmount    Int?
+  airdropMax       Int?
+  airdropSecretKey String?
+  appMints         AppMint[]
+  coingeckoId      String?
+  decimals         Int
+  logoUrl          String?
+  name             String
+  symbol           String
+  type             MintType
+  cluster          Cluster   @relation(fields: [clusterId], references: [id])
+  clusterId        String
 
   @@unique([address, clusterId])
   @@unique([address, symbol])

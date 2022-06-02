@@ -1,6 +1,8 @@
+import { AirdropConfig } from '@mogami/airdrop'
 import { hashPassword } from '@mogami/api/auth/util'
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
-import { Solana } from '@mogami/solana'
+import { Keypair } from '@mogami/keypair'
+import { getPublicKey, Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
@@ -8,6 +10,7 @@ import { omit } from 'lodash'
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger(ApiCoreDataAccessService.name)
+  readonly airdropConfig = new Map<string, Omit<AirdropConfig, 'connection'>>()
   readonly connections = new Map<string, Solana>()
   readonly solana: Solana
 
@@ -111,7 +114,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getAppKey(environment: string, index: number): string {
-    return `app-${environment}-${index}`
+    return `app-${index}-${environment}`
   }
 
   async getSolanaConnection(environment: string, index: number): Promise<Solana> {
@@ -121,7 +124,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       this.connections.set(
         key,
         new Solana(env.cluster.endpoint, {
-          logger: new Logger(`@mogami/solana: environment: ${environment}, index: ${index}`),
+          logger: new Logger(`@mogami/solana:${key}`),
         }),
       )
     }
@@ -193,7 +196,24 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
             create: { ...mint },
             include: { cluster: true },
           })
-          .then((res) => this.logger.verbose(`Configured mint ${res.name} on ${res.cluster?.name}`)),
+          .then((res) => {
+            if (res.airdropSecretKey) {
+              this.airdropConfig.set(mint.id, {
+                airdropAmount: mint.airdropAmount || this.config.defaultMintAirdropAmount,
+                airdropMax: mint.airdropMax || this.config.defaultMintAirdropMax,
+                decimals: mint.decimals,
+                feePayer: Keypair.fromByteArray(JSON.parse(res.airdropSecretKey)).solana,
+                mint: getPublicKey(mint.address),
+              })
+            }
+            this.logger.verbose(
+              `Configured mint ${res.name} (${res.decimals} decimals) on ${res.cluster?.name} ${
+                this.airdropConfig.has(mint.id)
+                  ? `(Airdrop ${this.airdropConfig.get(mint.id).feePayer.publicKey?.toBase58()})`
+                  : ''
+              }`,
+            )
+          }),
       ),
     )
   }

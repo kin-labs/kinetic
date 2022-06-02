@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger'
 
 export class AppConfigMint {
   @ApiProperty()
+  airdrop: boolean
+  @ApiProperty()
   feePayer: string
   @ApiProperty()
   logoUrl: string

@@ -9,6 +9,10 @@ describe('getSolanaRpcEndpoint', () => {
     expect(getSolanaRpcEndpoint('mainnet')).toEqual('mainnet-beta')
   })
 
+  it('should return mainnet-beta', () => {
+    expect(getSolanaRpcEndpoint('mainnet-beta')).toEqual('mainnet-beta')
+  })
+
   it('should return a url starting with http', () => {
     const local = 'http://local.mogami.io'
     const endpoint = getSolanaRpcEndpoint(local)
