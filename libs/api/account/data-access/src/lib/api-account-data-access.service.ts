@@ -1,4 +1,4 @@
-import { AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
+import { ApiAppDataAccessService, AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
@@ -7,7 +7,7 @@ import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
 export class ApiAccountDataAccessService {
-  constructor(readonly data: ApiCoreDataAccessService) {}
+  constructor(readonly data: ApiCoreDataAccessService, private readonly app: ApiAppDataAccessService) {}
 
   async getAccountInfo(environment: string, index: number, accountId: PublicKeyString, commitment?: Commitment) {
     const solana = await this.data.getSolanaConnection(environment, index)
@@ -17,7 +17,7 @@ export class ApiAccountDataAccessService {
 
   async getBalance(environment: string, index: number, accountId: PublicKeyString) {
     const solana = await this.data.getSolanaConnection(environment, index)
-    const appEnv = await this.data.getAppConfig(environment, index)
+    const appEnv = await this.app.getAppConfig(environment, index)
 
     const value = await solana.getBalance(accountId, appEnv.mint.publicKey)
 
@@ -26,14 +26,16 @@ export class ApiAccountDataAccessService {
 
   async getHistory(environment: string, index: number, accountId: PublicKeyString) {
     const solana = await this.data.getSolanaConnection(environment, index)
+    const appEnv = await this.app.getAppConfig(environment, index)
 
-    return solana.getTokenHistory(accountId, this.data.config.mogamiMintPublicKey)
+    return solana.getTokenHistory(accountId, appEnv.mint.publicKey)
   }
 
   async getTokenAccounts(environment: string, index: number, accountId: PublicKeyString) {
     const solana = await this.data.getSolanaConnection(environment, index)
+    const appEnv = await this.app.getAppConfig(environment, index)
 
-    return solana.getTokenAccounts(accountId, this.data.config.mogamiMintPublicKey)
+    return solana.getTokenAccounts(accountId, appEnv.mint.publicKey)
   }
 
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
@@ -72,7 +74,7 @@ export class ApiAccountDataAccessService {
       data: {
         errors,
         feePayer,
-        mint: this.data.config.mogamiMintPublicKey,
+        mint: mint.mint.address,
         signature,
         solanaStart,
         solanaCommitted: new Date(),

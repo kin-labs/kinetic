@@ -59,7 +59,7 @@ export class ApiTransactionDataAccessService {
       amount,
       destination: destination.pubkey.toBase58(),
       feePayer,
-      mint: this.data.config.mogamiMintPublicKey,
+      mint: mint?.mint?.address,
       source,
     }
 
