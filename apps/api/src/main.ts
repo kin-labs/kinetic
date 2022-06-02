@@ -1,10 +1,11 @@
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
-import redirectSSL from 'redirect-ssl'
+import { exec } from 'child_process'
 import cookieParser from 'cookie-parser'
-import { AppModule } from './app/app.module'
+import redirectSSL from 'redirect-ssl'
 import { AllExceptionsFilter } from './all-exceptions.filter'
+import { AppModule } from './app/app.module'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -24,6 +25,9 @@ async function bootstrap() {
     }.`,
   )
   Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
+  if (config.environment === 'development') {
+    exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })
+  }
 }
 
 bootstrap()

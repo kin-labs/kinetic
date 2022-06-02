@@ -126,7 +126,6 @@ export class ApiConfigDataAccessService {
     const document = SwaggerModule.createDocument(app, config)
     if (this.environment === 'development') {
       fs.writeFileSync('./api-swagger.json', JSON.stringify(document, null, 2))
-      exec('prettier --write ./api-swagger.json', { cwd: process.cwd() })
     }
     SwaggerModule.setup(this.prefix, app, document)
   }
