@@ -15,10 +15,14 @@ export class ApiWalletDataAccessService {
   @Cron('25 * * * * *')
   async checkBalance() {
     const wallets = await this.data.wallet.findMany({
-      include: { balances: { orderBy: { createdAt: 'desc' }, take: 1 } },
+      include: {
+        appEnv: { include: { cluster: true, app: true } },
+        balances: { orderBy: { createdAt: 'desc' }, take: 1 },
+      },
     })
-    for (const wallet of wallets) {
-      await this.updateWalletBalance(wallet)
+    const filtered = wallets.filter((wallet) => wallet.appEnv?.app?.index)
+    for (const wallet of filtered) {
+      await this.updateWalletBalance(wallet.appEnv?.name, wallet.appEnv?.app.index, wallet)
     }
   }
 
@@ -31,9 +35,7 @@ export class ApiWalletDataAccessService {
     await this.data.ensureAdminUser(userId)
     const { publicKey, secretKey } = this.getAppKeypair(index)
 
-    const created = await this.data.wallet.create({ data: { secretKey, publicKey } })
-    await this.updateWalletBalance(created)
-    return created
+    return this.data.wallet.create({ data: { secretKey, publicKey } })
   }
 
   async wallet(userId: string, walletId: string) {
@@ -94,9 +96,10 @@ export class ApiWalletDataAccessService {
     return this.data.walletBalance.create({ data: { balance, walletId } })
   }
 
-  private async updateWalletBalance(wallet: Wallet) {
+  private async updateWalletBalance(environment: string, index: number, wallet: Wallet) {
+    const solana = await this.data.getSolanaConnection(environment, index)
     const current = wallet.balances?.length ? wallet.balances[0].balance : 0
-    const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
+    const balance = await solana.getBalanceSol(wallet.publicKey)
     if (BigInt(balance) !== current) {
       await this.storeWalletBalance(wallet.id, balance)
       this.logger.verbose(`Updated Wallet Balance: ${wallet.publicKey} ${current} => ${balance}`)

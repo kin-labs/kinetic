@@ -1,3 +1,4 @@
+import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, Payment, PublicKeyString } from '@mogami/solana'
 import {
@@ -5,6 +6,7 @@ import {
   AirdropApi,
   AppApi,
   AppConfig,
+  BalanceResponse,
   Configuration,
   CreateAccountRequest,
   DefaultApi,
@@ -13,13 +15,13 @@ import {
   TransactionApi,
 } from '../generated'
 import {
-  serializeCreateAccountTransaction,
-  serializeMakeTransferTransaction,
   parseMogamiSdkEndpoint,
+  serializeCreateAccountTransaction,
   serializeMakeTransferBatchTransactions,
+  serializeMakeTransferTransaction,
 } from './helpers'
-import { MogamiSdkConfig } from './interfaces'
-import { TransactionType } from '@kin-tools/kin-memo'
+import { MogamiSdkConfigParsed } from './interfaces/mogami-sdk-config-parsed'
+import { MogamiSdkEnvironment } from './interfaces/mogami-sdk-environment'
 
 export class MogamiSdkInternal {
   private readonly accountApi: AccountApi
@@ -30,7 +32,7 @@ export class MogamiSdkInternal {
 
   appConfig?: AppConfig
 
-  constructor(readonly sdkConfig: MogamiSdkConfig) {
+  constructor(readonly sdkConfig: MogamiSdkConfigParsed) {
     // Create the API Configuration
     const apiConfig = new Configuration({ basePath: parseMogamiSdkEndpoint(sdkConfig.endpoint) })
 
@@ -42,8 +44,19 @@ export class MogamiSdkInternal {
     this.transactionApi = new TransactionApi(apiConfig)
   }
 
-  balance(accountId: string) {
-    return this.accountApi.getBalance(accountId)
+  async balance(accountId: string): Promise<BalanceResponse> {
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+
+    console.log({
+      environment: this.appConfig.environment.name,
+      index: this.appConfig.app.index,
+      accountId,
+    })
+    const res = await this.accountApi.getBalance(this.appConfig.environment.name, this.appConfig.app.index, accountId)
+
+    return res.data as BalanceResponse
   }
 
   async createAccount(owner: Keypair) {
@@ -52,7 +65,7 @@ export class MogamiSdkInternal {
     }
     const { publicKey: mint, feePayer } = this.appConfig.mint
     const { blockhash: latestBlockhash } = await this.transactionApi
-      .getLatestBlockhash()
+      .getLatestBlockhash(this.appConfig.environment.name, this.appConfig.app.index)
       .then((res) => res.data as LatestBlockhashResponse)
 
     const tx = await serializeCreateAccountTransaction({
@@ -64,7 +77,9 @@ export class MogamiSdkInternal {
     })
 
     const request: CreateAccountRequest = {
+      environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
+      mint: this.appConfig.mint?.symbol,
       tx,
     }
 
@@ -73,14 +88,17 @@ export class MogamiSdkInternal {
     return Promise.resolve(res.data)
   }
 
-  async getAppConfig(index: number) {
-    const res = await this.appApi.getAppConfig(String(index))
+  async getAppConfig(environment: MogamiSdkEnvironment, index: number) {
+    const res = await this.appApi.getAppConfig(environment, index)
     this.appConfig = res.data
     return this.appConfig
   }
 
   getHistory(accountId: string) {
-    return this.accountApi.getHistory(accountId)
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    return this.accountApi.getHistory(this.appConfig.environment.name, this.appConfig.app.index, accountId)
   }
 
   async makeTransfer({
@@ -101,7 +119,7 @@ export class MogamiSdkInternal {
     }
     const { publicKey: mint, feePayer } = this.appConfig.mint
     const { blockhash: latestBlockhash, lastValidBlockHeight } = await this.transactionApi
-      .getLatestBlockhash()
+      .getLatestBlockhash(this.appConfig.environment.name, this.appConfig.app.index)
       .then((res) => res.data as LatestBlockhashResponse)
 
     const tx = await serializeMakeTransferTransaction({
@@ -117,7 +135,9 @@ export class MogamiSdkInternal {
 
     const request: MakeTransferRequest = {
       commitment,
+      environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
+      mint: this.appConfig.mint.symbol,
       lastValidBlockHeight,
       tx,
     }
@@ -147,7 +167,7 @@ export class MogamiSdkInternal {
 
     const { publicKey: mint, feePayer } = this.appConfig.mint
     const { blockhash: latestBlockhash, lastValidBlockHeight } = await this.transactionApi
-      .getLatestBlockhash()
+      .getLatestBlockhash(this.appConfig.environment.name, this.appConfig.app.index)
       .then((res) => res.data as LatestBlockhashResponse)
 
     const tx = await serializeMakeTransferBatchTransactions({
@@ -162,7 +182,9 @@ export class MogamiSdkInternal {
 
     const request: MakeTransferRequest = {
       commitment,
+      environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
+      mint: this.appConfig.mint.symbol,
       lastValidBlockHeight,
       tx,
     }
@@ -173,10 +195,21 @@ export class MogamiSdkInternal {
   }
 
   requestAirdrop(account: string, amount: string) {
-    return this.airdropApi.requestAirdrop({ account, amount })
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    return this.airdropApi.requestAirdrop({
+      environment: this.appConfig.environment.name,
+      index: this.appConfig.app.index,
+      account,
+      amount,
+    })
   }
 
   tokenAccounts(account: string) {
-    return this.accountApi.tokenAccounts(account)
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    return this.accountApi.tokenAccounts(this.appConfig.environment.name, this.appConfig.app.index, account)
   }
 }

@@ -110,6 +110,7 @@ describe('demo', () => {
       id: 'localhost:3000',
       name: 'localhost:3000',
       endpoint: 'http://localhost:3000',
+      environment: 'devnet',
     })
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
     cy.get('.create-account-btn').click()

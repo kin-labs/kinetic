@@ -8,7 +8,7 @@ export function SdkControlPanelAccountBalance({ keypair, sdk }: { keypair: DemoK
   const [result, setResult] = useState<unknown>(null)
   const [value, setValue] = useState<string>(keypair.publicKey)
   const getResult = () => {
-    sdk.balance(value).then((res) => setResult(res.data))
+    sdk.balance(value).then((res) => setResult(res))
   }
   return (
     <Stack spacing={3}>

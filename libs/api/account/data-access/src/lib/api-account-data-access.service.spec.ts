@@ -1,3 +1,4 @@
+import { ApiAppDataAccessModule } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 import { Test } from '@nestjs/testing'
 import { ApiAccountDataAccessService } from './api-account-data-access.service'
@@ -7,7 +8,7 @@ describe('ApiAccountDataAccessService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [ApiCoreDataAccessModule],
+      imports: [ApiAppDataAccessModule, ApiCoreDataAccessModule],
       providers: [ApiAccountDataAccessService],
     }).compile()
 

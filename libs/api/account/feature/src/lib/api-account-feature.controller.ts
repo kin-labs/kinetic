@@ -7,7 +7,7 @@ import {
 import { AppTransaction } from '@mogami/api/app/data-access'
 import { AccountIdSchema, JoiValidationPipe } from '@mogami/api/core/util'
 import { Commitment } from '@mogami/solana'
-import { Body, Controller, Get, Param, Post, Query, UsePipes } from '@nestjs/common'
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('account')
@@ -15,10 +15,14 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 export class ApiAccountFeatureController {
   constructor(private readonly service: ApiAccountDataAccessService) {}
 
-  @Get('info/:accountId')
-  @UsePipes(new JoiValidationPipe(AccountIdSchema))
-  getAccountInfo(@Param('accountId') accountId: string, @Query('commitment') commitment?: Commitment) {
-    return this.service.getAccountInfo(accountId, commitment)
+  @Get('info/:environment/:index/:accountId')
+  getAccountInfo(
+    @Param('environment') environment: string,
+    @Param('index', ParseIntPipe) index: number,
+    @Param('accountId', new JoiValidationPipe(AccountIdSchema)) accountId: string,
+    @Query('commitment') commitment?: Commitment,
+  ) {
+    return this.service.getAccountInfo(environment, index, accountId, commitment)
   }
 
   @Post('create')
@@ -29,27 +33,36 @@ export class ApiAccountFeatureController {
     return this.service.createAccount(body)
   }
 
-  @Get('balance/:accountId')
-  @UsePipes(new JoiValidationPipe(AccountIdSchema))
+  @Get('balance/:environment/:index/:accountId')
   @ApiOperation({ operationId: 'getBalance' })
   @ApiResponse({ type: BalanceResponse })
-  getBalance(@Param('accountId') accountId: string) {
-    return this.service.getBalance(accountId)
+  getBalance(
+    @Param('environment') environment: string,
+    @Param('index', ParseIntPipe) index: number,
+    @Param('accountId', new JoiValidationPipe(AccountIdSchema)) accountId: string,
+  ) {
+    return this.service.getBalance(environment, index, accountId)
   }
 
-  @Get('history/:accountId')
-  @UsePipes(new JoiValidationPipe(AccountIdSchema))
+  @Get('history/:environment/:index/:accountId')
   @ApiOperation({ operationId: 'getHistory' })
   @ApiResponse({ type: HistoryResponse, isArray: true })
-  getHistory(@Param('accountId') accountId: string) {
-    return this.service.getHistory(accountId)
+  getHistory(
+    @Param('environment') environment: string,
+    @Param('index', ParseIntPipe) index: number,
+    @Param('accountId', new JoiValidationPipe(AccountIdSchema)) accountId: string,
+  ) {
+    return this.service.getHistory(environment, index, accountId)
   }
 
-  @Get('token-accounts/:accountId')
-  @UsePipes(new JoiValidationPipe(AccountIdSchema))
+  @Get('token-accounts/:environment/:index/:accountId')
   @ApiOperation({ operationId: 'tokenAccounts' })
   @ApiResponse({ type: String, isArray: true })
-  tokenAccounts(@Param('accountId') accountId: string) {
-    return this.service.getTokenAccounts(accountId)
+  tokenAccounts(
+    @Param('environment') environment: string,
+    @Param('index', ParseIntPipe) index: number,
+    @Param('accountId', new JoiValidationPipe(AccountIdSchema)) accountId: string,
+  ) {
+    return this.service.getTokenAccounts(environment, index, accountId)
   }
 }

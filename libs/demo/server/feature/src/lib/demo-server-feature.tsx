@@ -20,9 +20,10 @@ export function DemoServerFeature() {
   }
 
   const createServer = (endpoint: MogamiSdkEndpoint) => {
+    const environment = endpoint.includes('mainnet') ? 'mainnet' : 'devnet'
     const url = parseMogamiSdkEndpoint(endpoint)
     const { host } = new URL(url)
-    demoServerDb.server.add({ id: host, name: host, endpoint })
+    demoServerDb.server.add({ id: host, name: host, endpoint, environment })
     setServerCreateVisible(false)
   }
 

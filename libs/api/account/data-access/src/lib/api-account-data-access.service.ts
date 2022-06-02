@@ -1,4 +1,4 @@
-import { AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
+import { ApiAppDataAccessService, AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
@@ -7,29 +7,51 @@ import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
 export class ApiAccountDataAccessService {
-  constructor(readonly data: ApiCoreDataAccessService) {}
+  constructor(readonly data: ApiCoreDataAccessService, private readonly app: ApiAppDataAccessService) {}
 
-  getAccountInfo(accountId: PublicKeyString, commitment?: Commitment) {
-    return this.data.solana.getAccountInfo(accountId, { commitment })
+  async getAccountInfo(environment: string, index: number, accountId: PublicKeyString, commitment?: Commitment) {
+    const solana = await this.data.getSolanaConnection(environment, index)
+
+    return solana.getAccountInfo(accountId, { commitment })
   }
 
-  async getBalance(accountId: PublicKeyString) {
-    const value = await this.data.solana.getBalance(accountId, this.data.config.mogamiMintPublicKey)
+  async getBalance(environment: string, index: number, accountId: PublicKeyString) {
+    const solana = await this.data.getSolanaConnection(environment, index)
+    const appEnv = await this.app.getAppConfig(environment, index)
+
+    const value = await solana.getBalance(accountId, appEnv.mint.publicKey)
+
     return { value }
   }
 
-  getHistory(accountId: PublicKeyString) {
-    return this.data.solana.getTokenHistory(accountId, this.data.config.mogamiMintPublicKey)
+  async getHistory(environment: string, index: number, accountId: PublicKeyString) {
+    const solana = await this.data.getSolanaConnection(environment, index)
+    const appEnv = await this.app.getAppConfig(environment, index)
+
+    return solana.getTokenHistory(accountId, appEnv.mint.publicKey)
   }
 
-  getTokenAccounts(accountId: PublicKeyString) {
-    return this.data.solana.getTokenAccounts(accountId, this.data.config.mogamiMintPublicKey)
+  async getTokenAccounts(environment: string, index: number, accountId: PublicKeyString) {
+    const solana = await this.data.getSolanaConnection(environment, index)
+    const appEnv = await this.app.getAppConfig(environment, index)
+
+    return solana.getTokenAccounts(accountId, appEnv.mint.publicKey)
   }
 
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
+    const solana = await this.data.getSolanaConnection(input.environment, input.index)
+    const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
     const app = await this.data.getAppByIndex(Number(input.index))
-    const created = await this.data.appTransaction.create({ data: { appId: app.id }, include: { errors: true } })
-    const signer = Keypair.fromSecretKey(app.wallets[0].secretKey)
+
+    const created = await this.data.appTransaction.create({
+      data: { appId: app.id, appEnvId: appEnv.id },
+      include: { errors: true },
+    })
+    const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
+    if (!mint) {
+      throw new Error(`Can't find mint ${input.mint} in environment ${input.environment} for index ${input.index}`)
+    }
+    const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
 
     const { feePayer, source, transaction } = parseAndSignTransaction({ tx: input.tx, signer: signer.solana })
     let errors
@@ -40,7 +62,7 @@ export class ApiAccountDataAccessService {
     const solanaStart = new Date()
 
     try {
-      signature = await this.data.solana.sendRawTransaction(transaction)
+      signature = await solana.sendRawTransaction(transaction)
       status = AppTransactionStatus.Committed
     } catch (error) {
       status = AppTransactionStatus.Failed
@@ -52,7 +74,7 @@ export class ApiAccountDataAccessService {
       data: {
         errors,
         feePayer,
-        mint: this.data.config.mogamiMintPublicKey,
+        mint: mint.mint.address,
         signature,
         solanaStart,
         solanaCommitted: new Date(),

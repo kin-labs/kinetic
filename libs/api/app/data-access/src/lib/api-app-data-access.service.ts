@@ -76,10 +76,10 @@ export class ApiAppDataAccessService implements OnModuleInit {
             name: cluster.type.toLowerCase().replace('solana', ''),
             // Connect the wallet
             wallets,
-            // Create the KIN mint and connect it to the wallet
+            // Create the default mint and connect it to the wallet
             mints: {
               create: cluster.mints
-                .filter((mint) => mint.symbol === 'KIN')
+                .filter((mint) => mint.address === process.env['MOGAMI_MINT_PUBLIC_KEY'])
                 .map((mint) => ({
                   mint: { connect: { id: mint.id } },
                   wallet: wallets,
@@ -90,8 +90,30 @@ export class ApiAppDataAccessService implements OnModuleInit {
       },
       wallets,
     }
-    const created = await this.data.app.create({ data, include: this.include })
-    this.logger.verbose(`app ${created.index}: created app ${created.name}`)
+    const created = await this.data.app.create({
+      data,
+      include: {
+        envs: {
+          include: {
+            cluster: true,
+            mints: {
+              include: {
+                mint: true,
+                wallet: true,
+              },
+            },
+            wallets: true,
+          },
+        },
+        users: true,
+        wallets: true,
+      },
+    })
+    this.logger.verbose(
+      `Created app ${created.index} (${created.name}): ${created.envs
+        .map((env) => `=> ${env.name}: ${env.mints.map((mint) => mint.mint.symbol).join(', ')}`)
+        .join(', ')}`,
+    )
     return created
   }
 
@@ -252,26 +274,41 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  async getConfig(index: number): Promise<AppConfig> {
-    const {
-      name,
-      wallets: [wallet],
-    } = await this.data.getAppByIndex(index)
+  async getAppConfig(environment: string, index: number): Promise<AppConfig> {
+    const env = await this.data.getAppByEnvironmentIndex(environment, index)
+
+    const mints = env?.mints?.map(({ mint, wallet }) => ({
+      feePayer: wallet.publicKey,
+      logoUrl: mint?.logoUrl,
+      programId: TOKEN_PROGRAM_ID.toBase58(),
+      publicKey: mint?.address,
+      symbol: mint?.symbol,
+    }))
+
+    if (!mints.length) {
+      throw new Error(`No mints found for environment ${environment}, index ${index}`)
+    }
 
     return {
       app: {
-        index,
-        name,
+        index: env.app.index,
+        name: env.app.name,
       },
-      mint: {
-        feePayer: wallet.publicKey,
-        programId: TOKEN_PROGRAM_ID.toBase58(),
-        publicKey: this.data.config.mogamiMintPublicKey,
+      environment: {
+        name: env.name,
+        cluster: {
+          id: env.cluster.id,
+          name: env.cluster.name,
+          type: env.cluster.type,
+        },
       },
+      mint: mints[0],
+      mints,
     }
   }
 
   async storeIncomingWebhook(
+    environment: string,
     index: number,
     type: string,
     headers: IncomingHttpHeaders,
@@ -286,8 +323,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
     try {
       // Get the app by Index
-      const app = await this.data.getAppByIndex(index)
-      if (!app.webhookAcceptIncoming) {
+      const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
+      if (!appEnv.webhookAcceptIncoming) {
         this.logger.warn(`storeIncomingWebhook ignoring request, webhookAcceptIncoming is disabled`)
         res.statusCode = 400
         return res.send(new Error(`webhookAcceptIncoming is disabled`))
@@ -297,7 +334,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
       const created = await this.data.appWebhook.create({
         data: {
           direction: AppWebhookDirection.Incoming,
-          appId: app.id,
+          appId: appEnv.app.id,
+          appEnvId: appEnv.id,
           headers,
           payload,
           type: type === 'event' ? AppWebhookType.Event : AppWebhookType.Verify,
@@ -312,6 +350,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   private async configureProvisionedApps() {
+    await this.data.configureDefaultData()
     let adminId
     return Promise.all(
       this.data.config.provisionedApps.map(async (app) => {
