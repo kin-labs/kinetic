@@ -252,37 +252,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  async getAppConfig(environment: string, index: number): Promise<AppConfig> {
-    const env = await this.data.getAppByEnvironmentIndex(environment, index)
-
-    const mints = env.mints?.map(({ mint, wallet }) => ({
-      feePayer: wallet.publicKey,
-      logoUrl: mint?.logoUrl,
-      programId: TOKEN_PROGRAM_ID.toBase58(),
-      publicKey: mint?.address,
-      symbol: mint?.symbol,
-    }))
-
-    if (!mints.length) {
-      throw new Error(`No mints found for environment ${environment}, index ${index}`)
-    }
-
-    return {
-      app: {
-        index: env.app.index,
-        name: env.app.name,
-      },
-      environment: {
-        name: env.name,
-        cluster: {
-          id: env.cluster.id,
-          name: env.cluster.name,
-          type: env.cluster.type,
-        },
-      },
-      mint: mints[0],
-      mints,
-    }
+  getAppConfig(environment: string, index: number): Promise<AppConfig> {
+    return this.data.getAppConfig(environment, index)
   }
 
   async storeIncomingWebhook(

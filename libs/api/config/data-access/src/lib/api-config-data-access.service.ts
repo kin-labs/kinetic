@@ -5,7 +5,6 @@ import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ClusterStatus, ClusterType, Prisma } from '@prisma/client'
 import { Connection, Keypair } from '@solana/web3.js'
-import { exec } from 'child_process'
 import * as fs from 'fs'
 import { ProvisionedApp } from './entities/provisioned-app.entity'
 import { getProvisionedApps } from './helpers/get-provisioned-apps'
@@ -17,7 +16,7 @@ export class ApiConfigDataAccessService {
     {
       id: 'solana-devnet',
       name: 'Solana Devnet',
-      endpoint: 'devnet',
+      endpoint: process.env['SOLANA_RPC_ENDPOINT'] || 'devnet',
       type: ClusterType.SolanaDevnet,
     },
     {

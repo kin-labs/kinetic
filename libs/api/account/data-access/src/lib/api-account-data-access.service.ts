@@ -17,8 +17,9 @@ export class ApiAccountDataAccessService {
 
   async getBalance(environment: string, index: number, accountId: PublicKeyString) {
     const solana = await this.data.getSolanaConnection(environment, index)
+    const appEnv = await this.data.getAppConfig(environment, index)
 
-    const value = await solana.getBalance(accountId, this.data.config.mogamiMintPublicKey)
+    const value = await solana.getBalance(accountId, appEnv.mint.publicKey)
 
     return { value }
   }

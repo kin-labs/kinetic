@@ -1,7 +1,9 @@
+import { AppConfig } from '@mogami/api/app/data-access'
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { omit } from 'lodash'
 
 @Injectable()
@@ -109,6 +111,39 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
         wallets: true,
       },
     })
+  }
+
+  async getAppConfig(environment: string, index: number): Promise<AppConfig> {
+    const env = await this.getAppByEnvironmentIndex(environment, index)
+
+    const mints = env.mints?.map(({ mint, wallet }) => ({
+      feePayer: wallet.publicKey,
+      logoUrl: mint?.logoUrl,
+      programId: TOKEN_PROGRAM_ID.toBase58(),
+      publicKey: mint?.address,
+      symbol: mint?.symbol,
+    }))
+
+    if (!mints.length) {
+      throw new Error(`No mints found for environment ${environment}, index ${index}`)
+    }
+
+    return {
+      app: {
+        index: env.app.index,
+        name: env.app.name,
+      },
+      environment: {
+        name: env.name,
+        cluster: {
+          id: env.cluster.id,
+          name: env.cluster.name,
+          type: env.cluster.type,
+        },
+      },
+      mint: mints[0],
+      mints,
+    }
   }
 
   getAppKey(environment: string, index: number): string {

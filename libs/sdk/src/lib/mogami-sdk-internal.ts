@@ -6,6 +6,7 @@ import {
   AirdropApi,
   AppApi,
   AppConfig,
+  BalanceResponse,
   Configuration,
   CreateAccountRequest,
   DefaultApi,
@@ -43,11 +44,19 @@ export class MogamiSdkInternal {
     this.transactionApi = new TransactionApi(apiConfig)
   }
 
-  balance(accountId: string) {
+  async balance(accountId: string): Promise<BalanceResponse> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    return this.accountApi.getBalance(this.appConfig.environment.name, this.appConfig.app.index, accountId)
+
+    console.log({
+      environment: this.appConfig.environment.name,
+      index: this.appConfig.app.index,
+      accountId,
+    })
+    const res = await this.accountApi.getBalance(this.appConfig.environment.name, this.appConfig.app.index, accountId)
+
+    return res.data as BalanceResponse
   }
 
   async createAccount(owner: Keypair) {
