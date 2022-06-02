@@ -7,7 +7,7 @@ describe('solana', () => {
     expect(solana.endpoint).toEqual('http://localhost:8899')
   })
 
-  it('should throw "No Kin token accounts found"', async () => {
+  it('should throw "No token accounts found for mint..."', async () => {
     const endpoint = 'http://localhost:8899'
     const solana = new Solana(endpoint)
     try {
@@ -16,7 +16,7 @@ describe('solana', () => {
         '4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa',
       )
     } catch (error) {
-      expect(error.message).toBe('No Kin token accounts found')
+      expect(error.message).toBe(`No token accounts found for mint 4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa`)
     }
   })
 })
