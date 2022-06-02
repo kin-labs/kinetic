@@ -8,7 +8,7 @@ describe('MogamiSdk (e2e)', () => {
   const mogamiMint = process.env.MOGAMI_MINT_PUBLIC_KEY
 
   beforeEach(async () => {
-    sdk = await MogamiSdk.setup({ index: 1, endpoint: 'http://localhost:3000' })
+    sdk = await MogamiSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
   })
 
   it('should get App Config', () => {
