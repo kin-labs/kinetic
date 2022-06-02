@@ -1268,21 +1268,26 @@ export const AppApiAxiosParamCreator = function (configuration?: Configuration) 
   return {
     /**
      *
+     * @param {string} environment
      * @param {number} index
      * @param {string} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     apiAppFeatureControllerAppWebhook: async (
+      environment: string,
       index: number,
       type: string,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
+      // verify required parameter 'environment' is not null or undefined
+      assertParamExists('apiAppFeatureControllerAppWebhook', 'environment', environment)
       // verify required parameter 'index' is not null or undefined
       assertParamExists('apiAppFeatureControllerAppWebhook', 'index', index)
       // verify required parameter 'type' is not null or undefined
       assertParamExists('apiAppFeatureControllerAppWebhook', 'type', type)
-      const localVarPath = `/api/app/{index}/webhook/{type}`
+      const localVarPath = `/api/app/{environment}/{index}/webhook/{type}`
+        .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
         .replace(`{${'type'}}`, encodeURIComponent(String(type)))
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1321,7 +1326,7 @@ export const AppApiAxiosParamCreator = function (configuration?: Configuration) 
       assertParamExists('getAppConfig', 'environment', environment)
       // verify required parameter 'index' is not null or undefined
       assertParamExists('getAppConfig', 'index', index)
-      const localVarPath = `/api/app/config/{index}`
+      const localVarPath = `/api/app/config/{environment}/{index}`
         .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1356,17 +1361,24 @@ export const AppApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @param {string} environment
      * @param {number} index
      * @param {string} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async apiAppFeatureControllerAppWebhook(
+      environment: string,
       index: number,
       type: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAppFeatureControllerAppWebhook(index, type, options)
+      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAppFeatureControllerAppWebhook(
+        environment,
+        index,
+        type,
+        options,
+      )
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -1396,14 +1408,20 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
   return {
     /**
      *
+     * @param {string} environment
      * @param {number} index
      * @param {string} type
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    apiAppFeatureControllerAppWebhook(index: number, type: string, options?: any): AxiosPromise<void> {
+    apiAppFeatureControllerAppWebhook(
+      environment: string,
+      index: number,
+      type: string,
+      options?: any,
+    ): AxiosPromise<void> {
       return localVarFp
-        .apiAppFeatureControllerAppWebhook(index, type, options)
+        .apiAppFeatureControllerAppWebhook(environment, index, type, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -1428,15 +1446,21 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
 export class AppApi extends BaseAPI {
   /**
    *
+   * @param {string} environment
    * @param {number} index
    * @param {string} type
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AppApi
    */
-  public apiAppFeatureControllerAppWebhook(index: number, type: string, options?: AxiosRequestConfig) {
+  public apiAppFeatureControllerAppWebhook(
+    environment: string,
+    index: number,
+    type: string,
+    options?: AxiosRequestConfig,
+  ) {
     return AppApiFp(this.configuration)
-      .apiAppFeatureControllerAppWebhook(index, type, options)
+      .apiAppFeatureControllerAppWebhook(environment, index, type, options)
       .then((request) => request(this.axios, this.basePath))
   }
 

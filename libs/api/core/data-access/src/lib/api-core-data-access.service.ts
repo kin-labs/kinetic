@@ -1,3 +1,4 @@
+import { hashPassword } from '@mogami/api/auth/util'
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
@@ -23,8 +24,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async onModuleInit() {
     await this.$connect()
-    await this.configureClusters()
-    await this.configureMints()
   }
 
   async healthCheck() {
@@ -139,6 +138,35 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   getUserByUsername(username: string) {
     return this.user.findUnique({ where: { username }, include: { emails: true } })
+  }
+
+  async configureDefaultData() {
+    await this.configureAdminUser()
+    await this.configureClusters()
+    await this.configureMints()
+  }
+
+  private async configureAdminUser() {
+    const email = this.config.adminEmail
+    const password = this.config.adminPassword
+    const existing = await this.user.count({ where: { role: UserRole.Admin } })
+    if (existing < 1) {
+      await this.user.create({
+        data: {
+          id: 'admin',
+          name: 'Admin',
+          password: hashPassword(password),
+          role: UserRole.Admin,
+          username: 'admin',
+          emails: {
+            create: { email },
+          },
+        },
+      })
+      this.logger.verbose(`Created new Admin with email ${email} and password ${password}`)
+      return
+    }
+    this.logger.verbose(`Log in as Admin with email ${email} and password ${password}`)
   }
 
   private async configureClusters() {

@@ -289,7 +289,7 @@
         "tags": ["airdrop"]
       }
     },
-    "/api/app/config/{index}": {
+    "/api/app/config/{environment}/{index}": {
       "get": {
         "operationId": "getAppConfig",
         "summary": "",
@@ -326,10 +326,18 @@
         "tags": ["app"]
       }
     },
-    "/api/app/{index}/webhook/{type}": {
+    "/api/app/{environment}/{index}/webhook/{type}": {
       "post": {
         "operationId": "ApiAppFeatureController_appWebhook",
         "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "index",
             "required": true,

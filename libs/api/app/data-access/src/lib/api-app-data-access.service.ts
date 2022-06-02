@@ -90,8 +90,28 @@ export class ApiAppDataAccessService implements OnModuleInit {
       },
       wallets,
     }
-    const created = await this.data.app.create({ data, include: this.include })
-    this.logger.verbose(`app ${created.index}: created app ${created.name}`)
+    const created = await this.data.app.create({
+      data,
+      include: {
+        envs: {
+          include: {
+            cluster: true,
+            mints: {
+              include: {
+                mint: true,
+                wallet: true,
+              },
+            },
+            wallets: true,
+          },
+        },
+      },
+    })
+    this.logger.verbose(
+      `Created app ${created.index} (${created.name}): ${created.envs
+        .map((env) => `=> ${env.name}: ${env.mints.map((mint) => mint.mint.symbol).join(', ')}`)
+        .join(', ')}`,
+    )
     return created
   }
 
@@ -328,6 +348,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   private async configureProvisionedApps() {
+    await this.data.configureDefaultData()
     let adminId
     return Promise.all(
       this.data.config.provisionedApps.map(async (app) => {
