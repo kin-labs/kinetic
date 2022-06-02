@@ -76,10 +76,10 @@ export class ApiAppDataAccessService implements OnModuleInit {
             name: cluster.type.toLowerCase().replace('solana', ''),
             // Connect the wallet
             wallets,
-            // Create the KIN mint and connect it to the wallet
+            // Create the default mint and connect it to the wallet
             mints: {
               create: cluster.mints
-                .filter((mint) => mint.symbol === 'KIN')
+                .filter((mint) => mint.address === process.env['MOGAMI_MINT_PUBLIC_KEY'])
                 .map((mint) => ({
                   mint: { connect: { id: mint.id } },
                   wallet: wallets,

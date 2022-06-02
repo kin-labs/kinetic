@@ -29,7 +29,10 @@ export class ApiConfigDataAccessService {
     },
   ]
   readonly mints: Prisma.MintCreateInput[] = [
-    createMintKin('solana-devnet', 'KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX'),
+    createMintKin(
+      'solana-devnet',
+      process.env['MOGAMI_MINT_PUBLIC_KEY'] || 'KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX',
+    ),
     createMintKin('solana-mainnet', 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6'),
   ]
   readonly provisionedApps: ProvisionedApp[] = getProvisionedApps(Object.keys(process.env))
