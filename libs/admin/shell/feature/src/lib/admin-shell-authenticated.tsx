@@ -17,7 +17,7 @@ export function AdminShellAuthenticated() {
       <React.Suspense fallback={<AdminUiLoader />}>
         <Switch>
           <Route path="/" exact>
-            <Redirect to="/home" />
+            <Redirect to="/apps" />
           </Route>
           <Route path="/apps" render={() => <AdminAppFeature />} />
           <Route path="/clusters" render={() => <AdminClusterFeature />} />

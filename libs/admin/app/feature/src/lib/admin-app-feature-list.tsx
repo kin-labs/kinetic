@@ -1,5 +1,5 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiTable } from '@mogami/admin/app/ui'
+import { AdminAppUiGrid } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { useAppsQuery, useDeleteAppMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
@@ -28,13 +28,11 @@ export default function AdminAppFeatureList() {
           Apps
         </Box>
       </Box>
-      <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+      <Box>
         {fetching && !data?.items?.length ? (
           <AdminUiLoader />
         ) : (
-          <div>
-            <AdminAppUiTable apps={data?.items} deleteApp={handleDelete} />
-          </div>
+          <AdminAppUiGrid apps={data?.items} deleteApp={handleDelete} />
         )}
       </Box>
     </Stack>

@@ -1,5 +1,6 @@
 import { Box, Flex, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
 import {
+  AdminAppUiEnvironments,
   AdminAppUiForm,
   AdminAppUiTransactions,
   AdminAppUiUserModal,
@@ -23,6 +24,7 @@ import {
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { AppHeader } from './app-header'
 
 export default function AdminAppFeatureDetail() {
   const toast = useToast()
@@ -68,19 +70,16 @@ export default function AdminAppFeatureDetail() {
     return <AdminUiLoader />
   }
 
+  if (!data?.item) {
+    return <div>App not found :(</div>
+  }
+
   return (
     <Stack direction="column" spacing={6}>
-      <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
-        <Flex justifyContent="space-between" alignItems="center">
-          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
-            {data?.item?.name}
-          </Box>
-          <code>App Index: {data?.item?.index}</code>
-        </Flex>
-      </Box>
-
+      <AppHeader app={data?.item} />
       <Tabs isLazy colorScheme="teal">
         <TabList>
+          <Tab>Environments</Tab>
           <Tab>Wallet</Tab>
           <Tab>Transactions</Tab>
           <Tab>Webhooks </Tab>
@@ -88,6 +87,7 @@ export default function AdminAppFeatureDetail() {
           <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
+          <TabPanel>{appId && <AppEnvironmentsTab appId={appId} />}</TabPanel>
           <TabPanel>
             {data?.item?.wallets &&
               data?.item?.wallets.map((wallet: Wallet) => (
@@ -116,6 +116,14 @@ export default function AdminAppFeatureDetail() {
       </Tabs>
     </Stack>
   )
+}
+
+function AppEnvironmentsTab({ appId }: { appId: string }) {
+  const [{ data, fetching }] = useAppQuery({ variables: { appId } })
+  if (fetching) {
+    return <AdminUiLoader />
+  }
+  return <AdminAppUiEnvironments appId={appId} environments={data?.item?.envs} />
 }
 
 function AppTransactionsTab({ appId }: { appId: string }) {
