@@ -207,6 +207,17 @@ export type ClusterCreateInput = {
   type: ClusterType
 }
 
+export type ClusterStat = {
+  __typename?: 'ClusterStat'
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  numSlots?: Maybe<Scalars['Float']>
+  numTransactions: Scalars['Float']
+  samplePeriodSecs: Scalars['Float']
+  slot: Scalars['Float']
+  updatedAt: Scalars['DateTime']
+}
+
 export enum ClusterStatus {
   Active = 'Active',
   Inactive = 'Inactive',
@@ -405,17 +416,6 @@ export type MutationUpdateUserArgs = {
   userId: Scalars['String']
 }
 
-export type NetworkStat = {
-  __typename?: 'NetworkStat'
-  createdAt: Scalars['DateTime']
-  id: Scalars['String']
-  numSlots?: Maybe<Scalars['Float']>
-  numTransactions: Scalars['Float']
-  samplePeriodSecs: Scalars['Float']
-  slot: Scalars['Float']
-  updatedAt: Scalars['DateTime']
-}
-
 export type Query = {
   __typename?: 'Query'
   app?: Maybe<App>
@@ -426,11 +426,11 @@ export type Query = {
   appWebhooks?: Maybe<Array<AppWebhook>>
   apps?: Maybe<Array<App>>
   cluster?: Maybe<Cluster>
+  clusterStat?: Maybe<ClusterStat>
+  clusterStats?: Maybe<Array<ClusterStat>>
   clusterTokens?: Maybe<Array<ClusterToken>>
   clusters?: Maybe<Array<Cluster>>
   me?: Maybe<User>
-  networkStat?: Maybe<NetworkStat>
-  networkStats?: Maybe<Array<NetworkStat>>
   uptime: Scalars['Float']
   user?: Maybe<User>
   users?: Maybe<Array<User>>
@@ -475,12 +475,12 @@ export type QueryClusterArgs = {
   clusterId: Scalars['String']
 }
 
-export type QueryClusterTokensArgs = {
-  input: ClusterTokenInput
+export type QueryClusterStatArgs = {
+  clusterStatId: Scalars['String']
 }
 
-export type QueryNetworkStatArgs = {
-  networkStatId: Scalars['String']
+export type QueryClusterTokensArgs = {
+  input: ClusterTokenInput
 }
 
 export type QueryUserArgs = {

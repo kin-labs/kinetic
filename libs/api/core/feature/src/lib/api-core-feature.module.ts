@@ -5,7 +5,6 @@ import { ApiAuthFeatureModule } from '@mogami/api/auth/feature'
 import { ApiClusterFeatureModule } from '@mogami/api/cluster/feature'
 import { ApiConfigFeatureModule } from '@mogami/api/config/feature'
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
-import { ApiNetworkStatFeatureModule } from '@mogami/api/network-stat/feature'
 import { ApiTransactionFeatureModule } from '@mogami/api/transaction/feature'
 import { ApiUserFeatureModule } from '@mogami/api/user/feature'
 import { ApiWalletFeatureModule } from '@mogami/api/wallet/feature'
@@ -42,7 +41,6 @@ import { serveStaticFactory } from './serve-static.factory'
     ApiClusterFeatureModule,
     ApiConfigFeatureModule,
     ApiCoreDataAccessModule,
-    ApiNetworkStatFeatureModule,
     ApiTransactionFeatureModule,
     ApiUserFeatureModule,
     ApiWalletFeatureModule,
