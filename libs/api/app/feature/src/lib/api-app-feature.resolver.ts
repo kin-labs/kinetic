@@ -3,6 +3,7 @@ import {
   App,
   AppCreateInput,
   AppEnv,
+  AppEnvUpdateInput,
   AppTransaction,
   AppUpdateInput,
   AppUserAddInput,
@@ -66,8 +67,8 @@ export class ApiAppFeatureResolver {
   }
 
   @Query(() => [AppWebhook], { nullable: true })
-  appWebhooks(@CtxUser() user: User, @Args('appId') appId: string) {
-    return this.service.appWebhooks(user.id, appId)
+  appWebhooks(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
+    return this.service.appWebhooks(user.id, appId, appEnvId)
   }
 
   @Mutation(() => App, { nullable: true })
@@ -98,6 +99,16 @@ export class ApiAppFeatureResolver {
   @Mutation(() => App, { nullable: true })
   updateApp(@CtxUser() user: User, @Args('appId') appId: string, @Args('input') input: AppUpdateInput) {
     return this.service.updateApp(user.id, appId, input)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  updateAppEnv(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args('input') input: AppEnvUpdateInput,
+  ) {
+    return this.service.updateAppEnv(user.id, appId, appEnvId, input)
   }
 
   @ResolveField(() => [Wallet], { nullable: true })

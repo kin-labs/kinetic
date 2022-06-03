@@ -30,8 +30,6 @@ export default function AdminAppFeatureDetail() {
       appId: appId!,
       input: {
         ...input,
-        webhookEventUrl: input.webhookEventUrl?.trim(),
-        webhookVerifyUrl: input.webhookVerifyUrl?.trim(),
       },
     })
     if (res?.data?.updated) {

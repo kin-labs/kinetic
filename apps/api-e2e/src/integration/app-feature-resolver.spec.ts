@@ -3,6 +3,7 @@ import { Response } from 'supertest'
 import {
   App,
   AppCreateInput,
+  AppEnvUpdateInput,
   Apps,
   AppUpdateInput,
   AppUserAdd,
@@ -20,6 +21,7 @@ import {
   DeleteApp,
   GenerateWallet,
   UpdateApp,
+  UpdateAppEnv,
 } from '../generated/api-sdk'
 import {
   ADMIN_EMAIL,
@@ -87,12 +89,6 @@ describe('App (e2e)', () => {
       it('should update an app', async () => {
         const input: AppUpdateInput = {
           name: `App ${appIndex} edited`,
-          webhookSecret: 'WebHookSecret',
-          webhookAcceptIncoming: true,
-          webhookEventEnabled: true,
-          webhookEventUrl: 'http://local.mogami.io/api/app/devnet/1/hooks/event',
-          webhookVerifyEnabled: true,
-          webhookVerifyUrl: 'http://local.mogami.io/api/app/devnet/1/hooks/verify',
         }
 
         return runGraphQLQueryAdmin(app, token, UpdateApp, { appId, input })
@@ -103,12 +99,11 @@ describe('App (e2e)', () => {
 
             expect(data.index).toEqual(appIndex)
             expect(data.name).toEqual(input.name)
-            expect(data.webhookAcceptIncoming).toEqual(input.webhookAcceptIncoming)
-            expect(data.webhookSecret).toEqual(input.webhookSecret)
-            expect(data.webhookEventEnabled).toEqual(input.webhookEventEnabled)
-            expect(data.webhookEventUrl).toEqual(input.webhookEventUrl)
-            expect(data.webhookVerifyEnabled).toEqual(input.webhookVerifyEnabled)
-            expect(data.webhookVerifyUrl).toEqual(input.webhookVerifyUrl)
+            expect(data.envs.length).toEqual(1)
+            expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
+            expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
+            expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
+            expect(data.envs[0].name).toEqual('devnet')
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.wallets).toBeDefined()
@@ -243,6 +238,46 @@ describe('App (e2e)', () => {
       })
     })
 
+    describe('AppEnvs', () => {
+      it('should update an app environment', async () => {
+        const name = uniq('app-')
+        const index = uniqInt()
+        const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
+          input: { index, name },
+        })
+        const appId = createdApp.body.data.created.id
+        const appEnvId = createdApp.body.data.created.envs[0].id
+
+        const input: AppEnvUpdateInput = {
+          webhookSecret: 'WebHookSecret',
+          webhookAcceptIncoming: true,
+          webhookEventEnabled: true,
+          webhookEventUrl: 'http://local.mogami.io/api/app/devnet/1/hooks/event',
+          webhookVerifyEnabled: true,
+          webhookVerifyUrl: 'http://local.mogami.io/api/app/devnet/1/hooks/verify',
+        }
+
+        return runGraphQLQueryAdmin(app, token, UpdateAppEnv, { appId, appEnvId, input })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const data = res.body.data?.updated
+
+            expect(data.webhookAcceptIncoming).toEqual(input.webhookAcceptIncoming)
+            expect(data.webhookSecret).toEqual(input.webhookSecret)
+            expect(data.webhookEventEnabled).toEqual(input.webhookEventEnabled)
+            expect(data.webhookEventUrl).toEqual(input.webhookEventUrl)
+            expect(data.webhookVerifyEnabled).toEqual(input.webhookVerifyEnabled)
+            expect(data.webhookVerifyUrl).toEqual(input.webhookVerifyUrl)
+            expect(data.mints.length).toEqual(1)
+            expect(data.mints[0].mint.symbol).toEqual('KIN')
+            expect(data.mints[0].wallet.publicKey).toBeDefined()
+            expect(data.wallets).toBeDefined()
+            expect(data.wallets[0].publicKey).toBeDefined()
+          })
+      })
+    })
+
     describe('Wallets', () => {
       let appId: string | undefined
       let walletId: string | undefined
@@ -317,17 +352,18 @@ describe('App (e2e)', () => {
           })
       })
 
-      it('should not update an app with invalid webhook urls', async () => {
+      it('should not update an app env with invalid webhook urls', async () => {
         const name = uniq('app-')
         const index = uniqInt()
         const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
           input: { index, name },
         })
         const createdAppId = createdApp.body.data.created.id
+        const createdAppEnvId = createdApp.body.data.created.envs[0].id
 
-        const input: AppUpdateInput = { webhookVerifyUrl: 'test', webhookEventUrl: 'test' }
+        const input: AppEnvUpdateInput = { webhookVerifyUrl: 'test', webhookEventUrl: 'test' }
 
-        return runGraphQLQueryAdmin(app, token, UpdateApp, { appId: createdAppId, input })
+        return runGraphQLQueryAdmin(app, token, UpdateAppEnv, { appId: createdAppId, appEnvId: createdAppEnvId, input })
           .expect(200)
           .expect((res) => {
             const errors = JSON.parse(res.text).errors

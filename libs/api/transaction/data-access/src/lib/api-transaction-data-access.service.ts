@@ -1,4 +1,10 @@
-import { ApiAppWebhookDataAccessService, AppTransaction, AppWebhookType, parseError } from '@mogami/api/app/data-access'
+import {
+  ApiAppWebhookDataAccessService,
+  AppEnv,
+  AppTransaction,
+  AppWebhookType,
+  parseError,
+} from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, parseAndSignTokenTransfer } from '@mogami/solana'
@@ -65,10 +71,10 @@ export class ApiTransactionDataAccessService {
     }
 
     // Send Verify Webhook
-    if (app.webhookVerifyEnabled && app.webhookVerifyUrl) {
+    if (appEnv.webhookVerifyEnabled && appEnv.webhookVerifyUrl) {
       appTransaction.webhookVerifyStart = new Date()
       try {
-        await this.sendVerifyWebhook(app, appTransaction)
+        await this.sendVerifyWebhook(appEnv, appTransaction)
         appTransaction.webhookVerifyEnd = new Date()
       } catch (err) {
         appTransaction.webhookVerifyEnd = new Date()
@@ -126,13 +132,13 @@ export class ApiTransactionDataAccessService {
 
     // Send Event Webhook
     let webhookEventEnd
-    if (app.webhookEventEnabled && app.webhookEventUrl) {
+    if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl) {
       const updated = await this.updateAppTransaction(created.id, {
         webhookEventStart: new Date(),
       })
 
       try {
-        await this.sendEventWebhook(app, updated)
+        await this.sendEventWebhook(appEnv, updated)
         webhookEventEnd = new Date()
       } catch (err) {
         webhookEventEnd = new Date()
@@ -159,12 +165,12 @@ export class ApiTransactionDataAccessService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sendEventWebhook(app: App, payload: any) {
-    return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Event, payload })
+  sendEventWebhook(appEnv: AppEnv, payload: any) {
+    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, payload })
   }
 
-  sendVerifyWebhook(app: App, payload: Prisma.AppTransactionUpdateInput) {
-    return this.appWebhook.sendWebhook(app, { type: AppWebhookType.Verify, payload })
+  sendVerifyWebhook(appEnv: AppEnv, payload: Prisma.AppTransactionUpdateInput) {
+    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, payload })
   }
 
   async confirmSignature(

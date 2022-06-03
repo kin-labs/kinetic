@@ -8,6 +8,7 @@ import { Keypair } from '@solana/web3.js'
 import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
 import { AppCreateInput } from './dto/app-create.input'
+import { AppEnvUpdateInput } from './dto/app-env-update.input'
 import { AppUpdateInput } from './dto/app-update.input'
 import { AppUserAddInput } from './dto/app-user-add.input'
 import { AppUserRemoveInput } from './dto/app-user-remove.input'
@@ -122,7 +123,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
     await this.data.appUser.deleteMany({ where: { appId } })
     await this.data.appTransactionError.deleteMany({ where: { appTransaction: { appId } } })
     await this.data.appTransaction.deleteMany({ where: { appId } })
-    await this.data.appWebhook.deleteMany({ where: { appId } })
+    await this.data.appWebhook.deleteMany({ where: { appEnv: { appId } } })
     await this.data.appEnv.deleteMany({ where: { appId } })
     return this.data.app.delete({ where: { id: appId } })
   }
@@ -182,10 +183,10 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  async appWebhooks(userId: string, appId: string) {
+  async appWebhooks(userId: string, appId: string, appEnvId: string) {
     await this.ensureAppById(userId, appId)
     return this.data.appWebhook.findMany({
-      where: { appId },
+      where: { appEnvId },
       take: 100,
       orderBy: { updatedAt: 'desc' },
     })
@@ -229,6 +230,26 @@ export class ApiAppDataAccessService implements OnModuleInit {
   async updateApp(userId: string, appId: string, data: AppUpdateInput) {
     await this.ensureAppById(userId, appId)
     return this.data.app.update({ where: { id: appId }, data, include: this.include })
+  }
+
+  async updateAppEnv(userId: string, appId: string, appEnvId: string, data: AppEnvUpdateInput) {
+    await this.ensureAppById(userId, appId)
+
+    return this.data.appEnv.update({
+      where: { id: appEnvId },
+      data,
+      include: {
+        app: true,
+        cluster: true,
+        mints: {
+          include: {
+            mint: true,
+            wallet: true,
+          },
+        },
+        wallets: true,
+      },
+    })
   }
 
   private async ensureAppById(userId: string, appId: string) {
@@ -338,7 +359,6 @@ export class ApiAppDataAccessService implements OnModuleInit {
       const created = await this.data.appWebhook.create({
         data: {
           direction: AppWebhookDirection.Incoming,
-          appId: appEnv.app.id,
           appEnvId: appEnv.id,
           headers,
           payload,
