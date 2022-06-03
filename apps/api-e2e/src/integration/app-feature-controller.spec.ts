@@ -14,9 +14,9 @@ describe('AppFeatureController (e2e)', () => {
     return app.close()
   })
 
-  it('/api/app/config/devnet/1 (GET)', () => {
+  it('/api/app/devnet/1/config (GET)', () => {
     const feePayer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.APP_1_FEE_PAYER_BYTE_ARRAY)))
-    return getEndpoint(app, '/api/app/config/devnet/1')
+    return getEndpoint(app, '/api/app/devnet/1/config')
       .expect(200)
       .then((res) => {
         expect(res.body.app.index).toEqual(1)
