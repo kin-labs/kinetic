@@ -16,7 +16,6 @@ export function AdminAppUiTable({ apps, deleteApp }: AdminAppUiTableProps) {
           <Tr>
             <Th isNumeric>Index</Th>
             <Th>Name</Th>
-            <Th>Public Key</Th>
             <Th />
           </Tr>
         </Thead>
@@ -28,9 +27,6 @@ export function AdminAppUiTable({ apps, deleteApp }: AdminAppUiTableProps) {
                 <Link to={'/apps/' + app.id}>
                   <Text color="teal.500">{app.name}</Text>
                 </Link>
-              </Td>
-              <Td>
-                <Code colorScheme="teal">{app.wallets?.[0]?.publicKey}</Code>
               </Td>
               <Td isNumeric>
                 <Button size="xs" onClick={() => deleteApp(app.id)}>

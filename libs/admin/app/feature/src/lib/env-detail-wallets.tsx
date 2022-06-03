@@ -5,5 +5,7 @@ import { EnvDetailLayout } from './env-detail-layout'
 
 export function EnvDetailWallets() {
   const { appEnv } = useAppEnv()
-  return <EnvDetailLayout>{appEnv.app?.id && <AppWalletsTab appId={appEnv.app.id} />}</EnvDetailLayout>
+  return (
+    <EnvDetailLayout>{appEnv.app?.id && <AppWalletsTab appId={appEnv.app.id} appEnvId={appEnv.id} />}</EnvDetailLayout>
+  )
 }

@@ -116,9 +116,6 @@ mutation CreateApp($input: AppCreateInput!) {
     users {
       ...AppUserDetails
     }
-    wallets {
-      ...WalletDetails
-    }
   }
 }
 
@@ -136,9 +133,6 @@ mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
     }
     users {
       ...AppUserDetails
-    }
-    wallets {
-      ...WalletDetails
     }
   }
 }
@@ -179,24 +173,18 @@ mutation AppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
   }
 }
 
-mutation AppWalletAdd($appId: String!, $walletId: String!) {
-  item: appWalletAdd(appId: $appId, walletId: $walletId) {
-    ...AppDetails
-    envs {
-      ...AppEnvDetails
-    }
+mutation AppEnvWalletAdd($appId: String!, $appEnvId: String!, $walletId: String!) {
+  item: appEnvWalletAdd(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
+    ...AppEnvDetails
     wallets {
       ...WalletDetails
     }
   }
 }
 
-mutation AppWalletRemove($appId: String!, $walletId: String!) {
-  item: appWalletRemove(appId: $appId, walletId: $walletId) {
-    ...AppDetails
-    envs {
-      ...AppEnvDetails
-    }
+mutation AppEnvWalletRemove($appId: String!, $appEnvId: String!, $walletId: String!) {
+  item: appEnvWalletRemove(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
+    ...AppEnvDetails
     wallets {
       ...WalletDetails
     }
@@ -212,15 +200,15 @@ query App($appId: String!) {
     users {
       ...AppUserDetails
     }
-    wallets {
-      ...WalletDetails
-    }
   }
 }
 
 query AppEnv($appId: String!, $appEnvId: String!) {
   item: appEnv(appId: $appId, appEnvId: $appEnvId) {
     ...AppEnvDetails
+    wallets {
+      ...WalletDetails
+    }
   }
 }
 
@@ -253,9 +241,6 @@ query Apps {
     ...AppDetails
     envs {
       ...AppEnvDetails
-    }
-    wallets {
-      ...WalletDetails
     }
   }
 }

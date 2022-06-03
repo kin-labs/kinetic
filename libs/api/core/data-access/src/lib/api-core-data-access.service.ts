@@ -73,7 +73,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
             user: true,
           },
         },
-        wallets: true,
       },
     })
   }
@@ -112,9 +111,12 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
           },
         },
         users: true,
-        wallets: true,
       },
     })
+  }
+
+  getAppEnvById(appEnvId: string) {
+    return this.appEnv.findUnique({ where: { id: appEnvId }, include: { app: true } })
   }
 
   getAppKey(environment: string, index: number): string {

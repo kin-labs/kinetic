@@ -25,22 +25,23 @@ function isValidAppWebhookType(type: string) {
 
 @Injectable()
 export class ApiAppDataAccessService implements OnModuleInit {
-  private include: Prisma.AppInclude = {
-    users: { include: { user: true } },
-    envs: {
+  private includeAppEnv: Prisma.AppEnvInclude = {
+    cluster: true,
+    mints: {
       include: {
-        cluster: true,
-        mints: {
-          include: {
-            mint: true,
-            wallet: true,
-          },
-        },
-        wallets: true,
+        mint: true,
+        wallet: true,
       },
     },
     wallets: true,
   }
+  private include: Prisma.AppInclude = {
+    users: { include: { user: true } },
+    envs: {
+      include: this.includeAppEnv,
+    },
+  }
+
   private readonly logger = new Logger(ApiAppDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
 
@@ -89,7 +90,6 @@ export class ApiAppDataAccessService implements OnModuleInit {
           })),
         ],
       },
-      wallets,
     }
     const created = await this.data.app.create({
       data,
@@ -107,7 +107,6 @@ export class ApiAppDataAccessService implements OnModuleInit {
           },
         },
         users: true,
-        wallets: true,
       },
     })
     this.logger.verbose(
@@ -261,37 +260,37 @@ export class ApiAppDataAccessService implements OnModuleInit {
     return app
   }
 
-  async appWalletAdd(userId: string, appId: string, walletId: string) {
-    const app = await this.ensureAppById(userId, appId)
-    const found = app.wallets.find((item) => item.id === walletId)
+  async appEnvWalletAdd(userId: string, appId: string, appEnvId: string, walletId: string) {
+    const appEnv = await this.appEnv(userId, appId, appEnvId)
+    const found = appEnv.wallets.find((item) => item.id === walletId)
     if (found) {
-      throw new BadRequestException(`App already has a wallet with id ${walletId}`)
+      throw new BadRequestException(`AppEnv already has a wallet with id ${walletId}`)
     }
     const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
       throw new BadRequestException(`Wallet with id ${walletId} not found`)
     }
-    return this.data.app.update({
-      where: { id: appId },
+    return this.data.appEnv.update({
+      where: { id: appEnvId },
       data: { wallets: { connect: { id: wallet.id } } },
-      include: this.include,
+      include: this.includeAppEnv,
     })
   }
 
-  async appWalletRemove(userId: string, appId: string, walletId: string) {
-    const app = await this.ensureAppById(userId, appId)
-    const found = app.wallets.find((item) => item.id === walletId)
+  async appEnvWalletRemove(userId: string, appId: string, appEnvId: string, walletId: string) {
+    const appEnv = await this.appEnv(userId, appId, appEnvId)
+    const found = appEnv.wallets.find((item) => item.id === walletId)
     if (!found) {
-      throw new BadRequestException(`App has no wallet with id ${walletId}`)
+      throw new BadRequestException(`AppEnv has no wallet with id ${walletId}`)
     }
     const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
       throw new BadRequestException(`Wallet with id ${walletId} not found`)
     }
-    return this.data.app.update({
-      where: { id: appId },
+    return this.data.appEnv.update({
+      where: { id: appEnvId },
       data: { wallets: { disconnect: { id: wallet.id } } },
-      include: this.include,
+      include: this.includeAppEnv,
     })
   }
 

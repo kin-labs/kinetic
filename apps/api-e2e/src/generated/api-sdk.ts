@@ -29,7 +29,6 @@ export type App = {
   name?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
   users?: Maybe<Array<AppUser>>
-  wallets?: Maybe<Array<Wallet>>
 }
 
 export type AppCreateInput = {
@@ -297,11 +296,11 @@ export enum MintType {
 export type Mutation = {
   __typename?: 'Mutation'
   addClusterMint?: Maybe<Cluster>
+  appEnvWalletAdd?: Maybe<AppEnv>
+  appEnvWalletRemove?: Maybe<AppEnv>
   appUserAdd?: Maybe<App>
   appUserRemove?: Maybe<App>
   appUserUpdateRole?: Maybe<App>
-  appWalletAdd?: Maybe<App>
-  appWalletRemove?: Maybe<App>
   createApp?: Maybe<App>
   createCluster?: Maybe<Cluster>
   createUser?: Maybe<User>
@@ -322,6 +321,18 @@ export type MutationAddClusterMintArgs = {
   input: MintAddInput
 }
 
+export type MutationAppEnvWalletAddArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  walletId: Scalars['String']
+}
+
+export type MutationAppEnvWalletRemoveArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  walletId: Scalars['String']
+}
+
 export type MutationAppUserAddArgs = {
   appId: Scalars['String']
   input: AppUserAddInput
@@ -335,16 +346,6 @@ export type MutationAppUserRemoveArgs = {
 export type MutationAppUserUpdateRoleArgs = {
   appId: Scalars['String']
   input: AppUserUpdateRoleInput
-}
-
-export type MutationAppWalletAddArgs = {
-  appId: Scalars['String']
-  walletId: Scalars['String']
-}
-
-export type MutationAppWalletRemoveArgs = {
-  appId: Scalars['String']
-  walletId: Scalars['String']
 }
 
 export type MutationCreateAppArgs = {
@@ -492,14 +493,17 @@ export type QueryWalletArgs = {
 
 export type QueryWalletAirdropArgs = {
   amount: Scalars['Float']
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
 export type QueryWalletBalanceArgs = {
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
 export type QueryWalletBalancesArgs = {
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
@@ -549,7 +553,7 @@ export type Wallet = {
   __typename?: 'Wallet'
   balances?: Maybe<Array<WalletBalance>>
   createdAt?: Maybe<Scalars['DateTime']>
-  id?: Maybe<Scalars['String']>
+  id: Scalars['String']
   publicKey?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
 }
@@ -562,6 +566,7 @@ export type WalletAirdropResponse = {
 export type WalletBalance = {
   __typename?: 'WalletBalance'
   balance?: Maybe<Scalars['BigInt']>
+  change?: Maybe<Scalars['BigInt']>
   createdAt?: Maybe<Scalars['DateTime']>
   id?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
@@ -797,6 +802,7 @@ export const WalletBalanceDetails = gql`
     createdAt
     updatedAt
     balance
+    change
   }
 `
 export const CreateApp = gql`
@@ -809,15 +815,11 @@ export const CreateApp = gql`
       users {
         ...AppUserDetails
       }
-      wallets {
-        ...WalletDetails
-      }
     }
   }
   ${AppDetails}
   ${AppEnvDetails}
   ${AppUserDetails}
-  ${WalletDetails}
 `
 export const DeleteApp = gql`
   mutation DeleteApp($appId: String!) {
@@ -837,15 +839,11 @@ export const UpdateApp = gql`
       users {
         ...AppUserDetails
       }
-      wallets {
-        ...WalletDetails
-      }
     }
   }
   ${AppDetails}
   ${AppEnvDetails}
   ${AppUserDetails}
-  ${WalletDetails}
 `
 export const UpdateAppEnv = gql`
   mutation UpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
@@ -895,35 +893,27 @@ export const AppUserUpdateRole = gql`
   ${AppDetails}
   ${AppUserDetails}
 `
-export const AppWalletAdd = gql`
-  mutation AppWalletAdd($appId: String!, $walletId: String!) {
-    item: appWalletAdd(appId: $appId, walletId: $walletId) {
-      ...AppDetails
-      envs {
-        ...AppEnvDetails
-      }
+export const AppEnvWalletAdd = gql`
+  mutation AppEnvWalletAdd($appId: String!, $appEnvId: String!, $walletId: String!) {
+    item: appEnvWalletAdd(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
+      ...AppEnvDetails
       wallets {
         ...WalletDetails
       }
     }
   }
-  ${AppDetails}
   ${AppEnvDetails}
   ${WalletDetails}
 `
-export const AppWalletRemove = gql`
-  mutation AppWalletRemove($appId: String!, $walletId: String!) {
-    item: appWalletRemove(appId: $appId, walletId: $walletId) {
-      ...AppDetails
-      envs {
-        ...AppEnvDetails
-      }
+export const AppEnvWalletRemove = gql`
+  mutation AppEnvWalletRemove($appId: String!, $appEnvId: String!, $walletId: String!) {
+    item: appEnvWalletRemove(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
+      ...AppEnvDetails
       wallets {
         ...WalletDetails
       }
     }
   }
-  ${AppDetails}
   ${AppEnvDetails}
   ${WalletDetails}
 `
@@ -937,23 +927,23 @@ export const App = gql`
       users {
         ...AppUserDetails
       }
-      wallets {
-        ...WalletDetails
-      }
     }
   }
   ${AppDetails}
   ${AppEnvDetails}
   ${AppUserDetails}
-  ${WalletDetails}
 `
 export const AppEnv = gql`
   query AppEnv($appId: String!, $appEnvId: String!) {
     item: appEnv(appId: $appId, appEnvId: $appEnvId) {
       ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
     }
   }
   ${AppEnvDetails}
+  ${WalletDetails}
 `
 export const AppTransaction = gql`
   query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
@@ -994,14 +984,10 @@ export const Apps = gql`
       envs {
         ...AppEnvDetails
       }
-      wallets {
-        ...WalletDetails
-      }
     }
   }
   ${AppDetails}
   ${AppEnvDetails}
-  ${WalletDetails}
 `
 export const Login = gql`
   mutation Login($input: LoginInput!) {
@@ -1170,24 +1156,24 @@ export const Wallet = gql`
   ${WalletDetails}
 `
 export const WalletAirdrop = gql`
-  query WalletAirdrop($walletId: String!, $amount: Float!) {
-    response: walletAirdrop(walletId: $walletId, amount: $amount) {
+  query WalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!) {
+    response: walletAirdrop(appEnvId: $appEnvId, walletId: $walletId, amount: $amount) {
       ...WalletAirdropResponseDetails
     }
   }
   ${WalletAirdropResponseDetails}
 `
 export const WalletBalance = gql`
-  query WalletBalance($walletId: String!) {
-    balance: walletBalance(walletId: $walletId) {
+  query WalletBalance($appEnvId: String!, $walletId: String!) {
+    balance: walletBalance(appEnvId: $appEnvId, walletId: $walletId) {
       ...WalletBalanceDetails
     }
   }
   ${WalletBalanceDetails}
 `
 export const WalletBalances = gql`
-  query WalletBalances($walletId: String!) {
-    balances: walletBalances(walletId: $walletId) {
+  query WalletBalances($appEnvId: String!, $walletId: String!) {
+    balances: walletBalances(appEnvId: $appEnvId, walletId: $walletId) {
       ...WalletBalanceDetails
     }
   }
@@ -1253,7 +1239,7 @@ export type AppEnvDetailsFragment = {
     } | null
     wallet?: {
       __typename?: 'Wallet'
-      id?: string | null
+      id: string
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
@@ -1281,7 +1267,7 @@ export type AppMintDetailsFragment = {
   } | null
   wallet?: {
     __typename?: 'Wallet'
-    id?: string | null
+    id: string
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
@@ -1428,7 +1414,7 @@ export type CreateAppMutation = {
         } | null
         wallet?: {
           __typename?: 'Wallet'
-          id?: string | null
+          id: string
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
@@ -1460,13 +1446,6 @@ export type CreateAppMutation = {
         username: string
         role?: UserRole | null
       } | null
-    }> | null
-    wallets?: Array<{
-      __typename?: 'Wallet'
-      id?: string | null
-      createdAt?: any | null
-      updatedAt?: any | null
-      publicKey?: string | null
     }> | null
   } | null
 }
@@ -1551,7 +1530,7 @@ export type UpdateAppMutation = {
         } | null
         wallet?: {
           __typename?: 'Wallet'
-          id?: string | null
+          id: string
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
@@ -1584,13 +1563,6 @@ export type UpdateAppMutation = {
         role?: UserRole | null
       } | null
     }> | null
-    wallets?: Array<{
-      __typename?: 'Wallet'
-      id?: string | null
-      createdAt?: any | null
-      updatedAt?: any | null
-      publicKey?: string | null
-    }> | null
   } | null
 }
 
@@ -1616,7 +1588,7 @@ export type UpdateAppEnvMutation = {
     webhookVerifyUrl?: string | null
     wallets?: Array<{
       __typename?: 'Wallet'
-      id?: string | null
+      id: string
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
@@ -1652,7 +1624,7 @@ export type UpdateAppEnvMutation = {
       } | null
       wallet?: {
         __typename?: 'Wallet'
-        id?: string | null
+        id: string
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
@@ -1790,164 +1762,136 @@ export type AppUserUpdateRoleMutation = {
   } | null
 }
 
-export type AppWalletAddMutationVariables = Exact<{
+export type AppEnvWalletAddMutationVariables = Exact<{
   appId: Scalars['String']
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
-export type AppWalletAddMutation = {
+export type AppEnvWalletAddMutation = {
   __typename?: 'Mutation'
   item?: {
-    __typename?: 'App'
+    __typename?: 'AppEnv'
     id: string
     createdAt: any
     updatedAt: any
-    index: number
     name?: string | null
-    envs?: Array<{
-      __typename?: 'AppEnv'
-      id: string
-      createdAt: any
-      updatedAt: any
-      name?: string | null
-      webhookAcceptIncoming?: boolean | null
-      webhookEventEnabled?: boolean | null
-      webhookEventUrl?: string | null
-      webhookSecret?: string | null
-      webhookVerifyEnabled?: boolean | null
-      webhookVerifyUrl?: string | null
-      app?: {
-        __typename?: 'App'
-        id: string
-        createdAt: any
-        updatedAt: any
-        index: number
-        name?: string | null
-      } | null
-      cluster?: {
-        __typename?: 'Cluster'
-        id?: string | null
-        createdAt?: any | null
-        updatedAt?: any | null
-        endpoint?: string | null
-        name?: string | null
-        status?: ClusterStatus | null
-        type?: ClusterType | null
-      } | null
-      mints?: Array<{
-        __typename?: 'AppMint'
-        id: string
-        createdAt: any
-        updatedAt: any
-        mint?: {
-          __typename?: 'Mint'
-          id?: string | null
-          createdAt?: any | null
-          updatedAt?: any | null
-          address?: string | null
-          coingeckoId?: string | null
-          decimals?: number | null
-          logoUrl?: string | null
-          name?: string | null
-          symbol?: string | null
-          type?: MintType | null
-        } | null
-        wallet?: {
-          __typename?: 'Wallet'
-          id?: string | null
-          createdAt?: any | null
-          updatedAt?: any | null
-          publicKey?: string | null
-        } | null
-      }> | null
-    }> | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
     wallets?: Array<{
       __typename?: 'Wallet'
-      id?: string | null
+      id: string
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
+    }> | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      endpoint?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        logoUrl?: string | null
+        name?: string | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
     }> | null
   } | null
 }
 
-export type AppWalletRemoveMutationVariables = Exact<{
+export type AppEnvWalletRemoveMutationVariables = Exact<{
   appId: Scalars['String']
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
-export type AppWalletRemoveMutation = {
+export type AppEnvWalletRemoveMutation = {
   __typename?: 'Mutation'
   item?: {
-    __typename?: 'App'
+    __typename?: 'AppEnv'
     id: string
     createdAt: any
     updatedAt: any
-    index: number
     name?: string | null
-    envs?: Array<{
-      __typename?: 'AppEnv'
-      id: string
-      createdAt: any
-      updatedAt: any
-      name?: string | null
-      webhookAcceptIncoming?: boolean | null
-      webhookEventEnabled?: boolean | null
-      webhookEventUrl?: string | null
-      webhookSecret?: string | null
-      webhookVerifyEnabled?: boolean | null
-      webhookVerifyUrl?: string | null
-      app?: {
-        __typename?: 'App'
-        id: string
-        createdAt: any
-        updatedAt: any
-        index: number
-        name?: string | null
-      } | null
-      cluster?: {
-        __typename?: 'Cluster'
-        id?: string | null
-        createdAt?: any | null
-        updatedAt?: any | null
-        endpoint?: string | null
-        name?: string | null
-        status?: ClusterStatus | null
-        type?: ClusterType | null
-      } | null
-      mints?: Array<{
-        __typename?: 'AppMint'
-        id: string
-        createdAt: any
-        updatedAt: any
-        mint?: {
-          __typename?: 'Mint'
-          id?: string | null
-          createdAt?: any | null
-          updatedAt?: any | null
-          address?: string | null
-          coingeckoId?: string | null
-          decimals?: number | null
-          logoUrl?: string | null
-          name?: string | null
-          symbol?: string | null
-          type?: MintType | null
-        } | null
-        wallet?: {
-          __typename?: 'Wallet'
-          id?: string | null
-          createdAt?: any | null
-          updatedAt?: any | null
-          publicKey?: string | null
-        } | null
-      }> | null
-    }> | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
     wallets?: Array<{
       __typename?: 'Wallet'
-      id?: string | null
+      id: string
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
+    }> | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      endpoint?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        logoUrl?: string | null
+        name?: string | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
     }> | null
   } | null
 }
@@ -2015,7 +1959,7 @@ export type AppQuery = {
         } | null
         wallet?: {
           __typename?: 'Wallet'
-          id?: string | null
+          id: string
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
@@ -2048,13 +1992,6 @@ export type AppQuery = {
         role?: UserRole | null
       } | null
     }> | null
-    wallets?: Array<{
-      __typename?: 'Wallet'
-      id?: string | null
-      createdAt?: any | null
-      updatedAt?: any | null
-      publicKey?: string | null
-    }> | null
   } | null
 }
 
@@ -2077,6 +2014,13 @@ export type AppEnvQuery = {
     webhookSecret?: string | null
     webhookVerifyEnabled?: boolean | null
     webhookVerifyUrl?: string | null
+    wallets?: Array<{
+      __typename?: 'Wallet'
+      id: string
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+    }> | null
     app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
     cluster?: {
       __typename?: 'Cluster'
@@ -2108,7 +2052,7 @@ export type AppEnvQuery = {
       } | null
       wallet?: {
         __typename?: 'Wallet'
-        id?: string | null
+        id: string
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
@@ -2309,19 +2253,12 @@ export type AppsQuery = {
         } | null
         wallet?: {
           __typename?: 'Wallet'
-          id?: string | null
+          id: string
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
         } | null
       }> | null
-    }> | null
-    wallets?: Array<{
-      __typename?: 'Wallet'
-      id?: string | null
-      createdAt?: any | null
-      updatedAt?: any | null
-      publicKey?: string | null
     }> | null
   }> | null
 }
@@ -2789,7 +2726,7 @@ export type UsersQuery = {
 
 export type WalletDetailsFragment = {
   __typename?: 'Wallet'
-  id?: string | null
+  id: string
   createdAt?: any | null
   updatedAt?: any | null
   publicKey?: string | null
@@ -2803,6 +2740,7 @@ export type WalletBalanceDetailsFragment = {
   createdAt?: any | null
   updatedAt?: any | null
   balance?: any | null
+  change?: any | null
 }
 
 export type GenerateWalletMutationVariables = Exact<{
@@ -2813,7 +2751,7 @@ export type GenerateWalletMutation = {
   __typename?: 'Mutation'
   generated?: {
     __typename?: 'Wallet'
-    id?: string | null
+    id: string
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
@@ -2828,7 +2766,7 @@ export type DeleteWalletMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'Wallet'
-    id?: string | null
+    id: string
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
@@ -2843,7 +2781,7 @@ export type WalletQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Wallet'
-    id?: string | null
+    id: string
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
@@ -2851,6 +2789,7 @@ export type WalletQuery = {
 }
 
 export type WalletAirdropQueryVariables = Exact<{
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
   amount: Scalars['Float']
 }>
@@ -2861,6 +2800,7 @@ export type WalletAirdropQuery = {
 }
 
 export type WalletBalanceQueryVariables = Exact<{
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
@@ -2872,10 +2812,12 @@ export type WalletBalanceQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     balance?: any | null
+    change?: any | null
   } | null
 }
 
 export type WalletBalancesQueryVariables = Exact<{
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
@@ -2887,6 +2829,7 @@ export type WalletBalancesQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     balance?: any | null
+    change?: any | null
   }> | null
 }
 
@@ -2896,7 +2839,7 @@ export type WalletsQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Wallet'
-    id?: string | null
+    id: string
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null

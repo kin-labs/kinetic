@@ -4,18 +4,23 @@ import React, { ChangeEvent, useState } from 'react'
 import { ShowSolBalance } from './show-sol-balance'
 
 export interface AdminAppUiWalletProps {
+  appEnvId: string
   wallet: Wallet
 }
 
-export function AdminAppUiWallet({ wallet }: AdminAppUiWalletProps) {
+export function AdminAppUiWallet({ appEnvId, wallet }: AdminAppUiWalletProps) {
   const [amount, setAmount] = useState<number>(1)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [{ data }, refreshWallet] = useWalletBalanceQuery({ variables: { walletId: wallet.id! } })
+  const [{ data }, refreshWallet] = useWalletBalanceQuery({
+    variables: {
+      appEnvId,
+      walletId: wallet.id,
+    },
+  })
   const [{ data: airdropData, error: airdropError, fetching: airdropFetching }, requestAirdropMutation] =
     useWalletAirdropQuery({
       variables: {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        walletId: wallet.id!,
+        appEnvId,
+        walletId: wallet.id,
         amount,
       },
       pause: true,

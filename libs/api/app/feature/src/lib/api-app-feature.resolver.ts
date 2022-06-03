@@ -45,6 +45,7 @@ export class ApiAppFeatureResolver {
   appEnv(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
     return this.service.appEnv(user.id, appId, appEnvId)
   }
+
   @Query(() => AppWebhook, { nullable: true })
   appWebhook(@CtxUser() user: User, @Args('appId') appId: string, @Args('appWebhookId') appWebhookId: string) {
     return this.service.appWebhook(user.id, appId, appWebhookId)
@@ -70,14 +71,24 @@ export class ApiAppFeatureResolver {
     return this.service.appUserUpdateRole(user.id, appId, input)
   }
 
-  @Mutation(() => App, { nullable: true })
-  appWalletAdd(@CtxUser() user: User, @Args('appId') appId: string, @Args('walletId') walletId: string) {
-    return this.service.appWalletAdd(user.id, appId, walletId)
+  @Mutation(() => AppEnv, { nullable: true })
+  appEnvWalletAdd(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args('walletId') walletId: string,
+  ) {
+    return this.service.appEnvWalletAdd(user.id, appId, appEnvId, walletId)
   }
 
-  @Mutation(() => App, { nullable: true })
-  appWalletRemove(@CtxUser() user: User, @Args('appId') appId: string, @Args('walletId') walletId: string) {
-    return this.service.appWalletRemove(user.id, appId, walletId)
+  @Mutation(() => AppEnv, { nullable: true })
+  appEnvWalletRemove(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args('walletId') walletId: string,
+  ) {
+    return this.service.appEnvWalletRemove(user.id, appId, appEnvId, walletId)
   }
 
   @Mutation(() => App, { nullable: true })
@@ -93,10 +104,5 @@ export class ApiAppFeatureResolver {
     @Args('input') input: AppEnvUpdateInput,
   ) {
     return this.service.updateAppEnv(user.id, appId, appEnvId, input)
-  }
-
-  @ResolveField(() => [Wallet], { nullable: true })
-  wallets(@Parent() app: App) {
-    return app.wallets
   }
 }

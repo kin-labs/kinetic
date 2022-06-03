@@ -32,20 +32,21 @@ export class ApiWalletFeatureResolver {
   @Query(() => WalletAirdropResponse, { nullable: true })
   walletAirdrop(
     @CtxUser() user: User,
+    @Args('appEnvId') appEnvId: string,
     @Args('walletId') walletId: string,
     @Args({ name: 'amount', type: () => Float }) amount: number,
   ) {
-    return this.service.walletAirdrop(user.id, walletId, amount)
+    return this.service.walletAirdrop(user.id, appEnvId, walletId, amount)
   }
 
   @Query(() => WalletBalance, { nullable: true })
-  walletBalance(@CtxUser() user: User, @Args('walletId') walletId: string) {
-    return this.service.walletBalance(user.id, walletId)
+  walletBalance(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('walletId') walletId: string) {
+    return this.service.walletBalance(user.id, appEnvId, walletId)
   }
 
   @Query(() => [WalletBalance], { nullable: true })
-  walletBalances(@CtxUser() user: User, @Args('walletId') walletId: string) {
-    return this.service.walletBalances(user.id, walletId)
+  walletBalances(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('walletId') walletId: string) {
+    return this.service.walletBalances(user.id, appEnvId, walletId)
   }
 
   @Query(() => [Wallet], { nullable: true })
