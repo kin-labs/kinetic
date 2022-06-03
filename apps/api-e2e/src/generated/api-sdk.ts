@@ -47,6 +47,7 @@ export type AppEnv = {
   mints?: Maybe<Array<AppMint>>
   name?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
+  wallets?: Maybe<Array<Wallet>>
   webhookAcceptIncoming?: Maybe<Scalars['Boolean']>
   webhookEventEnabled?: Maybe<Scalars['Boolean']>
   webhookEventUrl?: Maybe<Scalars['String']>
@@ -848,9 +849,13 @@ export const UpdateAppEnv = gql`
   mutation UpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
     updated: updateAppEnv(appId: $appId, appEnvId: $appEnvId, input: $input) {
       ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
     }
   }
   ${AppEnvDetails}
+  ${WalletDetails}
 `
 export const AppUserAdd = gql`
   mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
@@ -1607,6 +1612,13 @@ export type UpdateAppEnvMutation = {
     webhookSecret?: string | null
     webhookVerifyEnabled?: boolean | null
     webhookVerifyUrl?: string | null
+    wallets?: Array<{
+      __typename?: 'Wallet'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+    }> | null
     app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
     cluster?: {
       __typename?: 'Cluster'

@@ -235,7 +235,21 @@ export class ApiAppDataAccessService implements OnModuleInit {
   async updateAppEnv(userId: string, appId: string, appEnvId: string, data: AppEnvUpdateInput) {
     await this.ensureAppById(userId, appId)
 
-    return this.data.appEnv.update({ where: { id: appEnvId }, data })
+    return this.data.appEnv.update({
+      where: { id: appEnvId },
+      data,
+      include: {
+        app: true,
+        cluster: true,
+        mints: {
+          include: {
+            mint: true,
+            wallet: true,
+          },
+        },
+        wallets: true,
+      },
+    })
   }
 
   private async ensureAppById(userId: string, appId: string) {

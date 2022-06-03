@@ -146,6 +146,9 @@ mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
 mutation UpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
   updated: updateAppEnv(appId: $appId, appEnvId: $appEnvId, input: $input) {
     ...AppEnvDetails
+    wallets {
+      ...WalletDetails
+    }
   }
 }
 

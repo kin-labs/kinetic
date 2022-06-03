@@ -27,6 +27,7 @@ type AppEnv {
   mints: [AppMint!]
   name: String
   updatedAt: DateTime!
+  wallets: [Wallet!]
   webhookAcceptIncoming: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String

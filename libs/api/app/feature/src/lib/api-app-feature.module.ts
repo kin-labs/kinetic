@@ -1,5 +1,6 @@
 import { ApiAppDataAccessModule } from '@mogami/api/app/data-access'
 import { Module } from '@nestjs/common'
+import { ApiAppEnvFeatureResolver } from './api-app-env-feature.resolver'
 import { ApiAppFeatureController } from './api-app-feature.controller'
 import { ApiAppFeatureResolver } from './api-app-feature.resolver'
 import { ApiAppTransactionFeatureResolver } from './api-app-transaction-feature.resolver'
@@ -7,6 +8,6 @@ import { ApiAppTransactionFeatureResolver } from './api-app-transaction-feature.
 @Module({
   controllers: [ApiAppFeatureController],
   imports: [ApiAppDataAccessModule],
-  providers: [ApiAppFeatureResolver, ApiAppTransactionFeatureResolver],
+  providers: [ApiAppEnvFeatureResolver, ApiAppFeatureResolver, ApiAppTransactionFeatureResolver],
 })
 export class ApiAppFeatureModule {}

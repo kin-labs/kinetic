@@ -1,5 +1,5 @@
 import { Cluster } from '@mogami/api/cluster/data-access'
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, ObjectType } from '@nestjs/graphql'
 import { AppMint } from './app-mint.entity'
 import { App } from './app.entity'
 
@@ -31,4 +31,6 @@ export class AppEnv {
   mints: AppMint[]
   @Field(() => App, { nullable: true })
   app: App
+  @HideField()
+  wallets
 }

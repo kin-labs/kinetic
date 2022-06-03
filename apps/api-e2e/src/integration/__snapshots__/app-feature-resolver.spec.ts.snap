@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`App (e2e) Unexpected usage CRUD Constraints should not update an app with invalid webhook urls 1`] = `
+exports[`App (e2e) Unexpected usage CRUD Constraints should not update an app env with invalid webhook urls 1`] = `
 Array [
   Object {
     "extensions": Object {
