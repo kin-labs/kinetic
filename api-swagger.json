@@ -809,6 +809,12 @@
           "airdrop": {
             "type": "boolean"
           },
+          "airdropAmount": {
+            "type": "number"
+          },
+          "airdropMax": {
+            "type": "number"
+          },
           "feePayer": {
             "type": "string"
           },
@@ -825,7 +831,16 @@
             "type": "string"
           }
         },
-        "required": ["airdrop", "feePayer", "logoUrl", "programId", "publicKey", "symbol"]
+        "required": [
+          "airdrop",
+          "airdropAmount",
+          "airdropMax",
+          "feePayer",
+          "logoUrl",
+          "programId",
+          "publicKey",
+          "symbol"
+        ]
       },
       "AppConfig": {
         "type": "object",

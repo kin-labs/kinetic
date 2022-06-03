@@ -280,6 +280,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
     const mints = env?.mints?.map(({ mint, wallet }) => ({
       airdrop: !!mint.airdropSecretKey,
+      airdropAmount: mint.airdropAmount,
+      airdropMax: mint.airdropMax,
       feePayer: wallet.publicKey,
       logoUrl: mint?.logoUrl,
       programId: TOKEN_PROGRAM_ID.toBase58(),

@@ -6,7 +6,7 @@ export const validationSchema = Joi.object({
   COOKIE_DOMAIN: Joi.string().required(),
   COOKIE_NAME: Joi.string().default('__session'),
   DATABASE_URL: Joi.string().required(),
-  DEFAULT_MINT_AIRDROP_AMOUNT: Joi.number().default(1),
+  DEFAULT_MINT_AIRDROP_AMOUNT: Joi.number().default(1000),
   DEFAULT_MINT_AIRDROP_MAX: Joi.number().default(50000),
   DEFAULT_MINT_AIRDROP_SECRET_KEY: Joi.string().optional(),
   DEFAULT_MINT_DECIMALS: Joi.number().required(),

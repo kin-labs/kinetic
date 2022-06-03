@@ -221,6 +221,18 @@ export interface AppConfigMint {
   airdrop: boolean
   /**
    *
+   * @type {number}
+   * @memberof AppConfigMint
+   */
+  airdropAmount: number
+  /**
+   *
+   * @type {number}
+   * @memberof AppConfigMint
+   */
+  airdropMax: number
+  /**
+   *
    * @type {string}
    * @memberof AppConfigMint
    */
