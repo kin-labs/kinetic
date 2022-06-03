@@ -1,4 +1,4 @@
-import { ApiAppDataAccessService, AppConfig } from '@mogami/api/app/data-access'
+import { ApiAppDataAccessService, AppConfig, AppHealth } from '@mogami/api/app/data-access'
 import { Controller, Get, Param, ParseIntPipe, Post, Req, Res } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Request, Response } from 'express'
@@ -8,11 +8,18 @@ import { Request, Response } from 'express'
 export class ApiAppFeatureController {
   constructor(private readonly service: ApiAppDataAccessService) {}
 
-  @Get('config/:environment/:index')
+  @Get(':environment/:index/config')
   @ApiOperation({ operationId: 'getAppConfig' })
   @ApiResponse({ type: AppConfig })
   app(@Param('environment') environment: string, @Param('index', ParseIntPipe) index: number) {
     return this.service.getAppConfig(environment, index)
+  }
+
+  @Get(':environment/:index/health')
+  @ApiOperation({ operationId: 'getAppHealth' })
+  @ApiResponse({ type: AppHealth })
+  appHealth(@Param('environment') environment: string, @Param('index', ParseIntPipe) index: number) {
+    return this.service.getAppHealth(environment, index)
   }
 
   @Post('/:environment/:index/webhook/:type')

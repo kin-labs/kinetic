@@ -29,17 +29,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     await this.$connect()
   }
 
-  async healthCheck() {
-    const isMogamiOk = true
-    const isSolanaOk = await this.solana.healthCheck()
-
-    return {
-      isSolanaOk,
-      isMogamiOk,
-      time: new Date(),
-    }
-  }
-
   async ensureAdminUser(userId: string) {
     const user = await this.getUserById(userId)
     if (user.role !== UserRole.Admin) {

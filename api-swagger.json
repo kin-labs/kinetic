@@ -12,25 +12,6 @@
         }
       }
     },
-    "/api/health-check": {
-      "get": {
-        "operationId": "healthCheck",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HealthCheckResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/account/info/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "ApiAccountFeatureController_getAccountInfo",
@@ -289,7 +270,7 @@
         "tags": ["airdrop"]
       }
     },
-    "/api/app/config/{environment}/{index}": {
+    "/api/app/{environment}/{index}/config": {
       "get": {
         "operationId": "getAppConfig",
         "summary": "",
@@ -318,6 +299,43 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AppConfig"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["app"]
+      }
+    },
+    "/api/app/{environment}/{index}/health": {
+      "get": {
+        "operationId": "getAppHealth",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppHealth"
                 }
               }
             }
@@ -521,21 +539,6 @@
   ],
   "components": {
     "schemas": {
-      "HealthCheckResponse": {
-        "type": "object",
-        "properties": {
-          "isSolanaOk": {
-            "type": "boolean"
-          },
-          "isMogamiOk": {
-            "type": "boolean"
-          },
-          "time": {
-            "type": "string"
-          }
-        },
-        "required": ["isSolanaOk", "isMogamiOk", "time"]
-      },
       "Buffer": {
         "type": "object",
         "properties": {}
@@ -862,6 +865,22 @@
           }
         },
         "required": ["app", "environment", "mint", "mints"]
+      },
+      "AppHealth": {
+        "type": "object",
+        "properties": {
+          "isSolanaOk": {
+            "type": "boolean"
+          },
+          "isMogamiOk": {
+            "type": "boolean"
+          },
+          "time": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["isSolanaOk", "isMogamiOk", "time"]
       },
       "ApiConfigSummary": {
         "type": "object",

@@ -14,6 +14,7 @@ import { AppUserAddInput } from './dto/app-user-add.input'
 import { AppUserRemoveInput } from './dto/app-user-remove.input'
 import { AppUserUpdateRoleInput } from './dto/app-user-update-role.input'
 import { AppConfig } from './entity/app-config.entity'
+import { AppHealth } from './entity/app-health.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
 import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
 
@@ -328,6 +329,19 @@ export class ApiAppDataAccessService implements OnModuleInit {
       },
       mint: mints[0],
       mints,
+    }
+  }
+
+  async getAppHealth(environment: string, index: number): Promise<AppHealth> {
+    const isMogamiOk = true
+    const solana = await this.data.getSolanaConnection(environment, index)
+
+    const isSolanaOk = await solana.healthCheck()
+
+    return {
+      isSolanaOk,
+      isMogamiOk,
+      time: new Date(),
     }
   }
 
