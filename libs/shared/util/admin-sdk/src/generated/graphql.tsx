@@ -452,11 +452,13 @@ export type QueryAppEnvArgs = {
 }
 
 export type QueryAppTransactionArgs = {
+  appEnvId: Scalars['String']
   appId: Scalars['String']
   appTransactionId: Scalars['String']
 }
 
 export type QueryAppTransactionsArgs = {
+  appEnvId: Scalars['String']
   appId: Scalars['String']
 }
 
@@ -1485,6 +1487,7 @@ export type AppEnvQuery = {
 
 export type AppTransactionQueryVariables = Exact<{
   appId: Scalars['String']
+  appEnvId: Scalars['String']
   appTransactionId: Scalars['String']
 }>
 
@@ -1528,6 +1531,7 @@ export type AppTransactionQuery = {
 
 export type AppTransactionsQueryVariables = Exact<{
   appId: Scalars['String']
+  appEnvId: Scalars['String']
 }>
 
 export type AppTransactionsQuery = {
@@ -2700,8 +2704,8 @@ export function useAppEnvQuery(options: Omit<Urql.UseQueryArgs<AppEnvQueryVariab
   return Urql.useQuery<AppEnvQuery>({ query: AppEnvDocument, ...options })
 }
 export const AppTransactionDocument = gql`
-  query AppTransaction($appId: String!, $appTransactionId: String!) {
-    item: appTransaction(appId: $appId, appTransactionId: $appTransactionId) {
+  query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
+    item: appTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
       ...AppTransactionDetails
     }
   }
@@ -2712,8 +2716,8 @@ export function useAppTransactionQuery(options: Omit<Urql.UseQueryArgs<AppTransa
   return Urql.useQuery<AppTransactionQuery>({ query: AppTransactionDocument, ...options })
 }
 export const AppTransactionsDocument = gql`
-  query AppTransactions($appId: String!) {
-    items: appTransactions(appId: $appId) {
+  query AppTransactions($appId: String!, $appEnvId: String!) {
+    items: appTransactions(appId: $appId, appEnvId: $appEnvId) {
       ...AppTransactionDetails
     }
   }

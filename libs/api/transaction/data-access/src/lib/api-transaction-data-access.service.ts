@@ -42,10 +42,8 @@ export class ApiTransactionDataAccessService {
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
 
     const appKey = this.data.getAppKey(input.environment, input.index)
-    const app = await this.data.getAppByIndex(input.index)
     const created = await this.data.appTransaction.create({
       data: {
-        appId: app.id,
         appEnvId: appEnv.id,
         commitment: input.commitment,
       },

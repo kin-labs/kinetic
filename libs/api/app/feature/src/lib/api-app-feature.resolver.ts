@@ -51,14 +51,15 @@ export class ApiAppFeatureResolver {
   appTransaction(
     @CtxUser() user: User,
     @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
     @Args('appTransactionId') appTransactionId: string,
   ) {
-    return this.service.appTransaction(user.id, appId, appTransactionId)
+    return this.service.appTransaction(user.id, appId, appEnvId, appTransactionId)
   }
 
   @Query(() => [AppTransaction], { nullable: true })
-  appTransactions(@CtxUser() user: User, @Args('appId') appId: string) {
-    return this.service.appTransactions(user.id, appId)
+  appTransactions(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
+    return this.service.appTransactions(user.id, appId, appEnvId)
   }
 
   @Query(() => AppWebhook, { nullable: true })

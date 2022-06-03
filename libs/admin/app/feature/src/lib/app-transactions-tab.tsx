@@ -3,8 +3,8 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { useAppTransactionsQuery } from '@mogami/shared/util/admin-sdk'
 import React, { useEffect } from 'react'
 
-export function AppTransactionsTab({ appId, envId }: { appId: string; envId: string }) {
-  const [{ data, fetching }, refresh] = useAppTransactionsQuery({ variables: { appId } })
+export function AppTransactionsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
+  const [{ data, fetching }, refresh] = useAppTransactionsQuery({ variables: { appId, appEnvId } })
 
   useEffect(() => {
     if (!fetching) {
@@ -17,5 +17,5 @@ export function AppTransactionsTab({ appId, envId }: { appId: string; envId: str
   if (fetching && !data?.items?.length) {
     return <AdminUiLoader />
   }
-  return <AdminAppUiTransactions appId={appId} envId={envId} transactions={data?.items} />
+  return <AdminAppUiTransactions appId={appId} appEnvId={appEnvId} transactions={data?.items} />
 }

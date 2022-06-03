@@ -6,10 +6,12 @@ import { EnvDetailLayout } from './env-detail-layout'
 
 export function EnvDetailWebhook() {
   const { appWebhookId } = useParams<{ appId: string; appWebhookId: string }>()
-  const { env } = useAppEnv()
+  const { appEnv } = useAppEnv()
   return (
     <EnvDetailLayout>
-      {env.app?.id && appWebhookId && <AdminAppFeatureWebhookDetail appId={env.app.id} appWebhookId={appWebhookId} />}
+      {appEnv.app?.id && appWebhookId && (
+        <AdminAppFeatureWebhookDetail appId={appEnv.app.id} appWebhookId={appWebhookId} />
+      )}
     </EnvDetailLayout>
   )
 }

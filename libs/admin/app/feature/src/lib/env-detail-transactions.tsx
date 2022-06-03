@@ -4,6 +4,10 @@ import { AppTransactionsTab } from './app-transactions-tab'
 import { EnvDetailLayout } from './env-detail-layout'
 
 export function EnvDetailTransactions() {
-  const { env } = useAppEnv()
-  return <EnvDetailLayout>{env.app?.id && <AppTransactionsTab appId={env.app.id} envId={env.id} />}</EnvDetailLayout>
+  const { appEnv } = useAppEnv()
+  return (
+    <EnvDetailLayout>
+      {appEnv.app?.id && <AppTransactionsTab appId={appEnv.app.id} appEnvId={appEnv.id} />}
+    </EnvDetailLayout>
+  )
 }

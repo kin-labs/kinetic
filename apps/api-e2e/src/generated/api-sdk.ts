@@ -450,11 +450,13 @@ export type QueryAppEnvArgs = {
 }
 
 export type QueryAppTransactionArgs = {
+  appEnvId: Scalars['String']
   appId: Scalars['String']
   appTransactionId: Scalars['String']
 }
 
 export type QueryAppTransactionsArgs = {
+  appEnvId: Scalars['String']
   appId: Scalars['String']
 }
 
@@ -954,16 +956,16 @@ export const AppEnv = gql`
   ${AppEnvDetails}
 `
 export const AppTransaction = gql`
-  query AppTransaction($appId: String!, $appTransactionId: String!) {
-    item: appTransaction(appId: $appId, appTransactionId: $appTransactionId) {
+  query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
+    item: appTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
       ...AppTransactionDetails
     }
   }
   ${AppTransactionDetails}
 `
 export const AppTransactions = gql`
-  query AppTransactions($appId: String!) {
-    items: appTransactions(appId: $appId) {
+  query AppTransactions($appId: String!, $appEnvId: String!) {
+    items: appTransactions(appId: $appId, appEnvId: $appEnvId) {
       ...AppTransactionDetails
     }
   }
@@ -2117,6 +2119,7 @@ export type AppEnvQuery = {
 
 export type AppTransactionQueryVariables = Exact<{
   appId: Scalars['String']
+  appEnvId: Scalars['String']
   appTransactionId: Scalars['String']
 }>
 
@@ -2160,6 +2163,7 @@ export type AppTransactionQuery = {
 
 export type AppTransactionsQueryVariables = Exact<{
   appId: Scalars['String']
+  appEnvId: Scalars['String']
 }>
 
 export type AppTransactionsQuery = {
