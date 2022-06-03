@@ -194,6 +194,7 @@ export type AuthToken = {
 export type Cluster = {
   __typename?: 'Cluster'
   createdAt?: Maybe<Scalars['DateTime']>
+  enableStats?: Maybe<Scalars['Boolean']>
   endpoint?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['String']>
   mints?: Maybe<Array<Mint>>
@@ -271,6 +272,7 @@ export enum ClusterType {
 }
 
 export type ClusterUpdateInput = {
+  enableStats?: InputMaybe<Scalars['Boolean']>
   endpoint?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
   status?: InputMaybe<ClusterStatus>
@@ -600,6 +602,7 @@ export type AppEnvDetailsFragment = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -782,6 +785,7 @@ export type CreateAppMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        enableStats?: boolean | null
         endpoint?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -905,6 +909,7 @@ export type UpdateAppMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        enableStats?: boolean | null
         endpoint?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -999,6 +1004,7 @@ export type UpdateAppEnvMutation = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      enableStats?: boolean | null
       endpoint?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -1195,6 +1201,7 @@ export type AppEnvWalletAddMutation = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      enableStats?: boolean | null
       endpoint?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -1262,6 +1269,7 @@ export type AppEnvWalletRemoveMutation = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      enableStats?: boolean | null
       endpoint?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -1341,6 +1349,7 @@ export type AppQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        enableStats?: boolean | null
         endpoint?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -1434,6 +1443,7 @@ export type AppEnvQuery = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      enableStats?: boolean | null
       endpoint?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -1635,6 +1645,7 @@ export type AppsQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        enableStats?: boolean | null
         endpoint?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -1735,6 +1746,7 @@ export type ClusterDetailsFragment = {
   id?: string | null
   createdAt?: any | null
   updatedAt?: any | null
+  enableStats?: boolean | null
   endpoint?: string | null
   name?: string | null
   status?: ClusterStatus | null
@@ -1826,6 +1838,7 @@ export type AddClusterMintMutation = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -1857,6 +1870,7 @@ export type CreateClusterMutation = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -1875,6 +1889,7 @@ export type DeleteClusterMutation = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -1894,6 +1909,7 @@ export type UpdateClusterMutation = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -1912,6 +1928,7 @@ export type ClusterQuery = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -1977,6 +1994,7 @@ export type ClustersQuery = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -2287,6 +2305,7 @@ export const ClusterDetailsFragmentDoc = gql`
     id
     createdAt
     updatedAt
+    enableStats
     endpoint
     name
     status

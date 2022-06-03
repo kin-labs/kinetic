@@ -11,7 +11,7 @@ export class ApiClusterStatDataAccessService {
   @Cron('55 * * * * *')
   async handleCron() {
     const activeClusters = await this.data.getActiveClusters()
-    for (const { id, endpoint } of activeClusters) {
+    for (const { id, endpoint } of activeClusters.filter((item) => item.enableStats)) {
       if (!this.solana.has(id)) {
         this.solana.set(id, new Solana(endpoint, { logger: new Logger(`@mogami/solana:cluster-${id}`) }))
       }

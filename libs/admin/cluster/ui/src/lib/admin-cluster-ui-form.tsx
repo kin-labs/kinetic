@@ -1,8 +1,8 @@
-// eslint-disable @typescript-eslint/no-explicit-any
 import { Box, ButtonGroup, Stack } from '@chakra-ui/react'
 import { Cluster, ClusterStatus, ClusterUpdateInput } from '@mogami/shared/util/admin-sdk'
 import { Formik } from 'formik'
-import { InputControl, SelectControl, SubmitButton } from 'formik-chakra-ui'
+import { CheckboxSingleControl, InputControl, SelectControl, SubmitButton } from 'formik-chakra-ui'
+import React from 'react'
 
 import * as Yup from 'yup'
 
@@ -12,8 +12,9 @@ export interface AdminClusterUiProps {
 }
 
 const validationSchema = Yup.object({
-  name: Yup.string(),
+  enableStats: Yup.boolean(),
   endpoint: Yup.string(),
+  name: Yup.string(),
   status: Yup.string(),
 })
 
@@ -22,12 +23,14 @@ export function AdminClusterUiForm({ cluster, onSubmit }: AdminClusterUiProps) {
     <Formik
       initialValues={{
         name: cluster?.name,
+        enableStats: cluster?.enableStats,
         endpoint: cluster?.endpoint,
         type: cluster?.type,
         status: cluster?.status,
       }}
       onSubmit={(values) =>
         onSubmit({
+          enableStats: values?.enableStats,
           name: values.name,
           endpoint: values?.endpoint,
           status: values?.status,
@@ -50,6 +53,7 @@ export function AdminClusterUiForm({ cluster, onSubmit }: AdminClusterUiProps) {
                     </option>
                   ))}
                 </SelectControl>
+                <CheckboxSingleControl name="enableStats" label="Enable cluster stats" />
               </Stack>
             </Box>
             <ButtonGroup>

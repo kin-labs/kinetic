@@ -2,6 +2,7 @@ fragment ClusterDetails on Cluster {
   id
   createdAt
   updatedAt
+  enableStats
   endpoint
   name
   status

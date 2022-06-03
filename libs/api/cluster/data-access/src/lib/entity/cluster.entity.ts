@@ -12,9 +12,11 @@ export class Cluster {
   @Field({ nullable: true })
   updatedAt?: Date
   @Field({ nullable: true })
-  name?: string
+  enableStats?: boolean
   @Field({ nullable: true })
   endpoint?: string
+  @Field({ nullable: true })
+  name?: string
   @Field(() => ClusterStatus, { nullable: true })
   status?: ClusterStatus
   @Field(() => ClusterType, { nullable: true })

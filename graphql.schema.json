@@ -1567,6 +1567,18 @@
             "deprecationReason": null
           },
           {
+            "name": "enableStats",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "endpoint",
             "description": null,
             "args": [],
@@ -2275,6 +2287,18 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "enableStats",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "endpoint",
             "description": null,
