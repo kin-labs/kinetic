@@ -11,6 +11,7 @@ import { ApiWalletFeatureModule } from '@mogami/api/wallet/feature'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
+import { PrometheusModule } from '@willsoto/nestjs-prometheus'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
@@ -44,6 +45,7 @@ import { serveStaticFactory } from './serve-static.factory'
     ApiTransactionFeatureModule,
     ApiUserFeatureModule,
     ApiWalletFeatureModule,
+    PrometheusModule.register(),
     ScheduleModule.forRoot(),
   ],
 })

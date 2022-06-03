@@ -17,22 +17,6 @@
         "operationId": "ApiAccountFeatureController_getAccountInfo",
         "parameters": [
           {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "index",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
             "name": "accountId",
             "required": true,
             "in": "path",
@@ -79,27 +63,11 @@
         "tags": ["account"]
       }
     },
-    "/api/account/balance/{environment}/{index}/{accountId}": {
+    "/api/account/balance/{accountId}": {
       "get": {
         "operationId": "getBalance",
         "summary": "",
         "parameters": [
-          {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "index",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
           {
             "name": "accountId",
             "required": true,
@@ -124,27 +92,11 @@
         "tags": ["account"]
       }
     },
-    "/api/account/history/{environment}/{index}/{accountId}": {
+    "/api/account/history/{accountId}": {
       "get": {
         "operationId": "getHistory",
         "summary": "",
         "parameters": [
-          {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "index",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
           {
             "name": "accountId",
             "required": true,
@@ -172,27 +124,11 @@
         "tags": ["account"]
       }
     },
-    "/api/account/token-accounts/{environment}/{index}/{accountId}": {
+    "/api/account/token-accounts/{accountId}": {
       "get": {
         "operationId": "tokenAccounts",
         "summary": "",
         "parameters": [
-          {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "index",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
           {
             "name": "accountId",
             "required": true,
@@ -276,19 +212,11 @@
         "summary": "",
         "parameters": [
           {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "index",
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "string"
             }
           }
         ],
@@ -349,14 +277,6 @@
         "operationId": "ApiAppFeatureController_appWebhook",
         "parameters": [
           {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "index",
             "required": true,
             "in": "path",
@@ -401,28 +321,11 @@
         "tags": ["config"]
       }
     },
-    "/api/transaction/latest-blockhash/{environment}/{index}": {
+    "/api/transaction/latest-blockhash": {
       "get": {
         "operationId": "getLatestBlockhash",
         "summary": "",
-        "parameters": [
-          {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "index",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "default": {
             "description": "",
@@ -438,27 +341,11 @@
         "tags": ["transaction"]
       }
     },
-    "/api/transaction/minimum-rent-exemption-balance/{environment}/{index}": {
+    "/api/transaction/minimum-rent-exemption-balance": {
       "get": {
         "operationId": "getMinimumRentExemptionBalance",
         "summary": "",
         "parameters": [
-          {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "index",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
           {
             "name": "dataLength",
             "in": "query",
@@ -512,6 +399,17 @@
         },
         "tags": ["transaction"]
       }
+    },
+    "/api/metrics": {
+      "get": {
+        "operationId": "PrometheusController_index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "info": {
@@ -546,20 +444,14 @@
       "CreateAccountRequest": {
         "type": "object",
         "properties": {
-          "environment": {
-            "type": "string"
-          },
           "index": {
             "type": "number"
-          },
-          "mint": {
-            "type": "string"
           },
           "tx": {
             "$ref": "#/components/schemas/Buffer"
           }
         },
-        "required": ["environment", "index", "mint", "tx"]
+        "required": ["index", "tx"]
       },
       "AppTransactionError": {
         "type": "object",
@@ -787,33 +679,6 @@
         },
         "required": ["index", "name"]
       },
-      "AppConfigCluster": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "object"
-          }
-        },
-        "required": ["id", "name", "type"]
-      },
-      "AppConfigEnvironment": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "cluster": {
-            "$ref": "#/components/schemas/AppConfigCluster"
-          }
-        },
-        "required": ["name", "cluster"]
-      },
       "AppConfigMint": {
         "type": "object",
         "properties": {
@@ -829,16 +694,10 @@
           "feePayer": {
             "type": "string"
           },
-          "logoUrl": {
-            "type": "string"
-          },
           "programId": {
             "type": "string"
           },
           "publicKey": {
-            "type": "string"
-          },
-          "symbol": {
             "type": "string"
           }
         },
@@ -859,20 +718,11 @@
           "app": {
             "$ref": "#/components/schemas/AppConfigApp"
           },
-          "environment": {
-            "$ref": "#/components/schemas/AppConfigEnvironment"
-          },
           "mint": {
             "$ref": "#/components/schemas/AppConfigMint"
-          },
-          "mints": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AppConfigMint"
-            }
           }
         },
-        "required": ["app", "environment", "mint", "mints"]
+        "required": ["app", "mint"]
       },
       "AppHealth": {
         "type": "object",
@@ -930,14 +780,8 @@
             "type": "string",
             "enum": ["Confirmed", "Finalized", "Processed"]
           },
-          "environment": {
-            "type": "string"
-          },
           "index": {
             "type": "number"
-          },
-          "mint": {
-            "type": "string"
           },
           "lastValidBlockHeight": {
             "type": "number"
