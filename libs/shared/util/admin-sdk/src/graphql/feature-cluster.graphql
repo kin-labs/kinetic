@@ -8,6 +8,16 @@ fragment ClusterDetails on Cluster {
   type
 }
 
+fragment ClusterStatDetails on ClusterStat {
+  id
+  createdAt
+  updatedAt
+  numSlots
+  numTransactions
+  samplePeriodSecs
+  slot
+}
+
 fragment ClusterTokenDetails on ClusterToken {
   address
   name
@@ -99,5 +109,11 @@ query Clusters {
     mints {
       ...MintDetails
     }
+  }
+}
+
+query ClusterStats($clusterId: String!) {
+  items: clusterStats(clusterId: $clusterId) {
+    ...ClusterStatDetails
   }
 }

@@ -426,7 +426,6 @@ export type Query = {
   appWebhooks?: Maybe<Array<AppWebhook>>
   apps?: Maybe<Array<App>>
   cluster?: Maybe<Cluster>
-  clusterStat?: Maybe<ClusterStat>
   clusterStats?: Maybe<Array<ClusterStat>>
   clusterTokens?: Maybe<Array<ClusterToken>>
   clusters?: Maybe<Array<Cluster>>
@@ -475,8 +474,8 @@ export type QueryClusterArgs = {
   clusterId: Scalars['String']
 }
 
-export type QueryClusterStatArgs = {
-  clusterStatId: Scalars['String']
+export type QueryClusterStatsArgs = {
+  clusterId: Scalars['String']
 }
 
 export type QueryClusterTokensArgs = {
@@ -748,6 +747,17 @@ export const AuthTokenDetails = gql`
     }
   }
   ${UserDetails}
+`
+export const ClusterStatDetails = gql`
+  fragment ClusterStatDetails on ClusterStat {
+    id
+    createdAt
+    updatedAt
+    numSlots
+    numTransactions
+    samplePeriodSecs
+    slot
+  }
 `
 export const ClusterTokenExtensionsDetails = gql`
   fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
@@ -1089,6 +1099,14 @@ export const Clusters = gql`
   }
   ${ClusterDetails}
   ${MintDetails}
+`
+export const ClusterStats = gql`
+  query ClusterStats($clusterId: String!) {
+    items: clusterStats(clusterId: $clusterId) {
+      ...ClusterStatDetails
+    }
+  }
+  ${ClusterStatDetails}
 `
 export const Uptime = gql`
   query Uptime {
@@ -2367,6 +2385,17 @@ export type ClusterDetailsFragment = {
   type?: ClusterType | null
 }
 
+export type ClusterStatDetailsFragment = {
+  __typename?: 'ClusterStat'
+  id: string
+  createdAt: any
+  updatedAt: any
+  numSlots?: number | null
+  numTransactions: number
+  samplePeriodSecs: number
+  slot: number
+}
+
 export type ClusterTokenDetailsFragment = {
   __typename?: 'ClusterToken'
   address?: string | null
@@ -2609,6 +2638,24 @@ export type ClustersQuery = {
       symbol?: string | null
       type?: MintType | null
     }> | null
+  }> | null
+}
+
+export type ClusterStatsQueryVariables = Exact<{
+  clusterId: Scalars['String']
+}>
+
+export type ClusterStatsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'ClusterStat'
+    id: string
+    createdAt: any
+    updatedAt: any
+    numSlots?: number | null
+    numTransactions: number
+    samplePeriodSecs: number
+    slot: number
   }> | null
 }
 

@@ -3729,11 +3729,11 @@
             "deprecationReason": null
           },
           {
-            "name": "clusterStat",
+            "name": "clusterStats",
             "description": null,
             "args": [
               {
-                "name": "clusterStatId",
+                "name": "clusterId",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -3749,18 +3749,6 @@
                 "deprecationReason": null
               }
             ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "ClusterStat",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "clusterStats",
-            "description": null,
-            "args": [],
             "type": {
               "kind": "LIST",
               "name": null,

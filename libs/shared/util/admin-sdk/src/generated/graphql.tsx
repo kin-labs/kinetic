@@ -428,7 +428,6 @@ export type Query = {
   appWebhooks?: Maybe<Array<AppWebhook>>
   apps?: Maybe<Array<App>>
   cluster?: Maybe<Cluster>
-  clusterStat?: Maybe<ClusterStat>
   clusterStats?: Maybe<Array<ClusterStat>>
   clusterTokens?: Maybe<Array<ClusterToken>>
   clusters?: Maybe<Array<Cluster>>
@@ -477,8 +476,8 @@ export type QueryClusterArgs = {
   clusterId: Scalars['String']
 }
 
-export type QueryClusterStatArgs = {
-  clusterStatId: Scalars['String']
+export type QueryClusterStatsArgs = {
+  clusterId: Scalars['String']
 }
 
 export type QueryClusterTokensArgs = {
@@ -1742,6 +1741,17 @@ export type ClusterDetailsFragment = {
   type?: ClusterType | null
 }
 
+export type ClusterStatDetailsFragment = {
+  __typename?: 'ClusterStat'
+  id: string
+  createdAt: any
+  updatedAt: any
+  numSlots?: number | null
+  numTransactions: number
+  samplePeriodSecs: number
+  slot: number
+}
+
 export type ClusterTokenDetailsFragment = {
   __typename?: 'ClusterToken'
   address?: string | null
@@ -1984,6 +1994,24 @@ export type ClustersQuery = {
       symbol?: string | null
       type?: MintType | null
     }> | null
+  }> | null
+}
+
+export type ClusterStatsQueryVariables = Exact<{
+  clusterId: Scalars['String']
+}>
+
+export type ClusterStatsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'ClusterStat'
+    id: string
+    createdAt: any
+    updatedAt: any
+    numSlots?: number | null
+    numTransactions: number
+    samplePeriodSecs: number
+    slot: number
   }> | null
 }
 
@@ -2431,6 +2459,17 @@ export const AuthTokenDetailsFragmentDoc = gql`
   }
   ${UserDetailsFragmentDoc}
 `
+export const ClusterStatDetailsFragmentDoc = gql`
+  fragment ClusterStatDetails on ClusterStat {
+    id
+    createdAt
+    updatedAt
+    numSlots
+    numTransactions
+    samplePeriodSecs
+    slot
+  }
+`
 export const ClusterTokenExtensionsDetailsFragmentDoc = gql`
   fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
     address
@@ -2875,6 +2914,18 @@ export const ClustersDocument = gql`
 
 export function useClustersQuery(options?: Omit<Urql.UseQueryArgs<ClustersQueryVariables>, 'query'>) {
   return Urql.useQuery<ClustersQuery>({ query: ClustersDocument, ...options })
+}
+export const ClusterStatsDocument = gql`
+  query ClusterStats($clusterId: String!) {
+    items: clusterStats(clusterId: $clusterId) {
+      ...ClusterStatDetails
+    }
+  }
+  ${ClusterStatDetailsFragmentDoc}
+`
+
+export function useClusterStatsQuery(options: Omit<Urql.UseQueryArgs<ClusterStatsQueryVariables>, 'query'>) {
+  return Urql.useQuery<ClusterStatsQuery>({ query: ClusterStatsDocument, ...options })
 }
 export const UptimeDocument = gql`
   query Uptime {

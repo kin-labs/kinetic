@@ -8,13 +8,8 @@ import { Args, Query, Resolver } from '@nestjs/graphql'
 export class ApiClusterStatFeatureResolver {
   constructor(private readonly service: ApiClusterStatDataAccessService) {}
 
-  @Query(() => ClusterStat, { nullable: true })
-  clusterStat(@Args('clusterStatId') clusterStatId: string) {
-    return this.service.clusterStat(clusterStatId)
-  }
-
   @Query(() => [ClusterStat], { nullable: true })
-  clusterStats() {
-    return this.service.clusterStats()
+  clusterStats(@Args('clusterId') clusterId: string) {
+    return this.service.clusterStats(clusterId)
   }
 }

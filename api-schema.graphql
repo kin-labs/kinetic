@@ -320,8 +320,7 @@ type Query {
   appWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
   apps: [App!]
   cluster(clusterId: String!): Cluster
-  clusterStat(clusterStatId: String!): ClusterStat
-  clusterStats: [ClusterStat!]
+  clusterStats(clusterId: String!): [ClusterStat!]
   clusterTokens(input: ClusterTokenInput!): [ClusterToken!]
   clusters: [Cluster!]
   me: User
