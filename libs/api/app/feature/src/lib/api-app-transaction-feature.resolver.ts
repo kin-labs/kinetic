@@ -1,9 +1,11 @@
 import { ApiAppDataAccessService, AppTransaction } from '@mogami/api/app/data-access'
-import { CtxUser } from '@mogami/api/auth/data-access'
+import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
+import { UseGuards } from '@nestjs/common'
 import { Args, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => AppTransaction)
+@UseGuards(ApiAuthGraphqlGuard)
 export class ApiAppTransactionFeatureResolver {
   constructor(private readonly service: ApiAppDataAccessService) {}
 
