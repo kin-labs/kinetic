@@ -15,7 +15,7 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost)
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter.getInstance()))
   app.enableCors({ origin: config.corsOrigins })
-  app.use(redirectSSL.create({ enabled: config.environment === 'production' }))
+  app.use(redirectSSL.create({ enabled: config.isProduction }))
   config.configureSwagger(app)
   app.use(cookieParser())
   await app.listen(config.port)
@@ -25,7 +25,7 @@ async function bootstrap() {
     }.`,
   )
   Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
-  if (config.environment === 'development') {
+  if (config.isDevelopment) {
     exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })
   }
 }

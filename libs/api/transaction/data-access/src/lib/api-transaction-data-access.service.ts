@@ -35,6 +35,7 @@ export class ApiTransactionDataAccessService {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
 
+    const appKey = this.data.getAppKey(input.environment, input.index)
     const app = await this.data.getAppByIndex(input.index)
     const created = await this.data.appTransaction.create({
       data: {
@@ -46,7 +47,7 @@ export class ApiTransactionDataAccessService {
     })
     const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
     if (!mint) {
-      throw new Error(`Can't find mint ${input.mint} in environment ${input.environment} for index ${input.index}`)
+      throw new Error(`${appKey}: Can't find mint ${input.mint}`)
     }
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
 
@@ -87,17 +88,17 @@ export class ApiTransactionDataAccessService {
       appTransaction.signature = await solana.sendRawTransaction(transaction)
       appTransaction.status = AppTransactionStatus.Committed
       appTransaction.solanaCommitted = new Date()
-      this.logger.verbose(`makeTransfer ${appTransaction.status} ${appTransaction.signature}`)
+      this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${appTransaction.signature}`)
     } catch (error) {
       appTransaction.errors = { create: parseError(error) }
       appTransaction.status = AppTransactionStatus.Failed
-      this.logger.verbose(`makeTransfer ${appTransaction.status} ${error}`)
+      this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${error}`)
       appTransaction.solanaCommitted = new Date()
     }
 
     // Confirm transaction
     if (appTransaction.signature) {
-      this.logger.verbose(`makeTransfer confirming ${input.commitment} ${appTransaction.signature}`)
+      this.logger.verbose(`${appKey}: makeTransfer confirming ${input.commitment} ${appTransaction.signature}...`)
       // Start listening for commitment
       await solana.confirmTransaction(
         {
@@ -112,7 +113,9 @@ export class ApiTransactionDataAccessService {
       await this.updateAppTransaction(created.id, {
         ...appTransaction,
       })
-      this.logger.verbose(`makeTransfer ${appTransaction.status} ${input.commitment} ${appTransaction.signature}`)
+      this.logger.verbose(
+        `${appKey}: makeTransfer ${appTransaction.status} ${input.commitment} ${appTransaction.signature}`,
+      )
 
       this.confirmSignature(input.environment, input.index, created.id, {
         blockhash,
@@ -178,10 +181,11 @@ export class ApiTransactionDataAccessService {
       signature: string
     },
   ) {
+    const appKey = this.data.getAppKey(environment, index)
     const solana = await this.data.getSolanaConnection(environment, index)
-    this.logger.verbose(`confirmSignature: confirming ${signature}`)
+    this.logger.verbose(`${appKey}: confirmSignature: confirming ${signature}`)
 
-    const confirmed = await solana.confirmTransaction(
+    const finalized = await solana.confirmTransaction(
       {
         blockhash,
         lastValidBlockHeight,
@@ -189,8 +193,8 @@ export class ApiTransactionDataAccessService {
       },
       Commitment.Finalized,
     )
-    if (confirmed) {
-      this.logger.verbose(`confirmSignature: ${Commitment.Finalized} ${signature}`)
+    if (finalized) {
+      this.logger.verbose(`${appKey}: confirmSignature: ${Commitment.Finalized} ${signature}`)
       const solanaTransaction = await solana.connection.getParsedTransaction(signature, 'finalized')
       await this.data.appTransaction.update({
         where: { id: appTransactionId },
@@ -200,7 +204,7 @@ export class ApiTransactionDataAccessService {
           status: AppTransactionStatus.Finalized,
         },
       })
-      this.logger.verbose(`confirmSignature: finished ${signature}`)
+      this.logger.verbose(`${appKey}: confirmSignature: finished ${signature}`)
     }
   }
 }

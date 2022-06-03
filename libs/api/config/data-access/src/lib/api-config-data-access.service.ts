@@ -1,38 +1,32 @@
-import { AirdropConfig } from '@mogami/airdrop'
 import { createMintKin } from '@mogami/api/cluster/util'
-import { INestApplication, Injectable, Logger } from '@nestjs/common'
+import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ClusterStatus, ClusterType, Prisma } from '@prisma/client'
-import { Connection, Keypair } from '@solana/web3.js'
 import * as fs from 'fs'
 import { ProvisionedApp } from './entities/provisioned-app.entity'
 import { getProvisionedApps } from './helpers/get-provisioned-apps'
 
 @Injectable()
 export class ApiConfigDataAccessService {
-  private readonly logger = new Logger(ApiConfigDataAccessService.name)
   readonly clusters: Prisma.ClusterCreateInput[] = [
     {
       id: 'solana-devnet',
       name: 'Solana Devnet',
-      endpoint: process.env['SOLANA_RPC_ENDPOINT'] || 'devnet',
+      endpoint: this.solanaDevnetRpcEndpoint,
       type: ClusterType.SolanaDevnet,
     },
     {
       id: 'solana-mainnet',
       name: 'Solana Mainnet',
-      endpoint: 'mainnet',
+      endpoint: this.solanaMainnetRpcEndpoint,
       type: ClusterType.SolanaMainnet,
       status: ClusterStatus.Inactive,
     },
   ]
   readonly mints: Prisma.MintCreateInput[] = [
-    createMintKin(
-      'solana-devnet',
-      process.env['MOGAMI_MINT_PUBLIC_KEY'] || 'KinDesK3dYWo3R2wDk6Ucaf31tvQCCSYyL8Fuqp33GX',
-    ),
-    createMintKin('solana-mainnet', 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6'),
+    createMintKin('solana-devnet', this.defaultMintPublicKey, this.defaultMintDecimals),
+    createMintKin('solana-mainnet', 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6', 5),
   ]
   readonly provisionedApps: ProvisionedApp[] = getProvisionedApps(Object.keys(process.env))
 
@@ -50,49 +44,32 @@ export class ApiConfigDataAccessService {
     return this.config.get('cors.origin')
   }
 
+  get defaultMintAirdropAmount(): number {
+    return this.config.get('defaultMintAirdropAmount')
+  }
+
+  get defaultMintAirdropMax(): number {
+    return this.config.get('defaultMintAirdropMax')
+  }
+
+  get defaultMintDecimals(): number {
+    return this.config.get('defaultMintDecimals')
+  }
+
+  get defaultMintPublicKey(): string {
+    return this.config.get('defaultMintPublicKey')
+  }
+
   get environment() {
     return this.config.get('environment')
   }
 
-  get jwtSecret(): string {
-    return this.config.get('jwt.secret')
+  get isDevelopment(): boolean {
+    return this.environment === 'development'
   }
 
-  mogamiAirdropConfig(connection: Connection): AirdropConfig | null {
-    return this.mogamiAirdropKeypair
-      ? {
-          airdropDefault: this.mogamiAirdropDefault,
-          airdropMax: this.mogamiAirdropMax,
-          connection,
-          decimals: this.mogamiMintDecimals,
-          feePayer: this.mogamiAirdropKeypair,
-          mint: this.mogamiMintPublicKey,
-        }
-      : null
-  }
-
-  get mogamiAirdropDefault(): number {
-    return this.config.get('mogamiAirdropDefault')
-  }
-
-  get mogamiAirdropMax(): number {
-    return this.config.get('mogamiAirdropMax')
-  }
-
-  get mogamiAirdropKeypair(): Keypair {
-    return this.config.get('mogamiAirdropKeypair')
-  }
-
-  get mogamiMainnet() {
-    return this.config.get('mogamiMainnet')
-  }
-
-  get mogamiMintDecimals() {
-    return this.config.get('mogamiMintDecimals')
-  }
-
-  get mogamiMintPublicKey() {
-    return this.config.get('mogamiMintPublicKey')
+  get isProduction(): boolean {
+    return this.environment === 'production'
   }
 
   get port() {
@@ -103,6 +80,14 @@ export class ApiConfigDataAccessService {
     return 'api'
   }
 
+  get solanaDevnetRpcEndpoint() {
+    return this.config.get('solanaDevnetRpcEndpoint')
+  }
+
+  get solanaMainnetRpcEndpoint() {
+    return this.config.get('solanaMainnetRpcEndpoint')
+  }
+
   get solanaRpcEndpoint() {
     return this.config.get('solanaRpcEndpoint')
   }
@@ -111,7 +96,6 @@ export class ApiConfigDataAccessService {
     return {
       environment: this.environment,
       port: this.port,
-      solanaRpcEndpoint: this.solanaRpcEndpoint,
     }
   }
 
@@ -126,7 +110,7 @@ export class ApiConfigDataAccessService {
       .addServer('http://localhost:3000')
       .build()
     const document = SwaggerModule.createDocument(app, config)
-    if (this.environment === 'development') {
+    if (this.isDevelopment) {
       fs.writeFileSync('./api-swagger.json', JSON.stringify(document, null, 2))
     }
     SwaggerModule.setup(this.prefix, app, document)

@@ -97,12 +97,13 @@ export class ApiWalletDataAccessService {
   }
 
   private async updateWalletBalance(environment: string, index: number, wallet: Wallet) {
+    const appKey = this.data.getAppKey(environment, index)
     const solana = await this.data.getSolanaConnection(environment, index)
     const current = wallet.balances?.length ? wallet.balances[0].balance : 0
     const balance = await solana.getBalanceSol(wallet.publicKey)
     if (BigInt(balance) !== current) {
       await this.storeWalletBalance(wallet.id, balance)
-      this.logger.verbose(`Updated Wallet Balance: ${wallet.publicKey} ${current} => ${balance}`)
+      this.logger.verbose(`${appKey}: Updated Wallet Balance: ${wallet.publicKey} ${current} => ${balance}`)
     }
   }
 }

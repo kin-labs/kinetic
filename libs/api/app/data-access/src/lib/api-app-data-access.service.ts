@@ -79,7 +79,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
             // Create the default mint and connect it to the wallet
             mints: {
               create: cluster.mints
-                .filter((mint) => mint.address === process.env['MOGAMI_MINT_PUBLIC_KEY'])
+                .filter((mint) => mint.address === process.env['DEFAULT_MINT_PUBLIC_KEY'])
                 .map((mint) => ({
                   mint: { connect: { id: mint.id } },
                   wallet: wallets,
@@ -275,9 +275,13 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   async getAppConfig(environment: string, index: number): Promise<AppConfig> {
+    const appKey = this.data.getAppKey(environment, index)
     const env = await this.data.getAppByEnvironmentIndex(environment, index)
 
     const mints = env?.mints?.map(({ mint, wallet }) => ({
+      airdrop: !!mint.airdropSecretKey,
+      airdropAmount: mint.airdropAmount,
+      airdropMax: mint.airdropMax,
       feePayer: wallet.publicKey,
       logoUrl: mint?.logoUrl,
       programId: TOKEN_PROGRAM_ID.toBase58(),
@@ -286,7 +290,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
     }))
 
     if (!mints.length) {
-      throw new Error(`No mints found for environment ${environment}, index ${index}`)
+      throw new Error(`${appKey}: no mints found.`)
     }
 
     return {

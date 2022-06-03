@@ -23,7 +23,7 @@ describe('AppFeatureController (e2e)', () => {
         expect(res.body.app.name).toEqual('App 1')
         expect(res.body.mint.feePayer).toEqual(feePayer.publicKey.toBase58())
         expect(res.body.mint.programId).toEqual(TOKEN_PROGRAM_ID?.toBase58())
-        expect(res.body.mint.publicKey).toEqual(process.env.MOGAMI_MINT_PUBLIC_KEY)
+        expect(res.body.mint.publicKey).toEqual(process.env.DEFAULT_MINT_PUBLIC_KEY)
       })
   })
 
