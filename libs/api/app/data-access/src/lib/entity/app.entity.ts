@@ -1,4 +1,4 @@
-import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
+import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { AppEnv } from './app-env.entity'
 import { AppUser } from './app-user.entity'
 
@@ -18,6 +18,4 @@ export class App {
   name: string
   @Field(() => [AppUser], { nullable: true })
   users?: AppUser[]
-  @HideField()
-  wallets?
 }

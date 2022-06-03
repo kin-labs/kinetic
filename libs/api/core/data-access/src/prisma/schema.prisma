@@ -35,14 +35,13 @@ model Airdrop {
 }
 
 model App {
-  id          String           @id @default(cuid())
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  envs        AppEnv[]
-  index       Int              @unique
-  name        String
-  users       AppUser[]
-  wallets     Wallet[]
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  envs      AppEnv[]
+  index     Int       @unique
+  name      String
+  users     AppUser[]
 }
 
 model AppEnv {
@@ -63,6 +62,7 @@ model AppEnv {
   appId                 String
   cluster               Cluster          @relation(fields: [clusterId], references: [id])
   clusterId             String
+  walletBalances        WalletBalance[]
   wallets               Wallet[]
 
   @@unique([appId, clusterId])
@@ -275,9 +275,7 @@ model Wallet {
   publicKey String
   secretKey String
   appMints  AppMint[]
-  apps      App[]           @relation()
-  appEnv    AppEnv?         @relation(fields: [appEnvId], references: [id])
-  appEnvId  String?
+  appEnvs   AppEnv[]        @relation()
   balances  WalletBalance[]
 }
 
@@ -286,6 +284,9 @@ model WalletBalance {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   balance   BigInt
+  change    BigInt
+  appEnv    AppEnv?  @relation(fields: [appEnvId], references: [id])
+  appEnvId  String?
   wallet    Wallet?  @relation(fields: [walletId], references: [id])
   walletId  String?
 }

@@ -14,6 +14,7 @@ fragment WalletBalanceDetails on WalletBalance {
   createdAt
   updatedAt
   balance
+  change
 }
 
 mutation GenerateWallet($index: Int!) {
@@ -34,20 +35,20 @@ query Wallet($walletId: String!) {
   }
 }
 
-query WalletAirdrop($walletId: String!, $amount: Float!) {
-  response: walletAirdrop(walletId: $walletId, amount: $amount) {
+query WalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!) {
+  response: walletAirdrop(appEnvId: $appEnvId, walletId: $walletId, amount: $amount) {
     ...WalletAirdropResponseDetails
   }
 }
 
-query WalletBalance($walletId: String!) {
-  balance: walletBalance(walletId: $walletId) {
+query WalletBalance($appEnvId: String!, $walletId: String!) {
+  balance: walletBalance(appEnvId: $appEnvId, walletId: $walletId) {
     ...WalletBalanceDetails
   }
 }
 
-query WalletBalances($walletId: String!) {
-  balances: walletBalances(walletId: $walletId) {
+query WalletBalances($appEnvId: String!, $walletId: String!) {
+  balances: walletBalances(appEnvId: $appEnvId, walletId: $walletId) {
     ...WalletBalanceDetails
   }
 }

@@ -2,6 +2,7 @@ import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
+import { ClusterStatus } from '@prisma/client'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
 import { WalletBalance } from './entity/wallet-balance.entity'
@@ -14,15 +15,22 @@ export class ApiWalletDataAccessService {
 
   @Cron('25 * * * * *')
   async checkBalance() {
-    const wallets = await this.data.wallet.findMany({
+    const appEnvs = await this.data.appEnv.findMany({
+      where: { cluster: { status: ClusterStatus.Active } },
       include: {
-        appEnv: { include: { cluster: true, app: true } },
-        balances: { orderBy: { createdAt: 'desc' }, take: 1 },
+        app: true,
+        cluster: true,
+        wallets: {
+          include: {
+            balances: { orderBy: { createdAt: 'desc' }, take: 1 },
+          },
+        },
       },
     })
-    const filtered = wallets.filter((wallet) => wallet.appEnv?.app?.index)
-    for (const wallet of filtered) {
-      await this.updateWalletBalance(wallet.appEnv?.name, wallet.appEnv?.app.index, wallet)
+    for (const appEnv of appEnvs) {
+      for (const wallet of appEnv.wallets) {
+        await this.updateWalletBalance(appEnv.id, appEnv?.name, appEnv?.app.index, wallet)
+      }
     }
   }
 
@@ -43,27 +51,37 @@ export class ApiWalletDataAccessService {
     return this.data.wallet.findUnique({ where: { id: walletId } })
   }
 
-  async walletAirdrop(userId: string, walletId: string, amount: number): Promise<WalletAirdropResponse> {
+  async walletAirdrop(
+    userId: string,
+    appEnvId: string,
+    walletId: string,
+    amount: number,
+  ): Promise<WalletAirdropResponse> {
     const wallet = await this.ensureWalletById(userId, walletId)
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const solana = await this.data.getSolanaConnection(appEnv.name, appEnv.app.index)
     const floatAmount = parseFloat(amount?.toString())
-    const signature = await this.data.solana.requestAirdrop(wallet.publicKey, floatAmount * LAMPORTS_PER_SOL)
+    const signature = await solana.requestAirdrop(wallet.publicKey, floatAmount * LAMPORTS_PER_SOL)
 
     return {
       signature,
     }
   }
 
-  async walletBalance(userId: string, walletId: string): Promise<WalletBalance> {
+  async walletBalance(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance> {
     const wallet = await this.ensureWalletById(userId, walletId)
-    const balance = await this.data.solana.getBalanceSol(wallet.publicKey)
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const solana = await this.data.getSolanaConnection(appEnv.name, appEnv.app.index)
+
+    const balance = await solana.getBalanceSol(wallet.publicKey)
 
     return { balance: BigInt(balance) }
   }
 
-  async walletBalances(userId: string, walletId: string): Promise<WalletBalance[]> {
+  async walletBalances(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance[]> {
     const wallet = await this.ensureWalletById(userId, walletId)
     return this.data.walletBalance.findMany({
-      where: { walletId: wallet.id },
+      where: { appEnvId, walletId: wallet.id },
       orderBy: { createdAt: 'desc' },
     })
   }
@@ -75,7 +93,7 @@ export class ApiWalletDataAccessService {
 
   private async ensureWalletById(userId: string, walletId: string) {
     await this.data.ensureAdminUser(userId)
-    const wallet = await this.data.wallet.findUnique({ where: { id: walletId }, include: { apps: true } })
+    const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
       throw new NotFoundException(`Wallet with id ${walletId} does not exist.`)
     }
@@ -92,18 +110,21 @@ export class ApiWalletDataAccessService {
     return Keypair.generate()
   }
 
-  private storeWalletBalance(walletId: string, balance: number) {
-    return this.data.walletBalance.create({ data: { balance, walletId } })
+  private storeWalletBalance(appEnvId: string, walletId: string, balance: number, change: number) {
+    return this.data.walletBalance.create({ data: { appEnvId, balance, change, walletId } })
   }
 
-  private async updateWalletBalance(environment: string, index: number, wallet: Wallet) {
+  private async updateWalletBalance(appEnvId: string, environment: string, index: number, wallet: Wallet) {
     const appKey = this.data.getAppKey(environment, index)
     const solana = await this.data.getSolanaConnection(environment, index)
     const current = wallet.balances?.length ? wallet.balances[0].balance : 0
     const balance = await solana.getBalanceSol(wallet.publicKey)
     if (BigInt(balance) !== current) {
-      await this.storeWalletBalance(wallet.id, balance)
-      this.logger.verbose(`${appKey}: Updated Wallet Balance: ${wallet.publicKey} ${current} => ${balance}`)
+      const change = balance - Number(current)
+      await this.storeWalletBalance(appEnvId, wallet.id, balance, change)
+      this.logger.verbose(
+        `${appKey}: Updated Wallet Balance: ${wallet.publicKey} ${current} => ${balance} (${change} SOL)`,
+      )
     }
   }
 }

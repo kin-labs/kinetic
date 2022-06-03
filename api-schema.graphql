@@ -10,7 +10,6 @@ type App {
   name: String
   updatedAt: DateTime!
   users: [AppUser!]
-  wallets: [Wallet!]
 }
 
 input AppCreateInput {
@@ -281,11 +280,11 @@ enum MintType {
 
 type Mutation {
   addClusterMint(input: MintAddInput!): Cluster
+  appEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
+  appEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   appUserAdd(appId: String!, input: AppUserAddInput!): App
   appUserRemove(appId: String!, input: AppUserRemoveInput!): App
   appUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
-  appWalletAdd(appId: String!, walletId: String!): App
-  appWalletRemove(appId: String!, walletId: String!): App
   createApp(input: AppCreateInput!): App
   createCluster(input: ClusterCreateInput!): Cluster
   createUser(input: UserCreateInput!): User
@@ -330,9 +329,9 @@ type Query {
   user(userId: String!): User
   users: [User!]
   wallet(walletId: String!): Wallet
-  walletAirdrop(amount: Float!, walletId: String!): WalletAirdropResponse
-  walletBalance(walletId: String!): WalletBalance
-  walletBalances(walletId: String!): [WalletBalance!]
+  walletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
+  walletBalance(appEnvId: String!, walletId: String!): WalletBalance
+  walletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
   wallets: [Wallet!]
 }
 
@@ -379,7 +378,7 @@ input UserUpdateInput {
 type Wallet {
   balances: [WalletBalance!]
   createdAt: DateTime
-  id: String
+  id: String!
   publicKey: String
   updatedAt: DateTime
 }
@@ -390,6 +389,7 @@ type WalletAirdropResponse {
 
 type WalletBalance {
   balance: BigInt
+  change: BigInt
   createdAt: DateTime
   id: String
   updatedAt: DateTime

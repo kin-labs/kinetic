@@ -3,8 +3,8 @@ import { WalletBalance } from './wallet-balance.entity'
 
 @ObjectType()
 export class Wallet {
-  @Field({ nullable: true })
-  id?: string
+  @Field()
+  id: string
   @Field({ nullable: true })
   createdAt?: Date
   @Field({ nullable: true })

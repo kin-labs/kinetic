@@ -1,16 +1,20 @@
-import { Box, Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import { Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { useWalletBalancesQuery, Wallet } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { ShowSolBalance } from './show-sol-balance'
 
 export interface AdminAppUiWalletBalancesProps {
+  appEnvId: string
   wallet: Wallet
 }
 
-export function AdminAppUiWalletBalances({ wallet }: AdminAppUiWalletBalancesProps) {
+export function AdminAppUiWalletBalances({ appEnvId, wallet }: AdminAppUiWalletBalancesProps) {
   const [{ data }] = useWalletBalancesQuery({
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    variables: { walletId: wallet.id! },
+    variables: {
+      appEnvId,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      walletId: wallet.id!,
+    },
   })
 
   return (
@@ -20,7 +24,8 @@ export function AdminAppUiWalletBalances({ wallet }: AdminAppUiWalletBalancesPro
           <Thead>
             <Tr>
               <Th>Name</Th>
-              <Th />
+              <Th isNumeric>Balance</Th>
+              <Th isNumeric>Change</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -30,15 +35,12 @@ export function AdminAppUiWalletBalances({ wallet }: AdminAppUiWalletBalancesPro
                 <Td isNumeric>
                   <ShowSolBalance balance={balance.balance}></ShowSolBalance>
                 </Td>
+                <Td isNumeric>
+                  <ShowSolBalance balance={balance.change}></ShowSolBalance>
+                </Td>
               </Tr>
             ))}
           </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>Name</Th>
-              <Th />
-            </Tr>
-          </Tfoot>
         </Table>
       </TableContainer>
     </Box>
