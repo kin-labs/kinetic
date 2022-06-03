@@ -8,6 +8,7 @@ import { Connection, Keypair } from '@solana/web3.js'
 import * as fs from 'fs'
 import { ProvisionedApp } from './entities/provisioned-app.entity'
 import { getProvisionedApps } from './helpers/get-provisioned-apps'
+import { Counter } from '@metinseylan/nestjs-opentelemetry'
 
 @Injectable()
 export class ApiConfigDataAccessService {
@@ -107,6 +108,7 @@ export class ApiConfigDataAccessService {
     return this.config.get('solanaRpcEndpoint')
   }
 
+  @Counter()
   configSummary() {
     return {
       environment: this.environment,

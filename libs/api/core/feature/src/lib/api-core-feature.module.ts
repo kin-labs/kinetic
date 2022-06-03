@@ -18,6 +18,8 @@ import { join } from 'path'
 import { ApiCoreFeatureController } from './api-core-feature.controller'
 import { ApiCoreFeatureResolver } from './api-core-feature.resolver'
 import { serveStaticFactory } from './serve-static.factory'
+import { OpenTelemetryModule } from '@metinseylan/nestjs-opentelemetry'
+import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 
 @Module({
   controllers: [ApiCoreFeatureController],
@@ -46,6 +48,13 @@ import { serveStaticFactory } from './serve-static.factory'
     ApiTransactionFeatureModule,
     ApiUserFeatureModule,
     ApiWalletFeatureModule,
+    OpenTelemetryModule.forRoot({
+      applicationName: 'mogami-opentelemetry',
+      metricExporter: new PrometheusExporter({
+        endpoint: 'metrics',
+        port: 9090,
+      }),
+    }),
     ScheduleModule.forRoot(),
   ],
 })
