@@ -4,7 +4,7 @@ import { useAppWebhooksQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AppWebhooksTab({ appId, envId }: { appId: string; envId: string }) {
-  const [{ data, fetching }] = useAppWebhooksQuery({ variables: { appId } })
+  const [{ data, fetching }] = useAppWebhooksQuery({ variables: { appId, appEnvId: envId } })
   if (fetching) {
     return <AdminUiLoader />
   }

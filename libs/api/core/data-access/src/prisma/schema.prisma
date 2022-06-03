@@ -35,22 +35,15 @@ model Airdrop {
 }
 
 model App {
-  id                    String           @id @default(cuid())
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime         @updatedAt
-  envs                  AppEnv[]
-  index                 Int              @unique
-  name                  String
-  transaction           AppTransaction[]
-  users                 AppUser[]
-  wallets               Wallet[]
-  webhookAcceptIncoming Boolean          @default(false)
-  webhookEventEnabled   Boolean          @default(false)
-  webhookEventUrl       String?
-  webhookSecret         String?
-  webhookVerifyEnabled  Boolean          @default(false)
-  webhookVerifyUrl      String?
-  webhooks              AppWebhook[]
+  id          String           @id @default(cuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  envs        AppEnv[]
+  index       Int              @unique
+  name        String
+  transaction AppTransaction[]
+  users       AppUser[]
+  wallets     Wallet[]
 }
 
 model AppEnv {
@@ -159,8 +152,6 @@ model AppWebhook {
   responseError   String?
   responseStatus  Int?
   type            AppWebhookType
-  app             App                 @relation(fields: [appId], references: [id])
-  appId           String
   appEnv          AppEnv?             @relation(fields: [appEnvId], references: [id])
   appEnvId        String?
 }

@@ -4,6 +4,7 @@ import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { AppEnvProvider } from './app-env-provider'
 import { EnvDetailOverview } from './env-detail-overview'
+import { EnvDetailSettings } from './env-detail-settings'
 import { EnvDetailTransaction } from './env-detail-transaction'
 import { EnvDetailTransactions } from './env-detail-transactions'
 import { EnvDetailWallets } from './env-detail-wallets'
@@ -23,6 +24,7 @@ export default function AdminAppFeatureEnvDetail() {
           <Switch>
             <Route path={path} exact render={() => <Redirect to={`${url}/overview`} />} />
             <Route path={`${path}/overview`} render={() => <EnvDetailOverview />} />
+            <Route path={`${path}/settings`} render={() => <EnvDetailSettings />} />
             <Route path={`${path}/transactions/:appTransactionId`} render={() => <EnvDetailTransaction />} />
             <Route path={`${path}/transactions`} render={() => <EnvDetailTransactions />} />
             <Route path={`${path}/wallets`} render={() => <EnvDetailWallets />} />

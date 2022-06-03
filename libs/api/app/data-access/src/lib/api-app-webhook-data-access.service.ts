@@ -1,9 +1,10 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { HttpService } from '@nestjs/axios'
 import { Injectable, Logger } from '@nestjs/common'
-import { App, AppWebhookType } from '@prisma/client'
+import { AppWebhookType } from '@prisma/client'
 import { AxiosRequestHeaders } from 'axios'
 import { switchMap } from 'rxjs'
+import { AppEnv } from './entity/app-env.entity'
 import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
 
 interface WebhookOptions {
@@ -18,44 +19,45 @@ export class ApiAppWebhookDataAccessService {
   private readonly logger = new Logger(ApiAppWebhookDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService, private readonly http: HttpService) {}
 
-  sendWebhook(app: App, options: WebhookOptions) {
+  sendWebhook(appEnv: AppEnv, options: WebhookOptions) {
+    const appKey = this.data.getAppKey(appEnv.name, appEnv.app?.index)
     switch (options.type) {
       case AppWebhookType.Event:
-        if (!app.webhookEventEnabled) {
-          this.logger.warn(`Skip webhook for app ${app.index}, webhookEventEnabled is false`)
+        if (!appEnv.webhookEventEnabled) {
+          this.logger.warn(`Skip webhook for app ${appKey}, webhookEventEnabled is false`)
           return
         }
-        if (!app.webhookEventUrl) {
-          this.logger.warn(`Skip webhook for app ${app.index}, webhookEventUrl not set`)
+        if (!appEnv.webhookEventUrl) {
+          this.logger.warn(`Skip webhook for app ${appKey}, webhookEventUrl not set`)
           return
         }
-        return this.sendEventWebhook(app, options)
+        return this.sendEventWebhook(appEnv, options)
       case AppWebhookType.Verify:
-        if (!app.webhookVerifyEnabled) {
-          this.logger.warn(`Skip webhook for app ${app.index}, webhookVerifyEnabled is false`)
+        if (!appEnv.webhookVerifyEnabled) {
+          this.logger.warn(`Skip webhook for app ${appKey}, webhookVerifyEnabled is false`)
           return
         }
-        if (!app.webhookVerifyUrl) {
-          this.logger.warn(`Skip webhook for app ${app.index}, webhookVerifyUrl not set`)
+        if (!appEnv.webhookVerifyUrl) {
+          this.logger.warn(`Skip webhook for app ${appKey}, webhookVerifyUrl not set`)
           return
         }
-        return this.sendVerifyWebhook(app, options)
+        return this.sendVerifyWebhook(appEnv, options)
       default:
         throw new Error(`Unknown webhook type ${options.type}`)
     }
   }
 
-  private sendEventWebhook(app: App, options: WebhookOptions) {
+  private sendEventWebhook(appEnv: AppEnv, options: WebhookOptions) {
     return new Promise((resolve, reject) => {
       this.http
-        .post(app.webhookEventUrl, options.payload, {
-          headers: this.getHeaders(app, options),
+        .post(appEnv.webhookEventUrl, options.payload, {
+          headers: this.getHeaders(appEnv, options),
         })
         .pipe(
           switchMap((res) =>
             this.data.appWebhook.create({
               data: {
-                app: { connect: { id: app.id } },
+                appEnv: { connect: { id: appEnv.id } },
                 direction: AppWebhookDirection.Outgoing,
                 type: options.type,
                 responseError: res.statusText,
@@ -72,17 +74,17 @@ export class ApiAppWebhookDataAccessService {
     })
   }
 
-  private sendVerifyWebhook(app: App, options: WebhookOptions) {
+  private sendVerifyWebhook(appEnv: AppEnv, options: WebhookOptions) {
     return new Promise((resolve, reject) =>
       this.http
-        .post(app.webhookVerifyUrl, options.payload, {
-          headers: this.getHeaders(app, options),
+        .post(appEnv.webhookVerifyUrl, options.payload, {
+          headers: this.getHeaders(appEnv, options),
         })
         .pipe(
           switchMap((res) =>
             this.data.appWebhook.create({
               data: {
-                app: { connect: { id: app.id } },
+                appEnv: { connect: { id: appEnv.id } },
                 direction: AppWebhookDirection.Outgoing,
                 type: options.type,
                 responseError: res.statusText,
@@ -99,10 +101,10 @@ export class ApiAppWebhookDataAccessService {
     )
   }
 
-  private getHeaders = (app: App, options: WebhookOptions) => ({
+  private getHeaders = (appEnv: AppEnv, options: WebhookOptions) => ({
     ...options.headers,
     'content-type': 'application/json',
-    'mogami-app-index': app.index,
+    'mogami-app-index': appEnv.app?.index,
     'mogami-webhook-type': options.type,
   })
 }

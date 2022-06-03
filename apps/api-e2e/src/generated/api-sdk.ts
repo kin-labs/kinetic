@@ -30,12 +30,6 @@ export type App = {
   updatedAt: Scalars['DateTime']
   users?: Maybe<Array<AppUser>>
   wallets?: Maybe<Array<Wallet>>
-  webhookAcceptIncoming?: Maybe<Scalars['Boolean']>
-  webhookEventEnabled?: Maybe<Scalars['Boolean']>
-  webhookEventUrl?: Maybe<Scalars['String']>
-  webhookSecret?: Maybe<Scalars['String']>
-  webhookVerifyEnabled?: Maybe<Scalars['Boolean']>
-  webhookVerifyUrl?: Maybe<Scalars['String']>
 }
 
 export type AppCreateInput = {
@@ -59,6 +53,15 @@ export type AppEnv = {
   webhookSecret?: Maybe<Scalars['String']>
   webhookVerifyEnabled?: Maybe<Scalars['Boolean']>
   webhookVerifyUrl?: Maybe<Scalars['String']>
+}
+
+export type AppEnvUpdateInput = {
+  webhookAcceptIncoming?: InputMaybe<Scalars['Boolean']>
+  webhookEventEnabled?: InputMaybe<Scalars['Boolean']>
+  webhookEventUrl?: InputMaybe<Scalars['String']>
+  webhookSecret?: InputMaybe<Scalars['String']>
+  webhookVerifyEnabled?: InputMaybe<Scalars['Boolean']>
+  webhookVerifyUrl?: InputMaybe<Scalars['String']>
 }
 
 export type AppMint = {
@@ -125,12 +128,6 @@ export enum AppTransactionStatus {
 
 export type AppUpdateInput = {
   name?: InputMaybe<Scalars['String']>
-  webhookAcceptIncoming?: InputMaybe<Scalars['Boolean']>
-  webhookEventEnabled?: InputMaybe<Scalars['Boolean']>
-  webhookEventUrl?: InputMaybe<Scalars['String']>
-  webhookSecret?: InputMaybe<Scalars['String']>
-  webhookVerifyEnabled?: InputMaybe<Scalars['Boolean']>
-  webhookVerifyUrl?: InputMaybe<Scalars['String']>
 }
 
 export type AppUser = {
@@ -315,6 +312,7 @@ export type Mutation = {
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
   updateApp?: Maybe<App>
+  updateAppEnv?: Maybe<AppEnv>
   updateCluster?: Maybe<Cluster>
   updateUser?: Maybe<User>
 }
@@ -389,6 +387,12 @@ export type MutationUpdateAppArgs = {
   input: AppUpdateInput
 }
 
+export type MutationUpdateAppEnvArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  input: AppEnvUpdateInput
+}
+
 export type MutationUpdateClusterArgs = {
   clusterId: Scalars['String']
   input: ClusterUpdateInput
@@ -459,6 +463,7 @@ export type QueryAppWebhookArgs = {
 }
 
 export type QueryAppWebhooksArgs = {
+  appEnvId: Scalars['String']
   appId: Scalars['String']
 }
 
@@ -683,12 +688,6 @@ export const AppDetails = gql`
     updatedAt
     index
     name
-    webhookAcceptIncoming
-    webhookEventEnabled
-    webhookEventUrl
-    webhookSecret
-    webhookVerifyEnabled
-    webhookVerifyUrl
   }
 `
 export const UserDetails = gql`
@@ -845,6 +844,14 @@ export const UpdateApp = gql`
   ${AppUserDetails}
   ${WalletDetails}
 `
+export const UpdateAppEnv = gql`
+  mutation UpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
+    updated: updateAppEnv(appId: $appId, appEnvId: $appEnvId, input: $input) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetails}
+`
 export const AppUserAdd = gql`
   mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
     item: appUserAdd(appId: $appId, input: $input) {
@@ -966,8 +973,8 @@ export const AppWebhook = gql`
   ${AppWebhookDetails}
 `
 export const AppWebhooks = gql`
-  query AppWebhooks($appId: String!) {
-    items: appWebhooks(appId: $appId) {
+  query AppWebhooks($appId: String!, $appEnvId: String!) {
+    items: appWebhooks(appId: $appId, appEnvId: $appEnvId) {
       ...AppWebhookDetails
     }
   }
@@ -1194,12 +1201,6 @@ export type AppDetailsFragment = {
   updatedAt: any
   index: number
   name?: string | null
-  webhookAcceptIncoming?: boolean | null
-  webhookEventEnabled?: boolean | null
-  webhookEventUrl?: string | null
-  webhookSecret?: string | null
-  webhookVerifyEnabled?: boolean | null
-  webhookVerifyUrl?: string | null
 }
 
 export type AppEnvDetailsFragment = {
@@ -1329,20 +1330,7 @@ export type AppUserDetailsFragment = {
   createdAt: any
   updatedAt: any
   role: AppUserRole
-  app?: {
-    __typename?: 'App'
-    id: string
-    createdAt: any
-    updatedAt: any
-    index: number
-    name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
-  } | null
+  app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
   user?: {
     __typename?: 'User'
     id: string
@@ -1383,12 +1371,6 @@ export type CreateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -1459,12 +1441,6 @@ export type CreateAppMutation = {
         updatedAt: any
         index: number
         name?: string | null
-        webhookAcceptIncoming?: boolean | null
-        webhookEventEnabled?: boolean | null
-        webhookEventUrl?: string | null
-        webhookSecret?: string | null
-        webhookVerifyEnabled?: boolean | null
-        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1501,12 +1477,6 @@ export type DeleteAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
   } | null
 }
 
@@ -1524,12 +1494,6 @@ export type UpdateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -1600,12 +1564,6 @@ export type UpdateAppMutation = {
         updatedAt: any
         index: number
         name?: string | null
-        webhookAcceptIncoming?: boolean | null
-        webhookEventEnabled?: boolean | null
-        webhookEventUrl?: string | null
-        webhookSecret?: string | null
-        webhookVerifyEnabled?: boolean | null
-        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1629,6 +1587,66 @@ export type UpdateAppMutation = {
   } | null
 }
 
+export type UpdateAppEnvMutationVariables = Exact<{
+  appId: Scalars['String']
+  appEnvId: Scalars['String']
+  input: AppEnvUpdateInput
+}>
+
+export type UpdateAppEnvMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    name?: string | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      endpoint?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        logoUrl?: string | null
+        name?: string | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
 export type AppUserAddMutationVariables = Exact<{
   appId: Scalars['String']
   input: AppUserAddInput
@@ -1643,12 +1661,6 @@ export type AppUserAddMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -1662,12 +1674,6 @@ export type AppUserAddMutation = {
         updatedAt: any
         index: number
         name?: string | null
-        webhookAcceptIncoming?: boolean | null
-        webhookEventEnabled?: boolean | null
-        webhookEventUrl?: string | null
-        webhookSecret?: string | null
-        webhookVerifyEnabled?: boolean | null
-        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1698,12 +1704,6 @@ export type AppUserRemoveMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -1717,12 +1717,6 @@ export type AppUserRemoveMutation = {
         updatedAt: any
         index: number
         name?: string | null
-        webhookAcceptIncoming?: boolean | null
-        webhookEventEnabled?: boolean | null
-        webhookEventUrl?: string | null
-        webhookSecret?: string | null
-        webhookVerifyEnabled?: boolean | null
-        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1753,12 +1747,6 @@ export type AppUserUpdateRoleMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -1772,12 +1760,6 @@ export type AppUserUpdateRoleMutation = {
         updatedAt: any
         index: number
         name?: string | null
-        webhookAcceptIncoming?: boolean | null
-        webhookEventEnabled?: boolean | null
-        webhookEventUrl?: string | null
-        webhookSecret?: string | null
-        webhookVerifyEnabled?: boolean | null
-        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1808,12 +1790,6 @@ export type AppWalletAddMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -1895,12 +1871,6 @@ export type AppWalletRemoveMutation = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -1981,12 +1951,6 @@ export type AppQuery = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -2057,12 +2021,6 @@ export type AppQuery = {
         updatedAt: any
         index: number
         name?: string | null
-        webhookAcceptIncoming?: boolean | null
-        webhookEventEnabled?: boolean | null
-        webhookEventUrl?: string | null
-        webhookSecret?: string | null
-        webhookVerifyEnabled?: boolean | null
-        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -2254,6 +2212,7 @@ export type AppWebhookQuery = {
 
 export type AppWebhooksQueryVariables = Exact<{
   appId: Scalars['String']
+  appEnvId: Scalars['String']
 }>
 
 export type AppWebhooksQuery = {
@@ -2284,12 +2243,6 @@ export type AppsQuery = {
     updatedAt: any
     index: number
     name?: string | null
-    webhookAcceptIncoming?: boolean | null
-    webhookEventEnabled?: boolean | null
-    webhookEventUrl?: string | null
-    webhookSecret?: string | null
-    webhookVerifyEnabled?: boolean | null
-    webhookVerifyUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -2784,12 +2737,6 @@ export type UserQuery = {
         updatedAt: any
         index: number
         name?: string | null
-        webhookAcceptIncoming?: boolean | null
-        webhookEventEnabled?: boolean | null
-        webhookEventUrl?: string | null
-        webhookSecret?: string | null
-        webhookVerifyEnabled?: boolean | null
-        webhookVerifyUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'

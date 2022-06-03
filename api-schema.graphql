@@ -11,12 +11,6 @@ type App {
   updatedAt: DateTime!
   users: [AppUser!]
   wallets: [Wallet!]
-  webhookAcceptIncoming: Boolean
-  webhookEventEnabled: Boolean
-  webhookEventUrl: String
-  webhookSecret: String
-  webhookVerifyEnabled: Boolean
-  webhookVerifyUrl: String
 }
 
 input AppCreateInput {
@@ -33,6 +27,15 @@ type AppEnv {
   mints: [AppMint!]
   name: String
   updatedAt: DateTime!
+  webhookAcceptIncoming: Boolean
+  webhookEventEnabled: Boolean
+  webhookEventUrl: String
+  webhookSecret: String
+  webhookVerifyEnabled: Boolean
+  webhookVerifyUrl: String
+}
+
+input AppEnvUpdateInput {
   webhookAcceptIncoming: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String
@@ -102,12 +105,6 @@ enum AppTransactionStatus {
 
 input AppUpdateInput {
   name: String
-  webhookAcceptIncoming: Boolean
-  webhookEventEnabled: Boolean
-  webhookEventUrl: String
-  webhookSecret: String
-  webhookVerifyEnabled: Boolean
-  webhookVerifyUrl: String
 }
 
 type AppUser {
@@ -299,6 +296,7 @@ type Mutation {
   login(input: LoginInput!): AuthToken
   logout: Boolean
   updateApp(appId: String!, input: AppUpdateInput!): App
+  updateAppEnv(appEnvId: String!, appId: String!, input: AppEnvUpdateInput!): AppEnv
   updateCluster(clusterId: String!, input: ClusterUpdateInput!): Cluster
   updateUser(input: UserUpdateInput!, userId: String!): User
 }
@@ -319,7 +317,7 @@ type Query {
   appTransaction(appId: String!, appTransactionId: String!): AppTransaction
   appTransactions(appId: String!): [AppTransaction!]
   appWebhook(appId: String!, appWebhookId: String!): AppWebhook
-  appWebhooks(appId: String!): [AppWebhook!]
+  appWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
   apps: [App!]
   cluster(clusterId: String!): Cluster
   clusterTokens(input: ClusterTokenInput!): [ClusterToken!]

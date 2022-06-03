@@ -4,12 +4,6 @@ fragment AppDetails on App {
   updatedAt
   index
   name
-  webhookAcceptIncoming
-  webhookEventEnabled
-  webhookEventUrl
-  webhookSecret
-  webhookVerifyEnabled
-  webhookVerifyUrl
 }
 
 fragment AppEnvDetails on AppEnv {
@@ -149,6 +143,12 @@ mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
   }
 }
 
+mutation UpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
+  updated: updateAppEnv(appId: $appId, appEnvId: $appEnvId, input: $input) {
+    ...AppEnvDetails
+  }
+}
+
 mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
   item: appUserAdd(appId: $appId, input: $input) {
     ...AppDetails
@@ -239,8 +239,8 @@ query AppWebhook($appId: String!, $appWebhookId: String!) {
   }
 }
 
-query AppWebhooks($appId: String!) {
-  items: appWebhooks(appId: $appId) {
+query AppWebhooks($appId: String!, $appEnvId: String!) {
+  items: appWebhooks(appId: $appId, appEnvId: $appEnvId) {
     ...AppWebhookDetails
   }
 }

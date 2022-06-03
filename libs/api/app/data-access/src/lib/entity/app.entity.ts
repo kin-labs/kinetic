@@ -11,25 +11,13 @@ export class App {
   @Field()
   updatedAt?: Date
   @Field(() => [AppEnv], { nullable: true })
-  envs: AppEnv[]
+  envs?: AppEnv[]
   @Field(() => Int)
   index: number
   @Field({ nullable: true })
   name: string
-  @Field({ nullable: true })
-  webhookAcceptIncoming?: boolean
-  @Field({ nullable: true })
-  webhookEventEnabled?: boolean
-  @Field({ nullable: true })
-  webhookEventUrl?: string
-  @Field({ nullable: true })
-  webhookSecret?: string
-  @Field({ nullable: true })
-  webhookVerifyEnabled?: boolean
-  @Field({ nullable: true })
-  webhookVerifyUrl?: string
   @Field(() => [AppUser], { nullable: true })
-  users: AppUser[]
+  users?: AppUser[]
   @HideField()
-  wallets
+  wallets?
 }
