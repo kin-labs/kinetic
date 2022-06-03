@@ -112,6 +112,9 @@ mutation CreateApp($input: AppCreateInput!) {
     ...AppDetails
     envs {
       ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
     }
     users {
       ...AppUserDetails
@@ -130,6 +133,9 @@ mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
     ...AppDetails
     envs {
       ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
     }
     users {
       ...AppUserDetails
@@ -196,6 +202,9 @@ query App($appId: String!) {
     ...AppDetails
     envs {
       ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
     }
     users {
       ...AppUserDetails

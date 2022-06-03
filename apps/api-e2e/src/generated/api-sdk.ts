@@ -811,6 +811,9 @@ export const CreateApp = gql`
       ...AppDetails
       envs {
         ...AppEnvDetails
+        wallets {
+          ...WalletDetails
+        }
       }
       users {
         ...AppUserDetails
@@ -819,6 +822,7 @@ export const CreateApp = gql`
   }
   ${AppDetails}
   ${AppEnvDetails}
+  ${WalletDetails}
   ${AppUserDetails}
 `
 export const DeleteApp = gql`
@@ -835,6 +839,9 @@ export const UpdateApp = gql`
       ...AppDetails
       envs {
         ...AppEnvDetails
+        wallets {
+          ...WalletDetails
+        }
       }
       users {
         ...AppUserDetails
@@ -843,6 +850,7 @@ export const UpdateApp = gql`
   }
   ${AppDetails}
   ${AppEnvDetails}
+  ${WalletDetails}
   ${AppUserDetails}
 `
 export const UpdateAppEnv = gql`
@@ -923,6 +931,9 @@ export const App = gql`
       ...AppDetails
       envs {
         ...AppEnvDetails
+        wallets {
+          ...WalletDetails
+        }
       }
       users {
         ...AppUserDetails
@@ -931,6 +942,7 @@ export const App = gql`
   }
   ${AppDetails}
   ${AppEnvDetails}
+  ${WalletDetails}
   ${AppUserDetails}
 `
 export const AppEnv = gql`
@@ -1376,6 +1388,13 @@ export type CreateAppMutation = {
       webhookSecret?: string | null
       webhookVerifyEnabled?: boolean | null
       webhookVerifyUrl?: string | null
+      wallets?: Array<{
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      }> | null
       app?: {
         __typename?: 'App'
         id: string
@@ -1492,6 +1511,13 @@ export type UpdateAppMutation = {
       webhookSecret?: string | null
       webhookVerifyEnabled?: boolean | null
       webhookVerifyUrl?: string | null
+      wallets?: Array<{
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      }> | null
       app?: {
         __typename?: 'App'
         id: string
@@ -1921,6 +1947,13 @@ export type AppQuery = {
       webhookSecret?: string | null
       webhookVerifyEnabled?: boolean | null
       webhookVerifyUrl?: string | null
+      wallets?: Array<{
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      }> | null
       app?: {
         __typename?: 'App'
         id: string

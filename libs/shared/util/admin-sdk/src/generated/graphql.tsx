@@ -763,6 +763,13 @@ export type CreateAppMutation = {
       webhookSecret?: string | null
       webhookVerifyEnabled?: boolean | null
       webhookVerifyUrl?: string | null
+      wallets?: Array<{
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      }> | null
       app?: {
         __typename?: 'App'
         id: string
@@ -879,6 +886,13 @@ export type UpdateAppMutation = {
       webhookSecret?: string | null
       webhookVerifyEnabled?: boolean | null
       webhookVerifyUrl?: string | null
+      wallets?: Array<{
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      }> | null
       app?: {
         __typename?: 'App'
         id: string
@@ -1308,6 +1322,13 @@ export type AppQuery = {
       webhookSecret?: string | null
       webhookVerifyEnabled?: boolean | null
       webhookVerifyUrl?: string | null
+      wallets?: Array<{
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      }> | null
       app?: {
         __typename?: 'App'
         id: string
@@ -2472,6 +2493,9 @@ export const CreateAppDocument = gql`
       ...AppDetails
       envs {
         ...AppEnvDetails
+        wallets {
+          ...WalletDetails
+        }
       }
       users {
         ...AppUserDetails
@@ -2480,6 +2504,7 @@ export const CreateAppDocument = gql`
   }
   ${AppDetailsFragmentDoc}
   ${AppEnvDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
 `
 
@@ -2504,6 +2529,9 @@ export const UpdateAppDocument = gql`
       ...AppDetails
       envs {
         ...AppEnvDetails
+        wallets {
+          ...WalletDetails
+        }
       }
       users {
         ...AppUserDetails
@@ -2512,6 +2540,7 @@ export const UpdateAppDocument = gql`
   }
   ${AppDetailsFragmentDoc}
   ${AppEnvDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
 `
 
@@ -2620,6 +2649,9 @@ export const AppDocument = gql`
       ...AppDetails
       envs {
         ...AppEnvDetails
+        wallets {
+          ...WalletDetails
+        }
       }
       users {
         ...AppUserDetails
@@ -2628,6 +2660,7 @@ export const AppDocument = gql`
   }
   ${AppDetailsFragmentDoc}
   ${AppEnvDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
   ${AppUserDetailsFragmentDoc}
 `
 

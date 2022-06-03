@@ -81,7 +81,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
             // Create the default mint and connect it to the wallet
             mints: {
               create: cluster.mints
-                .filter((mint) => mint.address === process.env['DEFAULT_MINT_PUBLIC_KEY'])
+                .filter((mint) => mint.address === process.env['DEFAULT_MINT_PUBLIC_KEY'] || mint.symbol === 'KIN')
                 .map((mint) => ({
                   mint: { connect: { id: mint.id } },
                   wallet: wallets,

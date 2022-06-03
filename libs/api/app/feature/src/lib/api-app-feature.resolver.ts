@@ -12,9 +12,8 @@ import {
 } from '@mogami/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
-import { Wallet } from '@mogami/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => App)
 @UseGuards(ApiAuthGraphqlGuard)

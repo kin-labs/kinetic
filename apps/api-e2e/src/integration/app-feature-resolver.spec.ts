@@ -13,8 +13,8 @@ import {
   AppUserRole,
   AppUserUpdateRole,
   AppUserUpdateRoleInput,
-  AppWalletAdd,
-  AppWalletRemove,
+  AppEnvWalletAdd,
+  AppEnvWalletRemove,
   ClusterType,
   CreateApp,
   CreateUser,
@@ -73,16 +73,17 @@ describe('App (e2e)', () => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.created
             appId = data.id
+
             expect(data.index).toEqual(input.index)
             expect(data.name).toEqual(input.name)
             expect(data.envs.length).toEqual(1)
             expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
             expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
             expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
+            expect(data.envs[0].wallets).toBeDefined()
+            expect(data.envs[0].wallets[0].publicKey).toBeDefined()
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
-            expect(data.wallets).toBeDefined()
-            expect(data.wallets[0].publicKey).toBeDefined()
           })
       })
 
@@ -104,10 +105,10 @@ describe('App (e2e)', () => {
             expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
             expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
             expect(data.envs[0].name).toEqual('devnet')
+            expect(data.envs[0].wallets).toBeDefined()
+            expect(data.envs[0].wallets[0].publicKey).toBeDefined()
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
-            expect(data.wallets).toBeDefined()
-            expect(data.wallets[0].publicKey).toBeDefined()
           })
       })
 
@@ -124,10 +125,10 @@ describe('App (e2e)', () => {
             expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
             expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
             expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
+            expect(data.envs[0].wallets).toBeDefined()
+            expect(data.envs[0].wallets[0].publicKey).toBeDefined()
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
-            expect(data.wallets).toBeDefined()
-            expect(data.wallets[0].publicKey).toBeDefined()
           })
       })
 
@@ -280,6 +281,7 @@ describe('App (e2e)', () => {
 
     describe('Wallets', () => {
       let appId: string | undefined
+      let appEnvId: string | undefined
       let walletId: string | undefined
       let walletPublicKey: string | undefined
 
@@ -292,13 +294,14 @@ describe('App (e2e)', () => {
           input: { index: randomAppIndex(), name, skipWalletCreation: true },
         })
         appId = createdApp.body.data.created.id
+        appEnvId = createdApp.body.data.created.envs[0].id
 
         // Generate wallet
         const createdWallet = await runGraphQLQueryAdmin(app, token, GenerateWallet, { index })
         walletId = createdWallet.body.data.generated?.id
         walletPublicKey = createdWallet.body.data.generated?.publicKey
 
-        await runGraphQLQueryAdmin(app, token, AppWalletAdd, { appId, walletId })
+        await runGraphQLQueryAdmin(app, token, AppEnvWalletAdd, { appId, appEnvId, walletId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -310,7 +313,7 @@ describe('App (e2e)', () => {
       })
 
       it('should remove a wallet fom an app', async () => {
-        await runGraphQLQueryAdmin(app, token, AppWalletRemove, { appId, walletId })
+        await runGraphQLQueryAdmin(app, token, AppEnvWalletRemove, { appId, appEnvId, walletId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
