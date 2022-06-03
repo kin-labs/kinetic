@@ -136,8 +136,9 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  app(userId: string, appId: string) {
-    return this.ensureAppById(userId, appId)
+  async app(userId: string, appId: string) {
+    await this.data.ensureAdminUser(userId)
+    return this.data.getAppById(appId)
   }
 
   async appEnv(userId: string, appId: string, appEnvId: string) {
@@ -254,7 +255,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
   private async ensureAppById(userId: string, appId: string) {
     await this.data.ensureAdminUser(userId)
-    const app = await this.data.getAppById(appId)
+    const app = await this.data.app.findUnique({ where: { id: appId } })
     if (!app) {
       throw new NotFoundException(`App with id ${appId} does not exist.`)
     }
