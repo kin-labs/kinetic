@@ -224,14 +224,14 @@ query AppEnv($appId: String!, $appEnvId: String!) {
   }
 }
 
-query AppTransaction($appId: String!, $appTransactionId: String!) {
-  item: appTransaction(appId: $appId, appTransactionId: $appTransactionId) {
+query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
+  item: appTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
     ...AppTransactionDetails
   }
 }
 
-query AppTransactions($appId: String!) {
-  items: appTransactions(appId: $appId) {
+query AppTransactions($appId: String!, $appEnvId: String!) {
+  items: appTransactions(appId: $appId, appEnvId: $appEnvId) {
     ...AppTransactionDetails
   }
 }

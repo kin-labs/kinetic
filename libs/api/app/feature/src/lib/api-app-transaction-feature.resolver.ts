@@ -1,8 +1,29 @@
-import { AppTransaction } from '@mogami/api/app/data-access'
-import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
+import { ApiAppDataAccessService, AppTransaction } from '@mogami/api/app/data-access'
+import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
+import { User } from '@mogami/api/user/data-access'
+import { UseGuards } from '@nestjs/common'
+import { Args, Int, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => AppTransaction)
+@UseGuards(ApiAuthGraphqlGuard)
 export class ApiAppTransactionFeatureResolver {
+  constructor(private readonly service: ApiAppDataAccessService) {}
+
+  @Query(() => AppTransaction, { nullable: true })
+  appTransaction(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args('appTransactionId') appTransactionId: string,
+  ) {
+    return this.service.appTransaction(user.id, appId, appEnvId, appTransactionId)
+  }
+
+  @Query(() => [AppTransaction], { nullable: true })
+  appTransactions(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
+    return this.service.appTransactions(user.id, appId, appEnvId)
+  }
+
   @ResolveField(() => Int, { nullable: true })
   processingDuration(@Parent() tx: AppTransaction) {
     if (!tx.createdAt || !tx.solanaStart) return null

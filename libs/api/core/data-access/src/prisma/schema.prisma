@@ -41,7 +41,6 @@ model App {
   envs        AppEnv[]
   index       Int              @unique
   name        String
-  transaction AppTransaction[]
   users       AppUser[]
   wallets     Wallet[]
 }
@@ -104,8 +103,6 @@ model AppTransaction {
   webhookEventEnd    DateTime?
   webhookVerifyStart DateTime?
   webhookVerifyEnd   DateTime?
-  app                App                       @relation(fields: [appId], references: [id])
-  appId              String
   appEnv             AppEnv?                   @relation(fields: [appEnvId], references: [id])
   appEnvId           String?
 }

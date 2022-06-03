@@ -6,18 +6,18 @@ import { useAppEnv } from './app-env-provider'
 import { AppHeader } from './app-header'
 
 export function EnvDetailLayout({ children }: PropsWithChildren<any>) {
-  const { env, tabs } = useAppEnv()
+  const { appEnv, tabs } = useAppEnv()
   const { url } = useRouteMatch()
   const defaultIndex = tabs.findIndex((item) => url.startsWith(item.path)) || 0
   return (
     <Stack direction="column" spacing={6}>
-      {env.app && <AppHeader app={env.app} />}
+      {appEnv.app && <AppHeader app={appEnv.app} />}
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Flex justifyContent="space-between" alignItems="center">
           <Box maxW="32rem" fontSize="xl" as="h4">
-            Environment: {env?.name}
+            Environment: {appEnv?.name}
           </Box>
-          {env?.cluster && <AdminClusterUiCluster cluster={env?.cluster} />}
+          {appEnv?.cluster && <AdminClusterUiCluster cluster={appEnv?.cluster} />}
         </Flex>
       </Box>
       <Tabs colorScheme="teal" defaultIndex={defaultIndex}>

@@ -6,11 +6,15 @@ import { EnvDetailLayout } from './env-detail-layout'
 
 export function EnvDetailTransaction() {
   const { appTransactionId } = useParams<{ appId: string; appTransactionId: string }>()
-  const { env } = useAppEnv()
+  const { appEnv } = useAppEnv()
   return (
     <EnvDetailLayout>
-      {env.app?.id && appTransactionId && (
-        <AdminAppFeatureTransactionDetail appId={env.app.id} appTransactionId={appTransactionId} />
+      {appEnv.id && appEnv.app?.id && appTransactionId && (
+        <AdminAppFeatureTransactionDetail
+          appId={appEnv.app.id}
+          appEnvId={appEnv.id}
+          appTransactionId={appTransactionId}
+        />
       )}
     </EnvDetailLayout>
   )

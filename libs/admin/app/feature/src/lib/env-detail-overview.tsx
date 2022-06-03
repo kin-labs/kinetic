@@ -5,12 +5,13 @@ import { useAppEnv } from './app-env-provider'
 import { EnvDetailLayout } from './env-detail-layout'
 
 export function EnvDetailOverview() {
-  const { env } = useAppEnv()
+  const { appEnv } = useAppEnv()
   return (
     <EnvDetailLayout>
       <Stack spacing={6}>
-        {env.mints?.map(
-          ({ mint }) => env.cluster?.id && mint && <AdminClusterUiMints mints={[mint]} clusterId={env.cluster?.id} />,
+        {appEnv.mints?.map(
+          ({ mint }) =>
+            appEnv.cluster?.id && mint && <AdminClusterUiMints mints={[mint]} clusterId={appEnv.cluster?.id} />,
         )}
       </Stack>
     </EnvDetailLayout>

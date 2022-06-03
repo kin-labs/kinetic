@@ -3,13 +3,13 @@ import React, { ReactNode } from 'react'
 
 export interface AppEnvProviderContext {
   baseUrl: string
-  env: AppEnv
+  appEnv: AppEnv
   tabs: { label: string; path: string }[]
 }
 
 const AppEnvContext = React.createContext<AppEnvProviderContext>({} as AppEnvProviderContext)
 
-function AppEnvProvider({ baseUrl, env, children }: { baseUrl: string; children: ReactNode; env: AppEnv }) {
+function AppEnvProvider({ baseUrl, appEnv, children }: { baseUrl: string; children: ReactNode; appEnv: AppEnv }) {
   const tabs = [
     { path: `${baseUrl}/overview`, label: 'Overview' },
     { path: `${baseUrl}/transactions`, label: 'Transactions' },
@@ -19,7 +19,7 @@ function AppEnvProvider({ baseUrl, env, children }: { baseUrl: string; children:
   ]
   const value = {
     baseUrl,
-    env,
+    appEnv,
     tabs,
   }
 

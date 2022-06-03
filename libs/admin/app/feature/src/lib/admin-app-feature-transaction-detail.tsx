@@ -11,13 +11,15 @@ import React, { useEffect } from 'react'
 
 export default function AdminAppFeatureTransactionDetail({
   appId,
+  appEnvId,
   appTransactionId,
 }: {
   appId: string
+  appEnvId: string
   appTransactionId: string
 }) {
   const [{ data, fetching }, refresh] = useAppTransactionQuery({
-    variables: { appId: appId!, appTransactionId: appTransactionId },
+    variables: { appId: appId, appEnvId, appTransactionId: appTransactionId },
   })
 
   useEffect(() => {

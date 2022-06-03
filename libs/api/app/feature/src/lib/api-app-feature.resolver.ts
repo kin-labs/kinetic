@@ -4,7 +4,6 @@ import {
   AppCreateInput,
   AppEnv,
   AppEnvUpdateInput,
-  AppTransaction,
   AppUpdateInput,
   AppUserAddInput,
   AppUserRemoveInput,
@@ -46,21 +45,6 @@ export class ApiAppFeatureResolver {
   appEnv(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
     return this.service.appEnv(user.id, appId, appEnvId)
   }
-
-  @Query(() => AppTransaction, { nullable: true })
-  appTransaction(
-    @CtxUser() user: User,
-    @Args('appId') appId: string,
-    @Args('appTransactionId') appTransactionId: string,
-  ) {
-    return this.service.appTransaction(user.id, appId, appTransactionId)
-  }
-
-  @Query(() => [AppTransaction], { nullable: true })
-  appTransactions(@CtxUser() user: User, @Args('appId') appId: string) {
-    return this.service.appTransactions(user.id, appId)
-  }
-
   @Query(() => AppWebhook, { nullable: true })
   appWebhook(@CtxUser() user: User, @Args('appId') appId: string, @Args('appWebhookId') appWebhookId: string) {
     return this.service.appWebhook(user.id, appId, appWebhookId)

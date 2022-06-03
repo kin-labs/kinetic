@@ -121,8 +121,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
   async deleteApp(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
     await this.data.appUser.deleteMany({ where: { appId } })
-    await this.data.appTransactionError.deleteMany({ where: { appTransaction: { appId } } })
-    await this.data.appTransaction.deleteMany({ where: { appId } })
+    await this.data.appTransactionError.deleteMany({ where: { appTransaction: { appEnv: { appId } } } })
+    await this.data.appTransaction.deleteMany({ where: { appEnv: { appId } } })
     await this.data.appWebhook.deleteMany({ where: { appEnv: { appId } } })
     await this.data.appEnv.deleteMany({ where: { appId } })
     return this.data.app.delete({ where: { id: appId } })
@@ -158,18 +158,18 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  async appTransaction(userId: string, appId: string, appTransactionId: string) {
+  async appTransaction(userId: string, appId: string, appEnvId: string, appTransactionId: string) {
     await this.ensureAppById(userId, appId)
-    return this.data.appTransaction.findUnique({
-      where: { id: appTransactionId },
+    return this.data.appTransaction.findFirst({
+      where: { id: appTransactionId, appEnvId },
       include: { errors: true },
     })
   }
 
-  async appTransactions(userId: string, appId: string) {
+  async appTransactions(userId: string, appId: string, appEnvId: string) {
     await this.ensureAppById(userId, appId)
     return this.data.appTransaction.findMany({
-      where: { appId },
+      where: { appEnvId },
       take: 100,
       orderBy: { updatedAt: 'desc' },
       include: { errors: true },

@@ -4,6 +4,10 @@ import { AppEnvSettingsTab } from './app-env-settings-tab'
 import { EnvDetailLayout } from './env-detail-layout'
 
 export function EnvDetailSettings() {
-  const { env } = useAppEnv()
-  return <EnvDetailLayout>{env.app?.id && <AppEnvSettingsTab appId={env.app.id} envId={env.id} />}</EnvDetailLayout>
+  const { appEnv } = useAppEnv()
+  return (
+    <EnvDetailLayout>
+      {appEnv.app?.id && <AppEnvSettingsTab appId={appEnv.app.id} appEnvId={appEnv.id} />}
+    </EnvDetailLayout>
+  )
 }

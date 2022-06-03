@@ -41,10 +41,9 @@ export class ApiAccountDataAccessService {
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
-    const app = await this.data.getAppByIndex(Number(input.index))
 
     const created = await this.data.appTransaction.create({
-      data: { appId: app.id, appEnvId: appEnv.id },
+      data: { appEnvId: appEnv.id },
       include: { errors: true },
     })
     const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)

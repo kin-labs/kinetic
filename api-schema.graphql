@@ -315,8 +315,8 @@ type NetworkStat {
 type Query {
   app(appId: String!): App
   appEnv(appEnvId: String!, appId: String!): AppEnv
-  appTransaction(appId: String!, appTransactionId: String!): AppTransaction
-  appTransactions(appId: String!): [AppTransaction!]
+  appTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
+  appTransactions(appEnvId: String!, appId: String!): [AppTransaction!]
   appWebhook(appId: String!, appWebhookId: String!): AppWebhook
   appWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
   apps: [App!]

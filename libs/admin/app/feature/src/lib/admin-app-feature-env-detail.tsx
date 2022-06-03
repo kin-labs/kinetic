@@ -20,7 +20,7 @@ export default function AdminAppFeatureEnvDetail() {
   return (
     <React.Suspense fallback={<AdminUiLoader />}>
       {!fetching && data?.item ? (
-        <AppEnvProvider env={data.item} baseUrl={url}>
+        <AppEnvProvider appEnv={data.item} baseUrl={url}>
           <Switch>
             <Route path={path} exact render={() => <Redirect to={`${url}/overview`} />} />
             <Route path={`${path}/overview`} render={() => <EnvDetailOverview />} />

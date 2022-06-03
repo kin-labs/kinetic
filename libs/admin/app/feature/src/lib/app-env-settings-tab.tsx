@@ -4,9 +4,9 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AppEnvUpdateInput, useAppEnvQuery, useUpdateAppEnvMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export function AppEnvSettingsTab({ appId, envId }: { appId: string; envId: string }) {
+export function AppEnvSettingsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
   const toast = useToast()
-  const [{ data, fetching }] = useAppEnvQuery({ variables: { appId, appEnvId: envId } })
+  const [{ data, fetching }] = useAppEnvQuery({ variables: { appId, appEnvId: appEnvId } })
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [, updateAppEnvMutation] = useUpdateAppEnvMutation()
 
@@ -14,7 +14,7 @@ export function AppEnvSettingsTab({ appId, envId }: { appId: string; envId: stri
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await updateAppEnvMutation({
       appId: appId,
-      appEnvId: envId,
+      appEnvId: appEnvId,
       input: {
         ...input,
         webhookEventUrl: input.webhookEventUrl?.trim(),
