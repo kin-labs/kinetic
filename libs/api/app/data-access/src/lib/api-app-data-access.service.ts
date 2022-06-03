@@ -137,7 +137,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   async app(userId: string, appId: string) {
-    await this.data.ensureAdminUser(userId)
+    await this.ensureAppById(userId, appId)
     return this.data.getAppById(appId)
   }
 
