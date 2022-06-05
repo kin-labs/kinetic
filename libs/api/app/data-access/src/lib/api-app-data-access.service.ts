@@ -172,7 +172,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
     return this.data.appTransaction.findMany({
       where: { appEnvId },
       take: 100,
-      orderBy: { updatedAt: 'desc' },
+      orderBy: { createdAt: 'desc' },
       include: { errors: true },
     })
   }

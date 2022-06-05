@@ -106,12 +106,16 @@ export class MogamiSdkInternal {
     commitment,
     destination,
     owner,
+    referenceId,
+    referenceType,
     type,
   }: {
     amount: string
     commitment: Commitment
     destination: PublicKeyString
     owner: Keypair
+    referenceId?: string
+    referenceType?: string
     type: TransactionType
   }) {
     if (!this.appConfig) {
@@ -139,6 +143,8 @@ export class MogamiSdkInternal {
       index: this.appConfig.app.index,
       mint: this.appConfig.mint.symbol,
       lastValidBlockHeight,
+      referenceId: referenceId || null,
+      referenceType: referenceType || null,
       tx,
     }
 
@@ -151,11 +157,15 @@ export class MogamiSdkInternal {
     commitment,
     owner,
     payments,
+    referenceId,
+    referenceType,
     type,
   }: {
     commitment: Commitment
     owner: Keypair
     payments: Payment[]
+    referenceId?: string
+    referenceType?: string
     type: TransactionType
   }) {
     if (!this.appConfig) {
@@ -186,6 +196,8 @@ export class MogamiSdkInternal {
       index: this.appConfig.app.index,
       mint: this.appConfig.mint.symbol,
       lastValidBlockHeight,
+      referenceId: referenceId || null,
+      referenceType: referenceType || null,
       tx,
     }
 

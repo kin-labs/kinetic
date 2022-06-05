@@ -83,6 +83,8 @@ export type AppTransaction = {
   id?: Maybe<Scalars['String']>
   mint?: Maybe<Scalars['String']>
   processingDuration?: Maybe<Scalars['Int']>
+  referenceId?: Maybe<Scalars['String']>
+  referenceType?: Maybe<Scalars['String']>
   signature?: Maybe<Scalars['String']>
   solanaCommitted?: Maybe<Scalars['DateTime']>
   solanaCommittedDuration?: Maybe<Scalars['Int']>
@@ -672,6 +674,8 @@ export const AppTransactionDetails = gql`
     feePayer
     mint
     processingDuration
+    referenceId
+    referenceType
     signature
     solanaCommittedDuration
     solanaFinalized
@@ -1318,6 +1322,8 @@ export type AppTransactionDetailsFragment = {
   feePayer?: string | null
   mint?: string | null
   processingDuration?: number | null
+  referenceId?: string | null
+  referenceType?: string | null
   signature?: string | null
   solanaCommittedDuration?: number | null
   solanaFinalized?: any | null
@@ -2141,6 +2147,8 @@ export type AppTransactionQuery = {
     feePayer?: string | null
     mint?: string | null
     processingDuration?: number | null
+    referenceId?: string | null
+    referenceType?: string | null
     signature?: string | null
     solanaCommittedDuration?: number | null
     solanaFinalized?: any | null
@@ -2184,6 +2192,8 @@ export type AppTransactionsQuery = {
     feePayer?: string | null
     mint?: string | null
     processingDuration?: number | null
+    referenceId?: string | null
+    referenceType?: string | null
     signature?: string | null
     solanaCommittedDuration?: number | null
     solanaFinalized?: any | null

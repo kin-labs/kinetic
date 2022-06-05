@@ -46,6 +46,8 @@ export class ApiTransactionDataAccessService {
       data: {
         appEnvId: appEnv.id,
         commitment: input.commitment,
+        referenceId: input.referenceId,
+        referenceType: input.referenceType,
       },
       include: { errors: true },
     })

@@ -25,6 +25,8 @@ export function SdkControlPanelMakePayment({ keypair, sdk }: { keypair: DemoKeyp
       amount,
       destination: accountId,
       owner: kp,
+      referenceId: Date.now().toString(),
+      referenceType: 'DemoPayment',
       type: TransactionType.Spend,
     })
     setResult(res)

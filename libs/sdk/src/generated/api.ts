@@ -346,6 +346,18 @@ export interface AppTransaction {
    * @type {string}
    * @memberof AppTransaction
    */
+  referenceId: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
+  referenceType: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
   signature: string
   /**
    *
@@ -551,6 +563,18 @@ export interface MakeTransferRequest {
    * @memberof MakeTransferRequest
    */
   lastValidBlockHeight: number
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferRequest
+   */
+  referenceId: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferRequest
+   */
+  referenceType: string | null
   /**
    *
    * @type {object}

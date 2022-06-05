@@ -1,4 +1,4 @@
-import { Alert, Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Alert, Box, Table, TableContainer, Text, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { AppTransaction } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -22,6 +22,7 @@ export function AdminAppUiTransactions({ appId, appEnvId, transactions }: AdminA
             <Tr>
               <Th>Status</Th>
               <Th>Source</Th>
+              <Th>Reference</Th>
               <Th isNumeric>Created</Th>
               <Th isNumeric>Duration</Th>
             </Tr>
@@ -34,8 +35,15 @@ export function AdminAppUiTransactions({ appId, appEnvId, transactions }: AdminA
                     <AdminAppUiTransactionStatus status={transaction?.status} />
                   </Link>
                 </Td>
-                <Td>{transaction.source}</Td>
-                <Td isNumeric>{transaction.createdAt} ms</Td>
+                <Td>
+                  <Text fontSize="sm">{transaction.source}</Text>
+                </Td>
+                <Td>
+                  {transaction?.referenceId || transaction?.referenceType
+                    ? `${transaction?.referenceType}:${transaction?.referenceId}`
+                    : 'None'}
+                </Td>
+                <Td isNumeric>{transaction.createdAt}</Td>
                 <Td isNumeric>{transaction.totalDuration} ms</Td>
               </Tr>
             ))}
