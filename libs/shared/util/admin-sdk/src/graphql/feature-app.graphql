@@ -229,8 +229,8 @@ query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: Str
   }
 }
 
-query AppTransactions($appId: String!, $appEnvId: String!) {
-  items: appTransactions(appId: $appId, appEnvId: $appEnvId) {
+query AppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
+  items: appTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
     ...AppTransactionDetails
   }
 }

@@ -9,6 +9,7 @@ import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppEnvUpdateInput } from './dto/app-env-update.input'
+import { AppTransactionListInput } from './dto/app-transaction-list.input'
 import { AppUpdateInput } from './dto/app-update.input'
 import { AppUserAddInput } from './dto/app-user-add.input'
 import { AppUserRemoveInput } from './dto/app-user-remove.input'
@@ -167,10 +168,10 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  async appTransactions(userId: string, appId: string, appEnvId: string) {
+  async appTransactions(userId: string, appId: string, appEnvId: string, input: AppTransactionListInput = {}) {
     await this.ensureAppById(userId, appId)
     return this.data.appTransaction.findMany({
-      where: { appEnvId },
+      where: { appEnvId, ...input },
       take: 100,
       orderBy: { createdAt: 'desc' },
       include: { errors: true },
