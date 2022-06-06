@@ -1,4 +1,4 @@
-import { ApiAppDataAccessService, AppTransaction } from '@mogami/api/app/data-access'
+import { ApiAppDataAccessService, AppTransaction, AppTransactionListInput } from '@mogami/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
@@ -20,8 +20,13 @@ export class ApiAppTransactionFeatureResolver {
   }
 
   @Query(() => [AppTransaction], { nullable: true })
-  appTransactions(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
-    return this.service.appTransactions(user.id, appId, appEnvId)
+  appTransactions(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args({ name: 'input', type: () => AppTransactionListInput, nullable: true }) input: AppTransactionListInput,
+  ) {
+    return this.service.appTransactions(user.id, appId, appEnvId, input)
   }
 
   @ResolveField(() => Int, { nullable: true })

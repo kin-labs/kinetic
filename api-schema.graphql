@@ -97,6 +97,14 @@ enum AppTransactionErrorType {
   WebhookFailed
 }
 
+input AppTransactionListInput {
+  referenceId: String
+  referenceType: String
+  signature: String
+  source: String
+  status: AppTransactionStatus
+}
+
 enum AppTransactionStatus {
   Committed
   Confirmed
@@ -319,7 +327,7 @@ type Query {
   app(appId: String!): App
   appEnv(appEnvId: String!, appId: String!): AppEnv
   appTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
-  appTransactions(appEnvId: String!, appId: String!): [AppTransaction!]
+  appTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
   appWebhook(appId: String!, appWebhookId: String!): AppWebhook
   appWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
   apps: [App!]

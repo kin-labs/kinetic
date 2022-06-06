@@ -122,6 +122,14 @@ export enum AppTransactionErrorType {
   WebhookFailed = 'WebhookFailed',
 }
 
+export type AppTransactionListInput = {
+  referenceId?: InputMaybe<Scalars['String']>
+  referenceType?: InputMaybe<Scalars['String']>
+  signature?: InputMaybe<Scalars['String']>
+  source?: InputMaybe<Scalars['String']>
+  status?: InputMaybe<AppTransactionStatus>
+}
+
 export enum AppTransactionStatus {
   Committed = 'Committed',
   Confirmed = 'Confirmed',
@@ -464,6 +472,7 @@ export type QueryAppTransactionArgs = {
 export type QueryAppTransactionsArgs = {
   appEnvId: Scalars['String']
   appId: Scalars['String']
+  input?: InputMaybe<AppTransactionListInput>
 }
 
 export type QueryAppWebhookArgs = {
@@ -1531,6 +1540,7 @@ export type AppTransactionQuery = {
 export type AppTransactionsQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
+  input?: InputMaybe<AppTransactionListInput>
 }>
 
 export type AppTransactionsQuery = {
@@ -2764,8 +2774,8 @@ export function useAppTransactionQuery(options: Omit<Urql.UseQueryArgs<AppTransa
   return Urql.useQuery<AppTransactionQuery>({ query: AppTransactionDocument, ...options })
 }
 export const AppTransactionsDocument = gql`
-  query AppTransactions($appId: String!, $appEnvId: String!) {
-    items: appTransactions(appId: $appId, appEnvId: $appEnvId) {
+  query AppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
+    items: appTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
       ...AppTransactionDetails
     }
   }
