@@ -61,6 +61,8 @@ type AppTransaction {
   id: String
   mint: String
   processingDuration: Int
+  referenceId: String
+  referenceType: String
   signature: String
   solanaCommitted: DateTime
   solanaCommittedDuration: Int

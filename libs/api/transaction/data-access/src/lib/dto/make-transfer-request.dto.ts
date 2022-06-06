@@ -12,6 +12,10 @@ export class MakeTransferRequest {
   mint: string
   @ApiProperty()
   lastValidBlockHeight: number
+  @ApiProperty({ nullable: true })
+  referenceId?: string
+  @ApiProperty({ nullable: true })
+  referenceType?: string
   @ApiProperty()
   tx: Buffer
 }

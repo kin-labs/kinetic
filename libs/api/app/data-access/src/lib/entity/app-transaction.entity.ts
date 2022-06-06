@@ -34,6 +34,12 @@ export class AppTransaction {
   mint?: string
   @ApiProperty()
   @Field({ nullable: true })
+  referenceId?: string
+  @ApiProperty()
+  @Field({ nullable: true })
+  referenceType?: string
+  @ApiProperty()
+  @Field({ nullable: true })
   signature?: string
   @ApiProperty()
   @Field({ nullable: true })

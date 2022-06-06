@@ -50,12 +50,16 @@ export class MogamiSdk {
     commitment = Commitment.Confirmed,
     destination,
     owner,
+    referenceId,
+    referenceType,
     type = TransactionType.None,
   }: {
     amount: string
     commitment?: Commitment
     destination: string
     owner: Keypair
+    referenceId?: string
+    referenceType?: string
     type?: TransactionType
   }) {
     return this.internal.makeTransfer({
@@ -63,6 +67,8 @@ export class MogamiSdk {
       commitment,
       destination,
       owner,
+      referenceId,
+      referenceType,
       type,
     })
   }

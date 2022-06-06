@@ -91,13 +91,15 @@ model AppTransaction {
   errors             AppTransactionError[]
   feePayer           String?
   mint               String?
-  source             String?
+  referenceId        String?
+  referenceType      String?
   signature          String?
   solanaCommitted    DateTime?
   solanaConfirmed    DateTime?
   solanaFinalized    DateTime?
   solanaStart        DateTime?
   solanaTransaction  Json?
+  source             String?
   status             AppTransactionStatus      @default(Processing)
   webhookEventStart  DateTime?
   webhookEventEnd    DateTime?
@@ -145,6 +147,8 @@ model AppWebhook {
   direction       AppWebhookDirection
   headers         Json?
   payload         Json?
+  referenceId     String?
+  referenceType   String?
   responsePayload Json?
   responseError   String?
   responseStatus  Int?

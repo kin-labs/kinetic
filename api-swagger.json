@@ -608,6 +608,12 @@
           "mint": {
             "type": "string"
           },
+          "referenceId": {
+            "type": "string"
+          },
+          "referenceType": {
+            "type": "string"
+          },
           "signature": {
             "type": "string"
           },
@@ -658,6 +664,8 @@
           "errors",
           "feePayer",
           "mint",
+          "referenceId",
+          "referenceType",
           "signature",
           "solanaFinalized",
           "solanaCommitted",
@@ -934,11 +942,28 @@
           "lastValidBlockHeight": {
             "type": "number"
           },
+          "referenceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceType": {
+            "type": "string",
+            "nullable": true
+          },
           "tx": {
             "$ref": "#/components/schemas/Buffer"
           }
         },
-        "required": ["commitment", "environment", "index", "mint", "lastValidBlockHeight", "tx"]
+        "required": [
+          "commitment",
+          "environment",
+          "index",
+          "mint",
+          "lastValidBlockHeight",
+          "referenceId",
+          "referenceType",
+          "tx"
+        ]
       }
     }
   }
