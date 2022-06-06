@@ -19,6 +19,7 @@ input AppCreateInput {
 }
 
 type AppEnv {
+  app: App
   cluster: Cluster
   createdAt: DateTime!
   id: String!

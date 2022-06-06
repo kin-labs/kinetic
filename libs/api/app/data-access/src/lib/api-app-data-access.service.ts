@@ -18,6 +18,8 @@ import { AppConfig } from './entity/app-config.entity'
 import { AppHealth } from './entity/app-health.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
 import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
+import { InjectMetric } from '@willsoto/nestjs-prometheus'
+import { Counter } from 'prom-client'
 
 function isValidAppWebhookType(type: string) {
   return Object.keys(AppWebhookType)
@@ -45,7 +47,11 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   private readonly logger = new Logger(ApiAppDataAccessService.name)
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
+  constructor(
+    private readonly data: ApiCoreDataAccessService,
+    private readonly wallet: ApiWalletDataAccessService,
+    @InjectMetric('app_config_metric_name') public counter: Counter<string>,
+  ) {}
 
   async onModuleInit() {
     await this.configureProvisionedApps()
