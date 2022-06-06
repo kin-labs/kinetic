@@ -13,6 +13,7 @@
     "admin-home-feature": "libs/admin/home/feature",
     "admin-shell-feature": "libs/admin/shell/feature",
     "admin-ui-alert": "libs/admin/ui/alert",
+    "admin-ui-form": "libs/admin/ui/form",
     "admin-ui-layout": "libs/admin/ui/layout",
     "admin-ui-loader": "libs/admin/ui/loader",
     "admin-user-feature": "libs/admin/user/feature",
