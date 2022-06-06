@@ -182,15 +182,29 @@ enum AppUserRole {
 }
 
 model Cluster {
-  id        String        @id @default(cuid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @default(now()) @updatedAt
-  endpoint  String
-  envs      AppEnv[]
-  mints     Mint[]
-  name      String
-  status    ClusterStatus @default(Active)
-  type      ClusterType
+  id          String        @id @default(cuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  enableStats Boolean       @default(false)
+  endpoint    String
+  envs        AppEnv[]
+  mints       Mint[]
+  name        String
+  status      ClusterStatus @default(Active)
+  type        ClusterType
+  stats       ClusterStat[]
+}
+
+model ClusterStat {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
+  numSlots         Int
+  numTransactions  Int
+  samplePeriodSecs Int
+  slot             Int
+  cluster          Cluster  @relation(fields: [clusterId], references: [id])
+  clusterId        String
 }
 
 enum ClusterStatus {
@@ -229,16 +243,6 @@ model Mint {
 
 enum MintType {
   SplToken
-}
-
-model NetworkStat {
-  id               String   @id @default(cuid())
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now()) @updatedAt
-  numSlots         Int
-  numTransactions  Int
-  samplePeriodSecs Int
-  slot             Int
 }
 
 model User {

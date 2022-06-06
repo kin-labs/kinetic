@@ -7,25 +7,11 @@ const AdminClusterFeatureList = React.lazy(async () => import('./admin-cluster-f
 
 export function AdminClusterFeature() {
   return (
-    <Switch>
-      <Route
-        path="/clusters"
-        exact
-        render={() => (
-          <React.Suspense fallback={<AdminUiLoader />}>
-            <AdminClusterFeatureList />
-          </React.Suspense>
-        )}
-      />
-      <Route
-        path="/clusters/:clusterId"
-        exact
-        render={() => (
-          <React.Suspense fallback={<AdminUiLoader />}>
-            <AdminClusterFeatureDetail />
-          </React.Suspense>
-        )}
-      />
-    </Switch>
+    <React.Suspense fallback={<AdminUiLoader />}>
+      <Switch>
+        <Route path="/clusters" exact render={() => <AdminClusterFeatureList />} />
+        <Route path="/clusters/:clusterId" exact render={() => <AdminClusterFeatureDetail />} />
+      </Switch>
+    </React.Suspense>
   )
 }

@@ -12,13 +12,9 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   private readonly logger = new Logger(ApiCoreDataAccessService.name)
   readonly airdropConfig = new Map<string, Omit<AirdropConfig, 'connection'>>()
   readonly connections = new Map<string, Solana>()
-  readonly solana: Solana
 
   constructor(readonly config: ApiConfigDataAccessService) {
     super()
-    this.solana = new Solana(config.solanaRpcEndpoint, {
-      logger: new Logger('@mogami/solana'),
-    })
   }
 
   uptime() {
@@ -27,17 +23,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async onModuleInit() {
     await this.$connect()
-  }
-
-  async healthCheck() {
-    const isMogamiOk = true
-    const isSolanaOk = await this.solana.healthCheck()
-
-    return {
-      isSolanaOk,
-      isMogamiOk,
-      time: new Date(),
-    }
   }
 
   async ensureAdminUser(userId: string) {

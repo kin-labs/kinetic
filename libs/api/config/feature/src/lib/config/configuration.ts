@@ -21,7 +21,6 @@ export default () => ({
   defaultMintAirdropAmount: process.env.DEFAULT_MINT_AIRDROP_AMOUNT,
   defaultMintAirdropMax: process.env.DEFAULT_MINT_AIRDROP_MAX,
   port: parseInt(process.env.PORT, 10),
-  solanaRpcEndpoint: process.env.SOLANA_DEVNET_RPC_ENDPOINT,
   solanaDevnetRpcEndpoint: process.env.SOLANA_DEVNET_RPC_ENDPOINT,
   solanaMainnetRpcEndpoint: process.env.SOLANA_MAINNET_RPC_ENDPOINT,
 })

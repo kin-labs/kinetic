@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
-export class NetworkStat {
+export class ClusterStat {
   @Field()
   id?: string
   @Field()

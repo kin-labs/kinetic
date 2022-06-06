@@ -192,6 +192,7 @@ export type AuthToken = {
 export type Cluster = {
   __typename?: 'Cluster'
   createdAt?: Maybe<Scalars['DateTime']>
+  enableStats?: Maybe<Scalars['Boolean']>
   endpoint?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['String']>
   mints?: Maybe<Array<Mint>>
@@ -205,6 +206,17 @@ export type ClusterCreateInput = {
   endpoint: Scalars['String']
   name: Scalars['String']
   type: ClusterType
+}
+
+export type ClusterStat = {
+  __typename?: 'ClusterStat'
+  createdAt: Scalars['DateTime']
+  id: Scalars['String']
+  numSlots?: Maybe<Scalars['Float']>
+  numTransactions: Scalars['Float']
+  samplePeriodSecs: Scalars['Float']
+  slot: Scalars['Float']
+  updatedAt: Scalars['DateTime']
 }
 
 export enum ClusterStatus {
@@ -258,6 +270,7 @@ export enum ClusterType {
 }
 
 export type ClusterUpdateInput = {
+  enableStats?: InputMaybe<Scalars['Boolean']>
   endpoint?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
   status?: InputMaybe<ClusterStatus>
@@ -405,17 +418,6 @@ export type MutationUpdateUserArgs = {
   userId: Scalars['String']
 }
 
-export type NetworkStat = {
-  __typename?: 'NetworkStat'
-  createdAt: Scalars['DateTime']
-  id: Scalars['String']
-  numSlots?: Maybe<Scalars['Float']>
-  numTransactions: Scalars['Float']
-  samplePeriodSecs: Scalars['Float']
-  slot: Scalars['Float']
-  updatedAt: Scalars['DateTime']
-}
-
 export type Query = {
   __typename?: 'Query'
   app?: Maybe<App>
@@ -426,11 +428,10 @@ export type Query = {
   appWebhooks?: Maybe<Array<AppWebhook>>
   apps?: Maybe<Array<App>>
   cluster?: Maybe<Cluster>
+  clusterStats?: Maybe<Array<ClusterStat>>
   clusterTokens?: Maybe<Array<ClusterToken>>
   clusters?: Maybe<Array<Cluster>>
   me?: Maybe<User>
-  networkStat?: Maybe<NetworkStat>
-  networkStats?: Maybe<Array<NetworkStat>>
   uptime: Scalars['Float']
   user?: Maybe<User>
   users?: Maybe<Array<User>>
@@ -475,12 +476,12 @@ export type QueryClusterArgs = {
   clusterId: Scalars['String']
 }
 
-export type QueryClusterTokensArgs = {
-  input: ClusterTokenInput
+export type QueryClusterStatsArgs = {
+  clusterId: Scalars['String']
 }
 
-export type QueryNetworkStatArgs = {
-  networkStatId: Scalars['String']
+export type QueryClusterTokensArgs = {
+  input: ClusterTokenInput
 }
 
 export type QueryUserArgs = {
@@ -577,6 +578,7 @@ export const ClusterDetails = gql`
     id
     createdAt
     updatedAt
+    enableStats
     endpoint
     name
     status
@@ -748,6 +750,17 @@ export const AuthTokenDetails = gql`
     }
   }
   ${UserDetails}
+`
+export const ClusterStatDetails = gql`
+  fragment ClusterStatDetails on ClusterStat {
+    id
+    createdAt
+    updatedAt
+    numSlots
+    numTransactions
+    samplePeriodSecs
+    slot
+  }
 `
 export const ClusterTokenExtensionsDetails = gql`
   fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
@@ -1090,6 +1103,14 @@ export const Clusters = gql`
   ${ClusterDetails}
   ${MintDetails}
 `
+export const ClusterStats = gql`
+  query ClusterStats($clusterId: String!) {
+    items: clusterStats(clusterId: $clusterId) {
+      ...ClusterStatDetails
+    }
+  }
+  ${ClusterStatDetails}
+`
 export const Uptime = gql`
   query Uptime {
     uptime
@@ -1226,6 +1247,7 @@ export type AppEnvDetailsFragment = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -1408,6 +1430,7 @@ export type CreateAppMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        enableStats?: boolean | null
         endpoint?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -1531,6 +1554,7 @@ export type UpdateAppMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        enableStats?: boolean | null
         endpoint?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -1625,6 +1649,7 @@ export type UpdateAppEnvMutation = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      enableStats?: boolean | null
       endpoint?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -1821,6 +1846,7 @@ export type AppEnvWalletAddMutation = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      enableStats?: boolean | null
       endpoint?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -1888,6 +1914,7 @@ export type AppEnvWalletRemoveMutation = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      enableStats?: boolean | null
       endpoint?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -1967,6 +1994,7 @@ export type AppQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        enableStats?: boolean | null
         endpoint?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -2060,6 +2088,7 @@ export type AppEnvQuery = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      enableStats?: boolean | null
       endpoint?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -2261,6 +2290,7 @@ export type AppsQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        enableStats?: boolean | null
         endpoint?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -2361,10 +2391,22 @@ export type ClusterDetailsFragment = {
   id?: string | null
   createdAt?: any | null
   updatedAt?: any | null
+  enableStats?: boolean | null
   endpoint?: string | null
   name?: string | null
   status?: ClusterStatus | null
   type?: ClusterType | null
+}
+
+export type ClusterStatDetailsFragment = {
+  __typename?: 'ClusterStat'
+  id: string
+  createdAt: any
+  updatedAt: any
+  numSlots?: number | null
+  numTransactions: number
+  samplePeriodSecs: number
+  slot: number
 }
 
 export type ClusterTokenDetailsFragment = {
@@ -2441,6 +2483,7 @@ export type AddClusterMintMutation = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -2472,6 +2515,7 @@ export type CreateClusterMutation = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -2490,6 +2534,7 @@ export type DeleteClusterMutation = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -2509,6 +2554,7 @@ export type UpdateClusterMutation = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -2527,6 +2573,7 @@ export type ClusterQuery = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -2592,6 +2639,7 @@ export type ClustersQuery = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    enableStats?: boolean | null
     endpoint?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -2609,6 +2657,24 @@ export type ClustersQuery = {
       symbol?: string | null
       type?: MintType | null
     }> | null
+  }> | null
+}
+
+export type ClusterStatsQueryVariables = Exact<{
+  clusterId: Scalars['String']
+}>
+
+export type ClusterStatsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'ClusterStat'
+    id: string
+    createdAt: any
+    updatedAt: any
+    numSlots?: number | null
+    numTransactions: number
+    samplePeriodSecs: number
+    slot: number
   }> | null
 }
 

@@ -37,8 +37,6 @@
     "api-core-feature": "libs/api/core/feature",
     "api-core-util": "libs/api/core/util",
     "api-e2e": "apps/api-e2e",
-    "api-network-stat-data-access": "libs/api/network-stat/data-access",
-    "api-network-stat-feature": "libs/api/network-stat/feature",
     "api-transaction-data-access": "libs/api/transaction/data-access",
     "api-transaction-feature": "libs/api/transaction/feature",
     "api-user-data-access": "libs/api/user/data-access",

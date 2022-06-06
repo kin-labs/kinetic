@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class HealthCheckResponse {
+export class AppHealth {
   @ApiProperty()
   isSolanaOk: boolean
   @ApiProperty()
   isMogamiOk: boolean
   @ApiProperty()
-  time: string
+  time: Date
 }

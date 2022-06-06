@@ -5,6 +5,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { AdminClusterFeatureMintsTab } from './admin-cluster-feature-mints-tab'
 import { AdminClusterFeatureSettingsTab } from './admin-cluster-feature-settings-tab'
+import { AdminClusterFeatureStatsTab } from './admin-cluster-feature-stats-tab'
 
 export default function AdminClusterFeatureDetail() {
   const { clusterId } = useParams<{ clusterId: string }>()
@@ -31,13 +32,13 @@ export default function AdminClusterFeatureDetail() {
       <Tabs isLazy colorScheme="teal">
         <TabList>
           <Tab>Mints</Tab>
+          <Tab>Stats</Tab>
           <Tab>Settings</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>{clusterId && <AdminClusterFeatureMintsTab clusterId={clusterId!} />}</TabPanel>
-          <TabPanel>
-            {clusterId && <AdminClusterFeatureSettingsTab clusterId={clusterId!}></AdminClusterFeatureSettingsTab>}
-          </TabPanel>
+          <TabPanel>{clusterId && <AdminClusterFeatureMintsTab clusterId={clusterId} />}</TabPanel>
+          <TabPanel>{clusterId && <AdminClusterFeatureStatsTab clusterId={clusterId} />}</TabPanel>
+          <TabPanel>{clusterId && <AdminClusterFeatureSettingsTab clusterId={clusterId} />}</TabPanel>
         </TabPanels>
       </Tabs>
     </Stack>

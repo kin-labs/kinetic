@@ -4,9 +4,11 @@ import { ClusterStatus } from '../entity/cluster-status.enum'
 @InputType()
 export class ClusterUpdateInput {
   @Field({ nullable: true })
-  name?: string
+  enableStats?: boolean
   @Field({ nullable: true })
   endpoint?: string
+  @Field({ nullable: true })
+  name?: string
   @Field(() => ClusterStatus, { nullable: true })
   status?: ClusterStatus
 }

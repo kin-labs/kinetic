@@ -2,10 +2,21 @@ fragment ClusterDetails on Cluster {
   id
   createdAt
   updatedAt
+  enableStats
   endpoint
   name
   status
   type
+}
+
+fragment ClusterStatDetails on ClusterStat {
+  id
+  createdAt
+  updatedAt
+  numSlots
+  numTransactions
+  samplePeriodSecs
+  slot
 }
 
 fragment ClusterTokenDetails on ClusterToken {
@@ -99,5 +110,11 @@ query Clusters {
     mints {
       ...MintDetails
     }
+  }
+}
+
+query ClusterStats($clusterId: String!) {
+  items: clusterStats(clusterId: $clusterId) {
+    ...ClusterStatDetails
   }
 }

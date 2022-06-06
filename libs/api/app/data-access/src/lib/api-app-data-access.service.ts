@@ -14,6 +14,7 @@ import { AppUserAddInput } from './dto/app-user-add.input'
 import { AppUserRemoveInput } from './dto/app-user-remove.input'
 import { AppUserUpdateRoleInput } from './dto/app-user-update-role.input'
 import { AppConfig } from './entity/app-config.entity'
+import { AppHealth } from './entity/app-health.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
 import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
 
@@ -135,8 +136,9 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  app(userId: string, appId: string) {
-    return this.ensureAppById(userId, appId)
+  async app(userId: string, appId: string) {
+    await this.ensureAppById(userId, appId)
+    return this.data.getAppById(appId)
   }
 
   async appEnv(userId: string, appId: string, appEnvId: string) {
@@ -253,7 +255,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
   private async ensureAppById(userId: string, appId: string) {
     await this.data.ensureAdminUser(userId)
-    const app = await this.data.getAppById(appId)
+    const app = await this.data.app.findUnique({ where: { id: appId } })
     if (!app) {
       throw new NotFoundException(`App with id ${appId} does not exist.`)
     }
@@ -328,6 +330,19 @@ export class ApiAppDataAccessService implements OnModuleInit {
       },
       mint: mints[0],
       mints,
+    }
+  }
+
+  async getAppHealth(environment: string, index: number): Promise<AppHealth> {
+    const isMogamiOk = true
+    const solana = await this.data.getSolanaConnection(environment, index)
+
+    const isSolanaOk = await solana.healthCheck()
+
+    return {
+      isSolanaOk,
+      isMogamiOk,
+      time: new Date(),
     }
   }
 
