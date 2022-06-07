@@ -10,7 +10,7 @@ export function AdminClusterFeature() {
     <React.Suspense fallback={<AdminUiLoader />}>
       <Switch>
         <Route path="/clusters" exact render={() => <AdminClusterFeatureList />} />
-        <Route path="/clusters/:clusterId" exact render={() => <AdminClusterFeatureDetail />} />
+        <Route path="/clusters/:clusterId" render={() => <AdminClusterFeatureDetail />} />
       </Switch>
     </React.Suspense>
   )

@@ -30,7 +30,7 @@ const fields: UiFormField[] = [
 
 export function AdminClusterUiForm({ cluster, onSubmit }: AdminClusterUiProps) {
   return (
-    <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
+    <Box borderWidth="1px" rounded="lg" p={6}>
       <Stack direction="column" spacing={6}>
         <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
           Cluster settings
