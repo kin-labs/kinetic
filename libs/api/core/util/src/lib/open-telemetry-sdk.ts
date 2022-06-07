@@ -1,7 +1,11 @@
-import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node'
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { NodeSDK } from '@opentelemetry/sdk-node'
 import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks'
+import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core'
+
+import { InstrumentationOption } from '@opentelemetry/instrumentation'
+
+const nestInstrumentation = new NestInstrumentation() as unknown as InstrumentationOption
 
 export class OpenTelementrySdk {
   static otelSdk: NodeSDK
@@ -14,7 +18,7 @@ export class OpenTelementrySdk {
         }),
         metricInterval: 1000,
         contextManager: new AsyncLocalStorageContextManager(),
-        instrumentations: [getNodeAutoInstrumentations()],
+        instrumentations: [nestInstrumentation],
       })
     }
 

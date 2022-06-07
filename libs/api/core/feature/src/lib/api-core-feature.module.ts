@@ -49,17 +49,16 @@ const isMetricsEnable = process.env.ENABLE_METRICS === 'TRUE'
     ApiWalletFeatureModule,
     OpenTelemetryModule.forRoot({
       metrics: {
-        hostMetrics: isMetricsEnable, // Includes Host Metrics
-        defaultMetrics: isMetricsEnable, // Includes Default Metrics
+        hostMetrics: isMetricsEnable,
+        defaultMetrics: isMetricsEnable,
         apiMetrics: {
-          enable: isMetricsEnable, // Includes api metrics
-          timeBuckets: [], // You can change the default time buckets
+          enable: isMetricsEnable,
+          timeBuckets: [],
           defaultAttributes: {
-            // You can set default labels for api metrics
             custom: 'label',
           },
-          ignoreRoutes: ['/favicon.ico'], // You can ignore specific routes (See https://docs.nestjs.com/middleware#excluding-routes for options)
-          ignoreUndefinedRoutes: false, //Records metrics for all URLs, even undefined ones
+          ignoreRoutes: ['/favicon.ico'],
+          ignoreUndefinedRoutes: false,
         },
       },
     }),
