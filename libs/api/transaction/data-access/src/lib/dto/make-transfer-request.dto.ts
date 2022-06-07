@@ -17,5 +17,5 @@ export class MakeTransferRequest {
   @ApiProperty({ nullable: true })
   referenceType?: string
   @ApiProperty()
-  tx: Buffer
+  tx: Uint8Array
 }

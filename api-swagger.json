@@ -985,6 +985,10 @@
         },
         "required": ["lamports"]
       },
+      "Uint8Array": {
+        "type": "object",
+        "properties": {}
+      },
       "MakeTransferRequest": {
         "type": "object",
         "properties": {
@@ -1013,7 +1017,7 @@
             "nullable": true
           },
           "tx": {
-            "$ref": "#/components/schemas/Buffer"
+            "$ref": "#/components/schemas/Uint8Array"
           }
         },
         "required": [
