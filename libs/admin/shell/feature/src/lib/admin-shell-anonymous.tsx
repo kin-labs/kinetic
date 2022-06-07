@@ -9,16 +9,11 @@ const AdminAuthFeature = React.lazy(async () => import('@mogami/admin/auth/featu
 export function AdminShellAnonymous() {
   return (
     <AdminUiLayout copyright={copyright} name={name}>
-      <Switch>
-        <Route
-          path="**"
-          render={() => (
-            <React.Suspense fallback={<AdminUiLoader />}>
-              <AdminAuthFeature />
-            </React.Suspense>
-          )}
-        />
-      </Switch>
+      <React.Suspense fallback={<AdminUiLoader />}>
+        <Switch>
+          <Route path="**" render={() => <AdminAuthFeature />} />
+        </Switch>
+      </React.Suspense>
     </AdminUiLayout>
   )
 }

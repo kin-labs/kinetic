@@ -7,24 +7,11 @@ const AdminUserFeatureList = React.lazy(async () => import('./admin-user-feature
 
 export function AdminUserFeature() {
   return (
-    <Switch>
-      <Route
-        path="/users"
-        exact
-        render={() => (
-          <React.Suspense fallback={<AdminUiLoader />}>
-            <AdminUserFeatureList />
-          </React.Suspense>
-        )}
-      />
-      <Route
-        path="/users/:userId"
-        render={() => (
-          <React.Suspense fallback={<AdminUiLoader />}>
-            <AdminUserFeatureDetail />
-          </React.Suspense>
-        )}
-      />
-    </Switch>
+    <React.Suspense fallback={<AdminUiLoader />}>
+      <Switch>
+        <Route path="/users" exact render={() => <AdminUserFeatureList />} />
+        <Route path="/users/:userId" render={() => <AdminUserFeatureDetail />} />
+      </Switch>
+    </React.Suspense>
   )
 }
