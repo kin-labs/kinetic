@@ -33,11 +33,11 @@ export function AdminAppUiWallet({ appEnvId, wallet }: AdminAppUiWalletProps) {
 
   return (
     <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
-      <Box mt="1" isTruncated>
+      <Box mt="1" noOfLines={1}>
         <Code colorScheme="teal">{wallet?.publicKey}</Code>
       </Box>
       <Stack direction="column" spacing={6}>
-        <Box mt="1" fontWeight="semibold" as="h3" lineHeight="tight" isTruncated>
+        <Box mt="1" fontWeight="semibold" as="h3" lineHeight="tight" noOfLines={1}>
           <ShowSolBalance balance={data?.balance?.balance} />
         </Box>
         {wallet?.id && (

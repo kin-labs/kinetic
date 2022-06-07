@@ -15,7 +15,7 @@ export default function AdminAppFeatureWebhookDetail({ appId, appWebhookId }: { 
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Flex justifyContent="space-between" alignItems="center">
-          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+          <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
             Webhook {data?.item?.id}
           </Box>
         </Flex>

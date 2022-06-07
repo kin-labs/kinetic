@@ -5,7 +5,7 @@ import React from 'react'
 export function AdminClusterUiToken({ token }: { token: ClusterToken }) {
   return (
     <Flex justifyContent="space-between" alignItems="center">
-      <Box mt="1" fontWeight="semibold" lineHeight="tight" isTruncated flex={'auto'}>
+      <Box mt="1" fontWeight="semibold" lineHeight="tight" noOfLines={1} flex={'auto'}>
         <Stack spacing={2}>
           <Box fontSize="xl" as="h4">
             {token?.name} ({token?.symbol})
@@ -15,7 +15,7 @@ export function AdminClusterUiToken({ token }: { token: ClusterToken }) {
           </Box>
         </Stack>
       </Box>
-      <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
+      <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1}>
         {token?.logoURI ? <Image src={token?.logoURI} h={12} /> : <Avatar name={token.name || 'X'} />}
       </Box>
     </Flex>
