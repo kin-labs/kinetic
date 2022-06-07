@@ -10,7 +10,15 @@ export function AdminClusterFeatureSettingsTab({ clusterId }: { clusterId: strin
   const [{ fetching: updateFetching }, updateCluster] = useUpdateClusterMutation()
   const update = async (input: ClusterUpdateInput) => {
     try {
-      await updateCluster({ clusterId, input })
+      await updateCluster({
+        clusterId,
+        input: {
+          enableStats: input?.enableStats,
+          name: input.name,
+          endpoint: input?.endpoint,
+          status: input?.status,
+        },
+      })
       toast({
         status: 'success',
         title: 'Cluster updated',

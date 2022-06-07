@@ -29,7 +29,7 @@ export default function AdminAppFeatureDetail() {
     const res = await updateAppMutation({
       appId: appId!,
       input: {
-        ...input,
+        name: input.name,
       },
     })
     if (res?.data?.updated) {

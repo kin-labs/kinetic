@@ -39,7 +39,7 @@ export function renderField(
     case UiFormFieldType.Input:
       return <InputControl disabled={disabled} name={name} label={label || ''} />
     case UiFormFieldType.Number:
-      return <NumberControl name={name} label={label || ''} />
+      return <NumberControl disabled={disabled} name={name} label={label || ''} />
     case UiFormFieldType.Progress:
       return <PercentComplete size="sm" my={5} hasStripe isAnimated />
     case UiFormFieldType.Radio:

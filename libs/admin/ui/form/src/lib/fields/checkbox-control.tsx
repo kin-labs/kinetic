@@ -11,7 +11,7 @@ export function CheckboxControl({ name, children }: PropsWithChildren<{ name: st
   })
   return (
     <FormControl isInvalid={touched && invalid} my={4}>
-      <Checkbox {...input} isInvalid={touched && invalid} my={4}>
+      <Checkbox {...input} isInvalid={touched && invalid} my={4} isChecked={checked}>
         {children}
       </Checkbox>
       <FormErrorMessage>{error}</FormErrorMessage>
