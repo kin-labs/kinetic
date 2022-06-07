@@ -32,7 +32,7 @@ export function AdminClusterUiForm({ cluster, onSubmit }: AdminClusterUiProps) {
   return (
     <Box borderWidth="1px" rounded="lg" p={6}>
       <Stack direction="column" spacing={6}>
-        <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+        <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
           Cluster settings
         </Box>
         <AdminUiForm

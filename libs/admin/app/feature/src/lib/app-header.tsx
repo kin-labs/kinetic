@@ -7,7 +7,7 @@ export function AppHeader({ app }: { app: App }) {
   return (
     <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
       <Flex justifyContent="space-between" alignItems="center">
-        <Box fontWeight="semibold" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+        <Box fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
           <Link to={`/apps/${app.id}`}>
             <Heading>{app?.name}</Heading>
           </Link>

@@ -24,7 +24,7 @@ export function AdminUserUiForm({ user, onSubmit }: AdminUserUiProps) {
   return (
     <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
       <Stack direction="column" spacing={6}>
-        <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+        <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
           User Settings
         </Box>
         <AdminUiForm
