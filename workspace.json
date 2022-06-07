@@ -16,6 +16,7 @@
     "admin-ui-form": "libs/admin/ui/form",
     "admin-ui-layout": "libs/admin/ui/layout",
     "admin-ui-loader": "libs/admin/ui/loader",
+    "admin-ui-tabs": "libs/admin/ui/tabs",
     "admin-user-feature": "libs/admin/user/feature",
     "admin-user-ui": "libs/admin/user/ui",
     "airdrop": "libs/airdrop",

@@ -11,8 +11,8 @@ export function AdminAppFeature() {
     <React.Suspense fallback={<AdminUiLoader />}>
       <Switch>
         <Route path="/apps" exact render={() => <AdminAppFeatureList />} />
-        <Route path="/apps/:appId" exact render={() => <AdminAppFeatureDetail />} />
         <Route path="/apps/:appId/environments/:appEnvId" render={() => <AdminAppFeatureEnvDetail />} />
+        <Route path="/apps/:appId" render={() => <AdminAppFeatureDetail />} />
       </Switch>
     </React.Suspense>
   )

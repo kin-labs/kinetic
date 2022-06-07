@@ -1,6 +1,7 @@
-import { Box, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from '@chakra-ui/react'
+import { Box, Stack, useToast } from '@chakra-ui/react'
 import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
+import { AdminUiTabs } from '@mogami/admin/ui/tabs'
 import {
   AppUpdateInput,
   AppUserAddInput,
@@ -11,7 +12,7 @@ import {
   useUpdateAppMutation,
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { AppEnvironmentsTab } from './app-environments-tab'
 import { AppHeader } from './app-header'
 
@@ -50,6 +51,12 @@ export default function AdminAppFeatureDetail() {
     }
     return res?.data?.updated
   }
+  const { path, url } = useRouteMatch()
+  const tabs = [
+    { path: `${url}/environments`, label: 'Environments' },
+    { path: `${url}/users`, label: 'Users' },
+    { path: `${url}/settings`, label: 'Settings' },
+  ]
 
   const addRole = async ({ role, userId }: AppUserAddInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -71,29 +78,40 @@ export default function AdminAppFeatureDetail() {
   return (
     <Stack direction="column" spacing={6}>
       <AppHeader app={data?.item} />
-      <Tabs isLazy colorScheme="teal">
-        <TabList>
-          <Tab>Environments</Tab>
-          <Tab>Users</Tab>
-          <Tab>Settings</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>{appId && <AppEnvironmentsTab appId={appId} />}</TabPanel>
-          <TabPanel>
-            <Stack direction="column" spacing={6}>
-              <Box w="full">
-                <AdminAppUiUsers updateRole={updateRole} users={data?.item?.users} />
-              </Box>
-              <Box>
-                <AdminAppUiUserModal addRole={addRole} />
-              </Box>
-            </Stack>
-          </TabPanel>
-          <TabPanel>
-            <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <Switch>
+        <Route path={path} exact render={() => <Redirect to={`${url}/environments`} />} />
+        <Route
+          path={`${path}/environments`}
+          render={() => (
+            <AdminUiTabs tabs={tabs}>
+              <AppEnvironmentsTab appId={appId} />
+            </AdminUiTabs>
+          )}
+        />
+        <Route
+          path={`${path}/users`}
+          render={() => (
+            <AdminUiTabs tabs={tabs}>
+              <Stack direction="column" spacing={6}>
+                <Box w="full">
+                  <AdminAppUiUsers updateRole={updateRole} users={data?.item?.users} />
+                </Box>
+                <Box>
+                  <AdminAppUiUserModal addRole={addRole} />
+                </Box>
+              </Stack>
+            </AdminUiTabs>
+          )}
+        />
+        <Route
+          path={`${path}/settings`}
+          render={() => (
+            <AdminUiTabs tabs={tabs}>
+              <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />
+            </AdminUiTabs>
+          )}
+        />
+      </Switch>
     </Stack>
   )
 }

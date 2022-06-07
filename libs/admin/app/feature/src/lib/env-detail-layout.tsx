@@ -1,14 +1,12 @@
-import { Box, Flex, Stack, Tab, TabList, Tabs } from '@chakra-ui/react'
+import { Box, Flex, Stack } from '@chakra-ui/react'
 import { AdminClusterUiCluster } from '@mogami/admin/cluster/ui'
+import { AdminUiTabs } from '@mogami/admin/ui/tabs'
 import React, { PropsWithChildren } from 'react'
-import { Link, useRouteMatch } from 'react-router-dom'
 import { useAppEnv } from './app-env-provider'
 import { AppHeader } from './app-header'
 
 export function EnvDetailLayout({ children }: PropsWithChildren<any>) {
   const { appEnv, tabs } = useAppEnv()
-  const { url } = useRouteMatch()
-  const defaultIndex = tabs.findIndex((item) => url.startsWith(item.path)) || 0
   return (
     <Stack direction="column" spacing={6}>
       {appEnv.app && <AppHeader app={appEnv.app} />}
@@ -20,16 +18,7 @@ export function EnvDetailLayout({ children }: PropsWithChildren<any>) {
           {appEnv?.cluster && <AdminClusterUiCluster cluster={appEnv?.cluster} />}
         </Flex>
       </Box>
-      <Tabs colorScheme="teal" defaultIndex={defaultIndex}>
-        <TabList>
-          {tabs.map((tab) => (
-            <Tab as={Link} key={tab.path} to={tab.path}>
-              {tab.label}
-            </Tab>
-          ))}
-        </TabList>
-      </Tabs>
-      <Box>{children}</Box>
+      <AdminUiTabs tabs={tabs}>{children}</AdminUiTabs>
     </Stack>
   )
 }
