@@ -18,6 +18,7 @@ import { AppConfig } from './entity/app-config.entity'
 import { AppHealth } from './entity/app-health.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
 import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
+import { OtelMethodCounter } from 'nestjs-otel'
 
 function isValidAppWebhookType(type: string) {
   return Object.keys(AppWebhookType)
@@ -45,6 +46,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   private readonly logger = new Logger(ApiAppDataAccessService.name)
+
   constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
 
   async onModuleInit() {
@@ -297,6 +299,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
+  @OtelMethodCounter()
   async getAppConfig(environment: string, index: number): Promise<AppConfig> {
     const appKey = this.data.getAppKey(environment, index)
     const env = await this.data.getAppByEnvironmentIndex(environment, index)

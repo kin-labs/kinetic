@@ -1,4 +1,5 @@
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
+import { OpenTelementrySdk } from '@mogami/api/core/util'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { exec } from 'child_process'
@@ -10,6 +11,9 @@ import { AppModule } from './app/app.module'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ApiConfigDataAccessService)
+  if (config.isMetricsEnabled) {
+    await OpenTelementrySdk.start()
+  }
   app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
   const { httpAdapter } = app.get(HttpAdapterHost)
