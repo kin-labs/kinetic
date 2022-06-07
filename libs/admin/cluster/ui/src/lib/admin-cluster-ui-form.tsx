@@ -1,7 +1,6 @@
-import { Box, ButtonGroup, Stack } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
+import { AdminUiForm, UiFormField } from '@mogami/admin/ui/form'
 import { Cluster, ClusterStatus, ClusterUpdateInput } from '@mogami/shared/util/admin-sdk'
-import { Formik } from 'formik'
-import { CheckboxSingleControl, InputControl, SelectControl, SubmitButton } from 'formik-chakra-ui'
 import React from 'react'
 
 import * as Yup from 'yup'
@@ -18,50 +17,37 @@ const validationSchema = Yup.object({
   status: Yup.string(),
 })
 
+const fields: UiFormField[] = [
+  UiFormField.input('type', { disabled: true, label: 'Type' }),
+  UiFormField.input('name', { label: 'Name' }),
+  UiFormField.input('endpoint', { label: 'Endpoint' }),
+  UiFormField.radio('status', {
+    label: 'Status',
+    options: [...Object.keys(ClusterStatus).map((status) => ({ value: status, label: status }))],
+  }),
+  UiFormField.checkbox('enableStats', { label: 'Enable cluster stats' }),
+]
+
 export function AdminClusterUiForm({ cluster, onSubmit }: AdminClusterUiProps) {
   return (
-    <Formik
-      initialValues={{
-        name: cluster?.name,
-        enableStats: cluster?.enableStats,
-        endpoint: cluster?.endpoint,
-        type: cluster?.type,
-        status: cluster?.status,
-      }}
-      onSubmit={(values) =>
-        onSubmit({
-          enableStats: values?.enableStats,
-          name: values.name,
-          endpoint: values?.endpoint,
-          status: values?.status,
-        })
-      }
-      validationSchema={validationSchema}
-    >
-      {({ handleSubmit, values, errors, dirty }) => (
-        <Box as="form" onSubmit={handleSubmit as any}>
-          <Stack display="block" direction="column" justify="normal" spacing={6}>
-            <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
-              <Stack direction="column" spacing={6}>
-                <InputControl name="type" label="Type" isDisabled />
-                <InputControl name="name" label="Name" />
-                <InputControl name="endpoint" label="Endpoint" />
-                <SelectControl name="status" label="Status" selectProps={{ placeholder: 'Select status' }}>
-                  {Object.values(ClusterStatus).map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </SelectControl>
-                <CheckboxSingleControl name="enableStats" label="Enable cluster stats" />
-              </Stack>
-            </Box>
-            <ButtonGroup>
-              <SubmitButton isDisabled={!dirty}>Save</SubmitButton>
-            </ButtonGroup>
-          </Stack>
+    <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
+      <Stack direction="column" spacing={6}>
+        <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+          Cluster settings
         </Box>
-      )}
-    </Formik>
+        <AdminUiForm
+          data={{
+            name: cluster?.name,
+            enableStats: cluster?.enableStats,
+            endpoint: cluster?.endpoint,
+            type: cluster?.type,
+            status: cluster?.status,
+          }}
+          fields={fields}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+        />
+      </Stack>
+    </Box>
   )
 }

@@ -26,6 +26,7 @@
       "@mogami/admin/home/feature": ["libs/admin/home/feature/src/index.ts"],
       "@mogami/admin/shell/feature": ["libs/admin/shell/feature/src/index.ts"],
       "@mogami/admin/ui/alert": ["libs/admin/ui/alert/src/index.ts"],
+      "@mogami/admin/ui/form": ["libs/admin/ui/form/src/index.ts"],
       "@mogami/admin/ui/layout": ["libs/admin/ui/layout/src/index.ts"],
       "@mogami/admin/ui/loader": ["libs/admin/ui/loader/src/index.ts"],
       "@mogami/admin/user/feature": ["libs/admin/user/feature/src/index.ts"],

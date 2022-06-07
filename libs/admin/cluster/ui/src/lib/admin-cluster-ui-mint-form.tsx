@@ -1,8 +1,7 @@
-// eslint-disable @typescript-eslint/no-explicit-any
-import { Box, ButtonGroup, Stack } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
+import { AdminUiForm, UiFormField } from '@mogami/admin/ui/form'
 import { ClusterTokenInput } from '@mogami/shared/util/admin-sdk'
-import { Formik } from 'formik'
-import { InputControl, SubmitButton } from 'formik-chakra-ui'
+import React from 'react'
 
 import * as Yup from 'yup'
 
@@ -17,37 +16,27 @@ const validationSchema = Yup.object({
   symbol: Yup.string(),
 })
 
+const fields: UiFormField[] = [
+  UiFormField.input('address', { label: 'Address' }),
+  UiFormField.input('name', { label: 'Name' }),
+  UiFormField.input('symbol', { label: 'Symbol' }),
+]
+
 export function AdminClusterUiMintForm({ input, onSubmit }: AdminClusterUiProps) {
   return (
-    <Formik
-      initialValues={{
-        address: input.address,
-        name: input.name,
-        symbol: input.symbol,
-      }}
-      onSubmit={(values) => {
-        onSubmit({
-          address: values?.address,
-          name: values.name,
-          symbol: values?.symbol,
-        })
-      }}
-      validationSchema={validationSchema}
-    >
-      {({ handleSubmit, values, errors, dirty }) => (
-        <Box as="form" onSubmit={handleSubmit as any}>
-          <Stack display="block" direction="column" justify="normal" spacing={6}>
-            <Stack direction="column" spacing={6}>
-              <InputControl name="address" label="Address" />
-              <InputControl name="name" label="Name" />
-              <InputControl name="symbol" label="Symbol" />
-            </Stack>
-            <ButtonGroup>
-              <SubmitButton isDisabled={!dirty}>Search</SubmitButton>
-            </ButtonGroup>
-          </Stack>
-        </Box>
-      )}
-    </Formik>
+    <Stack display="block" direction="column" justify="normal" spacing={6}>
+      <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
+        <AdminUiForm
+          data={{
+            address: input.address,
+            name: input.name,
+            symbol: input.symbol,
+          }}
+          fields={fields}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+        />
+      </Box>
+    </Stack>
   )
 }

@@ -49,6 +49,7 @@ export class ApiAppTransactionFeatureResolver {
 
   @ResolveField(() => Int, { nullable: true })
   totalDuration(@Parent() tx: AppTransaction) {
+    if (!tx.solanaFinalized) return null
     return tx?.solanaFinalized?.getTime() - tx?.createdAt?.getTime()
   }
 

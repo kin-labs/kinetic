@@ -1,7 +1,7 @@
-import { Box, ButtonGroup, Stack } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
+import { AdminUiForm, UiFormField } from '@mogami/admin/ui/form'
 import { User, UserUpdateInput } from '@mogami/shared/util/admin-sdk'
-import { Formik } from 'formik'
-import { InputControl, ResetButton, SubmitButton } from 'formik-chakra-ui'
+import React from 'react'
 
 import * as Yup from 'yup'
 
@@ -15,33 +15,28 @@ const validationSchema = Yup.object({
   name: Yup.string().required(),
 })
 
+const fields: UiFormField[] = [
+  UiFormField.input('name', { label: 'Name' }),
+  UiFormField.input('avatarUrl', { label: 'Avatar Url' }),
+]
+
 export function AdminUserUiForm({ user, onSubmit }: AdminUserUiProps) {
   return (
-    <Formik
-      initialValues={{
-        avatarUrl: user?.avatarUrl,
-        name: user?.name,
-      }}
-      onSubmit={(values) =>
-        onSubmit({
-          avatarUrl: values.avatarUrl,
-          name: values.name,
-        })
-      }
-      validationSchema={validationSchema}
-    >
-      {({ handleSubmit, values, errors, dirty }) => (
-        <Box borderWidth="1px" rounded="lg" p={6} m="10px auto" as="form" onSubmit={handleSubmit as any}>
-          <Stack direction="column" spacing={6}>
-            <InputControl name="name" label="Name" />
-            <InputControl name="avatarUrl" label="Avatar Url" />
-            <ButtonGroup>
-              <SubmitButton isDisabled={!dirty}>Submit</SubmitButton>
-              <ResetButton>Reset</ResetButton>
-            </ButtonGroup>
-          </Stack>
+    <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
+      <Stack direction="column" spacing={6}>
+        <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" isTruncated flex={'auto'}>
+          User Settings
         </Box>
-      )}
-    </Formik>
+        <AdminUiForm
+          data={{
+            name: user?.name,
+            avatarUrl: user?.avatarUrl,
+          }}
+          fields={fields}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+        />
+      </Stack>
+    </Box>
   )
 }
