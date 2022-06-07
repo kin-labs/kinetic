@@ -63,5 +63,6 @@
     "sdk-e2e": "apps/sdk-e2e",
     "shared-util-admin-sdk": "libs/shared/util/admin-sdk",
     "solana": "libs/solana"
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json"
 }

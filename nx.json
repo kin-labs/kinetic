@@ -3,9 +3,6 @@
   "affected": {
     "defaultBase": "dev"
   },
-  "cli": {
-    "defaultCollection": "@nrwl/nest"
-  },
   "implicitDependencies": {
     ".github/workflows/build-test.yml": "*",
     "package.json": {
@@ -47,5 +44,6 @@
         "linter": "eslint"
       }
     }
-  }
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }
