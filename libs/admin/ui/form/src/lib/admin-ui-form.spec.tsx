@@ -4,9 +4,8 @@ import { AdminUiForm } from './admin-ui-form'
 
 describe('AdminUiForm', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(
-      <AdminUiForm fields={[]} onValidate={() => ({})} onSubmit={() => console.log('submit')} />,
-    )
+    const onSubmit = () => console.log('submit')
+    const { baseElement } = render(<AdminUiForm fields={[]} data={{}} onSubmit={onSubmit} />)
     expect(baseElement).toBeTruthy()
   })
 })

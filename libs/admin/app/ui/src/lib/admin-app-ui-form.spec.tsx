@@ -4,7 +4,8 @@ import { AdminAppUiForm } from './admin-app-ui-form'
 
 describe('AdminAppUiForm', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<AdminAppUiForm />)
+    const onSubmit = async () => console.log('submit')
+    const { baseElement } = render(<AdminAppUiForm onSubmit={onSubmit} />)
     expect(baseElement).toBeTruthy()
   })
 })
