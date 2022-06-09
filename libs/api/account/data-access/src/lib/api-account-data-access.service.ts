@@ -2,41 +2,40 @@ import { ApiAppDataAccessService, AppTransaction, AppTransactionStatus, parseErr
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
-import { Injectable } from '@nestjs/common'
+import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
-export class ApiAccountDataAccessService {
-  private createAccountCounters = new Map<string, Counter>()
+export class ApiAccountDataAccessService implements OnModuleInit {
+  private appCreateAccountCallCounter: Counter
+  private appCreateAccountErrorMintNotFoundCounter: Counter
+  private appCreateAccountSendSolanaTransactionSuccessCounter: Counter
+  private appCreateAccountSendSolanaTransactionErrorCounter: Counter
 
-  constructor(readonly data: ApiCoreDataAccessService, private readonly app: ApiAppDataAccessService) {
-    this.createAccountCounters.set(
-      'app_create_account_call_counter',
-      this.data.metricService.getCounter('app_create_account_call_counter', {
-        description: 'Total number of createAccount request calls',
-      }),
-    )
+  constructor(readonly data: ApiCoreDataAccessService, private readonly app: ApiAppDataAccessService) {}
 
-    this.createAccountCounters.set(
+  onModuleInit() {
+    this.appCreateAccountCallCounter = this.data.metrics.getCounter('app_create_account_call_counter', {
+      description: 'Total number of createAccount request calls',
+    })
+    this.appCreateAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(
       'app_create_account_error_mint_not_found_counter',
-      this.data.metricService.getCounter('app_create_account_error_mint_not_found_counter', {
+      {
         description: 'Total number of createAccount mint not found errors',
-      }),
+      },
     )
-
-    this.createAccountCounters.set(
+    this.appCreateAccountSendSolanaTransactionSuccessCounter = this.data.metrics.getCounter(
       'app_create_account_send_solana_transaction_success_counter',
-      this.data.metricService.getCounter('app_create_account_send_solana_transaction_success_counter', {
+      {
         description: 'Total number of createAccount send Solana transaction success',
-      }),
+      },
     )
-
-    this.createAccountCounters.set(
+    this.appCreateAccountSendSolanaTransactionErrorCounter = this.data.metrics.getCounter(
       'app_create_account_send_solana_transaction_error_counter',
-      this.data.metricService.getCounter('app_create_account_send_solana_transaction_error_counter', {
+      {
         description: 'Total number of createAccount send Solana transaction error',
-      }),
+      },
     )
   }
 
@@ -73,16 +72,7 @@ export class ApiAccountDataAccessService {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
 
-    this.createAccountCounters.get('app_create_account_call_counter').add(1)
-    if (!this.createAccountCounters.has(`app_create_account_with_appKey_${appEnv.id}_call_counter`)) {
-      this.createAccountCounters.set(
-        `app_create_account_with_appKey_${appEnv.id}_call_counter`,
-        this.data.metricService.getCounter(`app_create_account_with_appKey_${appEnv.id}_call_counter`, {
-          description: `Total number of createAccount with appKey: ${appEnv.id}`,
-        }),
-      )
-    }
-    this.createAccountCounters.get(`app_create_account_with_appKey_${appEnv.id}_call_counter`).add(1)
+    this.appCreateAccountCallCounter.add(1)
 
     const created = await this.data.appTransaction.create({
       data: { appEnvId: appEnv.id },
@@ -90,17 +80,7 @@ export class ApiAccountDataAccessService {
     })
     const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
     if (!mint) {
-      this.createAccountCounters.get('app_create_account_error_mint_not_found_counter').add(1)
-      if (!this.createAccountCounters.has(`app_create_account_with_mint_${mint}_call_counter`)) {
-        this.createAccountCounters.set(
-          `app_create_account_with_mint_${mint}_call_counter`,
-          this.data.metricService.getCounter(`app_create_account_with_mint_${mint}_call_counter`, {
-            description: `Total number of createAccount with mint: ${mint}`,
-          }),
-        )
-      }
-      this.createAccountCounters.get(`app_create_account_with_mint_${mint}_call_counter`).add(1)
-
+      this.appCreateAccountErrorMintNotFoundCounter.add(1)
       throw new Error(`Can't find mint ${input.mint} in environment ${input.environment} for index ${input.index}`)
     }
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
@@ -116,10 +96,10 @@ export class ApiAccountDataAccessService {
     try {
       signature = await solana.sendRawTransaction(transaction)
       status = AppTransactionStatus.Committed
-      this.createAccountCounters.get('app_create_account_send_solana_transaction_success_counter').add(1)
+      this.appCreateAccountSendSolanaTransactionSuccessCounter.add(1)
     } catch (error) {
       status = AppTransactionStatus.Failed
-      this.createAccountCounters.get('app_create_account_send_solana_transaction_error_counter').add(1)
+      this.appCreateAccountSendSolanaTransactionErrorCounter.add(1)
       errors = parseError(error)
     }
 

@@ -2,7 +2,7 @@ import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { UserRole } from '@mogami/api/user/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
-import { Counter } from '@opentelemetry/api-metrics'
+import { AggregationTemporality, Histogram, ValueType } from '@opentelemetry/api-metrics'
 import { AppWebhookType, Prisma } from '@prisma/client'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Keypair } from '@solana/web3.js'
@@ -46,18 +46,18 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   private readonly logger = new Logger(ApiAppDataAccessService.name)
-  private getAppConfigCounters = new Map<string, Counter>()
+  private appConfigErrorHistogram: Histogram
+  private appConfigSuccessHistogram: Histogram
 
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {
-    this.getAppConfigCounters.set(
-      'app_get_app_config_call_counter',
-      this.data.metricService.getCounter('app_get_app_config_call_counter', {
-        description: 'Total number of getAppConfig request calls',
-      }),
-    )
-  }
+  constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
 
   async onModuleInit() {
+    this.appConfigErrorHistogram = this.data.metrics.getHistogram('app_config_error_counter', {
+      description: 'Total number of failed getAppConfig requests',
+    })
+    this.appConfigSuccessHistogram = this.data.metrics.getHistogram('app_config_success_counter', {
+      description: 'Total number of getAppConfig requests',
+    })
     await this.configureProvisionedApps()
   }
 
@@ -310,27 +310,12 @@ export class ApiAppDataAccessService implements OnModuleInit {
   async getAppConfig(environment: string, index: number): Promise<AppConfig> {
     const appKey = this.data.getAppKey(environment, index)
     const env = await this.data.getAppByEnvironmentIndex(environment, index)
-
-    this.getAppConfigCounters.get('app_get_app_config_call_counter').add(1)
-    if (
-      !this.getAppConfigCounters.has(
-        `app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter`,
-      )
-    ) {
-      this.getAppConfigCounters.set(
-        `app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter`,
-        this.data.metricService.getCounter(
-          `app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter`,
-          {
-            description: `Total number of getAppConfig with appKey: ${appKey} and environment: ${environment}`,
-          },
-        ),
-      )
+    if (!env) {
+      this.appConfigErrorHistogram.record(1, { appKey })
+      throw new NotFoundException(`App not found :(`)
     }
-    this.getAppConfigCounters
-      .get(`app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter`)
-      .add(1)
-
+    this.appConfigSuccessHistogram.record(1, { appKey })
+    this.logger.verbose(`getAppConfig ${appKey}`)
     const mints = env?.mints?.map(({ mint, wallet }) => ({
       airdrop: !!mint.airdropSecretKey,
       airdropAmount: mint.airdropAmount,
@@ -342,7 +327,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
       symbol: mint?.symbol,
     }))
 
-    if (!mints.length) {
+    if (!mints?.length) {
       throw new Error(`${appKey}: no mints found.`)
     }
 

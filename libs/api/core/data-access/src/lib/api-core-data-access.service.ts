@@ -4,7 +4,7 @@ import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Keypair } from '@mogami/keypair'
 import { getPublicKey, Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
-import { Counter } from '@opentelemetry/api-metrics'
+import { Counter, Histogram } from '@opentelemetry/api-metrics'
 import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
 import { MetricService } from 'nestjs-otel'
@@ -15,16 +15,11 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   readonly airdropConfig = new Map<string, Omit<AirdropConfig, 'connection'>>()
   readonly connections = new Map<string, Solana>()
 
-  private getAppByIndexCounters = new Map<string, Counter>()
+  private getAppByEnvironmentIndexHistogram: Histogram
+  private getAppByIndexCounter: Counter
 
-  constructor(readonly config: ApiConfigDataAccessService, readonly metricService: MetricService) {
+  constructor(readonly config: ApiConfigDataAccessService, readonly metrics: MetricService) {
     super()
-    this.getAppByIndexCounters.set(
-      'app_get_app_by_index_call_counter',
-      this.metricService.getCounter('app_get_app_by_index_call_counter', {
-        description: 'Total number of getAppByIndex request calls',
-      }),
-    )
   }
 
   uptime() {
@@ -32,6 +27,8 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   async onModuleInit() {
+    this.getAppByEnvironmentIndexHistogram = this.metrics.getHistogram('core_get_app_by_environment_index_counter')
+    this.getAppByIndexCounter = this.metrics.getCounter('core_get_app_by_index_counter')
     await this.$connect()
   }
 
@@ -73,6 +70,9 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getAppByEnvironmentIndex(environment: string, index: number) {
+    const appKey = this.getAppKey(environment, index)
+    console.log(`getAppByEnvironmentIndex appKey ${appKey}`)
+    this.getAppByEnvironmentIndexHistogram?.record(1, { appKey })
     return this.appEnv.findFirst({
       where: { app: { index }, name: environment },
       include: {
@@ -90,16 +90,9 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getAppByIndex(index: number) {
-    if (!this.getAppByIndexCounters.has(`app_get_app_by_index_with_index_${index}_call_counter`)) {
-      this.getAppByIndexCounters.set(
-        `app_get_app_by_index_with_index_${index}_call_counter`,
-        this.metricService.getCounter(`app_get_app_by_index_with_index_${index}_call_counter`, {
-          description: `Total number of getAppbyIndex with index: ${index}`,
-        }),
-      )
-    }
-
-    this.getAppByIndexCounters.get(`app_get_app_by_index_with_index_${index}_call_counter`).add(1)
+    console.log(`getAppByIndex: ${index}`)
+    this.getAppByIndexCounter?.add(1, { index: `${index}` })
+    console.log(this.getAppByIndexCounter)
 
     return this.app.findUnique({
       where: { index },
