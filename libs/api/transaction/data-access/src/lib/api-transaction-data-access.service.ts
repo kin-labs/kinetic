@@ -20,11 +20,11 @@ import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exe
 export class ApiTransactionDataAccessService implements OnModuleInit {
   private logger = new Logger(ApiTransactionDataAccessService.name)
 
-  private makeTransferCounter: Counter
   private makeTransferMintNotFoundErrorCounter: Counter
+  private makeTransferRequestCounter: Counter
   private makeTransferSolanaConfirmedCounter: Counter
-  private makeTransferSolanaFinalizedCounter: Counter
   private makeTransferSolanaErrorCounter: Counter
+  private makeTransferSolanaFinalizedCounter: Counter
   private makeTransferWebhookEventErrorCounter: Counter
   private makeTransferWebhookEventSuccessCounter: Counter
   private makeTransferWebhookVerifyErrorCounter: Counter
@@ -34,24 +34,21 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   onModuleInit() {
     const prefix = `api_transaction_make_transfer`
-    this.makeTransferCounter = this.data.metrics.getCounter(`${prefix}_call_counter`, {
-      description: 'Number of calls to makeTransfer',
+    this.makeTransferRequestCounter = this.data.metrics.getCounter(`${prefix}_request_counter`, {
+      description: 'Number of requests to makeTransfer',
     })
     this.makeTransferMintNotFoundErrorCounter = this.data.metrics.getCounter(`${prefix}_error_mint_not_found_counter`, {
       description: 'Number of makeTransfer mint not found errors',
     })
-    this.makeTransferSolanaConfirmedCounter = this.data.metrics.getCounter(
-      `${prefix}_confirmed_solana_transaction_counter`,
-      { description: 'Number of makeTransfer confirmed Solana transactions' },
-    )
-    this.makeTransferSolanaFinalizedCounter = this.data.metrics.getCounter(
-      `${prefix}_finalized_solana_transaction_counter`,
-      { description: 'Number of makeTransfer finalized Solana transactions' },
-    )
-    this.makeTransferSolanaErrorCounter = this.data.metrics.getCounter(
-      `${prefix}_send_solana_transaction_error_counter`,
-      { description: 'Number of makeTransfer Solana errors' },
-    )
+    this.makeTransferSolanaConfirmedCounter = this.data.metrics.getCounter(`${prefix}_solana_confirmed_counter`, {
+      description: 'Number of makeTransfer confirmed Solana transactions',
+    })
+    this.makeTransferSolanaFinalizedCounter = this.data.metrics.getCounter(`${prefix}_solana_finalized_counter`, {
+      description: 'Number of makeTransfer finalized Solana transactions',
+    })
+    this.makeTransferSolanaErrorCounter = this.data.metrics.getCounter(`${prefix}_solana_error_counter`, {
+      description: 'Number of makeTransfer Solana errors',
+    })
     this.makeTransferWebhookEventErrorCounter = this.data.metrics.getCounter(`${prefix}_webhook_event_error_counter`, {
       description: 'Number of makeTransfer webhook event errors',
     })
@@ -90,7 +87,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
     const appKey = this.data.getAppKey(input.environment, input.index)
-    this.makeTransferCounter.add(1, { appKey })
+    this.makeTransferRequestCounter.add(1, { appKey })
 
     const created = await this.data.appTransaction.create({
       data: {

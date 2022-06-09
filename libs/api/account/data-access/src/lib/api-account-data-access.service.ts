@@ -8,7 +8,7 @@ import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {
-  private createAccountCallCounter: Counter
+  private createAccountRequestCounter: Counter
   private createAccountErrorMintNotFoundCounter: Counter
   private createAccountSolanaTransactionSuccessCounter: Counter
   private createAccountSolanaTransactionErrorCounter: Counter
@@ -17,23 +17,20 @@ export class ApiAccountDataAccessService implements OnModuleInit {
 
   onModuleInit() {
     const prefix = 'api_account_create_account'
-    this.createAccountCallCounter = this.data.metrics.getCounter(`${prefix}_call_counter`, {
+    this.createAccountRequestCounter = this.data.metrics.getCounter(`${prefix}_request`, {
       description: 'Number of createAccount requests',
     })
-    this.createAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(
-      `${prefix}_error_mint_not_found_counter`,
-      {
-        description: 'Number of createAccount mint not found errors',
-      },
-    )
+    this.createAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(`${prefix}_error_mint_not_found`, {
+      description: 'Number of createAccount mint not found errors',
+    })
     this.createAccountSolanaTransactionSuccessCounter = this.data.metrics.getCounter(
-      `${prefix}_send_solana_transaction_success_counter`,
+      `${prefix}_send_solana_transaction_success`,
       {
         description: 'Number of createAccount Solana transaction success',
       },
     )
     this.createAccountSolanaTransactionErrorCounter = this.data.metrics.getCounter(
-      `${prefix}_send_solana_transaction_error_counter`,
+      `${prefix}_send_solana_transaction_error`,
       {
         description: 'Number of createAccount Solana transaction errors',
       },
@@ -73,7 +70,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
     const appKey = this.data.getAppKey(input.environment, input.index)
-    this.createAccountCallCounter.add(1, { appKey })
+    this.createAccountRequestCounter.add(1, { appKey })
 
     const created = await this.data.appTransaction.create({
       data: { appEnvId: appEnv.id },
