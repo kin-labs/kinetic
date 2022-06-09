@@ -14,7 +14,6 @@ import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
-import { MetricService } from 'nestjs-otel'
 import { Counter, metrics } from '@opentelemetry/api-metrics'
 import { OpenTelementrySdk } from '@mogami/api/core/util'
 
@@ -23,74 +22,70 @@ export class ApiTransactionDataAccessService {
   private logger = new Logger(ApiTransactionDataAccessService.name)
   private makeTransferCounters = new Map<string, Counter>()
 
-  constructor(
-    readonly data: ApiCoreDataAccessService,
-    private readonly appWebhook: ApiAppWebhookDataAccessService,
-    private readonly metricService: MetricService,
-  ) {
+  constructor(readonly data: ApiCoreDataAccessService, private readonly appWebhook: ApiAppWebhookDataAccessService) {
     if (this.data.config.isMetricsEnabled) {
       metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
     }
 
     this.makeTransferCounters.set(
       'app_make_transfer_call_counter',
-      this.metricService.getCounter('app_make_transfer_call_counter', {
+      this.data.metricService.getCounter('app_make_transfer_call_counter', {
         description: 'Total number of makeTransfer request calls',
       }),
     )
 
     this.makeTransferCounters.set(
       'app_make_transfer_error_mint_not_found_counter',
-      this.metricService.getCounter('app_make_transfer_error_mint_not_found_counter', {
+      this.data.metricService.getCounter('app_make_transfer_error_mint_not_found_counter', {
         description: 'Total number of makeTransfer mint not found errors',
       }),
     )
 
     this.makeTransferCounters.set(
       'app_make_transfer_webhook_verify_success_counter',
-      this.metricService.getCounter('app_make_transfer_webhook_verify_success_counter', {
+      this.data.metricService.getCounter('app_make_transfer_webhook_verify_success_counter', {
         description: 'Total number of makeTransfer webhook verify success',
       }),
     )
 
     this.makeTransferCounters.set(
       'app_make_transfer_webhook_verify_error_counter',
-      this.metricService.getCounter('app_make_transfer_webhook_verify_error_counter', {
+      this.data.metricService.getCounter('app_make_transfer_webhook_verify_error_counter', {
         description: 'Total number of makeTransfer webhook verify error',
       }),
     )
 
     this.makeTransferCounters.set(
       'app_make_transfer_send_solana_transaction_success_counter',
-      this.metricService.getCounter('app_make_transfer_send_solana_transaction_success_counter', {
+      this.data.metricService.getCounter('app_make_transfer_send_solana_transaction_success_counter', {
         description: 'Total number of makeTransfer send Solana transaction success',
       }),
     )
 
     this.makeTransferCounters.set(
       'app_make_transfer_send_solana_transaction_error_counter',
-      this.metricService.getCounter('app_make_transfer_send_solana_transaction_error_counter', {
+      this.data.metricService.getCounter('app_make_transfer_send_solana_transaction_error_counter', {
         description: 'Total number of makeTransfer send Solana transaction error',
       }),
     )
 
     this.makeTransferCounters.set(
       'app_make_transfer_confirmed_solana_transaction_counter',
-      this.metricService.getCounter('app_make_transfer_confirmed_solana_transaction_counter', {
+      this.data.metricService.getCounter('app_make_transfer_confirmed_solana_transaction_counter', {
         description: 'Total number of makeTransfer confirm Solana transaction success',
       }),
     )
 
     this.makeTransferCounters.set(
       'app_make_transfer_webhook_event_success_counter',
-      this.metricService.getCounter('app_make_transfer_webhook_event_success_counter', {
+      this.data.metricService.getCounter('app_make_transfer_webhook_event_success_counter', {
         description: 'Total number of makeTransfer webhook event success',
       }),
     )
 
     this.makeTransferCounters.set(
       'app_make_transfer_webhook_event_error_counter',
-      this.metricService.getCounter('app_make_transfer_webhook_event_error_counter', {
+      this.data.metricService.getCounter('app_make_transfer_webhook_event_error_counter', {
         description: 'Total number of makeTransfer webhook event error',
       }),
     )
@@ -123,7 +118,7 @@ export class ApiTransactionDataAccessService {
     if (!this.makeTransferCounters.has(`app_make_transfer_with_appKey_${appKey}_call_counter`)) {
       this.makeTransferCounters.set(
         `app_make_transfer_with_appKey_${appKey}_call_counter`,
-        this.metricService.getCounter(`app_make_transfer_with_appKey_${appKey}_call_counter`, {
+        this.data.metricService.getCounter(`app_make_transfer_with_appKey_${appKey}_call_counter`, {
           description: `Total number of makeTransfer with appKey: ${appKey}`,
         }),
       )
@@ -146,7 +141,7 @@ export class ApiTransactionDataAccessService {
       if (!this.makeTransferCounters.has(`app_make_transfer_with_mint_${mint}_call_counter`)) {
         this.makeTransferCounters.set(
           `app_make_transfer_with_mint_${mint}_call_counter`,
-          this.metricService.getCounter(`app_make_transfer_with_mint_${mint}_call_counter`, {
+          this.data.metricService.getCounter(`app_make_transfer_with_mint_${mint}_call_counter`, {
             description: `Total number of makeTransfer with mint: ${mint}`,
           }),
         )

@@ -18,7 +18,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   private getAppByIndexCounters = new Map<string, Counter>()
 
-  constructor(readonly config: ApiConfigDataAccessService, private readonly metricService: MetricService) {
+  constructor(readonly config: ApiConfigDataAccessService, readonly metricService: MetricService) {
     super()
     if (config.isMetricsEnabled) {
       metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())

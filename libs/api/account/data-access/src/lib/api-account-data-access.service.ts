@@ -5,18 +5,13 @@ import { Keypair } from '@mogami/keypair'
 import { Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
 import { Counter, metrics } from '@opentelemetry/api-metrics'
-import { MetricService } from 'nestjs-otel'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
 export class ApiAccountDataAccessService {
   private createAccountCounters = new Map<string, Counter>()
 
-  constructor(
-    readonly data: ApiCoreDataAccessService,
-    private readonly app: ApiAppDataAccessService,
-    private readonly metricService: MetricService,
-  ) {
+  constructor(readonly data: ApiCoreDataAccessService, private readonly app: ApiAppDataAccessService) {
     metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
     if (this.data.config.isMetricsEnabled) {
       metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
@@ -24,28 +19,28 @@ export class ApiAccountDataAccessService {
 
     this.createAccountCounters.set(
       'app_create_account_call_counter',
-      this.metricService.getCounter('app_create_account_call_counter', {
+      this.data.metricService.getCounter('app_create_account_call_counter', {
         description: 'Total number of createAccount request calls',
       }),
     )
 
     this.createAccountCounters.set(
       'app_create_account_error_mint_not_found_counter',
-      this.metricService.getCounter('app_create_account_error_mint_not_found_counter', {
+      this.data.metricService.getCounter('app_create_account_error_mint_not_found_counter', {
         description: 'Total number of createAccount mint not found errors',
       }),
     )
 
     this.createAccountCounters.set(
       'app_create_account_send_solana_transaction_success_counter',
-      this.metricService.getCounter('app_create_account_send_solana_transaction_success_counter', {
+      this.data.metricService.getCounter('app_create_account_send_solana_transaction_success_counter', {
         description: 'Total number of createAccount send Solana transaction success',
       }),
     )
 
     this.createAccountCounters.set(
       'app_create_account_send_solana_transaction_error_counter',
-      this.metricService.getCounter('app_create_account_send_solana_transaction_error_counter', {
+      this.data.metricService.getCounter('app_create_account_send_solana_transaction_error_counter', {
         description: 'Total number of createAccount send Solana transaction error',
       }),
     )
@@ -88,7 +83,7 @@ export class ApiAccountDataAccessService {
     if (!this.createAccountCounters.has(`app_create_account_with_appKey_${appEnv.id}_call_counter`)) {
       this.createAccountCounters.set(
         `app_create_account_with_appKey_${appEnv.id}_call_counter`,
-        this.metricService.getCounter(`app_create_account_with_appKey_${appEnv.id}_call_counter`, {
+        this.data.metricService.getCounter(`app_create_account_with_appKey_${appEnv.id}_call_counter`, {
           description: `Total number of createAccount with appKey: ${appEnv.id}`,
         }),
       )
@@ -105,7 +100,7 @@ export class ApiAccountDataAccessService {
       if (!this.createAccountCounters.has(`app_create_account_with_mint_${mint}_call_counter`)) {
         this.createAccountCounters.set(
           `app_create_account_with_mint_${mint}_call_counter`,
-          this.metricService.getCounter(`app_create_account_with_mint_${mint}_call_counter`, {
+          this.data.metricService.getCounter(`app_create_account_with_mint_${mint}_call_counter`, {
             description: `Total number of createAccount with mint: ${mint}`,
           }),
         )
