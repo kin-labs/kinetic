@@ -1,10 +1,10 @@
-import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
-import { NodeSDK } from '@opentelemetry/sdk-node'
 import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks'
-import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core'
+import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 
 import { InstrumentationOption } from '@opentelemetry/instrumentation'
+import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core'
 import { MeterProvider } from '@opentelemetry/sdk-metrics-base'
+import { NodeSDK } from '@opentelemetry/sdk-node'
 
 const nestInstrumentation = new NestInstrumentation() as unknown as InstrumentationOption
 
@@ -13,43 +13,32 @@ export class OpenTelementrySdk {
   static meterProvider: MeterProvider
   static metricExporter: PrometheusExporter
 
-  static start() {
+  static start(enableMetrics: boolean) {
+    if (!enableMetrics) {
+      return true
+    }
     const metricInterval = 1000
 
-    if (!this.metricExporter) {
-      this.metricExporter = new PrometheusExporter({
-        port: 9461,
-      })
-    }
+    this.metricExporter = new PrometheusExporter({
+      preventServerStart: !enableMetrics,
+    })
 
-    if (!this.meterProvider) {
-      this.meterProvider = new MeterProvider({
-        exporter: this.metricExporter,
-        interval: metricInterval,
-      })
-    }
+    this.meterProvider = new MeterProvider({
+      exporter: this.metricExporter,
+      interval: metricInterval,
+    })
 
-    if (!this.otelSdk) {
-      this.otelSdk = new NodeSDK({
-        metricExporter: this.metricExporter,
-        metricInterval,
-        contextManager: new AsyncLocalStorageContextManager(),
-        instrumentations: [nestInstrumentation],
-      })
-    }
+    this.otelSdk = new NodeSDK({
+      metricExporter: this.metricExporter,
+      metricInterval,
+      contextManager: new AsyncLocalStorageContextManager(),
+      instrumentations: [nestInstrumentation],
+    })
 
     return this.otelSdk.start()
   }
 
   static async shutdown() {
     await this.otelSdk.shutdown()
-  }
-
-  static getMetricProvider() {
-    if (!this.meterProvider && process.env.ENABLE_METRICS === 'TRUE') {
-      this.start()
-    }
-
-    return this.meterProvider
   }
 }
