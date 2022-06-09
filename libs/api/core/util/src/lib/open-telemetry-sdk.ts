@@ -1,45 +1,34 @@
-import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-hooks'
+import { Logger } from '@nestjs/common'
+import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
-
-import { InstrumentationOption } from '@opentelemetry/instrumentation'
-import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core'
-import { MeterProvider } from '@opentelemetry/sdk-metrics-base'
 import { NodeSDK } from '@opentelemetry/sdk-node'
 
-const nestInstrumentation = new NestInstrumentation() as unknown as InstrumentationOption
+diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG)
 
 export class OpenTelementrySdk {
-  static otelSdk: NodeSDK
-  static meterProvider: MeterProvider
-  static metricExporter: PrometheusExporter
+  static sdk: NodeSDK
 
-  static start(enableMetrics: boolean) {
-    if (!enableMetrics) {
+  static start(metricsEnabled: boolean) {
+    if (!metricsEnabled) {
+      Logger.verbose(`Metrics disabled`, 'OpenTelementrySdk')
       return true
     }
-    const metricInterval = 1000
+    Logger.verbose(`Metrics enabled`, 'OpenTelementrySdk')
 
-    this.metricExporter = new PrometheusExporter({
+    const metricExporter = new PrometheusExporter({
       prefix: 'mogami',
-      preventServerStart: !enableMetrics,
+      preventServerStart: !metricsEnabled,
     })
 
-    this.meterProvider = new MeterProvider({
-      exporter: this.metricExporter,
-      interval: metricInterval,
+    this.sdk = new NodeSDK({
+      metricExporter,
+      metricInterval: 1000,
     })
 
-    this.otelSdk = new NodeSDK({
-      metricExporter: this.metricExporter,
-      metricInterval,
-      contextManager: new AsyncLocalStorageContextManager(),
-      instrumentations: [nestInstrumentation],
-    })
-
-    return this.otelSdk.start()
+    return this.sdk.start()
   }
 
   static async shutdown() {
-    await this.otelSdk.shutdown()
+    await this.sdk.shutdown()
   }
 }

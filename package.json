@@ -62,7 +62,6 @@
     "@nestjs/swagger": "^5.2.1",
     "@opentelemetry/core": "^1.0.1",
     "@opentelemetry/exporter-prometheus": "^0.27.0",
-    "@opentelemetry/instrumentation-nestjs-core": "^0.27.0",
     "@opentelemetry/sdk-node": "^0.27.0",
     "@prisma/client": "^3.14.0",
     "@scure/bip39": "^1.0.0",

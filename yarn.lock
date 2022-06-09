@@ -3220,11 +3220,6 @@
     rxjs "7.5.5"
     tslib "2.0.3"
 
-"@opentelemetry/api-metrics@0.26.0":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/api-metrics/-/api-metrics-0.26.0.tgz#6f98a5467140ab97f23f598b26e0e18ad8ec59f3"
-  integrity sha512-idDSUTx+LRwJiHhVHhdh45SWow5u9lKNDROKu5AMzsIVPI29utH5FfT9vor8qMM6blxWWvlT22HUNdNMWqUQfQ==
-
 "@opentelemetry/api-metrics@0.27.0", "@opentelemetry/api-metrics@^0.27.0":
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/api-metrics/-/api-metrics-0.27.0.tgz#d8eca344ed1155f3ea8a8133ade827b4bb90efbf"
@@ -3273,30 +3268,12 @@
     "@opentelemetry/sdk-metrics-base" "^0.27.0"
     systeminformation "^5.0.0"
 
-"@opentelemetry/instrumentation-nestjs-core@^0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation-nestjs-core/-/instrumentation-nestjs-core-0.27.0.tgz#39b2a4716ae854651e35c1e3cbc36570c9498dd7"
-  integrity sha512-kNzbQhd/GZbvT0dIiquV3QtBxkpArqxtEPUk4ZGWR+MS3vM+ma4e4Lk5vP1PaEIplhAFpoT9njeMH0I6V+GBSw==
-  dependencies:
-    "@opentelemetry/instrumentation" "^0.26.0"
-    "@opentelemetry/semantic-conventions" "^1.0.0"
-
 "@opentelemetry/instrumentation@0.27.0":
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.27.0.tgz#8e9864aed24e5b265008ffb14466bdc27ce31897"
   integrity sha512-dUwY/VoDptdK8AYigwS3IKblG+unV5xIdV4VQKy+nX5aT3f7vd5PMYs4arCQSYLbLRe0s7GxK6S9dtjai/TsHQ==
   dependencies:
     "@opentelemetry/api-metrics" "0.27.0"
-    require-in-the-middle "^5.0.3"
-    semver "^7.3.2"
-    shimmer "^1.2.1"
-
-"@opentelemetry/instrumentation@^0.26.0":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.26.0.tgz#64f1ff0242ed8742146c7920acb642786a1c398f"
-  integrity sha512-KpQfLnHjMnxqMXgEcRYAQ65/3oAl+Q2kHTFYzobjme/zH5n/iOPF94oGqCAr1NLbm2oX2Q6wXiQP/snSVcbJlw==
-  dependencies:
-    "@opentelemetry/api-metrics" "0.26.0"
     require-in-the-middle "^5.0.3"
     semver "^7.3.2"
     shimmer "^1.2.1"

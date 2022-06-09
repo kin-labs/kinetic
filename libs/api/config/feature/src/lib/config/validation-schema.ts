@@ -11,7 +11,7 @@ export const validationSchema = Joi.object({
   DEFAULT_MINT_AIRDROP_SECRET_KEY: Joi.string().optional(),
   DEFAULT_MINT_DECIMALS: Joi.number().required(),
   DEFAULT_MINT_PUBLIC_KEY: Joi.string().required(),
-  ENABLE_METRICS: Joi.boolean().default(false),
+  METRICS_ENABLED: Joi.boolean().default(false),
   JWT_SECRET: Joi.string().required(),
   NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
   PORT: Joi.number().default(3000),

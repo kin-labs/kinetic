@@ -11,7 +11,7 @@ import { AppModule } from './app/app.module'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ApiConfigDataAccessService)
-  await OpenTelementrySdk.start(config.isMetricsEnabled)
+  await OpenTelementrySdk.start(config.metricsEnabled)
   app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
   const { httpAdapter } = app.get(HttpAdapterHost)
