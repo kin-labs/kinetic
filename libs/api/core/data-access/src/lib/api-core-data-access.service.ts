@@ -1,11 +1,10 @@
 import { AirdropConfig } from '@mogami/airdrop'
 import { hashPassword } from '@mogami/api/auth/util'
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
-import { OpenTelementrySdk } from '@mogami/api/core/util'
 import { Keypair } from '@mogami/keypair'
 import { getPublicKey, Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
-import { Counter, metrics } from '@opentelemetry/api-metrics'
+import { Counter } from '@opentelemetry/api-metrics'
 import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
 import { MetricService } from 'nestjs-otel'
@@ -20,10 +19,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   constructor(readonly config: ApiConfigDataAccessService, readonly metricService: MetricService) {
     super()
-    if (config.isMetricsEnabled) {
-      metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
-    }
-
     this.getAppByIndexCounters.set(
       'app_get_app_by_index_call_counter',
       this.metricService.getCounter('app_get_app_by_index_call_counter', {

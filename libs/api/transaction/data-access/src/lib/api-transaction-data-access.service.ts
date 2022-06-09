@@ -9,13 +9,12 @@ import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, parseAndSignTokenTransfer } from '@mogami/solana'
 import { Injectable, Logger } from '@nestjs/common'
+import { Counter } from '@opentelemetry/api-metrics'
 import { AppTransactionErrorType, AppTransactionStatus, Prisma } from '@prisma/client'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
-import { Counter, metrics } from '@opentelemetry/api-metrics'
-import { OpenTelementrySdk } from '@mogami/api/core/util'
 
 @Injectable()
 export class ApiTransactionDataAccessService {
@@ -23,10 +22,6 @@ export class ApiTransactionDataAccessService {
   private makeTransferCounters = new Map<string, Counter>()
 
   constructor(readonly data: ApiCoreDataAccessService, private readonly appWebhook: ApiAppWebhookDataAccessService) {
-    if (this.data.config.isMetricsEnabled) {
-      metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
-    }
-
     this.makeTransferCounters.set(
       'app_make_transfer_call_counter',
       this.data.metricService.getCounter('app_make_transfer_call_counter', {

@@ -1,10 +1,9 @@
 import { ApiAppDataAccessService, AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
-import { OpenTelementrySdk } from '@mogami/api/core/util'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
 import { Injectable } from '@nestjs/common'
-import { Counter, metrics } from '@opentelemetry/api-metrics'
+import { Counter } from '@opentelemetry/api-metrics'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
@@ -12,11 +11,6 @@ export class ApiAccountDataAccessService {
   private createAccountCounters = new Map<string, Counter>()
 
   constructor(readonly data: ApiCoreDataAccessService, private readonly app: ApiAppDataAccessService) {
-    metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
-    if (this.data.config.isMetricsEnabled) {
-      metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
-    }
-
     this.createAccountCounters.set(
       'app_create_account_call_counter',
       this.data.metricService.getCounter('app_create_account_call_counter', {

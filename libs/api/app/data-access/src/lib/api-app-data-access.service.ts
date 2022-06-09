@@ -1,9 +1,8 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
-import { OpenTelementrySdk } from '@mogami/api/core/util'
 import { UserRole } from '@mogami/api/user/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
-import { Counter, metrics } from '@opentelemetry/api-metrics'
+import { Counter } from '@opentelemetry/api-metrics'
 import { AppWebhookType, Prisma } from '@prisma/client'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Keypair } from '@solana/web3.js'
@@ -50,10 +49,6 @@ export class ApiAppDataAccessService implements OnModuleInit {
   private getAppConfigCounters = new Map<string, Counter>()
 
   constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {
-    if (this.data.config.isMetricsEnabled) {
-      metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
-    }
-
     this.getAppConfigCounters.set(
       'app_get_app_config_call_counter',
       this.data.metricService.getCounter('app_get_app_config_call_counter', {
