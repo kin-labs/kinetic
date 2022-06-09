@@ -1,12 +1,15 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { OpenTelementrySdk } from '@mogami/api/core/util'
 import { UserRole } from '@mogami/api/user/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
+import { Counter, metrics } from '@opentelemetry/api-metrics'
 import { AppWebhookType, Prisma } from '@prisma/client'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Keypair } from '@solana/web3.js'
 import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
+import { MetricService } from 'nestjs-otel'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppEnvUpdateInput } from './dto/app-env-update.input'
 import { AppTransactionListInput } from './dto/app-transaction-list.input'
@@ -18,7 +21,6 @@ import { AppConfig } from './entity/app-config.entity'
 import { AppHealth } from './entity/app-health.entity'
 import { AppUserRole } from './entity/app-user-role.enum'
 import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
-import { OtelMethodCounter } from 'nestjs-otel'
 
 function isValidAppWebhookType(type: string) {
   return Object.keys(AppWebhookType)
@@ -46,8 +48,24 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   private readonly logger = new Logger(ApiAppDataAccessService.name)
+  private getAppConfigCounters = new Map<string, Counter>()
 
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
+  constructor(
+    private readonly data: ApiCoreDataAccessService,
+    private readonly wallet: ApiWalletDataAccessService,
+    private readonly metricService: MetricService,
+  ) {
+    if (this.data.config.isMetricsEnabled) {
+      metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
+    }
+
+    this.getAppConfigCounters.set(
+      'app_get_app_config_call_counter',
+      this.metricService.getCounter('app_get_app_config_call_counter', {
+        description: 'Total number of getAppConfig request calls',
+      }),
+    )
+  }
 
   async onModuleInit() {
     await this.configureProvisionedApps()
@@ -299,10 +317,29 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  @OtelMethodCounter()
   async getAppConfig(environment: string, index: number): Promise<AppConfig> {
     const appKey = this.data.getAppKey(environment, index)
     const env = await this.data.getAppByEnvironmentIndex(environment, index)
+
+    this.getAppConfigCounters.get('app_get_app_config_call_counter').add(1)
+    if (
+      !this.getAppConfigCounters.has(
+        `'app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter'`,
+      )
+    ) {
+      this.getAppConfigCounters.set(
+        `'app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter'`,
+        this.metricService.getCounter(
+          `'app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter'`,
+          {
+            description: `Total number of getAppConfig with appKey: ${appKey} and environment: ${environment}`,
+          },
+        ),
+      )
+    }
+    this.getAppConfigCounters
+      .get(`'app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter'`)
+      .add(1)
 
     const mints = env?.mints?.map(({ mint, wallet }) => ({
       airdrop: !!mint.airdropSecretKey,

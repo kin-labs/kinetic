@@ -1,11 +1,14 @@
 import { AirdropConfig } from '@mogami/airdrop'
 import { hashPassword } from '@mogami/api/auth/util'
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
+import { OpenTelementrySdk } from '@mogami/api/core/util'
 import { Keypair } from '@mogami/keypair'
 import { getPublicKey, Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { Counter, metrics } from '@opentelemetry/api-metrics'
 import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
+import { MetricService } from 'nestjs-otel'
 
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
@@ -13,8 +16,20 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   readonly airdropConfig = new Map<string, Omit<AirdropConfig, 'connection'>>()
   readonly connections = new Map<string, Solana>()
 
-  constructor(readonly config: ApiConfigDataAccessService) {
+  private getAppByIndexCounters = new Map<string, Counter>()
+
+  constructor(readonly config: ApiConfigDataAccessService, private readonly metricService: MetricService) {
     super()
+    if (config.isMetricsEnabled) {
+      metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
+    }
+
+    this.getAppByIndexCounters.set(
+      'app_get_app_by_index_call_counter',
+      this.metricService.getCounter('app_get_app_by_index_call_counter', {
+        description: 'Total number of getAppByIndex request calls',
+      }),
+    )
   }
 
   uptime() {
@@ -80,6 +95,17 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getAppByIndex(index: number) {
+    this.getAppByIndexCounters.get('app_get_app_by_index_call_counter').add(1)
+    if (!this.getAppByIndexCounters.has(`'app_get_app_by_index_with_index_${index}_call_counter'`)) {
+      this.getAppByIndexCounters.set(
+        `'app_get_app_by_index_with_index_${index}_call_counter'`,
+        this.metricService.getCounter(`'app_get_app_by_index_with_index_${index}_call_counter'`, {
+          description: `Total number of getAppbyIndex with index: ${index}`,
+        }),
+      )
+    }
+    this.getAppByIndexCounters.get(`'app_get_app_by_index_with_index_${index}_call_counter'`).add(1)
+
     return this.app.findUnique({
       where: { index },
       include: {

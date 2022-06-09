@@ -4,19 +4,35 @@ import { AsyncLocalStorageContextManager } from '@opentelemetry/context-async-ho
 import { NestInstrumentation } from '@opentelemetry/instrumentation-nestjs-core'
 
 import { InstrumentationOption } from '@opentelemetry/instrumentation'
+import { MeterProvider } from '@opentelemetry/sdk-metrics-base'
 
 const nestInstrumentation = new NestInstrumentation() as unknown as InstrumentationOption
 
 export class OpenTelementrySdk {
   static otelSdk: NodeSDK
+  static meterProvider: MeterProvider
+  static metricExporter: PrometheusExporter
 
   static start() {
+    const metricInterval = 1000
+
+    if (!this.metricExporter) {
+      this.metricExporter = new PrometheusExporter({
+        port: 9461,
+      })
+    }
+
+    if (!this.meterProvider) {
+      this.meterProvider = new MeterProvider({
+        exporter: this.metricExporter,
+        interval: metricInterval,
+      })
+    }
+
     if (!this.otelSdk) {
       this.otelSdk = new NodeSDK({
-        metricExporter: new PrometheusExporter({
-          port: 9461,
-        }),
-        metricInterval: 1000,
+        metricExporter: this.metricExporter,
+        metricInterval,
         contextManager: new AsyncLocalStorageContextManager(),
         instrumentations: [nestInstrumentation],
       })
@@ -27,5 +43,13 @@ export class OpenTelementrySdk {
 
   static async shutdown() {
     await this.otelSdk.shutdown()
+  }
+
+  static getMetricProvider() {
+    if (!this.meterProvider && process.env.ENABLE_METRICS === 'TRUE') {
+      this.start()
+    }
+
+    return this.meterProvider
   }
 }

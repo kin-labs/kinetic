@@ -11,7 +11,7 @@ import { ApiWalletFeatureModule } from '@mogami/api/wallet/feature'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
-import { OpenTelemetryModule } from 'nestjs-otel'
+import { MetricService, OpenTelemetryModule } from 'nestjs-otel'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
@@ -63,6 +63,7 @@ const isMetricsEnable = process.env.ENABLE_METRICS === 'TRUE'
       },
     }),
     ScheduleModule.forRoot(),
+    MetricService,
   ],
 })
 export class ApiCoreFeatureModule {}

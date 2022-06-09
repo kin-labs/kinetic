@@ -2,6 +2,7 @@ import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { OpenTelementrySdk } from '@mogami/api/core/util'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
+import { metrics } from '@opentelemetry/api-metrics'
 import { exec } from 'child_process'
 import cookieParser from 'cookie-parser'
 import redirectSSL from 'redirect-ssl'
@@ -12,7 +13,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ApiConfigDataAccessService)
   if (config.isMetricsEnabled) {
-    await OpenTelementrySdk.start()
+    metrics.setGlobalMeterProvider(OpenTelementrySdk.getMetricProvider())
   }
   app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
