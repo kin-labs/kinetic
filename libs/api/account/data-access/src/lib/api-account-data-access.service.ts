@@ -71,8 +71,8 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
-
-    this.appCreateAccountCallCounter.add(1)
+    const appKey = this.data.getAppKey(input.environment, input.index)
+    this.appCreateAccountCallCounter.add(1, { appKey })
 
     const created = await this.data.appTransaction.create({
       data: { appEnvId: appEnv.id },
@@ -80,7 +80,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     })
     const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
     if (!mint) {
-      this.appCreateAccountErrorMintNotFoundCounter.add(1)
+      this.appCreateAccountErrorMintNotFoundCounter.add(1, { appKey })
       throw new Error(`Can't find mint ${input.mint} in environment ${input.environment} for index ${input.index}`)
     }
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
@@ -96,10 +96,10 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     try {
       signature = await solana.sendRawTransaction(transaction)
       status = AppTransactionStatus.Committed
-      this.appCreateAccountSendSolanaTransactionSuccessCounter.add(1)
+      this.appCreateAccountSendSolanaTransactionSuccessCounter.add(1, { appKey })
     } catch (error) {
       status = AppTransactionStatus.Failed
-      this.appCreateAccountSendSolanaTransactionErrorCounter.add(1)
+      this.appCreateAccountSendSolanaTransactionErrorCounter.add(1, { appKey })
       errors = parseError(error)
     }
 
