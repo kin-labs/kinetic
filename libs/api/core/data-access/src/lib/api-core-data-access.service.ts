@@ -95,16 +95,16 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getAppByIndex(index: number) {
-    this.getAppByIndexCounters.get('app_get_app_by_index_call_counter').add(1)
-    if (!this.getAppByIndexCounters.has(`'app_get_app_by_index_with_index_${index}_call_counter'`)) {
+    if (!this.getAppByIndexCounters.has(`app_get_app_by_index_with_index_${index}_call_counter`)) {
       this.getAppByIndexCounters.set(
-        `'app_get_app_by_index_with_index_${index}_call_counter'`,
-        this.metricService.getCounter(`'app_get_app_by_index_with_index_${index}_call_counter'`, {
+        `app_get_app_by_index_with_index_${index}_call_counter`,
+        this.metricService.getCounter(`app_get_app_by_index_with_index_${index}_call_counter`, {
           description: `Total number of getAppbyIndex with index: ${index}`,
         }),
       )
     }
-    this.getAppByIndexCounters.get(`'app_get_app_by_index_with_index_${index}_call_counter'`).add(1)
+
+    this.getAppByIndexCounters.get(`app_get_app_by_index_with_index_${index}_call_counter`).add(1)
 
     return this.app.findUnique({
       where: { index },

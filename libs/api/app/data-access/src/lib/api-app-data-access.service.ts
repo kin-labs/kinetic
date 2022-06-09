@@ -324,13 +324,13 @@ export class ApiAppDataAccessService implements OnModuleInit {
     this.getAppConfigCounters.get('app_get_app_config_call_counter').add(1)
     if (
       !this.getAppConfigCounters.has(
-        `'app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter'`,
+        `app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter`,
       )
     ) {
       this.getAppConfigCounters.set(
-        `'app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter'`,
+        `app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter`,
         this.metricService.getCounter(
-          `'app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter'`,
+          `app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter`,
           {
             description: `Total number of getAppConfig with appKey: ${appKey} and environment: ${environment}`,
           },
@@ -338,7 +338,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
       )
     }
     this.getAppConfigCounters
-      .get(`'app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter'`)
+      .get(`app_get_app_config_with_appKey_${appKey}_and_environment_${environment}_call_counter`)
       .add(1)
 
     const mints = env?.mints?.map(({ mint, wallet }) => ({

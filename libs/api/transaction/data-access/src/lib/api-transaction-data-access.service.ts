@@ -120,15 +120,15 @@ export class ApiTransactionDataAccessService {
 
     const appKey = this.data.getAppKey(input.environment, input.index)
     // increment makeTranfer counter for this appKey
-    if (!this.makeTransferCounters.has(`'app_make_transfer_with_appKey_${appKey}_call_counter'`)) {
+    if (!this.makeTransferCounters.has(`app_make_transfer_with_appKey_${appKey}_call_counter`)) {
       this.makeTransferCounters.set(
-        `'app_make_transfer_with_appKey_${appKey}_call_counter'`,
-        this.metricService.getCounter(`'app_make_transfer_with_appKey_${appKey}_call_counter'`, {
+        `app_make_transfer_with_appKey_${appKey}_call_counter`,
+        this.metricService.getCounter(`app_make_transfer_with_appKey_${appKey}_call_counter`, {
           description: `Total number of makeTransfer with appKey: ${appKey}`,
         }),
       )
     }
-    this.makeTransferCounters.get(`'app_make_transfer_with_appKey_${appKey}_call_counter'`).add(1)
+    this.makeTransferCounters.get(`app_make_transfer_with_appKey_${appKey}_call_counter`).add(1)
 
     const created = await this.data.appTransaction.create({
       data: {
@@ -143,15 +143,15 @@ export class ApiTransactionDataAccessService {
     if (!mint) {
       // increment makeTranfer error counter - mint
       this.makeTransferCounters.get('app_make_transfer_error_mint_not_found_counter').add(1)
-      if (!this.makeTransferCounters.has(`'app_make_transfer_with_mint_${mint}_call_counter'`)) {
+      if (!this.makeTransferCounters.has(`app_make_transfer_with_mint_${mint}_call_counter`)) {
         this.makeTransferCounters.set(
-          `'app_make_transfer_with_mint_${mint}_call_counter'`,
-          this.metricService.getCounter(`'app_make_transfer_with_mint_${mint}_call_counter'`, {
+          `app_make_transfer_with_mint_${mint}_call_counter`,
+          this.metricService.getCounter(`app_make_transfer_with_mint_${mint}_call_counter`, {
             description: `Total number of makeTransfer with mint: ${mint}`,
           }),
         )
       }
-      this.makeTransferCounters.get(`'app_make_transfer_with_mint_${mint}_call_counter'`).add(1)
+      this.makeTransferCounters.get(`app_make_transfer_with_mint_${mint}_call_counter`).add(1)
       throw new Error(`${appKey}: Can't find mint ${input.mint}`)
     }
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)

@@ -85,15 +85,15 @@ export class ApiAccountDataAccessService {
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
 
     this.createAccountCounters.get('app_create_account_call_counter').add(1)
-    if (!this.createAccountCounters.has(`'app_create_account_with_appKey_${appEnv.id}_call_counter'`)) {
+    if (!this.createAccountCounters.has(`app_create_account_with_appKey_${appEnv.id}_call_counter`)) {
       this.createAccountCounters.set(
-        `'app_create_account_with_appKey_${appEnv.id}_call_counter'`,
-        this.metricService.getCounter(`'app_create_account_with_appKey_${appEnv.id}_call_counter'`, {
+        `app_create_account_with_appKey_${appEnv.id}_call_counter`,
+        this.metricService.getCounter(`app_create_account_with_appKey_${appEnv.id}_call_counter`, {
           description: `Total number of createAccount with appKey: ${appEnv.id}`,
         }),
       )
     }
-    this.createAccountCounters.get(`'app_create_account_with_appKey_${appEnv.id}_call_counter'`).add(1)
+    this.createAccountCounters.get(`app_create_account_with_appKey_${appEnv.id}_call_counter`).add(1)
 
     const created = await this.data.appTransaction.create({
       data: { appEnvId: appEnv.id },
@@ -102,15 +102,15 @@ export class ApiAccountDataAccessService {
     const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
     if (!mint) {
       this.createAccountCounters.get('app_create_account_error_mint_not_found_counter').add(1)
-      if (!this.createAccountCounters.has(`'app_create_account_with_mint_${mint}_call_counter'`)) {
+      if (!this.createAccountCounters.has(`app_create_account_with_mint_${mint}_call_counter`)) {
         this.createAccountCounters.set(
-          `'app_create_account_with_mint_${mint}_call_counter'`,
-          this.metricService.getCounter(`'app_create_account_with_mint_${mint}_call_counter'`, {
+          `app_create_account_with_mint_${mint}_call_counter`,
+          this.metricService.getCounter(`app_create_account_with_mint_${mint}_call_counter`, {
             description: `Total number of createAccount with mint: ${mint}`,
           }),
         )
       }
-      this.createAccountCounters.get(`'app_create_account_with_mint_${mint}_call_counter'`).add(1)
+      this.createAccountCounters.get(`app_create_account_with_mint_${mint}_call_counter`).add(1)
 
       throw new Error(`Can't find mint ${input.mint} in environment ${input.environment} for index ${input.index}`)
     }
