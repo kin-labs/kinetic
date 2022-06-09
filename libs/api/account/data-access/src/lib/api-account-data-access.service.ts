@@ -8,33 +8,34 @@ import { CreateAccountRequest } from './dto/create-account-request.dto'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {
-  private appCreateAccountCallCounter: Counter
-  private appCreateAccountErrorMintNotFoundCounter: Counter
-  private appCreateAccountSendSolanaTransactionSuccessCounter: Counter
-  private appCreateAccountSendSolanaTransactionErrorCounter: Counter
+  private createAccountCallCounter: Counter
+  private createAccountErrorMintNotFoundCounter: Counter
+  private createAccountSolanaTransactionSuccessCounter: Counter
+  private createAccountSolanaTransactionErrorCounter: Counter
 
   constructor(readonly data: ApiCoreDataAccessService, private readonly app: ApiAppDataAccessService) {}
 
   onModuleInit() {
-    this.appCreateAccountCallCounter = this.data.metrics.getCounter('app_create_account_call_counter', {
-      description: 'Total number of createAccount request calls',
+    const prefix = 'api_account_create_account'
+    this.createAccountCallCounter = this.data.metrics.getCounter(`${prefix}_call_counter`, {
+      description: 'Number of createAccount requests',
     })
-    this.appCreateAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(
-      'app_create_account_error_mint_not_found_counter',
+    this.createAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(
+      `${prefix}_error_mint_not_found_counter`,
       {
-        description: 'Total number of createAccount mint not found errors',
+        description: 'Number of createAccount mint not found errors',
       },
     )
-    this.appCreateAccountSendSolanaTransactionSuccessCounter = this.data.metrics.getCounter(
-      'app_create_account_send_solana_transaction_success_counter',
+    this.createAccountSolanaTransactionSuccessCounter = this.data.metrics.getCounter(
+      `${prefix}_send_solana_transaction_success_counter`,
       {
-        description: 'Total number of createAccount send Solana transaction success',
+        description: 'Number of createAccount Solana transaction success',
       },
     )
-    this.appCreateAccountSendSolanaTransactionErrorCounter = this.data.metrics.getCounter(
-      'app_create_account_send_solana_transaction_error_counter',
+    this.createAccountSolanaTransactionErrorCounter = this.data.metrics.getCounter(
+      `${prefix}_send_solana_transaction_error_counter`,
       {
-        description: 'Total number of createAccount send Solana transaction error',
+        description: 'Number of createAccount Solana transaction errors',
       },
     )
   }
@@ -72,7 +73,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
     const appKey = this.data.getAppKey(input.environment, input.index)
-    this.appCreateAccountCallCounter.add(1, { appKey })
+    this.createAccountCallCounter.add(1, { appKey })
 
     const created = await this.data.appTransaction.create({
       data: { appEnvId: appEnv.id },
@@ -80,7 +81,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     })
     const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
     if (!mint) {
-      this.appCreateAccountErrorMintNotFoundCounter.add(1, { appKey })
+      this.createAccountErrorMintNotFoundCounter.add(1, { appKey })
       throw new Error(`Can't find mint ${input.mint} in environment ${input.environment} for index ${input.index}`)
     }
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
@@ -96,10 +97,10 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     try {
       signature = await solana.sendRawTransaction(transaction)
       status = AppTransactionStatus.Committed
-      this.appCreateAccountSendSolanaTransactionSuccessCounter.add(1, { appKey })
+      this.createAccountSolanaTransactionSuccessCounter.add(1, { appKey })
     } catch (error) {
       status = AppTransactionStatus.Failed
-      this.appCreateAccountSendSolanaTransactionErrorCounter.add(1, { appKey })
+      this.createAccountSolanaTransactionErrorCounter.add(1, { appKey })
       errors = parseError(error)
     }
 

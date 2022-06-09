@@ -20,6 +20,7 @@ export class OpenTelementrySdk {
     const metricInterval = 1000
 
     this.metricExporter = new PrometheusExporter({
+      prefix: 'mogami',
       preventServerStart: !enableMetrics,
     })
 

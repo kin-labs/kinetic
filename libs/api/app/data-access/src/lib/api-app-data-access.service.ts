@@ -2,7 +2,7 @@ import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { UserRole } from '@mogami/api/user/data-access'
 import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
-import { AggregationTemporality, Histogram, ValueType } from '@opentelemetry/api-metrics'
+import { Counter } from '@opentelemetry/api-metrics'
 import { AppWebhookType, Prisma } from '@prisma/client'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Keypair } from '@solana/web3.js'
@@ -46,17 +46,17 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   private readonly logger = new Logger(ApiAppDataAccessService.name)
-  private appConfigErrorHistogram: Histogram
-  private appConfigSuccessHistogram: Histogram
+  private getAppConfigErrorCounter: Counter
+  private getAppConfigSuccessCounter: Counter
 
   constructor(private readonly data: ApiCoreDataAccessService, private readonly wallet: ApiWalletDataAccessService) {}
 
   async onModuleInit() {
-    this.appConfigErrorHistogram = this.data.metrics.getHistogram('app_config_error_counter', {
-      description: 'Total number of failed getAppConfig requests',
+    this.getAppConfigErrorCounter = this.data.metrics.getCounter('api_app_get_app_config_error_counter', {
+      description: 'Number of getAppConfig errors',
     })
-    this.appConfigSuccessHistogram = this.data.metrics.getHistogram('app_config_success_counter', {
-      description: 'Total number of getAppConfig requests',
+    this.getAppConfigSuccessCounter = this.data.metrics.getCounter('api_app_get_app_config_success_counter', {
+      description: 'Number of getAppConfig success',
     })
     await this.configureProvisionedApps()
   }
@@ -311,10 +311,10 @@ export class ApiAppDataAccessService implements OnModuleInit {
     const appKey = this.data.getAppKey(environment, index)
     const env = await this.data.getAppByEnvironmentIndex(environment, index)
     if (!env) {
-      this.appConfigErrorHistogram.record(1, { appKey })
+      this.getAppConfigErrorCounter.add(1, { appKey })
       throw new NotFoundException(`App not found :(`)
     }
-    this.appConfigSuccessHistogram.record(1, { appKey })
+    this.getAppConfigSuccessCounter.add(1, { appKey })
     this.logger.verbose(`getAppConfig ${appKey}`)
     const mints = env?.mints?.map(({ mint, wallet }) => ({
       airdrop: !!mint.airdropSecretKey,
