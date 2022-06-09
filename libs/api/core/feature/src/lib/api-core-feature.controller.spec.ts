@@ -1,5 +1,6 @@
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 import { Test } from '@nestjs/testing'
+import { OpenTelemetryModule } from 'nestjs-otel'
 import { ApiCoreFeatureController } from './api-core-feature.controller'
 
 describe('ApiCoreFeatureController', () => {
@@ -8,7 +9,16 @@ describe('ApiCoreFeatureController', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [],
-      imports: [ApiCoreDataAccessModule],
+      imports: [
+        ApiCoreDataAccessModule,
+        OpenTelemetryModule.forRoot({
+          metrics: {
+            apiMetrics: {
+              enable: false,
+            },
+          },
+        }),
+      ],
       controllers: [ApiCoreFeatureController],
     }).compile()
 
