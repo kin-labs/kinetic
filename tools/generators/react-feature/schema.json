@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "react-feature",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Library name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "app": {
+      "type": "string",
+      "description": "Web app name",
+      "default": "web"
+    },
+    "skipDataAccess": {
+      "type": "boolean",
+      "default": true
+    },
+    "skipFeature": {
+      "type": "boolean",
+      "default": false
+    },
+    "skipUi": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": ["name"]
+}

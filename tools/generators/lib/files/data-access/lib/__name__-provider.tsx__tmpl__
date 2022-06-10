@@ -1,0 +1,20 @@
+import React, { ReactNode } from 'react';
+
+export interface <%= app.className %><%= className %>ProviderContext {}
+
+const <%= app.className %><%= className %>Context = React.createContext<<%= app.className %><%= className %>ProviderContext>({});
+
+function <%= app.className %><%= className %>Provider(props: { children: ReactNode }) {
+  const { children } = props;
+
+  const value = {};
+  return (
+    <<%= app.className %><%= className %>Context.Provider value={value}>
+      {children}
+    </<%= app.className %><%= className %>Context.Provider>
+  );
+}
+
+const use<%= app.className %><%= className %> = () => React.useContext(<%= app.className %><%= className %>Context);
+
+export { <%= app.className %><%= className %>Provider, use<%= app.className %><%= className %> };
