@@ -1,5 +1,7 @@
+import { useToast } from '@chakra-ui/react'
+import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAppEnvQuery } from '@mogami/shared/util/admin-sdk'
+import { useUserAppEnvQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { AppEnvProvider } from './app-env-provider'
@@ -12,14 +14,23 @@ import { EnvDetailWebhook } from './env-detail-webhook'
 import { EnvDetailWebhooks } from './env-detail-webhooks'
 
 export default function AdminAppFeatureEnvDetail() {
+  const toast = useToast()
+
   const { path, url } = useRouteMatch()
   const { appId, appEnvId } = useParams<{ appId: string; appEnvId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [{ data, fetching }] = useAppEnvQuery({ variables: { appId: appId!, appEnvId: appEnvId! } })
+  const [{ data, error, fetching }] = useUserAppEnvQuery({ variables: { appId: appId!, appEnvId: appEnvId! } })
 
+  if (error) {
+    toast({ status: 'error', title: 'Something went wrong', description: `${error}` })
+  }
+
+  if (fetching) {
+    return <AdminUiLoader />
+  }
   return (
     <React.Suspense fallback={<AdminUiLoader />}>
-      {!fetching && data?.item ? (
+      {data?.item ? (
         <AppEnvProvider appEnv={data.item} baseUrl={url}>
           <Switch>
             <Route path={path} exact render={() => <Redirect to={`${url}/overview`} />} />
@@ -33,7 +44,7 @@ export default function AdminAppFeatureEnvDetail() {
           </Switch>
         </AppEnvProvider>
       ) : (
-        <AdminUiLoader />
+        <AdminUiAlert status="warning" message={'App environment not found'} />
       )}
     </React.Suspense>
   )

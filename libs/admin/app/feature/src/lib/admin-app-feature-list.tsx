@@ -1,12 +1,13 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
 import { AdminAppUiGrid } from '@mogami/admin/app/ui'
+import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAppsQuery, useDeleteAppMutation } from '@mogami/shared/util/admin-sdk'
+import { useUserAppsQuery, useDeleteAppMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminAppFeatureList() {
   const toast = useToast()
-  const [{ data, fetching }, refresh] = useAppsQuery()
+  const [{ data, error, fetching }, refresh] = useUserAppsQuery()
   const [, deleteApp] = useDeleteAppMutation()
 
   const handleDelete = async (appId: string) => {
@@ -21,6 +22,13 @@ export default function AdminAppFeatureList() {
     await refresh()
   }
 
+  if (error) {
+    toast({ status: 'error', title: 'Something went wrong', description: `${error}` })
+  }
+
+  if (fetching) {
+    return <AdminUiLoader />
+  }
   return (
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
@@ -29,10 +37,10 @@ export default function AdminAppFeatureList() {
         </Box>
       </Box>
       <Box>
-        {fetching && !data?.items?.length ? (
-          <AdminUiLoader />
-        ) : (
+        {data?.items?.length ? (
           <AdminAppUiGrid apps={data?.items} deleteApp={handleDelete} />
+        ) : (
+          <AdminUiAlert status="warning" message={'No apps found'} />
         )}
       </Box>
     </Stack>

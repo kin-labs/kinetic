@@ -6,7 +6,7 @@ import React from 'react'
 
 export default function AdminUserFeatureList() {
   const toast = useToast()
-  const [{ data, fetching }, refresh] = useUsersQuery()
+  const [{ data, error, fetching }, refresh] = useUsersQuery()
   const [, deleteUser] = useDeleteUserMutation()
 
   const handleDelete = async (userId: string) => {
@@ -19,6 +19,10 @@ export default function AdminUserFeatureList() {
       })
     }
     await refresh()
+  }
+
+  if (error) {
+    toast({ status: 'error', title: 'Something went wrong', description: `${error}` })
   }
 
   return (

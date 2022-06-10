@@ -40,11 +40,6 @@ export class ApiAppFeatureResolver {
     return this.service.app(user.id, appId)
   }
 
-  @Query(() => AppEnv, { nullable: true })
-  appEnv(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
-    return this.service.appEnv(user.id, appId, appEnvId)
-  }
-
   @Query(() => AppWebhook, { nullable: true })
   appWebhook(@CtxUser() user: User, @Args('appId') appId: string, @Args('appWebhookId') appWebhookId: string) {
     return this.service.appWebhook(user.id, appId, appWebhookId)

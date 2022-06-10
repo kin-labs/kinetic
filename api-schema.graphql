@@ -325,7 +325,6 @@ type Mutation {
 
 type Query {
   app(appId: String!): App
-  appEnv(appEnvId: String!, appId: String!): AppEnv
   appTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
   appTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
   appWebhook(appId: String!, appWebhookId: String!): AppWebhook
@@ -338,6 +337,9 @@ type Query {
   me: User
   uptime: Float!
   user(userId: String!): User
+  userApp(appId: String!): App
+  userAppEnv(appEnvId: String!, appId: String!): AppEnv
+  userApps: [App!]
   users: [User!]
   wallet(walletId: String!): Wallet
   walletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse

@@ -214,15 +214,6 @@ query App($appId: String!) {
   }
 }
 
-query AppEnv($appId: String!, $appEnvId: String!) {
-  item: appEnv(appId: $appId, appEnvId: $appEnvId) {
-    ...AppEnvDetails
-    wallets {
-      ...WalletDetails
-    }
-  }
-}
-
 query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
   item: appTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
     ...AppTransactionDetails
@@ -252,6 +243,39 @@ query Apps {
     ...AppDetails
     envs {
       ...AppEnvDetails
+    }
+  }
+}
+
+query UserApps {
+  items: userApps {
+    ...AppDetails
+    envs {
+      ...AppEnvDetails
+    }
+  }
+}
+
+query UserApp($appId: String!) {
+  item: userApp(appId: $appId) {
+    ...AppDetails
+    envs {
+      ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
+    }
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+query UserAppEnv($appId: String!, $appEnvId: String!) {
+  item: userAppEnv(appId: $appId, appEnvId: $appEnvId) {
+    ...AppEnvDetails
+    wallets {
+      ...WalletDetails
     }
   }
 }

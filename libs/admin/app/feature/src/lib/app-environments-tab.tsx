@@ -1,10 +1,10 @@
 import { AdminAppUiEnvironments } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAppQuery } from '@mogami/shared/util/admin-sdk'
+import { useUserAppQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AppEnvironmentsTab({ appId }: { appId: string }) {
-  const [{ data, fetching }] = useAppQuery({ variables: { appId } })
+  const [{ data, fetching }] = useUserAppQuery({ variables: { appId } })
   if (fetching) {
     return <AdminUiLoader />
   }

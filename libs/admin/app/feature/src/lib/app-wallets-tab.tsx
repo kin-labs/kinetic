@@ -1,11 +1,11 @@
 import { Alert, Box } from '@chakra-ui/react'
 import { AdminAppUiWallet, AdminAppUiWalletBalances } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAppEnvQuery, Wallet } from '@mogami/shared/util/admin-sdk'
+import { useUserAppEnvQuery, Wallet } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AppWalletsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
-  const [{ data, fetching }] = useAppEnvQuery({ variables: { appId, appEnvId } })
+  const [{ data, fetching }] = useUserAppEnvQuery({ variables: { appId, appEnvId } })
   if (fetching) {
     return <AdminUiLoader />
   }

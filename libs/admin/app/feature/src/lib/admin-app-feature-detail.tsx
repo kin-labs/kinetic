@@ -1,15 +1,16 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
 import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers } from '@mogami/admin/app/ui'
+import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AdminUiTabs } from '@mogami/admin/ui/tabs'
 import {
   AppUpdateInput,
   AppUserAddInput,
   AppUserUpdateRoleInput,
-  useAppQuery,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
   useUpdateAppMutation,
+  useUserAppQuery,
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
@@ -20,7 +21,7 @@ export default function AdminAppFeatureDetail() {
   const toast = useToast()
   const { appId } = useParams<{ appId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [{ data, fetching }] = useAppQuery({ variables: { appId: appId! } })
+  const [{ data, error, fetching }] = useUserAppQuery({ variables: { appId: appId! } })
   const [, updateAppMutation] = useUpdateAppMutation()
   const [, updateUserAddMutation] = useAppUserAddMutation()
   const [, updateRoleMutation] = useAppUserUpdateRoleMutation()
@@ -67,12 +68,16 @@ export default function AdminAppFeatureDetail() {
     await updateRoleMutation({ appId: appId!, input: { role, userId } })
   }
 
+  if (error) {
+    toast({ status: 'error', title: 'Something went wrong', description: `${error}` })
+  }
+
   if (fetching) {
     return <AdminUiLoader />
   }
 
   if (!data?.item) {
-    return <div>App not found :(</div>
+    return <AdminUiAlert status="warning" message="App not found :(" />
   }
 
   return (

@@ -1,17 +1,20 @@
-import { Box, Flex, Heading, Text, Stack } from '@chakra-ui/react'
-import { AdminClusterUiCluster } from '@mogami/admin/cluster/ui'
+import { Box, Flex, Heading, Stack, useToast } from '@chakra-ui/react'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAppEnvQuery } from '@mogami/shared/util/admin-sdk'
+import { useUserAppEnvQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
 export default function AdminAppFeatureEnvTransactionList() {
+  const toast = useToast()
   const { appId, appEnvId } = useParams<{ appId: string; appEnvId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [{ data, error, fetching }] = useAppEnvQuery({ variables: { appId: appId!, appEnvId: appEnvId! } })
+  const [{ data, error, fetching }] = useUserAppEnvQuery({ variables: { appId: appId!, appEnvId: appEnvId! } })
 
   if (fetching) {
     return <AdminUiLoader />
+  }
+  if (error) {
+    toast({ status: 'error', title: 'Something went wrong', description: `${error}` })
   }
 
   return (

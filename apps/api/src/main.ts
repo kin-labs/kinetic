@@ -23,7 +23,7 @@ async function bootstrap() {
   await app.listen(config.port)
   Logger.log(
     `🚀 API is running on http://localhost:${config.port}/${config.prefix} with CORS ${
-      config.corsOrigins ? `enabled for ${config.corsOrigins}` : 'disabled'
+      config.corsOrigins ? `enabled for: ${config.corsOrigins?.join(' ')}` : 'disabled'
     }.`,
   )
   Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
