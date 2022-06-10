@@ -22,6 +22,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   private makeTransferMintNotFoundErrorCounter: Counter
   private makeTransferRequestCounter: Counter
+  private makeTransferSolanaCommittedCounter: Counter
   private makeTransferSolanaConfirmedCounter: Counter
   private makeTransferSolanaErrorCounter: Counter
   private makeTransferSolanaFinalizedCounter: Counter
@@ -39,6 +40,9 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     })
     this.makeTransferMintNotFoundErrorCounter = this.data.metrics.getCounter(`${prefix}_error_mint_not_found_counter`, {
       description: 'Number of makeTransfer mint not found errors',
+    })
+    this.makeTransferSolanaCommittedCounter = this.data.metrics.getCounter(`${prefix}_solana_committed_counter`, {
+      description: 'Number of makeTransfer committed Solana transactions',
     })
     this.makeTransferSolanaConfirmedCounter = this.data.metrics.getCounter(`${prefix}_solana_confirmed_counter`, {
       description: 'Number of makeTransfer confirmed Solana transactions',
@@ -168,6 +172,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       )
       appTransaction.status = AppTransactionStatus.Confirmed
       appTransaction.solanaConfirmed = new Date()
+      this.makeTransferSolanaCommittedCounter.add(1, { appKey })
       await this.updateAppTransaction(created.id, {
         ...appTransaction,
       })
@@ -180,7 +185,6 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
         signature: appTransaction.signature as string,
         lastValidBlockHeight: input.lastValidBlockHeight,
       })
-      this.makeTransferSolanaErrorCounter.add(1, { appKey })
     }
 
     // Send Event Webhook
@@ -265,6 +269,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
           status: AppTransactionStatus.Finalized,
         },
       })
+      this.makeTransferSolanaFinalizedCounter.add(1, { appKey })
       this.logger.verbose(`${appKey}: confirmSignature: finished ${signature}`)
     }
   }
