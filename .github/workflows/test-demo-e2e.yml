@@ -24,6 +24,7 @@ env:
   JWT_SECRET: 'MogamiJwtSecret!'
   NX_CLOUD_DISTRIBUTED_EXECUTION: false
   SOLANA_DEVNET_RPC_ENDPOINT: 'http://localhost:8899'
+  DEBUG: cypress:*
 
 jobs:
   main:

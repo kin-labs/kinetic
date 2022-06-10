@@ -48,7 +48,7 @@ describe('demo', () => {
     cy.get('.chakra-button.close').click()
   })
 
-  it('should import mnemonic', () => {
+  it.only('should import mnemonic', () => {
     // into actor clay vapor vacuum settle topple soon female chicken case flush
     // CbHSujkci8tpk2nH31cUhtgYwNpX8w7hVoP9qXHfBvY
     // 45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6
@@ -64,7 +64,7 @@ describe('demo', () => {
       .invoke('val')
       .then((secret) => {
         expect(secret).equals(
-          '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
+          '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq', // 6
         )
       })
   })
