@@ -22,7 +22,7 @@ export function AdminUserUiTable({ users, deleteUser }: AdminUserUiTableProps) {
           {users?.map((user) => (
             <Tr key={user.id}>
               <Td>
-                <Link to={'/users/' + user.id}>
+                <Link to={'/system/users/' + user.id}>
                   <Text color="teal.500">{user.name}</Text>
                 </Link>
               </Td>

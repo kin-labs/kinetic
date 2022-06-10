@@ -9,8 +9,8 @@ export function AdminClusterFeature() {
   return (
     <React.Suspense fallback={<AdminUiLoader />}>
       <Switch>
-        <Route path="/clusters" exact render={() => <AdminClusterFeatureList />} />
-        <Route path="/clusters/:clusterId" render={() => <AdminClusterFeatureDetail />} />
+        <Route path="/system/clusters" exact render={() => <AdminClusterFeatureList />} />
+        <Route path="/system/clusters/:clusterId" render={() => <AdminClusterFeatureDetail />} />
       </Switch>
     </React.Suspense>
   )

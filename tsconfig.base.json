@@ -25,6 +25,8 @@
       "@mogami/admin/cluster/ui": ["libs/admin/cluster/ui/src/index.ts"],
       "@mogami/admin/home/feature": ["libs/admin/home/feature/src/index.ts"],
       "@mogami/admin/shell/feature": ["libs/admin/shell/feature/src/index.ts"],
+      "@mogami/admin/system/feature": ["libs/admin/system/feature/src/index.ts"],
+      "@mogami/admin/system/ui": ["libs/admin/system/ui/src/index.ts"],
       "@mogami/admin/ui/alert": ["libs/admin/ui/alert/src/index.ts"],
       "@mogami/admin/ui/form": ["libs/admin/ui/form/src/index.ts"],
       "@mogami/admin/ui/layout": ["libs/admin/ui/layout/src/index.ts"],

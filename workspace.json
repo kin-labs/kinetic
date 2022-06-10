@@ -12,6 +12,8 @@
     "admin-e2e": "apps/admin-e2e",
     "admin-home-feature": "libs/admin/home/feature",
     "admin-shell-feature": "libs/admin/shell/feature",
+    "admin-system-feature": "libs/admin/system/feature",
+    "admin-system-ui": "libs/admin/system/ui",
     "admin-ui-alert": "libs/admin/ui/alert",
     "admin-ui-form": "libs/admin/ui/form",
     "admin-ui-layout": "libs/admin/ui/layout",
