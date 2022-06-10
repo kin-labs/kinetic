@@ -1,1 +1,1 @@
-export { AdminAppFeature as default } from './lib/admin-app-feature'
+export { AdminAppUserFeature as default } from './lib/admin-app-user-feature'

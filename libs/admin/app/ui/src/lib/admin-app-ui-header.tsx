@@ -1,9 +1,9 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading } from '@chakra-ui/react'
 import { App } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export function AppHeader({ app }: { app: App }) {
+export function AdminAppUiHeader({ app }: { app: App }) {
   return (
     <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
       <Flex justifyContent="space-between" alignItems="center">

@@ -5,7 +5,7 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { useUserAppsQuery, useDeleteAppMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export default function AdminAppFeatureList() {
+export default function AdminAppUserFeatureList() {
   const toast = useToast()
   const [{ data, error, fetching }, refresh] = useUserAppsQuery()
   const [, deleteApp] = useDeleteAppMutation()

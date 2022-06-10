@@ -1,15 +1,15 @@
 import { Box, Flex, Stack } from '@chakra-ui/react'
+import { useUserAppEnv } from '@mogami/admin/app/data-access'
+import { AdminAppUiHeader } from '@mogami/admin/app/ui'
 import { AdminClusterUiCluster } from '@mogami/admin/cluster/ui'
 import { AdminUiTabs } from '@mogami/admin/ui/tabs'
 import React, { PropsWithChildren } from 'react'
-import { useAppEnv } from './app-env-provider'
-import { AppHeader } from './app-header'
 
-export function EnvDetailLayout({ children }: PropsWithChildren<any>) {
-  const { appEnv, tabs } = useAppEnv()
+export function AdminAppUserAppEnvDetailLayout({ children }: PropsWithChildren<any>) {
+  const { appEnv, tabs } = useUserAppEnv()
   return (
     <Stack direction="column" spacing={6}>
-      {appEnv.app && <AppHeader app={appEnv.app} />}
+      {appEnv.app && <AdminAppUiHeader app={appEnv.app} />}
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Flex justifyContent="space-between" alignItems="center">
           <Box maxW="32rem" fontSize="xl" as="h4">

@@ -1,13 +1,13 @@
 import { render } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 
-import { AdminAppFeature } from './admin-app-feature'
+import { AdminAppUserFeature } from './admin-app-user-feature'
 
-describe('AdminAppFeature', () => {
+describe('AdminAppUserFeature', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <BrowserRouter>
-        <AdminAppFeature />
+        <AdminAppUserFeature />
       </BrowserRouter>,
     )
     expect(baseElement).toBeTruthy()

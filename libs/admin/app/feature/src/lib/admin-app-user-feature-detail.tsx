@@ -1,5 +1,5 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiForm, AdminAppUiUserModal, AdminAppUiUsers } from '@mogami/admin/app/ui'
+import { AdminAppUiForm, AdminAppUiHeader, AdminAppUiUserModal, AdminAppUiUsers } from '@mogami/admin/app/ui'
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AdminUiTabs } from '@mogami/admin/ui/tabs'
@@ -14,10 +14,9 @@ import {
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
-import { AppEnvironmentsTab } from './app-environments-tab'
-import { AppHeader } from './app-header'
+import { AdminAppUserEnvironmentsTab } from './admin-app-user-environments-tab'
 
-export default function AdminAppFeatureDetail() {
+export default function AdminAppUserFeatureDetail() {
   const toast = useToast()
   const { appId } = useParams<{ appId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -82,14 +81,14 @@ export default function AdminAppFeatureDetail() {
 
   return (
     <Stack direction="column" spacing={6}>
-      <AppHeader app={data?.item} />
+      <AdminAppUiHeader app={data?.item} />
       <Switch>
         <Route path={path} exact render={() => <Redirect to={`${url}/environments`} />} />
         <Route
           path={`${path}/environments`}
           render={() => (
             <AdminUiTabs tabs={tabs}>
-              <AppEnvironmentsTab appId={appId} />
+              <AdminAppUserEnvironmentsTab appId={appId} />
             </AdminUiTabs>
           )}
         />

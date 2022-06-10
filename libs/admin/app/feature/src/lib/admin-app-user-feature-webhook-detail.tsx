@@ -4,7 +4,13 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { useAppWebhookQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export default function AdminAppFeatureWebhookDetail({ appId, appWebhookId }: { appId: string; appWebhookId: string }) {
+export default function AdminAppUserFeatureWebhookDetail({
+  appId,
+  appWebhookId,
+}: {
+  appId: string
+  appWebhookId: string
+}) {
   const [{ data, fetching }] = useAppWebhookQuery({ variables: { appId: appId!, appWebhookId: appWebhookId! } })
 
   if (fetching) {

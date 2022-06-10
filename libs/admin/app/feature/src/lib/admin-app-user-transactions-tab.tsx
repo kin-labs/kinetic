@@ -4,7 +4,7 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AppTransactionListInput, useAppTransactionsQuery } from '@mogami/shared/util/admin-sdk'
 import React, { useEffect, useState } from 'react'
 
-export function AppTransactionsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
+export function AdminAppUserTransactionsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
   const toast = useToast()
   const [input, setInput] = useState<AppTransactionListInput>({})
   const [{ data, error, fetching }, refresh] = useAppTransactionsQuery({ variables: { appId, appEnvId, input } })

@@ -4,7 +4,7 @@ import { useUserAppEnvQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
-export default function AdminAppFeatureEnvTransactionList() {
+export default function AdminAppUserFeatureEnvTransactionList() {
   const toast = useToast()
   const { appId, appEnvId } = useParams<{ appId: string; appEnvId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

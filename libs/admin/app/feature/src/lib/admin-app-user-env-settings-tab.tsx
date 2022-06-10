@@ -4,7 +4,7 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AppEnvUpdateInput, useUpdateAppEnvMutation, useUserAppEnvQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export function AppEnvSettingsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
+export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
   const toast = useToast()
   const [{ data, fetching }] = useUserAppEnvQuery({ variables: { appId, appEnvId: appEnvId } })
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

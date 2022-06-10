@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/admin/app/data-access/src",
+  "projectType": "library",
+  "tags": ["scope:admin", "type:data-access"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/admin/app/data-access/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/admin/app/data-access"],
+      "options": {
+        "jestConfig": "libs/admin/app/data-access/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

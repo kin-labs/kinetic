@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "admin": "apps/admin",
+    "admin-app-data-access": "libs/admin/app/data-access",
     "admin-app-feature": "libs/admin/app/feature",
     "admin-app-ui": "libs/admin/app/ui",
     "admin-auth-data-access": "libs/admin/auth/data-access",

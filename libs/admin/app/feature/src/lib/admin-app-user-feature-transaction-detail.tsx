@@ -9,7 +9,7 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AppTransactionStatus, useAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
 import React, { useEffect } from 'react'
 
-export default function AdminAppFeatureTransactionDetail({
+export default function AdminAppUserFeatureTransactionDetail({
   appId,
   appEnvId,
   appTransactionId,

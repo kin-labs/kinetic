@@ -4,7 +4,7 @@ import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { useUserAppEnvQuery, Wallet } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
-export function AppWalletsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
+export function AdminAppUserWalletsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
   const [{ data, fetching }] = useUserAppEnvQuery({ variables: { appId, appEnvId } })
   if (fetching) {
     return <AdminUiLoader />
