@@ -321,15 +321,15 @@ export enum MintType {
 export type Mutation = {
   __typename?: 'Mutation'
   addClusterMint?: Maybe<Cluster>
+  adminCreateApp?: Maybe<App>
+  adminDeleteApp?: Maybe<App>
   appEnvWalletAdd?: Maybe<AppEnv>
   appEnvWalletRemove?: Maybe<AppEnv>
   appUserAdd?: Maybe<App>
   appUserRemove?: Maybe<App>
   appUserUpdateRole?: Maybe<App>
-  createApp?: Maybe<App>
   createCluster?: Maybe<Cluster>
   createUser?: Maybe<User>
-  deleteApp?: Maybe<App>
   deleteCluster?: Maybe<Cluster>
   deleteUser?: Maybe<User>
   deleteWallet?: Maybe<Wallet>
@@ -344,6 +344,14 @@ export type Mutation = {
 
 export type MutationAddClusterMintArgs = {
   input: MintAddInput
+}
+
+export type MutationAdminCreateAppArgs = {
+  input: AppCreateInput
+}
+
+export type MutationAdminDeleteAppArgs = {
+  appId: Scalars['String']
 }
 
 export type MutationAppEnvWalletAddArgs = {
@@ -373,20 +381,12 @@ export type MutationAppUserUpdateRoleArgs = {
   input: AppUserUpdateRoleInput
 }
 
-export type MutationCreateAppArgs = {
-  input: AppCreateInput
-}
-
 export type MutationCreateClusterArgs = {
   input: ClusterCreateInput
 }
 
 export type MutationCreateUserArgs = {
   input: UserCreateInput
-}
-
-export type MutationDeleteAppArgs = {
-  appId: Scalars['String']
 }
 
 export type MutationDeleteClusterArgs = {
@@ -432,12 +432,12 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query'
-  app?: Maybe<App>
+  adminApp?: Maybe<App>
+  adminApps?: Maybe<Array<App>>
   appTransaction?: Maybe<AppTransaction>
   appTransactions?: Maybe<Array<AppTransaction>>
   appWebhook?: Maybe<AppWebhook>
   appWebhooks?: Maybe<Array<AppWebhook>>
-  apps?: Maybe<Array<App>>
   cluster?: Maybe<Cluster>
   clusterStats?: Maybe<Array<ClusterStat>>
   clusterTokens?: Maybe<Array<ClusterToken>>
@@ -456,7 +456,7 @@ export type Query = {
   wallets?: Maybe<Array<Wallet>>
 }
 
-export type QueryAppArgs = {
+export type QueryAdminAppArgs = {
   appId: Scalars['String']
 }
 
@@ -759,11 +759,11 @@ export type AppWebhookDetailsFragment = {
   type: AppWebhookType
 }
 
-export type CreateAppMutationVariables = Exact<{
+export type AdminCreateAppMutationVariables = Exact<{
   input: AppCreateInput
 }>
 
-export type CreateAppMutation = {
+export type AdminCreateAppMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'App'
@@ -866,11 +866,11 @@ export type CreateAppMutation = {
   } | null
 }
 
-export type DeleteAppMutationVariables = Exact<{
+export type AdminDeleteAppMutationVariables = Exact<{
   appId: Scalars['String']
 }>
 
-export type DeleteAppMutation = {
+export type AdminDeleteAppMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'App'
@@ -1323,11 +1323,11 @@ export type AppEnvWalletRemoveMutation = {
   } | null
 }
 
-export type AppQueryVariables = Exact<{
+export type AdminAppQueryVariables = Exact<{
   appId: Scalars['String']
 }>
 
-export type AppQuery = {
+export type AdminAppQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'App'
@@ -1566,9 +1566,9 @@ export type AppWebhooksQuery = {
   }> | null
 }
 
-export type AppsQueryVariables = Exact<{ [key: string]: never }>
+export type AdminAppsQueryVariables = Exact<{ [key: string]: never }>
 
-export type AppsQuery = {
+export type AdminAppsQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'App'
@@ -2750,9 +2750,9 @@ export const WalletBalanceDetailsFragmentDoc = gql`
     change
   }
 `
-export const CreateAppDocument = gql`
-  mutation CreateApp($input: AppCreateInput!) {
-    created: createApp(input: $input) {
+export const AdminCreateAppDocument = gql`
+  mutation AdminCreateApp($input: AppCreateInput!) {
+    created: adminCreateApp(input: $input) {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -2771,20 +2771,20 @@ export const CreateAppDocument = gql`
   ${AppUserDetailsFragmentDoc}
 `
 
-export function useCreateAppMutation() {
-  return Urql.useMutation<CreateAppMutation, CreateAppMutationVariables>(CreateAppDocument)
+export function useAdminCreateAppMutation() {
+  return Urql.useMutation<AdminCreateAppMutation, AdminCreateAppMutationVariables>(AdminCreateAppDocument)
 }
-export const DeleteAppDocument = gql`
-  mutation DeleteApp($appId: String!) {
-    deleted: deleteApp(appId: $appId) {
+export const AdminDeleteAppDocument = gql`
+  mutation AdminDeleteApp($appId: String!) {
+    deleted: adminDeleteApp(appId: $appId) {
       ...AppDetails
     }
   }
   ${AppDetailsFragmentDoc}
 `
 
-export function useDeleteAppMutation() {
-  return Urql.useMutation<DeleteAppMutation, DeleteAppMutationVariables>(DeleteAppDocument)
+export function useAdminDeleteAppMutation() {
+  return Urql.useMutation<AdminDeleteAppMutation, AdminDeleteAppMutationVariables>(AdminDeleteAppDocument)
 }
 export const UpdateAppDocument = gql`
   mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
@@ -2906,9 +2906,9 @@ export const AppEnvWalletRemoveDocument = gql`
 export function useAppEnvWalletRemoveMutation() {
   return Urql.useMutation<AppEnvWalletRemoveMutation, AppEnvWalletRemoveMutationVariables>(AppEnvWalletRemoveDocument)
 }
-export const AppDocument = gql`
-  query App($appId: String!) {
-    item: app(appId: $appId) {
+export const AdminAppDocument = gql`
+  query AdminApp($appId: String!) {
+    item: adminApp(appId: $appId) {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -2927,8 +2927,8 @@ export const AppDocument = gql`
   ${AppUserDetailsFragmentDoc}
 `
 
-export function useAppQuery(options: Omit<Urql.UseQueryArgs<AppQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppQuery>({ query: AppDocument, ...options })
+export function useAdminAppQuery(options: Omit<Urql.UseQueryArgs<AdminAppQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminAppQuery>({ query: AdminAppDocument, ...options })
 }
 export const AppTransactionDocument = gql`
   query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
@@ -2978,9 +2978,9 @@ export const AppWebhooksDocument = gql`
 export function useAppWebhooksQuery(options: Omit<Urql.UseQueryArgs<AppWebhooksQueryVariables>, 'query'>) {
   return Urql.useQuery<AppWebhooksQuery>({ query: AppWebhooksDocument, ...options })
 }
-export const AppsDocument = gql`
-  query Apps {
-    items: apps {
+export const AdminAppsDocument = gql`
+  query AdminApps {
+    items: adminApps {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -2991,8 +2991,8 @@ export const AppsDocument = gql`
   ${AppEnvDetailsFragmentDoc}
 `
 
-export function useAppsQuery(options?: Omit<Urql.UseQueryArgs<AppsQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppsQuery>({ query: AppsDocument, ...options })
+export function useAdminAppsQuery(options?: Omit<Urql.UseQueryArgs<AdminAppsQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminAppsQuery>({ query: AdminAppsDocument, ...options })
 }
 export const UserAppsDocument = gql`
   query UserApps {

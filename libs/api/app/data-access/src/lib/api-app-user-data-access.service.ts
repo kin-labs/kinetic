@@ -1,33 +1,17 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { UserRole } from '@mogami/api/user/data-access'
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { AppUser, AppUserRole, Prisma } from '@prisma/client'
+import { AppUserRole, Prisma } from '@prisma/client'
+import { ApiAppDataAccessService } from './api-app-data-access.service'
 
 @Injectable()
 export class ApiAppUserDataAccessService {
-  private includeAppEnv: Prisma.AppEnvInclude = {
-    cluster: true,
-    mints: {
-      include: {
-        mint: true,
-        wallet: true,
-      },
-    },
-    wallets: true,
-  }
-  private include: Prisma.AppInclude = {
-    users: { include: { user: true } },
-    envs: {
-      include: this.includeAppEnv,
-    },
-  }
-
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly app: ApiAppDataAccessService, private readonly data: ApiCoreDataAccessService) {}
 
   async userApps(userId: string) {
     const user = await this.data.getUserById(userId)
     return this.data.app.findMany({
-      include: this.include,
+      include: this.app.include,
       orderBy: { updatedAt: 'desc' },
       where: this.allowAdmin(user.role, userId),
     })

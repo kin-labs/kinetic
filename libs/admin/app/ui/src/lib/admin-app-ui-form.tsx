@@ -22,7 +22,7 @@ const fields: UiFormField[] = [
 export function AdminAppUiForm({ app, onSubmit }: AdminAppUiProps) {
   return (
     <Stack display="block" direction="column" justify="normal" spacing={6}>
-      <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
+      <Box borderWidth="1px" rounded="lg" p={6}>
         <Box mt="1" fontWeight="semibold" fontSize="xl" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
           App Settings
         </Box>

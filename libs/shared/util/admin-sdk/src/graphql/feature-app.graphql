@@ -109,8 +109,8 @@ fragment AppWebhookDetails on AppWebhook {
   type
 }
 
-mutation CreateApp($input: AppCreateInput!) {
-  created: createApp(input: $input) {
+mutation AdminCreateApp($input: AppCreateInput!) {
+  created: adminCreateApp(input: $input) {
     ...AppDetails
     envs {
       ...AppEnvDetails
@@ -124,8 +124,8 @@ mutation CreateApp($input: AppCreateInput!) {
   }
 }
 
-mutation DeleteApp($appId: String!) {
-  deleted: deleteApp(appId: $appId) {
+mutation AdminDeleteApp($appId: String!) {
+  deleted: adminDeleteApp(appId: $appId) {
     ...AppDetails
   }
 }
@@ -199,8 +199,8 @@ mutation AppEnvWalletRemove($appId: String!, $appEnvId: String!, $walletId: Stri
   }
 }
 
-query App($appId: String!) {
-  item: app(appId: $appId) {
+query AdminApp($appId: String!) {
+  item: adminApp(appId: $appId) {
     ...AppDetails
     envs {
       ...AppEnvDetails
@@ -238,8 +238,8 @@ query AppWebhooks($appId: String!, $appEnvId: String!) {
   }
 }
 
-query Apps {
-  items: apps {
+query AdminApps {
+  items: adminApps {
     ...AppDetails
     envs {
       ...AppEnvDetails

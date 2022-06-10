@@ -1,3 +1,4 @@
+import { AdminAppAdminFeatureList } from '@mogami/admin/app/feature'
 import { useAdminAuth } from '@mogami/admin/auth/data-access'
 import { AdminSystemUiDashboard, AdminSystemUiLayout } from '@mogami/admin/system/ui'
 import { AdminUiAlert } from '@mogami/admin/ui/alert'
@@ -15,6 +16,7 @@ export function AdminSystemFeature() {
 
   const links: AdminUiLink[] = [
     { label: 'Dashboard', path: '/system/dashboard' },
+    { label: 'Apps', path: '/system/apps' },
     { label: 'Clusters', path: '/system/clusters' },
     { label: 'Users', path: '/system/users' },
   ]
@@ -34,6 +36,7 @@ export function AdminSystemFeature() {
           <Route path="/system" exact>
             <Redirect to="/system/dashboard" />
           </Route>
+          <Route path="/system/apps" render={() => <AdminAppAdminFeatureList />} />
           <Route path="/system/clusters" render={() => <AdminClusterFeature />} />
           <Route
             path="/system/dashboard"

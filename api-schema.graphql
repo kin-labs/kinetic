@@ -302,15 +302,15 @@ enum MintType {
 
 type Mutation {
   addClusterMint(input: MintAddInput!): Cluster
+  adminCreateApp(input: AppCreateInput!): App
+  adminDeleteApp(appId: String!): App
   appEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   appEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   appUserAdd(appId: String!, input: AppUserAddInput!): App
   appUserRemove(appId: String!, input: AppUserRemoveInput!): App
   appUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
-  createApp(input: AppCreateInput!): App
   createCluster(input: ClusterCreateInput!): Cluster
   createUser(input: UserCreateInput!): User
-  deleteApp(appId: String!): App
   deleteCluster(clusterId: String!): Cluster
   deleteUser(userId: String!): User
   deleteWallet(walletId: String!): Wallet
@@ -324,12 +324,12 @@ type Mutation {
 }
 
 type Query {
-  app(appId: String!): App
+  adminApp(appId: String!): App
+  adminApps: [App!]
   appTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
   appTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
   appWebhook(appId: String!, appWebhookId: String!): AppWebhook
   appWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
-  apps: [App!]
   cluster(clusterId: String!): Cluster
   clusterStats(clusterId: String!): [ClusterStat!]
   clusterTokens(input: ClusterTokenInput!): [ClusterToken!]

@@ -319,15 +319,15 @@ export enum MintType {
 export type Mutation = {
   __typename?: 'Mutation'
   addClusterMint?: Maybe<Cluster>
+  adminCreateApp?: Maybe<App>
+  adminDeleteApp?: Maybe<App>
   appEnvWalletAdd?: Maybe<AppEnv>
   appEnvWalletRemove?: Maybe<AppEnv>
   appUserAdd?: Maybe<App>
   appUserRemove?: Maybe<App>
   appUserUpdateRole?: Maybe<App>
-  createApp?: Maybe<App>
   createCluster?: Maybe<Cluster>
   createUser?: Maybe<User>
-  deleteApp?: Maybe<App>
   deleteCluster?: Maybe<Cluster>
   deleteUser?: Maybe<User>
   deleteWallet?: Maybe<Wallet>
@@ -342,6 +342,14 @@ export type Mutation = {
 
 export type MutationAddClusterMintArgs = {
   input: MintAddInput
+}
+
+export type MutationAdminCreateAppArgs = {
+  input: AppCreateInput
+}
+
+export type MutationAdminDeleteAppArgs = {
+  appId: Scalars['String']
 }
 
 export type MutationAppEnvWalletAddArgs = {
@@ -371,20 +379,12 @@ export type MutationAppUserUpdateRoleArgs = {
   input: AppUserUpdateRoleInput
 }
 
-export type MutationCreateAppArgs = {
-  input: AppCreateInput
-}
-
 export type MutationCreateClusterArgs = {
   input: ClusterCreateInput
 }
 
 export type MutationCreateUserArgs = {
   input: UserCreateInput
-}
-
-export type MutationDeleteAppArgs = {
-  appId: Scalars['String']
 }
 
 export type MutationDeleteClusterArgs = {
@@ -430,12 +430,12 @@ export type MutationUpdateUserArgs = {
 
 export type Query = {
   __typename?: 'Query'
-  app?: Maybe<App>
+  adminApp?: Maybe<App>
+  adminApps?: Maybe<Array<App>>
   appTransaction?: Maybe<AppTransaction>
   appTransactions?: Maybe<Array<AppTransaction>>
   appWebhook?: Maybe<AppWebhook>
   appWebhooks?: Maybe<Array<AppWebhook>>
-  apps?: Maybe<Array<App>>
   cluster?: Maybe<Cluster>
   clusterStats?: Maybe<Array<ClusterStat>>
   clusterTokens?: Maybe<Array<ClusterToken>>
@@ -454,7 +454,7 @@ export type Query = {
   wallets?: Maybe<Array<Wallet>>
 }
 
-export type QueryAppArgs = {
+export type QueryAdminAppArgs = {
   appId: Scalars['String']
 }
 
@@ -837,9 +837,9 @@ export const WalletBalanceDetails = gql`
     change
   }
 `
-export const CreateApp = gql`
-  mutation CreateApp($input: AppCreateInput!) {
-    created: createApp(input: $input) {
+export const AdminCreateApp = gql`
+  mutation AdminCreateApp($input: AppCreateInput!) {
+    created: adminCreateApp(input: $input) {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -857,9 +857,9 @@ export const CreateApp = gql`
   ${WalletDetails}
   ${AppUserDetails}
 `
-export const DeleteApp = gql`
-  mutation DeleteApp($appId: String!) {
-    deleted: deleteApp(appId: $appId) {
+export const AdminDeleteApp = gql`
+  mutation AdminDeleteApp($appId: String!) {
+    deleted: adminDeleteApp(appId: $appId) {
       ...AppDetails
     }
   }
@@ -957,9 +957,9 @@ export const AppEnvWalletRemove = gql`
   ${AppEnvDetails}
   ${WalletDetails}
 `
-export const App = gql`
-  query App($appId: String!) {
-    item: app(appId: $appId) {
+export const AdminApp = gql`
+  query AdminApp($appId: String!) {
+    item: adminApp(appId: $appId) {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -1009,9 +1009,9 @@ export const AppWebhooks = gql`
   }
   ${AppWebhookDetails}
 `
-export const Apps = gql`
-  query Apps {
-    items: apps {
+export const AdminApps = gql`
+  query AdminApps {
+    items: adminApps {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -1438,11 +1438,11 @@ export type AppWebhookDetailsFragment = {
   type: AppWebhookType
 }
 
-export type CreateAppMutationVariables = Exact<{
+export type AdminCreateAppMutationVariables = Exact<{
   input: AppCreateInput
 }>
 
-export type CreateAppMutation = {
+export type AdminCreateAppMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'App'
@@ -1545,11 +1545,11 @@ export type CreateAppMutation = {
   } | null
 }
 
-export type DeleteAppMutationVariables = Exact<{
+export type AdminDeleteAppMutationVariables = Exact<{
   appId: Scalars['String']
 }>
 
-export type DeleteAppMutation = {
+export type AdminDeleteAppMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'App'
@@ -2002,11 +2002,11 @@ export type AppEnvWalletRemoveMutation = {
   } | null
 }
 
-export type AppQueryVariables = Exact<{
+export type AdminAppQueryVariables = Exact<{
   appId: Scalars['String']
 }>
 
-export type AppQuery = {
+export type AdminAppQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'App'
@@ -2245,9 +2245,9 @@ export type AppWebhooksQuery = {
   }> | null
 }
 
-export type AppsQueryVariables = Exact<{ [key: string]: never }>
+export type AdminAppsQueryVariables = Exact<{ [key: string]: never }>
 
-export type AppsQuery = {
+export type AdminAppsQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'App'
