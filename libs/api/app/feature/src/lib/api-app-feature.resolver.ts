@@ -1,7 +1,6 @@
 import {
   ApiAppDataAccessService,
   App,
-  AppCreateInput,
   AppEnv,
   AppEnvUpdateInput,
   AppUpdateInput,
@@ -19,26 +18,6 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiAppFeatureResolver {
   constructor(private readonly service: ApiAppDataAccessService) {}
-
-  @Mutation(() => App, { nullable: true })
-  createApp(@CtxUser() user: User, @Args('input') input: AppCreateInput) {
-    return this.service.createApp(user.id, input)
-  }
-
-  @Mutation(() => App, { nullable: true })
-  deleteApp(@CtxUser() user: User, @Args('appId') appId: string) {
-    return this.service.deleteApp(user.id, appId)
-  }
-
-  @Query(() => [App], { nullable: true })
-  apps(@CtxUser() user: User) {
-    return this.service.apps(user.id)
-  }
-
-  @Query(() => App, { nullable: true })
-  app(@CtxUser() user: User, @Args('appId') appId: string) {
-    return this.service.app(user.id, appId)
-  }
 
   @Query(() => AppWebhook, { nullable: true })
   appWebhook(@CtxUser() user: User, @Args('appId') appId: string, @Args('appWebhookId') appWebhookId: string) {
