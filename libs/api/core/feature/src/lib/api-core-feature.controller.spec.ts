@@ -1,6 +1,5 @@
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 import { Test } from '@nestjs/testing'
-import { OpenTelemetryModule } from 'nestjs-otel'
 import { ApiCoreFeatureController } from './api-core-feature.controller'
 
 describe('ApiCoreFeatureController', () => {
