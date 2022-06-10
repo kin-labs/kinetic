@@ -1,19 +1,16 @@
 import { Logger } from '@nestjs/common'
-import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api'
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { NodeSDK } from '@opentelemetry/sdk-node'
-
-diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG)
 
 export class OpenTelementrySdk {
   static sdk: NodeSDK
 
   static start(metricsEnabled: boolean) {
     if (!metricsEnabled) {
-      Logger.verbose(`Metrics disabled`, 'OpenTelementrySdk')
+      Logger.verbose(`Metrics are disabled, set METRICS_ENABLED=true to enable them`, 'OpenTelementrySdk')
       return true
     }
-    Logger.verbose(`Metrics enabled`, 'OpenTelementrySdk')
+    Logger.verbose(`Metrics are enabled`, 'OpenTelementrySdk')
 
     const metricExporter = new PrometheusExporter({
       prefix: 'mogami',
