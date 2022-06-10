@@ -58,8 +58,6 @@ export function apiCrudController(
       },
     ])
 
-    console.log('Add Crud to Controller', targetClass, name)
-
     return source
   })
 }

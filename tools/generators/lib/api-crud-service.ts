@@ -56,8 +56,6 @@ export function apiCrudService(
       },
     ])
 
-    console.log('Add Crud to Service', targetClass, name)
-
     return source
   })
 }

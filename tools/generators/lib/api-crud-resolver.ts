@@ -82,8 +82,6 @@ export function apiCrudResolver(
       },
     ])
 
-    console.log('Add Crud to Resolver', targetClass, name)
-
     return source
   })
 }
