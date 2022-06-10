@@ -4,8 +4,10 @@ import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Keypair } from '@mogami/keypair'
 import { getPublicKey, Solana } from '@mogami/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { Counter } from '@opentelemetry/api-metrics'
 import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
+import { MetricService } from 'nestjs-otel'
 
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
@@ -13,7 +15,10 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   readonly airdropConfig = new Map<string, Omit<AirdropConfig, 'connection'>>()
   readonly connections = new Map<string, Solana>()
 
-  constructor(readonly config: ApiConfigDataAccessService) {
+  private getAppByEnvironmentIndexCounter: Counter
+  private getAppByIndexCounter: Counter
+
+  constructor(readonly config: ApiConfigDataAccessService, readonly metrics: MetricService) {
     super()
   }
 
@@ -22,6 +27,12 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   async onModuleInit() {
+    this.getAppByEnvironmentIndexCounter = this.metrics.getCounter('api_core_get_app_by_environment_index_counter', {
+      description: 'Number of requests to getAppByEnvironmentIndex',
+    })
+    this.getAppByIndexCounter = this.metrics.getCounter('api_core_get_app_by_index_counter', {
+      description: 'Number of requests to getAppByIndex',
+    })
     await this.$connect()
   }
 
@@ -63,6 +74,8 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getAppByEnvironmentIndex(environment: string, index: number) {
+    const appKey = this.getAppKey(environment, index)
+    this.getAppByEnvironmentIndexCounter?.add(1, { appKey })
     return this.appEnv.findFirst({
       where: { app: { index }, name: environment },
       include: {
@@ -80,6 +93,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getAppByIndex(index: number) {
+    this.getAppByIndexCounter?.add(1, { index: `${index}` })
     return this.app.findUnique({
       where: { index },
       include: {
@@ -109,17 +123,17 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   async getSolanaConnection(environment: string, index: number): Promise<Solana> {
-    const key = this.getAppKey(environment, index)
-    if (!this.connections.has(key)) {
+    const appKey = this.getAppKey(environment, index)
+    if (!this.connections.has(appKey)) {
       const env = await this.getAppByEnvironmentIndex(environment, index)
       this.connections.set(
-        key,
+        appKey,
         new Solana(env.cluster.endpoint, {
-          logger: new Logger(`@mogami/solana:${key}`),
+          logger: new Logger(`@mogami/solana:${appKey}`),
         }),
       )
     }
-    return this.connections.get(key)
+    return this.connections.get(appKey)
   }
 
   getUserByEmail(email: string) {

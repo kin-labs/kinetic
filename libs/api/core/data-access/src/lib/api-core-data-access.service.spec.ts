@@ -1,5 +1,6 @@
 import { ApiConfigDataAccessModule } from '@mogami/api/config/data-access'
 import { Test } from '@nestjs/testing'
+import { OpenTelemetryCoreModule } from 'nestjs-otel/lib/opentelemetry-core.module'
 import { ApiCoreDataAccessService } from './api-core-data-access.service'
 
 describe('ApiCoreDataAccessService', () => {
@@ -7,7 +8,7 @@ describe('ApiCoreDataAccessService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [ApiConfigDataAccessModule],
+      imports: [ApiConfigDataAccessModule, OpenTelemetryCoreModule.forRoot()],
       providers: [ApiCoreDataAccessService],
     }).compile()
 

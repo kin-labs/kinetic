@@ -8,17 +8,67 @@ import {
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, parseAndSignTokenTransfer } from '@mogami/solana'
-import { Injectable, Logger } from '@nestjs/common'
-import { App, AppTransactionErrorType, AppTransactionStatus, Prisma } from '@prisma/client'
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { Counter } from '@opentelemetry/api-metrics'
+import { AppTransactionErrorType, AppTransactionStatus, Prisma } from '@prisma/client'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 
 @Injectable()
-export class ApiTransactionDataAccessService {
+export class ApiTransactionDataAccessService implements OnModuleInit {
   private logger = new Logger(ApiTransactionDataAccessService.name)
+
+  private makeTransferMintNotFoundErrorCounter: Counter
+  private makeTransferRequestCounter: Counter
+  private makeTransferSolanaCommittedCounter: Counter
+  private makeTransferSolanaConfirmedCounter: Counter
+  private makeTransferSolanaErrorCounter: Counter
+  private makeTransferSolanaFinalizedCounter: Counter
+  private makeTransferWebhookEventErrorCounter: Counter
+  private makeTransferWebhookEventSuccessCounter: Counter
+  private makeTransferWebhookVerifyErrorCounter: Counter
+  private makeTransferWebhookVerifySuccessCounter: Counter
+
   constructor(readonly data: ApiCoreDataAccessService, private readonly appWebhook: ApiAppWebhookDataAccessService) {}
+
+  onModuleInit() {
+    const prefix = `api_transaction_make_transfer`
+    this.makeTransferRequestCounter = this.data.metrics.getCounter(`${prefix}_request_counter`, {
+      description: 'Number of requests to makeTransfer',
+    })
+    this.makeTransferMintNotFoundErrorCounter = this.data.metrics.getCounter(`${prefix}_error_mint_not_found_counter`, {
+      description: 'Number of makeTransfer mint not found errors',
+    })
+    this.makeTransferSolanaCommittedCounter = this.data.metrics.getCounter(`${prefix}_solana_committed_counter`, {
+      description: 'Number of makeTransfer committed Solana transactions',
+    })
+    this.makeTransferSolanaConfirmedCounter = this.data.metrics.getCounter(`${prefix}_solana_confirmed_counter`, {
+      description: 'Number of makeTransfer confirmed Solana transactions',
+    })
+    this.makeTransferSolanaFinalizedCounter = this.data.metrics.getCounter(`${prefix}_solana_finalized_counter`, {
+      description: 'Number of makeTransfer finalized Solana transactions',
+    })
+    this.makeTransferSolanaErrorCounter = this.data.metrics.getCounter(`${prefix}_solana_error_counter`, {
+      description: 'Number of makeTransfer Solana errors',
+    })
+    this.makeTransferWebhookEventErrorCounter = this.data.metrics.getCounter(`${prefix}_webhook_event_error_counter`, {
+      description: 'Number of makeTransfer webhook event errors',
+    })
+    this.makeTransferWebhookEventSuccessCounter = this.data.metrics.getCounter(
+      `${prefix}_webhook_event_success_counter`,
+      { description: 'Number of makeTransfer webhook event success' },
+    )
+    this.makeTransferWebhookVerifyErrorCounter = this.data.metrics.getCounter(
+      `${prefix}_webhook_verify_error_counter`,
+      { description: 'Number of makeTransfer webhook verify errors' },
+    )
+    this.makeTransferWebhookVerifySuccessCounter = this.data.metrics.getCounter(
+      `${prefix}_webhook_verify_success_counter`,
+      { description: 'Number of makeTransfer webhook verify success' },
+    )
+  }
 
   async getLatestBlockhash(environment: string, index: number): Promise<LatestBlockhashResponse> {
     const solana = await this.data.getSolanaConnection(environment, index)
@@ -40,8 +90,9 @@ export class ApiTransactionDataAccessService {
   async makeTransfer(input: MakeTransferRequest): Promise<AppTransaction> {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
-
     const appKey = this.data.getAppKey(input.environment, input.index)
+    this.makeTransferRequestCounter.add(1, { appKey })
+
     const created = await this.data.appTransaction.create({
       data: {
         appEnvId: appEnv.id,
@@ -53,6 +104,7 @@ export class ApiTransactionDataAccessService {
     })
     const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
     if (!mint) {
+      this.makeTransferMintNotFoundErrorCounter.add(1, { appKey, mint: input.mint })
       throw new Error(`${appKey}: Can't find mint ${input.mint}`)
     }
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
@@ -76,8 +128,10 @@ export class ApiTransactionDataAccessService {
       try {
         await this.sendVerifyWebhook(appEnv, appTransaction)
         appTransaction.webhookVerifyEnd = new Date()
+        this.makeTransferWebhookVerifySuccessCounter.add(1, { appKey })
       } catch (err) {
         appTransaction.webhookVerifyEnd = new Date()
+        this.makeTransferWebhookVerifyErrorCounter.add(1, { appKey })
         return this.updateAppTransaction(created.id, {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
@@ -95,11 +149,13 @@ export class ApiTransactionDataAccessService {
       appTransaction.status = AppTransactionStatus.Committed
       appTransaction.solanaCommitted = new Date()
       this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${appTransaction.signature}`)
+      this.makeTransferSolanaConfirmedCounter.add(1, { appKey })
     } catch (error) {
       appTransaction.errors = { create: parseError(error) }
       appTransaction.status = AppTransactionStatus.Failed
       this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${error}`)
       appTransaction.solanaCommitted = new Date()
+      this.makeTransferSolanaErrorCounter.add(1, { appKey })
     }
 
     // Confirm transaction
@@ -116,6 +172,7 @@ export class ApiTransactionDataAccessService {
       )
       appTransaction.status = AppTransactionStatus.Confirmed
       appTransaction.solanaConfirmed = new Date()
+      this.makeTransferSolanaCommittedCounter.add(1, { appKey })
       await this.updateAppTransaction(created.id, {
         ...appTransaction,
       })
@@ -140,8 +197,10 @@ export class ApiTransactionDataAccessService {
       try {
         await this.sendEventWebhook(appEnv, updated)
         webhookEventEnd = new Date()
+        this.makeTransferWebhookEventSuccessCounter.add(1, { appKey })
       } catch (err) {
         webhookEventEnd = new Date()
+        this.makeTransferWebhookEventErrorCounter.add(1, { appKey })
         return this.updateAppTransaction(created.id, {
           webhookEventEnd,
           status: AppTransactionStatus.Failed,
@@ -210,6 +269,7 @@ export class ApiTransactionDataAccessService {
           status: AppTransactionStatus.Finalized,
         },
       })
+      this.makeTransferSolanaFinalizedCounter.add(1, { appKey })
       this.logger.verbose(`${appKey}: confirmSignature: finished ${signature}`)
     }
   }

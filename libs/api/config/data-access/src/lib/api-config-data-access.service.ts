@@ -68,6 +68,10 @@ export class ApiConfigDataAccessService {
     return this.environment === 'development'
   }
 
+  get metricsEnabled(): boolean {
+    return this.config.get('metricsEnabled')
+  }
+
   get isProduction(): boolean {
     return this.environment === 'production'
   }

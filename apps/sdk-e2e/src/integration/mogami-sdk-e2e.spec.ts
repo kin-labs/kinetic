@@ -76,7 +76,6 @@ describe('MogamiSdk (e2e)', () => {
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(defaultMint)
     const { signature, errors } = tx
-    console.log(signature)
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
   })

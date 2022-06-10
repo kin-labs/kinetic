@@ -49,11 +49,6 @@ export class MogamiSdkInternal {
       throw new Error(`AppConfig not initialized`)
     }
 
-    console.log({
-      environment: this.appConfig.environment.name,
-      index: this.appConfig.app.index,
-      accountId,
-    })
     const res = await this.accountApi.getBalance(this.appConfig.environment.name, this.appConfig.app.index, accountId)
 
     return res.data as BalanceResponse
