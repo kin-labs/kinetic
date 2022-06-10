@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "api-feature",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Library name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "app": {
+      "type": "string",
+      "description": "Api name",
+      "default": "api"
+    },
+    "crud": {
+      "type": "boolean",
+      "description": "Generate CRUD",
+      "default": false
+    },
+    "plural": {
+      "type": "string",
+      "description": "Plural name (eg, 'companies' when model name is 'company')"
+    },
+    "skipDataAccess": {
+      "type": "boolean",
+      "default": false
+    },
+    "skipFeature": {
+      "type": "boolean",
+      "default": false
+    },
+    "skipUtil": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": ["name"]
+}

@@ -1,0 +1,118 @@
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Link,
+  Stack,
+  useColorMode,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import React, { PropsWithChildren, ReactNode } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+
+export interface LayoutLink {
+  label: string;
+  path: string;
+}
+
+export function Layout({
+  children,
+  links,
+}: PropsWithChildren<{ links: LayoutLink[] }>) {
+  const name = '<%= className %>';
+  const copyright = <p><%= className %> &copy; {new Date().getUTCFullYear()}</p>;
+  return (
+    <Flex direction="column" h="full">
+      <LayoutHeader links={links} name={name} />
+      <Flex direction="column" grow={1} p={4}>
+        <Container maxW="container.xl" h="full">
+          {children}
+        </Container>
+      </Flex>
+      <LayoutFooter copyright={copyright} />
+    </Flex>
+  );
+}
+
+export interface LayoutLink {
+  label: string;
+  path: string;
+  cyData?: string;
+}
+
+export function LayoutHeaderLink({ link }: { link: LayoutLink }) {
+  return (
+    <Link
+      cy-data={link.cyData}
+      px={2}
+      py={1}
+      rounded={'md'}
+      _hover={{
+        textDecoration: 'none',
+        bg: useColorModeValue('gray.200', 'gray.700'),
+      }}
+      as={RouterLink}
+      to={link.path}
+    >
+      {link.label}
+    </Link>
+  );
+}
+
+export function LayoutHeader({
+  links,
+  name,
+}: {
+  links: LayoutLink[];
+  name: string;
+}) {
+  return (
+    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+      <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+        <Flex alignItems={'center'}>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Box px={4}>
+              <Heading size="md">
+                <RouterLink to="/">{name}</RouterLink>
+              </Heading>
+            </Box>
+            {links?.map((link) => (
+              <LayoutHeaderLink key={link.path} link={link} />
+            ))}
+          </Stack>
+        </Flex>
+        <Flex alignItems={'center'}>
+          <Stack direction={'row'} spacing={7}>
+            <Button>Hi</Button>
+          </Stack>
+        </Flex>
+      </Flex>
+    </Box>
+  );
+}
+
+function LayoutFooter({ copyright }: { copyright: ReactNode }) {
+  const { colorMode, toggleColorMode } = useColorMode();
+
+  return (
+    <Box
+      bg={useColorModeValue('gray.100', 'gray.900')}
+      color={useColorModeValue('gray.600', 'gray.500')}
+      px={4}
+    >
+      <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+        <Flex alignItems={'center'}>
+          <Button onClick={toggleColorMode}>
+            {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          </Button>
+        </Flex>
+        <Flex alignItems={'center'}>
+          <Box>{copyright}</Box>
+        </Flex>
+      </Flex>
+    </Box>
+  );
+}
