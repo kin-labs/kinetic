@@ -49,7 +49,6 @@ type AppMint {
   createdAt: DateTime!
   id: String!
   mint: Mint
-  order: Int
   updatedAt: DateTime!
   wallet: Wallet
 }
@@ -59,7 +58,6 @@ type AppTransaction {
   createdAt: DateTime
   destination: String
   errors: [AppTransactionError!]
-  explorerUrl: String
   feePayer: String
   id: String
   mint: String
@@ -185,7 +183,6 @@ type Cluster {
   createdAt: DateTime
   enableStats: Boolean
   endpoint: String
-  explorer: String
   id: String
   mints: [Mint!]
   name: String
@@ -196,7 +193,6 @@ type Cluster {
 
 input ClusterCreateInput {
   endpoint: String!
-  explorer: String
   name: String!
   type: ClusterType!
 }
@@ -262,7 +258,6 @@ enum ClusterType {
 input ClusterUpdateInput {
   enableStats: Boolean
   endpoint: String
-  explorer: String
   name: String
   status: ClusterStatus
 }
@@ -287,12 +282,9 @@ type Mint {
   coingeckoId: String
   createdAt: DateTime
   decimals: Int
-  default: Boolean
-  enabled: Boolean
   id: String
   logoUrl: String
   name: String
-  order: Int
   symbol: String
   type: MintType
   updatedAt: DateTime
@@ -322,17 +314,13 @@ type Mutation {
   adminUpdateUser(input: UserUpdateInput!, userId: String!): User
   login(input: LoginInput!): AuthToken
   logout: Boolean
-  userAppEnvMintDisable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
-  userAppEnvMintEnable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
-  userAppEnvMintSetWallet(appEnvId: String!, appId: String!, mintId: String!, walletId: String!): AppEnv
   userAppEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   userAppEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   userAppUserAdd(appId: String!, input: AppUserAddInput!): App
   userAppUserRemove(appId: String!, input: AppUserRemoveInput!): App
   userAppUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
   userDeleteWallet(walletId: String!): Wallet
-  userGenerateWallet(appEnvId: String!): Wallet
-  userImportWallet(appEnvId: String!, secretKey: String!): Wallet
+  userGenerateWallet(index: Int!): Wallet
   userUpdateApp(appId: String!, input: AppUpdateInput!): App
   userUpdateAppEnv(appEnvId: String!, appId: String!, input: AppEnvUpdateInput!): AppEnv
 }

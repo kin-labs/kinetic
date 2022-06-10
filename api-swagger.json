@@ -613,9 +613,6 @@
               "$ref": "#/components/schemas/AppTransactionError"
             }
           },
-          "explorerUrl": {
-            "type": "string"
-          },
           "feePayer": {
             "type": "string"
           },
@@ -676,7 +673,6 @@
           "amount",
           "destination",
           "errors",
-          "explorerUrl",
           "feePayer",
           "mint",
           "referenceId",
