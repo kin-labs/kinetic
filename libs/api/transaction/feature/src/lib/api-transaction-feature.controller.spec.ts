@@ -1,6 +1,5 @@
 import { ApiTransactionDataAccessModule } from '@mogami/api/transaction/data-access'
 import { Test } from '@nestjs/testing'
-import { OpenTelemetryModule } from 'nestjs-otel'
 import { ApiTransactionFeatureController } from './api-transaction-feature.controller'
 
 describe('ApiTransactionFeatureController', () => {
@@ -9,16 +8,7 @@ describe('ApiTransactionFeatureController', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [],
-      imports: [
-        ApiTransactionDataAccessModule,
-        OpenTelemetryModule.forRoot({
-          metrics: {
-            apiMetrics: {
-              enable: false,
-            },
-          },
-        }),
-      ],
+      imports: [ApiTransactionDataAccessModule],
       controllers: [ApiTransactionFeatureController],
     }).compile()
 
