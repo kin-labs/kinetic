@@ -149,35 +149,62 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   async configureDefaultData() {
-    await this.configureAdminUser()
-    await this.configureClusters()
-    await this.configureMints()
+    await this.configureDefaultUsers()
+    await this.configureDefaultClusters()
+    await this.configureDefaultMints()
   }
 
-  private async configureAdminUser() {
-    const email = this.config.adminEmail
-    const password = this.config.adminPassword
-    const existing = await this.user.count({ where: { role: UserRole.Admin } })
+  private async configureDefaultUsers() {
+    await this.configureDefaultUser({
+      id: 'admin',
+      name: 'Admin',
+      email: this.config.adminEmail,
+      password: this.config.adminPassword,
+      role: UserRole.Admin,
+    })
+    await this.configureDefaultUser({
+      id: 'user',
+      name: 'User',
+      email: this.config.adminEmail.replace('admin', 'user'),
+      password: this.config.adminPassword.replace('@dmin', '@user'),
+      role: UserRole.User,
+    })
+  }
+
+  private async configureDefaultUser({
+    id,
+    name,
+    email,
+    password,
+    role,
+  }: {
+    id: string
+    name: string
+    email: string
+    password: string
+    role: UserRole
+  }) {
+    const existing = await this.user.count({ where: { role } })
     if (existing < 1) {
       await this.user.create({
         data: {
-          id: 'admin',
-          name: 'Admin',
+          id,
+          name,
           password: hashPassword(password),
-          role: UserRole.Admin,
-          username: 'admin',
+          role,
+          username: id,
           emails: {
             create: { email },
           },
         },
       })
-      this.logger.verbose(`Created new Admin with email ${email} and password ${password}`)
+      this.logger.verbose(`Created new ${role} with email ${email} and password ${password}`)
       return
     }
-    this.logger.verbose(`Log in as Admin with email ${email} and password ${password}`)
+    this.logger.verbose(`Log in as ${role} with email ${email} and password ${password}`)
   }
 
-  private async configureClusters() {
+  private async configureDefaultClusters() {
     return Promise.all(
       this.config.clusters.map((cluster) =>
         this.cluster
@@ -191,7 +218,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     )
   }
 
-  private async configureMints() {
+  private async configureDefaultMints() {
     return Promise.all(
       this.config.mints.map((mint) =>
         this.mint
