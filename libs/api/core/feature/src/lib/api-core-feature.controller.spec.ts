@@ -9,16 +9,7 @@ describe('ApiCoreFeatureController', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [],
-      imports: [
-        ApiCoreDataAccessModule,
-        OpenTelemetryModule.forRoot({
-          metrics: {
-            apiMetrics: {
-              enable: false,
-            },
-          },
-        }),
-      ],
+      imports: [ApiCoreDataAccessModule],
       controllers: [ApiCoreFeatureController],
     }).compile()
 

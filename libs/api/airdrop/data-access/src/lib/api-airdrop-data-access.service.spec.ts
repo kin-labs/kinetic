@@ -1,6 +1,5 @@
 import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
 import { Test } from '@nestjs/testing'
-import { OpenTelemetryModule } from 'nestjs-otel'
 import { ApiAirdropDataAccessService } from './api-airdrop-data-access.service'
 
 describe('ApiAirdropDataAccessService', () => {
@@ -8,16 +7,7 @@ describe('ApiAirdropDataAccessService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [
-        ApiCoreDataAccessModule,
-        OpenTelemetryModule.forRoot({
-          metrics: {
-            apiMetrics: {
-              enable: false,
-            },
-          },
-        }),
-      ],
+      imports: [ApiCoreDataAccessModule],
       providers: [ApiAirdropDataAccessService],
     }).compile()
 
