@@ -29,7 +29,6 @@ export function AdminSystemFeature() {
 
   if (!user || user?.role !== UserRole.Admin) {
     return <AdminUiAlert status="error" message="You don't have access to this area." title="Permission Denied" />
-  }
 
   return (
     <AdminSystemUiLayout links={links}>
