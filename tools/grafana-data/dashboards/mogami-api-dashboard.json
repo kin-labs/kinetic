@@ -69,6 +69,344 @@
         "x": 0,
         "y": 0
       },
+      "id": 25,
+      "panels": [],
+      "title": "Solana",
+      "type": "row"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(mogami_api_transaction_make_transfer_solana_committed_counter_total{}[1m])",
+          "interval": "",
+          "legendFormat": "{{ appKey }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Solana Committed",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(mogami_api_transaction_make_transfer_solana_confirmed_counter_total{}[1m])",
+          "interval": "",
+          "legendFormat": "{{ appKey }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Solana Confirmed",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(mogami_api_transaction_make_transfer_solana_finalized_counter_total{}[1m])",
+          "interval": "",
+          "legendFormat": "{{ appKey }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Solana Finalized",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(mogami_api_transaction_make_transfer_solana_error_counter_total{}[1m])",
+          "interval": "",
+          "legendFormat": "{{ appKey }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Solana Errors",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
       "id": 13,
       "panels": [],
       "title": "Mogami Api Account",
@@ -130,7 +468,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 18
       },
       "id": 15,
       "options": {
@@ -146,9 +484,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_app_get_app_config_success_counter_total{}[10m])",
+          "expr": "rate(mogami_api_app_get_app_config_success_counter_total{}[1m])",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{ appKey }}",
           "refId": "A"
         }
       ],
@@ -211,7 +549,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 18
       },
       "id": 18,
       "options": {
@@ -227,9 +565,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_app_get_app_config_error_counter_total{}[10m])",
+          "expr": "rate(mogami_api_app_get_app_config_error_counter_total{}[1m])",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{ appKey }}",
           "refId": "A"
         }
       ],
@@ -243,7 +581,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 26
       },
       "id": 9,
       "panels": [],
@@ -306,7 +644,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 10
+        "y": 27
       },
       "id": 4,
       "options": {
@@ -322,9 +660,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_app_get_app_config_success_counter_total{}[10m])",
+          "expr": "rate(mogami_api_app_get_app_config_success_counter_total{appKey=~\".+\"}[1m])",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{ appKey }}",
           "refId": "A"
         }
       ],
@@ -387,7 +725,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 10
+        "y": 27
       },
       "id": 7,
       "options": {
@@ -403,9 +741,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_app_get_app_config_error_counter_total{}[10m])",
+          "expr": "rate(mogami_api_app_get_app_config_error_counter_total{}[1m])",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{ appKey }}",
           "refId": "A"
         }
       ],
@@ -419,7 +757,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 35
       },
       "id": 2,
       "panels": [],
@@ -482,7 +820,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 19
+        "y": 36
       },
       "id": 6,
       "options": {
@@ -498,9 +836,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_core_get_app_by_environment_index_counter_total{}[10m])",
+          "expr": "rate(mogami_api_core_get_app_by_environment_index_counter_total{}[1m])",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{ appKey }}",
           "refId": "A"
         }
       ],
@@ -514,7 +852,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 44
       },
       "id": 11,
       "panels": [],
@@ -577,7 +915,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 28
+        "y": 45
       },
       "id": 17,
       "options": {
@@ -593,13 +931,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_transaction_make_transfer_request_counter_total{}[10m])",
+          "expr": "rate(mogami_api_transaction_make_transfer_request_counter_total{}[1m])",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{ appKey }}",
           "refId": "A"
         }
       ],
-      "title": "Panel Title",
+      "title": "Make Transfer Request",
       "type": "timeseries"
     }
   ],
