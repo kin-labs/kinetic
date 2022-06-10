@@ -12,6 +12,7 @@
     "dev:admin-sdk": "yarn build:admin-sdk --watch",
     "dev:api": "nx serve api",
     "dev:demo": "nx serve demo",
+    "dev:monitoring": "docker compose -f ./docker-compose.monitoring.yml up",
     "dev:sdk": "nodemon --watch ./api-swagger.json -x 'yarn build:sdk'",
     "dev:services": "docker compose up",
     "dev:services:postgres": "docker compose up postgres",

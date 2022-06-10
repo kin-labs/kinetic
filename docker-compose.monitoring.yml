@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./tools/prometheus.yaml:/etc/prometheus.yaml
+    entrypoint:
+      - /bin/prometheus
+      - --config.file=/etc/prometheus.yaml
+    ports:
+      - '9090:9090'
+    depends_on:
+      - nestjs-example
+  grafana:
+    image: grafana/grafana:8.1.0-ubuntu
+    volumes:
+      - ./tools/grafana-data/datasources:/etc/grafana/provisioning/datasources
+      - ./tools/grafana-data/dashboards-provisioning:/etc/grafana/provisioning/dashboards
+      - ./tools/grafana-data/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - '3001:3000'
+    depends_on:
+      - prometheus
