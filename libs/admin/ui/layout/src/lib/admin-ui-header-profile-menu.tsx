@@ -10,33 +10,43 @@ export function AdminUiHeaderProfileMenu({ logout, user }: { logout: AdminAuthLo
   return (
     <Menu>
       <MenuButton as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0}>
-        <Avatar bg="transparent" size={'sm'} src={user?.avatarUrl || defaultAvatar} />
+        <Avatar size={'sm'} src={user?.avatarUrl || defaultAvatar} />
       </MenuButton>
       <MenuList alignItems={'center'}>
         <br />
         <Center>
-          <Avatar bg="transparent" size={'2xl'} src={user?.avatarUrl || defaultAvatar} />
+          <Avatar size={'2xl'} src={user?.avatarUrl || defaultAvatar} />
         </Center>
         <br />
         <Center>
           <p>{user?.name}</p>
         </Center>
         <br />
+        <MenuDivider />
+        <MenuItem as={Link} to="/apps">
+          Your Apps
+        </MenuItem>
         {isAdmin ? (
-          <MenuGroup title="System Administration">
-            <MenuItem as={Link} to="/system/dashboard">
-              Dashboard
-            </MenuItem>
-            <MenuItem as={Link} to="/system/apps">
-              Manage Apps
-            </MenuItem>
-            <MenuItem as={Link} to="/system/clusters">
-              Manage Clusters
-            </MenuItem>
-            <MenuItem as={Link} to="/system/users">
-              Manage Users
-            </MenuItem>
-          </MenuGroup>
+          <>
+            <MenuDivider />
+            <MenuGroup title="System Administration">
+              <MenuItem as={Link} to="/system/dashboard">
+                Dashboard
+              </MenuItem>
+              <MenuItem as={Link} to="/system/apps">
+                Manage Apps
+              </MenuItem>
+              <MenuItem as={Link} to="/system/clusters">
+                Manage Clusters
+              </MenuItem>
+              <MenuItem as={Link} to="/system/users">
+                Manage Users
+              </MenuItem>
+              <MenuItem as={Link} to="/system/wallets">
+                Manage Wallets
+              </MenuItem>
+            </MenuGroup>
+          </>
         ) : null}
         <MenuDivider />
         <MenuItem onClick={logout}>Logout</MenuItem>

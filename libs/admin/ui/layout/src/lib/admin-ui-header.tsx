@@ -5,6 +5,7 @@ import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { AdminUiHeaderLink, AdminUiLink } from './admin-ui-header-link'
 import { AdminUiHeaderProfileMenu } from './admin-ui-header-profile-menu'
+import { AdminUiThemeToggle } from './admin-ui-theme-toggle'
 
 export function AdminUiHeader({
   links,
@@ -33,7 +34,8 @@ export function AdminUiHeader({
           </Stack>
         </Flex>
         <Flex alignItems={'center'}>
-          <Stack direction={'row'} spacing={7}>
+          <Stack direction={'row'} spacing={4}>
+            <AdminUiThemeToggle />
             {user && logout && <AdminUiHeaderProfileMenu logout={logout} user={user} />}
           </Stack>
         </Flex>
