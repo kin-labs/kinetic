@@ -10,6 +10,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 
 const AdminClusterFeature = React.lazy(async () => import('@mogami/admin/cluster/feature'))
 const AdminUserFeature = React.lazy(async () => import('@mogami/admin/user/feature'))
+const AdminWalletFeature = React.lazy(async () => import('@mogami/admin/wallet/feature'))
 
 export function AdminSystemFeature() {
   const { loading, user } = useAdminAuth()
@@ -19,6 +20,7 @@ export function AdminSystemFeature() {
     { label: 'Apps', path: '/system/apps' },
     { label: 'Clusters', path: '/system/clusters' },
     { label: 'Users', path: '/system/users' },
+    { label: 'Wallets', path: '/system/wallets' },
   ]
 
   if (loading) {
@@ -43,6 +45,7 @@ export function AdminSystemFeature() {
             render={() => <AdminSystemUiDashboard links={links.filter((link) => link.label !== 'Dashboard')} />}
           />
           <Route path="/system/users" render={() => <AdminUserFeature />} />
+          <Route path="/system/wallets" render={() => <AdminWalletFeature />} />
         </Switch>
       </React.Suspense>
     </AdminSystemUiLayout>

@@ -1,6 +1,6 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
-import { Injectable, Logger, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
 import { ClusterStatus } from '@prisma/client'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
@@ -35,7 +35,10 @@ export class ApiWalletUserDataAccessService {
   }
 
   async userDeleteWallet(userId: string, walletId: string) {
-    await this.ensureWalletById(userId, walletId)
+    const wallet = await this.userWallet(userId, walletId)
+    if (wallet.appEnvs?.length) {
+      throw new BadRequestException(`You can't delete a wallet that has environments`)
+    }
     return this.data.wallet.delete({ where: { id: walletId } })
   }
 
@@ -48,7 +51,7 @@ export class ApiWalletUserDataAccessService {
 
   async userWallet(userId: string, walletId: string) {
     await this.ensureWalletById(userId, walletId)
-    return this.data.wallet.findUnique({ where: { id: walletId } })
+    return this.data.wallet.findUnique({ where: { id: walletId }, include: { appEnvs: true } })
   }
 
   async userWalletAirdrop(

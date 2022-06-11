@@ -17,6 +17,42 @@ fragment WalletBalanceDetails on WalletBalance {
   change
 }
 
+mutation AdminDeleteWallet($walletId: String!) {
+  deleted: adminDeleteWallet(walletId: $walletId) {
+    ...WalletDetails
+  }
+}
+
+query AdminWallet($walletId: String!) {
+  item: adminWallet(walletId: $walletId) {
+    ...WalletDetails
+    appEnvs {
+      ...AppEnvDetails
+    }
+  }
+}
+
+query AdminWalletBalances($appEnvId: String!, $walletId: String!) {
+  balances: adminWalletBalances(appEnvId: $appEnvId, walletId: $walletId) {
+    ...WalletBalanceDetails
+  }
+}
+
+query AdminWallets {
+  items: adminWallets {
+    ...WalletDetails
+    balances {
+      ...WalletBalanceDetails
+      appEnv {
+        ...AppEnvDetails
+      }
+    }
+    appEnvs {
+      ...AppEnvDetails
+    }
+  }
+}
+
 mutation UserGenerateWallet($index: Int!) {
   generated: userGenerateWallet(index: $index) {
     ...WalletDetails

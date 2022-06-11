@@ -22,6 +22,8 @@
     "admin-ui-tabs": "libs/admin/ui/tabs",
     "admin-user-feature": "libs/admin/user/feature",
     "admin-user-ui": "libs/admin/user/ui",
+    "admin-wallet-feature": "libs/admin/wallet/feature",
+    "admin-wallet-ui": "libs/admin/wallet/ui",
     "airdrop": "libs/airdrop",
     "api": "apps/api",
     "api-account-data-access": "libs/api/account/data-access",

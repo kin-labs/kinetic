@@ -23,6 +23,7 @@ type AppEnv {
   cluster: Cluster
   createdAt: DateTime!
   id: String!
+  key: String
   mints: [AppMint!]
   name: String
   updatedAt: DateTime!
@@ -308,6 +309,7 @@ type Mutation {
   adminDeleteApp(appId: String!): App
   adminDeleteCluster(clusterId: String!): Cluster
   adminDeleteUser(userId: String!): User
+  adminDeleteWallet(walletId: String!): Wallet
   adminUpdateCluster(clusterId: String!, input: ClusterUpdateInput!): Cluster
   adminUpdateUser(input: UserUpdateInput!, userId: String!): User
   login(input: LoginInput!): AuthToken
@@ -331,6 +333,9 @@ type Query {
   adminClusters: [Cluster!]
   adminUser(userId: String!): User
   adminUsers: [User!]
+  adminWallet(walletId: String!): Wallet
+  adminWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
+  adminWallets: [Wallet!]
   clusterStats(clusterId: String!): [ClusterStat!]
   me: User
   uptime: Float!
@@ -390,6 +395,7 @@ input UserUpdateInput {
 }
 
 type Wallet {
+  appEnvs: [AppEnv!]
   balances: [WalletBalance!]
   createdAt: DateTime
   id: String!
@@ -402,6 +408,7 @@ type WalletAirdropResponse {
 }
 
 type WalletBalance {
+  appEnv: AppEnv
   balance: BigInt
   change: BigInt
   createdAt: DateTime

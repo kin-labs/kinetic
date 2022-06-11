@@ -35,6 +35,8 @@
       "@mogami/admin/ui/tabs": ["libs/admin/ui/tabs/src/index.ts"],
       "@mogami/admin/user/feature": ["libs/admin/user/feature/src/index.ts"],
       "@mogami/admin/user/ui": ["libs/admin/user/ui/src/index.ts"],
+      "@mogami/admin/wallet/feature": ["libs/admin/wallet/feature/src/index.ts"],
+      "@mogami/admin/wallet/ui": ["libs/admin/wallet/ui/src/index.ts"],
       "@mogami/airdrop": ["libs/airdrop/src/index.ts"],
       "@mogami/api-app-module": ["apps/api/src/app/app.module.ts"],
       "@mogami/api/account/data-access": ["libs/api/account/data-access/src/index.ts"],

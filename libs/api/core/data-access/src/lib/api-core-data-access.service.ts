@@ -5,7 +5,7 @@ import { Keypair } from '@mogami/keypair'
 import { getPublicKey, Solana } from '@mogami/solana'
 import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
-import { AppUserRole, ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
+import { App, AppUserRole, ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
 import { MetricService } from 'nestjs-otel'
 
@@ -44,6 +44,14 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     return user
   }
 
+  async ensureApp(appId: string): Promise<App> {
+    const app = await this.app.findUnique({ where: { id: appId } })
+    if (!app) {
+      throw new NotFoundException(`App with id ${appId} does not exist.`)
+    }
+    return app
+  }
+
   async ensureAppOwner(userId: string, appId: string): Promise<AppUserRole> {
     const role = await this.ensureAppUser(userId, appId)
     if (role !== AppUserRole.Owner) {
@@ -53,6 +61,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   async ensureAppUser(userId: string, appId: string): Promise<AppUserRole> {
+    await this.ensureApp(appId)
     const user = await this.getUserById(userId)
     if (user.role === UserRole.Admin) {
       return AppUserRole.Owner
