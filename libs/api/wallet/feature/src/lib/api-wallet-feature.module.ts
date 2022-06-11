@@ -1,9 +1,9 @@
 import { ApiWalletDataAccessModule } from '@mogami/api/wallet/data-access'
 import { Module } from '@nestjs/common'
-import { ApiWalletFeatureResolver } from './api-wallet-feature.resolver'
+import { ApiWalletUserFeatureResolver } from './api-wallet-user-feature.resolver'
 
 @Module({
   imports: [ApiWalletDataAccessModule],
-  providers: [ApiWalletFeatureResolver],
+  providers: [ApiWalletUserFeatureResolver],
 })
 export class ApiWalletFeatureModule {}

@@ -8,9 +8,9 @@ import {
   AppUserAddInput,
   AppUserRole,
   AppUserUpdateRoleInput,
-  useAppUserAddMutation,
-  useAppUserUpdateRoleMutation,
-  useUpdateAppMutation,
+  useUserAppUserAddMutation,
+  useUserAppUserUpdateRoleMutation,
+  useUserUpdateAppMutation,
   useUserAppQuery,
 } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
@@ -22,9 +22,9 @@ export default function AdminAppUserFeatureDetail() {
   const { appId } = useParams<{ appId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data, error, fetching }] = useUserAppQuery({ variables: { appId: appId! } })
-  const [, updateAppMutation] = useUpdateAppMutation()
-  const [, updateUserAddMutation] = useAppUserAddMutation()
-  const [, updateRoleMutation] = useAppUserUpdateRoleMutation()
+  const [, updateAppMutation] = useUserUpdateAppMutation()
+  const [, updateUserAddMutation] = useUserAppUserAddMutation()
+  const [, updateRoleMutation] = useUserAppUserUpdateRoleMutation()
 
   const onSubmit = async (input: AppUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

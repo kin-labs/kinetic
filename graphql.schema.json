@@ -3040,7 +3040,48 @@
             "deprecationReason": null
           },
           {
-            "name": "appEnvWalletAdd",
+            "name": "login",
+            "description": null,
+            "args": [
+              {
+                "name": "input",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "LoginInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "AuthToken",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "logout",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "userAppEnvWalletAdd",
             "description": null,
             "args": [
               {
@@ -3101,7 +3142,7 @@
             "deprecationReason": null
           },
           {
-            "name": "appEnvWalletRemove",
+            "name": "userAppEnvWalletRemove",
             "description": null,
             "args": [
               {
@@ -3162,7 +3203,7 @@
             "deprecationReason": null
           },
           {
-            "name": "appUserAdd",
+            "name": "userAppUserAdd",
             "description": null,
             "args": [
               {
@@ -3207,7 +3248,7 @@
             "deprecationReason": null
           },
           {
-            "name": "appUserRemove",
+            "name": "userAppUserRemove",
             "description": null,
             "args": [
               {
@@ -3252,7 +3293,7 @@
             "deprecationReason": null
           },
           {
-            "name": "appUserUpdateRole",
+            "name": "userAppUserUpdateRole",
             "description": null,
             "args": [
               {
@@ -3297,7 +3338,7 @@
             "deprecationReason": null
           },
           {
-            "name": "deleteWallet",
+            "name": "userDeleteWallet",
             "description": null,
             "args": [
               {
@@ -3326,7 +3367,7 @@
             "deprecationReason": null
           },
           {
-            "name": "generateWallet",
+            "name": "userGenerateWallet",
             "description": null,
             "args": [
               {
@@ -3355,48 +3396,7 @@
             "deprecationReason": null
           },
           {
-            "name": "login",
-            "description": null,
-            "args": [
-              {
-                "name": "input",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "LoginInput",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "AuthToken",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "logout",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updateApp",
+            "name": "userUpdateApp",
             "description": null,
             "args": [
               {
@@ -3441,7 +3441,7 @@
             "deprecationReason": null
           },
           {
-            "name": "updateAppEnv",
+            "name": "userUpdateAppEnv",
             "description": null,
             "args": [
               {
@@ -4109,7 +4109,7 @@
             "deprecationReason": null
           },
           {
-            "name": "wallet",
+            "name": "userWallet",
             "description": null,
             "args": [
               {
@@ -4138,7 +4138,7 @@
             "deprecationReason": null
           },
           {
-            "name": "walletAirdrop",
+            "name": "userWalletAirdrop",
             "description": null,
             "args": [
               {
@@ -4199,7 +4199,7 @@
             "deprecationReason": null
           },
           {
-            "name": "walletBalance",
+            "name": "userWalletBalance",
             "description": null,
             "args": [
               {
@@ -4244,7 +4244,7 @@
             "deprecationReason": null
           },
           {
-            "name": "walletBalances",
+            "name": "userWalletBalances",
             "description": null,
             "args": [
               {
@@ -4297,7 +4297,7 @@
             "deprecationReason": null
           },
           {
-            "name": "wallets",
+            "name": "userWallets",
             "description": null,
             "args": [],
             "type": {

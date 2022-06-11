@@ -1,0 +1,126 @@
+mutation UserUpdateApp($appId: String!, $input: AppUpdateInput!) {
+  updated: userUpdateApp(appId: $appId, input: $input) {
+    ...AppDetails
+    envs {
+      ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
+    }
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+mutation UserUpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
+  updated: userUpdateAppEnv(appId: $appId, appEnvId: $appEnvId, input: $input) {
+    ...AppEnvDetails
+    wallets {
+      ...WalletDetails
+    }
+  }
+}
+
+mutation UserAppUserAdd($appId: String!, $input: AppUserAddInput!) {
+  item: userAppUserAdd(appId: $appId, input: $input) {
+    ...AppDetails
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+mutation UserAppUserRemove($appId: String!, $input: AppUserRemoveInput!) {
+  item: userAppUserRemove(appId: $appId, input: $input) {
+    ...AppDetails
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+mutation UserAppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
+  item: userAppUserUpdateRole(appId: $appId, input: $input) {
+    ...AppDetails
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+mutation UserAppEnvWalletAdd($appId: String!, $appEnvId: String!, $walletId: String!) {
+  item: userAppEnvWalletAdd(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
+    ...AppEnvDetails
+    wallets {
+      ...WalletDetails
+    }
+  }
+}
+
+mutation UserAppEnvWalletRemove($appId: String!, $appEnvId: String!, $walletId: String!) {
+  item: userAppEnvWalletRemove(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
+    ...AppEnvDetails
+    wallets {
+      ...WalletDetails
+    }
+  }
+}
+
+query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
+  item: userAppTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
+    ...AppTransactionDetails
+  }
+}
+
+query UserAppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
+  items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
+    ...AppTransactionDetails
+  }
+}
+
+query UserAppWebhook($appId: String!, $appWebhookId: String!) {
+  item: userAppWebhook(appId: $appId, appWebhookId: $appWebhookId) {
+    ...AppWebhookDetails
+  }
+}
+
+query UserAppWebhooks($appId: String!, $appEnvId: String!) {
+  items: userAppWebhooks(appId: $appId, appEnvId: $appEnvId) {
+    ...AppWebhookDetails
+  }
+}
+
+query UserApps {
+  items: userApps {
+    ...AppDetails
+    envs {
+      ...AppEnvDetails
+    }
+  }
+}
+
+query UserApp($appId: String!) {
+  item: userApp(appId: $appId) {
+    ...AppDetails
+    envs {
+      ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
+    }
+    users {
+      ...AppUserDetails
+    }
+  }
+  role: userAppRole(appId: $appId)
+}
+
+query UserAppEnv($appId: String!, $appEnvId: String!) {
+  item: userAppEnv(appId: $appId, appEnvId: $appEnvId) {
+    ...AppEnvDetails
+    wallets {
+      ...WalletDetails
+    }
+  }
+}

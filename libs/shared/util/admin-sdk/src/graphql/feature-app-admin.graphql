@@ -1,0 +1,44 @@
+mutation AdminCreateApp($input: AppCreateInput!) {
+  created: adminCreateApp(input: $input) {
+    ...AppDetails
+    envs {
+      ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
+    }
+    users {
+      ...AppUserDetails
+    }
+  }
+}
+
+mutation AdminDeleteApp($appId: String!) {
+  deleted: adminDeleteApp(appId: $appId) {
+    ...AppDetails
+  }
+}
+
+query AdminApps {
+  items: adminApps {
+    ...AppDetails
+    envs {
+      ...AppEnvDetails
+    }
+  }
+}
+
+query AdminApp($appId: String!) {
+  item: adminApp(appId: $appId) {
+    ...AppDetails
+    envs {
+      ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
+    }
+    users {
+      ...AppUserDetails
+    }
+  }
+}

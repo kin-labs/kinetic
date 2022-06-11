@@ -1,14 +1,14 @@
 import { Box, useToast } from '@chakra-ui/react'
 import { AdminAppUiAppEnvWebhookForm } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AppEnvUpdateInput, useUpdateAppEnvMutation, useUserAppEnvQuery } from '@mogami/shared/util/admin-sdk'
+import { AppEnvUpdateInput, useUserUpdateAppEnvMutation, useUserAppEnvQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
   const toast = useToast()
   const [{ data, fetching }] = useUserAppEnvQuery({ variables: { appId, appEnvId: appEnvId } })
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [, updateAppEnvMutation] = useUpdateAppEnvMutation()
+  const [, updateAppEnvMutation] = useUserUpdateAppEnvMutation()
 
   const onSubmit = async (input: AppEnvUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

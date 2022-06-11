@@ -3,9 +3,9 @@ import { hashPassword } from '@mogami/api/auth/util'
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Keypair } from '@mogami/keypair'
 import { getPublicKey, Solana } from '@mogami/solana'
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
-import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
+import { AppUserRole, ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
 import { MetricService } from 'nestjs-otel'
 
@@ -42,6 +42,26 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       throw new Error(`Admin role required.`)
     }
     return user
+  }
+
+  async ensureAppOwner(userId: string, appId: string): Promise<AppUserRole> {
+    const role = await this.ensureAppUser(userId, appId)
+    if (role !== AppUserRole.Owner) {
+      throw new UnauthorizedException(`User ${userId} does not have Owner access to app ${appId}.`)
+    }
+    return role
+  }
+
+  async ensureAppUser(userId: string, appId: string): Promise<AppUserRole> {
+    const user = await this.getUserById(userId)
+    if (user.role === UserRole.Admin) {
+      return AppUserRole.Owner
+    }
+    const appUser = await this.appUser.findFirst({ where: { appId, userId } })
+    if (!appUser) {
+      throw new NotFoundException(`User ${userId} does not have access to app ${appId}.`)
+    }
+    return appUser?.role
   }
 
   getActiveClusters() {

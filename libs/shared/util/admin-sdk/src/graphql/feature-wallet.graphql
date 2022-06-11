@@ -17,44 +17,44 @@ fragment WalletBalanceDetails on WalletBalance {
   change
 }
 
-mutation GenerateWallet($index: Int!) {
-  generated: generateWallet(index: $index) {
+mutation UserGenerateWallet($index: Int!) {
+  generated: userGenerateWallet(index: $index) {
     ...WalletDetails
   }
 }
 
-mutation DeleteWallet($walletId: String!) {
-  deleted: deleteWallet(walletId: $walletId) {
+mutation UserDeleteWallet($walletId: String!) {
+  deleted: userDeleteWallet(walletId: $walletId) {
     ...WalletDetails
   }
 }
 
-query Wallet($walletId: String!) {
-  item: wallet(walletId: $walletId) {
+query UserWallet($walletId: String!) {
+  item: userWallet(walletId: $walletId) {
     ...WalletDetails
   }
 }
 
-query WalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!) {
-  response: walletAirdrop(appEnvId: $appEnvId, walletId: $walletId, amount: $amount) {
+query UserWalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!) {
+  response: userWalletAirdrop(appEnvId: $appEnvId, walletId: $walletId, amount: $amount) {
     ...WalletAirdropResponseDetails
   }
 }
 
-query WalletBalance($appEnvId: String!, $walletId: String!) {
-  balance: walletBalance(appEnvId: $appEnvId, walletId: $walletId) {
+query UserWalletBalance($appEnvId: String!, $walletId: String!) {
+  balance: userWalletBalance(appEnvId: $appEnvId, walletId: $walletId) {
     ...WalletBalanceDetails
   }
 }
 
-query WalletBalances($appEnvId: String!, $walletId: String!) {
-  balances: walletBalances(appEnvId: $appEnvId, walletId: $walletId) {
+query UserWalletBalances($appEnvId: String!, $walletId: String!) {
+  balances: userWalletBalances(appEnvId: $appEnvId, walletId: $walletId) {
     ...WalletBalanceDetails
   }
 }
 
-query Wallets {
-  items: wallets {
+query UserWallets {
+  items: userWallets {
     ...WalletDetails
   }
 }

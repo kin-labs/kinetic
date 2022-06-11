@@ -1,5 +1,5 @@
 import { Box, Button, ButtonGroup, Code, Input, Stack } from '@chakra-ui/react'
-import { useWalletAirdropQuery, useWalletBalanceQuery, Wallet } from '@mogami/shared/util/admin-sdk'
+import { useUserWalletAirdropQuery, useUserWalletBalanceQuery, Wallet } from '@mogami/shared/util/admin-sdk'
 import React, { ChangeEvent, useState } from 'react'
 import { ShowSolBalance } from './show-sol-balance'
 
@@ -10,14 +10,14 @@ export interface AdminAppUiWalletProps {
 
 export function AdminAppUiWallet({ appEnvId, wallet }: AdminAppUiWalletProps) {
   const [amount, setAmount] = useState<number>(1)
-  const [{ data }, refreshWallet] = useWalletBalanceQuery({
+  const [{ data }, refreshWallet] = useUserWalletBalanceQuery({
     variables: {
       appEnvId,
       walletId: wallet.id,
     },
   })
   const [{ data: airdropData, error: airdropError, fetching: airdropFetching }, requestAirdropMutation] =
-    useWalletAirdropQuery({
+    useUserWalletAirdropQuery({
       variables: {
         appEnvId,
         walletId: wallet.id,

@@ -1,6 +1,6 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { UserRole } from '@mogami/api/user/data-access'
-import { ApiWalletDataAccessService } from '@mogami/api/wallet/data-access'
+import { ApiWalletUserDataAccessService } from '@mogami/api/wallet/data-access'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { Keypair } from '@solana/web3.js'
@@ -15,7 +15,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
   constructor(
     private readonly app: ApiAppDataAccessService,
     private readonly data: ApiCoreDataAccessService,
-    private readonly wallet: ApiWalletDataAccessService,
+    private readonly wallet: ApiWalletUserDataAccessService,
   ) {}
 
   async onModuleInit() {
@@ -32,7 +32,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
     this.logger.verbose(`app ${input.index}: creating ${input.name}...`)
     let wallets
     if (!input.skipWalletCreation) {
-      const generated = await this.wallet.generateWallet(userId, input.index)
+      const generated = await this.wallet.userGenerateWallet(userId, input.index)
       wallets = { connect: { id: generated.id } }
       this.logger.verbose(`app ${input.index}: connecting wallet ${generated.publicKey}...`)
     }

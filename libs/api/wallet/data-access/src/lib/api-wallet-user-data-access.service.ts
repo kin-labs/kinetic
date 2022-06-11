@@ -9,8 +9,8 @@ import { WalletBalance } from './entity/wallet-balance.entity'
 import { Wallet } from './entity/wallet.entity'
 
 @Injectable()
-export class ApiWalletDataAccessService {
-  private readonly logger = new Logger(ApiWalletDataAccessService.name)
+export class ApiWalletUserDataAccessService {
+  private readonly logger = new Logger(ApiWalletUserDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   @Cron('25 * * * * *')
@@ -34,24 +34,24 @@ export class ApiWalletDataAccessService {
     }
   }
 
-  async deleteWallet(userId: string, walletId: string) {
+  async userDeleteWallet(userId: string, walletId: string) {
     await this.ensureWalletById(userId, walletId)
     return this.data.wallet.delete({ where: { id: walletId } })
   }
 
-  async generateWallet(userId: string, index: number) {
+  async userGenerateWallet(userId: string, index: number) {
     await this.data.ensureAdminUser(userId)
     const { publicKey, secretKey } = this.getAppKeypair(index)
 
     return this.data.wallet.create({ data: { secretKey, publicKey } })
   }
 
-  async wallet(userId: string, walletId: string) {
+  async userWallet(userId: string, walletId: string) {
     await this.ensureWalletById(userId, walletId)
     return this.data.wallet.findUnique({ where: { id: walletId } })
   }
 
-  async walletAirdrop(
+  async userWalletAirdrop(
     userId: string,
     appEnvId: string,
     walletId: string,
@@ -68,9 +68,10 @@ export class ApiWalletDataAccessService {
     }
   }
 
-  async walletBalance(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance> {
+  async userWalletBalance(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance> {
     const wallet = await this.ensureWalletById(userId, walletId)
     const appEnv = await this.data.getAppEnvById(appEnvId)
+    await this.data.ensureAppUser(userId, appEnv.app.id)
     const solana = await this.data.getSolanaConnection(appEnv.name, appEnv.app.index)
 
     const balance = await solana.getBalanceSol(wallet.publicKey)
@@ -78,7 +79,7 @@ export class ApiWalletDataAccessService {
     return { balance: BigInt(balance) }
   }
 
-  async walletBalances(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance[]> {
+  async userWalletBalances(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance[]> {
     const wallet = await this.ensureWalletById(userId, walletId)
     return this.data.walletBalance.findMany({
       where: { appEnvId, walletId: wallet.id },
@@ -86,7 +87,7 @@ export class ApiWalletDataAccessService {
     })
   }
 
-  async wallets(userId: string) {
+  async userWallets(userId: string) {
     await this.data.ensureAdminUser(userId)
     return this.data.wallet.findMany()
   }

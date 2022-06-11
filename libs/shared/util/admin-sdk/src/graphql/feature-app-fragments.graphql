@@ -1,0 +1,110 @@
+fragment AppDetails on App {
+  id
+  createdAt
+  updatedAt
+  index
+  name
+}
+
+fragment AppEnvDetails on AppEnv {
+  id
+  createdAt
+  updatedAt
+  app {
+    id
+    createdAt
+    updatedAt
+    index
+    name
+  }
+  cluster {
+    ...ClusterDetails
+  }
+  mints {
+    ...AppMintDetails
+  }
+  name
+  webhookAcceptIncoming
+  webhookEventEnabled
+  webhookEventUrl
+  webhookSecret
+  webhookVerifyEnabled
+  webhookVerifyUrl
+}
+
+fragment AppMintDetails on AppMint {
+  id
+  createdAt
+  updatedAt
+  mint {
+    ...MintDetails
+  }
+  wallet {
+    ...WalletDetails
+  }
+}
+
+fragment AppTransactionDetails on AppTransaction {
+  id
+  createdAt
+  updatedAt
+  amount
+  destination
+  errors {
+    ...AppTransactionErrorDetails
+  }
+  feePayer
+  mint
+  processingDuration
+  referenceId
+  referenceType
+  signature
+  solanaCommittedDuration
+  solanaFinalized
+  solanaFinalizedDuration
+  solanaCommitted
+  solanaStart
+  solanaTransaction
+  source
+  status
+  totalDuration
+  webhookEventDuration
+  webhookEventEnd
+  webhookEventStart
+  webhookVerifyDuration
+  webhookVerifyEnd
+  webhookVerifyStart
+}
+
+fragment AppTransactionErrorDetails on AppTransactionError {
+  id
+  message
+  type
+  instruction
+}
+
+fragment AppUserDetails on AppUser {
+  id
+  createdAt
+  updatedAt
+  role
+  app {
+    ...AppDetails
+  }
+  user {
+    ...UserDetails
+  }
+}
+
+fragment AppWebhookDetails on AppWebhook {
+  id
+  createdAt
+  updatedAt
+  direction
+  headers
+  payload
+  responseError
+  responsePayload
+  responseStatus
+  type
+}
