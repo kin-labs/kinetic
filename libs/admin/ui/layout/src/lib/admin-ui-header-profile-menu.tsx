@@ -22,21 +22,31 @@ export function AdminUiHeaderProfileMenu({ logout, user }: { logout: AdminAuthLo
           <p>{user?.name}</p>
         </Center>
         <br />
+        <MenuDivider />
+        <MenuItem as={Link} to="/apps">
+          Your Apps
+        </MenuItem>
         {isAdmin ? (
-          <MenuGroup title="System Administration">
-            <MenuItem as={Link} to="/system/dashboard">
-              Dashboard
-            </MenuItem>
-            <MenuItem as={Link} to="/system/apps">
-              Manage Apps
-            </MenuItem>
-            <MenuItem as={Link} to="/system/clusters">
-              Manage Clusters
-            </MenuItem>
-            <MenuItem as={Link} to="/system/users">
-              Manage Users
-            </MenuItem>
-          </MenuGroup>
+          <>
+            <MenuDivider />
+            <MenuGroup title="System Administration">
+              <MenuItem as={Link} to="/system/dashboard">
+                Dashboard
+              </MenuItem>
+              <MenuItem as={Link} to="/system/apps">
+                Manage Apps
+              </MenuItem>
+              <MenuItem as={Link} to="/system/clusters">
+                Manage Clusters
+              </MenuItem>
+              <MenuItem as={Link} to="/system/users">
+                Manage Users
+              </MenuItem>
+              <MenuItem as={Link} to="/system/wallets">
+                Manage Wallets
+              </MenuItem>
+            </MenuGroup>
+          </>
         ) : null}
         <MenuDivider />
         <MenuItem as={Link} to="/apps">
