@@ -2,9 +2,14 @@ import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import {
   AdminApp,
+  AdminApps,
+  AdminCreateApp,
+  AdminCreateUser,
+  AdminDeleteApp,
   AppCreateInput,
   AppEnvUpdateInput,
-  AdminApps,
+  AppEnvWalletAdd,
+  AppEnvWalletRemove,
   AppUpdateInput,
   AppUserAdd,
   AppUserAddInput,
@@ -13,12 +18,7 @@ import {
   AppUserRole,
   AppUserUpdateRole,
   AppUserUpdateRoleInput,
-  AppEnvWalletAdd,
-  AppEnvWalletRemove,
   ClusterType,
-  AdminCreateApp,
-  CreateUser,
-  AdminDeleteApp,
   GenerateWallet,
   UpdateApp,
   UpdateAppEnv,
@@ -188,7 +188,7 @@ describe('App (e2e)', () => {
         appId = createdApp.body.data.created.id
 
         // Create user
-        const createdUser = await runGraphQLQueryAdmin(app, token, CreateUser, {
+        const createdUser = await runGraphQLQueryAdmin(app, token, AdminCreateUser, {
           input: { password: 'password', email },
         })
         userId = createdUser.body.data.created.id

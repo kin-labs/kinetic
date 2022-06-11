@@ -269,6 +269,7 @@ query UserApp($appId: String!) {
       ...AppUserDetails
     }
   }
+  role: userAppRole(appId: $appId)
 }
 
 query UserAppEnv($appId: String!, $appEnvId: String!) {

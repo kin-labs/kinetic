@@ -318,29 +318,29 @@ export enum MintType {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  addClusterMint?: Maybe<Cluster>
+  adminAddClusterMint?: Maybe<Cluster>
   adminCreateApp?: Maybe<App>
+  adminCreateCluster?: Maybe<Cluster>
+  adminCreateUser?: Maybe<User>
   adminDeleteApp?: Maybe<App>
+  adminDeleteCluster?: Maybe<Cluster>
+  adminDeleteUser?: Maybe<User>
+  adminUpdateCluster?: Maybe<Cluster>
+  adminUpdateUser?: Maybe<User>
   appEnvWalletAdd?: Maybe<AppEnv>
   appEnvWalletRemove?: Maybe<AppEnv>
   appUserAdd?: Maybe<App>
   appUserRemove?: Maybe<App>
   appUserUpdateRole?: Maybe<App>
-  createCluster?: Maybe<Cluster>
-  createUser?: Maybe<User>
-  deleteCluster?: Maybe<Cluster>
-  deleteUser?: Maybe<User>
   deleteWallet?: Maybe<Wallet>
   generateWallet?: Maybe<Wallet>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
   updateApp?: Maybe<App>
   updateAppEnv?: Maybe<AppEnv>
-  updateCluster?: Maybe<Cluster>
-  updateUser?: Maybe<User>
 }
 
-export type MutationAddClusterMintArgs = {
+export type MutationAdminAddClusterMintArgs = {
   input: MintAddInput
 }
 
@@ -348,8 +348,34 @@ export type MutationAdminCreateAppArgs = {
   input: AppCreateInput
 }
 
+export type MutationAdminCreateClusterArgs = {
+  input: ClusterCreateInput
+}
+
+export type MutationAdminCreateUserArgs = {
+  input: UserCreateInput
+}
+
 export type MutationAdminDeleteAppArgs = {
   appId: Scalars['String']
+}
+
+export type MutationAdminDeleteClusterArgs = {
+  clusterId: Scalars['String']
+}
+
+export type MutationAdminDeleteUserArgs = {
+  userId: Scalars['String']
+}
+
+export type MutationAdminUpdateClusterArgs = {
+  clusterId: Scalars['String']
+  input: ClusterUpdateInput
+}
+
+export type MutationAdminUpdateUserArgs = {
+  input: UserUpdateInput
+  userId: Scalars['String']
 }
 
 export type MutationAppEnvWalletAddArgs = {
@@ -379,22 +405,6 @@ export type MutationAppUserUpdateRoleArgs = {
   input: AppUserUpdateRoleInput
 }
 
-export type MutationCreateClusterArgs = {
-  input: ClusterCreateInput
-}
-
-export type MutationCreateUserArgs = {
-  input: UserCreateInput
-}
-
-export type MutationDeleteClusterArgs = {
-  clusterId: Scalars['String']
-}
-
-export type MutationDeleteUserArgs = {
-  userId: Scalars['String']
-}
-
 export type MutationDeleteWalletArgs = {
   walletId: Scalars['String']
 }
@@ -418,35 +428,26 @@ export type MutationUpdateAppEnvArgs = {
   input: AppEnvUpdateInput
 }
 
-export type MutationUpdateClusterArgs = {
-  clusterId: Scalars['String']
-  input: ClusterUpdateInput
-}
-
-export type MutationUpdateUserArgs = {
-  input: UserUpdateInput
-  userId: Scalars['String']
-}
-
 export type Query = {
   __typename?: 'Query'
   adminApp?: Maybe<App>
   adminApps?: Maybe<Array<App>>
+  adminCluster?: Maybe<Cluster>
+  adminClusterTokens?: Maybe<Array<ClusterToken>>
+  adminClusters?: Maybe<Array<Cluster>>
+  adminUser?: Maybe<User>
+  adminUsers?: Maybe<Array<User>>
   appTransaction?: Maybe<AppTransaction>
   appTransactions?: Maybe<Array<AppTransaction>>
   appWebhook?: Maybe<AppWebhook>
   appWebhooks?: Maybe<Array<AppWebhook>>
-  cluster?: Maybe<Cluster>
   clusterStats?: Maybe<Array<ClusterStat>>
-  clusterTokens?: Maybe<Array<ClusterToken>>
-  clusters?: Maybe<Array<Cluster>>
   me?: Maybe<User>
   uptime: Scalars['Float']
-  user?: Maybe<User>
   userApp?: Maybe<App>
   userAppEnv?: Maybe<AppEnv>
+  userAppRole?: Maybe<AppUserRole>
   userApps?: Maybe<Array<App>>
-  users?: Maybe<Array<User>>
   wallet?: Maybe<Wallet>
   walletAirdrop?: Maybe<WalletAirdropResponse>
   walletBalance?: Maybe<WalletBalance>
@@ -456,6 +457,18 @@ export type Query = {
 
 export type QueryAdminAppArgs = {
   appId: Scalars['String']
+}
+
+export type QueryAdminClusterArgs = {
+  clusterId: Scalars['String']
+}
+
+export type QueryAdminClusterTokensArgs = {
+  input: ClusterTokenInput
+}
+
+export type QueryAdminUserArgs = {
+  userId: Scalars['String']
 }
 
 export type QueryAppTransactionArgs = {
@@ -480,20 +493,8 @@ export type QueryAppWebhooksArgs = {
   appId: Scalars['String']
 }
 
-export type QueryClusterArgs = {
-  clusterId: Scalars['String']
-}
-
 export type QueryClusterStatsArgs = {
   clusterId: Scalars['String']
-}
-
-export type QueryClusterTokensArgs = {
-  input: ClusterTokenInput
-}
-
-export type QueryUserArgs = {
-  userId: Scalars['String']
 }
 
 export type QueryUserAppArgs = {
@@ -502,6 +503,10 @@ export type QueryUserAppArgs = {
 
 export type QueryUserAppEnvArgs = {
   appEnvId: Scalars['String']
+  appId: Scalars['String']
+}
+
+export type QueryUserAppRoleArgs = {
   appId: Scalars['String']
 }
 
@@ -1047,6 +1052,7 @@ export const UserApp = gql`
         ...AppUserDetails
       }
     }
+    role: userAppRole(appId: $appId)
   }
   ${AppDetails}
   ${AppEnvDetails}
@@ -1086,9 +1092,9 @@ export const Me = gql`
   }
   ${UserDetails}
 `
-export const AddClusterMint = gql`
-  mutation addClusterMint($input: MintAddInput!) {
-    addClusterMint(input: $input) {
+export const AdminAddClusterMint = gql`
+  mutation AdminAddClusterMint($input: MintAddInput!) {
+    adminAddClusterMint(input: $input) {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -1098,33 +1104,33 @@ export const AddClusterMint = gql`
   ${ClusterDetails}
   ${MintDetails}
 `
-export const CreateCluster = gql`
-  mutation CreateCluster($input: ClusterCreateInput!) {
-    created: createCluster(input: $input) {
+export const AdminCreateCluster = gql`
+  mutation AdminCreateCluster($input: ClusterCreateInput!) {
+    created: adminCreateCluster(input: $input) {
       ...ClusterDetails
     }
   }
   ${ClusterDetails}
 `
-export const DeleteCluster = gql`
-  mutation DeleteCluster($clusterId: String!) {
-    deleted: deleteCluster(clusterId: $clusterId) {
+export const AdminDeleteCluster = gql`
+  mutation AdminDeleteCluster($clusterId: String!) {
+    deleted: adminDeleteCluster(clusterId: $clusterId) {
       ...ClusterDetails
     }
   }
   ${ClusterDetails}
 `
-export const UpdateCluster = gql`
-  mutation UpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
-    updated: updateCluster(clusterId: $clusterId, input: $input) {
+export const AdminUpdateCluster = gql`
+  mutation AdminUpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
+    updated: adminUpdateCluster(clusterId: $clusterId, input: $input) {
       ...ClusterDetails
     }
   }
   ${ClusterDetails}
 `
-export const Cluster = gql`
-  query Cluster($clusterId: String!) {
-    item: cluster(clusterId: $clusterId) {
+export const AdminCluster = gql`
+  query AdminCluster($clusterId: String!) {
+    item: adminCluster(clusterId: $clusterId) {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -1134,17 +1140,17 @@ export const Cluster = gql`
   ${ClusterDetails}
   ${MintDetails}
 `
-export const ClusterTokens = gql`
-  query ClusterTokens($input: ClusterTokenInput!) {
-    items: clusterTokens(input: $input) {
+export const AdminClusterTokens = gql`
+  query AdminClusterTokens($input: ClusterTokenInput!) {
+    items: adminClusterTokens(input: $input) {
       ...ClusterTokenDetails
     }
   }
   ${ClusterTokenDetails}
 `
-export const Clusters = gql`
-  query Clusters {
-    items: clusters {
+export const AdminClusters = gql`
+  query AdminClusters {
+    items: adminClusters {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -1167,33 +1173,33 @@ export const Uptime = gql`
     uptime
   }
 `
-export const CreateUser = gql`
-  mutation CreateUser($input: UserCreateInput!) {
-    created: createUser(input: $input) {
+export const AdminCreateUser = gql`
+  mutation AdminCreateUser($input: UserCreateInput!) {
+    created: adminCreateUser(input: $input) {
       ...UserDetails
     }
   }
   ${UserDetails}
 `
-export const DeleteUser = gql`
-  mutation DeleteUser($userId: String!) {
-    deleted: deleteUser(userId: $userId) {
+export const AdminDeleteUser = gql`
+  mutation AdminDeleteUser($userId: String!) {
+    deleted: adminDeleteUser(userId: $userId) {
       ...UserDetails
     }
   }
   ${UserDetails}
 `
-export const UpdateUser = gql`
-  mutation UpdateUser($userId: String!, $input: UserUpdateInput!) {
-    updated: updateUser(userId: $userId, input: $input) {
+export const AdminUpdateUser = gql`
+  mutation AdminUpdateUser($userId: String!, $input: UserUpdateInput!) {
+    updated: adminUpdateUser(userId: $userId, input: $input) {
       ...UserDetails
     }
   }
   ${UserDetails}
 `
-export const User = gql`
-  query User($userId: String!) {
-    item: user(userId: $userId) {
+export const AdminUser = gql`
+  query AdminUser($userId: String!) {
+    item: adminUser(userId: $userId) {
       ...UserDetails
       apps {
         ...AppUserDetails
@@ -1207,9 +1213,9 @@ export const User = gql`
   ${AppUserDetails}
   ${UserEmailDetails}
 `
-export const Users = gql`
-  query Users {
-    items: users {
+export const AdminUsers = gql`
+  query AdminUsers {
+    items: adminUsers {
       ...UserDetails
     }
   }
@@ -2395,6 +2401,7 @@ export type UserAppQueryVariables = Exact<{
 
 export type UserAppQuery = {
   __typename?: 'Query'
+  role?: AppUserRole | null
   item?: {
     __typename?: 'App'
     id: string
@@ -2709,13 +2716,13 @@ export type MintDetailsFragment = {
   type?: MintType | null
 }
 
-export type AddClusterMintMutationVariables = Exact<{
+export type AdminAddClusterMintMutationVariables = Exact<{
   input: MintAddInput
 }>
 
-export type AddClusterMintMutation = {
+export type AdminAddClusterMintMutation = {
   __typename?: 'Mutation'
-  addClusterMint?: {
+  adminAddClusterMint?: {
     __typename?: 'Cluster'
     id?: string | null
     createdAt?: any | null
@@ -2741,11 +2748,11 @@ export type AddClusterMintMutation = {
   } | null
 }
 
-export type CreateClusterMutationVariables = Exact<{
+export type AdminCreateClusterMutationVariables = Exact<{
   input: ClusterCreateInput
 }>
 
-export type CreateClusterMutation = {
+export type AdminCreateClusterMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Cluster'
@@ -2760,11 +2767,11 @@ export type CreateClusterMutation = {
   } | null
 }
 
-export type DeleteClusterMutationVariables = Exact<{
+export type AdminDeleteClusterMutationVariables = Exact<{
   clusterId: Scalars['String']
 }>
 
-export type DeleteClusterMutation = {
+export type AdminDeleteClusterMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'Cluster'
@@ -2779,12 +2786,12 @@ export type DeleteClusterMutation = {
   } | null
 }
 
-export type UpdateClusterMutationVariables = Exact<{
+export type AdminUpdateClusterMutationVariables = Exact<{
   clusterId: Scalars['String']
   input: ClusterUpdateInput
 }>
 
-export type UpdateClusterMutation = {
+export type AdminUpdateClusterMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Cluster'
@@ -2799,11 +2806,11 @@ export type UpdateClusterMutation = {
   } | null
 }
 
-export type ClusterQueryVariables = Exact<{
+export type AdminClusterQueryVariables = Exact<{
   clusterId: Scalars['String']
 }>
 
-export type ClusterQuery = {
+export type AdminClusterQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Cluster'
@@ -2831,11 +2838,11 @@ export type ClusterQuery = {
   } | null
 }
 
-export type ClusterTokensQueryVariables = Exact<{
+export type AdminClusterTokensQueryVariables = Exact<{
   input: ClusterTokenInput
 }>
 
-export type ClusterTokensQuery = {
+export type AdminClusterTokensQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'ClusterToken'
@@ -2867,9 +2874,9 @@ export type ClusterTokensQuery = {
   }> | null
 }
 
-export type ClustersQueryVariables = Exact<{ [key: string]: never }>
+export type AdminClustersQueryVariables = Exact<{ [key: string]: never }>
 
-export type ClustersQuery = {
+export type AdminClustersQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Cluster'
@@ -2939,11 +2946,11 @@ export type UserEmailDetailsFragment = {
   email: string
 }
 
-export type CreateUserMutationVariables = Exact<{
+export type AdminCreateUserMutationVariables = Exact<{
   input: UserCreateInput
 }>
 
-export type CreateUserMutation = {
+export type AdminCreateUserMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'User'
@@ -2958,11 +2965,11 @@ export type CreateUserMutation = {
   } | null
 }
 
-export type DeleteUserMutationVariables = Exact<{
+export type AdminDeleteUserMutationVariables = Exact<{
   userId: Scalars['String']
 }>
 
-export type DeleteUserMutation = {
+export type AdminDeleteUserMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'User'
@@ -2977,12 +2984,12 @@ export type DeleteUserMutation = {
   } | null
 }
 
-export type UpdateUserMutationVariables = Exact<{
+export type AdminUpdateUserMutationVariables = Exact<{
   userId: Scalars['String']
   input: UserUpdateInput
 }>
 
-export type UpdateUserMutation = {
+export type AdminUpdateUserMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'User'
@@ -2997,11 +3004,11 @@ export type UpdateUserMutation = {
   } | null
 }
 
-export type UserQueryVariables = Exact<{
+export type AdminUserQueryVariables = Exact<{
   userId: Scalars['String']
 }>
 
-export type UserQuery = {
+export type AdminUserQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'User'
@@ -3043,9 +3050,9 @@ export type UserQuery = {
   } | null
 }
 
-export type UsersQueryVariables = Exact<{ [key: string]: never }>
+export type AdminUsersQueryVariables = Exact<{ [key: string]: never }>
 
-export type UsersQuery = {
+export type AdminUsersQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'User'

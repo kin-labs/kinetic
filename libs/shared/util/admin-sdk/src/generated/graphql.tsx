@@ -320,29 +320,29 @@ export enum MintType {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  addClusterMint?: Maybe<Cluster>
+  adminAddClusterMint?: Maybe<Cluster>
   adminCreateApp?: Maybe<App>
+  adminCreateCluster?: Maybe<Cluster>
+  adminCreateUser?: Maybe<User>
   adminDeleteApp?: Maybe<App>
+  adminDeleteCluster?: Maybe<Cluster>
+  adminDeleteUser?: Maybe<User>
+  adminUpdateCluster?: Maybe<Cluster>
+  adminUpdateUser?: Maybe<User>
   appEnvWalletAdd?: Maybe<AppEnv>
   appEnvWalletRemove?: Maybe<AppEnv>
   appUserAdd?: Maybe<App>
   appUserRemove?: Maybe<App>
   appUserUpdateRole?: Maybe<App>
-  createCluster?: Maybe<Cluster>
-  createUser?: Maybe<User>
-  deleteCluster?: Maybe<Cluster>
-  deleteUser?: Maybe<User>
   deleteWallet?: Maybe<Wallet>
   generateWallet?: Maybe<Wallet>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
   updateApp?: Maybe<App>
   updateAppEnv?: Maybe<AppEnv>
-  updateCluster?: Maybe<Cluster>
-  updateUser?: Maybe<User>
 }
 
-export type MutationAddClusterMintArgs = {
+export type MutationAdminAddClusterMintArgs = {
   input: MintAddInput
 }
 
@@ -350,8 +350,34 @@ export type MutationAdminCreateAppArgs = {
   input: AppCreateInput
 }
 
+export type MutationAdminCreateClusterArgs = {
+  input: ClusterCreateInput
+}
+
+export type MutationAdminCreateUserArgs = {
+  input: UserCreateInput
+}
+
 export type MutationAdminDeleteAppArgs = {
   appId: Scalars['String']
+}
+
+export type MutationAdminDeleteClusterArgs = {
+  clusterId: Scalars['String']
+}
+
+export type MutationAdminDeleteUserArgs = {
+  userId: Scalars['String']
+}
+
+export type MutationAdminUpdateClusterArgs = {
+  clusterId: Scalars['String']
+  input: ClusterUpdateInput
+}
+
+export type MutationAdminUpdateUserArgs = {
+  input: UserUpdateInput
+  userId: Scalars['String']
 }
 
 export type MutationAppEnvWalletAddArgs = {
@@ -381,22 +407,6 @@ export type MutationAppUserUpdateRoleArgs = {
   input: AppUserUpdateRoleInput
 }
 
-export type MutationCreateClusterArgs = {
-  input: ClusterCreateInput
-}
-
-export type MutationCreateUserArgs = {
-  input: UserCreateInput
-}
-
-export type MutationDeleteClusterArgs = {
-  clusterId: Scalars['String']
-}
-
-export type MutationDeleteUserArgs = {
-  userId: Scalars['String']
-}
-
 export type MutationDeleteWalletArgs = {
   walletId: Scalars['String']
 }
@@ -420,35 +430,26 @@ export type MutationUpdateAppEnvArgs = {
   input: AppEnvUpdateInput
 }
 
-export type MutationUpdateClusterArgs = {
-  clusterId: Scalars['String']
-  input: ClusterUpdateInput
-}
-
-export type MutationUpdateUserArgs = {
-  input: UserUpdateInput
-  userId: Scalars['String']
-}
-
 export type Query = {
   __typename?: 'Query'
   adminApp?: Maybe<App>
   adminApps?: Maybe<Array<App>>
+  adminCluster?: Maybe<Cluster>
+  adminClusterTokens?: Maybe<Array<ClusterToken>>
+  adminClusters?: Maybe<Array<Cluster>>
+  adminUser?: Maybe<User>
+  adminUsers?: Maybe<Array<User>>
   appTransaction?: Maybe<AppTransaction>
   appTransactions?: Maybe<Array<AppTransaction>>
   appWebhook?: Maybe<AppWebhook>
   appWebhooks?: Maybe<Array<AppWebhook>>
-  cluster?: Maybe<Cluster>
   clusterStats?: Maybe<Array<ClusterStat>>
-  clusterTokens?: Maybe<Array<ClusterToken>>
-  clusters?: Maybe<Array<Cluster>>
   me?: Maybe<User>
   uptime: Scalars['Float']
-  user?: Maybe<User>
   userApp?: Maybe<App>
   userAppEnv?: Maybe<AppEnv>
+  userAppRole?: Maybe<AppUserRole>
   userApps?: Maybe<Array<App>>
-  users?: Maybe<Array<User>>
   wallet?: Maybe<Wallet>
   walletAirdrop?: Maybe<WalletAirdropResponse>
   walletBalance?: Maybe<WalletBalance>
@@ -458,6 +459,18 @@ export type Query = {
 
 export type QueryAdminAppArgs = {
   appId: Scalars['String']
+}
+
+export type QueryAdminClusterArgs = {
+  clusterId: Scalars['String']
+}
+
+export type QueryAdminClusterTokensArgs = {
+  input: ClusterTokenInput
+}
+
+export type QueryAdminUserArgs = {
+  userId: Scalars['String']
 }
 
 export type QueryAppTransactionArgs = {
@@ -482,20 +495,8 @@ export type QueryAppWebhooksArgs = {
   appId: Scalars['String']
 }
 
-export type QueryClusterArgs = {
-  clusterId: Scalars['String']
-}
-
 export type QueryClusterStatsArgs = {
   clusterId: Scalars['String']
-}
-
-export type QueryClusterTokensArgs = {
-  input: ClusterTokenInput
-}
-
-export type QueryUserArgs = {
-  userId: Scalars['String']
 }
 
 export type QueryUserAppArgs = {
@@ -504,6 +505,10 @@ export type QueryUserAppArgs = {
 
 export type QueryUserAppEnvArgs = {
   appEnvId: Scalars['String']
+  appId: Scalars['String']
+}
+
+export type QueryUserAppRoleArgs = {
   appId: Scalars['String']
 }
 
@@ -1716,6 +1721,7 @@ export type UserAppQueryVariables = Exact<{
 
 export type UserAppQuery = {
   __typename?: 'Query'
+  role?: AppUserRole | null
   item?: {
     __typename?: 'App'
     id: string
@@ -2030,13 +2036,13 @@ export type MintDetailsFragment = {
   type?: MintType | null
 }
 
-export type AddClusterMintMutationVariables = Exact<{
+export type AdminAddClusterMintMutationVariables = Exact<{
   input: MintAddInput
 }>
 
-export type AddClusterMintMutation = {
+export type AdminAddClusterMintMutation = {
   __typename?: 'Mutation'
-  addClusterMint?: {
+  adminAddClusterMint?: {
     __typename?: 'Cluster'
     id?: string | null
     createdAt?: any | null
@@ -2062,11 +2068,11 @@ export type AddClusterMintMutation = {
   } | null
 }
 
-export type CreateClusterMutationVariables = Exact<{
+export type AdminCreateClusterMutationVariables = Exact<{
   input: ClusterCreateInput
 }>
 
-export type CreateClusterMutation = {
+export type AdminCreateClusterMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Cluster'
@@ -2081,11 +2087,11 @@ export type CreateClusterMutation = {
   } | null
 }
 
-export type DeleteClusterMutationVariables = Exact<{
+export type AdminDeleteClusterMutationVariables = Exact<{
   clusterId: Scalars['String']
 }>
 
-export type DeleteClusterMutation = {
+export type AdminDeleteClusterMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'Cluster'
@@ -2100,12 +2106,12 @@ export type DeleteClusterMutation = {
   } | null
 }
 
-export type UpdateClusterMutationVariables = Exact<{
+export type AdminUpdateClusterMutationVariables = Exact<{
   clusterId: Scalars['String']
   input: ClusterUpdateInput
 }>
 
-export type UpdateClusterMutation = {
+export type AdminUpdateClusterMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Cluster'
@@ -2120,11 +2126,11 @@ export type UpdateClusterMutation = {
   } | null
 }
 
-export type ClusterQueryVariables = Exact<{
+export type AdminClusterQueryVariables = Exact<{
   clusterId: Scalars['String']
 }>
 
-export type ClusterQuery = {
+export type AdminClusterQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Cluster'
@@ -2152,11 +2158,11 @@ export type ClusterQuery = {
   } | null
 }
 
-export type ClusterTokensQueryVariables = Exact<{
+export type AdminClusterTokensQueryVariables = Exact<{
   input: ClusterTokenInput
 }>
 
-export type ClusterTokensQuery = {
+export type AdminClusterTokensQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'ClusterToken'
@@ -2188,9 +2194,9 @@ export type ClusterTokensQuery = {
   }> | null
 }
 
-export type ClustersQueryVariables = Exact<{ [key: string]: never }>
+export type AdminClustersQueryVariables = Exact<{ [key: string]: never }>
 
-export type ClustersQuery = {
+export type AdminClustersQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Cluster'
@@ -2260,11 +2266,11 @@ export type UserEmailDetailsFragment = {
   email: string
 }
 
-export type CreateUserMutationVariables = Exact<{
+export type AdminCreateUserMutationVariables = Exact<{
   input: UserCreateInput
 }>
 
-export type CreateUserMutation = {
+export type AdminCreateUserMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'User'
@@ -2279,11 +2285,11 @@ export type CreateUserMutation = {
   } | null
 }
 
-export type DeleteUserMutationVariables = Exact<{
+export type AdminDeleteUserMutationVariables = Exact<{
   userId: Scalars['String']
 }>
 
-export type DeleteUserMutation = {
+export type AdminDeleteUserMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'User'
@@ -2298,12 +2304,12 @@ export type DeleteUserMutation = {
   } | null
 }
 
-export type UpdateUserMutationVariables = Exact<{
+export type AdminUpdateUserMutationVariables = Exact<{
   userId: Scalars['String']
   input: UserUpdateInput
 }>
 
-export type UpdateUserMutation = {
+export type AdminUpdateUserMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'User'
@@ -2318,11 +2324,11 @@ export type UpdateUserMutation = {
   } | null
 }
 
-export type UserQueryVariables = Exact<{
+export type AdminUserQueryVariables = Exact<{
   userId: Scalars['String']
 }>
 
-export type UserQuery = {
+export type AdminUserQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'User'
@@ -2364,9 +2370,9 @@ export type UserQuery = {
   } | null
 }
 
-export type UsersQueryVariables = Exact<{ [key: string]: never }>
+export type AdminUsersQueryVariables = Exact<{ [key: string]: never }>
 
-export type UsersQuery = {
+export type AdminUsersQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'User'
@@ -3024,6 +3030,7 @@ export const UserAppDocument = gql`
         ...AppUserDetails
       }
     }
+    role: userAppRole(appId: $appId)
   }
   ${AppDetailsFragmentDoc}
   ${AppEnvDetailsFragmentDoc}
@@ -3083,9 +3090,9 @@ export const MeDocument = gql`
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options })
 }
-export const AddClusterMintDocument = gql`
-  mutation addClusterMint($input: MintAddInput!) {
-    addClusterMint(input: $input) {
+export const AdminAddClusterMintDocument = gql`
+  mutation AdminAddClusterMint($input: MintAddInput!) {
+    adminAddClusterMint(input: $input) {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -3096,48 +3103,50 @@ export const AddClusterMintDocument = gql`
   ${MintDetailsFragmentDoc}
 `
 
-export function useAddClusterMintMutation() {
-  return Urql.useMutation<AddClusterMintMutation, AddClusterMintMutationVariables>(AddClusterMintDocument)
+export function useAdminAddClusterMintMutation() {
+  return Urql.useMutation<AdminAddClusterMintMutation, AdminAddClusterMintMutationVariables>(
+    AdminAddClusterMintDocument,
+  )
 }
-export const CreateClusterDocument = gql`
-  mutation CreateCluster($input: ClusterCreateInput!) {
-    created: createCluster(input: $input) {
+export const AdminCreateClusterDocument = gql`
+  mutation AdminCreateCluster($input: ClusterCreateInput!) {
+    created: adminCreateCluster(input: $input) {
       ...ClusterDetails
     }
   }
   ${ClusterDetailsFragmentDoc}
 `
 
-export function useCreateClusterMutation() {
-  return Urql.useMutation<CreateClusterMutation, CreateClusterMutationVariables>(CreateClusterDocument)
+export function useAdminCreateClusterMutation() {
+  return Urql.useMutation<AdminCreateClusterMutation, AdminCreateClusterMutationVariables>(AdminCreateClusterDocument)
 }
-export const DeleteClusterDocument = gql`
-  mutation DeleteCluster($clusterId: String!) {
-    deleted: deleteCluster(clusterId: $clusterId) {
+export const AdminDeleteClusterDocument = gql`
+  mutation AdminDeleteCluster($clusterId: String!) {
+    deleted: adminDeleteCluster(clusterId: $clusterId) {
       ...ClusterDetails
     }
   }
   ${ClusterDetailsFragmentDoc}
 `
 
-export function useDeleteClusterMutation() {
-  return Urql.useMutation<DeleteClusterMutation, DeleteClusterMutationVariables>(DeleteClusterDocument)
+export function useAdminDeleteClusterMutation() {
+  return Urql.useMutation<AdminDeleteClusterMutation, AdminDeleteClusterMutationVariables>(AdminDeleteClusterDocument)
 }
-export const UpdateClusterDocument = gql`
-  mutation UpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
-    updated: updateCluster(clusterId: $clusterId, input: $input) {
+export const AdminUpdateClusterDocument = gql`
+  mutation AdminUpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
+    updated: adminUpdateCluster(clusterId: $clusterId, input: $input) {
       ...ClusterDetails
     }
   }
   ${ClusterDetailsFragmentDoc}
 `
 
-export function useUpdateClusterMutation() {
-  return Urql.useMutation<UpdateClusterMutation, UpdateClusterMutationVariables>(UpdateClusterDocument)
+export function useAdminUpdateClusterMutation() {
+  return Urql.useMutation<AdminUpdateClusterMutation, AdminUpdateClusterMutationVariables>(AdminUpdateClusterDocument)
 }
-export const ClusterDocument = gql`
-  query Cluster($clusterId: String!) {
-    item: cluster(clusterId: $clusterId) {
+export const AdminClusterDocument = gql`
+  query AdminCluster($clusterId: String!) {
+    item: adminCluster(clusterId: $clusterId) {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -3148,24 +3157,26 @@ export const ClusterDocument = gql`
   ${MintDetailsFragmentDoc}
 `
 
-export function useClusterQuery(options: Omit<Urql.UseQueryArgs<ClusterQueryVariables>, 'query'>) {
-  return Urql.useQuery<ClusterQuery>({ query: ClusterDocument, ...options })
+export function useAdminClusterQuery(options: Omit<Urql.UseQueryArgs<AdminClusterQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminClusterQuery>({ query: AdminClusterDocument, ...options })
 }
-export const ClusterTokensDocument = gql`
-  query ClusterTokens($input: ClusterTokenInput!) {
-    items: clusterTokens(input: $input) {
+export const AdminClusterTokensDocument = gql`
+  query AdminClusterTokens($input: ClusterTokenInput!) {
+    items: adminClusterTokens(input: $input) {
       ...ClusterTokenDetails
     }
   }
   ${ClusterTokenDetailsFragmentDoc}
 `
 
-export function useClusterTokensQuery(options: Omit<Urql.UseQueryArgs<ClusterTokensQueryVariables>, 'query'>) {
-  return Urql.useQuery<ClusterTokensQuery>({ query: ClusterTokensDocument, ...options })
+export function useAdminClusterTokensQuery(
+  options: Omit<Urql.UseQueryArgs<AdminClusterTokensQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<AdminClusterTokensQuery>({ query: AdminClusterTokensDocument, ...options })
 }
-export const ClustersDocument = gql`
-  query Clusters {
-    items: clusters {
+export const AdminClustersDocument = gql`
+  query AdminClusters {
+    items: adminClusters {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -3176,8 +3187,8 @@ export const ClustersDocument = gql`
   ${MintDetailsFragmentDoc}
 `
 
-export function useClustersQuery(options?: Omit<Urql.UseQueryArgs<ClustersQueryVariables>, 'query'>) {
-  return Urql.useQuery<ClustersQuery>({ query: ClustersDocument, ...options })
+export function useAdminClustersQuery(options?: Omit<Urql.UseQueryArgs<AdminClustersQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminClustersQuery>({ query: AdminClustersDocument, ...options })
 }
 export const ClusterStatsDocument = gql`
   query ClusterStats($clusterId: String!) {
@@ -3200,45 +3211,45 @@ export const UptimeDocument = gql`
 export function useUptimeQuery(options?: Omit<Urql.UseQueryArgs<UptimeQueryVariables>, 'query'>) {
   return Urql.useQuery<UptimeQuery>({ query: UptimeDocument, ...options })
 }
-export const CreateUserDocument = gql`
-  mutation CreateUser($input: UserCreateInput!) {
-    created: createUser(input: $input) {
+export const AdminCreateUserDocument = gql`
+  mutation AdminCreateUser($input: UserCreateInput!) {
+    created: adminCreateUser(input: $input) {
       ...UserDetails
     }
   }
   ${UserDetailsFragmentDoc}
 `
 
-export function useCreateUserMutation() {
-  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument)
+export function useAdminCreateUserMutation() {
+  return Urql.useMutation<AdminCreateUserMutation, AdminCreateUserMutationVariables>(AdminCreateUserDocument)
 }
-export const DeleteUserDocument = gql`
-  mutation DeleteUser($userId: String!) {
-    deleted: deleteUser(userId: $userId) {
+export const AdminDeleteUserDocument = gql`
+  mutation AdminDeleteUser($userId: String!) {
+    deleted: adminDeleteUser(userId: $userId) {
       ...UserDetails
     }
   }
   ${UserDetailsFragmentDoc}
 `
 
-export function useDeleteUserMutation() {
-  return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument)
+export function useAdminDeleteUserMutation() {
+  return Urql.useMutation<AdminDeleteUserMutation, AdminDeleteUserMutationVariables>(AdminDeleteUserDocument)
 }
-export const UpdateUserDocument = gql`
-  mutation UpdateUser($userId: String!, $input: UserUpdateInput!) {
-    updated: updateUser(userId: $userId, input: $input) {
+export const AdminUpdateUserDocument = gql`
+  mutation AdminUpdateUser($userId: String!, $input: UserUpdateInput!) {
+    updated: adminUpdateUser(userId: $userId, input: $input) {
       ...UserDetails
     }
   }
   ${UserDetailsFragmentDoc}
 `
 
-export function useUpdateUserMutation() {
-  return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument)
+export function useAdminUpdateUserMutation() {
+  return Urql.useMutation<AdminUpdateUserMutation, AdminUpdateUserMutationVariables>(AdminUpdateUserDocument)
 }
-export const UserDocument = gql`
-  query User($userId: String!) {
-    item: user(userId: $userId) {
+export const AdminUserDocument = gql`
+  query AdminUser($userId: String!) {
+    item: adminUser(userId: $userId) {
       ...UserDetails
       apps {
         ...AppUserDetails
@@ -3253,20 +3264,20 @@ export const UserDocument = gql`
   ${UserEmailDetailsFragmentDoc}
 `
 
-export function useUserQuery(options: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserQuery>({ query: UserDocument, ...options })
+export function useAdminUserQuery(options: Omit<Urql.UseQueryArgs<AdminUserQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminUserQuery>({ query: AdminUserDocument, ...options })
 }
-export const UsersDocument = gql`
-  query Users {
-    items: users {
+export const AdminUsersDocument = gql`
+  query AdminUsers {
+    items: adminUsers {
       ...UserDetails
     }
   }
   ${UserDetailsFragmentDoc}
 `
 
-export function useUsersQuery(options?: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'>) {
-  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options })
+export function useAdminUsersQuery(options?: Omit<Urql.UseQueryArgs<AdminUsersQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminUsersQuery>({ query: AdminUsersDocument, ...options })
 }
 export const GenerateWalletDocument = gql`
   mutation GenerateWallet($index: Int!) {

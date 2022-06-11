@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Stack } from '@chakra-ui/react'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AdminUiTabs } from '@mogami/admin/ui/tabs'
-import { useClusterQuery } from '@mogami/shared/util/admin-sdk'
+import { useAdminClusterQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { AdminClusterFeatureMintsTab } from './admin-cluster-feature-mints-tab'
@@ -12,7 +12,7 @@ export default function AdminClusterFeatureDetail() {
   const { path, url } = useRouteMatch()
   const { clusterId } = useParams<{ clusterId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [{ data, fetching }] = useClusterQuery({ variables: { clusterId: clusterId! } })
+  const [{ data, fetching }] = useAdminClusterQuery({ variables: { clusterId: clusterId! } })
 
   if (!data || fetching) {
     return <AdminUiLoader />

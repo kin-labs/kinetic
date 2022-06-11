@@ -1,7 +1,7 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
 import { AdminUiTabs } from '@mogami/admin/ui/tabs'
 import { AdminUserUiApps, AdminUserUiEmails, AdminUserUiForm } from '@mogami/admin/user/ui'
-import { UserUpdateInput, useUpdateUserMutation, useUserQuery } from '@mogami/shared/util/admin-sdk'
+import { UserUpdateInput, useAdminUpdateUserMutation, useAdminUserQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 
@@ -10,9 +10,9 @@ export default function AdminUserFeatureDetail() {
   const { path, url } = useRouteMatch()
   const { userId } = useParams<{ userId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [{ data }] = useUserQuery({ variables: { userId: userId! } })
+  const [{ data }] = useAdminUserQuery({ variables: { userId: userId! } })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, updateUserMutation] = useUpdateUserMutation()
+  const [_, updateUserMutation] = useAdminUpdateUserMutation()
 
   const onSubmit = async (input: UserUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

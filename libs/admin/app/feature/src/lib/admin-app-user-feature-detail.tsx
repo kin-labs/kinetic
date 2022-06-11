@@ -6,6 +6,7 @@ import { AdminUiTabs } from '@mogami/admin/ui/tabs'
 import {
   AppUpdateInput,
   AppUserAddInput,
+  AppUserRole,
   AppUserUpdateRoleInput,
   useAppUserAddMutation,
   useAppUserUpdateRoleMutation,
@@ -51,13 +52,17 @@ export default function AdminAppUserFeatureDetail() {
     }
     return res?.data?.updated
   }
+  const role = data?.role || AppUserRole.Member
   const { path, url } = useRouteMatch()
-  const tabs = [
-    { path: `${url}/environments`, label: 'Environments' },
-    { path: `${url}/users`, label: 'Users' },
-    { path: `${url}/settings`, label: 'Settings' },
-  ]
-
+  const tabs = [{ path: `${url}/environments`, label: 'Environments' }]
+  if (role === AppUserRole.Owner) {
+    tabs.push(
+      ...[
+        { path: `${url}/users`, label: 'Users' },
+        { path: `${url}/settings`, label: 'Settings' },
+      ],
+    )
+  }
   const addRole = async ({ role, userId }: AppUserAddInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await updateUserAddMutation({ appId: appId!, input: { role, userId } })

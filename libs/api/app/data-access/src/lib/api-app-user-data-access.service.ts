@@ -40,6 +40,10 @@ export class ApiAppUserDataAccessService {
     })
   }
 
+  userAppRole(userId: string, appId: string) {
+    return this.ensureAppUser(userId, appId)
+  }
+
   private allowAdmin = (role: UserRole, userId): Prisma.AppWhereInput => {
     return role !== UserRole.Admin ? { users: { some: { userId: userId } } } : {}
   }

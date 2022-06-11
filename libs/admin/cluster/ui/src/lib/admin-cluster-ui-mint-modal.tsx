@@ -12,7 +12,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import { Cluster, ClusterToken, ClusterTokenInput, useAddClusterMintMutation } from '@mogami/shared/util/admin-sdk'
+import { Cluster, ClusterToken, ClusterTokenInput, useAdminAddClusterMintMutation } from '@mogami/shared/util/admin-sdk'
 import React, { useState } from 'react'
 import { AdminClusterUiMintForm } from './admin-cluster-ui-mint-form'
 import { AdminClusterUiTokenConfirm } from './admin-cluster-ui-token-confirm'
@@ -26,7 +26,7 @@ export function AdminClusterUiMintModal({ cluster }: AdminClusterUiMintModalProp
   const toast = useToast()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const defaultInput: ClusterTokenInput = { type: cluster.type!, address: '', name: '', symbol: '' }
-  const [, addClusterMint] = useAddClusterMintMutation()
+  const [, addClusterMint] = useAdminAddClusterMintMutation()
 
   const [input, setInput] = useState<ClusterTokenInput>({ ...defaultInput })
   const [selected, setSelected] = useState<ClusterToken | null>()

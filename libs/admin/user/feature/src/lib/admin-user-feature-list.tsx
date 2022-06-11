@@ -1,13 +1,13 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import { AdminUserUiTable } from '@mogami/admin/user/ui'
-import { useDeleteUserMutation, useUsersQuery } from '@mogami/shared/util/admin-sdk'
+import { useAdminDeleteUserMutation, useAdminUsersQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminUserFeatureList() {
   const toast = useToast()
-  const [{ data, error, fetching }, refresh] = useUsersQuery()
-  const [, deleteUser] = useDeleteUserMutation()
+  const [{ data, error, fetching }, refresh] = useAdminUsersQuery()
+  const [, deleteUser] = useAdminDeleteUserMutation()
 
   const handleDelete = async (userId: string) => {
     if (!window.confirm(`Are you sure?`)) return
@@ -17,6 +17,19 @@ export default function AdminUserFeatureList() {
         title: 'User deleted',
         description: `User name: ${res.data.deleted.name}`,
       })
+    }
+    if (res?.error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errors = (res.error.graphQLErrors[0]?.extensions as any)?.response.message ?? [
+        res.error?.message?.toString(),
+      ]
+      for (const error of errors) {
+        toast({
+          status: 'error',
+          title: 'User delete failed',
+          description: error,
+        })
+      }
     }
     await refresh()
   }

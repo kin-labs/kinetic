@@ -1,4 +1,4 @@
-import { ApiAppUserDataAccessService, App, AppEnv } from '@mogami/api/app/data-access'
+import { ApiAppUserDataAccessService, App, AppEnv, AppUserRole } from '@mogami/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
@@ -16,6 +16,11 @@ export class ApiAppUserFeatureResolver {
   @Query(() => AppEnv, { nullable: true })
   userAppEnv(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
     return this.service.userAppEnv(user.id, appId, appEnvId)
+  }
+
+  @Query(() => AppUserRole, { nullable: true })
+  userAppRole(@CtxUser() user: User, @Args('appId') appId: string) {
+    return this.service.userAppRole(user.id, appId)
   }
 
   @Query(() => [App], { nullable: true })

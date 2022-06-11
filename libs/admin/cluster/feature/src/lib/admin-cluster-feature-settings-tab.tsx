@@ -1,13 +1,13 @@
 import { useToast } from '@chakra-ui/react'
 import { AdminClusterUiForm } from '@mogami/admin/cluster/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { ClusterUpdateInput, useClusterQuery, useUpdateClusterMutation } from '@mogami/shared/util/admin-sdk'
+import { ClusterUpdateInput, useAdminClusterQuery, useAdminUpdateClusterMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminClusterFeatureSettingsTab({ clusterId }: { clusterId: string }) {
   const toast = useToast()
-  const [{ data, fetching }] = useClusterQuery({ variables: { clusterId } })
-  const [{ fetching: updateFetching }, updateCluster] = useUpdateClusterMutation()
+  const [{ data, fetching }] = useAdminClusterQuery({ variables: { clusterId } })
+  const [{ fetching: updateFetching }, updateCluster] = useAdminUpdateClusterMutation()
   const update = async (input: ClusterUpdateInput) => {
     try {
       await updateCluster({
