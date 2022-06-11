@@ -56,6 +56,9 @@ query AdminWallets {
 mutation UserGenerateWallet($appEnvId: String!) {
   generated: userGenerateWallet(appEnvId: $appEnvId) {
     ...WalletDetails
+    appEnvs {
+      ...AppEnvDetails
+    }
   }
 }
 

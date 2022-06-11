@@ -3300,6 +3300,86 @@ export type UserGenerateWalletMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    appEnvs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      key?: string | null
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        enableStats?: boolean | null
+        endpoint?: string | null
+        explorer?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        order?: number | null
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id: string
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
+    }> | null
   } | null
 }
 
@@ -4309,9 +4389,13 @@ export const UserGenerateWalletDocument = gql`
   mutation UserGenerateWallet($appEnvId: String!) {
     generated: userGenerateWallet(appEnvId: $appEnvId) {
       ...WalletDetails
+      appEnvs {
+        ...AppEnvDetails
+      }
     }
   }
   ${WalletDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
 `
 
 export function useUserGenerateWalletMutation() {

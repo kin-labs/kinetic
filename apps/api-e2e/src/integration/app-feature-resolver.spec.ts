@@ -283,11 +283,9 @@ describe('App (e2e)', () => {
       let appId: string | undefined
       let appEnvId: string | undefined
       let walletId: string | undefined
-      let walletPublicKey: string | undefined
 
-      it('should add a wallet to an app', async () => {
+      it('should add a wallet to an app Env', async () => {
         const name = uniq('app-')
-        const index = uniqInt()
 
         // Create App - but skip automatic wallet generation
         const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
@@ -295,20 +293,16 @@ describe('App (e2e)', () => {
         })
         appId = createdApp.body.data.created.id
         appEnvId = createdApp.body.data.created.envs[0].id
-
-        // Generate wallet
-        const createdWallet = await runGraphQLQueryAdmin(app, token, UserGenerateWallet, { index })
-        walletId = createdWallet.body.data.generated?.id
-        walletPublicKey = createdWallet.body.data.generated?.publicKey
-
-        await runGraphQLQueryAdmin(app, token, UserAppEnvWalletAdd, { appId, appEnvId, walletId })
+        // Generate wallet and attach it to the App Env
+        await runGraphQLQueryAdmin(app, token, UserGenerateWallet, { appEnvId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
-            const data = res.body.data?.item
-            expect(data.wallets).toBeDefined()
-            expect(data.wallets[0].id).toEqual(walletId)
-            expect(data.wallets[0].publicKey).toEqual(walletPublicKey)
+
+            const data = res.body.data?.generated
+            walletId = res.body.data?.generated?.id
+            expect(data.appEnvs).toBeDefined()
+            expect(data.appEnvs.length).toEqual(1)
           })
       })
 

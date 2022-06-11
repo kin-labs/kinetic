@@ -103,7 +103,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   explorerUrl(tx: AppTransaction) {
-    const { explorer } = tx?.appEnv?.cluster
+    const { explorer } = tx.appEnv.cluster
 
     return explorer.replace('{path}', `/tx/${tx.signature}`)
   }
