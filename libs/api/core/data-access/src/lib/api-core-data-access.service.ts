@@ -186,38 +186,59 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   private async configureDefaultUsers() {
     await this.configureDefaultUser({
       id: 'admin',
-      name: 'Admin',
+      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/aliceal.svg',
+      name: 'Alice',
       email: this.config.adminEmail,
       password: this.config.adminPassword,
       role: UserRole.Admin,
     })
     await this.configureDefaultUser({
-      id: 'user',
-      name: 'User',
-      email: this.config.adminEmail.replace('admin', 'user'),
-      password: this.config.adminPassword.replace('@dmin', '@user'),
+      id: 'bob',
+      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/bob42.svg',
+      name: 'Bob',
+      email: this.config.adminEmail.replace('admin', 'bob'),
+      password: this.config.adminPassword.replace('@dmin', '@bob'),
+      role: UserRole.User,
+    })
+    await this.configureDefaultUser({
+      id: 'charlie',
+      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/charlie42222.svg',
+      name: 'Charlie',
+      email: this.config.adminEmail.replace('admin', 'charlie'),
+      password: this.config.adminPassword.replace('@dmin', '@charlie'),
+      role: UserRole.User,
+    })
+    await this.configureDefaultUser({
+      id: 'dave',
+      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/dave42.svg',
+      name: 'Dave',
+      email: this.config.adminEmail.replace('admin', 'dave'),
+      password: this.config.adminPassword.replace('@dmin', '@dave'),
       role: UserRole.User,
     })
   }
 
   private async configureDefaultUser({
     id,
+    avatarUrl,
     name,
     email,
     password,
     role,
   }: {
     id: string
+    avatarUrl: string
     name: string
     email: string
     password: string
     role: UserRole
   }) {
-    const existing = await this.user.count({ where: { role } })
+    const existing = await this.user.count({ where: { id } })
     if (existing < 1) {
       await this.user.create({
         data: {
           id,
+          avatarUrl,
           name,
           password: hashPassword(password),
           role,
