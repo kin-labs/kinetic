@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Stack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Flex, Heading, Image, Stack, useColorModeValue } from '@chakra-ui/react'
 import { AdminAuthLogoutFn } from '@mogami/admin/auth/data-access'
 import { User } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
@@ -9,11 +9,13 @@ import { AdminUiThemeToggle } from './admin-ui-theme-toggle'
 
 export function AdminUiHeader({
   links,
+  logo,
   logout,
   name,
   user,
 }: {
   links: AdminUiLink[]
+  logo: string
   logout?: AdminAuthLogoutFn
   name: string
   user?: User
@@ -24,9 +26,12 @@ export function AdminUiHeader({
         <Flex alignItems={'center'}>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Box px={4}>
-              <Heading size="md">
-                <RouterLink to="/">{name}</RouterLink>
-              </Heading>
+              <Flex alignItems={'center'}>
+                <Image src={logo} h={8} mr={4} />
+                <Heading size="md">
+                  <RouterLink to="/">{name}</RouterLink>
+                </Heading>
+              </Flex>
             </Box>
             {links?.map((link) => (
               <AdminUiHeaderLink key={link.path} link={link} />

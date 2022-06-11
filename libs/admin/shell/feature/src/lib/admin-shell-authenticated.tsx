@@ -3,7 +3,7 @@ import { AdminUiLayout } from '@mogami/admin/ui/layout'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { copyright, links, name } from './admin-shell-constants'
+import { copyright, links, logo, name } from './admin-shell-constants'
 
 const AdminAppFeature = React.lazy(async () => import('@mogami/admin/app/feature'))
 const AdminHomeFeature = React.lazy(async () => import('@mogami/admin/home/feature'))
@@ -12,7 +12,7 @@ const AdminSystemFeature = React.lazy(async () => import('@mogami/admin/system/f
 export function AdminShellAuthenticated() {
   const { logout, user } = useAdminAuth()
   return (
-    <AdminUiLayout copyright={copyright} name={name} links={links} logout={logout} user={user}>
+    <AdminUiLayout copyright={copyright} name={name} links={links} logo={logo} logout={logout} user={user}>
       <React.Suspense fallback={<AdminUiLoader />}>
         <Switch>
           <Route path="/" exact>
