@@ -31,16 +31,12 @@ import {
   runGraphQLQueryAdmin,
   runLoginQuery,
 } from '../helpers'
-import { uniq, uniqInt } from '../helpers/uniq'
+import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {
   expect(res).toHaveProperty('text')
   const errors = JSON.parse(res.text).errors
   expect(errors[0].message).toEqual('Unauthorized')
-}
-
-function randomAppIndex(): number {
-  return getRandomInt(1_000, 1_000_000)
 }
 
 describe('App (e2e)', () => {
