@@ -331,16 +331,16 @@ type Query {
   adminClusters: [Cluster!]
   adminUser(userId: String!): User
   adminUsers: [User!]
-  appTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
-  appTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
-  appWebhook(appId: String!, appWebhookId: String!): AppWebhook
-  appWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
   clusterStats(clusterId: String!): [ClusterStat!]
   me: User
   uptime: Float!
   userApp(appId: String!): App
   userAppEnv(appEnvId: String!, appId: String!): AppEnv
   userAppRole(appId: String!): AppUserRole
+  userAppTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
+  userAppTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
+  userAppWebhook(appId: String!, appWebhookId: String!): AppWebhook
+  userAppWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
   userApps: [App!]
   wallet(walletId: String!): Wallet
   walletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse

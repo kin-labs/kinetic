@@ -1,7 +1,7 @@
 import { Box, Flex, Stack } from '@chakra-ui/react'
 import { AdminAppUiWebhookDetail } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAppWebhookQuery } from '@mogami/shared/util/admin-sdk'
+import { useUserAppWebhookQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminAppUserFeatureWebhookDetail({
@@ -11,7 +11,7 @@ export default function AdminAppUserFeatureWebhookDetail({
   appId: string
   appWebhookId: string
 }) {
-  const [{ data, fetching }] = useAppWebhookQuery({ variables: { appId: appId!, appWebhookId: appWebhookId! } })
+  const [{ data, fetching }] = useUserAppWebhookQuery({ variables: { appId: appId!, appWebhookId: appWebhookId! } })
 
   if (fetching) {
     return <AdminUiLoader />

@@ -1,13 +1,13 @@
 import { Stack, useToast } from '@chakra-ui/react'
 import { AdminAppUiTransactionFilter, AdminAppUiTransactions } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AppTransactionListInput, useAppTransactionsQuery } from '@mogami/shared/util/admin-sdk'
+import { AppTransactionListInput, useUserAppTransactionsQuery } from '@mogami/shared/util/admin-sdk'
 import React, { useEffect, useState } from 'react'
 
 export function AdminAppUserTransactionsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
   const toast = useToast()
   const [input, setInput] = useState<AppTransactionListInput>({})
-  const [{ data, error, fetching }, refresh] = useAppTransactionsQuery({ variables: { appId, appEnvId, input } })
+  const [{ data, error, fetching }, refresh] = useUserAppTransactionsQuery({ variables: { appId, appEnvId, input } })
 
   if (error) {
     toast({ status: 'error', title: 'Something went wrong', description: `${error}` })

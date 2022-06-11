@@ -6,7 +6,7 @@ import {
   AdminAppUiTransactionTimeline,
 } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AppTransactionStatus, useAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
+import { AppTransactionStatus, useUserAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
 import React, { useEffect } from 'react'
 
 export default function AdminAppUserFeatureTransactionDetail({
@@ -18,7 +18,7 @@ export default function AdminAppUserFeatureTransactionDetail({
   appEnvId: string
   appTransactionId: string
 }) {
-  const [{ data, fetching }, refresh] = useAppTransactionQuery({
+  const [{ data, fetching }, refresh] = useUserAppTransactionQuery({
     variables: { appId: appId, appEnvId, appTransactionId: appTransactionId },
   })
 

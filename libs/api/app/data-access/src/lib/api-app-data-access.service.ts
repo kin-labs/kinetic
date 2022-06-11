@@ -64,40 +64,6 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  async appTransaction(userId: string, appId: string, appEnvId: string, appTransactionId: string) {
-    await this.ensureAppById(userId, appId)
-    return this.data.appTransaction.findFirst({
-      where: { id: appTransactionId, appEnvId },
-      include: { errors: true },
-    })
-  }
-
-  async appTransactions(userId: string, appId: string, appEnvId: string, input: AppTransactionListInput = {}) {
-    await this.ensureAppById(userId, appId)
-    return this.data.appTransaction.findMany({
-      where: { appEnvId, ...input },
-      take: 100,
-      orderBy: { createdAt: 'desc' },
-      include: { errors: true },
-    })
-  }
-
-  async appWebhook(userId: string, appId: string, appWebhookId: string) {
-    await this.ensureAppById(userId, appId)
-    return this.data.appWebhook.findUnique({
-      where: { id: appWebhookId },
-    })
-  }
-
-  async appWebhooks(userId: string, appId: string, appEnvId: string) {
-    await this.ensureAppById(userId, appId)
-    return this.data.appWebhook.findMany({
-      where: { appEnvId },
-      take: 100,
-      orderBy: { updatedAt: 'desc' },
-    })
-  }
-
   async appUserAdd(userId: string, appId: string, input: AppUserAddInput) {
     await this.ensureAppById(userId, appId)
     return this.data.app.update({

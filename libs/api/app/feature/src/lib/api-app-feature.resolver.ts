@@ -7,27 +7,16 @@ import {
   AppUserAddInput,
   AppUserRemoveInput,
   AppUserUpdateRoleInput,
-  AppWebhook,
 } from '@mogami/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
 import { User } from '@mogami/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => App)
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiAppFeatureResolver {
   constructor(private readonly service: ApiAppDataAccessService) {}
-
-  @Query(() => AppWebhook, { nullable: true })
-  appWebhook(@CtxUser() user: User, @Args('appId') appId: string, @Args('appWebhookId') appWebhookId: string) {
-    return this.service.appWebhook(user.id, appId, appWebhookId)
-  }
-
-  @Query(() => [AppWebhook], { nullable: true })
-  appWebhooks(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
-    return this.service.appWebhooks(user.id, appId, appEnvId)
-  }
 
   @Mutation(() => App, { nullable: true })
   appUserAdd(@CtxUser() user: User, @Args('appId') appId: string, @Args('input') input: AppUserAddInput) {

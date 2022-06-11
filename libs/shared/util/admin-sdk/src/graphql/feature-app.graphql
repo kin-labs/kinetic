@@ -214,26 +214,26 @@ query AdminApp($appId: String!) {
   }
 }
 
-query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
-  item: appTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
+query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
+  item: userAppTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
     ...AppTransactionDetails
   }
 }
 
-query AppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
-  items: appTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
+query UserAppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
+  items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
     ...AppTransactionDetails
   }
 }
 
-query AppWebhook($appId: String!, $appWebhookId: String!) {
-  item: appWebhook(appId: $appId, appWebhookId: $appWebhookId) {
+query UserAppWebhook($appId: String!, $appWebhookId: String!) {
+  item: userAppWebhook(appId: $appId, appWebhookId: $appWebhookId) {
     ...AppWebhookDetails
   }
 }
 
-query AppWebhooks($appId: String!, $appEnvId: String!) {
-  items: appWebhooks(appId: $appId, appEnvId: $appEnvId) {
+query UserAppWebhooks($appId: String!, $appEnvId: String!) {
+  items: userAppWebhooks(appId: $appId, appEnvId: $appEnvId) {
     ...AppWebhookDetails
   }
 }

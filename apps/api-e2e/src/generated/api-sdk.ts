@@ -437,16 +437,16 @@ export type Query = {
   adminClusters?: Maybe<Array<Cluster>>
   adminUser?: Maybe<User>
   adminUsers?: Maybe<Array<User>>
-  appTransaction?: Maybe<AppTransaction>
-  appTransactions?: Maybe<Array<AppTransaction>>
-  appWebhook?: Maybe<AppWebhook>
-  appWebhooks?: Maybe<Array<AppWebhook>>
   clusterStats?: Maybe<Array<ClusterStat>>
   me?: Maybe<User>
   uptime: Scalars['Float']
   userApp?: Maybe<App>
   userAppEnv?: Maybe<AppEnv>
   userAppRole?: Maybe<AppUserRole>
+  userAppTransaction?: Maybe<AppTransaction>
+  userAppTransactions?: Maybe<Array<AppTransaction>>
+  userAppWebhook?: Maybe<AppWebhook>
+  userAppWebhooks?: Maybe<Array<AppWebhook>>
   userApps?: Maybe<Array<App>>
   wallet?: Maybe<Wallet>
   walletAirdrop?: Maybe<WalletAirdropResponse>
@@ -471,28 +471,6 @@ export type QueryAdminUserArgs = {
   userId: Scalars['String']
 }
 
-export type QueryAppTransactionArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  appTransactionId: Scalars['String']
-}
-
-export type QueryAppTransactionsArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  input?: InputMaybe<AppTransactionListInput>
-}
-
-export type QueryAppWebhookArgs = {
-  appId: Scalars['String']
-  appWebhookId: Scalars['String']
-}
-
-export type QueryAppWebhooksArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-}
-
 export type QueryClusterStatsArgs = {
   clusterId: Scalars['String']
 }
@@ -507,6 +485,28 @@ export type QueryUserAppEnvArgs = {
 }
 
 export type QueryUserAppRoleArgs = {
+  appId: Scalars['String']
+}
+
+export type QueryUserAppTransactionArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  appTransactionId: Scalars['String']
+}
+
+export type QueryUserAppTransactionsArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  input?: InputMaybe<AppTransactionListInput>
+}
+
+export type QueryUserAppWebhookArgs = {
+  appId: Scalars['String']
+  appWebhookId: Scalars['String']
+}
+
+export type QueryUserAppWebhooksArgs = {
+  appEnvId: Scalars['String']
   appId: Scalars['String']
 }
 
@@ -982,33 +982,33 @@ export const AdminApp = gql`
   ${WalletDetails}
   ${AppUserDetails}
 `
-export const AppTransaction = gql`
-  query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
-    item: appTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
+export const UserAppTransaction = gql`
+  query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
+    item: userAppTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
       ...AppTransactionDetails
     }
   }
   ${AppTransactionDetails}
 `
-export const AppTransactions = gql`
-  query AppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
-    items: appTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
+export const UserAppTransactions = gql`
+  query UserAppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
+    items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
       ...AppTransactionDetails
     }
   }
   ${AppTransactionDetails}
 `
-export const AppWebhook = gql`
-  query AppWebhook($appId: String!, $appWebhookId: String!) {
-    item: appWebhook(appId: $appId, appWebhookId: $appWebhookId) {
+export const UserAppWebhook = gql`
+  query UserAppWebhook($appId: String!, $appWebhookId: String!) {
+    item: userAppWebhook(appId: $appId, appWebhookId: $appWebhookId) {
       ...AppWebhookDetails
     }
   }
   ${AppWebhookDetails}
 `
-export const AppWebhooks = gql`
-  query AppWebhooks($appId: String!, $appEnvId: String!) {
-    items: appWebhooks(appId: $appId, appEnvId: $appEnvId) {
+export const UserAppWebhooks = gql`
+  query UserAppWebhooks($appId: String!, $appEnvId: String!) {
+    items: userAppWebhooks(appId: $appId, appEnvId: $appEnvId) {
       ...AppWebhookDetails
     }
   }
@@ -2115,13 +2115,13 @@ export type AdminAppQuery = {
   } | null
 }
 
-export type AppTransactionQueryVariables = Exact<{
+export type UserAppTransactionQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
   appTransactionId: Scalars['String']
 }>
 
-export type AppTransactionQuery = {
+export type UserAppTransactionQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'AppTransaction'
@@ -2161,13 +2161,13 @@ export type AppTransactionQuery = {
   } | null
 }
 
-export type AppTransactionsQueryVariables = Exact<{
+export type UserAppTransactionsQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
   input?: InputMaybe<AppTransactionListInput>
 }>
 
-export type AppTransactionsQuery = {
+export type UserAppTransactionsQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'AppTransaction'
@@ -2207,12 +2207,12 @@ export type AppTransactionsQuery = {
   }> | null
 }
 
-export type AppWebhookQueryVariables = Exact<{
+export type UserAppWebhookQueryVariables = Exact<{
   appId: Scalars['String']
   appWebhookId: Scalars['String']
 }>
 
-export type AppWebhookQuery = {
+export type UserAppWebhookQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'AppWebhook'
@@ -2229,12 +2229,12 @@ export type AppWebhookQuery = {
   } | null
 }
 
-export type AppWebhooksQueryVariables = Exact<{
+export type UserAppWebhooksQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
 }>
 
-export type AppWebhooksQuery = {
+export type UserAppWebhooksQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'AppWebhook'

@@ -439,16 +439,16 @@ export type Query = {
   adminClusters?: Maybe<Array<Cluster>>
   adminUser?: Maybe<User>
   adminUsers?: Maybe<Array<User>>
-  appTransaction?: Maybe<AppTransaction>
-  appTransactions?: Maybe<Array<AppTransaction>>
-  appWebhook?: Maybe<AppWebhook>
-  appWebhooks?: Maybe<Array<AppWebhook>>
   clusterStats?: Maybe<Array<ClusterStat>>
   me?: Maybe<User>
   uptime: Scalars['Float']
   userApp?: Maybe<App>
   userAppEnv?: Maybe<AppEnv>
   userAppRole?: Maybe<AppUserRole>
+  userAppTransaction?: Maybe<AppTransaction>
+  userAppTransactions?: Maybe<Array<AppTransaction>>
+  userAppWebhook?: Maybe<AppWebhook>
+  userAppWebhooks?: Maybe<Array<AppWebhook>>
   userApps?: Maybe<Array<App>>
   wallet?: Maybe<Wallet>
   walletAirdrop?: Maybe<WalletAirdropResponse>
@@ -473,28 +473,6 @@ export type QueryAdminUserArgs = {
   userId: Scalars['String']
 }
 
-export type QueryAppTransactionArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  appTransactionId: Scalars['String']
-}
-
-export type QueryAppTransactionsArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  input?: InputMaybe<AppTransactionListInput>
-}
-
-export type QueryAppWebhookArgs = {
-  appId: Scalars['String']
-  appWebhookId: Scalars['String']
-}
-
-export type QueryAppWebhooksArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-}
-
 export type QueryClusterStatsArgs = {
   clusterId: Scalars['String']
 }
@@ -509,6 +487,28 @@ export type QueryUserAppEnvArgs = {
 }
 
 export type QueryUserAppRoleArgs = {
+  appId: Scalars['String']
+}
+
+export type QueryUserAppTransactionArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  appTransactionId: Scalars['String']
+}
+
+export type QueryUserAppTransactionsArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  input?: InputMaybe<AppTransactionListInput>
+}
+
+export type QueryUserAppWebhookArgs = {
+  appId: Scalars['String']
+  appWebhookId: Scalars['String']
+}
+
+export type QueryUserAppWebhooksArgs = {
+  appEnvId: Scalars['String']
   appId: Scalars['String']
 }
 
@@ -1435,13 +1435,13 @@ export type AdminAppQuery = {
   } | null
 }
 
-export type AppTransactionQueryVariables = Exact<{
+export type UserAppTransactionQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
   appTransactionId: Scalars['String']
 }>
 
-export type AppTransactionQuery = {
+export type UserAppTransactionQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'AppTransaction'
@@ -1481,13 +1481,13 @@ export type AppTransactionQuery = {
   } | null
 }
 
-export type AppTransactionsQueryVariables = Exact<{
+export type UserAppTransactionsQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
   input?: InputMaybe<AppTransactionListInput>
 }>
 
-export type AppTransactionsQuery = {
+export type UserAppTransactionsQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'AppTransaction'
@@ -1527,12 +1527,12 @@ export type AppTransactionsQuery = {
   }> | null
 }
 
-export type AppWebhookQueryVariables = Exact<{
+export type UserAppWebhookQueryVariables = Exact<{
   appId: Scalars['String']
   appWebhookId: Scalars['String']
 }>
 
-export type AppWebhookQuery = {
+export type UserAppWebhookQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'AppWebhook'
@@ -1549,12 +1549,12 @@ export type AppWebhookQuery = {
   } | null
 }
 
-export type AppWebhooksQueryVariables = Exact<{
+export type UserAppWebhooksQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
 }>
 
-export type AppWebhooksQuery = {
+export type UserAppWebhooksQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'AppWebhook'
@@ -2936,53 +2936,57 @@ export const AdminAppDocument = gql`
 export function useAdminAppQuery(options: Omit<Urql.UseQueryArgs<AdminAppQueryVariables>, 'query'>) {
   return Urql.useQuery<AdminAppQuery>({ query: AdminAppDocument, ...options })
 }
-export const AppTransactionDocument = gql`
-  query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
-    item: appTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
+export const UserAppTransactionDocument = gql`
+  query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
+    item: userAppTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
       ...AppTransactionDetails
     }
   }
   ${AppTransactionDetailsFragmentDoc}
 `
 
-export function useAppTransactionQuery(options: Omit<Urql.UseQueryArgs<AppTransactionQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppTransactionQuery>({ query: AppTransactionDocument, ...options })
+export function useUserAppTransactionQuery(
+  options: Omit<Urql.UseQueryArgs<UserAppTransactionQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<UserAppTransactionQuery>({ query: UserAppTransactionDocument, ...options })
 }
-export const AppTransactionsDocument = gql`
-  query AppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
-    items: appTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
+export const UserAppTransactionsDocument = gql`
+  query UserAppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
+    items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
       ...AppTransactionDetails
     }
   }
   ${AppTransactionDetailsFragmentDoc}
 `
 
-export function useAppTransactionsQuery(options: Omit<Urql.UseQueryArgs<AppTransactionsQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppTransactionsQuery>({ query: AppTransactionsDocument, ...options })
+export function useUserAppTransactionsQuery(
+  options: Omit<Urql.UseQueryArgs<UserAppTransactionsQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<UserAppTransactionsQuery>({ query: UserAppTransactionsDocument, ...options })
 }
-export const AppWebhookDocument = gql`
-  query AppWebhook($appId: String!, $appWebhookId: String!) {
-    item: appWebhook(appId: $appId, appWebhookId: $appWebhookId) {
+export const UserAppWebhookDocument = gql`
+  query UserAppWebhook($appId: String!, $appWebhookId: String!) {
+    item: userAppWebhook(appId: $appId, appWebhookId: $appWebhookId) {
       ...AppWebhookDetails
     }
   }
   ${AppWebhookDetailsFragmentDoc}
 `
 
-export function useAppWebhookQuery(options: Omit<Urql.UseQueryArgs<AppWebhookQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppWebhookQuery>({ query: AppWebhookDocument, ...options })
+export function useUserAppWebhookQuery(options: Omit<Urql.UseQueryArgs<UserAppWebhookQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserAppWebhookQuery>({ query: UserAppWebhookDocument, ...options })
 }
-export const AppWebhooksDocument = gql`
-  query AppWebhooks($appId: String!, $appEnvId: String!) {
-    items: appWebhooks(appId: $appId, appEnvId: $appEnvId) {
+export const UserAppWebhooksDocument = gql`
+  query UserAppWebhooks($appId: String!, $appEnvId: String!) {
+    items: userAppWebhooks(appId: $appId, appEnvId: $appEnvId) {
       ...AppWebhookDetails
     }
   }
   ${AppWebhookDetailsFragmentDoc}
 `
 
-export function useAppWebhooksQuery(options: Omit<Urql.UseQueryArgs<AppWebhooksQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppWebhooksQuery>({ query: AppWebhooksDocument, ...options })
+export function useUserAppWebhooksQuery(options: Omit<Urql.UseQueryArgs<UserAppWebhooksQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserAppWebhooksQuery>({ query: UserAppWebhooksDocument, ...options })
 }
 export const AdminAppsDocument = gql`
   query AdminApps {
