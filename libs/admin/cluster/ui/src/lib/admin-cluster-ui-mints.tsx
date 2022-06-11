@@ -1,6 +1,7 @@
-import { Alert, Avatar, Box, Code, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Alert, Box, SimpleGrid } from '@chakra-ui/react'
 import { Mint } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
+import { AdminClusterUiMintDetails } from './admin-cluster-ui-mint-details'
 
 export interface AdminClusterUiMintsProps {
   clusterId: string
@@ -12,33 +13,12 @@ export function AdminClusterUiMints({ mints }: AdminClusterUiMintsProps) {
     return <Alert>No mints found.</Alert>
   }
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" m="10px auto">
-      <TableContainer>
-        <Table variant="simple" colorScheme="teal">
-          <Thead>
-            <Tr>
-              <Th />
-              <Th>Name</Th>
-              <Th>Symbol</Th>
-              <Th>Type</Th>
-              <Th isNumeric>Decimals</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {mints?.map((mint) => (
-              <Tr key={mint?.id}>
-                <Td width={10}>{mint?.logoUrl && <Avatar src={mint.logoUrl} />}</Td>
-                <Td>{mint?.name}</Td>
-                <Td>{mint?.symbol}</Td>
-                <Td>
-                  <Code>{mint?.type}</Code>
-                </Td>
-                <Td isNumeric>{mint?.decimals}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </Box>
+    <SimpleGrid columns={2} gap={6}>
+      {mints?.map((mint) => (
+        <Box p={6} borderWidth="1px" borderRadius="lg" overflow="hidden">
+          <AdminClusterUiMintDetails key={mint?.id} mint={mint} />
+        </Box>
+      ))}
+    </SimpleGrid>
   )
 }

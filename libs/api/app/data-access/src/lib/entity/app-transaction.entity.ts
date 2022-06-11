@@ -1,6 +1,7 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger'
 import { GraphQLJSON } from 'graphql-type-json'
+import { AppEnv } from './app-env.entity'
 import { AppTransactionError } from './app-transaction-error.entity'
 import { AppTransactionStatus } from './app-transaction-status.enum'
 
@@ -26,6 +27,9 @@ export class AppTransaction {
   })
   @Field(() => [AppTransactionError], { nullable: true })
   errors?: AppTransactionError[]
+  @ApiProperty()
+  @Field({ nullable: true })
+  explorerUrl?: string
   @ApiProperty()
   @Field({ nullable: true })
   feePayer?: string
@@ -72,4 +76,6 @@ export class AppTransaction {
   @ApiProperty()
   @Field({ nullable: true })
   webhookVerifyEnd?: Date
+  @HideField()
+  appEnv?: AppEnv
 }

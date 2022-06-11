@@ -87,6 +87,37 @@ export class ApiAppUserFeatureResolver {
   }
 
   @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvMintDisable(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args('mintId') mintId: string,
+  ) {
+    return this.service.userAppEnvMintDisable(user.id, appId, appEnvId, mintId)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvMintEnable(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args('mintId') mintId: string,
+  ) {
+    return this.service.userAppEnvMintEnable(user.id, appId, appEnvId, mintId)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvMintSetWallet(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args('mintId') mintId: string,
+    @Args('walletId') walletId: string,
+  ) {
+    return this.service.userAppEnvMintSetWallet(user.id, appId, appEnvId, mintId, walletId)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
   userAppEnvWalletAdd(
     @CtxUser() user: User,
     @Args('appId') appId: string,

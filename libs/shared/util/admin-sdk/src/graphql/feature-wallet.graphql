@@ -53,8 +53,14 @@ query AdminWallets {
   }
 }
 
-mutation UserGenerateWallet($index: Int!) {
-  generated: userGenerateWallet(index: $index) {
+mutation UserGenerateWallet($appEnvId: String!) {
+  generated: userGenerateWallet(appEnvId: $appEnvId) {
+    ...WalletDetails
+  }
+}
+
+mutation UserImportWallet($appEnvId: String!, $secretKey: String!) {
+  generated: userImportWallet(appEnvId: $appEnvId, secretKey: $secretKey) {
     ...WalletDetails
   }
 }

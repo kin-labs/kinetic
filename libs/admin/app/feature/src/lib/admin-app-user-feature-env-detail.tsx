@@ -9,6 +9,7 @@ import { AdminAppUserAppEnvDetailOverview } from './admin-app-user-app-env-detai
 import { AdminAppUserAppEnvDetailSettings } from './admin-app-user-app-env-detail-settings'
 import { AdminAppUserAppEnvDetailTransaction } from './admin-app-user-app-env-detail-transaction'
 import { AdminAppUserAppEnvDetailTransactions } from './admin-app-user-app-env-detail-transactions'
+import { AdminAppUserAppEnvDetailWallet } from './admin-app-user-app-env-detail-wallet'
 import { AdminAppUserAppEnvDetailWallets } from './admin-app-user-app-env-detail-wallets'
 import { AdminAppUserAppEnvDetailWebhook } from './admin-app-user-app-env-detail-webhook'
 import { AdminAppUserAppEnvDetailWebhooks } from './admin-app-user-app-env-detail-webhooks'
@@ -42,6 +43,7 @@ export default function AdminAppUserFeatureEnvDetail() {
               render={() => <AdminAppUserAppEnvDetailTransaction />}
             />
             <Route path={`${path}/transactions`} render={() => <AdminAppUserAppEnvDetailTransactions />} />
+            <Route path={`${path}/wallets/:walletId`} render={() => <AdminAppUserAppEnvDetailWallet />} />
             <Route path={`${path}/wallets`} render={() => <AdminAppUserAppEnvDetailWallets />} />
             <Route path={`${path}/webhooks/:appWebhookId`} render={() => <AdminAppUserAppEnvDetailWebhook />} />
             <Route path={`${path}/webhooks`} render={() => <AdminAppUserAppEnvDetailWebhooks />} />

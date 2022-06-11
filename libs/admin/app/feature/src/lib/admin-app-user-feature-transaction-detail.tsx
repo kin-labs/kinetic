@@ -1,4 +1,5 @@
-import { Box, Flex, Stack } from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { Box, Flex, Link, Stack, Text } from '@chakra-ui/react'
 import {
   AdminAppUiTransactionDetail,
   AdminAppUiTransactionErrors,
@@ -39,7 +40,14 @@ export default function AdminAppUserFeatureTransactionDetail({
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Flex justifyContent="space-between" alignItems="center">
           <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1} flex={'auto'}>
-            Transaction {data?.item?.id}
+            <Flex alignItems="center">
+              <Text mr={2}>Transaction {data?.item?.id}</Text>
+              {data?.item?.explorerUrl && (
+                <Link target="_blank" href={data?.item?.explorerUrl}>
+                  <ExternalLinkIcon />
+                </Link>
+              )}
+            </Flex>
           </Box>
           <Box justifyContent={'end'} mt="1" fontWeight="semibold" as="h4" lineHeight="tight">
             <AdminAppUiTransactionStatus status={data?.item?.status} />

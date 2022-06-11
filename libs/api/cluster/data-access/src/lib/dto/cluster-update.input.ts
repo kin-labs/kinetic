@@ -8,6 +8,8 @@ export class ClusterUpdateInput {
   @Field({ nullable: true })
   endpoint?: string
   @Field({ nullable: true })
+  explorer?: string
+  @Field({ nullable: true })
   name?: string
   @Field(() => ClusterStatus, { nullable: true })
   status?: ClusterStatus

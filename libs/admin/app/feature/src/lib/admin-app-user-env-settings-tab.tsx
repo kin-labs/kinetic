@@ -1,7 +1,14 @@
-import { Box, useToast } from '@chakra-ui/react'
-import { AdminAppUiAppEnvWebhookForm } from '@mogami/admin/app/ui'
+import { Box, Stack, useToast } from '@chakra-ui/react'
+import { AdminAppUiAppEnvMintSettings, AdminAppUiAppEnvWebhookForm } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AppEnvUpdateInput, useUserUpdateAppEnvMutation, useUserAppEnvQuery } from '@mogami/shared/util/admin-sdk'
+import {
+  AppEnvUpdateInput,
+  useUserAppEnvMintDisableMutation,
+  useUserAppEnvMintEnableMutation,
+  useUserAppEnvMintSetWalletMutation,
+  useUserAppEnvQuery,
+  useUserUpdateAppEnvMutation,
+} from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
@@ -9,7 +16,9 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
   const [{ data, fetching }] = useUserAppEnvQuery({ variables: { appId, appEnvId: appEnvId } })
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [, updateAppEnvMutation] = useUserUpdateAppEnvMutation()
-
+  const [, disableMintMutation] = useUserAppEnvMintDisableMutation()
+  const [, enableMintMutation] = useUserAppEnvMintEnableMutation()
+  const [, setWalletMutation] = useUserAppEnvMintSetWalletMutation()
   const onSubmit = async (input: AppEnvUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await updateAppEnvMutation({
@@ -40,18 +49,54 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
     return res?.data?.updated
   }
 
+  const disableMint = (mintId: string) => {
+    disableMintMutation({
+      appId,
+      appEnvId,
+      mintId,
+    }).then(() => {
+      toast({ status: 'success', title: 'Mint disabled' })
+    })
+  }
+  const enableMint = (mintId: string) => {
+    enableMintMutation({
+      appId,
+      appEnvId,
+      mintId,
+    }).then(() => {
+      toast({ status: 'success', title: 'Mint enabled' })
+    })
+  }
+  const selectWallet = (mintId: string, walletId: string) => {
+    setWalletMutation({
+      appId,
+      appEnvId,
+      mintId,
+      walletId,
+    }).then(() => {
+      toast({ status: 'success', title: 'Wallet selected' })
+    })
+  }
   if (fetching) {
     return <AdminUiLoader />
   }
   return (
-    <div>
+    <Stack direction="column" spacing={6}>
       {data?.item ? (
-        <AdminAppUiAppEnvWebhookForm appEnv={data.item} onSubmit={onSubmit} />
+        <Stack direction="column" spacing={6} alignItems={'normal'}>
+          <AdminAppUiAppEnvMintSettings
+            appEnv={data.item}
+            disableMint={disableMint}
+            enableMint={enableMint}
+            selectWallet={selectWallet}
+          />
+          <AdminAppUiAppEnvWebhookForm appEnv={data.item} onSubmit={onSubmit} />
+        </Stack>
       ) : (
         <Box as="pre" p="6" borderWidth="1px" borderRadius="lg" overflow="hidden" fontSize="xs">
-          {JSON.stringify(data, null, 2)}
+          {JSON.stringify(data?.item?.mints, null, 2)}
         </Box>
       )}
-    </div>
+    </Stack>
   )
 }

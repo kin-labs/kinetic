@@ -5,6 +5,11 @@ import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 export class ApiAppTransactionFeatureResolver {
   constructor(private readonly service: ApiAppDataAccessService) {}
 
+  @ResolveField(() => String, { nullable: true })
+  explorerUrl(@Parent() tx: AppTransaction) {
+    return this.service.explorerUrl(tx)
+  }
+
   @ResolveField(() => Int, { nullable: true })
   processingDuration(@Parent() tx: AppTransaction) {
     return this.service.processingDuration(tx)

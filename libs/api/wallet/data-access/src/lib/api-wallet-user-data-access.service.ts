@@ -42,11 +42,25 @@ export class ApiWalletUserDataAccessService {
     return this.data.wallet.delete({ where: { id: walletId } })
   }
 
-  async userGenerateWallet(userId: string, index: number) {
-    await this.data.ensureAdminUser(userId)
-    const { publicKey, secretKey } = this.getAppKeypair(index)
+  async userGenerateWallet(userId: string, appEnvId: string) {
+    const app = await this.data.appEnv.findUnique({ where: { id: appEnvId } }).app()
+    await this.data.ensureAppOwner(userId, app.id)
+    const { publicKey, secretKey } = Keypair.generate()
 
-    return this.data.wallet.create({ data: { secretKey, publicKey } })
+    return this.data.wallet.create({ data: { secretKey, publicKey, appEnvs: { connect: { id: appEnvId } } } })
+  }
+
+  async userImportWallet(userId: string, appEnvId: string, secret: string) {
+    const app = await this.data.appEnv.findUnique({ where: { id: appEnvId } }).app()
+    await this.data.ensureAppOwner(userId, app.id)
+
+    try {
+      const { publicKey, secretKey } = Keypair.fromByteArray(JSON.parse(secret))
+
+      return this.data.wallet.create({ data: { secretKey, publicKey, appEnvs: { connect: { id: appEnvId } } } })
+    } catch (e) {
+      throw new BadRequestException(`Error importing wallet`)
+    }
   }
 
   async userWallet(userId: string, walletId: string) {
@@ -102,16 +116,6 @@ export class ApiWalletUserDataAccessService {
       throw new NotFoundException(`Wallet with id ${walletId} does not exist.`)
     }
     return wallet
-  }
-
-  private getAppKeypair(index: number): Keypair {
-    const envVar = process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]
-    if (envVar) {
-      this.logger.verbose(`getAppKeypair app ${index}: read from env var`)
-      return Keypair.fromByteArray(JSON.parse(envVar))
-    }
-    this.logger.verbose(`getAppKeypair app ${index}: generated new keypair`)
-    return Keypair.generate()
   }
 
   private storeWalletBalance(appEnvId: string, walletId: string, balance: number, change: number) {

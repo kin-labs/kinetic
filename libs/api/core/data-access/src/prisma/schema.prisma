@@ -73,12 +73,15 @@ model AppMint {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  mint      Mint?    @relation(fields: [mintId], references: [id])
-  mintId    String?
+  order     Int      @default(0)
   appEnv    AppEnv?  @relation(fields: [appEnvId], references: [id])
   appEnvId  String?
+  mint      Mint?    @relation(fields: [mintId], references: [id])
+  mintId    String?
   wallet    Wallet?  @relation(fields: [walletId], references: [id])
   walletId  String?
+
+  @@unique([order, appEnvId])
 }
 
 model AppTransaction {
@@ -191,6 +194,7 @@ model Cluster {
   updatedAt   DateTime      @default(now()) @updatedAt
   enableStats Boolean       @default(false)
   endpoint    String
+  explorer    String
   envs        AppEnv[]
   mints       Mint[]
   name        String
@@ -234,15 +238,19 @@ model Mint {
   appMints         AppMint[]
   coingeckoId      String?
   decimals         Int
+  default          Boolean   @default(false)
+  enabled          Boolean   @default(true)
   logoUrl          String?
   name             String
+  order            Int       @default(0)
   symbol           String
   type             MintType
   cluster          Cluster   @relation(fields: [clusterId], references: [id])
   clusterId        String
 
   @@unique([address, clusterId])
-  @@unique([address, symbol])
+  @@unique([address, clusterId, symbol])
+  @@unique([order, clusterId])
 }
 
 enum MintType {

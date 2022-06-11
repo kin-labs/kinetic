@@ -70,6 +70,7 @@ export type AppMint = {
   createdAt: Scalars['DateTime']
   id: Scalars['String']
   mint?: Maybe<Mint>
+  order?: Maybe<Scalars['Int']>
   updatedAt: Scalars['DateTime']
   wallet?: Maybe<Wallet>
 }
@@ -80,6 +81,7 @@ export type AppTransaction = {
   createdAt?: Maybe<Scalars['DateTime']>
   destination?: Maybe<Scalars['String']>
   errors?: Maybe<Array<AppTransactionError>>
+  explorerUrl?: Maybe<Scalars['String']>
   feePayer?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['String']>
   mint?: Maybe<Scalars['String']>
@@ -205,6 +207,7 @@ export type Cluster = {
   createdAt?: Maybe<Scalars['DateTime']>
   enableStats?: Maybe<Scalars['Boolean']>
   endpoint?: Maybe<Scalars['String']>
+  explorer?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['String']>
   mints?: Maybe<Array<Mint>>
   name?: Maybe<Scalars['String']>
@@ -215,6 +218,7 @@ export type Cluster = {
 
 export type ClusterCreateInput = {
   endpoint: Scalars['String']
+  explorer?: InputMaybe<Scalars['String']>
   name: Scalars['String']
   type: ClusterType
 }
@@ -283,6 +287,7 @@ export enum ClusterType {
 export type ClusterUpdateInput = {
   enableStats?: InputMaybe<Scalars['Boolean']>
   endpoint?: InputMaybe<Scalars['String']>
+  explorer?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
   status?: InputMaybe<ClusterStatus>
 }
@@ -298,9 +303,12 @@ export type Mint = {
   coingeckoId?: Maybe<Scalars['String']>
   createdAt?: Maybe<Scalars['DateTime']>
   decimals?: Maybe<Scalars['Int']>
+  default?: Maybe<Scalars['Boolean']>
+  enabled?: Maybe<Scalars['Boolean']>
   id?: Maybe<Scalars['String']>
   logoUrl?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+  order?: Maybe<Scalars['Int']>
   symbol?: Maybe<Scalars['String']>
   type?: Maybe<MintType>
   updatedAt?: Maybe<Scalars['DateTime']>
@@ -331,6 +339,9 @@ export type Mutation = {
   adminUpdateUser?: Maybe<User>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
+  userAppEnvMintDisable?: Maybe<AppEnv>
+  userAppEnvMintEnable?: Maybe<AppEnv>
+  userAppEnvMintSetWallet?: Maybe<AppEnv>
   userAppEnvWalletAdd?: Maybe<AppEnv>
   userAppEnvWalletRemove?: Maybe<AppEnv>
   userAppUserAdd?: Maybe<App>
@@ -338,6 +349,7 @@ export type Mutation = {
   userAppUserUpdateRole?: Maybe<App>
   userDeleteWallet?: Maybe<Wallet>
   userGenerateWallet?: Maybe<Wallet>
+  userImportWallet?: Maybe<Wallet>
   userUpdateApp?: Maybe<App>
   userUpdateAppEnv?: Maybe<AppEnv>
 }
@@ -388,6 +400,25 @@ export type MutationLoginArgs = {
   input: LoginInput
 }
 
+export type MutationUserAppEnvMintDisableArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  mintId: Scalars['String']
+}
+
+export type MutationUserAppEnvMintEnableArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  mintId: Scalars['String']
+}
+
+export type MutationUserAppEnvMintSetWalletArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  mintId: Scalars['String']
+  walletId: Scalars['String']
+}
+
 export type MutationUserAppEnvWalletAddArgs = {
   appEnvId: Scalars['String']
   appId: Scalars['String']
@@ -420,7 +451,12 @@ export type MutationUserDeleteWalletArgs = {
 }
 
 export type MutationUserGenerateWalletArgs = {
-  index: Scalars['Int']
+  appEnvId: Scalars['String']
+}
+
+export type MutationUserImportWalletArgs = {
+  appEnvId: Scalars['String']
+  secretKey: Scalars['String']
 }
 
 export type MutationUserUpdateAppArgs = {
@@ -622,6 +658,7 @@ export const ClusterDetails = gql`
     updatedAt
     enableStats
     endpoint
+    explorer
     name
     status
     type
@@ -635,8 +672,11 @@ export const MintDetails = gql`
     address
     coingeckoId
     decimals
+    default
+    enabled
     logoUrl
     name
+    order
     symbol
     type
   }
@@ -654,6 +694,7 @@ export const AppMintDetails = gql`
     id
     createdAt
     updatedAt
+    order
     mint {
       ...MintDetails
     }
@@ -679,6 +720,9 @@ export const AppEnvDetails = gql`
     }
     cluster {
       ...ClusterDetails
+      mints {
+        ...MintDetails
+      }
     }
     mints {
       ...AppMintDetails
@@ -692,6 +736,7 @@ export const AppEnvDetails = gql`
     webhookVerifyUrl
   }
   ${ClusterDetails}
+  ${MintDetails}
   ${AppMintDetails}
 `
 export const AppTransactionErrorDetails = gql`
@@ -712,6 +757,7 @@ export const AppTransactionDetails = gql`
     errors {
       ...AppTransactionErrorDetails
     }
+    explorerUrl
     feePayer
     mint
     processingDuration
@@ -990,6 +1036,30 @@ export const UserAppUserUpdateRole = gql`
   }
   ${AppDetails}
   ${AppUserDetails}
+`
+export const UserAppEnvMintDisable = gql`
+  mutation UserAppEnvMintDisable($appId: String!, $appEnvId: String!, $mintId: String!) {
+    item: userAppEnvMintDisable(appId: $appId, appEnvId: $appEnvId, mintId: $mintId) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetails}
+`
+export const UserAppEnvMintEnable = gql`
+  mutation UserAppEnvMintEnable($appId: String!, $appEnvId: String!, $mintId: String!) {
+    item: userAppEnvMintEnable(appId: $appId, appEnvId: $appEnvId, mintId: $mintId) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetails}
+`
+export const UserAppEnvMintSetWallet = gql`
+  mutation userAppEnvMintSetWallet($appId: String!, $appEnvId: String!, $mintId: String!, $walletId: String!) {
+    item: userAppEnvMintSetWallet(appId: $appId, appEnvId: $appEnvId, mintId: $mintId, walletId: $walletId) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetails}
 `
 export const UserAppEnvWalletAdd = gql`
   mutation UserAppEnvWalletAdd($appId: String!, $appEnvId: String!, $walletId: String!) {
@@ -1290,8 +1360,16 @@ export const AdminWallets = gql`
   ${AppEnvDetails}
 `
 export const UserGenerateWallet = gql`
-  mutation UserGenerateWallet($index: Int!) {
-    generated: userGenerateWallet(index: $index) {
+  mutation UserGenerateWallet($appEnvId: String!) {
+    generated: userGenerateWallet(appEnvId: $appEnvId) {
+      ...WalletDetails
+    }
+  }
+  ${WalletDetails}
+`
+export const UserImportWallet = gql`
+  mutation UserImportWallet($appEnvId: String!, $secretKey: String!) {
+    generated: userImportWallet(appEnvId: $appEnvId, secretKey: $secretKey) {
       ...WalletDetails
     }
   }
@@ -1393,15 +1471,33 @@ export type AdminCreateAppMutation = {
         updatedAt?: any | null
         enableStats?: boolean | null
         endpoint?: string | null
+        explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
         type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
       } | null
       mints?: Array<{
         __typename?: 'AppMint'
         id: string
         createdAt: any
         updatedAt: any
+        order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
@@ -1410,8 +1506,11 @@ export type AdminCreateAppMutation = {
           address?: string | null
           coingeckoId?: string | null
           decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
           logoUrl?: string | null
           name?: string | null
+          order?: number | null
           symbol?: string | null
           type?: MintType | null
         } | null
@@ -1508,15 +1607,33 @@ export type AdminAppsQuery = {
         updatedAt?: any | null
         enableStats?: boolean | null
         endpoint?: string | null
+        explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
         type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
       } | null
       mints?: Array<{
         __typename?: 'AppMint'
         id: string
         createdAt: any
         updatedAt: any
+        order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
@@ -1525,8 +1642,11 @@ export type AdminAppsQuery = {
           address?: string | null
           coingeckoId?: string | null
           decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
           logoUrl?: string | null
           name?: string | null
+          order?: number | null
           symbol?: string | null
           type?: MintType | null
         } | null
@@ -1590,15 +1710,33 @@ export type AdminAppQuery = {
         updatedAt?: any | null
         enableStats?: boolean | null
         endpoint?: string | null
+        explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
         type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
       } | null
       mints?: Array<{
         __typename?: 'AppMint'
         id: string
         createdAt: any
         updatedAt: any
+        order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
@@ -1607,8 +1745,11 @@ export type AdminAppQuery = {
           address?: string | null
           coingeckoId?: string | null
           decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
           logoUrl?: string | null
           name?: string | null
+          order?: number | null
           symbol?: string | null
           type?: MintType | null
         } | null
@@ -1680,15 +1821,33 @@ export type AppEnvDetailsFragment = {
     updatedAt?: any | null
     enableStats?: boolean | null
     endpoint?: string | null
+    explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
     type?: ClusterType | null
+    mints?: Array<{
+      __typename?: 'Mint'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      address?: string | null
+      coingeckoId?: string | null
+      decimals?: number | null
+      default?: boolean | null
+      enabled?: boolean | null
+      logoUrl?: string | null
+      name?: string | null
+      order?: number | null
+      symbol?: string | null
+      type?: MintType | null
+    }> | null
   } | null
   mints?: Array<{
     __typename?: 'AppMint'
     id: string
     createdAt: any
     updatedAt: any
+    order?: number | null
     mint?: {
       __typename?: 'Mint'
       id?: string | null
@@ -1697,8 +1856,11 @@ export type AppEnvDetailsFragment = {
       address?: string | null
       coingeckoId?: string | null
       decimals?: number | null
+      default?: boolean | null
+      enabled?: boolean | null
       logoUrl?: string | null
       name?: string | null
+      order?: number | null
       symbol?: string | null
       type?: MintType | null
     } | null
@@ -1717,6 +1879,7 @@ export type AppMintDetailsFragment = {
   id: string
   createdAt: any
   updatedAt: any
+  order?: number | null
   mint?: {
     __typename?: 'Mint'
     id?: string | null
@@ -1725,8 +1888,11 @@ export type AppMintDetailsFragment = {
     address?: string | null
     coingeckoId?: string | null
     decimals?: number | null
+    default?: boolean | null
+    enabled?: boolean | null
     logoUrl?: string | null
     name?: string | null
+    order?: number | null
     symbol?: string | null
     type?: MintType | null
   } | null
@@ -1746,6 +1912,7 @@ export type AppTransactionDetailsFragment = {
   updatedAt?: any | null
   amount?: number | null
   destination?: string | null
+  explorerUrl?: string | null
   feePayer?: string | null
   mint?: string | null
   processingDuration?: number | null
@@ -1867,15 +2034,33 @@ export type UserUpdateAppMutation = {
         updatedAt?: any | null
         enableStats?: boolean | null
         endpoint?: string | null
+        explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
         type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
       } | null
       mints?: Array<{
         __typename?: 'AppMint'
         id: string
         createdAt: any
         updatedAt: any
+        order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
@@ -1884,8 +2069,11 @@ export type UserUpdateAppMutation = {
           address?: string | null
           coingeckoId?: string | null
           decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
           logoUrl?: string | null
           name?: string | null
+          order?: number | null
           symbol?: string | null
           type?: MintType | null
         } | null
@@ -1963,15 +2151,33 @@ export type UserUpdateAppEnvMutation = {
       updatedAt?: any | null
       enableStats?: boolean | null
       endpoint?: string | null
+      explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
       type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
     } | null
     mints?: Array<{
       __typename?: 'AppMint'
       id: string
       createdAt: any
       updatedAt: any
+      order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
@@ -1980,8 +2186,11 @@ export type UserUpdateAppEnvMutation = {
         address?: string | null
         coingeckoId?: string | null
         decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
         logoUrl?: string | null
         name?: string | null
+        order?: number | null
         symbol?: string | null
         type?: MintType | null
       } | null
@@ -2125,6 +2334,256 @@ export type UserAppUserUpdateRoleMutation = {
   } | null
 }
 
+export type UserAppEnvMintDisableMutationVariables = Exact<{
+  appId: Scalars['String']
+  appEnvId: Scalars['String']
+  mintId: Scalars['String']
+}>
+
+export type UserAppEnvMintDisableMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    name?: string | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpoint?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserAppEnvMintEnableMutationVariables = Exact<{
+  appId: Scalars['String']
+  appEnvId: Scalars['String']
+  mintId: Scalars['String']
+}>
+
+export type UserAppEnvMintEnableMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    name?: string | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpoint?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserAppEnvMintSetWalletMutationVariables = Exact<{
+  appId: Scalars['String']
+  appEnvId: Scalars['String']
+  mintId: Scalars['String']
+  walletId: Scalars['String']
+}>
+
+export type UserAppEnvMintSetWalletMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    name?: string | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpoint?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
 export type UserAppEnvWalletAddMutationVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
@@ -2161,15 +2620,33 @@ export type UserAppEnvWalletAddMutation = {
       updatedAt?: any | null
       enableStats?: boolean | null
       endpoint?: string | null
+      explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
       type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
     } | null
     mints?: Array<{
       __typename?: 'AppMint'
       id: string
       createdAt: any
       updatedAt: any
+      order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
@@ -2178,8 +2655,11 @@ export type UserAppEnvWalletAddMutation = {
         address?: string | null
         coingeckoId?: string | null
         decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
         logoUrl?: string | null
         name?: string | null
+        order?: number | null
         symbol?: string | null
         type?: MintType | null
       } | null
@@ -2230,15 +2710,33 @@ export type UserAppEnvWalletRemoveMutation = {
       updatedAt?: any | null
       enableStats?: boolean | null
       endpoint?: string | null
+      explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
       type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
     } | null
     mints?: Array<{
       __typename?: 'AppMint'
       id: string
       createdAt: any
       updatedAt: any
+      order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
@@ -2247,8 +2745,11 @@ export type UserAppEnvWalletRemoveMutation = {
         address?: string | null
         coingeckoId?: string | null
         decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
         logoUrl?: string | null
         name?: string | null
+        order?: number | null
         symbol?: string | null
         type?: MintType | null
       } | null
@@ -2278,6 +2779,7 @@ export type UserAppTransactionQuery = {
     updatedAt?: any | null
     amount?: number | null
     destination?: string | null
+    explorerUrl?: string | null
     feePayer?: string | null
     mint?: string | null
     processingDuration?: number | null
@@ -2324,6 +2826,7 @@ export type UserAppTransactionsQuery = {
     updatedAt?: any | null
     amount?: number | null
     destination?: string | null
+    explorerUrl?: string | null
     feePayer?: string | null
     mint?: string | null
     processingDuration?: number | null
@@ -2438,15 +2941,33 @@ export type UserAppsQuery = {
         updatedAt?: any | null
         enableStats?: boolean | null
         endpoint?: string | null
+        explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
         type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
       } | null
       mints?: Array<{
         __typename?: 'AppMint'
         id: string
         createdAt: any
         updatedAt: any
+        order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
@@ -2455,8 +2976,11 @@ export type UserAppsQuery = {
           address?: string | null
           coingeckoId?: string | null
           decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
           logoUrl?: string | null
           name?: string | null
+          order?: number | null
           symbol?: string | null
           type?: MintType | null
         } | null
@@ -2521,15 +3045,33 @@ export type UserAppQuery = {
         updatedAt?: any | null
         enableStats?: boolean | null
         endpoint?: string | null
+        explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
         type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
       } | null
       mints?: Array<{
         __typename?: 'AppMint'
         id: string
         createdAt: any
         updatedAt: any
+        order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
@@ -2538,8 +3080,11 @@ export type UserAppQuery = {
           address?: string | null
           coingeckoId?: string | null
           decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
           logoUrl?: string | null
           name?: string | null
+          order?: number | null
           symbol?: string | null
           type?: MintType | null
         } | null
@@ -2616,15 +3161,33 @@ export type UserAppEnvQuery = {
       updatedAt?: any | null
       enableStats?: boolean | null
       endpoint?: string | null
+      explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
       type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
     } | null
     mints?: Array<{
       __typename?: 'AppMint'
       id: string
       createdAt: any
       updatedAt: any
+      order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
@@ -2633,8 +3196,11 @@ export type UserAppEnvQuery = {
         address?: string | null
         coingeckoId?: string | null
         decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
         logoUrl?: string | null
         name?: string | null
+        order?: number | null
         symbol?: string | null
         type?: MintType | null
       } | null
@@ -2716,6 +3282,7 @@ export type ClusterDetailsFragment = {
   updatedAt?: any | null
   enableStats?: boolean | null
   endpoint?: string | null
+  explorer?: string | null
   name?: string | null
   status?: ClusterStatus | null
   type?: ClusterType | null
@@ -2789,8 +3356,11 @@ export type MintDetailsFragment = {
   address?: string | null
   coingeckoId?: string | null
   decimals?: number | null
+  default?: boolean | null
+  enabled?: boolean | null
   logoUrl?: string | null
   name?: string | null
+  order?: number | null
   symbol?: string | null
   type?: MintType | null
 }
@@ -2808,6 +3378,7 @@ export type AdminAddClusterMintMutation = {
     updatedAt?: any | null
     enableStats?: boolean | null
     endpoint?: string | null
+    explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
     type?: ClusterType | null
@@ -2819,8 +3390,11 @@ export type AdminAddClusterMintMutation = {
       address?: string | null
       coingeckoId?: string | null
       decimals?: number | null
+      default?: boolean | null
+      enabled?: boolean | null
       logoUrl?: string | null
       name?: string | null
+      order?: number | null
       symbol?: string | null
       type?: MintType | null
     }> | null
@@ -2840,6 +3414,7 @@ export type AdminCreateClusterMutation = {
     updatedAt?: any | null
     enableStats?: boolean | null
     endpoint?: string | null
+    explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
     type?: ClusterType | null
@@ -2859,6 +3434,7 @@ export type AdminDeleteClusterMutation = {
     updatedAt?: any | null
     enableStats?: boolean | null
     endpoint?: string | null
+    explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
     type?: ClusterType | null
@@ -2879,6 +3455,7 @@ export type AdminUpdateClusterMutation = {
     updatedAt?: any | null
     enableStats?: boolean | null
     endpoint?: string | null
+    explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
     type?: ClusterType | null
@@ -2898,6 +3475,7 @@ export type AdminClusterQuery = {
     updatedAt?: any | null
     enableStats?: boolean | null
     endpoint?: string | null
+    explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
     type?: ClusterType | null
@@ -2909,8 +3487,11 @@ export type AdminClusterQuery = {
       address?: string | null
       coingeckoId?: string | null
       decimals?: number | null
+      default?: boolean | null
+      enabled?: boolean | null
       logoUrl?: string | null
       name?: string | null
+      order?: number | null
       symbol?: string | null
       type?: MintType | null
     }> | null
@@ -2964,6 +3545,7 @@ export type AdminClustersQuery = {
     updatedAt?: any | null
     enableStats?: boolean | null
     endpoint?: string | null
+    explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
     type?: ClusterType | null
@@ -2975,8 +3557,11 @@ export type AdminClustersQuery = {
       address?: string | null
       coingeckoId?: string | null
       decimals?: number | null
+      default?: boolean | null
+      enabled?: boolean | null
       logoUrl?: string | null
       name?: string | null
+      order?: number | null
       symbol?: string | null
       type?: MintType | null
     }> | null
@@ -3220,15 +3805,33 @@ export type AdminWalletQuery = {
         updatedAt?: any | null
         enableStats?: boolean | null
         endpoint?: string | null
+        explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
         type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
       } | null
       mints?: Array<{
         __typename?: 'AppMint'
         id: string
         createdAt: any
         updatedAt: any
+        order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
@@ -3237,8 +3840,11 @@ export type AdminWalletQuery = {
           address?: string | null
           coingeckoId?: string | null
           decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
           logoUrl?: string | null
           name?: string | null
+          order?: number | null
           symbol?: string | null
           type?: MintType | null
         } | null
@@ -3316,15 +3922,33 @@ export type AdminWalletsQuery = {
           updatedAt?: any | null
           enableStats?: boolean | null
           endpoint?: string | null
+          explorer?: string | null
           name?: string | null
           status?: ClusterStatus | null
           type?: ClusterType | null
+          mints?: Array<{
+            __typename?: 'Mint'
+            id?: string | null
+            createdAt?: any | null
+            updatedAt?: any | null
+            address?: string | null
+            coingeckoId?: string | null
+            decimals?: number | null
+            default?: boolean | null
+            enabled?: boolean | null
+            logoUrl?: string | null
+            name?: string | null
+            order?: number | null
+            symbol?: string | null
+            type?: MintType | null
+          }> | null
         } | null
         mints?: Array<{
           __typename?: 'AppMint'
           id: string
           createdAt: any
           updatedAt: any
+          order?: number | null
           mint?: {
             __typename?: 'Mint'
             id?: string | null
@@ -3333,8 +3957,11 @@ export type AdminWalletsQuery = {
             address?: string | null
             coingeckoId?: string | null
             decimals?: number | null
+            default?: boolean | null
+            enabled?: boolean | null
             logoUrl?: string | null
             name?: string | null
+            order?: number | null
             symbol?: string | null
             type?: MintType | null
           } | null
@@ -3376,15 +4003,33 @@ export type AdminWalletsQuery = {
         updatedAt?: any | null
         enableStats?: boolean | null
         endpoint?: string | null
+        explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
         type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
       } | null
       mints?: Array<{
         __typename?: 'AppMint'
         id: string
         createdAt: any
         updatedAt: any
+        order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
@@ -3393,8 +4038,11 @@ export type AdminWalletsQuery = {
           address?: string | null
           coingeckoId?: string | null
           decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
           logoUrl?: string | null
           name?: string | null
+          order?: number | null
           symbol?: string | null
           type?: MintType | null
         } | null
@@ -3411,10 +4059,26 @@ export type AdminWalletsQuery = {
 }
 
 export type UserGenerateWalletMutationVariables = Exact<{
-  index: Scalars['Int']
+  appEnvId: Scalars['String']
 }>
 
 export type UserGenerateWalletMutation = {
+  __typename?: 'Mutation'
+  generated?: {
+    __typename?: 'Wallet'
+    id: string
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  } | null
+}
+
+export type UserImportWalletMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  secretKey: Scalars['String']
+}>
+
+export type UserImportWalletMutation = {
   __typename?: 'Mutation'
   generated?: {
     __typename?: 'Wallet'

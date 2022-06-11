@@ -16,9 +16,15 @@ export class Mint {
   @Field(() => Int, { nullable: true })
   decimals: number
   @Field({ nullable: true })
+  default?: boolean
+  @Field({ nullable: true })
+  enabled?: boolean
+  @Field({ nullable: true })
   logoUrl?: string
   @Field({ nullable: true })
   name: string
+  @Field(() => Int, { nullable: true })
+  order?: number
   @Field({ nullable: true })
   symbol: string
   @Field(() => MintType, { nullable: true })

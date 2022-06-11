@@ -1,30 +1,58 @@
-import { Alert, Box } from '@chakra-ui/react'
-import { AdminAppUiWallet, AdminAppUiWalletBalances } from '@mogami/admin/app/ui'
+import { Alert, Box, Button, Flex, Stack, useToast } from '@chakra-ui/react'
+import { AdminAppUiWallet } from '@mogami/admin/app/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useUserAppEnvQuery, Wallet } from '@mogami/shared/util/admin-sdk'
+import {
+  useUserAppEnvQuery,
+  useUserGenerateWalletMutation,
+  useUserImportWalletMutation,
+  Wallet,
+} from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUserWalletsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
+  const toast = useToast()
   const [{ data, fetching }] = useUserAppEnvQuery({ variables: { appId, appEnvId } })
+  const [, generateWalletMutation] = useUserGenerateWalletMutation()
+  const [, importWalletMutation] = useUserImportWalletMutation()
+
+  const generateWallet = () => {
+    generateWalletMutation({ appEnvId }).then(() => {
+      toast({ status: 'success', title: 'Wallet generated' })
+    })
+  }
+
+  const importWallet = () => {
+    const secretKey = prompt('Enter secretKey')
+    if (!secretKey) return
+    importWalletMutation({ appEnvId, secretKey }).then(() => {
+      toast({ status: 'success', title: 'Wallet imported' })
+    })
+  }
   if (fetching) {
     return <AdminUiLoader />
   }
+  const wallets = data?.item?.wallets || []
   return (
-    <Box>
-      {data?.item?.wallets?.length ? (
-        data?.item?.wallets.map((wallet: Wallet) => (
+    <Stack direction="column" spacing={6}>
+      <Flex>
+        <Button mr={2} onClick={generateWallet}>
+          Generate Wallet
+        </Button>
+        <Button onClick={importWallet}>Import Wallet</Button>
+      </Flex>
+      {wallets?.length ? (
+        wallets.map((wallet: Wallet) => (
           <Box key={wallet.id}>
             {data?.item?.id ? (
-              <>
-                <AdminAppUiWallet appEnvId={data.item.id} wallet={wallet} />
-                <AdminAppUiWalletBalances appEnvId={data.item.id} wallet={wallet} />
-              </>
+              <Stack direction="column" spacing={6}>
+                <AdminAppUiWallet appId={appId} appEnvId={data.item.id} wallet={wallet} />
+              </Stack>
             ) : null}
           </Box>
         ))
       ) : (
         <Alert>No Wallets Found</Alert>
       )}
-    </Box>
+    </Stack>
   )
 }
