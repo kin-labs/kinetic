@@ -1,5 +1,7 @@
+export * from './lib/api-app-admin-data-access.service'
 export * from './lib/api-app-data-access.module'
 export * from './lib/api-app-data-access.service'
+export * from './lib/api-app-user-data-access.service'
 export * from './lib/api-app-webhook-data-access.service'
 export * from './lib/dto/app-create.input'
 export * from './lib/dto/app-env-update.input'

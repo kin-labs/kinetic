@@ -1,7 +1,7 @@
-import { Box, Stack, useToast } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Stack, Text, useToast } from '@chakra-ui/react'
 import { AdminUiTabs } from '@mogami/admin/ui/tabs'
 import { AdminUserUiApps, AdminUserUiEmails, AdminUserUiForm } from '@mogami/admin/user/ui'
-import { UserUpdateInput, useUpdateUserMutation, useUserQuery } from '@mogami/shared/util/admin-sdk'
+import { UserUpdateInput, useAdminUpdateUserMutation, useAdminUserQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 
@@ -10,9 +10,9 @@ export default function AdminUserFeatureDetail() {
   const { path, url } = useRouteMatch()
   const { userId } = useParams<{ userId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [{ data }] = useUserQuery({ variables: { userId: userId! } })
+  const [{ data }] = useAdminUserQuery({ variables: { userId: userId! } })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, updateUserMutation] = useUpdateUserMutation()
+  const [_, updateUserMutation] = useAdminUpdateUserMutation()
 
   const onSubmit = async (input: UserUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -31,7 +31,13 @@ export default function AdminUserFeatureDetail() {
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
         <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" noOfLines={1}>
-          {data?.item?.name}
+          <Flex alignItems="center">
+            {data?.item?.avatarUrl ? <Avatar mr={4} size="lg" src={data?.item?.avatarUrl} /> : null}
+            <Flex direction="column">
+              <Text fontSize="2xl">{data?.item?.name}</Text>
+              <Text color="gray.500">{data?.item?.role}</Text>
+            </Flex>
+          </Flex>
         </Box>
       </Box>
       <Switch>

@@ -1,3 +1,4 @@
+export * from './lib/api-cluster-admin-data-access.service'
 export * from './lib/api-cluster-data-access.module'
 export * from './lib/api-cluster-data-access.service'
 export * from './lib/api-cluster-stat-data-access.service'

@@ -1,8 +1,10 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { HttpService } from '@nestjs/axios'
-import { Injectable, Logger } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { AppWebhookType } from '@prisma/client'
 import { AxiosRequestHeaders } from 'axios'
+import { Response } from 'express'
+import { IncomingHttpHeaders } from 'http'
 import { switchMap } from 'rxjs'
 import { AppEnv } from './entity/app-env.entity'
 import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
@@ -12,6 +14,12 @@ interface WebhookOptions {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any
   type: AppWebhookType
+}
+
+function isValidAppWebhookType(type: string) {
+  return Object.keys(AppWebhookType)
+    .map((item) => item.toLowerCase())
+    .includes(type.toLowerCase())
 }
 
 @Injectable()
@@ -44,6 +52,47 @@ export class ApiAppWebhookDataAccessService {
         return this.sendVerifyWebhook(appEnv, options)
       default:
         throw new Error(`Unknown webhook type ${options.type}`)
+    }
+  }
+
+  async storeIncomingWebhook(
+    environment: string,
+    index: number,
+    type: string,
+    headers: IncomingHttpHeaders,
+    payload: object,
+    res: Response,
+  ) {
+    // Make sure the webhook type is valid
+    if (!isValidAppWebhookType(type)) {
+      res.statusCode = 400
+      return res.send(new BadRequestException(`Unknown AppWebhookType`))
+    }
+
+    try {
+      // Get the app by Index
+      const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
+      if (!appEnv.webhookAcceptIncoming) {
+        this.logger.warn(`storeIncomingWebhook ignoring request, webhookAcceptIncoming is disabled`)
+        res.statusCode = 400
+        return res.send(new Error(`webhookAcceptIncoming is disabled`))
+      }
+
+      // Store the incoming webhook
+      const created = await this.data.appWebhook.create({
+        data: {
+          direction: AppWebhookDirection.Incoming,
+          appEnvId: appEnv.id,
+          headers,
+          payload,
+          type: type === 'event' ? AppWebhookType.Event : AppWebhookType.Verify,
+        },
+      })
+      res.statusCode = 200
+      return res.send(created)
+    } catch (e) {
+      res.statusCode = 400
+      return res.send(new BadRequestException(`Something went wrong storing incoming webhook`))
     }
   }
 

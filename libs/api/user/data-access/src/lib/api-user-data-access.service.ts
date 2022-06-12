@@ -9,7 +9,7 @@ import { UserRole } from './entities/user-role.enum'
 export class ApiUserDataAccessService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
-  async createUser(adminId: string, input: UserCreateInput) {
+  async adminCreateUser(adminId: string, input: UserCreateInput) {
     await this.data.ensureAdminUser(adminId)
     const { email: inputEmail, ...data } = input
     const email = inputEmail.trim()
@@ -41,18 +41,26 @@ export class ApiUserDataAccessService {
     })
   }
 
-  async deleteUser(adminId: string, userId: string) {
+  async adminDeleteUser(adminId: string, userId: string) {
     await this.ensureUserById(adminId, userId)
+    if (adminId === userId) {
+      throw new BadRequestException(`Can't delete your own user.`)
+    }
+    const count = await this.data.user.count()
+    if (count === 1) {
+      throw new BadRequestException(`Can't delete the last user.`)
+    }
+    await this.data.appUser.deleteMany({ where: { userId } })
     await this.data.userEmail.deleteMany({ where: { ownerId: userId } })
     return this.data.user.delete({ where: { id: userId } })
   }
 
-  async users(adminId: string) {
+  async adminUsers(adminId: string) {
     await this.data.ensureAdminUser(adminId)
     return this.data.user.findMany({ include: { emails: true } })
   }
 
-  async user(adminId: string, userId: string) {
+  async adminUser(adminId: string, userId: string) {
     return this.ensureUserById(adminId, userId)
   }
 

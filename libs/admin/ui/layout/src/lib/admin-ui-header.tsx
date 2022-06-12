@@ -1,18 +1,21 @@
-import { Box, Flex, Heading, Stack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Flex, Heading, Image, Stack, useColorModeValue } from '@chakra-ui/react'
 import { AdminAuthLogoutFn } from '@mogami/admin/auth/data-access'
 import { User } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { AdminUiHeaderLink, AdminUiLink } from './admin-ui-header-link'
 import { AdminUiHeaderProfileMenu } from './admin-ui-header-profile-menu'
+import { AdminUiThemeToggle } from './admin-ui-theme-toggle'
 
 export function AdminUiHeader({
   links,
+  logo,
   logout,
   name,
   user,
 }: {
   links: AdminUiLink[]
+  logo: string
   logout?: AdminAuthLogoutFn
   name: string
   user?: User
@@ -23,9 +26,12 @@ export function AdminUiHeader({
         <Flex alignItems={'center'}>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Box px={4}>
-              <Heading size="md">
-                <RouterLink to="/">{name}</RouterLink>
-              </Heading>
+              <Flex alignItems={'center'}>
+                <Image src={logo} h={8} mr={4} />
+                <Heading size="md">
+                  <RouterLink to="/">{name}</RouterLink>
+                </Heading>
+              </Flex>
             </Box>
             {links?.map((link) => (
               <AdminUiHeaderLink key={link.path} link={link} />
@@ -33,7 +39,8 @@ export function AdminUiHeader({
           </Stack>
         </Flex>
         <Flex alignItems={'center'}>
-          <Stack direction={'row'} spacing={7}>
+          <Stack direction={'row'} spacing={4}>
+            <AdminUiThemeToggle />
             {user && logout && <AdminUiHeaderProfileMenu logout={logout} user={user} />}
           </Stack>
         </Flex>

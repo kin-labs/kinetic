@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, ObjectType } from '@nestjs/graphql'
 import { WalletBalance } from './wallet-balance.entity'
 
 @ObjectType()
@@ -13,4 +13,6 @@ export class Wallet {
   publicKey: string
   @Field(() => [WalletBalance], { nullable: true })
   balances?: WalletBalance[]
+  @HideField()
+  appEnvs?
 }

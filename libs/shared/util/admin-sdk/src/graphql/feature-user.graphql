@@ -16,26 +16,26 @@ fragment UserEmailDetails on UserEmail {
   email
 }
 
-mutation CreateUser($input: UserCreateInput!) {
-  created: createUser(input: $input) {
+mutation AdminCreateUser($input: UserCreateInput!) {
+  created: adminCreateUser(input: $input) {
     ...UserDetails
   }
 }
 
-mutation DeleteUser($userId: String!) {
-  deleted: deleteUser(userId: $userId) {
+mutation AdminDeleteUser($userId: String!) {
+  deleted: adminDeleteUser(userId: $userId) {
     ...UserDetails
   }
 }
 
-mutation UpdateUser($userId: String!, $input: UserUpdateInput!) {
-  updated: updateUser(userId: $userId, input: $input) {
+mutation AdminUpdateUser($userId: String!, $input: UserUpdateInput!) {
+  updated: adminUpdateUser(userId: $userId, input: $input) {
     ...UserDetails
   }
 }
 
-query User($userId: String!) {
-  item: user(userId: $userId) {
+query AdminUser($userId: String!) {
+  item: adminUser(userId: $userId) {
     ...UserDetails
     apps {
       ...AppUserDetails
@@ -46,8 +46,8 @@ query User($userId: String!) {
   }
 }
 
-query Users {
-  items: users {
+query AdminUsers {
+  items: adminUsers {
     ...UserDetails
   }
 }

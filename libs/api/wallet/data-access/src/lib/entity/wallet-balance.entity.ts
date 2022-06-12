@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, ObjectType } from '@nestjs/graphql'
 import { GraphQLBigInt } from 'graphql-scalars'
 
 @ObjectType()
@@ -13,4 +13,6 @@ export class WalletBalance {
   balance?: bigint
   @Field(() => GraphQLBigInt, { nullable: true })
   change?: bigint
+  @HideField()
+  appEnv?
 }

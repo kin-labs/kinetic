@@ -1,13 +1,13 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
 import { AdminClusterUiTable } from '@mogami/admin/cluster/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { Cluster, useClustersQuery, useDeleteClusterMutation } from '@mogami/shared/util/admin-sdk'
+import { Cluster, useAdminClustersQuery, useAdminDeleteClusterMutation } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminClusterFeatureList() {
   const toast = useToast()
-  const [{ data, fetching }, refresh] = useClustersQuery()
-  const [, deleteCluster] = useDeleteClusterMutation()
+  const [{ data, fetching }, refresh] = useAdminClustersQuery()
+  const [, deleteCluster] = useAdminDeleteClusterMutation()
 
   const handleDelete = async (cluster: Cluster) => {
     if (!cluster?.id) return

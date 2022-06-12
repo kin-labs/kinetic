@@ -23,6 +23,7 @@ type AppEnv {
   cluster: Cluster
   createdAt: DateTime!
   id: String!
+  key: String
   mints: [AppMint!]
   name: String
   updatedAt: DateTime!
@@ -301,49 +302,56 @@ enum MintType {
 }
 
 type Mutation {
-  addClusterMint(input: MintAddInput!): Cluster
-  appEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
-  appEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv
-  appUserAdd(appId: String!, input: AppUserAddInput!): App
-  appUserRemove(appId: String!, input: AppUserRemoveInput!): App
-  appUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
-  createApp(input: AppCreateInput!): App
-  createCluster(input: ClusterCreateInput!): Cluster
-  createUser(input: UserCreateInput!): User
-  deleteApp(appId: String!): App
-  deleteCluster(clusterId: String!): Cluster
-  deleteUser(userId: String!): User
-  deleteWallet(walletId: String!): Wallet
-  generateWallet(index: Int!): Wallet
+  adminAddClusterMint(input: MintAddInput!): Cluster
+  adminCreateApp(input: AppCreateInput!): App
+  adminCreateCluster(input: ClusterCreateInput!): Cluster
+  adminCreateUser(input: UserCreateInput!): User
+  adminDeleteApp(appId: String!): App
+  adminDeleteCluster(clusterId: String!): Cluster
+  adminDeleteUser(userId: String!): User
+  adminDeleteWallet(walletId: String!): Wallet
+  adminUpdateCluster(clusterId: String!, input: ClusterUpdateInput!): Cluster
+  adminUpdateUser(input: UserUpdateInput!, userId: String!): User
   login(input: LoginInput!): AuthToken
   logout: Boolean
-  updateApp(appId: String!, input: AppUpdateInput!): App
-  updateAppEnv(appEnvId: String!, appId: String!, input: AppEnvUpdateInput!): AppEnv
-  updateCluster(clusterId: String!, input: ClusterUpdateInput!): Cluster
-  updateUser(input: UserUpdateInput!, userId: String!): User
+  userAppEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
+  userAppEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv
+  userAppUserAdd(appId: String!, input: AppUserAddInput!): App
+  userAppUserRemove(appId: String!, input: AppUserRemoveInput!): App
+  userAppUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
+  userDeleteWallet(walletId: String!): Wallet
+  userGenerateWallet(index: Int!): Wallet
+  userUpdateApp(appId: String!, input: AppUpdateInput!): App
+  userUpdateAppEnv(appEnvId: String!, appId: String!, input: AppEnvUpdateInput!): AppEnv
 }
 
 type Query {
-  app(appId: String!): App
-  appEnv(appEnvId: String!, appId: String!): AppEnv
-  appTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
-  appTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
-  appWebhook(appId: String!, appWebhookId: String!): AppWebhook
-  appWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
-  apps: [App!]
-  cluster(clusterId: String!): Cluster
+  adminApp(appId: String!): App
+  adminApps: [App!]
+  adminCluster(clusterId: String!): Cluster
+  adminClusterTokens(input: ClusterTokenInput!): [ClusterToken!]
+  adminClusters: [Cluster!]
+  adminUser(userId: String!): User
+  adminUsers: [User!]
+  adminWallet(walletId: String!): Wallet
+  adminWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
+  adminWallets: [Wallet!]
   clusterStats(clusterId: String!): [ClusterStat!]
-  clusterTokens(input: ClusterTokenInput!): [ClusterToken!]
-  clusters: [Cluster!]
   me: User
   uptime: Float!
-  user(userId: String!): User
-  users: [User!]
-  wallet(walletId: String!): Wallet
-  walletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
-  walletBalance(appEnvId: String!, walletId: String!): WalletBalance
-  walletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
-  wallets: [Wallet!]
+  userApp(appId: String!): App
+  userAppEnv(appEnvId: String!, appId: String!): AppEnv
+  userAppRole(appId: String!): AppUserRole
+  userAppTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
+  userAppTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
+  userAppWebhook(appId: String!, appWebhookId: String!): AppWebhook
+  userAppWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
+  userApps: [App!]
+  userWallet(walletId: String!): Wallet
+  userWalletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
+  userWalletBalance(appEnvId: String!, walletId: String!): WalletBalance
+  userWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
+  userWallets: [Wallet!]
 }
 
 type User {
@@ -387,6 +395,7 @@ input UserUpdateInput {
 }
 
 type Wallet {
+  appEnvs: [AppEnv!]
   balances: [WalletBalance!]
   createdAt: DateTime
   id: String!
@@ -399,6 +408,7 @@ type WalletAirdropResponse {
 }
 
 type WalletBalance {
+  appEnv: AppEnv
   balance: BigInt
   change: BigInt
   createdAt: DateTime

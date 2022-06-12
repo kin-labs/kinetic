@@ -14,7 +14,7 @@ export function AdminAppUiUsers({ updateRole, users }: AdminAppUiUsersProps) {
     return <Alert>No users found.</Alert>
   }
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" m="10px auto">
+    <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
       <TableContainer>
         <Table variant="simple" colorScheme="teal">
           <Thead>
@@ -27,7 +27,7 @@ export function AdminAppUiUsers({ updateRole, users }: AdminAppUiUsersProps) {
             {users?.map((user) => (
               <Tr key={user?.id}>
                 <Td>
-                  <Link to={'/users/' + user?.user?.id}>
+                  <Link to={'/system/users/' + user?.user?.id}>
                     <Text color="teal.500">
                       {user?.user?.name} ({user?.role})
                     </Text>

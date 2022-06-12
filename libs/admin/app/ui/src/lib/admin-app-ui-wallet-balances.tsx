@@ -1,5 +1,5 @@
 import { Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import { useWalletBalancesQuery, Wallet } from '@mogami/shared/util/admin-sdk'
+import { useUserWalletBalancesQuery, Wallet } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { ShowSolBalance } from './show-sol-balance'
 
@@ -9,7 +9,7 @@ export interface AdminAppUiWalletBalancesProps {
 }
 
 export function AdminAppUiWalletBalances({ appEnvId, wallet }: AdminAppUiWalletBalancesProps) {
-  const [{ data }] = useWalletBalancesQuery({
+  const [{ data }] = useUserWalletBalancesQuery({
     variables: {
       appEnvId,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

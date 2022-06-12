@@ -1,13 +1,13 @@
 import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import {
-  CreateUser,
-  DeleteUser,
-  UpdateUser,
-  User,
+  AdminCreateUser,
+  AdminDeleteUser,
+  AdminUpdateUser,
+  AdminUser,
+  AdminUsers,
   UserCreateInput,
   UserRole,
-  Users,
   UserUpdateInput,
 } from '../generated/api-sdk'
 import { ADMIN_EMAIL, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
@@ -53,7 +53,7 @@ describe('User (e2e)', () => {
           name,
         }
 
-        return runGraphQLQueryAdmin(app, token, CreateUser, { input })
+        return runGraphQLQueryAdmin(app, token, AdminCreateUser, { input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -73,7 +73,7 @@ describe('User (e2e)', () => {
           avatarUrl: 'test-avatar',
         }
 
-        return runGraphQLQueryAdmin(app, token, UpdateUser, { userId, input })
+        return runGraphQLQueryAdmin(app, token, AdminUpdateUser, { userId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -87,7 +87,7 @@ describe('User (e2e)', () => {
       })
 
       it('should find a user', async () => {
-        return runGraphQLQueryAdmin(app, token, User, { userId })
+        return runGraphQLQueryAdmin(app, token, AdminUser, { userId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -99,7 +99,7 @@ describe('User (e2e)', () => {
       })
 
       it('should find a list of users', async () => {
-        return runGraphQLQueryAdmin(app, token, Users)
+        return runGraphQLQueryAdmin(app, token, AdminUsers)
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -111,7 +111,7 @@ describe('User (e2e)', () => {
       })
 
       it('should delete a user', async () => {
-        return runGraphQLQueryAdmin(app, token, DeleteUser, { userId })
+        return runGraphQLQueryAdmin(app, token, AdminDeleteUser, { userId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -136,9 +136,9 @@ describe('User (e2e)', () => {
         }
 
         // Run once
-        await runGraphQLQueryAdmin(app, token, CreateUser, { input })
+        await runGraphQLQueryAdmin(app, token, AdminCreateUser, { input })
         // Try to add again
-        return runGraphQLQueryAdmin(app, token, CreateUser, { input })
+        return runGraphQLQueryAdmin(app, token, AdminCreateUser, { input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -157,9 +157,9 @@ describe('User (e2e)', () => {
         }
 
         // Run once
-        await runGraphQLQueryAdmin(app, token, CreateUser, { input })
+        await runGraphQLQueryAdmin(app, token, AdminCreateUser, { input })
         // Try to add again
-        return runGraphQLQueryAdmin(app, token, CreateUser, { input: { ...input, email: uniq('email-') } })
+        return runGraphQLQueryAdmin(app, token, AdminCreateUser, { input: { ...input, email: uniq('email-') } })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -172,7 +172,7 @@ describe('User (e2e)', () => {
         const userId = uniq('user-')
         const input: UserUpdateInput = { name: `User ${userId}` }
 
-        return runGraphQLQueryAdmin(app, token, UpdateUser, { userId, input })
+        return runGraphQLQueryAdmin(app, token, AdminUpdateUser, { userId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -183,7 +183,7 @@ describe('User (e2e)', () => {
 
       it('should not find a user that does not exist', async () => {
         const userId = uniq('user-')
-        return runGraphQLQueryAdmin(app, token, User, { userId })
+        return runGraphQLQueryAdmin(app, token, AdminUser, { userId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -194,7 +194,7 @@ describe('User (e2e)', () => {
 
       it('should not delete a user that does not exist', async () => {
         const userId = uniq('user-')
-        return runGraphQLQueryAdmin(app, token, DeleteUser, { userId })
+        return runGraphQLQueryAdmin(app, token, AdminDeleteUser, { userId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -208,7 +208,7 @@ describe('User (e2e)', () => {
       it('should not create a user', async () => {
         const input: UserCreateInput = { username: undefined, email: undefined, password: undefined }
 
-        return runGraphQLQuery(app, CreateUser, { input })
+        return runGraphQLQuery(app, AdminCreateUser, { input })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -220,7 +220,7 @@ describe('User (e2e)', () => {
       it('should not update a user', async () => {
         const input: UserUpdateInput = { name: undefined }
 
-        return runGraphQLQuery(app, UpdateUser, { userId: undefined, input })
+        return runGraphQLQuery(app, AdminUpdateUser, { userId: undefined, input })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -230,7 +230,7 @@ describe('User (e2e)', () => {
       })
 
       it('should not find a user', async () => {
-        return runGraphQLQuery(app, User, { userId: undefined })
+        return runGraphQLQuery(app, AdminUser, { userId: undefined })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -240,7 +240,7 @@ describe('User (e2e)', () => {
       })
 
       it('should not delete a user', async () => {
-        return runGraphQLQuery(app, DeleteUser, { userId: undefined })
+        return runGraphQLQuery(app, AdminDeleteUser, { userId: undefined })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -254,7 +254,7 @@ describe('User (e2e)', () => {
       it('should not create a user', async () => {
         const input: UserCreateInput = { username: username, password: 'password', email: uniq('email-') }
 
-        return runGraphQLQuery(app, CreateUser, { input })
+        return runGraphQLQuery(app, AdminCreateUser, { input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('text')
@@ -266,25 +266,25 @@ describe('User (e2e)', () => {
       it('should not update a user', async () => {
         const input: UserUpdateInput = { name: `User ${username} edited` }
 
-        return runGraphQLQuery(app, UpdateUser, { userId, input })
+        return runGraphQLQuery(app, AdminUpdateUser, { userId, input })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })
 
       it('should not find a user', async () => {
-        return runGraphQLQuery(app, User, { userId })
+        return runGraphQLQuery(app, AdminUser, { userId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })
 
       it('should not find a list of users', async () => {
-        return runGraphQLQuery(app, Users)
+        return runGraphQLQuery(app, AdminUsers)
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })
 
       it('should not delete a user', async () => {
-        return runGraphQLQuery(app, DeleteUser, { userId })
+        return runGraphQLQuery(app, AdminDeleteUser, { userId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })

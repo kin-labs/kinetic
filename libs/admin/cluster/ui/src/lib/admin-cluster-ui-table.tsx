@@ -25,7 +25,7 @@ export function AdminClusterUiTable({ clusters, deleteCluster }: AdminClusterUiT
               <Td>
                 <Flex alignItems="center">
                   <Image mr={2} src="/assets/solana-logo.svg" h={4} />
-                  <Link to={`/clusters/${cluster.id}`}>
+                  <Link to={`/system/clusters/${cluster.id}`}>
                     <Text color="teal.500">{cluster.name}</Text>
                   </Link>
                 </Flex>

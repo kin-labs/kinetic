@@ -1,27 +1,27 @@
 import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import {
-  App,
+  AdminApp,
+  AdminApps,
+  AdminCreateApp,
+  AdminCreateUser,
+  AdminDeleteApp,
   AppCreateInput,
   AppEnvUpdateInput,
-  Apps,
+  UserAppEnvWalletAdd,
+  UserAppEnvWalletRemove,
   AppUpdateInput,
-  AppUserAdd,
+  UserAppUserAdd,
   AppUserAddInput,
-  AppUserRemove,
+  UserAppUserRemove,
   AppUserRemoveInput,
   AppUserRole,
-  AppUserUpdateRole,
+  UserAppUserUpdateRole,
   AppUserUpdateRoleInput,
-  AppEnvWalletAdd,
-  AppEnvWalletRemove,
   ClusterType,
-  CreateApp,
-  CreateUser,
-  DeleteApp,
-  GenerateWallet,
-  UpdateApp,
-  UpdateAppEnv,
+  UserGenerateWallet,
+  UserUpdateApp,
+  UserUpdateAppEnv,
 } from '../generated/api-sdk'
 import {
   ADMIN_EMAIL,
@@ -67,7 +67,7 @@ describe('App (e2e)', () => {
       it('should create an app', async () => {
         const input: AppCreateInput = { index: appIndex, name: `App ${appIndex}` }
 
-        return runGraphQLQueryAdmin(app, token, CreateApp, { input })
+        return runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -92,7 +92,7 @@ describe('App (e2e)', () => {
           name: `App ${appIndex} edited`,
         }
 
-        return runGraphQLQueryAdmin(app, token, UpdateApp, { appId, input })
+        return runGraphQLQueryAdmin(app, token, UserUpdateApp, { appId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -113,7 +113,7 @@ describe('App (e2e)', () => {
       })
 
       it('should find an app', async () => {
-        return runGraphQLQueryAdmin(app, token, App, { appId })
+        return runGraphQLQueryAdmin(app, token, AdminApp, { appId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -133,7 +133,7 @@ describe('App (e2e)', () => {
       })
 
       it('should find a list of apps', async () => {
-        return runGraphQLQueryAdmin(app, token, Apps)
+        return runGraphQLQueryAdmin(app, token, AdminApps)
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -145,7 +145,7 @@ describe('App (e2e)', () => {
       })
 
       it('should delete an app', async () => {
-        return runGraphQLQueryAdmin(app, token, DeleteApp, { appId })
+        return runGraphQLQueryAdmin(app, token, AdminDeleteApp, { appId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -161,16 +161,16 @@ describe('App (e2e)', () => {
         const input: AppCreateInput = { index, name: `App ${index}` }
 
         // Create First
-        const created1 = await runGraphQLQueryAdmin(app, token, CreateApp, { input })
+        const created1 = await runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
 
         // Delete First
-        await runGraphQLQueryAdmin(app, token, DeleteApp, { appId: created1.body?.data?.created?.id })
+        await runGraphQLQueryAdmin(app, token, AdminDeleteApp, { appId: created1.body?.data?.created?.id })
 
         // Create Second
-        const created2 = await runGraphQLQueryAdmin(app, token, CreateApp, { input })
+        const created2 = await runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
 
         // Delete Second
-        await runGraphQLQueryAdmin(app, token, DeleteApp, { appId: created2.body?.data?.created?.id })
+        await runGraphQLQueryAdmin(app, token, AdminDeleteApp, { appId: created2.body?.data?.created?.id })
       })
     })
 
@@ -182,13 +182,13 @@ describe('App (e2e)', () => {
         const email = uniq('email-')
 
         // Create App
-        const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
+        const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
           input: { index: randomAppIndex(), name: `test-${email}` },
         })
         appId = createdApp.body.data.created.id
 
         // Create user
-        const createdUser = await runGraphQLQueryAdmin(app, token, CreateUser, {
+        const createdUser = await runGraphQLQueryAdmin(app, token, AdminCreateUser, {
           input: { password: 'password', email },
         })
         userId = createdUser.body.data.created.id
@@ -198,7 +198,7 @@ describe('App (e2e)', () => {
           userId,
         }
 
-        await runGraphQLQueryAdmin(app, token, AppUserAdd, { appId, input })
+        await runGraphQLQueryAdmin(app, token, UserAppUserAdd, { appId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -215,7 +215,7 @@ describe('App (e2e)', () => {
           userId,
         }
 
-        await runGraphQLQueryAdmin(app, token, AppUserUpdateRole, { appId, input })
+        await runGraphQLQueryAdmin(app, token, UserAppUserUpdateRole, { appId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -228,7 +228,7 @@ describe('App (e2e)', () => {
 
       it('should remove a user fom an app', async () => {
         const input: AppUserRemoveInput = { userId }
-        await runGraphQLQueryAdmin(app, token, AppUserRemove, { appId, input })
+        await runGraphQLQueryAdmin(app, token, UserAppUserRemove, { appId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -243,7 +243,7 @@ describe('App (e2e)', () => {
       it('should update an app environment', async () => {
         const name = uniq('app-')
         const index = uniqInt()
-        const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
+        const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
           input: { index, name },
         })
         const appId = createdApp.body.data.created.id
@@ -258,7 +258,7 @@ describe('App (e2e)', () => {
           webhookVerifyUrl: 'http://local.mogami.io/api/app/devnet/1/hooks/verify',
         }
 
-        return runGraphQLQueryAdmin(app, token, UpdateAppEnv, { appId, appEnvId, input })
+        return runGraphQLQueryAdmin(app, token, UserUpdateAppEnv, { appId, appEnvId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -290,18 +290,18 @@ describe('App (e2e)', () => {
         const index = uniqInt()
 
         // Create App - but skip automatic wallet generation
-        const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
+        const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
           input: { index: randomAppIndex(), name, skipWalletCreation: true },
         })
         appId = createdApp.body.data.created.id
         appEnvId = createdApp.body.data.created.envs[0].id
 
         // Generate wallet
-        const createdWallet = await runGraphQLQueryAdmin(app, token, GenerateWallet, { index })
+        const createdWallet = await runGraphQLQueryAdmin(app, token, UserGenerateWallet, { index })
         walletId = createdWallet.body.data.generated?.id
         walletPublicKey = createdWallet.body.data.generated?.publicKey
 
-        await runGraphQLQueryAdmin(app, token, AppEnvWalletAdd, { appId, appEnvId, walletId })
+        await runGraphQLQueryAdmin(app, token, UserAppEnvWalletAdd, { appId, appEnvId, walletId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -313,7 +313,7 @@ describe('App (e2e)', () => {
       })
 
       it('should remove a wallet fom an app', async () => {
-        await runGraphQLQueryAdmin(app, token, AppEnvWalletRemove, { appId, appEnvId, walletId })
+        await runGraphQLQueryAdmin(app, token, UserAppEnvWalletRemove, { appId, appEnvId, walletId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -331,9 +331,9 @@ describe('App (e2e)', () => {
         const input: AppCreateInput = { index, name: `App ${index}` }
 
         // Run once
-        await runGraphQLQueryAdmin(app, token, CreateApp, { input })
+        await runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
         // Try to add again
-        return runGraphQLQueryAdmin(app, token, CreateApp, { input })
+        return runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -346,7 +346,7 @@ describe('App (e2e)', () => {
         const testAppId = uniq('app-')
         const input: AppUpdateInput = { name: `App ${testAppId}` }
 
-        return runGraphQLQueryAdmin(app, token, UpdateApp, { appId: testAppId, input })
+        return runGraphQLQueryAdmin(app, token, UserUpdateApp, { appId: testAppId, input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -358,7 +358,7 @@ describe('App (e2e)', () => {
       it('should not update an app env with invalid webhook urls', async () => {
         const name = uniq('app-')
         const index = uniqInt()
-        const createdApp = await runGraphQLQueryAdmin(app, token, CreateApp, {
+        const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
           input: { index, name },
         })
         const createdAppId = createdApp.body.data.created.id
@@ -366,7 +366,11 @@ describe('App (e2e)', () => {
 
         const input: AppEnvUpdateInput = { webhookVerifyUrl: 'test', webhookEventUrl: 'test' }
 
-        return runGraphQLQueryAdmin(app, token, UpdateAppEnv, { appId: createdAppId, appEnvId: createdAppEnvId, input })
+        return runGraphQLQueryAdmin(app, token, UserUpdateAppEnv, {
+          appId: createdAppId,
+          appEnvId: createdAppEnvId,
+          input,
+        })
           .expect(200)
           .expect((res) => {
             const errors = JSON.parse(res.text).errors
@@ -376,7 +380,7 @@ describe('App (e2e)', () => {
 
       it('should not find an app that does not exist', async () => {
         const testAppId = uniq('app-')
-        return runGraphQLQueryAdmin(app, token, App, { appId: testAppId })
+        return runGraphQLQueryAdmin(app, token, AdminApp, { appId: testAppId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -387,7 +391,7 @@ describe('App (e2e)', () => {
 
       it('should not delete an app that does not exist', async () => {
         const testAppId = uniq('app-')
-        return runGraphQLQueryAdmin(app, token, DeleteApp, { appId: testAppId })
+        return runGraphQLQueryAdmin(app, token, AdminDeleteApp, { appId: testAppId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -401,7 +405,7 @@ describe('App (e2e)', () => {
       it('should not create an app', async () => {
         const input: AppCreateInput = { index: undefined, name: undefined }
 
-        return runGraphQLQuery(app, CreateApp, { input })
+        return runGraphQLQuery(app, AdminCreateApp, { input })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -413,7 +417,7 @@ describe('App (e2e)', () => {
       it('should not update an app', async () => {
         const input: AppUpdateInput = { name: undefined }
 
-        return runGraphQLQuery(app, UpdateApp, { appId: undefined, input })
+        return runGraphQLQuery(app, UserUpdateApp, { appId: undefined, input })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -423,7 +427,7 @@ describe('App (e2e)', () => {
       })
 
       it('should not find an app', async () => {
-        return runGraphQLQuery(app, App, { appId: undefined })
+        return runGraphQLQuery(app, AdminApp, { appId: undefined })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -433,7 +437,7 @@ describe('App (e2e)', () => {
       })
 
       it('should not delete an app', async () => {
-        return runGraphQLQuery(app, DeleteApp, { appId: undefined })
+        return runGraphQLQuery(app, AdminDeleteApp, { appId: undefined })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -447,7 +451,7 @@ describe('App (e2e)', () => {
       it('should not create an app', async () => {
         const input: AppCreateInput = { index: appIndex, name: `App ${appIndex}` }
 
-        return runGraphQLQuery(app, CreateApp, { input })
+        return runGraphQLQuery(app, AdminCreateApp, { input })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('text')
@@ -459,25 +463,25 @@ describe('App (e2e)', () => {
       it('should not update an app', async () => {
         const input: AppUpdateInput = { name: `App ${appIndex} edited` }
 
-        return runGraphQLQuery(app, UpdateApp, { appId, input })
+        return runGraphQLQuery(app, UserUpdateApp, { appId, input })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })
 
       it('should not find an app', async () => {
-        return runGraphQLQuery(app, App, { appId })
+        return runGraphQLQuery(app, AdminApp, { appId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })
 
       it('should not find a list of apps', async () => {
-        return runGraphQLQuery(app, Apps)
+        return runGraphQLQuery(app, AdminApps)
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })
 
       it('should not delete an app', async () => {
-        return runGraphQLQuery(app, DeleteApp, { appId })
+        return runGraphQLQuery(app, AdminDeleteApp, { appId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })

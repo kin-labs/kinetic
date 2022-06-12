@@ -11,18 +11,20 @@ export function AdminUiLayout({
   copyright,
   name,
   links = [],
+  logo,
   logout,
   user,
 }: PropsWithChildren<{
   copyright: ReactNode
   name: string
   links?: AdminUiLink[]
+  logo: string
   logout?: AdminAuthLogoutFn
   user?: User
 }>) {
   return (
     <Flex direction="column" h="full">
-      <AdminUiHeader links={links} logout={logout} name={name} user={user} />
+      <AdminUiHeader links={links} logo={logo} logout={logout} name={name} user={user} />
       <Flex direction="column" grow={1} p={4}>
         <Container maxW="container.xl" h="full">
           {children}

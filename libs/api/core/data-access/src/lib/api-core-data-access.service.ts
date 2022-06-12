@@ -3,9 +3,9 @@ import { hashPassword } from '@mogami/api/auth/util'
 import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
 import { Keypair } from '@mogami/keypair'
 import { getPublicKey, Solana } from '@mogami/solana'
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
-import { ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
+import { App, AppUserRole, ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
 import { omit } from 'lodash'
 import { MetricService } from 'nestjs-otel'
 
@@ -42,6 +42,35 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       throw new Error(`Admin role required.`)
     }
     return user
+  }
+
+  async ensureApp(appId: string): Promise<App> {
+    const app = await this.app.findUnique({ where: { id: appId } })
+    if (!app) {
+      throw new NotFoundException(`App with id ${appId} does not exist.`)
+    }
+    return app
+  }
+
+  async ensureAppOwner(userId: string, appId: string): Promise<AppUserRole> {
+    const role = await this.ensureAppUser(userId, appId)
+    if (role !== AppUserRole.Owner) {
+      throw new UnauthorizedException(`User ${userId} does not have Owner access to app ${appId}.`)
+    }
+    return role
+  }
+
+  async ensureAppUser(userId: string, appId: string): Promise<AppUserRole> {
+    await this.ensureApp(appId)
+    const user = await this.getUserById(userId)
+    if (user.role === UserRole.Admin) {
+      return AppUserRole.Owner
+    }
+    const appUser = await this.appUser.findFirst({ where: { appId, userId } })
+    if (!appUser) {
+      throw new NotFoundException(`User ${userId} does not have access to app ${appId}.`)
+    }
+    return appUser?.role
   }
 
   getActiveClusters() {
@@ -149,35 +178,83 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   async configureDefaultData() {
-    await this.configureAdminUser()
-    await this.configureClusters()
-    await this.configureMints()
+    await this.configureDefaultUsers()
+    await this.configureDefaultClusters()
+    await this.configureDefaultMints()
   }
 
-  private async configureAdminUser() {
-    const email = this.config.adminEmail
-    const password = this.config.adminPassword
-    const existing = await this.user.count({ where: { role: UserRole.Admin } })
+  private async configureDefaultUsers() {
+    await this.configureDefaultUser({
+      id: 'admin',
+      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/aliceal.svg',
+      name: 'Alice',
+      email: this.config.adminEmail,
+      password: this.config.adminPassword,
+      role: UserRole.Admin,
+    })
+    await this.configureDefaultUser({
+      id: 'bob',
+      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/bob42.svg',
+      name: 'Bob',
+      email: this.config.adminEmail.replace('admin', 'bob'),
+      password: this.config.adminPassword.replace('@dmin', '@bob'),
+      role: UserRole.User,
+    })
+    await this.configureDefaultUser({
+      id: 'charlie',
+      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/charlie42222.svg',
+      name: 'Charlie',
+      email: this.config.adminEmail.replace('admin', 'charlie'),
+      password: this.config.adminPassword.replace('@dmin', '@charlie'),
+      role: UserRole.User,
+    })
+    await this.configureDefaultUser({
+      id: 'dave',
+      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/dave42.svg',
+      name: 'Dave',
+      email: this.config.adminEmail.replace('admin', 'dave'),
+      password: this.config.adminPassword.replace('@dmin', '@dave'),
+      role: UserRole.User,
+    })
+  }
+
+  private async configureDefaultUser({
+    id,
+    avatarUrl,
+    name,
+    email,
+    password,
+    role,
+  }: {
+    id: string
+    avatarUrl: string
+    name: string
+    email: string
+    password: string
+    role: UserRole
+  }) {
+    const existing = await this.user.count({ where: { id } })
     if (existing < 1) {
       await this.user.create({
         data: {
-          id: 'admin',
-          name: 'Admin',
+          id,
+          avatarUrl,
+          name,
           password: hashPassword(password),
-          role: UserRole.Admin,
-          username: 'admin',
+          role,
+          username: id,
           emails: {
             create: { email },
           },
         },
       })
-      this.logger.verbose(`Created new Admin with email ${email} and password ${password}`)
+      this.logger.verbose(`Created new ${role} with email ${email} and password ${password}`)
       return
     }
-    this.logger.verbose(`Log in as Admin with email ${email} and password ${password}`)
+    this.logger.verbose(`Log in as ${role} with email ${email} and password ${password}`)
   }
 
-  private async configureClusters() {
+  private async configureDefaultClusters() {
     return Promise.all(
       this.config.clusters.map((cluster) =>
         this.cluster
@@ -191,7 +268,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     )
   }
 
-  private async configureMints() {
+  private async configureDefaultMints() {
     return Promise.all(
       this.config.mints.map((mint) =>
         this.mint

@@ -62,8 +62,8 @@ fragment MintDetails on Mint {
   type
 }
 
-mutation addClusterMint($input: MintAddInput!) {
-  addClusterMint(input: $input) {
+mutation AdminAddClusterMint($input: MintAddInput!) {
+  adminAddClusterMint(input: $input) {
     ...ClusterDetails
     mints {
       ...MintDetails
@@ -71,26 +71,26 @@ mutation addClusterMint($input: MintAddInput!) {
   }
 }
 
-mutation CreateCluster($input: ClusterCreateInput!) {
-  created: createCluster(input: $input) {
+mutation AdminCreateCluster($input: ClusterCreateInput!) {
+  created: adminCreateCluster(input: $input) {
     ...ClusterDetails
   }
 }
 
-mutation DeleteCluster($clusterId: String!) {
-  deleted: deleteCluster(clusterId: $clusterId) {
+mutation AdminDeleteCluster($clusterId: String!) {
+  deleted: adminDeleteCluster(clusterId: $clusterId) {
     ...ClusterDetails
   }
 }
 
-mutation UpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
-  updated: updateCluster(clusterId: $clusterId, input: $input) {
+mutation AdminUpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
+  updated: adminUpdateCluster(clusterId: $clusterId, input: $input) {
     ...ClusterDetails
   }
 }
 
-query Cluster($clusterId: String!) {
-  item: cluster(clusterId: $clusterId) {
+query AdminCluster($clusterId: String!) {
+  item: adminCluster(clusterId: $clusterId) {
     ...ClusterDetails
     mints {
       ...MintDetails
@@ -98,14 +98,14 @@ query Cluster($clusterId: String!) {
   }
 }
 
-query ClusterTokens($input: ClusterTokenInput!) {
-  items: clusterTokens(input: $input) {
+query AdminClusterTokens($input: ClusterTokenInput!) {
+  items: adminClusterTokens(input: $input) {
     ...ClusterTokenDetails
   }
 }
 
-query Clusters {
-  items: clusters {
+query AdminClusters {
+  items: adminClusters {
     ...ClusterDetails
     mints {
       ...MintDetails

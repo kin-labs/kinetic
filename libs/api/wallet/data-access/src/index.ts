@@ -1,5 +1,6 @@
+export * from './lib/api-wallet-admin-data-access.service'
 export * from './lib/api-wallet-data-access.module'
-export * from './lib/api-wallet-data-access.service'
+export * from './lib/api-wallet-user-data-access.service'
 export * from './lib/entity/wallet-airdrop-response.entity'
 export * from './lib/entity/wallet-balance.entity'
 export * from './lib/entity/wallet.entity'

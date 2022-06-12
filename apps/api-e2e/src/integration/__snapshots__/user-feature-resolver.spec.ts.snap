@@ -8,7 +8,7 @@ Array [
     },
     "locations": Array [
       Object {
-        "column": 21,
+        "column": 26,
         "line": 1,
       },
     ],
@@ -20,7 +20,7 @@ Array [
     },
     "locations": Array [
       Object {
-        "column": 21,
+        "column": 26,
         "line": 1,
       },
     ],
@@ -37,7 +37,7 @@ Array [
     },
     "locations": Array [
       Object {
-        "column": 21,
+        "column": 26,
         "line": 1,
       },
     ],
@@ -54,7 +54,7 @@ Array [
     },
     "locations": Array [
       Object {
-        "column": 12,
+        "column": 17,
         "line": 1,
       },
     ],
@@ -71,7 +71,7 @@ Array [
     },
     "locations": Array [
       Object {
-        "column": 21,
+        "column": 26,
         "line": 1,
       },
     ],

@@ -1,6 +1,6 @@
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Alert, Box, Button, Stack } from '@chakra-ui/react'
-import { ClusterToken, ClusterTokenInput, useClusterTokensQuery } from '@mogami/shared/util/admin-sdk'
+import { ClusterToken, ClusterTokenInput, useAdminClusterTokensQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { AdminClusterUiTokenList } from './admin-cluster-ui-token-list'
 
@@ -15,7 +15,7 @@ export function AdminClusterUiTokenResults({
   input: ClusterTokenInput
   selectToken: (token: ClusterToken) => void
 }) {
-  const [{ data, fetching }] = useClusterTokensQuery({ variables: { input } })
+  const [{ data, fetching }] = useAdminClusterTokensQuery({ variables: { input } })
   if (fetching) {
     return <Alert>Loading.</Alert>
   }

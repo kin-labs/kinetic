@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from '@choc-ui/chakra-autocomplete'
-import { AppUser, AppUserRole, useUsersQuery } from '@mogami/shared/util/admin-sdk'
+import { AppUser, AppUserRole, useAdminUsersQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUiUserModal({
@@ -29,7 +29,7 @@ export function AdminAppUiUserModal({
   const [userId, setUserId] = React.useState<string | undefined>(user?.user?.id)
   const [role, setRole] = React.useState<AppUserRole>(user?.role || AppUserRole.Member)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [{ data: userData }] = useUsersQuery()
+  const [{ data: userData }] = useAdminUsersQuery()
 
   const userOptions = (userData?.items || []).map((user) => ({ userId: user.id, name: user.name }))
   const onSubmit = () => {

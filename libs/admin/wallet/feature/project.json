@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/admin/wallet/feature/src",
+  "projectType": "library",
+  "tags": ["scope:admin", "type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/admin/wallet/feature/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/admin/wallet/feature"],
+      "options": {
+        "jestConfig": "libs/admin/wallet/feature/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

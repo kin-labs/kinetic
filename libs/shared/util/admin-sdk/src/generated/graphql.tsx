@@ -45,6 +45,7 @@ export type AppEnv = {
   cluster?: Maybe<Cluster>
   createdAt: Scalars['DateTime']
   id: Scalars['String']
+  key?: Maybe<Scalars['String']>
   mints?: Maybe<Array<AppMint>>
   name?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
@@ -320,203 +321,231 @@ export enum MintType {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  addClusterMint?: Maybe<Cluster>
-  appEnvWalletAdd?: Maybe<AppEnv>
-  appEnvWalletRemove?: Maybe<AppEnv>
-  appUserAdd?: Maybe<App>
-  appUserRemove?: Maybe<App>
-  appUserUpdateRole?: Maybe<App>
-  createApp?: Maybe<App>
-  createCluster?: Maybe<Cluster>
-  createUser?: Maybe<User>
-  deleteApp?: Maybe<App>
-  deleteCluster?: Maybe<Cluster>
-  deleteUser?: Maybe<User>
-  deleteWallet?: Maybe<Wallet>
-  generateWallet?: Maybe<Wallet>
+  adminAddClusterMint?: Maybe<Cluster>
+  adminCreateApp?: Maybe<App>
+  adminCreateCluster?: Maybe<Cluster>
+  adminCreateUser?: Maybe<User>
+  adminDeleteApp?: Maybe<App>
+  adminDeleteCluster?: Maybe<Cluster>
+  adminDeleteUser?: Maybe<User>
+  adminDeleteWallet?: Maybe<Wallet>
+  adminUpdateCluster?: Maybe<Cluster>
+  adminUpdateUser?: Maybe<User>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
-  updateApp?: Maybe<App>
-  updateAppEnv?: Maybe<AppEnv>
-  updateCluster?: Maybe<Cluster>
-  updateUser?: Maybe<User>
+  userAppEnvWalletAdd?: Maybe<AppEnv>
+  userAppEnvWalletRemove?: Maybe<AppEnv>
+  userAppUserAdd?: Maybe<App>
+  userAppUserRemove?: Maybe<App>
+  userAppUserUpdateRole?: Maybe<App>
+  userDeleteWallet?: Maybe<Wallet>
+  userGenerateWallet?: Maybe<Wallet>
+  userUpdateApp?: Maybe<App>
+  userUpdateAppEnv?: Maybe<AppEnv>
 }
 
-export type MutationAddClusterMintArgs = {
+export type MutationAdminAddClusterMintArgs = {
   input: MintAddInput
 }
 
-export type MutationAppEnvWalletAddArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  walletId: Scalars['String']
-}
-
-export type MutationAppEnvWalletRemoveArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  walletId: Scalars['String']
-}
-
-export type MutationAppUserAddArgs = {
-  appId: Scalars['String']
-  input: AppUserAddInput
-}
-
-export type MutationAppUserRemoveArgs = {
-  appId: Scalars['String']
-  input: AppUserRemoveInput
-}
-
-export type MutationAppUserUpdateRoleArgs = {
-  appId: Scalars['String']
-  input: AppUserUpdateRoleInput
-}
-
-export type MutationCreateAppArgs = {
+export type MutationAdminCreateAppArgs = {
   input: AppCreateInput
 }
 
-export type MutationCreateClusterArgs = {
+export type MutationAdminCreateClusterArgs = {
   input: ClusterCreateInput
 }
 
-export type MutationCreateUserArgs = {
+export type MutationAdminCreateUserArgs = {
   input: UserCreateInput
 }
 
-export type MutationDeleteAppArgs = {
+export type MutationAdminDeleteAppArgs = {
   appId: Scalars['String']
 }
 
-export type MutationDeleteClusterArgs = {
+export type MutationAdminDeleteClusterArgs = {
   clusterId: Scalars['String']
 }
 
-export type MutationDeleteUserArgs = {
+export type MutationAdminDeleteUserArgs = {
   userId: Scalars['String']
 }
 
-export type MutationDeleteWalletArgs = {
+export type MutationAdminDeleteWalletArgs = {
   walletId: Scalars['String']
 }
 
-export type MutationGenerateWalletArgs = {
-  index: Scalars['Int']
+export type MutationAdminUpdateClusterArgs = {
+  clusterId: Scalars['String']
+  input: ClusterUpdateInput
+}
+
+export type MutationAdminUpdateUserArgs = {
+  input: UserUpdateInput
+  userId: Scalars['String']
 }
 
 export type MutationLoginArgs = {
   input: LoginInput
 }
 
-export type MutationUpdateAppArgs = {
+export type MutationUserAppEnvWalletAddArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  walletId: Scalars['String']
+}
+
+export type MutationUserAppEnvWalletRemoveArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  walletId: Scalars['String']
+}
+
+export type MutationUserAppUserAddArgs = {
+  appId: Scalars['String']
+  input: AppUserAddInput
+}
+
+export type MutationUserAppUserRemoveArgs = {
+  appId: Scalars['String']
+  input: AppUserRemoveInput
+}
+
+export type MutationUserAppUserUpdateRoleArgs = {
+  appId: Scalars['String']
+  input: AppUserUpdateRoleInput
+}
+
+export type MutationUserDeleteWalletArgs = {
+  walletId: Scalars['String']
+}
+
+export type MutationUserGenerateWalletArgs = {
+  index: Scalars['Int']
+}
+
+export type MutationUserUpdateAppArgs = {
   appId: Scalars['String']
   input: AppUpdateInput
 }
 
-export type MutationUpdateAppEnvArgs = {
+export type MutationUserUpdateAppEnvArgs = {
   appEnvId: Scalars['String']
   appId: Scalars['String']
   input: AppEnvUpdateInput
 }
 
-export type MutationUpdateClusterArgs = {
-  clusterId: Scalars['String']
-  input: ClusterUpdateInput
+export type Query = {
+  __typename?: 'Query'
+  adminApp?: Maybe<App>
+  adminApps?: Maybe<Array<App>>
+  adminCluster?: Maybe<Cluster>
+  adminClusterTokens?: Maybe<Array<ClusterToken>>
+  adminClusters?: Maybe<Array<Cluster>>
+  adminUser?: Maybe<User>
+  adminUsers?: Maybe<Array<User>>
+  adminWallet?: Maybe<Wallet>
+  adminWalletBalances?: Maybe<Array<WalletBalance>>
+  adminWallets?: Maybe<Array<Wallet>>
+  clusterStats?: Maybe<Array<ClusterStat>>
+  me?: Maybe<User>
+  uptime: Scalars['Float']
+  userApp?: Maybe<App>
+  userAppEnv?: Maybe<AppEnv>
+  userAppRole?: Maybe<AppUserRole>
+  userAppTransaction?: Maybe<AppTransaction>
+  userAppTransactions?: Maybe<Array<AppTransaction>>
+  userAppWebhook?: Maybe<AppWebhook>
+  userAppWebhooks?: Maybe<Array<AppWebhook>>
+  userApps?: Maybe<Array<App>>
+  userWallet?: Maybe<Wallet>
+  userWalletAirdrop?: Maybe<WalletAirdropResponse>
+  userWalletBalance?: Maybe<WalletBalance>
+  userWalletBalances?: Maybe<Array<WalletBalance>>
+  userWallets?: Maybe<Array<Wallet>>
 }
 
-export type MutationUpdateUserArgs = {
-  input: UserUpdateInput
+export type QueryAdminAppArgs = {
+  appId: Scalars['String']
+}
+
+export type QueryAdminClusterArgs = {
+  clusterId: Scalars['String']
+}
+
+export type QueryAdminClusterTokensArgs = {
+  input: ClusterTokenInput
+}
+
+export type QueryAdminUserArgs = {
   userId: Scalars['String']
 }
 
-export type Query = {
-  __typename?: 'Query'
-  app?: Maybe<App>
-  appEnv?: Maybe<AppEnv>
-  appTransaction?: Maybe<AppTransaction>
-  appTransactions?: Maybe<Array<AppTransaction>>
-  appWebhook?: Maybe<AppWebhook>
-  appWebhooks?: Maybe<Array<AppWebhook>>
-  apps?: Maybe<Array<App>>
-  cluster?: Maybe<Cluster>
-  clusterStats?: Maybe<Array<ClusterStat>>
-  clusterTokens?: Maybe<Array<ClusterToken>>
-  clusters?: Maybe<Array<Cluster>>
-  me?: Maybe<User>
-  uptime: Scalars['Float']
-  user?: Maybe<User>
-  users?: Maybe<Array<User>>
-  wallet?: Maybe<Wallet>
-  walletAirdrop?: Maybe<WalletAirdropResponse>
-  walletBalance?: Maybe<WalletBalance>
-  walletBalances?: Maybe<Array<WalletBalance>>
-  wallets?: Maybe<Array<Wallet>>
+export type QueryAdminWalletArgs = {
+  walletId: Scalars['String']
 }
 
-export type QueryAppArgs = {
-  appId: Scalars['String']
-}
-
-export type QueryAppEnvArgs = {
+export type QueryAdminWalletBalancesArgs = {
   appEnvId: Scalars['String']
-  appId: Scalars['String']
-}
-
-export type QueryAppTransactionArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  appTransactionId: Scalars['String']
-}
-
-export type QueryAppTransactionsArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  input?: InputMaybe<AppTransactionListInput>
-}
-
-export type QueryAppWebhookArgs = {
-  appId: Scalars['String']
-  appWebhookId: Scalars['String']
-}
-
-export type QueryAppWebhooksArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-}
-
-export type QueryClusterArgs = {
-  clusterId: Scalars['String']
+  walletId: Scalars['String']
 }
 
 export type QueryClusterStatsArgs = {
   clusterId: Scalars['String']
 }
 
-export type QueryClusterTokensArgs = {
-  input: ClusterTokenInput
+export type QueryUserAppArgs = {
+  appId: Scalars['String']
 }
 
-export type QueryUserArgs = {
-  userId: Scalars['String']
+export type QueryUserAppEnvArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
 }
 
-export type QueryWalletArgs = {
+export type QueryUserAppRoleArgs = {
+  appId: Scalars['String']
+}
+
+export type QueryUserAppTransactionArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  appTransactionId: Scalars['String']
+}
+
+export type QueryUserAppTransactionsArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  input?: InputMaybe<AppTransactionListInput>
+}
+
+export type QueryUserAppWebhookArgs = {
+  appId: Scalars['String']
+  appWebhookId: Scalars['String']
+}
+
+export type QueryUserAppWebhooksArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+}
+
+export type QueryUserWalletArgs = {
   walletId: Scalars['String']
 }
 
-export type QueryWalletAirdropArgs = {
+export type QueryUserWalletAirdropArgs = {
   amount: Scalars['Float']
   appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
-export type QueryWalletBalanceArgs = {
+export type QueryUserWalletBalanceArgs = {
   appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
-export type QueryWalletBalancesArgs = {
+export type QueryUserWalletBalancesArgs = {
   appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
@@ -565,6 +594,7 @@ export type UserUpdateInput = {
 
 export type Wallet = {
   __typename?: 'Wallet'
+  appEnvs?: Maybe<Array<AppEnv>>
   balances?: Maybe<Array<WalletBalance>>
   createdAt?: Maybe<Scalars['DateTime']>
   id: Scalars['String']
@@ -579,11 +609,317 @@ export type WalletAirdropResponse = {
 
 export type WalletBalance = {
   __typename?: 'WalletBalance'
+  appEnv?: Maybe<AppEnv>
   balance?: Maybe<Scalars['BigInt']>
   change?: Maybe<Scalars['BigInt']>
   createdAt?: Maybe<Scalars['DateTime']>
   id?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
+}
+
+export type AdminCreateAppMutationVariables = Exact<{
+  input: AppCreateInput
+}>
+
+export type AdminCreateAppMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      key?: string | null
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+      wallets?: Array<{
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      }> | null
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        enableStats?: boolean | null
+        endpoint?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          logoUrl?: string | null
+          name?: string | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id: string
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
+    }> | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type AdminDeleteAppMutationVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type AdminDeleteAppMutation = {
+  __typename?: 'Mutation'
+  deleted?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+  } | null
+}
+
+export type AdminAppsQueryVariables = Exact<{ [key: string]: never }>
+
+export type AdminAppsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      key?: string | null
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        enableStats?: boolean | null
+        endpoint?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          logoUrl?: string | null
+          name?: string | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id: string
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
+    }> | null
+  }> | null
+}
+
+export type AdminAppQueryVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type AdminAppQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      key?: string | null
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+      wallets?: Array<{
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      }> | null
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        enableStats?: boolean | null
+        endpoint?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          logoUrl?: string | null
+          name?: string | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id: string
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
+    }> | null
+    users?: Array<{
+      __typename?: 'AppUser'
+      id: string
+      createdAt: any
+      updatedAt: any
+      role: AppUserRole
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      user?: {
+        __typename?: 'User'
+        id: string
+        createdAt: any
+        updatedAt: any
+        avatarUrl?: string | null
+        email?: string | null
+        name?: string | null
+        username: string
+        role?: UserRole | null
+      } | null
+    }> | null
+  } | null
 }
 
 export type AppDetailsFragment = {
@@ -600,6 +936,7 @@ export type AppEnvDetailsFragment = {
   id: string
   createdAt: any
   updatedAt: any
+  key?: string | null
   name?: string | null
   webhookAcceptIncoming?: boolean | null
   webhookEventEnabled?: boolean | null
@@ -753,135 +1090,12 @@ export type AppWebhookDetailsFragment = {
   type: AppWebhookType
 }
 
-export type CreateAppMutationVariables = Exact<{
-  input: AppCreateInput
-}>
-
-export type CreateAppMutation = {
-  __typename?: 'Mutation'
-  created?: {
-    __typename?: 'App'
-    id: string
-    createdAt: any
-    updatedAt: any
-    index: number
-    name?: string | null
-    envs?: Array<{
-      __typename?: 'AppEnv'
-      id: string
-      createdAt: any
-      updatedAt: any
-      name?: string | null
-      webhookAcceptIncoming?: boolean | null
-      webhookEventEnabled?: boolean | null
-      webhookEventUrl?: string | null
-      webhookSecret?: string | null
-      webhookVerifyEnabled?: boolean | null
-      webhookVerifyUrl?: string | null
-      wallets?: Array<{
-        __typename?: 'Wallet'
-        id: string
-        createdAt?: any | null
-        updatedAt?: any | null
-        publicKey?: string | null
-      }> | null
-      app?: {
-        __typename?: 'App'
-        id: string
-        createdAt: any
-        updatedAt: any
-        index: number
-        name?: string | null
-      } | null
-      cluster?: {
-        __typename?: 'Cluster'
-        id?: string | null
-        createdAt?: any | null
-        updatedAt?: any | null
-        enableStats?: boolean | null
-        endpoint?: string | null
-        name?: string | null
-        status?: ClusterStatus | null
-        type?: ClusterType | null
-      } | null
-      mints?: Array<{
-        __typename?: 'AppMint'
-        id: string
-        createdAt: any
-        updatedAt: any
-        mint?: {
-          __typename?: 'Mint'
-          id?: string | null
-          createdAt?: any | null
-          updatedAt?: any | null
-          address?: string | null
-          coingeckoId?: string | null
-          decimals?: number | null
-          logoUrl?: string | null
-          name?: string | null
-          symbol?: string | null
-          type?: MintType | null
-        } | null
-        wallet?: {
-          __typename?: 'Wallet'
-          id: string
-          createdAt?: any | null
-          updatedAt?: any | null
-          publicKey?: string | null
-        } | null
-      }> | null
-    }> | null
-    users?: Array<{
-      __typename?: 'AppUser'
-      id: string
-      createdAt: any
-      updatedAt: any
-      role: AppUserRole
-      app?: {
-        __typename?: 'App'
-        id: string
-        createdAt: any
-        updatedAt: any
-        index: number
-        name?: string | null
-      } | null
-      user?: {
-        __typename?: 'User'
-        id: string
-        createdAt: any
-        updatedAt: any
-        avatarUrl?: string | null
-        email?: string | null
-        name?: string | null
-        username: string
-        role?: UserRole | null
-      } | null
-    }> | null
-  } | null
-}
-
-export type DeleteAppMutationVariables = Exact<{
-  appId: Scalars['String']
-}>
-
-export type DeleteAppMutation = {
-  __typename?: 'Mutation'
-  deleted?: {
-    __typename?: 'App'
-    id: string
-    createdAt: any
-    updatedAt: any
-    index: number
-    name?: string | null
-  } | null
-}
-
-export type UpdateAppMutationVariables = Exact<{
+export type UserUpdateAppMutationVariables = Exact<{
   appId: Scalars['String']
   input: AppUpdateInput
 }>
 
-export type UpdateAppMutation = {
+export type UserUpdateAppMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'App'
@@ -895,6 +1109,7 @@ export type UpdateAppMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      key?: string | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -984,19 +1199,20 @@ export type UpdateAppMutation = {
   } | null
 }
 
-export type UpdateAppEnvMutationVariables = Exact<{
+export type UserUpdateAppEnvMutationVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
   input: AppEnvUpdateInput
 }>
 
-export type UpdateAppEnvMutation = {
+export type UserUpdateAppEnvMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'AppEnv'
     id: string
     createdAt: any
     updatedAt: any
+    key?: string | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -1052,12 +1268,12 @@ export type UpdateAppEnvMutation = {
   } | null
 }
 
-export type AppUserAddMutationVariables = Exact<{
+export type UserAppUserAddMutationVariables = Exact<{
   appId: Scalars['String']
   input: AppUserAddInput
 }>
 
-export type AppUserAddMutation = {
+export type UserAppUserAddMutation = {
   __typename?: 'Mutation'
   item?: {
     __typename?: 'App'
@@ -1095,12 +1311,12 @@ export type AppUserAddMutation = {
   } | null
 }
 
-export type AppUserRemoveMutationVariables = Exact<{
+export type UserAppUserRemoveMutationVariables = Exact<{
   appId: Scalars['String']
   input: AppUserRemoveInput
 }>
 
-export type AppUserRemoveMutation = {
+export type UserAppUserRemoveMutation = {
   __typename?: 'Mutation'
   item?: {
     __typename?: 'App'
@@ -1138,12 +1354,12 @@ export type AppUserRemoveMutation = {
   } | null
 }
 
-export type AppUserUpdateRoleMutationVariables = Exact<{
+export type UserAppUserUpdateRoleMutationVariables = Exact<{
   appId: Scalars['String']
   input: AppUserUpdateRoleInput
 }>
 
-export type AppUserUpdateRoleMutation = {
+export type UserAppUserUpdateRoleMutation = {
   __typename?: 'Mutation'
   item?: {
     __typename?: 'App'
@@ -1181,19 +1397,20 @@ export type AppUserUpdateRoleMutation = {
   } | null
 }
 
-export type AppEnvWalletAddMutationVariables = Exact<{
+export type UserAppEnvWalletAddMutationVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
-export type AppEnvWalletAddMutation = {
+export type UserAppEnvWalletAddMutation = {
   __typename?: 'Mutation'
   item?: {
     __typename?: 'AppEnv'
     id: string
     createdAt: any
     updatedAt: any
+    key?: string | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -1249,19 +1466,20 @@ export type AppEnvWalletAddMutation = {
   } | null
 }
 
-export type AppEnvWalletRemoveMutationVariables = Exact<{
+export type UserAppEnvWalletRemoveMutationVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
-export type AppEnvWalletRemoveMutation = {
+export type UserAppEnvWalletRemoveMutation = {
   __typename?: 'Mutation'
   item?: {
     __typename?: 'AppEnv'
     id: string
     createdAt: any
     updatedAt: any
+    key?: string | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -1317,12 +1535,222 @@ export type AppEnvWalletRemoveMutation = {
   } | null
 }
 
-export type AppQueryVariables = Exact<{
+export type UserAppTransactionQueryVariables = Exact<{
   appId: Scalars['String']
+  appEnvId: Scalars['String']
+  appTransactionId: Scalars['String']
 }>
 
-export type AppQuery = {
+export type UserAppTransactionQuery = {
   __typename?: 'Query'
+  item?: {
+    __typename?: 'AppTransaction'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    amount?: number | null
+    destination?: string | null
+    feePayer?: string | null
+    mint?: string | null
+    processingDuration?: number | null
+    referenceId?: string | null
+    referenceType?: string | null
+    signature?: string | null
+    solanaCommittedDuration?: number | null
+    solanaFinalized?: any | null
+    solanaFinalizedDuration?: number | null
+    solanaCommitted?: any | null
+    solanaStart?: any | null
+    solanaTransaction?: any | null
+    source?: string | null
+    status: AppTransactionStatus
+    totalDuration?: number | null
+    webhookEventDuration?: number | null
+    webhookEventEnd?: any | null
+    webhookEventStart?: any | null
+    webhookVerifyDuration?: number | null
+    webhookVerifyEnd?: any | null
+    webhookVerifyStart?: any | null
+    errors?: Array<{
+      __typename?: 'AppTransactionError'
+      id?: string | null
+      message?: string | null
+      type: AppTransactionErrorType
+      instruction?: number | null
+    }> | null
+  } | null
+}
+
+export type UserAppTransactionsQueryVariables = Exact<{
+  appId: Scalars['String']
+  appEnvId: Scalars['String']
+  input?: InputMaybe<AppTransactionListInput>
+}>
+
+export type UserAppTransactionsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'AppTransaction'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    amount?: number | null
+    destination?: string | null
+    feePayer?: string | null
+    mint?: string | null
+    processingDuration?: number | null
+    referenceId?: string | null
+    referenceType?: string | null
+    signature?: string | null
+    solanaCommittedDuration?: number | null
+    solanaFinalized?: any | null
+    solanaFinalizedDuration?: number | null
+    solanaCommitted?: any | null
+    solanaStart?: any | null
+    solanaTransaction?: any | null
+    source?: string | null
+    status: AppTransactionStatus
+    totalDuration?: number | null
+    webhookEventDuration?: number | null
+    webhookEventEnd?: any | null
+    webhookEventStart?: any | null
+    webhookVerifyDuration?: number | null
+    webhookVerifyEnd?: any | null
+    webhookVerifyStart?: any | null
+    errors?: Array<{
+      __typename?: 'AppTransactionError'
+      id?: string | null
+      message?: string | null
+      type: AppTransactionErrorType
+      instruction?: number | null
+    }> | null
+  }> | null
+}
+
+export type UserAppWebhookQueryVariables = Exact<{
+  appId: Scalars['String']
+  appWebhookId: Scalars['String']
+}>
+
+export type UserAppWebhookQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'AppWebhook'
+    id: string
+    createdAt: any
+    updatedAt: any
+    direction: AppWebhookDirection
+    headers?: any | null
+    payload?: any | null
+    responseError?: string | null
+    responsePayload?: any | null
+    responseStatus?: number | null
+    type: AppWebhookType
+  } | null
+}
+
+export type UserAppWebhooksQueryVariables = Exact<{
+  appId: Scalars['String']
+  appEnvId: Scalars['String']
+}>
+
+export type UserAppWebhooksQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'AppWebhook'
+    id: string
+    createdAt: any
+    updatedAt: any
+    direction: AppWebhookDirection
+    headers?: any | null
+    payload?: any | null
+    responseError?: string | null
+    responsePayload?: any | null
+    responseStatus?: number | null
+    type: AppWebhookType
+  }> | null
+}
+
+export type UserAppsQueryVariables = Exact<{ [key: string]: never }>
+
+export type UserAppsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      key?: string | null
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        enableStats?: boolean | null
+        endpoint?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          logoUrl?: string | null
+          name?: string | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id: string
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
+    }> | null
+  }> | null
+}
+
+export type UserAppQueryVariables = Exact<{
+  appId: Scalars['String']
+}>
+
+export type UserAppQuery = {
+  __typename?: 'Query'
+  role?: AppUserRole | null
   item?: {
     __typename?: 'App'
     id: string
@@ -1335,6 +1763,7 @@ export type AppQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      key?: string | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -1424,18 +1853,19 @@ export type AppQuery = {
   } | null
 }
 
-export type AppEnvQueryVariables = Exact<{
+export type UserAppEnvQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
 }>
 
-export type AppEnvQuery = {
+export type UserAppEnvQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'AppEnv'
     id: string
     createdAt: any
     updatedAt: any
+    key?: string | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -1489,214 +1919,6 @@ export type AppEnvQuery = {
       } | null
     }> | null
   } | null
-}
-
-export type AppTransactionQueryVariables = Exact<{
-  appId: Scalars['String']
-  appEnvId: Scalars['String']
-  appTransactionId: Scalars['String']
-}>
-
-export type AppTransactionQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'AppTransaction'
-    id?: string | null
-    createdAt?: any | null
-    updatedAt?: any | null
-    amount?: number | null
-    destination?: string | null
-    feePayer?: string | null
-    mint?: string | null
-    processingDuration?: number | null
-    referenceId?: string | null
-    referenceType?: string | null
-    signature?: string | null
-    solanaCommittedDuration?: number | null
-    solanaFinalized?: any | null
-    solanaFinalizedDuration?: number | null
-    solanaCommitted?: any | null
-    solanaStart?: any | null
-    solanaTransaction?: any | null
-    source?: string | null
-    status: AppTransactionStatus
-    totalDuration?: number | null
-    webhookEventDuration?: number | null
-    webhookEventEnd?: any | null
-    webhookEventStart?: any | null
-    webhookVerifyDuration?: number | null
-    webhookVerifyEnd?: any | null
-    webhookVerifyStart?: any | null
-    errors?: Array<{
-      __typename?: 'AppTransactionError'
-      id?: string | null
-      message?: string | null
-      type: AppTransactionErrorType
-      instruction?: number | null
-    }> | null
-  } | null
-}
-
-export type AppTransactionsQueryVariables = Exact<{
-  appId: Scalars['String']
-  appEnvId: Scalars['String']
-  input?: InputMaybe<AppTransactionListInput>
-}>
-
-export type AppTransactionsQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'AppTransaction'
-    id?: string | null
-    createdAt?: any | null
-    updatedAt?: any | null
-    amount?: number | null
-    destination?: string | null
-    feePayer?: string | null
-    mint?: string | null
-    processingDuration?: number | null
-    referenceId?: string | null
-    referenceType?: string | null
-    signature?: string | null
-    solanaCommittedDuration?: number | null
-    solanaFinalized?: any | null
-    solanaFinalizedDuration?: number | null
-    solanaCommitted?: any | null
-    solanaStart?: any | null
-    solanaTransaction?: any | null
-    source?: string | null
-    status: AppTransactionStatus
-    totalDuration?: number | null
-    webhookEventDuration?: number | null
-    webhookEventEnd?: any | null
-    webhookEventStart?: any | null
-    webhookVerifyDuration?: number | null
-    webhookVerifyEnd?: any | null
-    webhookVerifyStart?: any | null
-    errors?: Array<{
-      __typename?: 'AppTransactionError'
-      id?: string | null
-      message?: string | null
-      type: AppTransactionErrorType
-      instruction?: number | null
-    }> | null
-  }> | null
-}
-
-export type AppWebhookQueryVariables = Exact<{
-  appId: Scalars['String']
-  appWebhookId: Scalars['String']
-}>
-
-export type AppWebhookQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'AppWebhook'
-    id: string
-    createdAt: any
-    updatedAt: any
-    direction: AppWebhookDirection
-    headers?: any | null
-    payload?: any | null
-    responseError?: string | null
-    responsePayload?: any | null
-    responseStatus?: number | null
-    type: AppWebhookType
-  } | null
-}
-
-export type AppWebhooksQueryVariables = Exact<{
-  appId: Scalars['String']
-  appEnvId: Scalars['String']
-}>
-
-export type AppWebhooksQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'AppWebhook'
-    id: string
-    createdAt: any
-    updatedAt: any
-    direction: AppWebhookDirection
-    headers?: any | null
-    payload?: any | null
-    responseError?: string | null
-    responsePayload?: any | null
-    responseStatus?: number | null
-    type: AppWebhookType
-  }> | null
-}
-
-export type AppsQueryVariables = Exact<{ [key: string]: never }>
-
-export type AppsQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'App'
-    id: string
-    createdAt: any
-    updatedAt: any
-    index: number
-    name?: string | null
-    envs?: Array<{
-      __typename?: 'AppEnv'
-      id: string
-      createdAt: any
-      updatedAt: any
-      name?: string | null
-      webhookAcceptIncoming?: boolean | null
-      webhookEventEnabled?: boolean | null
-      webhookEventUrl?: string | null
-      webhookSecret?: string | null
-      webhookVerifyEnabled?: boolean | null
-      webhookVerifyUrl?: string | null
-      app?: {
-        __typename?: 'App'
-        id: string
-        createdAt: any
-        updatedAt: any
-        index: number
-        name?: string | null
-      } | null
-      cluster?: {
-        __typename?: 'Cluster'
-        id?: string | null
-        createdAt?: any | null
-        updatedAt?: any | null
-        enableStats?: boolean | null
-        endpoint?: string | null
-        name?: string | null
-        status?: ClusterStatus | null
-        type?: ClusterType | null
-      } | null
-      mints?: Array<{
-        __typename?: 'AppMint'
-        id: string
-        createdAt: any
-        updatedAt: any
-        mint?: {
-          __typename?: 'Mint'
-          id?: string | null
-          createdAt?: any | null
-          updatedAt?: any | null
-          address?: string | null
-          coingeckoId?: string | null
-          decimals?: number | null
-          logoUrl?: string | null
-          name?: string | null
-          symbol?: string | null
-          type?: MintType | null
-        } | null
-        wallet?: {
-          __typename?: 'Wallet'
-          id: string
-          createdAt?: any | null
-          updatedAt?: any | null
-          publicKey?: string | null
-        } | null
-      }> | null
-    }> | null
-  }> | null
 }
 
 export type AuthTokenDetailsFragment = {
@@ -1845,13 +2067,13 @@ export type MintDetailsFragment = {
   type?: MintType | null
 }
 
-export type AddClusterMintMutationVariables = Exact<{
+export type AdminAddClusterMintMutationVariables = Exact<{
   input: MintAddInput
 }>
 
-export type AddClusterMintMutation = {
+export type AdminAddClusterMintMutation = {
   __typename?: 'Mutation'
-  addClusterMint?: {
+  adminAddClusterMint?: {
     __typename?: 'Cluster'
     id?: string | null
     createdAt?: any | null
@@ -1877,11 +2099,11 @@ export type AddClusterMintMutation = {
   } | null
 }
 
-export type CreateClusterMutationVariables = Exact<{
+export type AdminCreateClusterMutationVariables = Exact<{
   input: ClusterCreateInput
 }>
 
-export type CreateClusterMutation = {
+export type AdminCreateClusterMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Cluster'
@@ -1896,11 +2118,11 @@ export type CreateClusterMutation = {
   } | null
 }
 
-export type DeleteClusterMutationVariables = Exact<{
+export type AdminDeleteClusterMutationVariables = Exact<{
   clusterId: Scalars['String']
 }>
 
-export type DeleteClusterMutation = {
+export type AdminDeleteClusterMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'Cluster'
@@ -1915,12 +2137,12 @@ export type DeleteClusterMutation = {
   } | null
 }
 
-export type UpdateClusterMutationVariables = Exact<{
+export type AdminUpdateClusterMutationVariables = Exact<{
   clusterId: Scalars['String']
   input: ClusterUpdateInput
 }>
 
-export type UpdateClusterMutation = {
+export type AdminUpdateClusterMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Cluster'
@@ -1935,11 +2157,11 @@ export type UpdateClusterMutation = {
   } | null
 }
 
-export type ClusterQueryVariables = Exact<{
+export type AdminClusterQueryVariables = Exact<{
   clusterId: Scalars['String']
 }>
 
-export type ClusterQuery = {
+export type AdminClusterQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Cluster'
@@ -1967,11 +2189,11 @@ export type ClusterQuery = {
   } | null
 }
 
-export type ClusterTokensQueryVariables = Exact<{
+export type AdminClusterTokensQueryVariables = Exact<{
   input: ClusterTokenInput
 }>
 
-export type ClusterTokensQuery = {
+export type AdminClusterTokensQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'ClusterToken'
@@ -2003,9 +2225,9 @@ export type ClusterTokensQuery = {
   }> | null
 }
 
-export type ClustersQueryVariables = Exact<{ [key: string]: never }>
+export type AdminClustersQueryVariables = Exact<{ [key: string]: never }>
 
-export type ClustersQuery = {
+export type AdminClustersQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Cluster'
@@ -2075,11 +2297,11 @@ export type UserEmailDetailsFragment = {
   email: string
 }
 
-export type CreateUserMutationVariables = Exact<{
+export type AdminCreateUserMutationVariables = Exact<{
   input: UserCreateInput
 }>
 
-export type CreateUserMutation = {
+export type AdminCreateUserMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'User'
@@ -2094,11 +2316,11 @@ export type CreateUserMutation = {
   } | null
 }
 
-export type DeleteUserMutationVariables = Exact<{
+export type AdminDeleteUserMutationVariables = Exact<{
   userId: Scalars['String']
 }>
 
-export type DeleteUserMutation = {
+export type AdminDeleteUserMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'User'
@@ -2113,12 +2335,12 @@ export type DeleteUserMutation = {
   } | null
 }
 
-export type UpdateUserMutationVariables = Exact<{
+export type AdminUpdateUserMutationVariables = Exact<{
   userId: Scalars['String']
   input: UserUpdateInput
 }>
 
-export type UpdateUserMutation = {
+export type AdminUpdateUserMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'User'
@@ -2133,11 +2355,11 @@ export type UpdateUserMutation = {
   } | null
 }
 
-export type UserQueryVariables = Exact<{
+export type AdminUserQueryVariables = Exact<{
   userId: Scalars['String']
 }>
 
-export type UserQuery = {
+export type AdminUserQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'User'
@@ -2179,9 +2401,9 @@ export type UserQuery = {
   } | null
 }
 
-export type UsersQueryVariables = Exact<{ [key: string]: never }>
+export type AdminUsersQueryVariables = Exact<{ [key: string]: never }>
 
-export type UsersQuery = {
+export type AdminUsersQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'User'
@@ -2215,26 +2437,11 @@ export type WalletBalanceDetailsFragment = {
   change?: any | null
 }
 
-export type GenerateWalletMutationVariables = Exact<{
-  index: Scalars['Int']
-}>
-
-export type GenerateWalletMutation = {
-  __typename?: 'Mutation'
-  generated?: {
-    __typename?: 'Wallet'
-    id: string
-    createdAt?: any | null
-    updatedAt?: any | null
-    publicKey?: string | null
-  } | null
-}
-
-export type DeleteWalletMutationVariables = Exact<{
+export type AdminDeleteWalletMutationVariables = Exact<{
   walletId: Scalars['String']
 }>
 
-export type DeleteWalletMutation = {
+export type AdminDeleteWalletMutation = {
   __typename?: 'Mutation'
   deleted?: {
     __typename?: 'Wallet'
@@ -2245,11 +2452,11 @@ export type DeleteWalletMutation = {
   } | null
 }
 
-export type WalletQueryVariables = Exact<{
+export type AdminWalletQueryVariables = Exact<{
   walletId: Scalars['String']
 }>
 
-export type WalletQuery = {
+export type AdminWalletQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Wallet'
@@ -2257,43 +2464,74 @@ export type WalletQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    appEnvs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      key?: string | null
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        enableStats?: boolean | null
+        endpoint?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          logoUrl?: string | null
+          name?: string | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id: string
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
+    }> | null
   } | null
 }
 
-export type WalletAirdropQueryVariables = Exact<{
-  appEnvId: Scalars['String']
-  walletId: Scalars['String']
-  amount: Scalars['Float']
-}>
-
-export type WalletAirdropQuery = {
-  __typename?: 'Query'
-  response?: { __typename?: 'WalletAirdropResponse'; signature?: string | null } | null
-}
-
-export type WalletBalanceQueryVariables = Exact<{
+export type AdminWalletBalancesQueryVariables = Exact<{
   appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
-export type WalletBalanceQuery = {
-  __typename?: 'Query'
-  balance?: {
-    __typename?: 'WalletBalance'
-    id?: string | null
-    createdAt?: any | null
-    updatedAt?: any | null
-    balance?: any | null
-    change?: any | null
-  } | null
-}
-
-export type WalletBalancesQueryVariables = Exact<{
-  appEnvId: Scalars['String']
-  walletId: Scalars['String']
-}>
-
-export type WalletBalancesQuery = {
+export type AdminWalletBalancesQuery = {
   __typename?: 'Query'
   balances?: Array<{
     __typename?: 'WalletBalance'
@@ -2305,9 +2543,238 @@ export type WalletBalancesQuery = {
   }> | null
 }
 
-export type WalletsQueryVariables = Exact<{ [key: string]: never }>
+export type AdminWalletsQueryVariables = Exact<{ [key: string]: never }>
 
-export type WalletsQuery = {
+export type AdminWalletsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'Wallet'
+    id: string
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+    balances?: Array<{
+      __typename?: 'WalletBalance'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      balance?: any | null
+      change?: any | null
+      appEnv?: {
+        __typename?: 'AppEnv'
+        id: string
+        createdAt: any
+        updatedAt: any
+        key?: string | null
+        name?: string | null
+        webhookAcceptIncoming?: boolean | null
+        webhookEventEnabled?: boolean | null
+        webhookEventUrl?: string | null
+        webhookSecret?: string | null
+        webhookVerifyEnabled?: boolean | null
+        webhookVerifyUrl?: string | null
+        app?: {
+          __typename?: 'App'
+          id: string
+          createdAt: any
+          updatedAt: any
+          index: number
+          name?: string | null
+        } | null
+        cluster?: {
+          __typename?: 'Cluster'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          enableStats?: boolean | null
+          endpoint?: string | null
+          name?: string | null
+          status?: ClusterStatus | null
+          type?: ClusterType | null
+        } | null
+        mints?: Array<{
+          __typename?: 'AppMint'
+          id: string
+          createdAt: any
+          updatedAt: any
+          mint?: {
+            __typename?: 'Mint'
+            id?: string | null
+            createdAt?: any | null
+            updatedAt?: any | null
+            address?: string | null
+            coingeckoId?: string | null
+            decimals?: number | null
+            logoUrl?: string | null
+            name?: string | null
+            symbol?: string | null
+            type?: MintType | null
+          } | null
+          wallet?: {
+            __typename?: 'Wallet'
+            id: string
+            createdAt?: any | null
+            updatedAt?: any | null
+            publicKey?: string | null
+          } | null
+        }> | null
+      } | null
+    }> | null
+    appEnvs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      key?: string | null
+      name?: string | null
+      webhookAcceptIncoming?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        name?: string | null
+      } | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        enableStats?: boolean | null
+        endpoint?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          address?: string | null
+          coingeckoId?: string | null
+          decimals?: number | null
+          logoUrl?: string | null
+          name?: string | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id: string
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+        } | null
+      }> | null
+    }> | null
+  }> | null
+}
+
+export type UserGenerateWalletMutationVariables = Exact<{
+  index: Scalars['Int']
+}>
+
+export type UserGenerateWalletMutation = {
+  __typename?: 'Mutation'
+  generated?: {
+    __typename?: 'Wallet'
+    id: string
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  } | null
+}
+
+export type UserDeleteWalletMutationVariables = Exact<{
+  walletId: Scalars['String']
+}>
+
+export type UserDeleteWalletMutation = {
+  __typename?: 'Mutation'
+  deleted?: {
+    __typename?: 'Wallet'
+    id: string
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  } | null
+}
+
+export type UserWalletQueryVariables = Exact<{
+  walletId: Scalars['String']
+}>
+
+export type UserWalletQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Wallet'
+    id: string
+    createdAt?: any | null
+    updatedAt?: any | null
+    publicKey?: string | null
+  } | null
+}
+
+export type UserWalletAirdropQueryVariables = Exact<{
+  appEnvId: Scalars['String']
+  walletId: Scalars['String']
+  amount: Scalars['Float']
+}>
+
+export type UserWalletAirdropQuery = {
+  __typename?: 'Query'
+  response?: { __typename?: 'WalletAirdropResponse'; signature?: string | null } | null
+}
+
+export type UserWalletBalanceQueryVariables = Exact<{
+  appEnvId: Scalars['String']
+  walletId: Scalars['String']
+}>
+
+export type UserWalletBalanceQuery = {
+  __typename?: 'Query'
+  balance?: {
+    __typename?: 'WalletBalance'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    balance?: any | null
+    change?: any | null
+  } | null
+}
+
+export type UserWalletBalancesQueryVariables = Exact<{
+  appEnvId: Scalars['String']
+  walletId: Scalars['String']
+}>
+
+export type UserWalletBalancesQuery = {
+  __typename?: 'Query'
+  balances?: Array<{
+    __typename?: 'WalletBalance'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    balance?: any | null
+    change?: any | null
+  }> | null
+}
+
+export type UserWalletsQueryVariables = Exact<{ [key: string]: never }>
+
+export type UserWalletsQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Wallet'
@@ -2372,6 +2839,7 @@ export const AppEnvDetailsFragmentDoc = gql`
     id
     createdAt
     updatedAt
+    key
     app {
       id
       createdAt
@@ -2565,9 +3033,9 @@ export const WalletBalanceDetailsFragmentDoc = gql`
     change
   }
 `
-export const CreateAppDocument = gql`
-  mutation CreateApp($input: AppCreateInput!) {
-    created: createApp(input: $input) {
+export const AdminCreateAppDocument = gql`
+  mutation AdminCreateApp($input: AppCreateInput!) {
+    created: adminCreateApp(input: $input) {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -2586,24 +3054,40 @@ export const CreateAppDocument = gql`
   ${AppUserDetailsFragmentDoc}
 `
 
-export function useCreateAppMutation() {
-  return Urql.useMutation<CreateAppMutation, CreateAppMutationVariables>(CreateAppDocument)
+export function useAdminCreateAppMutation() {
+  return Urql.useMutation<AdminCreateAppMutation, AdminCreateAppMutationVariables>(AdminCreateAppDocument)
 }
-export const DeleteAppDocument = gql`
-  mutation DeleteApp($appId: String!) {
-    deleted: deleteApp(appId: $appId) {
+export const AdminDeleteAppDocument = gql`
+  mutation AdminDeleteApp($appId: String!) {
+    deleted: adminDeleteApp(appId: $appId) {
       ...AppDetails
     }
   }
   ${AppDetailsFragmentDoc}
 `
 
-export function useDeleteAppMutation() {
-  return Urql.useMutation<DeleteAppMutation, DeleteAppMutationVariables>(DeleteAppDocument)
+export function useAdminDeleteAppMutation() {
+  return Urql.useMutation<AdminDeleteAppMutation, AdminDeleteAppMutationVariables>(AdminDeleteAppDocument)
 }
-export const UpdateAppDocument = gql`
-  mutation UpdateApp($appId: String!, $input: AppUpdateInput!) {
-    updated: updateApp(appId: $appId, input: $input) {
+export const AdminAppsDocument = gql`
+  query AdminApps {
+    items: adminApps {
+      ...AppDetails
+      envs {
+        ...AppEnvDetails
+      }
+    }
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
+`
+
+export function useAdminAppsQuery(options?: Omit<Urql.UseQueryArgs<AdminAppsQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminAppsQuery>({ query: AdminAppsDocument, ...options })
+}
+export const AdminAppDocument = gql`
+  query AdminApp($appId: String!) {
+    item: adminApp(appId: $appId) {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -2622,108 +3106,12 @@ export const UpdateAppDocument = gql`
   ${AppUserDetailsFragmentDoc}
 `
 
-export function useUpdateAppMutation() {
-  return Urql.useMutation<UpdateAppMutation, UpdateAppMutationVariables>(UpdateAppDocument)
+export function useAdminAppQuery(options: Omit<Urql.UseQueryArgs<AdminAppQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminAppQuery>({ query: AdminAppDocument, ...options })
 }
-export const UpdateAppEnvDocument = gql`
-  mutation UpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
-    updated: updateAppEnv(appId: $appId, appEnvId: $appEnvId, input: $input) {
-      ...AppEnvDetails
-      wallets {
-        ...WalletDetails
-      }
-    }
-  }
-  ${AppEnvDetailsFragmentDoc}
-  ${WalletDetailsFragmentDoc}
-`
-
-export function useUpdateAppEnvMutation() {
-  return Urql.useMutation<UpdateAppEnvMutation, UpdateAppEnvMutationVariables>(UpdateAppEnvDocument)
-}
-export const AppUserAddDocument = gql`
-  mutation AppUserAdd($appId: String!, $input: AppUserAddInput!) {
-    item: appUserAdd(appId: $appId, input: $input) {
-      ...AppDetails
-      users {
-        ...AppUserDetails
-      }
-    }
-  }
-  ${AppDetailsFragmentDoc}
-  ${AppUserDetailsFragmentDoc}
-`
-
-export function useAppUserAddMutation() {
-  return Urql.useMutation<AppUserAddMutation, AppUserAddMutationVariables>(AppUserAddDocument)
-}
-export const AppUserRemoveDocument = gql`
-  mutation AppUserRemove($appId: String!, $input: AppUserRemoveInput!) {
-    item: appUserRemove(appId: $appId, input: $input) {
-      ...AppDetails
-      users {
-        ...AppUserDetails
-      }
-    }
-  }
-  ${AppDetailsFragmentDoc}
-  ${AppUserDetailsFragmentDoc}
-`
-
-export function useAppUserRemoveMutation() {
-  return Urql.useMutation<AppUserRemoveMutation, AppUserRemoveMutationVariables>(AppUserRemoveDocument)
-}
-export const AppUserUpdateRoleDocument = gql`
-  mutation AppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
-    item: appUserUpdateRole(appId: $appId, input: $input) {
-      ...AppDetails
-      users {
-        ...AppUserDetails
-      }
-    }
-  }
-  ${AppDetailsFragmentDoc}
-  ${AppUserDetailsFragmentDoc}
-`
-
-export function useAppUserUpdateRoleMutation() {
-  return Urql.useMutation<AppUserUpdateRoleMutation, AppUserUpdateRoleMutationVariables>(AppUserUpdateRoleDocument)
-}
-export const AppEnvWalletAddDocument = gql`
-  mutation AppEnvWalletAdd($appId: String!, $appEnvId: String!, $walletId: String!) {
-    item: appEnvWalletAdd(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
-      ...AppEnvDetails
-      wallets {
-        ...WalletDetails
-      }
-    }
-  }
-  ${AppEnvDetailsFragmentDoc}
-  ${WalletDetailsFragmentDoc}
-`
-
-export function useAppEnvWalletAddMutation() {
-  return Urql.useMutation<AppEnvWalletAddMutation, AppEnvWalletAddMutationVariables>(AppEnvWalletAddDocument)
-}
-export const AppEnvWalletRemoveDocument = gql`
-  mutation AppEnvWalletRemove($appId: String!, $appEnvId: String!, $walletId: String!) {
-    item: appEnvWalletRemove(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
-      ...AppEnvDetails
-      wallets {
-        ...WalletDetails
-      }
-    }
-  }
-  ${AppEnvDetailsFragmentDoc}
-  ${WalletDetailsFragmentDoc}
-`
-
-export function useAppEnvWalletRemoveMutation() {
-  return Urql.useMutation<AppEnvWalletRemoveMutation, AppEnvWalletRemoveMutationVariables>(AppEnvWalletRemoveDocument)
-}
-export const AppDocument = gql`
-  query App($appId: String!) {
-    item: app(appId: $appId) {
+export const UserUpdateAppDocument = gql`
+  mutation UserUpdateApp($appId: String!, $input: AppUpdateInput!) {
+    updated: userUpdateApp(appId: $appId, input: $input) {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -2742,12 +3130,12 @@ export const AppDocument = gql`
   ${AppUserDetailsFragmentDoc}
 `
 
-export function useAppQuery(options: Omit<Urql.UseQueryArgs<AppQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppQuery>({ query: AppDocument, ...options })
+export function useUserUpdateAppMutation() {
+  return Urql.useMutation<UserUpdateAppMutation, UserUpdateAppMutationVariables>(UserUpdateAppDocument)
 }
-export const AppEnvDocument = gql`
-  query AppEnv($appId: String!, $appEnvId: String!) {
-    item: appEnv(appId: $appId, appEnvId: $appEnvId) {
+export const UserUpdateAppEnvDocument = gql`
+  mutation UserUpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
+    updated: userUpdateAppEnv(appId: $appId, appEnvId: $appEnvId, input: $input) {
       ...AppEnvDetails
       wallets {
         ...WalletDetails
@@ -2758,60 +3146,150 @@ export const AppEnvDocument = gql`
   ${WalletDetailsFragmentDoc}
 `
 
-export function useAppEnvQuery(options: Omit<Urql.UseQueryArgs<AppEnvQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppEnvQuery>({ query: AppEnvDocument, ...options })
+export function useUserUpdateAppEnvMutation() {
+  return Urql.useMutation<UserUpdateAppEnvMutation, UserUpdateAppEnvMutationVariables>(UserUpdateAppEnvDocument)
 }
-export const AppTransactionDocument = gql`
-  query AppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
-    item: appTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
+export const UserAppUserAddDocument = gql`
+  mutation UserAppUserAdd($appId: String!, $input: AppUserAddInput!) {
+    item: userAppUserAdd(appId: $appId, input: $input) {
+      ...AppDetails
+      users {
+        ...AppUserDetails
+      }
+    }
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
+`
+
+export function useUserAppUserAddMutation() {
+  return Urql.useMutation<UserAppUserAddMutation, UserAppUserAddMutationVariables>(UserAppUserAddDocument)
+}
+export const UserAppUserRemoveDocument = gql`
+  mutation UserAppUserRemove($appId: String!, $input: AppUserRemoveInput!) {
+    item: userAppUserRemove(appId: $appId, input: $input) {
+      ...AppDetails
+      users {
+        ...AppUserDetails
+      }
+    }
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
+`
+
+export function useUserAppUserRemoveMutation() {
+  return Urql.useMutation<UserAppUserRemoveMutation, UserAppUserRemoveMutationVariables>(UserAppUserRemoveDocument)
+}
+export const UserAppUserUpdateRoleDocument = gql`
+  mutation UserAppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
+    item: userAppUserUpdateRole(appId: $appId, input: $input) {
+      ...AppDetails
+      users {
+        ...AppUserDetails
+      }
+    }
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
+`
+
+export function useUserAppUserUpdateRoleMutation() {
+  return Urql.useMutation<UserAppUserUpdateRoleMutation, UserAppUserUpdateRoleMutationVariables>(
+    UserAppUserUpdateRoleDocument,
+  )
+}
+export const UserAppEnvWalletAddDocument = gql`
+  mutation UserAppEnvWalletAdd($appId: String!, $appEnvId: String!, $walletId: String!) {
+    item: userAppEnvWalletAdd(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
+      ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
+    }
+  }
+  ${AppEnvDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useUserAppEnvWalletAddMutation() {
+  return Urql.useMutation<UserAppEnvWalletAddMutation, UserAppEnvWalletAddMutationVariables>(
+    UserAppEnvWalletAddDocument,
+  )
+}
+export const UserAppEnvWalletRemoveDocument = gql`
+  mutation UserAppEnvWalletRemove($appId: String!, $appEnvId: String!, $walletId: String!) {
+    item: userAppEnvWalletRemove(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
+      ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
+    }
+  }
+  ${AppEnvDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useUserAppEnvWalletRemoveMutation() {
+  return Urql.useMutation<UserAppEnvWalletRemoveMutation, UserAppEnvWalletRemoveMutationVariables>(
+    UserAppEnvWalletRemoveDocument,
+  )
+}
+export const UserAppTransactionDocument = gql`
+  query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
+    item: userAppTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
       ...AppTransactionDetails
     }
   }
   ${AppTransactionDetailsFragmentDoc}
 `
 
-export function useAppTransactionQuery(options: Omit<Urql.UseQueryArgs<AppTransactionQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppTransactionQuery>({ query: AppTransactionDocument, ...options })
+export function useUserAppTransactionQuery(
+  options: Omit<Urql.UseQueryArgs<UserAppTransactionQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<UserAppTransactionQuery>({ query: UserAppTransactionDocument, ...options })
 }
-export const AppTransactionsDocument = gql`
-  query AppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
-    items: appTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
+export const UserAppTransactionsDocument = gql`
+  query UserAppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
+    items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
       ...AppTransactionDetails
     }
   }
   ${AppTransactionDetailsFragmentDoc}
 `
 
-export function useAppTransactionsQuery(options: Omit<Urql.UseQueryArgs<AppTransactionsQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppTransactionsQuery>({ query: AppTransactionsDocument, ...options })
+export function useUserAppTransactionsQuery(
+  options: Omit<Urql.UseQueryArgs<UserAppTransactionsQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<UserAppTransactionsQuery>({ query: UserAppTransactionsDocument, ...options })
 }
-export const AppWebhookDocument = gql`
-  query AppWebhook($appId: String!, $appWebhookId: String!) {
-    item: appWebhook(appId: $appId, appWebhookId: $appWebhookId) {
+export const UserAppWebhookDocument = gql`
+  query UserAppWebhook($appId: String!, $appWebhookId: String!) {
+    item: userAppWebhook(appId: $appId, appWebhookId: $appWebhookId) {
       ...AppWebhookDetails
     }
   }
   ${AppWebhookDetailsFragmentDoc}
 `
 
-export function useAppWebhookQuery(options: Omit<Urql.UseQueryArgs<AppWebhookQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppWebhookQuery>({ query: AppWebhookDocument, ...options })
+export function useUserAppWebhookQuery(options: Omit<Urql.UseQueryArgs<UserAppWebhookQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserAppWebhookQuery>({ query: UserAppWebhookDocument, ...options })
 }
-export const AppWebhooksDocument = gql`
-  query AppWebhooks($appId: String!, $appEnvId: String!) {
-    items: appWebhooks(appId: $appId, appEnvId: $appEnvId) {
+export const UserAppWebhooksDocument = gql`
+  query UserAppWebhooks($appId: String!, $appEnvId: String!) {
+    items: userAppWebhooks(appId: $appId, appEnvId: $appEnvId) {
       ...AppWebhookDetails
     }
   }
   ${AppWebhookDetailsFragmentDoc}
 `
 
-export function useAppWebhooksQuery(options: Omit<Urql.UseQueryArgs<AppWebhooksQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppWebhooksQuery>({ query: AppWebhooksDocument, ...options })
+export function useUserAppWebhooksQuery(options: Omit<Urql.UseQueryArgs<UserAppWebhooksQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserAppWebhooksQuery>({ query: UserAppWebhooksDocument, ...options })
 }
-export const AppsDocument = gql`
-  query Apps {
-    items: apps {
+export const UserAppsDocument = gql`
+  query UserApps {
+    items: userApps {
       ...AppDetails
       envs {
         ...AppEnvDetails
@@ -2822,8 +3300,49 @@ export const AppsDocument = gql`
   ${AppEnvDetailsFragmentDoc}
 `
 
-export function useAppsQuery(options?: Omit<Urql.UseQueryArgs<AppsQueryVariables>, 'query'>) {
-  return Urql.useQuery<AppsQuery>({ query: AppsDocument, ...options })
+export function useUserAppsQuery(options?: Omit<Urql.UseQueryArgs<UserAppsQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserAppsQuery>({ query: UserAppsDocument, ...options })
+}
+export const UserAppDocument = gql`
+  query UserApp($appId: String!) {
+    item: userApp(appId: $appId) {
+      ...AppDetails
+      envs {
+        ...AppEnvDetails
+        wallets {
+          ...WalletDetails
+        }
+      }
+      users {
+        ...AppUserDetails
+      }
+    }
+    role: userAppRole(appId: $appId)
+  }
+  ${AppDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
+  ${AppUserDetailsFragmentDoc}
+`
+
+export function useUserAppQuery(options: Omit<Urql.UseQueryArgs<UserAppQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserAppQuery>({ query: UserAppDocument, ...options })
+}
+export const UserAppEnvDocument = gql`
+  query UserAppEnv($appId: String!, $appEnvId: String!) {
+    item: userAppEnv(appId: $appId, appEnvId: $appEnvId) {
+      ...AppEnvDetails
+      wallets {
+        ...WalletDetails
+      }
+    }
+  }
+  ${AppEnvDetailsFragmentDoc}
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useUserAppEnvQuery(options: Omit<Urql.UseQueryArgs<UserAppEnvQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserAppEnvQuery>({ query: UserAppEnvDocument, ...options })
 }
 export const LoginDocument = gql`
   mutation Login($input: LoginInput!) {
@@ -2858,9 +3377,9 @@ export const MeDocument = gql`
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options })
 }
-export const AddClusterMintDocument = gql`
-  mutation addClusterMint($input: MintAddInput!) {
-    addClusterMint(input: $input) {
+export const AdminAddClusterMintDocument = gql`
+  mutation AdminAddClusterMint($input: MintAddInput!) {
+    adminAddClusterMint(input: $input) {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -2871,48 +3390,50 @@ export const AddClusterMintDocument = gql`
   ${MintDetailsFragmentDoc}
 `
 
-export function useAddClusterMintMutation() {
-  return Urql.useMutation<AddClusterMintMutation, AddClusterMintMutationVariables>(AddClusterMintDocument)
+export function useAdminAddClusterMintMutation() {
+  return Urql.useMutation<AdminAddClusterMintMutation, AdminAddClusterMintMutationVariables>(
+    AdminAddClusterMintDocument,
+  )
 }
-export const CreateClusterDocument = gql`
-  mutation CreateCluster($input: ClusterCreateInput!) {
-    created: createCluster(input: $input) {
+export const AdminCreateClusterDocument = gql`
+  mutation AdminCreateCluster($input: ClusterCreateInput!) {
+    created: adminCreateCluster(input: $input) {
       ...ClusterDetails
     }
   }
   ${ClusterDetailsFragmentDoc}
 `
 
-export function useCreateClusterMutation() {
-  return Urql.useMutation<CreateClusterMutation, CreateClusterMutationVariables>(CreateClusterDocument)
+export function useAdminCreateClusterMutation() {
+  return Urql.useMutation<AdminCreateClusterMutation, AdminCreateClusterMutationVariables>(AdminCreateClusterDocument)
 }
-export const DeleteClusterDocument = gql`
-  mutation DeleteCluster($clusterId: String!) {
-    deleted: deleteCluster(clusterId: $clusterId) {
+export const AdminDeleteClusterDocument = gql`
+  mutation AdminDeleteCluster($clusterId: String!) {
+    deleted: adminDeleteCluster(clusterId: $clusterId) {
       ...ClusterDetails
     }
   }
   ${ClusterDetailsFragmentDoc}
 `
 
-export function useDeleteClusterMutation() {
-  return Urql.useMutation<DeleteClusterMutation, DeleteClusterMutationVariables>(DeleteClusterDocument)
+export function useAdminDeleteClusterMutation() {
+  return Urql.useMutation<AdminDeleteClusterMutation, AdminDeleteClusterMutationVariables>(AdminDeleteClusterDocument)
 }
-export const UpdateClusterDocument = gql`
-  mutation UpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
-    updated: updateCluster(clusterId: $clusterId, input: $input) {
+export const AdminUpdateClusterDocument = gql`
+  mutation AdminUpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
+    updated: adminUpdateCluster(clusterId: $clusterId, input: $input) {
       ...ClusterDetails
     }
   }
   ${ClusterDetailsFragmentDoc}
 `
 
-export function useUpdateClusterMutation() {
-  return Urql.useMutation<UpdateClusterMutation, UpdateClusterMutationVariables>(UpdateClusterDocument)
+export function useAdminUpdateClusterMutation() {
+  return Urql.useMutation<AdminUpdateClusterMutation, AdminUpdateClusterMutationVariables>(AdminUpdateClusterDocument)
 }
-export const ClusterDocument = gql`
-  query Cluster($clusterId: String!) {
-    item: cluster(clusterId: $clusterId) {
+export const AdminClusterDocument = gql`
+  query AdminCluster($clusterId: String!) {
+    item: adminCluster(clusterId: $clusterId) {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -2923,24 +3444,26 @@ export const ClusterDocument = gql`
   ${MintDetailsFragmentDoc}
 `
 
-export function useClusterQuery(options: Omit<Urql.UseQueryArgs<ClusterQueryVariables>, 'query'>) {
-  return Urql.useQuery<ClusterQuery>({ query: ClusterDocument, ...options })
+export function useAdminClusterQuery(options: Omit<Urql.UseQueryArgs<AdminClusterQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminClusterQuery>({ query: AdminClusterDocument, ...options })
 }
-export const ClusterTokensDocument = gql`
-  query ClusterTokens($input: ClusterTokenInput!) {
-    items: clusterTokens(input: $input) {
+export const AdminClusterTokensDocument = gql`
+  query AdminClusterTokens($input: ClusterTokenInput!) {
+    items: adminClusterTokens(input: $input) {
       ...ClusterTokenDetails
     }
   }
   ${ClusterTokenDetailsFragmentDoc}
 `
 
-export function useClusterTokensQuery(options: Omit<Urql.UseQueryArgs<ClusterTokensQueryVariables>, 'query'>) {
-  return Urql.useQuery<ClusterTokensQuery>({ query: ClusterTokensDocument, ...options })
+export function useAdminClusterTokensQuery(
+  options: Omit<Urql.UseQueryArgs<AdminClusterTokensQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<AdminClusterTokensQuery>({ query: AdminClusterTokensDocument, ...options })
 }
-export const ClustersDocument = gql`
-  query Clusters {
-    items: clusters {
+export const AdminClustersDocument = gql`
+  query AdminClusters {
+    items: adminClusters {
       ...ClusterDetails
       mints {
         ...MintDetails
@@ -2951,8 +3474,8 @@ export const ClustersDocument = gql`
   ${MintDetailsFragmentDoc}
 `
 
-export function useClustersQuery(options?: Omit<Urql.UseQueryArgs<ClustersQueryVariables>, 'query'>) {
-  return Urql.useQuery<ClustersQuery>({ query: ClustersDocument, ...options })
+export function useAdminClustersQuery(options?: Omit<Urql.UseQueryArgs<AdminClustersQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminClustersQuery>({ query: AdminClustersDocument, ...options })
 }
 export const ClusterStatsDocument = gql`
   query ClusterStats($clusterId: String!) {
@@ -2975,45 +3498,45 @@ export const UptimeDocument = gql`
 export function useUptimeQuery(options?: Omit<Urql.UseQueryArgs<UptimeQueryVariables>, 'query'>) {
   return Urql.useQuery<UptimeQuery>({ query: UptimeDocument, ...options })
 }
-export const CreateUserDocument = gql`
-  mutation CreateUser($input: UserCreateInput!) {
-    created: createUser(input: $input) {
+export const AdminCreateUserDocument = gql`
+  mutation AdminCreateUser($input: UserCreateInput!) {
+    created: adminCreateUser(input: $input) {
       ...UserDetails
     }
   }
   ${UserDetailsFragmentDoc}
 `
 
-export function useCreateUserMutation() {
-  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument)
+export function useAdminCreateUserMutation() {
+  return Urql.useMutation<AdminCreateUserMutation, AdminCreateUserMutationVariables>(AdminCreateUserDocument)
 }
-export const DeleteUserDocument = gql`
-  mutation DeleteUser($userId: String!) {
-    deleted: deleteUser(userId: $userId) {
+export const AdminDeleteUserDocument = gql`
+  mutation AdminDeleteUser($userId: String!) {
+    deleted: adminDeleteUser(userId: $userId) {
       ...UserDetails
     }
   }
   ${UserDetailsFragmentDoc}
 `
 
-export function useDeleteUserMutation() {
-  return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument)
+export function useAdminDeleteUserMutation() {
+  return Urql.useMutation<AdminDeleteUserMutation, AdminDeleteUserMutationVariables>(AdminDeleteUserDocument)
 }
-export const UpdateUserDocument = gql`
-  mutation UpdateUser($userId: String!, $input: UserUpdateInput!) {
-    updated: updateUser(userId: $userId, input: $input) {
+export const AdminUpdateUserDocument = gql`
+  mutation AdminUpdateUser($userId: String!, $input: UserUpdateInput!) {
+    updated: adminUpdateUser(userId: $userId, input: $input) {
       ...UserDetails
     }
   }
   ${UserDetailsFragmentDoc}
 `
 
-export function useUpdateUserMutation() {
-  return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument)
+export function useAdminUpdateUserMutation() {
+  return Urql.useMutation<AdminUpdateUserMutation, AdminUpdateUserMutationVariables>(AdminUpdateUserDocument)
 }
-export const UserDocument = gql`
-  query User($userId: String!) {
-    item: user(userId: $userId) {
+export const AdminUserDocument = gql`
+  query AdminUser($userId: String!) {
+    item: adminUser(userId: $userId) {
       ...UserDetails
       apps {
         ...AppUserDetails
@@ -3028,102 +3551,169 @@ export const UserDocument = gql`
   ${UserEmailDetailsFragmentDoc}
 `
 
-export function useUserQuery(options: Omit<Urql.UseQueryArgs<UserQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserQuery>({ query: UserDocument, ...options })
+export function useAdminUserQuery(options: Omit<Urql.UseQueryArgs<AdminUserQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminUserQuery>({ query: AdminUserDocument, ...options })
 }
-export const UsersDocument = gql`
-  query Users {
-    items: users {
+export const AdminUsersDocument = gql`
+  query AdminUsers {
+    items: adminUsers {
       ...UserDetails
     }
   }
   ${UserDetailsFragmentDoc}
 `
 
-export function useUsersQuery(options?: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'>) {
-  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options })
+export function useAdminUsersQuery(options?: Omit<Urql.UseQueryArgs<AdminUsersQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminUsersQuery>({ query: AdminUsersDocument, ...options })
 }
-export const GenerateWalletDocument = gql`
-  mutation GenerateWallet($index: Int!) {
-    generated: generateWallet(index: $index) {
+export const AdminDeleteWalletDocument = gql`
+  mutation AdminDeleteWallet($walletId: String!) {
+    deleted: adminDeleteWallet(walletId: $walletId) {
       ...WalletDetails
     }
   }
   ${WalletDetailsFragmentDoc}
 `
 
-export function useGenerateWalletMutation() {
-  return Urql.useMutation<GenerateWalletMutation, GenerateWalletMutationVariables>(GenerateWalletDocument)
+export function useAdminDeleteWalletMutation() {
+  return Urql.useMutation<AdminDeleteWalletMutation, AdminDeleteWalletMutationVariables>(AdminDeleteWalletDocument)
 }
-export const DeleteWalletDocument = gql`
-  mutation DeleteWallet($walletId: String!) {
-    deleted: deleteWallet(walletId: $walletId) {
+export const AdminWalletDocument = gql`
+  query AdminWallet($walletId: String!) {
+    item: adminWallet(walletId: $walletId) {
+      ...WalletDetails
+      appEnvs {
+        ...AppEnvDetails
+      }
+    }
+  }
+  ${WalletDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
+`
+
+export function useAdminWalletQuery(options: Omit<Urql.UseQueryArgs<AdminWalletQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminWalletQuery>({ query: AdminWalletDocument, ...options })
+}
+export const AdminWalletBalancesDocument = gql`
+  query AdminWalletBalances($appEnvId: String!, $walletId: String!) {
+    balances: adminWalletBalances(appEnvId: $appEnvId, walletId: $walletId) {
+      ...WalletBalanceDetails
+    }
+  }
+  ${WalletBalanceDetailsFragmentDoc}
+`
+
+export function useAdminWalletBalancesQuery(
+  options: Omit<Urql.UseQueryArgs<AdminWalletBalancesQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<AdminWalletBalancesQuery>({ query: AdminWalletBalancesDocument, ...options })
+}
+export const AdminWalletsDocument = gql`
+  query AdminWallets {
+    items: adminWallets {
+      ...WalletDetails
+      balances {
+        ...WalletBalanceDetails
+        appEnv {
+          ...AppEnvDetails
+        }
+      }
+      appEnvs {
+        ...AppEnvDetails
+      }
+    }
+  }
+  ${WalletDetailsFragmentDoc}
+  ${WalletBalanceDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
+`
+
+export function useAdminWalletsQuery(options?: Omit<Urql.UseQueryArgs<AdminWalletsQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminWalletsQuery>({ query: AdminWalletsDocument, ...options })
+}
+export const UserGenerateWalletDocument = gql`
+  mutation UserGenerateWallet($index: Int!) {
+    generated: userGenerateWallet(index: $index) {
       ...WalletDetails
     }
   }
   ${WalletDetailsFragmentDoc}
 `
 
-export function useDeleteWalletMutation() {
-  return Urql.useMutation<DeleteWalletMutation, DeleteWalletMutationVariables>(DeleteWalletDocument)
+export function useUserGenerateWalletMutation() {
+  return Urql.useMutation<UserGenerateWalletMutation, UserGenerateWalletMutationVariables>(UserGenerateWalletDocument)
 }
-export const WalletDocument = gql`
-  query Wallet($walletId: String!) {
-    item: wallet(walletId: $walletId) {
+export const UserDeleteWalletDocument = gql`
+  mutation UserDeleteWallet($walletId: String!) {
+    deleted: userDeleteWallet(walletId: $walletId) {
       ...WalletDetails
     }
   }
   ${WalletDetailsFragmentDoc}
 `
 
-export function useWalletQuery(options: Omit<Urql.UseQueryArgs<WalletQueryVariables>, 'query'>) {
-  return Urql.useQuery<WalletQuery>({ query: WalletDocument, ...options })
+export function useUserDeleteWalletMutation() {
+  return Urql.useMutation<UserDeleteWalletMutation, UserDeleteWalletMutationVariables>(UserDeleteWalletDocument)
 }
-export const WalletAirdropDocument = gql`
-  query WalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!) {
-    response: walletAirdrop(appEnvId: $appEnvId, walletId: $walletId, amount: $amount) {
+export const UserWalletDocument = gql`
+  query UserWallet($walletId: String!) {
+    item: userWallet(walletId: $walletId) {
+      ...WalletDetails
+    }
+  }
+  ${WalletDetailsFragmentDoc}
+`
+
+export function useUserWalletQuery(options: Omit<Urql.UseQueryArgs<UserWalletQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserWalletQuery>({ query: UserWalletDocument, ...options })
+}
+export const UserWalletAirdropDocument = gql`
+  query UserWalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!) {
+    response: userWalletAirdrop(appEnvId: $appEnvId, walletId: $walletId, amount: $amount) {
       ...WalletAirdropResponseDetails
     }
   }
   ${WalletAirdropResponseDetailsFragmentDoc}
 `
 
-export function useWalletAirdropQuery(options: Omit<Urql.UseQueryArgs<WalletAirdropQueryVariables>, 'query'>) {
-  return Urql.useQuery<WalletAirdropQuery>({ query: WalletAirdropDocument, ...options })
+export function useUserWalletAirdropQuery(options: Omit<Urql.UseQueryArgs<UserWalletAirdropQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserWalletAirdropQuery>({ query: UserWalletAirdropDocument, ...options })
 }
-export const WalletBalanceDocument = gql`
-  query WalletBalance($appEnvId: String!, $walletId: String!) {
-    balance: walletBalance(appEnvId: $appEnvId, walletId: $walletId) {
+export const UserWalletBalanceDocument = gql`
+  query UserWalletBalance($appEnvId: String!, $walletId: String!) {
+    balance: userWalletBalance(appEnvId: $appEnvId, walletId: $walletId) {
       ...WalletBalanceDetails
     }
   }
   ${WalletBalanceDetailsFragmentDoc}
 `
 
-export function useWalletBalanceQuery(options: Omit<Urql.UseQueryArgs<WalletBalanceQueryVariables>, 'query'>) {
-  return Urql.useQuery<WalletBalanceQuery>({ query: WalletBalanceDocument, ...options })
+export function useUserWalletBalanceQuery(options: Omit<Urql.UseQueryArgs<UserWalletBalanceQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserWalletBalanceQuery>({ query: UserWalletBalanceDocument, ...options })
 }
-export const WalletBalancesDocument = gql`
-  query WalletBalances($appEnvId: String!, $walletId: String!) {
-    balances: walletBalances(appEnvId: $appEnvId, walletId: $walletId) {
+export const UserWalletBalancesDocument = gql`
+  query UserWalletBalances($appEnvId: String!, $walletId: String!) {
+    balances: userWalletBalances(appEnvId: $appEnvId, walletId: $walletId) {
       ...WalletBalanceDetails
     }
   }
   ${WalletBalanceDetailsFragmentDoc}
 `
 
-export function useWalletBalancesQuery(options: Omit<Urql.UseQueryArgs<WalletBalancesQueryVariables>, 'query'>) {
-  return Urql.useQuery<WalletBalancesQuery>({ query: WalletBalancesDocument, ...options })
+export function useUserWalletBalancesQuery(
+  options: Omit<Urql.UseQueryArgs<UserWalletBalancesQueryVariables>, 'query'>,
+) {
+  return Urql.useQuery<UserWalletBalancesQuery>({ query: UserWalletBalancesDocument, ...options })
 }
-export const WalletsDocument = gql`
-  query Wallets {
-    items: wallets {
+export const UserWalletsDocument = gql`
+  query UserWallets {
+    items: userWallets {
       ...WalletDetails
     }
   }
   ${WalletDetailsFragmentDoc}
 `
 
-export function useWalletsQuery(options?: Omit<Urql.UseQueryArgs<WalletsQueryVariables>, 'query'>) {
-  return Urql.useQuery<WalletsQuery>({ query: WalletsDocument, ...options })
+export function useUserWalletsQuery(options?: Omit<Urql.UseQueryArgs<UserWalletsQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserWalletsQuery>({ query: UserWalletsDocument, ...options })
 }

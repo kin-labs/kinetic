@@ -15,7 +15,12 @@ export function DemoShellFeature() {
     { label: 'Servers', path: '/servers', cyData: 'cy-nav-btn-servers' },
   ]
   return (
-    <AdminUiLayout links={links} copyright={<div>Kin Foundation &copy; 2022</div>} name={'Mogami'}>
+    <AdminUiLayout
+      links={links}
+      logo={'/assets/kin-logo.svg'}
+      copyright={<div>Kin Foundation &copy; 2022</div>}
+      name={'Mogami'}
+    >
       <Route path="/" exact>
         <Redirect to="/home" />
       </Route>

@@ -1,11 +1,11 @@
 import { Stack } from '@chakra-ui/react'
 import { AdminClusterUiMintModal, AdminClusterUiMints } from '@mogami/admin/cluster/ui'
 import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useClusterQuery } from '@mogami/shared/util/admin-sdk'
+import { useAdminClusterQuery } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminClusterFeatureMintsTab({ clusterId }: { clusterId: string }) {
-  const [{ data, fetching }] = useClusterQuery({ variables: { clusterId } })
+  const [{ data, fetching }] = useAdminClusterQuery({ variables: { clusterId } })
   if (!data || fetching) {
     return <AdminUiLoader />
   }

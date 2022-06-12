@@ -36,14 +36,6 @@ export function AdminAppUiTable({ apps, deleteApp }: AdminAppUiTableProps) {
             </Tr>
           ))}
         </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th isNumeric>Index</Th>
-            <Th>Name</Th>
-            <Th>Public Key</Th>
-            <Th />
-          </Tr>
-        </Tfoot>
       </Table>
     </TableContainer>
   )

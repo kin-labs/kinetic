@@ -9,8 +9,8 @@ export function AdminUserFeature() {
   return (
     <React.Suspense fallback={<AdminUiLoader />}>
       <Switch>
-        <Route path="/users" exact render={() => <AdminUserFeatureList />} />
-        <Route path="/users/:userId" render={() => <AdminUserFeatureDetail />} />
+        <Route path="/system/users" exact render={() => <AdminUserFeatureList />} />
+        <Route path="/system/users/:userId" render={() => <AdminUserFeatureDetail />} />
       </Switch>
     </React.Suspense>
   )
