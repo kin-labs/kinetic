@@ -8,7 +8,6 @@ import {
   AdminDeleteApp,
   AppCreateInput,
   AppEnvUpdateInput,
-  UserAppEnvWalletAdd,
   UserAppEnvWalletRemove,
   AppUpdateInput,
   UserAppUserAdd,
@@ -23,14 +22,7 @@ import {
   UserUpdateApp,
   UserUpdateAppEnv,
 } from '../generated/api-sdk'
-import {
-  ADMIN_EMAIL,
-  getRandomInt,
-  initializeE2eApp,
-  runGraphQLQuery,
-  runGraphQLQueryAdmin,
-  runLoginQuery,
-} from '../helpers'
+import { ADMIN_EMAIL, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {

@@ -12,7 +12,6 @@ function expectUnauthorized(res: Response) {
 
 describe('Wallet (e2e)', () => {
   let app: INestApplication
-  let appId: string | undefined
   let appEnvId: string | undefined
   let walletId: string | undefined
   let publicKey: string | undefined
@@ -39,7 +38,6 @@ describe('Wallet (e2e)', () => {
         const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
           input: { index: randomAppIndex(), name, skipWalletCreation: true },
         })
-        appId = createdApp.body.data.created.id
         appEnvId = createdApp.body.data.created.envs[0].id
 
         return runGraphQLQueryAdmin(app, token, UserGenerateWallet, { appEnvId })
