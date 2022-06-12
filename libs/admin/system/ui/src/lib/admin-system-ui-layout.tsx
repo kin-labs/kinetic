@@ -7,10 +7,20 @@ export function AdminSystemUiLayout({ children, links }: PropsWithChildren<{ lin
   return (
     <Grid templateAreas={`"nav main"`} gridTemplateRows={'1fr'} gridTemplateColumns={'250px 1fr'} gap="6">
       <GridItem area={'nav'}>
-        <Stack spacing={6} borderWidth="1px" borderRadius="lg" p={6} justifyContent={'center'}>
+        <Stack className="sidebar" spacing={4} justifyContent={'center'}>
           {links?.map((link) => (
-            <Flex key={link.path} justifyContent="space-between" alignItems="center">
-              <NavLink to={link.path}>{link.label}</NavLink>
+            <Flex
+              key={link.path}
+              as={NavLink}
+              to={link.path}
+              justifyContent="space-between"
+              alignItems="center"
+              borderWidth="1px"
+              borderRadius="lg"
+              px={5}
+              py={4}
+            >
+              {link.label}
             </Flex>
           ))}
         </Stack>
