@@ -5,6 +5,7 @@ import {
   TEST_MNEMONIC_24_PUBLIC_KEY,
   TEST_MNEMONIC_24_SECRET_KEY,
   TEST_MNEMONIC_24_SET,
+  TEST_MNEMONIC_24_SECRET_BYTEARRAY,
   TEST_PUBLIC_KEY,
   TEST_SECRET_BYTEARRAY,
   TEST_SECRET_KEY,
@@ -13,10 +14,20 @@ import { Keypair } from './keypair'
 
 describe('Keypair', () => {
   it('should generate a KeyPair', () => {
-    const kp = Keypair.generate()
+    const kp = Keypair.random()
 
+    expect(kp.mnemonic).toBeDefined()
     expect(kp.secretKey).toBeDefined()
     expect(kp.publicKey).toBeDefined()
+  })
+
+  it('should return generate a KeyPair from mnemonic', () => {
+    const kp = Keypair.random()
+    const restored = Keypair.fromMnemonic(kp.mnemonic)
+
+    expect(restored.mnemonic).toEqual(kp.mnemonic)
+    expect(restored.secretKey).toEqual(kp.secretKey)
+    expect(restored.publicKey).toEqual(kp.publicKey)
   })
 
   it('should generate a Mnemonic phrase (12 chars)', () => {
@@ -32,7 +43,7 @@ describe('Keypair', () => {
   })
 
   it('should create and import keypair', () => {
-    const kp1 = Keypair.generate()
+    const kp1 = Keypair.random()
     const kp2 = Keypair.fromSecretKey(kp1.secretKey)
     expect(kp1.secretKey).toEqual(kp2.secretKey)
     expect(kp1.publicKey).toEqual(kp2.publicKey)
@@ -49,38 +60,45 @@ describe('Keypair', () => {
     expect(kp.publicKey).toEqual(TEST_PUBLIC_KEY)
   })
 
-  it('should import from a mnemonic', () => {
-    const keypair = Keypair.fromMnemonic(TEST_MNEMONIC_12)
+  it('should import from a mnemonic (12)', () => {
+    const keypair = Keypair.fromMnemonicSeed(TEST_MNEMONIC_12)
     expect(keypair.secretKey).toEqual(TEST_SECRET_KEY)
     expect(keypair.solanaSecretKey.toString()).toEqual(TEST_SECRET_BYTEARRAY.toString())
     expect(keypair.solanaPublicKey.toBase58()).toEqual(TEST_PUBLIC_KEY)
     expect(keypair.publicKey).toEqual(TEST_PUBLIC_KEY)
   })
 
+  it('should import from a mnemonic (24)', () => {
+    const keypair = Keypair.fromMnemonicSeed(TEST_MNEMONIC_24)
+    expect(keypair.secretKey).toEqual(TEST_MNEMONIC_24_SECRET_KEY)
+    expect(keypair.solanaSecretKey.toString()).toEqual(TEST_MNEMONIC_24_SECRET_BYTEARRAY.toString())
+    expect(keypair.solanaPublicKey.toBase58()).toEqual(TEST_MNEMONIC_24_PUBLIC_KEY)
+    expect(keypair.publicKey).toEqual(TEST_MNEMONIC_24_PUBLIC_KEY)
+  })
+
   it('should import multiple from a mnemonic (12 chars)', () => {
-    const keypair = Keypair.fromMnemonic(TEST_MNEMONIC_12)
     const set = Keypair.fromMnemonicSet(TEST_MNEMONIC_12)
-    const keys = set.map(({ secretKey, publicKey }) => ({
+    const keys = set.map(({ mnemonic, secretKey, publicKey }) => ({
+      mnemonic,
       secretKey,
       publicKey,
     }))
 
-    expect(keypair.secretKey).toEqual(TEST_SECRET_KEY)
-    expect(keypair.publicKey).toEqual(TEST_PUBLIC_KEY)
-    expect(keys.map(({ publicKey, secretKey }) => ({ publicKey, secretKey }))).toEqual(TEST_MNEMONIC_12_SET)
+    expect(keys.map(({ mnemonic, publicKey, secretKey }) => ({ mnemonic, publicKey, secretKey }))).toEqual(
+      TEST_MNEMONIC_12_SET,
+    )
   })
 
   it('should import multiple from a mnemonic (24 chars)', () => {
-    const keypair = Keypair.fromMnemonic(TEST_MNEMONIC_24)
     const set = Keypair.fromMnemonicSet(TEST_MNEMONIC_24)
-    const keys = set.map(({ secretKey, publicKey }) => ({
+    const keys = set.map(({ mnemonic, secretKey, publicKey }) => ({
+      mnemonic,
       secretKey,
       publicKey,
     }))
 
-    expect(keypair.secretKey).toEqual(TEST_MNEMONIC_24_SECRET_KEY)
-    expect(keypair.publicKey).toEqual(TEST_MNEMONIC_24_PUBLIC_KEY)
-
-    expect(keys.map(({ publicKey, secretKey }) => ({ publicKey, secretKey }))).toEqual(TEST_MNEMONIC_24_SET)
+    expect(keys.map(({ mnemonic, publicKey, secretKey }) => ({ mnemonic, publicKey, secretKey }))).toEqual(
+      TEST_MNEMONIC_24_SET,
+    )
   })
 })

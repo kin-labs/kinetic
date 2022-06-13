@@ -1,6 +1,6 @@
-import { Keypair as SolanaKeypair, PublicKey as SolanaPublicKey } from '@solana/web3.js'
 import * as bip39 from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english'
+import { Keypair as SolanaKeypair, PublicKey as SolanaPublicKey } from '@solana/web3.js'
 import * as bs58 from 'bs58'
 import { derivePath } from './vendor/hd-key'
 
@@ -8,7 +8,8 @@ export { SolanaKeypair, SolanaPublicKey }
 
 export class Keypair {
   private readonly solanaKeypair: SolanaKeypair
-  secretKey: string
+  mnemonic?: string
+  secretKey?: string
   publicKey: string
 
   constructor(secretKey: string) {
@@ -33,10 +34,14 @@ export class Keypair {
     return this.fromSecretKey(bs58.encode(Uint8Array.from(byteArray)))
   }
 
-  static fromMnemonic(mnemonic: string): Keypair {
+  static fromMnemonicSeed(mnemonic: string): Keypair {
     const seed = bip39.mnemonicToSeedSync(mnemonic, '')
 
     return this.fromSeed(Buffer.from(seed).slice(0, 32))
+  }
+
+  static fromMnemonic(mnemonic: string): Keypair {
+    return this.fromMnemonicSet(mnemonic)[0]
   }
 
   static fromMnemonicSet(mnemonic: string, from = 0, to = 10): Keypair[] {
@@ -50,7 +55,9 @@ export class Keypair {
 
     for (let i = from; i < to; i++) {
       const path = `m/44'/501'/${i}'/0'`
-      keys.push(this.derive(Buffer.from(seed), path))
+      const kp = this.derive(Buffer.from(seed), path)
+      kp.mnemonic = mnemonic
+      keys.push(kp)
     }
     return keys
   }
@@ -68,7 +75,15 @@ export class Keypair {
   }
 
   static generate(): Keypair {
-    return this.fromSecretKey(bs58.encode(SolanaKeypair.generate().secretKey))
+    console.warn(`Deprecated method, please use Keypair.random()`)
+    return this.random()
+  }
+
+  static random(): Keypair {
+    const mnemonic = this.generateMnemonic()
+    const [kp] = this.fromMnemonicSet(mnemonic)
+
+    return kp
   }
 
   static generateMnemonic(strength: 128 | 256 = 128): string {
