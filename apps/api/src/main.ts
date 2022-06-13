@@ -20,15 +20,20 @@ async function bootstrap() {
   app.use(redirectSSL.create({ enabled: config.isProduction }))
   config.configureSwagger(app)
   app.use(cookieParser())
-  await app.listen(config.port)
-  Logger.log(
-    `🚀 API is running on http://localhost:${config.port}/${config.prefix} with CORS ${
-      config.corsOrigins ? `enabled for: ${config.corsOrigins?.join(' ')}` : 'disabled'
-    }.`,
-  )
-  Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
-  if (config.isDevelopment) {
-    exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })
+  try {
+    await app.listen(config.port)
+    Logger.log(
+      `🚀 API is running on http://localhost:${config.port}/${config.prefix} with CORS ${
+        config?.corsOrigins ? `enabled for: ${config?.corsOrigins}` : 'disabled'
+      }.`,
+    )
+    Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
+    if (config.isDevelopment) {
+      exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })
+    }
+  } catch (e) {
+    Logger.error(e)
+    console.log(e)
   }
 }
 
