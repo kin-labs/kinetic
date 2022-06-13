@@ -29,7 +29,7 @@ describe('MogamiSdk (e2e)', () => {
 
   it('should get account balance', async () => {
     const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
-    const res = await sdk.balance(aliceKey.publicKey)
+    const res = await sdk.getBalance({ account: aliceKey.publicKey })
     const balance = Number(res.value)
     expect(isNaN(balance)).toBeFalsy()
     expect(balance).toBeGreaterThan(0)
@@ -72,7 +72,8 @@ describe('MogamiSdk (e2e)', () => {
   })
 
   it('should create an account', async () => {
-    const tx = await sdk.createAccount(Keypair.generate())
+    const owner = Keypair.random()
+    const tx = await sdk.createAccount({ owner })
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(defaultMint)
     const { signature, errors } = tx
@@ -95,7 +96,7 @@ describe('MogamiSdk (e2e)', () => {
 
   it('should throw an error when publicKey does not exits or is incorrect', async () => {
     try {
-      await sdk.balance('xx')
+      await sdk.getBalance({ account: 'xx' })
     } catch (error) {
       expect(error.response.data.statusCode).toBe(400)
       expect(error.response.data.error).toBe('BadRequestException: accountId must be a valid PublicKey')
@@ -121,7 +122,7 @@ describe('MogamiSdk (e2e)', () => {
       const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
       const payments: Payment[] = []
       payments.push({ destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' })
-      const kp = Keypair.generate()
+      const kp = Keypair.random()
       payments.push({ destination: kp.publicKey, amount: '12' })
       await sdk.makeTransferBatch({ payments, owner: aliceKey })
     } catch (error) {
