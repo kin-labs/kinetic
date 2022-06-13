@@ -83,7 +83,7 @@ describe('MogamiSdk (e2e)', () => {
 
   it('should get the account history', async () => {
     const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
-    const accountHistory = await sdk.getHistory(aliceKey.publicKey)
+    const accountHistory = await sdk.getHistory({ account: aliceKey.publicKey })
     expect(accountHistory.data.length).toBeGreaterThan(0)
     expect(accountHistory.data[0].account).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
   })
