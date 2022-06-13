@@ -1,4 +1,4 @@
-import { createMintKin } from '@mogami/api/cluster/util'
+import { createMintKin, createMintSol } from '@mogami/api/cluster/util'
 import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
@@ -14,19 +14,23 @@ export class ApiConfigDataAccessService {
       id: 'solana-devnet',
       name: 'Solana Devnet',
       endpoint: this.solanaDevnetRpcEndpoint,
+      explorer: 'https://explorer.solana.com/{path}?cluster=devnet',
       type: ClusterType.SolanaDevnet,
     },
     {
       id: 'solana-mainnet',
       name: 'Solana Mainnet',
       endpoint: this.solanaMainnetRpcEndpoint,
+      explorer: 'https://explorer.solana.com/{path}',
       type: ClusterType.SolanaMainnet,
       status: ClusterStatus.Inactive,
     },
   ]
   readonly mints: Prisma.MintCreateInput[] = [
-    createMintKin('solana-devnet', this.defaultMintPublicKey, this.defaultMintDecimals),
-    createMintKin('solana-mainnet', 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6', 5),
+    createMintKin('solana-devnet', 0, this.defaultMintPublicKey, this.defaultMintDecimals),
+    createMintKin('solana-mainnet', 0, 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6', 5),
+    createMintSol('solana-devnet', 1),
+    createMintSol('solana-mainnet', 1),
   ]
   readonly provisionedApps: ProvisionedApp[] = getProvisionedApps(Object.keys(process.env))
 

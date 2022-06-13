@@ -7,13 +7,11 @@ export function AdminSystemUiDashboard({ links }: { links: AdminUiLink[] }) {
   return (
     <SimpleGrid columns={2} gap={6}>
       {links?.map((link) => (
-        <Stack spacing={6} borderWidth="1px" borderRadius="lg" key={link.path} p={6} justifyContent={'center'}>
-          <Flex justifyContent="space-between" alignItems="center">
-            <Link to={link.path}>
-              <Text fontSize="3xl" color="teal.500">
-                {link.label}
-              </Text>
-            </Link>
+        <Stack spacing={6} borderWidth="1px" borderRadius="lg" key={link.path} justifyContent={'center'}>
+          <Flex as={Link} to={link.path} justifyContent="space-between" alignItems="center" p={6}>
+            <Text fontSize="3xl" color="teal.500">
+              {link.label}
+            </Text>
           </Flex>
         </Stack>
       ))}

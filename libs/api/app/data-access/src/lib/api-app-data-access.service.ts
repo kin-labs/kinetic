@@ -10,7 +10,13 @@ import { AppTransaction } from './entity/app-transaction.entity'
 @Injectable()
 export class ApiAppDataAccessService implements OnModuleInit {
   readonly includeAppEnv: Prisma.AppEnvInclude = {
-    cluster: true,
+    cluster: {
+      include: {
+        mints: {
+          orderBy: { order: 'asc' },
+        },
+      },
+    },
     mints: {
       include: {
         mint: true,
@@ -94,6 +100,12 @@ export class ApiAppDataAccessService implements OnModuleInit {
       isMogamiOk,
       time: new Date(),
     }
+  }
+
+  explorerUrl(tx: AppTransaction) {
+    const { explorer } = tx.appEnv.cluster
+
+    return explorer.replace('{path}', `/tx/${tx.signature}`)
   }
 
   processingDuration(tx: AppTransaction) {

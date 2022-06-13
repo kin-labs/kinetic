@@ -15,7 +15,12 @@ export class ApiClusterAdminDataAccessService {
 
   async adminCreateCluster(userId: string, data: ClusterCreateInput) {
     await this.data.ensureAdminUser(userId)
-    return this.data.cluster.create({ data })
+    return this.data.cluster.create({
+      data: {
+        ...data,
+        explorer: data.explorer || 'https://explorer.solana.com/{path}',
+      },
+    })
   }
 
   async adminDeleteCluster(userId: string, clusterId: string) {
@@ -33,7 +38,7 @@ export class ApiClusterAdminDataAccessService {
 
   async adminCluster(userId: string, clusterId: string) {
     await this.data.ensureAdminUser(userId)
-    return this.data.cluster.findUnique({ where: { id: clusterId }, include: { mints: true } })
+    return this.data.cluster.findUnique({ where: { id: clusterId }, include: { mints: { orderBy: { order: 'asc' } } } })
   }
 
   async adminClusterTokens(userId: string, input: ClusterTokenInput): Promise<ClusterToken[]> {
@@ -71,12 +76,15 @@ export class ApiClusterAdminDataAccessService {
       throw new BadRequestException('No such token found')
     }
 
+    // Get the order of the last mint and increase by 1
+    const order = cluster.mints[cluster.mints.length - 1].order + 1
     const mint: Prisma.MintUncheckedCreateWithoutClusterInput = {
       address: token.address,
       coingeckoId: token.extensions.coingeckoId,
       decimals: token.decimals,
       logoUrl: token.logoURI,
       name: token.name,
+      order,
       symbol: token.symbol,
       type: MintType.SplToken,
     }

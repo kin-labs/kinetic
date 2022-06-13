@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Wallet (e2e) Expected usage CRUD should not delete a wallet with an environment 1`] = `"You can't delete a wallet that has environments"`;
+
 exports[`Wallet (e2e) Unexpected usage Mall-formed Input should not delete a wallet 1`] = `
 Array [
   Object {

@@ -4,6 +4,7 @@ fragment ClusterDetails on Cluster {
   updatedAt
   enableStats
   endpoint
+  explorer
   name
   status
   type
@@ -56,8 +57,11 @@ fragment MintDetails on Mint {
   address
   coingeckoId
   decimals
+  default
+  enabled
   logoUrl
   name
+  order
   symbol
   type
 }

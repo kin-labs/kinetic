@@ -1,7 +1,8 @@
-import { Alert, Box, Table, TableContainer, Text, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { Alert, Box, Table, TableContainer, Text, Tbody, Td, Th, Thead, Tr, Link, Flex } from '@chakra-ui/react'
 import { AppTransaction } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import { AdminAppUiTransactionStatus } from './admin-app-ui-transaction-status'
 
 export interface AdminAppUiTransactionsProps {
@@ -31,12 +32,19 @@ export function AdminAppUiTransactions({ appId, appEnvId, transactions }: AdminA
             {transactions?.map((transaction) => (
               <Tr key={transaction?.id}>
                 <Td>
-                  <Link to={`/apps/${appId}/environments/${appEnvId}/transactions/${transaction.id}`}>
+                  <RouterLink to={`/apps/${appId}/environments/${appEnvId}/transactions/${transaction.id}`}>
                     <AdminAppUiTransactionStatus status={transaction?.status} />
-                  </Link>
+                  </RouterLink>
                 </Td>
                 <Td>
-                  <Text fontSize="sm">{transaction.source}</Text>
+                  <Flex alignItems="center">
+                    {transaction?.explorerUrl && transaction?.signature && (
+                      <Link mr={2} target="_blank" href={transaction?.explorerUrl}>
+                        <ExternalLinkIcon />
+                      </Link>
+                    )}
+                    <Text fontSize="sm">{transaction.source}</Text>
+                  </Flex>
                 </Td>
                 <Td>
                   {transaction?.referenceId || transaction?.referenceType

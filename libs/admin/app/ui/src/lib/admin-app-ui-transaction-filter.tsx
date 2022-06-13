@@ -29,7 +29,7 @@ export function AdminAppUiTransactionFilter({ input, onSubmit }: AdminAppUiTrans
   const [visible, setVisible] = useState<boolean>(false)
   return (
     <Stack display="block" direction="column" justify="normal" spacing={6}>
-      <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
+      <Box borderWidth="1px" rounded="lg" p={6}>
         <ButtonGroup>
           <Button onClick={() => setVisible(!visible)}>{visible ? 'Hide' : 'Show'} Filters</Button>
           <Button onClick={() => onSubmit({})}>Clear Filters</Button>

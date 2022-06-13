@@ -15,8 +15,13 @@ export class ApiWalletUserFeatureResolver {
   constructor(private readonly service: ApiWalletUserDataAccessService) {}
 
   @Mutation(() => Wallet, { nullable: true })
-  userGenerateWallet(@CtxUser() user: User, @Args({ name: 'index', type: () => Int }) index: number) {
-    return this.service.userGenerateWallet(user.id, index)
+  userGenerateWallet(@CtxUser() user: User, @Args('appEnvId') appEnvId: string) {
+    return this.service.userGenerateWallet(user.id, appEnvId)
+  }
+
+  @Mutation(() => Wallet, { nullable: true })
+  userImportWallet(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('secretKey') secretKey: string) {
+    return this.service.userImportWallet(user.id, appEnvId, secretKey)
   }
 
   @Mutation(() => Wallet, { nullable: true })

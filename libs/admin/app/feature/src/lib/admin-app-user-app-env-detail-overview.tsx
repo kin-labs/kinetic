@@ -1,18 +1,17 @@
 import { Stack } from '@chakra-ui/react'
 import { useUserAppEnv } from '@mogami/admin/app/data-access'
 import { AdminClusterUiMints } from '@mogami/admin/cluster/ui'
+import { Mint } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
 import { AdminAppUserAppEnvDetailLayout } from './admin-app-user-app-env-detail-layout'
 
 export function AdminAppUserAppEnvDetailOverview() {
   const { appEnv } = useUserAppEnv()
+  const mints = appEnv?.mints?.map((mint) => mint.mint as Mint)
   return (
     <AdminAppUserAppEnvDetailLayout>
-      <Stack spacing={6}>
-        {appEnv.mints?.map(
-          ({ mint }) =>
-            appEnv.cluster?.id && mint && <AdminClusterUiMints mints={[mint]} clusterId={appEnv.cluster?.id} />,
-        )}
+      <Stack direction="column" spacing={6}>
+        {mints?.length && appEnv.cluster?.id && <AdminClusterUiMints mints={mints} clusterId={appEnv.cluster?.id} />}
       </Stack>
     </AdminAppUserAppEnvDetailLayout>
   )

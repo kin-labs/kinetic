@@ -1,4 +1,16 @@
-import { Avatar, Button, Center, Menu, MenuButton, MenuDivider, MenuGroup, MenuItem, MenuList } from '@chakra-ui/react'
+import {
+  Avatar,
+  Button,
+  Center,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import { AdminAuthLogoutFn } from '@mogami/admin/auth/data-access'
 import { User, UserRole } from '@mogami/shared/util/admin-sdk'
 import React from 'react'
@@ -19,7 +31,10 @@ export function AdminUiHeaderProfileMenu({ logout, user }: { logout: AdminAuthLo
         </Center>
         <br />
         <Center>
-          <p>{user?.name}</p>
+          <Stack spacing={2}>
+            <Text fontSize="lg">{user?.name}</Text>
+            <Text color="gray.500">{user?.role}</Text>
+          </Stack>
         </Center>
         <br />
         <MenuDivider />

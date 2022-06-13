@@ -20,6 +20,9 @@ fragment AppEnvDetails on AppEnv {
   }
   cluster {
     ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
   }
   mints {
     ...AppMintDetails
@@ -37,6 +40,7 @@ fragment AppMintDetails on AppMint {
   id
   createdAt
   updatedAt
+  order
   mint {
     ...MintDetails
   }
@@ -54,6 +58,7 @@ fragment AppTransactionDetails on AppTransaction {
   errors {
     ...AppTransactionErrorDetails
   }
+  explorerUrl
   feePayer
   mint
   processingDuration

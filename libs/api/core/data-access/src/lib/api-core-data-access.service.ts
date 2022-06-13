@@ -74,7 +74,10 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   getActiveClusters() {
-    return this.cluster.findMany({ where: { status: ClusterStatus.Active }, include: { mints: true } })
+    return this.cluster.findMany({
+      where: { status: ClusterStatus.Active },
+      include: { mints: { orderBy: { order: 'asc' } } },
+    })
   }
 
   getAppById(id: string) {
@@ -82,12 +85,16 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       where: { id },
       include: {
         envs: {
+          orderBy: { name: 'asc' },
           include: {
             cluster: true,
             mints: {
               include: {
                 mint: true,
                 wallet: true,
+              },
+              orderBy: {
+                order: 'asc',
               },
             },
             wallets: true,
@@ -115,6 +122,9 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
             mint: true,
             wallet: true,
           },
+          orderBy: {
+            order: 'asc',
+          },
         },
         wallets: true,
       },
@@ -133,6 +143,9 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
               include: {
                 mint: true,
                 wallet: true,
+              },
+              orderBy: {
+                order: 'asc',
               },
             },
             wallets: true,

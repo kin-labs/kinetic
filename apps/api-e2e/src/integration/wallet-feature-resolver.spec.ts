@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
-import { UserDeleteWallet, UserGenerateWallet, UserWallet, UserWallets } from '../generated/api-sdk'
+import { AdminCreateApp, UserDeleteWallet, UserGenerateWallet, UserWallet, UserWallets } from '../generated/api-sdk'
 import { ADMIN_EMAIL, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
-import { uniq, uniqInt } from '../helpers/uniq'
+import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {
   expect(res).toHaveProperty('text')
@@ -12,6 +12,7 @@ function expectUnauthorized(res: Response) {
 
 describe('Wallet (e2e)', () => {
   let app: INestApplication
+  let appEnvId: string | undefined
   let walletId: string | undefined
   let publicKey: string | undefined
   let token: string | undefined
@@ -31,7 +32,15 @@ describe('Wallet (e2e)', () => {
   describe('Expected usage', () => {
     describe('CRUD', () => {
       it('should create a wallet', async () => {
-        return runGraphQLQueryAdmin(app, token, UserGenerateWallet, { index: 1 })
+        const name = uniq('app-')
+
+        // Create App - but skip automatic wallet generation
+        const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
+          input: { index: randomAppIndex(), name, skipWalletCreation: true },
+        })
+        appEnvId = createdApp.body.data.created.envs[0].id
+
+        return runGraphQLQueryAdmin(app, token, UserGenerateWallet, { appEnvId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
@@ -66,15 +75,13 @@ describe('Wallet (e2e)', () => {
           })
       })
 
-      it('should delete a wallet', async () => {
+      it('should not delete a wallet with an environment', async () => {
         return runGraphQLQueryAdmin(app, token, UserDeleteWallet, { walletId })
           .expect(200)
           .expect((res) => {
-            expect(res).toHaveProperty('body.data')
-            const data = res.body.data?.deleted
-
-            expect(data.id).toEqual(walletId)
-            expect(data.publicKey).toEqual(publicKey)
+            expect(res).toHaveProperty('error')
+            const errors = JSON.parse(res.text).errors
+            expect(errors[0].message).toMatchSnapshot()
           })
       })
     })
@@ -130,7 +137,7 @@ describe('Wallet (e2e)', () => {
     describe('Unauthenticated Access', () => {
       it('should not create a wallet', async () => {
         const index = uniqInt()
-        return runGraphQLQuery(app, UserGenerateWallet, { index })
+        return runGraphQLQuery(app, UserGenerateWallet, { appEnvId: `app-${index}` })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('text')

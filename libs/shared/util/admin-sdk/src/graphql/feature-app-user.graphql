@@ -49,6 +49,24 @@ mutation UserAppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!)
   }
 }
 
+mutation UserAppEnvMintDisable($appId: String!, $appEnvId: String!, $mintId: String!) {
+  item: userAppEnvMintDisable(appId: $appId, appEnvId: $appEnvId, mintId: $mintId) {
+    ...AppEnvDetails
+  }
+}
+
+mutation UserAppEnvMintEnable($appId: String!, $appEnvId: String!, $mintId: String!) {
+  item: userAppEnvMintEnable(appId: $appId, appEnvId: $appEnvId, mintId: $mintId) {
+    ...AppEnvDetails
+  }
+}
+
+mutation userAppEnvMintSetWallet($appId: String!, $appEnvId: String!, $mintId: String!, $walletId: String!) {
+  item: userAppEnvMintSetWallet(appId: $appId, appEnvId: $appEnvId, mintId: $mintId, walletId: $walletId) {
+    ...AppEnvDetails
+  }
+}
+
 mutation UserAppEnvWalletAdd($appId: String!, $appEnvId: String!, $walletId: String!) {
   item: userAppEnvWalletAdd(appId: $appId, appEnvId: $appEnvId, walletId: $walletId) {
     ...AppEnvDetails

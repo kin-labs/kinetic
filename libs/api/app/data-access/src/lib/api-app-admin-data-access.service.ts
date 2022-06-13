@@ -1,9 +1,8 @@
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { UserRole } from '@mogami/api/user/data-access'
-import { ApiWalletUserDataAccessService } from '@mogami/api/wallet/data-access'
+import { Keypair } from '@mogami/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
-import { Keypair } from '@solana/web3.js'
 import { ApiAppDataAccessService } from './api-app-data-access.service'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppUserRole } from './entity/app-user-role.enum'
@@ -12,11 +11,7 @@ import { AppUserRole } from './entity/app-user-role.enum'
 export class ApiAppAdminDataAccessService implements OnModuleInit {
   private readonly logger = new Logger(ApiAppAdminDataAccessService.name)
 
-  constructor(
-    private readonly app: ApiAppDataAccessService,
-    private readonly data: ApiCoreDataAccessService,
-    private readonly wallet: ApiWalletUserDataAccessService,
-  ) {}
+  constructor(private readonly app: ApiAppDataAccessService, private readonly data: ApiCoreDataAccessService) {}
 
   async onModuleInit() {
     await this.configureProvisionedApps()
@@ -32,7 +27,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
     this.logger.verbose(`app ${input.index}: creating ${input.name}...`)
     let wallets
     if (!input.skipWalletCreation) {
-      const generated = await this.wallet.userGenerateWallet(userId, input.index)
+      const generated = await this.adminGenerateWallet(userId, input.index)
       wallets = { connect: { id: generated.id } }
       this.logger.verbose(`app ${input.index}: connecting wallet ${generated.publicKey}...`)
     }
@@ -54,8 +49,9 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
             // Create the default mint and connect it to the wallet
             mints: {
               create: cluster.mints
-                .filter((mint) => mint.address === process.env['DEFAULT_MINT_PUBLIC_KEY'] || mint.symbol === 'KIN')
+                .filter((mint) => mint.default)
                 .map((mint) => ({
+                  order: mint.order,
                   mint: { connect: { id: mint.id } },
                   wallet: wallets,
                 })),
@@ -129,7 +125,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
       this.data.config.provisionedApps.map(async (app) => {
         const found = await this.data.getAppByIndex(app.index)
         if (found) {
-          const { publicKey } = Keypair.fromSecretKey(Buffer.from(app.feePayerByteArray))
+          const { publicKey } = Keypair.fromByteArray(app.feePayerByteArray)
           this.logger.verbose(
             `Provisioned app ${app.index} (${app.name}) found: ${publicKey} ${found.envs
               .map((env) => `=> ${env.name}: ${env.mints.map((mint) => mint.mint.symbol).join(', ')}`)
@@ -147,5 +143,22 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
         }
       }),
     )
+  }
+
+  private async adminGenerateWallet(userId: string, index: number) {
+    await this.data.ensureAdminUser(userId)
+    const { publicKey, secretKey } = this.getAppKeypair(index)
+
+    return this.data.wallet.create({ data: { secretKey, publicKey } })
+  }
+
+  private getAppKeypair(index: number): Keypair {
+    const envVar = process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]
+    if (envVar) {
+      this.logger.verbose(`getAppKeypair app ${index}: read from env var`)
+      return Keypair.fromByteArray(JSON.parse(envVar))
+    }
+    this.logger.verbose(`getAppKeypair app ${index}: generated new keypair`)
+    return Keypair.generate()
   }
 }

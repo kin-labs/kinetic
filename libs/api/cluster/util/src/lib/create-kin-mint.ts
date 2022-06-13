@@ -1,6 +1,11 @@
 import { MintType, Prisma } from '@prisma/client'
 
-export function createMintKin(clusterId: string, address: string, decimals: number): Prisma.MintCreateInput {
+export function createMintKin(
+  clusterId: string,
+  order: number,
+  address: string,
+  decimals: number,
+): Prisma.MintCreateInput {
   let airdropAmount, airdropMax, airdropSecretKey
   if (clusterId === 'solana-devnet') {
     airdropAmount = parseInt(process.env['DEFAULT_MINT_AIRDROP_AMOUNT'])
@@ -13,9 +18,11 @@ export function createMintKin(clusterId: string, address: string, decimals: numb
     address,
     coingeckoId: 'kin',
     decimals,
+    default: true,
     logoUrl:
       'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6/logo.png',
     name: 'Kin',
+    order,
     symbol: 'KIN',
     type: MintType.SplToken,
     airdropAmount,

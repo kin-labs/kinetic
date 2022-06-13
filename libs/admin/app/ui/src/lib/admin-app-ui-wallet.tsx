@@ -1,14 +1,16 @@
 import { Box, Button, ButtonGroup, Code, Input, Stack } from '@chakra-ui/react'
 import { useUserWalletAirdropQuery, useUserWalletBalanceQuery, Wallet } from '@mogami/shared/util/admin-sdk'
 import React, { ChangeEvent, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ShowSolBalance } from './show-sol-balance'
 
 export interface AdminAppUiWalletProps {
   appEnvId: string
+  appId: string
   wallet: Wallet
 }
 
-export function AdminAppUiWallet({ appEnvId, wallet }: AdminAppUiWalletProps) {
+export function AdminAppUiWallet({ appEnvId, appId, wallet }: AdminAppUiWalletProps) {
   const [amount, setAmount] = useState<number>(1)
   const [{ data }, refreshWallet] = useUserWalletBalanceQuery({
     variables: {
@@ -32,9 +34,11 @@ export function AdminAppUiWallet({ appEnvId, wallet }: AdminAppUiWalletProps) {
   }
 
   return (
-    <Box borderWidth="1px" rounded="lg" p={6} m="10px auto">
+    <Box borderWidth="1px" rounded="lg" p={6}>
       <Box mt="1" noOfLines={1}>
-        <Code colorScheme="teal">{wallet?.publicKey}</Code>
+        <Link to={`/apps/${appId}/environments/${appEnvId}/wallets/${wallet?.id}`}>
+          <Code colorScheme="teal">{wallet?.publicKey}</Code>
+        </Link>
       </Box>
       <Stack direction="column" spacing={6}>
         <Box mt="1" fontWeight="semibold" as="h3" lineHeight="tight" noOfLines={1}>

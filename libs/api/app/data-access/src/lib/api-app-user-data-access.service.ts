@@ -18,7 +18,7 @@ export class ApiAppUserDataAccessService {
     const user = await this.data.getUserById(userId)
     return this.data.app.findMany({
       include: this.app.include,
-      orderBy: { updatedAt: 'desc' },
+      orderBy: { name: 'asc' },
       where: this.allowAdmin(user.role, userId),
     })
   }
@@ -34,11 +34,22 @@ export class ApiAppUserDataAccessService {
       where: { id: appEnvId },
       include: {
         app: true,
-        cluster: true,
+        cluster: {
+          include: {
+            mints: {
+              orderBy: {
+                order: 'asc',
+              },
+            },
+          },
+        },
         mints: {
           include: {
             mint: true,
             wallet: true,
+          },
+          orderBy: {
+            order: 'asc',
           },
         },
         wallets: true,
@@ -54,7 +65,7 @@ export class ApiAppUserDataAccessService {
     await this.data.ensureAppUser(userId, appId)
     return this.data.appTransaction.findFirst({
       where: { id: appTransactionId, appEnvId },
-      include: { errors: true },
+      include: { errors: true, appEnv: { include: { cluster: true } } },
     })
   }
 
@@ -64,7 +75,7 @@ export class ApiAppUserDataAccessService {
       where: { appEnvId, ...input },
       take: 100,
       orderBy: { createdAt: 'desc' },
-      include: { errors: true },
+      include: { errors: true, appEnv: { include: { cluster: true } } },
     })
   }
 
@@ -99,6 +110,60 @@ export class ApiAppUserDataAccessService {
         app: true,
       },
     })
+  }
+
+  async userAppEnvMintDisable(userId: string, appId: string, appEnvId: string, mintId: string) {
+    const appEnv = await this.userAppEnv(userId, appId, appEnvId)
+    const found = appEnv.mints.find((item) => item.mint?.id === mintId)
+    if (!found) {
+      throw new BadRequestException(`AppEnv has no mint with id ${mintId}`)
+    }
+
+    if (found.mint?.default) {
+      throw new BadRequestException(`Can't disable the default mint`)
+    }
+
+    return this.data.appEnv.update({
+      where: { id: appEnvId },
+      data: { mints: { disconnect: { id: found.id } } },
+      include: this.app.includeAppEnv,
+    })
+  }
+
+  async userAppEnvMintEnable(userId: string, appId: string, appEnvId: string, mintId: string) {
+    const appEnv = await this.userAppEnv(userId, appId, appEnvId)
+    const found = appEnv.mints.find((item) => item.mint?.id === mintId)
+    if (found) {
+      throw new BadRequestException(`AppEnv already has a mint with id ${mintId}`)
+    }
+    const mint = await this.data.mint.findUnique({ where: { id: mintId } })
+    if (!mint) {
+      throw new BadRequestException(`Mint with id ${mintId} not found`)
+    }
+    return this.data.appEnv.update({
+      where: { id: appEnvId },
+      data: {
+        mints: {
+          create: {
+            mintId: mint.id,
+            walletId: appEnv.wallets[0].id,
+            order: mint?.order,
+          },
+        },
+      },
+      include: this.app.includeAppEnv,
+    })
+  }
+
+  async userAppEnvMintSetWallet(userId: string, appId: string, appEnvId: string, mintId: string, walletId: string) {
+    const appEnv = await this.userAppEnv(userId, appId, appEnvId)
+    const found = appEnv.wallets.find((item) => item.id === walletId)
+    if (!found) {
+      throw new BadRequestException(`AppEnv has no wallet with id ${walletId}`)
+    }
+
+    await this.data.appMint.update({ where: { id: mintId }, data: { walletId } })
+    return this.userAppEnv(userId, appId, appEnvId)
   }
 
   async userAppEnvWalletAdd(userId: string, appId: string, appEnvId: string, walletId: string) {
