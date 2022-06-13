@@ -1,6 +1,6 @@
 import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@mogami/keypair'
-import { Commitment, Payment, PublicKeyString } from '@mogami/solana'
+import { Commitment, getPublicKey, Payment, PublicKeyString } from '@mogami/solana'
 import {
   AccountApi,
   AirdropApi,
@@ -21,7 +21,7 @@ import {
   serializeMakeTransferBatchTransactions,
   serializeMakeTransferTransaction,
 } from './helpers'
-import { CreateAccountOptions, MogamiSdkConfigParsed, MogamiSdkEnvironment } from './interfaces'
+import { CreateAccountOptions, GetBalanceOptions, MogamiSdkConfigParsed, MogamiSdkEnvironment } from './interfaces'
 
 export class MogamiSdkInternal {
   private readonly accountApi: AccountApi
@@ -44,12 +44,16 @@ export class MogamiSdkInternal {
     this.transactionApi = new TransactionApi(apiConfig)
   }
 
-  async balance(accountId: string): Promise<BalanceResponse> {
+  async getBalance({ account }: GetBalanceOptions): Promise<BalanceResponse> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
 
-    const res = await this.accountApi.getBalance(this.appConfig.environment.name, this.appConfig.app.index, accountId)
+    const res = await this.accountApi.getBalance(
+      this.appConfig.environment.name,
+      this.appConfig.app.index,
+      getPublicKey(account).toBase58(),
+    )
 
     return res.data as BalanceResponse
   }

@@ -5,7 +5,7 @@ import { Cluster, clusterApiUrl } from '@solana/web3.js'
 import { AppTransaction } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
-import { CreateAccountOptions, MogamiSdkConfig, MogamiSdkConfigParsed } from './interfaces'
+import { CreateAccountOptions, GetBalanceOptions, MogamiSdkConfig, MogamiSdkConfigParsed } from './interfaces'
 import { MogamiSdkInternal } from './mogami-sdk-internal'
 
 export class MogamiSdk {
@@ -20,6 +20,13 @@ export class MogamiSdk {
       : getSolanaRpcEndpoint(sdkConfig.endpoint)
   }
 
+  // START DEPRECATED METHODS
+  balance(account: string) {
+    console.warn(`Deprecated method, please use getBalance()`)
+    return this.getBalance({ account })
+  }
+  // END DEPRECATED METHODS
+
   get endpoint() {
     return this.sdkConfig.endpoint
   }
@@ -32,8 +39,8 @@ export class MogamiSdk {
     return this.internal.requestAirdrop(account, amount)
   }
 
-  balance(account: string) {
-    return this.internal.balance(account)
+  getBalance(option: GetBalanceOptions) {
+    return this.internal.getBalance(option)
   }
 
   config() {

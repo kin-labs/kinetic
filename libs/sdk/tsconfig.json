@@ -1,14 +1,5 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "module": "CommonJS",
-    "moduleResolution": "Node"
-  },
-  "ts-node": {
-    "esm": true,
-    "swc": true
-  },
   "files": [],
   "include": [],
   "references": [

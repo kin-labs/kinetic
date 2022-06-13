@@ -1,4 +1,5 @@
 import { Keypair } from '@mogami/keypair'
+import { Commitment } from '@mogami/solana'
 import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
 import { MogamiSdkConfig } from './interfaces'
 import { MogamiSdk } from './mogami-sdk'
@@ -58,16 +59,13 @@ describe('sdk', () => {
         expect(sdk.sdkConfig.logger).toBeDefined()
       })
 
-      it('should adhere to RFC signature', () => {
-        try {
-          sdk.createAccount({
-            owner: Keypair.random(),
-          })
-          expect(true).toBeTruthy()
-        } catch (e) {
-          console.log(e)
-          expect(e).not.toBeDefined()
+      it('should adhere createAccountOptions to RFC signature', () => {
+        const createAccountOptions = {
+          owner: Keypair.random(),
+          commitment: Commitment.Confirmed,
         }
+        expect(createAccountOptions.owner.secretKey).toBeDefined()
+        expect(createAccountOptions.owner.secretKey).toBeDefined()
       })
     })
   })
