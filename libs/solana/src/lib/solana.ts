@@ -61,30 +61,34 @@ export class Solana {
   async getBalance(accountId: PublicKeyString, defaultMint: string, allMints: string[]): Promise<BalanceSummary> {
     this.config.logger?.log(`Getting account balance summary: ${accountId} for mints ${allMints.join(', ')}`)
 
-    const tokens: BalanceToken[] = []
+    try {
+      const tokens: BalanceToken[] = []
 
-    const tokenAccounts: { mint: string; accounts: string[] }[] = await Promise.all(
-      allMints.map((mint) => {
-        return this.getTokenAccounts(accountId, mint).then((accounts) => ({ mint, accounts }))
-      }),
-    )
+      const tokenAccounts: { mint: string; accounts: string[] }[] = await Promise.all(
+        allMints.map((mint) => {
+          return this.getTokenAccounts(accountId, mint).then((accounts) => ({ mint, accounts }))
+        }),
+      )
 
-    for (const { mint, accounts } of tokenAccounts) {
-      for (const account of accounts) {
-        const { balance } = await this.getTokenBalance(account)
-        tokens.push({ account, mint, balance })
+      for (const { mint, accounts } of tokenAccounts) {
+        for (const account of accounts) {
+          const { balance } = await this.getTokenBalance(account)
+          tokens.push({ account, mint, balance })
+        }
       }
-    }
 
-    const mints: BalanceMintMap = tokens.reduce<BalanceMintMap>((acc, { mint, balance }) => {
-      const mintBalance = acc[mint] ? acc[mint] : new BigNumber(0)
-      return { ...acc, [mint]: mintBalance.plus(balance) }
-    }, {})
+      const mints: BalanceMintMap = tokens.reduce<BalanceMintMap>((acc, { mint, balance }) => {
+        const mintBalance = acc[mint] ? acc[mint] : new BigNumber(0)
+        return { ...acc, [mint]: mintBalance.plus(balance) }
+      }, {})
 
-    return {
-      balance: mints[defaultMint] ? mints[defaultMint] : new BigNumber(0),
-      mints,
-      tokens,
+      return {
+        balance: mints[defaultMint] ? mints[defaultMint] : new BigNumber(0),
+        mints,
+        tokens,
+      }
+    } catch (e) {
+      throw new Error(`No token accounts found for mints ${allMints.join(', ')}`)
     }
   }
 

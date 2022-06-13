@@ -17,7 +17,7 @@ describe('solana', () => {
         ['4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa'],
       )
     } catch (error) {
-      expect(error.message).toBe(`No token accounts found for mint 4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa`)
+      expect(error.message).toBe(`No token accounts found for mints 4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa`)
     }
   })
 })
