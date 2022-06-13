@@ -144,7 +144,7 @@ describe('MogamiSdk (e2e)', () => {
 
   it('should request for an airdrop', async () => {
     const daveKey = Keypair.fromByteArray(keys.DAVE_KEY)
-    const airdrop = await sdk.requestAirdrop(daveKey.publicKey, '1000')
+    const airdrop = await sdk.requestAirdrop({ account: daveKey.publicKey, amount: '1000' })
     expect(airdrop.data.signature).not.toBeNull()
     expect(typeof airdrop.data.signature).toBe('string')
     const { account, amount } = JSON.parse(airdrop.config.data)
@@ -155,7 +155,7 @@ describe('MogamiSdk (e2e)', () => {
   it('should fail not funds for an airdrop', async () => {
     try {
       const daveKey = Keypair.fromByteArray(keys.DAVE_KEY)
-      await sdk.requestAirdrop(daveKey.publicKey, '50001')
+      await sdk.requestAirdrop({ account: daveKey.publicKey, amount: '50001' })
     } catch (error) {
       expect(error.response.data.error).toBe('BadRequestException: Try requesting 50000 or less.')
     }

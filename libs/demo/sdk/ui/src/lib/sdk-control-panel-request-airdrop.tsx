@@ -1,14 +1,14 @@
-import { MogamiSdk } from '@mogami/sdk'
-import React, { ChangeEvent, useState } from 'react'
 import { Button, Input, Stack } from '@chakra-ui/react'
 import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
+import { MogamiSdk } from '@mogami/sdk'
+import React, { ChangeEvent, useState } from 'react'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [amount, setAmount] = useState<string>('12345')
   const getResult = () => {
-    sdk.requestAirdrop(keypair.publicKey, amount).then((res) => setResult(res.data))
+    sdk.requestAirdrop({ account: keypair.publicKey, amount }).then((res) => setResult(res.data))
   }
   return (
     <Stack spacing={3}>

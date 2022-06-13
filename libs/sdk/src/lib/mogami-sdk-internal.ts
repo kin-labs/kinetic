@@ -1,5 +1,5 @@
 import { TransactionType } from '@kin-tools/kin-memo'
-import { Commitment, getPublicKey } from '@mogami/solana'
+import { Commitment } from '@mogami/solana'
 import {
   AccountApi,
   AirdropApi,
@@ -23,10 +23,12 @@ import {
 import {
   CreateAccountOptions,
   GetBalanceOptions,
+  GetHistoryOptions,
   MakeTransferBatchOptions,
   MakeTransferOptions,
   MogamiSdkConfigParsed,
   MogamiSdkEnvironment,
+  RequestAirdropOptions,
 } from './interfaces'
 
 export class MogamiSdkInternal {
@@ -95,11 +97,11 @@ export class MogamiSdkInternal {
     return this.appConfig
   }
 
-  getHistory(accountId: string) {
+  getHistory({ account }: GetHistoryOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    return this.accountApi.getHistory(this.appConfig.environment.name, this.appConfig.app.index, accountId)
+    return this.accountApi.getHistory(this.appConfig.environment.name, this.appConfig.app.index, account.toString())
   }
 
   async makeTransfer({
@@ -189,7 +191,7 @@ export class MogamiSdkInternal {
     return Promise.resolve(res.data)
   }
 
-  requestAirdrop(account: string, amount: string) {
+  requestAirdrop({ account, amount }: RequestAirdropOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
@@ -197,7 +199,7 @@ export class MogamiSdkInternal {
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
       mint: this.appConfig.mint.symbol,
-      account,
+      account: account?.toString(),
       amount,
     })
   }

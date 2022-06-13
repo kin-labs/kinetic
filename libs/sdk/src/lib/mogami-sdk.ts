@@ -8,10 +8,12 @@ import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
 import {
   CreateAccountOptions,
   GetBalanceOptions,
+  GetHistoryOptions,
   MakeTransferBatchOptions,
   MakeTransferOptions,
   MogamiSdkConfig,
   MogamiSdkConfigParsed,
+  RequestAirdropOptions,
 } from './interfaces'
 import { MogamiSdkInternal } from './mogami-sdk-internal'
 
@@ -42,8 +44,8 @@ export class MogamiSdk {
     return this.sdkConfig.solanaRpcEndpoint || 'mainnet-beta'
   }
 
-  requestAirdrop(account: string, amount: string) {
-    return this.internal.requestAirdrop(account, amount)
+  requestAirdrop(options: RequestAirdropOptions) {
+    return this.internal.requestAirdrop(options)
   }
 
   getBalance(option: GetBalanceOptions) {
@@ -58,8 +60,8 @@ export class MogamiSdk {
     return this.internal.createAccount(options)
   }
 
-  getHistory(account: string) {
-    return this.internal.getHistory(account)
+  getHistory(options: GetHistoryOptions) {
+    return this.internal.getHistory(options)
   }
 
   makeTransfer(options: MakeTransferOptions) {

@@ -6,9 +6,9 @@ import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
-  const [value, setValue] = useState<string>(keypair.publicKey)
+  const [account, setAccount] = useState<string>(keypair.publicKey)
   const getResult = () => {
-    sdk.getHistory(value).then((res) => setResult(res.data))
+    sdk.getHistory({ account }).then((res) => setResult(res.data))
   }
   return (
     <Stack spacing={3}>
@@ -18,8 +18,8 @@ export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: DemoK
         </Button>
         <Input
           w="full"
-          value={value}
-          onChange={(ev: ChangeEvent<HTMLInputElement>) => setValue(ev.target.value)}
+          value={account}
+          onChange={(ev: ChangeEvent<HTMLInputElement>) => setAccount(ev.target.value)}
           placeholder="Enter the accountId (Public Key for the Account owner)"
         />
       </Stack>
