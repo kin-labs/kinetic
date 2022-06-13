@@ -14,6 +14,7 @@ describe('solana', () => {
       await solana.getBalance(
         'ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA',
         '4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa',
+        ['4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa'],
       )
     } catch (error) {
       expect(error.message).toBe(`No token accounts found for mint 4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa`)

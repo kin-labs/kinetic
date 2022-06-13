@@ -122,9 +122,9 @@ describe('demo', () => {
     cy.get('[cy-data="cy-nav-btn-sdk"]').click()
     cy.get('.get-account-balance-btn').click()
     cy.get('[cy-data="panel-get-account-balance"]').then((el) => {
-      const balance = JSON.parse(el[0].innerText)
-      cy.log(balance)
-      cy.wrap(Number(balance.value)).should('be.gt', 0)
+      const result = JSON.parse(el[0].innerText)
+      cy.log(result)
+      cy.wrap(Number(result.balance)).should('be.gt', 0)
     })
   })
 

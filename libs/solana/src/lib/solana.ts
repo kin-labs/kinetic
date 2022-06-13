@@ -2,7 +2,15 @@ import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { convertCommitment, getPublicKey, parseEndpoint } from './helpers'
-import { Commitment, PublicKeyString, SolanaConfig, TokenBalance } from './interfaces'
+import {
+  BalanceMintMap,
+  BalanceSummary,
+  BalanceToken,
+  Commitment,
+  PublicKeyString,
+  SolanaConfig,
+  TokenBalance,
+} from './interfaces'
 
 export class Solana {
   readonly endpoint: string
@@ -50,13 +58,33 @@ export class Solana {
     return this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
   }
 
-  async getBalance(accountId: PublicKeyString, mint: PublicKeyString) {
-    this.config.logger?.log(`Getting account balance: ${accountId} for mint ${mint}`)
-    try {
-      const balances = await this.getTokenBalances(new PublicKey(accountId), mint)
-      return balances.reduce((acc, curr) => acc.plus(curr.balance), new BigNumber(0))
-    } catch (error) {
-      throw new Error(`No token accounts found for mint ${mint}`)
+  async getBalance(accountId: PublicKeyString, defaultMint: string, allMints: string[]): Promise<BalanceSummary> {
+    this.config.logger?.log(`Getting account balance summary: ${accountId} for mints ${allMints.join(', ')}`)
+
+    const tokens: BalanceToken[] = []
+
+    const tokenAccounts: { mint: string; accounts: string[] }[] = await Promise.all(
+      allMints.map((mint) => {
+        return this.getTokenAccounts(accountId, mint).then((accounts) => ({ mint, accounts }))
+      }),
+    )
+
+    for (const { mint, accounts } of tokenAccounts) {
+      for (const account of accounts) {
+        const { balance } = await this.getTokenBalance(account)
+        tokens.push({ account, mint, balance })
+      }
+    }
+
+    const mints: BalanceMintMap = tokens.reduce<BalanceMintMap>((acc, { mint, balance }) => {
+      const mintBalance = acc[mint] ? acc[mint] : new BigNumber(0)
+      return { ...acc, [mint]: mintBalance.plus(balance) }
+    }, {})
+
+    return {
+      balance: mints[defaultMint] ? mints[defaultMint] : new BigNumber(0),
+      mints,
+      tokens,
     }
   }
 

@@ -30,7 +30,8 @@ describe('MogamiSdk (e2e)', () => {
   it('should get account balance', async () => {
     const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
     const res = await sdk.getBalance({ account: aliceKey.publicKey })
-    const balance = Number(res.value)
+    console.log('res', res)
+    const balance = Number(res.balance)
     expect(isNaN(balance)).toBeFalsy()
     expect(balance).toBeGreaterThan(0)
   })

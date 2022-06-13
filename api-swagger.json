@@ -694,14 +694,39 @@
           "webhookVerifyEnd"
         ]
       },
-      "BalanceResponse": {
+      "BigNumber": {
+        "type": "object",
+        "properties": {}
+      },
+      "BalanceToken": {
         "type": "object",
         "properties": {
-          "value": {
+          "account": {
+            "type": "string"
+          },
+          "balance": {
+            "$ref": "#/components/schemas/BigNumber"
+          },
+          "mint": {
             "type": "string"
           }
         },
-        "required": ["value"]
+        "required": ["account", "balance", "mint"]
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "$ref": "#/components/schemas/BigNumber"
+          },
+          "mints": {
+            "type": "object"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/BalanceToken"
+          }
+        },
+        "required": ["balance", "mints", "tokens"]
       },
       "HistoryResponse": {
         "type": "object",
