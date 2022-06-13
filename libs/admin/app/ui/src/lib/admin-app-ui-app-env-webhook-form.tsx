@@ -38,7 +38,7 @@ const fields: UiFormField[] = [
 ]
 
 export function AdminAppUiAppEnvWebhookForm({ appEnv, onSubmit }: AdminAppUiAppEnvWebhookFormProps) {
-  const baseUrl = `http://local.mogami.io:3000/api/app/${appEnv.name}/${appEnv.app?.index}/webhook`
+  const baseUrl = `http://local.kinetic.kin.org:3000/api/app/${appEnv.name}/${appEnv.app?.index}/webhook`
   const webhookEventUrl = appEnv?.webhookEventUrl || `${baseUrl}/event`
   const webhookVerifyUrl = appEnv?.webhookVerifyUrl || `${baseUrl}/verify`
   return (

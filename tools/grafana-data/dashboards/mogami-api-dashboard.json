@@ -44,7 +44,7 @@
       "title": "Kinetic Devnet",
       "tooltip": "Kinetic Devnet",
       "type": "link",
-      "url": "https://devnet.mogami.io"
+      "url": "https://devnet.kinetic.kin.org"
     },
     {
       "asDropdown": false,
@@ -56,7 +56,7 @@
       "title": "Kinetic Mainnet",
       "tooltip": "Kinetic Mainnet",
       "type": "link",
-      "url": "https://mainnet.mogami.io"
+      "url": "https://mainnet.kinetic.kin.org"
     }
   ],
   "panels": [

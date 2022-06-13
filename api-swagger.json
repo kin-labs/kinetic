@@ -539,10 +539,10 @@
   ],
   "servers": [
     {
-      "url": "https://devnet.mogami.io"
+      "url": "https://devnet.kinetic.kin.org"
     },
     {
-      "url": "https://mainnet.mogami.io"
+      "url": "https://mainnet.kinetic.kin.org"
     },
     {
       "url": "http://localhost:3000"
