@@ -6,6 +6,7 @@ import { exec } from 'child_process'
 import cookieParser from 'cookie-parser'
 import redirectSSL from 'redirect-ssl'
 import { AllExceptionsFilter } from './all-exceptions.filter'
+import { GraphqlExceptionFilter } from './graphql-exceptions.filter'
 import { AppModule } from './app/app.module'
 
 async function bootstrap() {
@@ -15,7 +16,7 @@ async function bootstrap() {
   app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
   const { httpAdapter } = app.get(HttpAdapterHost)
-  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter.getInstance()))
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter.getInstance()), new GraphqlExceptionFilter())
   app.enableCors({ origin: config.corsOrigins })
   app.use(redirectSSL.create({ enabled: config.isProduction }))
   config.configureSwagger(app)
