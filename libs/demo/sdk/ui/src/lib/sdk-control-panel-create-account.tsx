@@ -17,7 +17,7 @@ export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKe
   const kp: Keypair = Keypair.fromSecretKey(keypair.secretKey)
 
   const getResult = () => {
-    sdk.createAccount(kp).then((res) => {
+    sdk.createAccount({ owner: kp }).then((res) => {
       setResult(res)
     })
   }

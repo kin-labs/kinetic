@@ -19,7 +19,7 @@
  */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import * as createHmac from 'create-hmac/browser'
+import createHmac from 'create-hmac/browser'
 
 const ED25519_CURVE = 'ed25519 seed'
 const HARDENED_OFFSET = 0x80000000

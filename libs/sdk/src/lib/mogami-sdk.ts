@@ -1,10 +1,11 @@
 import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@mogami/keypair'
 import { Commitment, Payment, Solana } from '@mogami/solana'
+import { Cluster, clusterApiUrl } from '@solana/web3.js'
+import { AppTransaction } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
-import { MogamiSdkConfig } from './interfaces'
-import { MogamiSdkConfigParsed } from './interfaces/mogami-sdk-config-parsed'
+import { CreateAccountOptions, MogamiSdkConfig, MogamiSdkConfigParsed } from './interfaces'
 import { MogamiSdkInternal } from './mogami-sdk-internal'
 
 export class MogamiSdk {
@@ -14,7 +15,9 @@ export class MogamiSdk {
 
   constructor(readonly sdkConfig: MogamiSdkConfigParsed) {
     this.internal = new MogamiSdkInternal(sdkConfig)
-    this.sdkConfig.solanaRpcEndpoint = getSolanaRpcEndpoint(sdkConfig.endpoint)
+    this.sdkConfig.solanaRpcEndpoint = sdkConfig.solanaRpcEndpoint
+      ? clusterApiUrl(getSolanaRpcEndpoint(sdkConfig.solanaRpcEndpoint) as Cluster)
+      : getSolanaRpcEndpoint(sdkConfig.endpoint)
   }
 
   get endpoint() {
@@ -37,8 +40,8 @@ export class MogamiSdk {
     return this.internal.appConfig
   }
 
-  createAccount(owner: Keypair) {
-    return this.internal.createAccount(owner)
+  createAccount(options: CreateAccountOptions): Promise<AppTransaction> {
+    return this.internal.createAccount(options)
   }
 
   getHistory(account: string) {
