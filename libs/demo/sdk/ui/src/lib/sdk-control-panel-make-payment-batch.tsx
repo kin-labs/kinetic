@@ -4,18 +4,18 @@ import { AdminUiAlert } from '@mogami/admin/ui/alert'
 import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
 import { Keypair } from '@mogami/keypair'
 import { MogamiSdk } from '@mogami/sdk'
-import { Payment } from '@mogami/solana'
+import { Destination } from '@mogami/solana'
 import React, { useState } from 'react'
 
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
   const [result, setResult] = useState<unknown>(null)
-  const [payments] = useState<Payment[]>([
+  const destinations: Destination[] = [
     { destination: 'BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y', amount: '42' },
     { destination: 'CharYfTvJSiH6LtDpkGUiVVZmeCn5Cenu2TzdJSbDJnG', amount: '34' },
     { destination: 'DAVEXJQuNAzUaVZsFeDiUr67WikDH3cj4L1YHyx5t2Nj', amount: '51' },
-  ])
+  ]
 
   if (!keypair.secretKey) {
     return <AdminUiAlert message="Invalid keypair found in DemoKeypairEntity" />
@@ -26,7 +26,7 @@ export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: Dem
   const getResult = async () => {
     setResult(null)
     const res = await sdk.makeTransferBatch({
-      payments,
+      destinations,
       owner: kp,
       type: TransactionType.Spend,
     })

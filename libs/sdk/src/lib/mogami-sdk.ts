@@ -1,11 +1,18 @@
 import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@mogami/keypair'
-import { Commitment, Payment, Solana } from '@mogami/solana'
+import { Commitment, Destination, Solana } from '@mogami/solana'
 import { Cluster, clusterApiUrl } from '@solana/web3.js'
 import { AppTransaction } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
-import { CreateAccountOptions, GetBalanceOptions, MogamiSdkConfig, MogamiSdkConfigParsed } from './interfaces'
+import {
+  CreateAccountOptions,
+  GetBalanceOptions,
+  MakeTransferBatchOptions,
+  MakeTransferOptions,
+  MogamiSdkConfig,
+  MogamiSdkConfigParsed,
+} from './interfaces'
 import { MogamiSdkInternal } from './mogami-sdk-internal'
 
 export class MogamiSdk {
@@ -55,51 +62,12 @@ export class MogamiSdk {
     return this.internal.getHistory(account)
   }
 
-  makeTransfer({
-    amount,
-    commitment = Commitment.Confirmed,
-    destination,
-    owner,
-    referenceId,
-    referenceType,
-    type = TransactionType.None,
-  }: {
-    amount: string
-    commitment?: Commitment
-    destination: string
-    owner: Keypair
-    referenceId?: string
-    referenceType?: string
-    type?: TransactionType
-  }) {
-    return this.internal.makeTransfer({
-      amount,
-      commitment,
-      destination,
-      owner,
-      referenceId,
-      referenceType,
-      type,
-    })
+  makeTransfer(options: MakeTransferOptions) {
+    return this.internal.makeTransfer(options)
   }
 
-  makeTransferBatch({
-    commitment = Commitment.Confirmed,
-    owner,
-    payments,
-    type = TransactionType.Earn,
-  }: {
-    commitment?: Commitment
-    owner: Keypair
-    payments: Payment[]
-    type?: TransactionType
-  }) {
-    return this.internal.makeTransferBatch({
-      commitment,
-      owner,
-      payments,
-      type,
-    })
+  makeTransferBatch(options: MakeTransferBatchOptions) {
+    return this.internal.makeTransferBatch(options)
   }
 
   tokenAccounts(account: string) {

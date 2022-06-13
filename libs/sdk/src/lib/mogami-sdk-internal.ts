@@ -1,6 +1,5 @@
 import { TransactionType } from '@kin-tools/kin-memo'
-import { Keypair } from '@mogami/keypair'
-import { Commitment, getPublicKey, Payment, PublicKeyString } from '@mogami/solana'
+import { Commitment, getPublicKey } from '@mogami/solana'
 import {
   AccountApi,
   AirdropApi,
@@ -21,7 +20,14 @@ import {
   serializeMakeTransferBatchTransactions,
   serializeMakeTransferTransaction,
 } from './helpers'
-import { CreateAccountOptions, GetBalanceOptions, MogamiSdkConfigParsed, MogamiSdkEnvironment } from './interfaces'
+import {
+  CreateAccountOptions,
+  GetBalanceOptions,
+  MakeTransferBatchOptions,
+  MakeTransferOptions,
+  MogamiSdkConfigParsed,
+  MogamiSdkEnvironment,
+} from './interfaces'
 
 export class MogamiSdkInternal {
   private readonly accountApi: AccountApi
@@ -48,11 +54,10 @@ export class MogamiSdkInternal {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-
     const res = await this.accountApi.getBalance(
       this.appConfig.environment.name,
       this.appConfig.app.index,
-      getPublicKey(account).toBase58(),
+      account.toString(),
     )
 
     return res.data as BalanceResponse
@@ -105,15 +110,7 @@ export class MogamiSdkInternal {
     referenceId,
     referenceType,
     type,
-  }: {
-    amount: string
-    commitment: Commitment
-    destination: PublicKeyString
-    owner: Keypair
-    referenceId?: string
-    referenceType?: string
-    type: TransactionType
-  }) {
+  }: MakeTransferOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
@@ -127,11 +124,11 @@ export class MogamiSdkInternal {
       latestBlockhash,
       feePayer,
       appIndex: this.appConfig.app.index,
-      type,
+      type: type || TransactionType.None,
     })
 
     const request: MakeTransferRequest = {
-      commitment,
+      commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
       mint: this.appConfig.mint.symbol,
@@ -148,40 +145,36 @@ export class MogamiSdkInternal {
 
   async makeTransferBatch({
     commitment,
+    destinations,
     owner,
-    payments,
     referenceId,
     referenceType,
     type,
-  }: {
-    commitment: Commitment
-    owner: Keypair
-    payments: Payment[]
-    referenceId?: string
-    referenceType?: string
-    type: TransactionType
-  }) {
+  }: MakeTransferBatchOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    if (payments?.length > 15) {
-      throw new Error('Maximum number of payments exceeded')
+    if (destinations?.length < 1) {
+      throw new Error('At least 1 destination required')
+    }
+    if (destinations?.length > 15) {
+      throw new Error('Maximum number of destinations exceeded')
     }
 
     const { mint, feePayer, latestBlockhash, lastValidBlockHeight } = await this.prepareTransaction()
 
     const tx = await serializeMakeTransferBatchTransactions({
-      payments,
+      destinations,
       mint,
       owner,
       latestBlockhash,
       feePayer,
       appIndex: this.appConfig.app.index,
-      type,
+      type: type || TransactionType.None,
     })
 
     const request: MakeTransferRequest = {
-      commitment,
+      commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
       mint: this.appConfig.mint.symbol,

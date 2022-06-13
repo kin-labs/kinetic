@@ -1,7 +1,7 @@
 import { MogamiSdk } from '@mogami/sdk'
 import { Keypair } from '@mogami/keypair'
 import * as keys from './fixtures'
-import { Payment } from '@mogami/solana'
+import { Destination } from '@mogami/solana'
 
 describe('MogamiSdk (e2e)', () => {
   let sdk: MogamiSdk
@@ -48,20 +48,20 @@ describe('MogamiSdk (e2e)', () => {
     expect(source).toBe(aliceKey.publicKey)
   })
 
-  it('should make a banch in batch', async () => {
+  it('should make a transfer in batch', async () => {
     const { ALICE_KEY, BOB_KEY, CHARLIE_KEY, DAVE_KEY } = keys
     const aliceKey = Keypair.fromByteArray(ALICE_KEY)
     const bobKey = Keypair.fromByteArray(BOB_KEY)
     const charlieKey = Keypair.fromByteArray(CHARLIE_KEY)
     const daveKey = Keypair.fromByteArray(DAVE_KEY)
 
-    const payments: Payment[] = [
+    const destinations: Destination[] = [
       { destination: bobKey.publicKey, amount: '51' },
       { destination: charlieKey.publicKey, amount: '72' },
       { destination: daveKey.publicKey, amount: '87' },
     ]
 
-    const tx = await sdk.makeTransferBatch({ payments, owner: aliceKey })
+    const tx = await sdk.makeTransferBatch({ destinations, owner: aliceKey })
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(defaultMint)
     const { signature, errors, amount, source } = tx
@@ -69,7 +69,7 @@ describe('MogamiSdk (e2e)', () => {
     expect(errors).toEqual([])
     expect(Number(amount)).toBe(5100000)
     expect(source).toBe(aliceKey.publicKey)
-  })
+  }, 60000)
 
   it('should create an account', async () => {
     const owner = Keypair.random()
@@ -103,28 +103,38 @@ describe('MogamiSdk (e2e)', () => {
     }
   })
 
+  it('should throw an error when there are less than 1 transactions in a batch', async () => {
+    try {
+      const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
+      const destinations: Destination[] = []
+      await sdk.makeTransferBatch({ destinations, owner: aliceKey })
+    } catch (error) {
+      expect(error.toString()).toContain('Error: At least 1 destination required')
+    }
+  })
+
   it('should throw an error when there are more than 15 transactions in a batch', async () => {
     try {
       const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
-      const payments: Payment[] = []
-      const payment = { destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' }
+      const destinations: Destination[] = []
+      const destination = { destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' }
       for (let i = 0; i <= 15; i++) {
-        payments.push(payment)
+        destinations.push(destination)
       }
-      await sdk.makeTransferBatch({ payments, owner: aliceKey })
+      await sdk.makeTransferBatch({ destinations, owner: aliceKey })
     } catch (error) {
-      expect(error.toString()).toContain('Error: Maximum number of payments exceeded')
+      expect(error.toString()).toContain('Error: Maximum number of destinations exceeded')
     }
   })
 
   it('should fail when one account does not exist in batch transfer', async () => {
     try {
       const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
-      const payments: Payment[] = []
-      payments.push({ destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' })
+      const destinations: Destination[] = []
+      destinations.push({ destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' })
       const kp = Keypair.random()
-      payments.push({ destination: kp.publicKey, amount: '12' })
-      await sdk.makeTransferBatch({ payments, owner: aliceKey })
+      destinations.push({ destination: kp.publicKey, amount: '12' })
+      await sdk.makeTransferBatch({ destinations, owner: aliceKey })
     } catch (error) {
       const errorData = error.response.data.error
       expect(errorData).toContain("type: 'InvalidAccount'")
