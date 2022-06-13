@@ -29,7 +29,7 @@ export function DemoServerFeature() {
 
   return (
     <Stack spacing={6}>
-      <Text>Here you can add and configure Mogami servers.</Text>
+      <Text>Here you can add and configure Kinetic servers.</Text>
       <Stack direction="row" spacing={2} alignItems="center">
         <Button className="add-server-btn" onClick={() => setServerCreateVisible(true)}>
           Add Server
@@ -42,7 +42,7 @@ export function DemoServerFeature() {
           cyData="card-servers-warning"
           status="info"
           title="No Servers found."
-          message="Add a new one to use the Mogami demo."
+          message="Add a new one to use the Kinetic demo."
         />
       )}
       <ServerCreateModal

@@ -526,14 +526,14 @@
     }
   },
   "info": {
-    "title": "Mogami",
-    "description": "The Mogami API description",
+    "title": "Kinetic",
+    "description": "The OpenAPI definition of the Kinetic API",
     "version": "1.0",
     "contact": {}
   },
   "tags": [
     {
-      "name": "mogami",
+      "name": "kinetic",
       "description": ""
     }
   ],

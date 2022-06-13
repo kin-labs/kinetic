@@ -1,4 +1,4 @@
-# Mogami
+# Kinetic
 
 # Requirements
 
@@ -11,8 +11,8 @@ You need to have the following tools installed on your machine:
 # Getting started
 
 ```shell
-git clone git@github.com:kin-labs/mogami.git
-cd mogami
+git clone git@github.com:kin-labs/kinetic.git
+cd kinetic
 yarn install
 ```
 

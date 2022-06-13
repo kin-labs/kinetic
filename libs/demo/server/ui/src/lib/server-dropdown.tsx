@@ -15,7 +15,7 @@ export function ServerDropdown({
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-        {selected ? selected.name : 'Select Mogami Server'}
+        {selected ? selected.name : 'Select Kinetic Server'}
       </MenuButton>
       <MenuList>
         {servers?.map((server) => (

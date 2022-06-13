@@ -105,10 +105,10 @@ export class ApiConfigDataAccessService {
 
   configureSwagger(app: INestApplication) {
     const config = new DocumentBuilder()
-      .setTitle('Mogami')
-      .setDescription('The Mogami API description')
+      .setTitle('Kinetic')
+      .setDescription('The OpenAPI definition of the Kinetic API')
       .setVersion('1.0')
-      .addTag('mogami')
+      .addTag('kinetic')
       .addServer('https://devnet.mogami.io')
       .addServer('https://mainnet.mogami.io')
       .addServer('http://localhost:3000')

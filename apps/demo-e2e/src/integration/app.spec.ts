@@ -19,10 +19,10 @@ describe('demo', () => {
     cy.login('my-email@something.com', 'myPassword')
 
     // Function helper example, see `../support/app.po.ts` file
-    getHeader().contains('Mogami')
+    getHeader().contains('Kinetic')
   })
 
-  it('should add dev Mogami server', () => {
+  it('should add dev Kinetic server', () => {
     cy.get('[cy-data="cy-nav-btn-servers"]').click()
     cy.get('[cy-data="card-servers-warning"]').contains('No Servers found.')
     cy.get('.chakra-button.add-server-btn').click()

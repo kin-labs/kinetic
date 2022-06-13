@@ -19,7 +19,7 @@ export function DemoShellFeature() {
       links={links}
       logo={'/assets/kin-logo.svg'}
       copyright={<div>Kin Foundation &copy; 2022</div>}
-      name={'Mogami'}
+      name={'Kinetic'}
     >
       <Route path="/" exact>
         <Redirect to="/home" />

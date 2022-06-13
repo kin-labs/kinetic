@@ -1,7 +1,7 @@
 import { MogamiSdkEndpoint } from '../interfaces'
 
 /**
- * This method accepts one of the existing hosts (mainnet | devnet ) or the URL of a Mogami API.
+ * This method accepts one of the existing hosts (mainnet | devnet ) or the URL of a Kinetic API.
  * @param {MogamiSdkEndpoint} endpoint
  * @returns {string}
  */
