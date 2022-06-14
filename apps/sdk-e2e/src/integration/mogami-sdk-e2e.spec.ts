@@ -1,7 +1,7 @@
 import { MogamiSdk } from '@mogami/sdk'
 import { Keypair } from '@mogami/keypair'
 import * as keys from './fixtures'
-import { Payment } from '@mogami/solana'
+import { Destination } from '@mogami/solana'
 
 describe('MogamiSdk (e2e)', () => {
   let sdk: MogamiSdk
@@ -29,8 +29,8 @@ describe('MogamiSdk (e2e)', () => {
 
   it('should get account balance', async () => {
     const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
-    const res = await sdk.balance(aliceKey.publicKey)
-    const balance = Number(res.value)
+    const res = await sdk.getBalance({ account: aliceKey.publicKey })
+    const balance = Number(res.balance)
     expect(isNaN(balance)).toBeFalsy()
     expect(balance).toBeGreaterThan(0)
   })
@@ -48,20 +48,20 @@ describe('MogamiSdk (e2e)', () => {
     expect(source).toBe(aliceKey.publicKey)
   })
 
-  it('should make a banch in batch', async () => {
+  it('should make a transfer in batch', async () => {
     const { ALICE_KEY, BOB_KEY, CHARLIE_KEY, DAVE_KEY } = keys
     const aliceKey = Keypair.fromByteArray(ALICE_KEY)
     const bobKey = Keypair.fromByteArray(BOB_KEY)
     const charlieKey = Keypair.fromByteArray(CHARLIE_KEY)
     const daveKey = Keypair.fromByteArray(DAVE_KEY)
 
-    const payments: Payment[] = [
+    const destinations: Destination[] = [
       { destination: bobKey.publicKey, amount: '51' },
       { destination: charlieKey.publicKey, amount: '72' },
       { destination: daveKey.publicKey, amount: '87' },
     ]
 
-    const tx = await sdk.makeTransferBatch({ payments, owner: aliceKey })
+    const tx = await sdk.makeTransferBatch({ destinations, owner: aliceKey })
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(defaultMint)
     const { signature, errors, amount, source } = tx
@@ -69,10 +69,11 @@ describe('MogamiSdk (e2e)', () => {
     expect(errors).toEqual([])
     expect(Number(amount)).toBe(5100000)
     expect(source).toBe(aliceKey.publicKey)
-  })
+  }, 60000)
 
   it('should create an account', async () => {
-    const tx = await sdk.createAccount(Keypair.generate())
+    const owner = Keypair.random()
+    const tx = await sdk.createAccount({ owner })
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(defaultMint)
     const { signature, errors } = tx
@@ -82,7 +83,7 @@ describe('MogamiSdk (e2e)', () => {
 
   it('should get the account history', async () => {
     const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
-    const accountHistory = await sdk.getHistory(aliceKey.publicKey)
+    const accountHistory = await sdk.getHistory({ account: aliceKey.publicKey })
     expect(accountHistory.data.length).toBeGreaterThan(0)
     expect(accountHistory.data[0].account).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
   })
@@ -95,35 +96,45 @@ describe('MogamiSdk (e2e)', () => {
 
   it('should throw an error when publicKey does not exits or is incorrect', async () => {
     try {
-      await sdk.balance('xx')
+      await sdk.getBalance({ account: 'xx' })
     } catch (error) {
       expect(error.response.data.statusCode).toBe(400)
       expect(error.response.data.error).toBe('BadRequestException: accountId must be a valid PublicKey')
     }
   })
 
+  it('should throw an error when there are less than 1 transactions in a batch', async () => {
+    try {
+      const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
+      const destinations: Destination[] = []
+      await sdk.makeTransferBatch({ destinations, owner: aliceKey })
+    } catch (error) {
+      expect(error.toString()).toContain('Error: At least 1 destination required')
+    }
+  })
+
   it('should throw an error when there are more than 15 transactions in a batch', async () => {
     try {
       const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
-      const payments: Payment[] = []
-      const payment = { destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' }
+      const destinations: Destination[] = []
+      const destination = { destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' }
       for (let i = 0; i <= 15; i++) {
-        payments.push(payment)
+        destinations.push(destination)
       }
-      await sdk.makeTransferBatch({ payments, owner: aliceKey })
+      await sdk.makeTransferBatch({ destinations, owner: aliceKey })
     } catch (error) {
-      expect(error.toString()).toContain('Error: Maximum number of payments exceeded')
+      expect(error.toString()).toContain('Error: Maximum number of destinations exceeded')
     }
   })
 
   it('should fail when one account does not exist in batch transfer', async () => {
     try {
       const aliceKey = Keypair.fromByteArray(keys.ALICE_KEY)
-      const payments: Payment[] = []
-      payments.push({ destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' })
-      const kp = Keypair.generate()
-      payments.push({ destination: kp.publicKey, amount: '12' })
-      await sdk.makeTransferBatch({ payments, owner: aliceKey })
+      const destinations: Destination[] = []
+      destinations.push({ destination: Keypair.fromByteArray(keys.BOB_KEY).publicKey, amount: '15' })
+      const kp = Keypair.random()
+      destinations.push({ destination: kp.publicKey, amount: '12' })
+      await sdk.makeTransferBatch({ destinations, owner: aliceKey })
     } catch (error) {
       const errorData = error.response.data.error
       expect(errorData).toContain("type: 'InvalidAccount'")
@@ -133,7 +144,7 @@ describe('MogamiSdk (e2e)', () => {
 
   it('should request for an airdrop', async () => {
     const daveKey = Keypair.fromByteArray(keys.DAVE_KEY)
-    const airdrop = await sdk.requestAirdrop(daveKey.publicKey, '1000')
+    const airdrop = await sdk.requestAirdrop({ account: daveKey.publicKey, amount: '1000' })
     expect(airdrop.data.signature).not.toBeNull()
     expect(typeof airdrop.data.signature).toBe('string')
     const { account, amount } = JSON.parse(airdrop.config.data)
@@ -144,7 +155,7 @@ describe('MogamiSdk (e2e)', () => {
   it('should fail not funds for an airdrop', async () => {
     try {
       const daveKey = Keypair.fromByteArray(keys.DAVE_KEY)
-      await sdk.requestAirdrop(daveKey.publicKey, '50001')
+      await sdk.requestAirdrop({ account: daveKey.publicKey, amount: '50001' })
     } catch (error) {
       expect(error.response.data.error).toBe('BadRequestException: Try requesting 50000 or less.')
     }

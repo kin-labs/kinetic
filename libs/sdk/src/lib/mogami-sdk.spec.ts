@@ -1,3 +1,6 @@
+import { Keypair } from '@mogami/keypair'
+import { Commitment } from '@mogami/solana'
+import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
 import { MogamiSdkConfig } from './interfaces'
 import { MogamiSdk } from './mogami-sdk'
 
@@ -13,11 +16,11 @@ function expectConfiguredSdk(sdk: MogamiSdk) {
   expect(sdk.solanaRpcEndpoint).toEqual(SOLANA_RPC_NAME)
 }
 
-xdescribe('sdk', () => {
+describe('sdk', () => {
   let sdk: MogamiSdk
 
   beforeEach(async () => {
-    sdk = await MogamiSdk.setup({
+    sdk = new MogamiSdk({
       environment: DEFAULT_APP_ENVIRONMENT,
       endpoint: DEFAULT_APP_ENDPOINT,
       index: DEFAULT_APP_INDEX,
@@ -26,22 +29,43 @@ xdescribe('sdk', () => {
 
   describe('initializing', () => {
     describe('expected behavior', () => {
-      it('should connect to a server endpoint', async () => {
-        expectConfiguredSdk(sdk)
+      it('should configure the SDK without a logger configured', async () => {
+        expect(sdk.solana).not.toBeDefined()
+        expect(sdk.solana?.connection).not.toBeDefined()
         expect(sdk.sdkConfig.logger).not.toBeDefined()
       })
 
-      it('should connect with a logger configured', async () => {
+      it('should configure the SDK with a logger configured', async () => {
         const config: MogamiSdkConfig = {
           environment: DEFAULT_APP_ENVIRONMENT,
           endpoint: DEFAULT_APP_ENDPOINT,
           index: DEFAULT_APP_INDEX,
           logger: console,
         }
-        sdk = await MogamiSdk.setup(config)
-
-        expectConfiguredSdk(sdk)
+        sdk = new MogamiSdk(parseMogamiSdkConfig(config))
         expect(sdk.sdkConfig.logger).toBeDefined()
+      })
+
+      it('should configure the SDK with a custom Solana RPC endpoint', async () => {
+        const config: MogamiSdkConfig = {
+          environment: DEFAULT_APP_ENVIRONMENT,
+          endpoint: DEFAULT_APP_ENDPOINT,
+          index: DEFAULT_APP_INDEX,
+          logger: console,
+          solanaRpcEndpoint: SOLANA_RPC_NAME,
+        }
+        sdk = new MogamiSdk(parseMogamiSdkConfig(config))
+        expect(sdk.sdkConfig.solanaRpcEndpoint).toEqual(SOLANA_RPC_ENDPOINT)
+        expect(sdk.sdkConfig.logger).toBeDefined()
+      })
+
+      it('should adhere createAccountOptions to RFC signature', () => {
+        const createAccountOptions = {
+          owner: Keypair.random(),
+          commitment: Commitment.Confirmed,
+        }
+        expect(createAccountOptions.owner.secretKey).toBeDefined()
+        expect(createAccountOptions.owner.secretKey).toBeDefined()
       })
     })
   })

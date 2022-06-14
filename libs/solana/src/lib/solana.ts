@@ -2,7 +2,15 @@ import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { convertCommitment, getPublicKey, parseEndpoint } from './helpers'
-import { Commitment, PublicKeyString, SolanaConfig, TokenBalance } from './interfaces'
+import {
+  BalanceMintMap,
+  BalanceSummary,
+  BalanceToken,
+  Commitment,
+  PublicKeyString,
+  SolanaConfig,
+  TokenBalance,
+} from './interfaces'
 
 export class Solana {
   readonly endpoint: string
@@ -50,13 +58,45 @@ export class Solana {
     return this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
   }
 
-  async getBalance(accountId: PublicKeyString, mint: PublicKeyString) {
-    this.config.logger?.log(`Getting account balance: ${accountId} for mint ${mint}`)
+  async getBalance(accountId: PublicKeyString, mints: string | string[]): Promise<BalanceSummary> {
+    mints = Array.isArray(mints) ? mints : [mints]
+    this.config.logger?.log(`Getting account balance summary: ${accountId} for mints ${mints.join(', ')}`)
+
+    if (!mints.length) {
+      throw new Error(`getBalance: No mints provided.`)
+    }
+    const defaultMint = mints[0]
     try {
-      const balances = await this.getTokenBalances(new PublicKey(accountId), mint)
-      return balances.reduce((acc, curr) => acc.plus(curr.balance), new BigNumber(0))
-    } catch (error) {
-      throw new Error(`No token accounts found for mint ${mint}`)
+      const tokens: BalanceToken[] = []
+
+      const tokenAccounts: { mint: string; accounts: string[] }[] = await Promise.all(
+        mints.map((mint) => {
+          return this.getTokenAccounts(accountId, mint).then((accounts) => ({ mint, accounts }))
+        }),
+      )
+
+      for (const { mint, accounts } of tokenAccounts) {
+        for (const account of accounts) {
+          const { balance } = await this.getTokenBalance(account)
+          tokens.push({ account, mint, balance })
+        }
+      }
+
+      const mintBalance: BalanceMintMap = tokens.reduce<BalanceMintMap>((acc, { mint, balance }) => {
+        const current = acc[mint] ? acc[mint] : new BigNumber(0)
+
+        return { ...acc, [mint]: current.plus(balance) }
+      }, {})
+
+      return {
+        balance: mintBalance[defaultMint] ? mintBalance[defaultMint] : new BigNumber(0),
+        mints: mintBalance,
+        tokens,
+      }
+    } catch (e) {
+      throw new Error(
+        `No token accounts found for ${mints.length > 1 ? `mints ${mints.join(', ')}` : `mint ${defaultMint}`}`,
+      )
     }
   }
 

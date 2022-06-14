@@ -1,6 +1,6 @@
 import { PublicKeyString } from './public-key-string'
 
-export interface Payment {
+export interface Destination {
   amount: string
   destination: PublicKeyString
 }

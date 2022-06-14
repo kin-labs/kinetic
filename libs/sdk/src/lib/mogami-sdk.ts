@@ -1,10 +1,20 @@
 import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@mogami/keypair'
-import { Commitment, Payment, Solana } from '@mogami/solana'
+import { Commitment, Destination, Solana } from '@mogami/solana'
+import { Cluster, clusterApiUrl } from '@solana/web3.js'
+import { AppTransaction } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
-import { MogamiSdkConfig } from './interfaces'
-import { MogamiSdkConfigParsed } from './interfaces/mogami-sdk-config-parsed'
+import {
+  CreateAccountOptions,
+  GetBalanceOptions,
+  GetHistoryOptions,
+  MakeTransferBatchOptions,
+  MakeTransferOptions,
+  MogamiSdkConfig,
+  MogamiSdkConfigParsed,
+  RequestAirdropOptions,
+} from './interfaces'
 import { MogamiSdkInternal } from './mogami-sdk-internal'
 
 export class MogamiSdk {
@@ -14,8 +24,17 @@ export class MogamiSdk {
 
   constructor(readonly sdkConfig: MogamiSdkConfigParsed) {
     this.internal = new MogamiSdkInternal(sdkConfig)
-    this.sdkConfig.solanaRpcEndpoint = getSolanaRpcEndpoint(sdkConfig.endpoint)
+    this.sdkConfig.solanaRpcEndpoint = sdkConfig.solanaRpcEndpoint
+      ? clusterApiUrl(getSolanaRpcEndpoint(sdkConfig.solanaRpcEndpoint) as Cluster)
+      : getSolanaRpcEndpoint(sdkConfig.endpoint)
   }
+
+  // START DEPRECATED METHODS
+  balance(account: string) {
+    console.warn(`Deprecated method, please use getBalance()`)
+    return this.getBalance({ account })
+  }
+  // END DEPRECATED METHODS
 
   get endpoint() {
     return this.sdkConfig.endpoint
@@ -25,71 +44,32 @@ export class MogamiSdk {
     return this.sdkConfig.solanaRpcEndpoint || 'mainnet-beta'
   }
 
-  requestAirdrop(account: string, amount: string) {
-    return this.internal.requestAirdrop(account, amount)
+  requestAirdrop(options: RequestAirdropOptions) {
+    return this.internal.requestAirdrop(options)
   }
 
-  balance(account: string) {
-    return this.internal.balance(account)
+  getBalance(option: GetBalanceOptions) {
+    return this.internal.getBalance(option)
   }
 
   config() {
     return this.internal.appConfig
   }
 
-  createAccount(owner: Keypair) {
-    return this.internal.createAccount(owner)
+  createAccount(options: CreateAccountOptions): Promise<AppTransaction> {
+    return this.internal.createAccount(options)
   }
 
-  getHistory(account: string) {
-    return this.internal.getHistory(account)
+  getHistory(options: GetHistoryOptions) {
+    return this.internal.getHistory(options)
   }
 
-  makeTransfer({
-    amount,
-    commitment = Commitment.Confirmed,
-    destination,
-    owner,
-    referenceId,
-    referenceType,
-    type = TransactionType.None,
-  }: {
-    amount: string
-    commitment?: Commitment
-    destination: string
-    owner: Keypair
-    referenceId?: string
-    referenceType?: string
-    type?: TransactionType
-  }) {
-    return this.internal.makeTransfer({
-      amount,
-      commitment,
-      destination,
-      owner,
-      referenceId,
-      referenceType,
-      type,
-    })
+  makeTransfer(options: MakeTransferOptions) {
+    return this.internal.makeTransfer(options)
   }
 
-  makeTransferBatch({
-    commitment = Commitment.Confirmed,
-    owner,
-    payments,
-    type = TransactionType.Earn,
-  }: {
-    commitment?: Commitment
-    owner: Keypair
-    payments: Payment[]
-    type?: TransactionType
-  }) {
-    return this.internal.makeTransferBatch({
-      commitment,
-      owner,
-      payments,
-      type,
-    })
+  makeTransferBatch(options: MakeTransferBatchOptions) {
+    return this.internal.makeTransferBatch(options)
   }
 
   tokenAccounts(account: string) {

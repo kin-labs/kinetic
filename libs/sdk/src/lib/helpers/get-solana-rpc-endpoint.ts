@@ -14,7 +14,7 @@ export function getSolanaRpcEndpoint(endpoint: MogamiSdkEndpoint): Cluster | str
     case 'mainnet-beta':
       return 'mainnet-beta'
     default:
-      if (endpoint.startsWith('http')) {
+      if (endpoint?.startsWith('http')) {
         return endpoint
       }
       throw new Error('Unknown http or https endpoint')

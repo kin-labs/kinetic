@@ -1,7 +1,7 @@
 import { ApiAppDataAccessService, AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
 import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
 import { Keypair } from '@mogami/keypair'
-import { Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
+import { BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
@@ -43,13 +43,13 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     return solana.getAccountInfo(accountId, { commitment })
   }
 
-  async getBalance(environment: string, index: number, accountId: PublicKeyString) {
+  async getBalance(environment: string, index: number, accountId: PublicKeyString): Promise<BalanceSummary> {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
 
-    const value = await solana.getBalance(accountId, appEnv.mint.publicKey)
+    const mints = appEnv.mints.map(({ publicKey }) => publicKey)
 
-    return { value }
+    return solana.getBalance(accountId, mints)
   }
 
   async getHistory(environment: string, index: number, accountId: PublicKeyString) {

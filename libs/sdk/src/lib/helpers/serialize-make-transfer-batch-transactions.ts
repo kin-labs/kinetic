@@ -1,7 +1,7 @@
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import { Keypair } from '@mogami/keypair'
-import { getPublicKey, Payment, PublicKeyString } from '@mogami/solana'
+import { getPublicKey, Destination, PublicKeyString } from '@mogami/solana'
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
@@ -9,7 +9,7 @@ import { kinToQuarks } from './kin-to-quarks'
 
 export async function serializeMakeTransferBatchTransactions({
   appIndex,
-  payments,
+  destinations,
   feePayer,
   latestBlockhash,
   mint,
@@ -17,7 +17,7 @@ export async function serializeMakeTransferBatchTransactions({
   type,
 }: {
   appIndex: number
-  payments: Payment[]
+  destinations: Destination[]
   feePayer: PublicKeyString
   latestBlockhash: string
   mint: PublicKeyString
@@ -32,8 +32,8 @@ export async function serializeMakeTransferBatchTransactions({
   const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, owner.solanaPublicKey)
 
   // Get TokenAccount from Destination
-  const paymentInfo: { amount: BigNumber; destination: PublicKey }[] = await Promise.all(
-    payments.map(async ({ amount, destination }) => ({
+  const destinationInfo: { amount: BigNumber; destination: PublicKey }[] = await Promise.all(
+    destinations.map(async ({ amount, destination }) => ({
       amount: kinToQuarks(amount),
       destination: await getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
     })),
@@ -46,12 +46,12 @@ export async function serializeMakeTransferBatchTransactions({
 
   const instructions: TransactionInstruction[] = [
     appIndexMemoInstruction,
-    ...paymentInfo.map((payment) =>
+    ...destinationInfo.map(({ amount, destination }) =>
       createTransferInstruction(
         ownerTokenAccount,
-        payment.destination,
+        destination,
         owner.solanaPublicKey,
-        payment.amount.toNumber(),
+        amount.toNumber(),
         [],
         TOKEN_PROGRAM_ID,
       ),
