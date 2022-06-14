@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Mogami
- * The Mogami API description
+ * Kinetic
+ * The OpenAPI definition of the Kinetic API
  *
  * The version of the OpenAPI document: 1.0
  *
@@ -17,7 +17,7 @@ import { Configuration } from './configuration'
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios'
 
-export const BASE_PATH = 'https://devnet.mogami.io'.replace(/\/+$/, '')
+export const BASE_PATH = 'https://devnet.kinetic.kin.org'.replace(/\/+$/, '')
 
 /**
  *

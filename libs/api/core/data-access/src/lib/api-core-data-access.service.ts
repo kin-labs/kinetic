@@ -209,24 +209,24 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       id: 'bob',
       avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/bob42.svg',
       name: 'Bob',
-      email: this.config.adminEmail.replace('admin', 'bob'),
-      password: this.config.adminPassword.replace('@dmin', '@bob'),
+      email: this.config.adminEmail.replace('kinetic', 'bob'),
+      password: this.config.adminPassword.replace('admin', 'bob'),
       role: UserRole.User,
     })
     await this.configureDefaultUser({
       id: 'charlie',
       avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/charlie42222.svg',
       name: 'Charlie',
-      email: this.config.adminEmail.replace('admin', 'charlie'),
-      password: this.config.adminPassword.replace('@dmin', '@charlie'),
+      email: this.config.adminEmail.replace('kinetic', 'charlie'),
+      password: this.config.adminPassword.replace('admin', 'charlie'),
       role: UserRole.User,
     })
     await this.configureDefaultUser({
       id: 'dave',
       avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/dave42.svg',
       name: 'Dave',
-      email: this.config.adminEmail.replace('admin', 'dave'),
-      password: this.config.adminPassword.replace('@dmin', '@dave'),
+      email: this.config.adminEmail.replace('kinetic', 'dave'),
+      password: this.config.adminPassword.replace('admin', 'dave'),
       role: UserRole.User,
     })
   }

@@ -526,23 +526,23 @@
     }
   },
   "info": {
-    "title": "Mogami",
-    "description": "The Mogami API description",
+    "title": "Kinetic",
+    "description": "The OpenAPI definition of the Kinetic API",
     "version": "1.0",
     "contact": {}
   },
   "tags": [
     {
-      "name": "mogami",
+      "name": "kinetic",
       "description": ""
     }
   ],
   "servers": [
     {
-      "url": "https://devnet.mogami.io"
+      "url": "https://devnet.kinetic.kin.org"
     },
     {
-      "url": "https://mainnet.mogami.io"
+      "url": "https://mainnet.kinetic.kin.org"
     },
     {
       "url": "http://localhost:3000"

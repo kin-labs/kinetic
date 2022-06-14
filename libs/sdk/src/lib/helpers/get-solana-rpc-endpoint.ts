@@ -2,7 +2,7 @@ import { Cluster } from '@solana/web3.js'
 import { MogamiSdkEndpoint } from '../interfaces'
 
 /**
- * This method accepts one of the existing Mogami APIs (mainnet | devnet ) or the URL of a Solana RPC Node.
+ * This method accepts one of the existing Kinetic APIs (mainnet | devnet ) or the URL of a Solana RPC Node.
  * @param {MogamiSdkEndpoint} endpoint
  * @returns {string}
  */

@@ -29,8 +29,8 @@
       "keepTime": false,
       "tags": [],
       "targetBlank": false,
-      "title": "Mogami Demo App",
-      "tooltip": "Mogami Demo App",
+      "title": "Kinetic Demo App",
+      "tooltip": "Kinetic Demo App",
       "type": "link",
       "url": "https://mogami.pages.dev"
     },
@@ -41,10 +41,10 @@
       "keepTime": false,
       "tags": [],
       "targetBlank": false,
-      "title": "Mogami Devnet",
-      "tooltip": "Mogami Devnet",
+      "title": "Kinetic Devnet",
+      "tooltip": "Kinetic Devnet",
       "type": "link",
-      "url": "https://devnet.mogami.io"
+      "url": "https://devnet.kinetic.kin.org"
     },
     {
       "asDropdown": false,
@@ -53,10 +53,10 @@
       "keepTime": false,
       "tags": [],
       "targetBlank": false,
-      "title": "Mogami Mainnet",
-      "tooltip": "Mogami Mainnet",
+      "title": "Kinetic Mainnet",
+      "tooltip": "Kinetic Mainnet",
       "type": "link",
-      "url": "https://mainnet.mogami.io"
+      "url": "https://mainnet.kinetic.kin.org"
     }
   ],
   "panels": [
@@ -409,7 +409,7 @@
       },
       "id": 13,
       "panels": [],
-      "title": "Mogami Api Account",
+      "title": "Kinetic Api Account",
       "type": "row"
     },
     {
@@ -585,7 +585,7 @@
       },
       "id": 9,
       "panels": [],
-      "title": "Mogami Api App",
+      "title": "Kinetic Api App",
       "type": "row"
     },
     {
@@ -761,7 +761,7 @@
       },
       "id": 2,
       "panels": [],
-      "title": "Mogami Api Core",
+      "title": "Kinetic Api Core",
       "type": "row"
     },
     {
@@ -856,7 +856,7 @@
       },
       "id": 11,
       "panels": [],
-      "title": "Mogami Api Transaction",
+      "title": "Kinetic Api Transaction",
       "type": "row"
     },
     {
@@ -954,7 +954,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Mogami Dashboard",
+  "title": "Kinetic Dashboard",
   "uid": "0C8q2TGnk",
   "version": 1
 }

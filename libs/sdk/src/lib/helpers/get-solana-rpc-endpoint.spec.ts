@@ -14,13 +14,13 @@ describe('getSolanaRpcEndpoint', () => {
   })
 
   it('should return a url starting with http', () => {
-    const local = 'http://local.mogami.io'
+    const local = 'http://local.kinetic.kin.org'
     const endpoint = getSolanaRpcEndpoint(local)
     expect(endpoint).toEqual(local)
   })
 
   it('should return a url starting with https', () => {
-    const local = 'https://local.mogami.io'
+    const local = 'https://local.kinetic.kin.org'
     const endpoint = getSolanaRpcEndpoint(local)
     expect(endpoint).toEqual(local)
   })

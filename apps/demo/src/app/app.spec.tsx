@@ -22,7 +22,7 @@ describe('App', () => {
       </BrowserRouter>,
     )
 
-    expect(getByText(/Mogami/gi)).toBeTruthy()
+    expect(getByText(/Kinetic/gi)).toBeTruthy()
     expect(getByText(/Kin Foundation © 2022/gi)).toBeTruthy()
   })
 })

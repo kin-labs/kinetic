@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Mogami
- * The Mogami API description
+ * Kinetic
+ * The OpenAPI definition of the Kinetic API
  *
  * The version of the OpenAPI document: 1.0
  *

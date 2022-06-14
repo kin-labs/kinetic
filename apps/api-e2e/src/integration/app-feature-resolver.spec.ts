@@ -241,9 +241,9 @@ describe('App (e2e)', () => {
           webhookSecret: 'WebHookSecret',
           webhookAcceptIncoming: true,
           webhookEventEnabled: true,
-          webhookEventUrl: 'http://local.mogami.io/api/app/devnet/1/hooks/event',
+          webhookEventUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/event',
           webhookVerifyEnabled: true,
-          webhookVerifyUrl: 'http://local.mogami.io/api/app/devnet/1/hooks/verify',
+          webhookVerifyUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/verify',
         }
 
         return runGraphQLQueryAdmin(app, token, UserUpdateAppEnv, { appId, appEnvId, input })

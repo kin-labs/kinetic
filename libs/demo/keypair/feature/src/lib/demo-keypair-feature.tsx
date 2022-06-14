@@ -95,7 +95,7 @@ export function DemoKeypairFeature() {
             cyData="card-keypair-warning"
             status="info"
             title="No Keypairs found."
-            message="Generate or import one to use the Mogami demo."
+            message="Generate or import one to use the Kinetic demo."
           />
         </div>
       )}
