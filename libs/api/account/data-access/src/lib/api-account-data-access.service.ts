@@ -47,10 +47,9 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
 
-    const defaultMint = appEnv.mint.publicKey
     const mints = appEnv.mints.map(({ publicKey }) => publicKey)
 
-    return solana.getBalance(accountId, defaultMint, mints)
+    return solana.getBalance(accountId, mints)
   }
 
   async getHistory(environment: string, index: number, accountId: PublicKeyString) {

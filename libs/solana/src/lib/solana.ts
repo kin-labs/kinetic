@@ -58,14 +58,19 @@ export class Solana {
     return this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
   }
 
-  async getBalance(accountId: PublicKeyString, defaultMint: string, allMints: string[]): Promise<BalanceSummary> {
-    this.config.logger?.log(`Getting account balance summary: ${accountId} for mints ${allMints.join(', ')}`)
+  async getBalance(accountId: PublicKeyString, mints: string | string[]): Promise<BalanceSummary> {
+    mints = Array.isArray(mints) ? mints : [mints]
+    this.config.logger?.log(`Getting account balance summary: ${accountId} for mints ${mints.join(', ')}`)
 
+    if (!mints.length) {
+      throw new Error(`getBalance: No mints provided.`)
+    }
+    const defaultMint = mints[0]
     try {
       const tokens: BalanceToken[] = []
 
       const tokenAccounts: { mint: string; accounts: string[] }[] = await Promise.all(
-        allMints.map((mint) => {
+        mints.map((mint) => {
           return this.getTokenAccounts(accountId, mint).then((accounts) => ({ mint, accounts }))
         }),
       )
@@ -77,18 +82,21 @@ export class Solana {
         }
       }
 
-      const mints: BalanceMintMap = tokens.reduce<BalanceMintMap>((acc, { mint, balance }) => {
-        const mintBalance = acc[mint] ? acc[mint] : new BigNumber(0)
-        return { ...acc, [mint]: mintBalance.plus(balance) }
+      const mintBalance: BalanceMintMap = tokens.reduce<BalanceMintMap>((acc, { mint, balance }) => {
+        const current = acc[mint] ? acc[mint] : new BigNumber(0)
+
+        return { ...acc, [mint]: current.plus(balance) }
       }, {})
 
       return {
-        balance: mints[defaultMint] ? mints[defaultMint] : new BigNumber(0),
-        mints,
+        balance: mintBalance[defaultMint] ? mintBalance[defaultMint] : new BigNumber(0),
+        mints: mintBalance,
         tokens,
       }
     } catch (e) {
-      throw new Error(`No token accounts found for mints ${allMints.join(', ')}`)
+      throw new Error(
+        `No token accounts found for ${mints.length > 1 ? `mints ${mints.join(', ')}` : `mint ${defaultMint}`}`,
+      )
     }
   }
 
