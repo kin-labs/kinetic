@@ -152,12 +152,24 @@ describe('MogamiSdk (e2e)', () => {
     expect(amount).toBe('1000')
   }, 30000)
 
-  it('should fail not funds for an airdrop', async () => {
+  it('should fail when airdrop request exceeds maximum allowed', async () => {
     try {
       const daveKey = Keypair.fromByteArray(keys.DAVE_KEY)
       await sdk.requestAirdrop({ account: daveKey.publicKey, amount: '50001' })
     } catch (error) {
       expect(error.response.data.error).toBe('BadRequestException: Try requesting 50000 or less.')
     }
+  })
+
+  it('should throw when insufficient funds in a transaction', () => {
+    //
+  })
+
+  it('should throw when insufficient funds in a batch transaction', () => {
+    //
+  })
+
+  it('should throw when try to create an account that already exists', () => {
+    //
   })
 })
