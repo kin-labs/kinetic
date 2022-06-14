@@ -64,7 +64,7 @@ describe('demo', () => {
       .invoke('val')
       .then((secret) => {
         expect(secret).equals(
-          '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq6',
+          '45zw9q67eZWELWEHKm7HQcsEMuVotmhWyZxizGEwFYeBs8VeUZNF9RypsFmnsMaj2KqBDFauZJxrpF4fbGRbdEq', // 6
         )
       })
   })
