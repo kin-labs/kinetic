@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { Prisma } from '@prisma/client'
@@ -90,14 +90,14 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   async getAppHealth(environment: string, index: number): Promise<AppHealth> {
-    const isMogamiOk = true
+    const isKineticOk = true
     const solana = await this.data.getSolanaConnection(environment, index)
 
     const isSolanaOk = await solana.healthCheck()
 
     return {
       isSolanaOk,
-      isMogamiOk,
+      isKineticOk,
       time: new Date(),
     }
   }

@@ -1,11 +1,11 @@
-import { MogamiSdk } from '@mogami/sdk'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import { daveKeypair } from './fixtures'
 
-describe('MogamiSdk (e2e) - Airdrop', () => {
-  let sdk: MogamiSdk
+describe('KineticSdk (e2e) - Airdrop', () => {
+  let sdk: KineticSdk
 
   beforeEach(async () => {
-    sdk = await MogamiSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
+    sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
   })
 
   it('should request for an airdrop', async () => {

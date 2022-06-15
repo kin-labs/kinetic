@@ -1,5 +1,5 @@
 import { Flex, SimpleGrid, Stack, Text } from '@chakra-ui/react'
-import { AdminUiLink } from '@mogami/admin/ui/layout'
+import { AdminUiLink } from '@kin-kinetic/admin/ui/layout'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

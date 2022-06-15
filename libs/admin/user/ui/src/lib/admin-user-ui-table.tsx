@@ -1,5 +1,5 @@
 import { Avatar, Button, Flex, Stack, Text } from '@chakra-ui/react'
-import { User } from '@mogami/shared/util/admin-sdk'
+import { User } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

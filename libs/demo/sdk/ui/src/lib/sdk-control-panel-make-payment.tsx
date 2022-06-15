@@ -1,14 +1,14 @@
 import { Button, Input, Stack } from '@chakra-ui/react'
 import { TransactionType } from '@kin-tools/kin-memo'
-import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
-import { Keypair } from '@mogami/keypair'
-import { MogamiSdk } from '@mogami/sdk'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
+import { Keypair } from '@kin-kinetic/keypair'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import React, { ChangeEvent, useState } from 'react'
 
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelMakePayment({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
+export function SdkControlPanelMakePayment({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [accountId, setAccountId] = useState<string>('BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y')
   const [amount, setAmount] = useState<string>('1050')

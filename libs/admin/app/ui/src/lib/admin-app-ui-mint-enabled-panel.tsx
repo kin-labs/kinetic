@@ -1,7 +1,7 @@
 import { SettingsIcon } from '@chakra-ui/icons'
 import { Button, Code, Flex, Stack, Text } from '@chakra-ui/react'
-import { AdminClusterUiMintDetails } from '@mogami/admin/cluster/ui'
-import { Mint, Wallet } from '@mogami/shared/util/admin-sdk'
+import { AdminClusterUiMintDetails } from '@kin-kinetic/admin/cluster/ui'
+import { Mint, Wallet } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useState } from 'react'
 
 export function AdminAppUiMintEnabledPanel({

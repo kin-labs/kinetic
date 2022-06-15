@@ -11,8 +11,8 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import { AdminAuthLogoutFn } from '@mogami/admin/auth/data-access'
-import { User, UserRole } from '@mogami/shared/util/admin-sdk'
+import { AdminAuthLogoutFn } from '@kin-kinetic/admin/auth/data-access'
+import { User, UserRole } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

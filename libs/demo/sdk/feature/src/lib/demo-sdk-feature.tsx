@@ -1,11 +1,11 @@
 import { Box, Button, Flex, Stack, useColorModeValue } from '@chakra-ui/react'
-import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { demoKeypairDb, DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
-import { KeypairDropdown } from '@mogami/demo/keypair/ui'
-import { SdkControlPanel } from '@mogami/demo/sdk/ui'
-import { demoServerDb, DemoServerEntity } from '@mogami/demo/server/data-access'
-import { ServerDropdown } from '@mogami/demo/server/ui'
-import { MogamiSdk } from '@mogami/sdk'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { demoKeypairDb, DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
+import { KeypairDropdown } from '@kin-kinetic/demo/keypair/ui'
+import { SdkControlPanel } from '@kin-kinetic/demo/sdk/ui'
+import { demoServerDb, DemoServerEntity } from '@kin-kinetic/demo/server/data-access'
+import { ServerDropdown } from '@kin-kinetic/demo/server/ui'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useState } from 'react'
 
@@ -13,7 +13,7 @@ export function DemoSdkFeature() {
   const [loading, setLoading] = useState(true)
   const [keypair, setKeypair] = useState<DemoKeypairEntity | null>(null)
   const [server, setServer] = useState<DemoServerEntity | null>(null)
-  const [sdk, setSdk] = useState<MogamiSdk | null>(null)
+  const [sdk, setSdk] = useState<KineticSdk | null>(null)
   const headerColor = useColorModeValue('gray.100', 'gray.900')
 
   const keypairs = useLiveQuery(() =>
@@ -45,7 +45,7 @@ export function DemoSdkFeature() {
   }
 
   const selectServer = (server: DemoServerEntity) => {
-    MogamiSdk.setup({
+    KineticSdk.setup({
       endpoint: server.endpoint,
       environment: server.environment,
       index: 1,

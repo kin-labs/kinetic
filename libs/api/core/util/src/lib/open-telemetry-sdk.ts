@@ -15,7 +15,7 @@ export class OpenTelementrySdk {
     Logger.verbose(`Metrics are enabled`, 'OpenTelementrySdk')
 
     this.metricExporter = new PrometheusExporter({
-      prefix: 'mogami',
+      prefix: 'kinetic',
       preventServerStart: true,
     })
 

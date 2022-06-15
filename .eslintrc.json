@@ -10,7 +10,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": ["@mogami/api-app-module"],
+            "allow": ["@kin-kinetic/api-app-module"],
             "depConstraints": [
               {
                 "sourceTag": "*",

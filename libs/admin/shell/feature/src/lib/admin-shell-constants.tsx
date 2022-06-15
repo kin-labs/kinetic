@@ -1,4 +1,4 @@
-import { AdminUiLink } from '@mogami/admin/ui/layout'
+import { AdminUiLink } from '@kin-kinetic/admin/ui/layout'
 
 export const name = 'Kinetic'
 export const logo = '/assets/kin-logo.svg'

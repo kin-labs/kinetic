@@ -1,5 +1,5 @@
-import { AppUser } from '@mogami/api/app/data-access'
-import { User } from '@mogami/api/user/data-access'
+import { AppUser } from '@kin-kinetic/api/app/data-access'
+import { User } from '@kin-kinetic/api/user/data-access'
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => User)

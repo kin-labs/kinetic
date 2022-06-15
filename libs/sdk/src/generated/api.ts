@@ -279,7 +279,7 @@ export interface AppHealth {
    * @type {boolean}
    * @memberof AppHealth
    */
-  isMogamiOk: boolean
+  isKineticOk: boolean
   /**
    *
    * @type {string}

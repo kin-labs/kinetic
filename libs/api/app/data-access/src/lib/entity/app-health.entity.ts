@@ -4,7 +4,7 @@ export class AppHealth {
   @ApiProperty()
   isSolanaOk: boolean
   @ApiProperty()
-  isMogamiOk: boolean
+  isKineticOk: boolean
   @ApiProperty()
   time: Date
 }

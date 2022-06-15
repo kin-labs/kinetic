@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { Module } from '@nestjs/common'
 import { ApiClusterAdminDataAccessService } from './api-cluster-admin-data-access.service'
 import { ApiClusterDataAccessService } from './api-cluster-data-access.service'

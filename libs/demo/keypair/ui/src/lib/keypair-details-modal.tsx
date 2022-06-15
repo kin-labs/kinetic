@@ -1,5 +1,5 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text, Textarea } from '@chakra-ui/react'
-import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
+import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import React from 'react'
 
 export function KeypairDetailsModal({

@@ -1,5 +1,5 @@
 import { Button, Code, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
-import { App } from '@mogami/shared/util/admin-sdk'
+import { App } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

@@ -1,30 +1,30 @@
-import { parseMogamiSdkEndpoint } from './parse-mogami-sdk-endpoint'
+import { parseKineticSdkEndpoint } from './parse-kinetic-sdk-endpoint'
 
-describe('parseMogamiSdkEndpoint', () => {
+describe('parseKineticSdkEndpoint', () => {
   it('should return devnet', () => {
-    expect(parseMogamiSdkEndpoint('devnet')).toEqual('https://devnet.kinetic.kin.org')
+    expect(parseKineticSdkEndpoint('devnet')).toEqual('https://devnet.kinetic.kin.org')
   })
 
   it('should return mainnet', () => {
-    expect(parseMogamiSdkEndpoint('mainnet')).toEqual('https://mainnet.kinetic.kin.org')
+    expect(parseKineticSdkEndpoint('mainnet')).toEqual('https://mainnet.kinetic.kin.org')
   })
 
   it('should return a url starting with http', () => {
     const local = 'http://local.kinetic.kin.org'
-    const endpoint = parseMogamiSdkEndpoint(local)
+    const endpoint = parseKineticSdkEndpoint(local)
     expect(endpoint).toEqual(local)
   })
 
   it('should return a url starting with https', () => {
     const local = 'https://local.kinetic.kin.org'
-    const endpoint = parseMogamiSdkEndpoint(local)
+    const endpoint = parseKineticSdkEndpoint(local)
     expect(endpoint).toEqual(local)
   })
 
   it('should not return some-unknown-net', () => {
     const cluster = 'some-unknown-net'
     try {
-      const endpoint = parseMogamiSdkEndpoint(cluster)
+      const endpoint = parseKineticSdkEndpoint(cluster)
       expect(endpoint).not.toBeDefined()
     } catch (e) {
       expect(e.message).toEqual(`Unknown http or https endpoint`)

@@ -1,6 +1,6 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
-import { demoKeypairDb } from '@mogami/demo/keypair/data-access'
-import { demoServerDb } from '@mogami/demo/server/data-access'
+import { demoKeypairDb } from '@kin-kinetic/demo/keypair/data-access'
+import { demoServerDb } from '@kin-kinetic/demo/server/data-access'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { getHeader } from '../support/app.po'
 

@@ -1,7 +1,12 @@
-import { ApiAppDataAccessService, AppTransaction, AppTransactionStatus, parseError } from '@mogami/api/app/data-access'
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
-import { Keypair } from '@mogami/keypair'
-import { BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@mogami/solana'
+import {
+  ApiAppDataAccessService,
+  AppTransaction,
+  AppTransactionStatus,
+  parseError,
+} from '@kin-kinetic/api/app/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { Keypair } from '@kin-kinetic/keypair'
+import { BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@kin-kinetic/solana'
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { CreateAccountRequest } from './dto/create-account-request.dto'

@@ -1,4 +1,4 @@
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import AdminAppUserFeatureEnvDetail from './admin-app-user-feature-env-detail'

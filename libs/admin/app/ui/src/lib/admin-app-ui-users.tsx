@@ -1,5 +1,5 @@
 import { Alert, Box, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
-import { AppUser, AppUserRole } from '@mogami/shared/util/admin-sdk'
+import { AppUser, AppUserRole } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { AdminAppUiUserModal } from './admin-app-ui-user-modal'

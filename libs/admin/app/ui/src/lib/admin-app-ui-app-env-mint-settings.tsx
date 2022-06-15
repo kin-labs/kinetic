@@ -1,6 +1,6 @@
 import { Box, SimpleGrid, Stack, Text } from '@chakra-ui/react'
-import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { AppEnv } from '@mogami/shared/util/admin-sdk'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { AppEnv } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { AdminAppUiMintDisabledPanel } from './admin-app-ui-mint-disabled-panel'
 import { AdminAppUiMintEnabledPanel } from './admin-app-ui-mint-enabled-panel'

@@ -1,10 +1,10 @@
-import { AdminUiLayout } from '@mogami/admin/ui/layout'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
+import { AdminUiLayout } from '@kin-kinetic/admin/ui/layout'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { copyright, logo, name } from './admin-shell-constants'
 
-const AdminAuthFeature = React.lazy(async () => import('@mogami/admin/auth/feature'))
+const AdminAuthFeature = React.lazy(async () => import('@kin-kinetic/admin/auth/feature'))
 
 export function AdminShellAnonymous() {
   return (

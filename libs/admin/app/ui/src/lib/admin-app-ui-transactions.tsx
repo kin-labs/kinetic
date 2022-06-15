@@ -1,6 +1,6 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { Alert, Box, Table, TableContainer, Text, Tbody, Td, Th, Thead, Tr, Link, Flex } from '@chakra-ui/react'
-import { AppTransaction } from '@mogami/shared/util/admin-sdk'
+import { AppTransaction } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { AdminAppUiTransactionStatus } from './admin-app-ui-transaction-status'

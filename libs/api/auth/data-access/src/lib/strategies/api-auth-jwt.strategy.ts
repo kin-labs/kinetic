@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Request } from 'express'

@@ -1,7 +1,7 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AdminUserUiTable } from '@mogami/admin/user/ui'
-import { useAdminDeleteUserMutation, useAdminUsersQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { AdminUserUiTable } from '@kin-kinetic/admin/user/ui'
+import { useAdminDeleteUserMutation, useAdminUsersQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminUserFeatureList() {

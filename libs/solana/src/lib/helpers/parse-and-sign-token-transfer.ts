@@ -1,4 +1,4 @@
-import { SolanaKeypair } from '@mogami/keypair'
+import { SolanaKeypair } from '@kin-kinetic/keypair'
 import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { AccountMeta, Transaction } from '@solana/web3.js'
 import { parseAndSignTransaction } from './parse-and-sign-transaction'

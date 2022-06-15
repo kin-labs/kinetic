@@ -1,12 +1,12 @@
 import { Alert, Box, Button, Flex, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiWallet } from '@mogami/admin/app/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
+import { AdminAppUiWallet } from '@kin-kinetic/admin/app/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import {
   useUserAppEnvQuery,
   useUserGenerateWalletMutation,
   useUserImportWalletMutation,
   Wallet,
-} from '@mogami/shared/util/admin-sdk'
+} from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUserWalletsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {

@@ -1,5 +1,5 @@
 import { Flex, Grid, GridItem, Stack } from '@chakra-ui/react'
-import { AdminUiLink } from '@mogami/admin/ui/layout'
+import { AdminUiLink } from '@kin-kinetic/admin/ui/layout'
 import React, { PropsWithChildren } from 'react'
 import { NavLink } from 'react-router-dom'
 

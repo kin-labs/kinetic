@@ -920,7 +920,7 @@
           "isSolanaOk": {
             "type": "boolean"
           },
-          "isMogamiOk": {
+          "isKineticOk": {
             "type": "boolean"
           },
           "time": {
@@ -928,7 +928,7 @@
             "type": "string"
           }
         },
-        "required": ["isSolanaOk", "isMogamiOk", "time"]
+        "required": ["isSolanaOk", "isKineticOk", "time"]
       },
       "ApiConfigSummary": {
         "type": "object",

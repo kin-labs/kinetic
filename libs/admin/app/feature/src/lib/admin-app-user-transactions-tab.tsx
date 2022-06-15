@@ -1,7 +1,7 @@
 import { Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiTransactionFilter, AdminAppUiTransactions } from '@mogami/admin/app/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AppTransactionListInput, useUserAppTransactionsQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminAppUiTransactionFilter, AdminAppUiTransactions } from '@kin-kinetic/admin/app/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { AppTransactionListInput, useUserAppTransactionsQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useEffect, useState } from 'react'
 
 export function AdminAppUserTransactionsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {

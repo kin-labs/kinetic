@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { WalletBalance } from './entity/wallet-balance.entity'

@@ -1,5 +1,5 @@
-import { ApiAppDataAccessModule } from '@mogami/api/app/data-access'
-import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
+import { ApiAppDataAccessModule } from '@kin-kinetic/api/app/data-access'
+import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { Test } from '@nestjs/testing'
 import { ApiTransactionDataAccessService } from './api-transaction-data-access.service'
 

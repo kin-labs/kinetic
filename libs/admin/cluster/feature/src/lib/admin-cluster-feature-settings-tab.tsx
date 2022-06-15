@@ -1,7 +1,11 @@
 import { useToast } from '@chakra-ui/react'
-import { AdminClusterUiForm } from '@mogami/admin/cluster/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { ClusterUpdateInput, useAdminClusterQuery, useAdminUpdateClusterMutation } from '@mogami/shared/util/admin-sdk'
+import { AdminClusterUiForm } from '@kin-kinetic/admin/cluster/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import {
+  ClusterUpdateInput,
+  useAdminClusterQuery,
+  useAdminUpdateClusterMutation,
+} from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminClusterFeatureSettingsTab({ clusterId }: { clusterId: string }) {

@@ -1,15 +1,15 @@
-import { MogamiSdk } from '@mogami/sdk'
-import { Keypair } from '@mogami/keypair'
+import { KineticSdk } from '@kin-kinetic/sdk'
+import { Keypair } from '@kin-kinetic/keypair'
 import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair } from './fixtures'
-import { Destination } from '@mogami/solana'
+import { Destination } from '@kin-kinetic/solana'
 import { AppTransactionStatus } from '@prisma/client'
 
-describe('MogamiSdk (e2e)', () => {
-  let sdk: MogamiSdk
+describe('KineticSdk (e2e)', () => {
+  let sdk: KineticSdk
   const defaultMint = process.env.DEFAULT_MINT_PUBLIC_KEY
 
   beforeEach(async () => {
-    sdk = await MogamiSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
+    sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
   })
 
   it('should make a transfer', async () => {

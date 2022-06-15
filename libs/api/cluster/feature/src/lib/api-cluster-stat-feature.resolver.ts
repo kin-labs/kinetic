@@ -1,4 +1,4 @@
-import { ApiClusterStatDataAccessService, ClusterStat } from '@mogami/api/cluster/data-access'
+import { ApiClusterStatDataAccessService, ClusterStat } from '@kin-kinetic/api/cluster/data-access'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => ClusterStat)

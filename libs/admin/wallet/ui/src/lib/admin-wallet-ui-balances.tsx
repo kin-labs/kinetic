@@ -1,5 +1,5 @@
 import { Alert, Box, Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
-import { WalletBalance } from '@mogami/shared/util/admin-sdk'
+import { WalletBalance } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export interface AdminWalletUiAppsProps {

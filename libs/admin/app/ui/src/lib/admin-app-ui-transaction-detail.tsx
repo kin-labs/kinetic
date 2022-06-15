@@ -1,5 +1,5 @@
 import { Code, Table, TableContainer, Tbody, Td, Th, Tr } from '@chakra-ui/react'
-import { AppTransaction } from '@mogami/shared/util/admin-sdk'
+import { AppTransaction } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUiTransactionDetail({ item }: { item: AppTransaction }) {

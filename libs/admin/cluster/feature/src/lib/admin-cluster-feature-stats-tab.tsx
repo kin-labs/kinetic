@@ -1,6 +1,6 @@
 import { Box, Stack } from '@chakra-ui/react'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useClusterStatsQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { useClusterStatsQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminClusterFeatureStatsTab({ clusterId }: { clusterId: string }) {

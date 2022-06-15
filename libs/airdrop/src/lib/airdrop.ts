@@ -1,4 +1,4 @@
-import { getPublicKey, PublicKeyString, TokenBalance } from '@mogami/solana'
+import { getPublicKey, PublicKeyString, TokenBalance } from '@kin-kinetic/solana'
 import { createAssociatedTokenAccount, transferChecked } from '@solana/spl-token'
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'

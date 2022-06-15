@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, Stack, useToast } from '@chakra-ui/react'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useUserAppEnvQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { useUserAppEnvQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 

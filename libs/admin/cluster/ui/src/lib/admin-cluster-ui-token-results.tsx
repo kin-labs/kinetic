@@ -1,6 +1,6 @@
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Alert, Box, Button, Stack } from '@chakra-ui/react'
-import { ClusterToken, ClusterTokenInput, useAdminClusterTokensQuery } from '@mogami/shared/util/admin-sdk'
+import { ClusterToken, ClusterTokenInput, useAdminClusterTokensQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { AdminClusterUiTokenList } from './admin-cluster-ui-token-list'
 

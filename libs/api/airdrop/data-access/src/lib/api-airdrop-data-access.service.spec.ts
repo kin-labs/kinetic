@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessModule } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { Test } from '@nestjs/testing'
 import { ApiAirdropDataAccessService } from './api-airdrop-data-access.service'
 

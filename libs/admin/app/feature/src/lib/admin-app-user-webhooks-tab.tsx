@@ -1,6 +1,6 @@
-import { AdminAppUiWebhooks } from '@mogami/admin/app/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useUserAppWebhooksQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminAppUiWebhooks } from '@kin-kinetic/admin/app/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { useUserAppWebhooksQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUserWebhooksTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {

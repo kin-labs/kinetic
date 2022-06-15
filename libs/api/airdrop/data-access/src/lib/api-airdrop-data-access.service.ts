@@ -1,5 +1,5 @@
-import { Airdrop } from '@mogami/airdrop'
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { Airdrop } from '@kin-kinetic/airdrop'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { RequestAirdropRequest } from './dto/request-airdrop-request.dto'
 import { AirdropStatsCounts } from './entity/airdrop-stats-counts.entity'

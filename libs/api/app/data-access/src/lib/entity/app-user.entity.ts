@@ -1,4 +1,4 @@
-import { User } from '@mogami/api/user/data-access'
+import { User } from '@kin-kinetic/api/user/data-access'
 import { Field, ObjectType } from '@nestjs/graphql'
 import { AppUserRole } from './app-user-role.enum'
 import { App } from './app.entity'

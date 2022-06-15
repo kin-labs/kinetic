@@ -1,5 +1,5 @@
-import { Keypair } from '@mogami/keypair'
-import { getPublicKey, PublicKeyString } from '@mogami/solana'
+import { Keypair } from '@kin-kinetic/keypair'
+import { getPublicKey, PublicKeyString } from '@kin-kinetic/solana'
 import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { TransactionType } from '@kin-tools/kin-memo'

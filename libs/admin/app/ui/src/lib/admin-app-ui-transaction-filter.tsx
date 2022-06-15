@@ -1,6 +1,6 @@
 import { Box, Button, ButtonGroup, Stack } from '@chakra-ui/react'
-import { AdminUiForm, UiFormField } from '@mogami/admin/ui/form'
-import { AppTransactionListInput } from '@mogami/shared/util/admin-sdk'
+import { AdminUiForm, UiFormField } from '@kin-kinetic/admin/ui/form'
+import { AppTransactionListInput } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useState } from 'react'
 
 import * as Yup from 'yup'

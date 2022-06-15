@@ -3,10 +3,10 @@ import {
   BalanceResponse,
   CreateAccountRequest,
   HistoryResponse,
-} from '@mogami/api/account/data-access'
-import { AppTransaction } from '@mogami/api/app/data-access'
-import { AccountIdSchema, JoiValidationPipe } from '@mogami/api/core/util'
-import { Commitment } from '@mogami/solana'
+} from '@kin-kinetic/api/account/data-access'
+import { AppTransaction } from '@kin-kinetic/api/app/data-access'
+import { AccountIdSchema, JoiValidationPipe } from '@kin-kinetic/api/core/util'
+import { Commitment } from '@kin-kinetic/solana'
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 

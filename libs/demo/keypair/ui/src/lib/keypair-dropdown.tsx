@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
-import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
+import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import React from 'react'
 
 export function elipsify(str = '', len = 4) {

@@ -1,6 +1,6 @@
 import { DeleteIcon, ViewIcon } from '@chakra-ui/icons'
 import { Button, ButtonGroup, Code, Flex, SimpleGrid, Stack, Text, useColorModeValue } from '@chakra-ui/react'
-import { DemoServerEntity } from '@mogami/demo/server/data-access'
+import { DemoServerEntity } from '@kin-kinetic/demo/server/data-access'
 import React from 'react'
 
 export function ServerGrid({

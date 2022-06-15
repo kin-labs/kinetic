@@ -4,10 +4,10 @@ import {
   AppTransaction,
   AppWebhookType,
   parseError,
-} from '@mogami/api/app/data-access'
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
-import { Keypair } from '@mogami/keypair'
-import { Commitment, parseAndSignTokenTransfer } from '@mogami/solana'
+} from '@kin-kinetic/api/app/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { Keypair } from '@kin-kinetic/keypair'
+import { Commitment, parseAndSignTokenTransfer } from '@kin-kinetic/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { AppTransactionErrorType, AppTransactionStatus, Prisma } from '@prisma/client'
