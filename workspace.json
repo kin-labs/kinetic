@@ -51,7 +51,6 @@
     "api-wallet-data-access": "libs/api/wallet/data-access",
     "api-wallet-feature": "libs/api/wallet/feature",
     "demo": "apps/demo",
-    "demo-e2e": "apps/demo-e2e",
     "demo-home-feature": "libs/demo/home/feature",
     "demo-keypair-data-access": "libs/demo/keypair/data-access",
     "demo-keypair-feature": "libs/demo/keypair/feature",

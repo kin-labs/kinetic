@@ -1,10 +1,9 @@
 import { Box } from '@chakra-ui/react'
 import React from 'react'
 
-export function SdkControlPanelResult({ data, cyData }: { data: unknown; cyData: string }) {
+export function SdkControlPanelResult({ data }: { data: unknown }) {
   return data ? (
     <Box
-      cy-data={cyData}
       as="pre"
       marginY={6}
       p={4}

@@ -15,7 +15,7 @@ export function SdkControlPanelAppConfig({ sdk }: { sdk: KineticSdk }) {
           Get App Config
         </Button>
       </Stack>
-      <SdkControlPanelResult cyData="panel-get-app-config" data={result} />
+      <SdkControlPanelResult data={result} />
     </Stack>
   )
 }

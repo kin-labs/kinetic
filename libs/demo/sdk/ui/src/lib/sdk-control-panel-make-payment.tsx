@@ -53,7 +53,7 @@ export function SdkControlPanelMakePayment({ keypair, sdk }: { keypair: DemoKeyp
           placeholder="Enter the amount"
         />
       </Stack>
-      <SdkControlPanelResult cyData="panel-submit-payment" data={result} />
+      <SdkControlPanelResult data={result} />
     </Stack>
   )
 }
