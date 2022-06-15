@@ -1,6 +1,6 @@
 import { Airdrop } from '@kin-kinetic/airdrop'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
 import { RequestAirdropRequest } from './dto/request-airdrop-request.dto'
 import { AirdropStatsCounts } from './entity/airdrop-stats-counts.entity'
 import { AirdropStatsDate } from './entity/airdrop-stats-date.entity'
@@ -29,7 +29,7 @@ export class ApiAirdropDataAccessService {
     // Make sure there is an airdrop config for this mint
     const airdropConfig = this.data.airdropConfig.get(mint.id)
     if (!airdropConfig) {
-      throw new BadRequestException(`Airdrop configuration not found.`)
+      throw new HttpException(`Airdrop configuration not found.`, HttpStatus.BAD_REQUEST)
     }
 
     // Make sure there is an Airdrop configured with a Solana connection
@@ -74,7 +74,7 @@ export class ApiAirdropDataAccessService {
       }
     } catch (error) {
       this.logger.error(error)
-      throw new BadRequestException(error)
+      throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
     }
   }
 
