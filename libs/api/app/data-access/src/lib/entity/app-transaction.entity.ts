@@ -7,73 +7,74 @@ import { AppTransactionStatus } from './app-transaction-status.enum'
 
 @ObjectType()
 export class AppTransaction {
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   id?: string
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   createdAt?: Date
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   updatedAt?: Date
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field(() => Int, { nullable: true })
   amount?: number
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   destination?: string
   @ApiProperty({
     type: [AppTransactionError],
+    nullable: true,
   })
   @Field(() => [AppTransactionError], { nullable: true })
   errors?: AppTransactionError[]
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   explorerUrl?: string
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   feePayer?: string
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   mint?: string
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   referenceId?: string
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   referenceType?: string
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   signature?: string
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   solanaFinalized?: Date
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   solanaCommitted?: Date
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   solanaStart?: Date
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field(() => GraphQLJSON, { nullable: true })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   solanaTransaction?: any
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   source?: string
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field(() => AppTransactionStatus)
   status: AppTransactionStatus
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   webhookEventStart?: Date
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   webhookEventEnd?: Date
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   webhookVerifyStart?: Date
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   webhookVerifyEnd?: Date
   @HideField()
