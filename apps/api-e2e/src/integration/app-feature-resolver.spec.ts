@@ -22,7 +22,7 @@ import {
   UserUpdateApp,
   UserUpdateAppEnv,
 } from '../generated/api-sdk'
-import { ADMIN_EMAIL, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
+import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {
@@ -39,7 +39,7 @@ describe('App (e2e)', () => {
 
   beforeAll(async () => {
     app = await initializeE2eApp()
-    const res = await runLoginQuery(app, ADMIN_EMAIL)
+    const res = await runLoginQuery(app, ADMIN_USERNAME)
     token = res.body.data.login.token
     appIndex = randomAppIndex()
   })

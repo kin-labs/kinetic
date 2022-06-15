@@ -295,8 +295,8 @@ export type ClusterUpdateInput = {
 }
 
 export type LoginInput = {
-  email: Scalars['String']
   password: Scalars['String']
+  username: Scalars['String']
 }
 
 export type Mint = {

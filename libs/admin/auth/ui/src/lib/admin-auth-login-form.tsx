@@ -3,11 +3,11 @@ import { AdminAuthLoginFn } from '@kin-kinetic/admin/auth/data-access'
 import { ChangeEvent, useState } from 'react'
 
 export function AdminAuthLoginForm({ login }: { login: AdminAuthLoginFn }) {
-  const [email, setEmail] = useState<string>('')
+  const [username, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
   const handleLogin = async () => {
-    await login({ email, password })
+    await login({ username, password })
   }
 
   return (
@@ -18,11 +18,11 @@ export function AdminAuthLoginForm({ login }: { login: AdminAuthLoginFn }) {
         </Stack>
         <Box rounded={'lg'} bg={useColorModeValue('white', 'gray.700')} boxShadow={'lg'} p={8}>
           <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
+            <FormControl id="username">
+              <FormLabel>Username</FormLabel>
               <Input
-                type="email"
-                value={email}
+                type="username"
+                value={username}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target?.value)}
               />
             </FormControl>
@@ -37,7 +37,7 @@ export function AdminAuthLoginForm({ login }: { login: AdminAuthLoginFn }) {
             <Stack spacing={10}>
               <Button
                 onClick={handleLogin}
-                disabled={!email?.length || !password?.length}
+                disabled={!username?.length || !password?.length}
                 bg={'teal.400'}
                 color={'white'}
                 _hover={{

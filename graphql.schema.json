@@ -2554,7 +2554,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "email",
+            "name": "password",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -2570,7 +2570,7 @@
             "deprecationReason": null
           },
           {
-            "name": "password",
+            "name": "username",
             "description": null,
             "type": {
               "kind": "NON_NULL",

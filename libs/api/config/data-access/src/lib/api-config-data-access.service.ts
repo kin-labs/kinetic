@@ -36,8 +36,8 @@ export class ApiConfigDataAccessService {
 
   constructor(private readonly config: ConfigService) {}
 
-  get adminEmail(): string {
-    return this.config.get('admin.email')
+  get adminUsername(): string {
+    return this.config.get('admin.username')
   }
 
   get adminPassword(): string {

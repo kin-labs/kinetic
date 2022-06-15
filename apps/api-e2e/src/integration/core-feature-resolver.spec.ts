@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { Uptime } from '../generated/api-sdk'
-import { ADMIN_EMAIL, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
+import { ADMIN_USERNAME, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { initializeE2eApp } from '../helpers/'
 
 describe('CoreFeatureResolver (e2e)', () => {
@@ -9,7 +9,7 @@ describe('CoreFeatureResolver (e2e)', () => {
 
   beforeAll(async () => {
     app = await initializeE2eApp()
-    const res = await runLoginQuery(app, ADMIN_EMAIL)
+    const res = await runLoginQuery(app, ADMIN_USERNAME)
     token = res.body.data.login.token
   })
   afterAll(async () => {
