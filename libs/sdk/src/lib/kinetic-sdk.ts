@@ -27,13 +27,6 @@ export class KineticSdk {
       : getSolanaRpcEndpoint(sdkConfig.endpoint)
   }
 
-  // START DEPRECATED METHODS
-  balance(account: string) {
-    console.warn(`Deprecated method, please use getBalance()`)
-    return this.getBalance({ account })
-  }
-  // END DEPRECATED METHODS
-
   get endpoint() {
     return this.sdkConfig.endpoint
   }

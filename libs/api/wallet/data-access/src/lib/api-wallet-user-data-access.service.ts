@@ -45,7 +45,7 @@ export class ApiWalletUserDataAccessService {
   async userGenerateWallet(userId: string, appEnvId: string) {
     const app = await this.data.appEnv.findUnique({ where: { id: appEnvId } }).app()
     await this.data.ensureAppOwner(userId, app.id)
-    const { publicKey, secretKey } = Keypair.generate()
+    const { publicKey, secretKey } = Keypair.random()
 
     return this.data.wallet.create({
       data: { secretKey, publicKey, appEnvs: { connect: { id: appEnvId } } },
