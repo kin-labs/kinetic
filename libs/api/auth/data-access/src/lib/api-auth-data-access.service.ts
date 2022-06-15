@@ -35,8 +35,8 @@ export class ApiAuthDataAccessService {
     return this.jwt.sign(payload, this.jwtOptions)
   }
 
-  async validateUser({ email, password }: { password: string; email: string }) {
-    const user = await this.data.getUserByEmail(email)
+  async validateUser({ username, password }: { password: string; username: string }) {
+    const user = await this.data.getUserByUsername(username)
 
     if (!user) {
       throw new UnauthorizedException(`User not found.`)

@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common'
 import { UserRole } from '@prisma/client'
 import { Me } from '../generated/api-sdk'
-import { ADMIN_EMAIL, initializeE2eApp, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
+import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 
 describe('Auth (e2e)', () => {
   let app: INestApplication
@@ -15,15 +15,15 @@ describe('Auth (e2e)', () => {
   })
 
   describe('log in ', () => {
-    it('should login with sample user: admin', async () => {
-      const res = await runLoginQuery(app, ADMIN_EMAIL)
+    it('should login with sample user: alice', async () => {
+      const res = await runLoginQuery(app, ADMIN_USERNAME)
       expect(res.body.data.login.token).toBeDefined()
       token = res.body.data.login.token
     })
   })
 
   describe('retrieve data of logged in user', () => {
-    it('should retrieve data of user: admin', () => {
+    it('should retrieve data of user: alice', () => {
       return runGraphQLQueryAdmin(app, token, Me)
         .expect(200)
         .expect((res) => {
@@ -34,7 +34,7 @@ describe('Auth (e2e)', () => {
 
           expect(data.me.role).toEqual(UserRole.Admin)
           expect(data.me.name).toEqual('Alice')
-          expect(data.me.username).toEqual('admin')
+          expect(data.me.username).toEqual('alice')
         })
     })
   })

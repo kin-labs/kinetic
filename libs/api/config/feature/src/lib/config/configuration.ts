@@ -8,7 +8,7 @@ const origin = originsEnv.length && originsEnv[0] === '*' ? '*' : originsEnv
 
 export default () => ({
   admin: {
-    email: process.env.ADMIN_EMAIL,
+    username: process.env.ADMIN_USERNAME,
     password: process.env.ADMIN_PASSWORD,
   },
   cors: { origin },

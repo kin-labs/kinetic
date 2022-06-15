@@ -197,57 +197,63 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   private async configureDefaultUsers() {
-    await this.configureDefaultUser({
-      id: 'admin',
-      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/aliceal.svg',
-      name: 'Alice',
-      email: this.config.adminEmail,
-      password: this.config.adminPassword,
-      role: UserRole.Admin,
-    })
-    await this.configureDefaultUser({
-      id: 'bob',
-      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/bob42.svg',
-      name: 'Bob',
-      email: this.config.adminEmail.replace('kinetic', 'bob'),
-      password: this.config.adminPassword.replace('admin', 'bob'),
-      role: UserRole.User,
-    })
-    await this.configureDefaultUser({
-      id: 'charlie',
-      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/charlie42222.svg',
-      name: 'Charlie',
-      email: this.config.adminEmail.replace('kinetic', 'charlie'),
-      password: this.config.adminPassword.replace('admin', 'charlie'),
-      role: UserRole.User,
-    })
-    await this.configureDefaultUser({
-      id: 'dave',
-      avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/dave42.svg',
-      name: 'Dave',
-      email: this.config.adminEmail.replace('kinetic', 'dave'),
-      password: this.config.adminPassword.replace('admin', 'dave'),
-      role: UserRole.User,
-    })
+    const users = [
+      {
+        role: UserRole.Admin,
+        avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/aliceal.svg',
+        id: 'alice',
+        name: 'Alice',
+        username: this.config.adminUsername,
+        password: this.config.adminPassword,
+      },
+      {
+        role: UserRole.User,
+        avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/bob42.svg',
+        id: 'bob',
+        name: 'Bob',
+        username: 'bob',
+        password: this.config.adminPassword.replace('alice', 'bob'),
+      },
+      {
+        role: UserRole.User,
+        avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/charlie42222.svg',
+        id: 'charlie',
+        name: 'Charlie',
+        username: 'charlie',
+        password: this.config.adminPassword.replace('alice', 'charlie'),
+      },
+      {
+        role: UserRole.User,
+        avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/dave42.svg',
+        id: 'dave',
+        name: 'Dave',
+        username: 'dave',
+        password: this.config.adminPassword.replace('alice', 'dave'),
+      },
+    ]
+    for (const user of users) {
+      await this.configureDefaultUser(user)
+    }
   }
 
   private async configureDefaultUser({
     id,
     avatarUrl,
     name,
-    email,
+    username,
     password,
     role,
   }: {
     id: string
     avatarUrl: string
     name: string
-    email: string
+    username: string
     password: string
     role: UserRole
   }) {
     const existing = await this.user.count({ where: { id } })
     if (existing < 1) {
+      const email = `${username}@example.com`
       await this.user.create({
         data: {
           id,
@@ -261,10 +267,10 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
           },
         },
       })
-      this.logger.verbose(`Created new ${role} with email ${email} and password ${password}`)
+      this.logger.verbose(`Created new ${role} with username ${username} and password ${password}`)
       return
     }
-    this.logger.verbose(`Log in as ${role} with email ${email} and password ${password}`)
+    this.logger.verbose(`Log in as ${role} with username ${username} and password ${password}`)
   }
 
   private async configureDefaultClusters() {

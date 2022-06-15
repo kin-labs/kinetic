@@ -26,7 +26,7 @@ export function runGraphQLQueryAdmin(
   return runGraphQLQuery(app, query, variables, { token })
 }
 
-export function runLoginQuery(app: INestApplication, email: string, password = ADMIN_PASSWORD) {
-  const input: LoginInput = { password, email }
+export function runLoginQuery(app: INestApplication, username: string, password = ADMIN_PASSWORD) {
+  const input: LoginInput = { password, username }
   return runGraphQLQuery(app, Login, { input }).expect(200)
 }
