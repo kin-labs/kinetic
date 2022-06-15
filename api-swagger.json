@@ -591,82 +591,104 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "createdAt": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "updatedAt": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "amount": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           },
           "destination": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "errors": {
+            "nullable": true,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AppTransactionError"
             }
           },
           "explorerUrl": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "feePayer": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "mint": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "referenceId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "referenceType": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "signature": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "solanaFinalized": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "solanaCommitted": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "solanaStart": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "solanaTransaction": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "status": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "webhookEventStart": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "webhookEventEnd": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "webhookVerifyStart": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "webhookVerifyEnd": {
             "format": "date-time",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "required": [
