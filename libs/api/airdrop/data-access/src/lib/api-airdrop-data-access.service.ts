@@ -1,6 +1,6 @@
 import { Airdrop } from '@kin-kinetic/airdrop'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { BadRequestException, HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
 import { RequestAirdropRequest } from './dto/request-airdrop-request.dto'
 import { AirdropStatsCounts } from './entity/airdrop-stats-counts.entity'
 import { AirdropStatsDate } from './entity/airdrop-stats-date.entity'
@@ -74,7 +74,7 @@ export class ApiAirdropDataAccessService {
       }
     } catch (error) {
       this.logger.error(error)
-      throw new BadRequestException(error)
+      throw new HttpException(error, HttpStatus.BAD_REQUEST)
     }
   }
 

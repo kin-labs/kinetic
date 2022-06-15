@@ -1,11 +1,10 @@
 import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
 import { OpenTelementrySdk } from '@kin-kinetic/api/core/util'
 import { Logger, ValidationPipe } from '@nestjs/common'
-import { HttpAdapterHost, NestFactory } from '@nestjs/core'
+import { NestFactory } from '@nestjs/core'
 import { exec } from 'child_process'
 import cookieParser from 'cookie-parser'
 import redirectSSL from 'redirect-ssl'
-// import { AllExceptionsFilter } from './all-exceptions.filter'
 import { AppModule } from './app/app.module'
 
 async function bootstrap() {
@@ -14,8 +13,6 @@ async function bootstrap() {
   await OpenTelementrySdk.start(config.metricsEnabled)
   app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
-  const { httpAdapter } = app.get(HttpAdapterHost)
-  // app.useGlobalFilters(new AllExceptionsFilter(httpAdapter.getInstance()))
   app.enableCors({ origin: config.corsOrigins })
   app.use(redirectSSL.create({ enabled: config.isProduction }))
   config.configureSwagger(app)
