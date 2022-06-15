@@ -75,10 +75,22 @@ fragment AppTransactionDetails on AppTransaction {
   status
   totalDuration
   webhookEventDuration
+  webhookEventIncoming {
+    ...AppWebhookDetails
+  }
+  webhookEventOutgoing {
+    ...AppWebhookDetails
+  }
   webhookEventEnd
   webhookEventStart
   webhookVerifyDuration
   webhookVerifyEnd
+  webhookVerifyIncoming {
+    ...AppWebhookDetails
+  }
+  webhookVerifyOutgoing {
+    ...AppWebhookDetails
+  }
   webhookVerifyStart
 }
 

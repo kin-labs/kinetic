@@ -104,6 +104,7 @@ model AppTransaction {
   solanaTransaction  Json?
   source             String?
   status             AppTransactionStatus      @default(Processing)
+  webhooks           AppWebhook[]
   webhookEventStart  DateTime?
   webhookEventEnd    DateTime?
   webhookVerifyStart DateTime?
@@ -144,20 +145,22 @@ model AppTransactionError {
 }
 
 model AppWebhook {
-  id              String              @id @default(cuid())
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
-  direction       AppWebhookDirection
-  headers         Json?
-  payload         Json?
-  referenceId     String?
-  referenceType   String?
-  responsePayload Json?
-  responseError   String?
-  responseStatus  Int?
-  type            AppWebhookType
-  appEnv          AppEnv?             @relation(fields: [appEnvId], references: [id])
-  appEnvId        String?
+  id               String              @id @default(cuid())
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  direction        AppWebhookDirection
+  headers          Json?
+  payload          Json?
+  referenceId      String?
+  referenceType    String?
+  responsePayload  Json?
+  responseError    String?
+  responseStatus   Int?
+  type             AppWebhookType
+  appEnv           AppEnv?             @relation(fields: [appEnvId], references: [id])
+  appEnvId         String?
+  appTransaction   AppTransaction      @relation(fields: [appTransactionId], references: [id])
+  appTransactionId String
 }
 
 enum AppWebhookDirection {

@@ -10,7 +10,6 @@ import {
   AppUserRemoveInput,
   AppUserRole,
   AppUserUpdateRoleInput,
-  AppWebhook,
 } from '@kin-kinetic/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
@@ -54,16 +53,6 @@ export class ApiAppUserFeatureResolver {
     @Args({ name: 'input', type: () => AppTransactionListInput, nullable: true }) input: AppTransactionListInput,
   ) {
     return this.service.userAppTransactions(user.id, appId, appEnvId, input)
-  }
-
-  @Query(() => AppWebhook, { nullable: true })
-  userAppWebhook(@CtxUser() user: User, @Args('appId') appId: string, @Args('appWebhookId') appWebhookId: string) {
-    return this.service.userAppWebhook(user.id, appId, appWebhookId)
-  }
-
-  @Query(() => [AppWebhook], { nullable: true })
-  userAppWebhooks(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
-    return this.service.userAppWebhooks(user.id, appId, appEnvId)
   }
 
   @Query(() => [App], { nullable: true })

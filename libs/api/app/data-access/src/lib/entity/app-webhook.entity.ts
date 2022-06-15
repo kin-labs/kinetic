@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { AppTransaction } from './app-transaction.entity'
 import { AppWebhookDirection } from './app-webhook-direction.enum'
 import { AppWebhookType } from './app-webhook-type.enum'
 

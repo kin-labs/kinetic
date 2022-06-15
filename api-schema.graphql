@@ -79,9 +79,13 @@ type AppTransaction {
   updatedAt: DateTime
   webhookEventDuration: Int
   webhookEventEnd: DateTime
+  webhookEventIncoming: AppWebhook
+  webhookEventOutgoing: AppWebhook
   webhookEventStart: DateTime
   webhookVerifyDuration: Int
   webhookVerifyEnd: DateTime
+  webhookVerifyIncoming: AppWebhook
+  webhookVerifyOutgoing: AppWebhook
   webhookVerifyStart: DateTime
 }
 
@@ -356,8 +360,6 @@ type Query {
   userAppRole(appId: String!): AppUserRole
   userAppTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
   userAppTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
-  userAppWebhook(appId: String!, appWebhookId: String!): AppWebhook
-  userAppWebhooks(appEnvId: String!, appId: String!): [AppWebhook!]
   userApps: [App!]
   userWallet(walletId: String!): Wallet
   userWalletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
