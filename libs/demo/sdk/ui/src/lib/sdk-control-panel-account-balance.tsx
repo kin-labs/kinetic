@@ -23,7 +23,7 @@ export function SdkControlPanelAccountBalance({ keypair, sdk }: { keypair: DemoK
           placeholder="Enter the accountId (Public Key for the Account owner)"
         />
       </Stack>
-      <SdkControlPanelResult cyData="panel-get-account-balance" data={result} />
+      <SdkControlPanelResult data={result} />
     </Stack>
   )
 }

@@ -23,7 +23,7 @@ export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: DemoKe
           placeholder="Enter the accountId (Public Key for the Account owner)"
         />
       </Stack>
-      <SdkControlPanelResult cyData="panel-get-token-accounts" data={result} />
+      <SdkControlPanelResult data={result} />
     </Stack>
   )
 }

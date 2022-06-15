@@ -29,7 +29,7 @@ export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKe
           Create Account
         </Button>
       </Stack>
-      <SdkControlPanelResult cyData="panel-create-account" data={result} />
+      <SdkControlPanelResult data={result} />
     </Stack>
   )
 }

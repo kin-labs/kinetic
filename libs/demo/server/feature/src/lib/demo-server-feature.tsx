@@ -38,12 +38,7 @@ export function DemoServerFeature() {
       {result?.length ? (
         <ServerGrid servers={result} showServer={showServer} deleteServer={deleteServer} />
       ) : (
-        <AdminUiAlert
-          cyData="card-servers-warning"
-          status="info"
-          title="No Servers found."
-          message="Add a new one to use the Kinetic demo."
-        />
+        <AdminUiAlert status="info" title="No Servers found." message="Add a new one to use the Kinetic demo." />
       )}
       <ServerCreateModal
         visible={serverCreateVisible}
