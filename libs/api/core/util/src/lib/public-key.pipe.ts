@@ -10,7 +10,7 @@ export class PublicKeyPipe implements PipeTransform {
     try {
       new PublicKey(value)
     } catch (error) {
-      throw new HttpException(`${this.field} must be a valid PublicKey`, HttpStatus.BAD_REQUEST)
+      throw new HttpException(`Error: ${this.field} must be a valid PublicKey`, HttpStatus.BAD_REQUEST)
     }
 
     return value

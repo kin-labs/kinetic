@@ -44,7 +44,7 @@ describe('KineticSdk (e2e) - Account', () => {
       await sdk.getBalance({ account: 'xx' })
     } catch (error) {
       expect(error.response.data.statusCode).toBe(400)
-      expect(error.response.data.error).toBe('BadRequestException: accountId must be a valid PublicKey')
+      expect(error.response.data.message).toBe('Error: accountId must be a valid PublicKey')
     }
   })
 
