@@ -1,6 +1,6 @@
-import { ApiAppAdminDataAccessService, App, AppCreateInput } from '@mogami/api/app/data-access'
-import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
-import { User } from '@mogami/api/user/data-access'
+import { ApiAppAdminDataAccessService, App, AppCreateInput } from '@kin-kinetic/api/app/data-access'
+import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
+import { User } from '@kin-kinetic/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query } from '@nestjs/graphql'
 

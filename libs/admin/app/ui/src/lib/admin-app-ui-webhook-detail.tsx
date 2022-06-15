@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import { AppWebhook } from '@mogami/shared/util/admin-sdk'
+import { AppWebhook } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export interface AdminAppUiWebhookDetailProps {

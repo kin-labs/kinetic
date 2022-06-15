@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { AutoComplete, AutoCompleteInput, AutoCompleteItem, AutoCompleteList } from '@choc-ui/chakra-autocomplete'
-import { AppUser, AppUserRole, useAdminUsersQuery } from '@mogami/shared/util/admin-sdk'
+import { AppUser, AppUserRole, useAdminUsersQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUiUserModal({

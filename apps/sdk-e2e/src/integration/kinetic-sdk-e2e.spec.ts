@@ -1,4 +1,4 @@
-import { MogamiSdk } from '@mogami/sdk'
+import { MogamiSdk } from '@kin-kinetic/sdk'
 
 describe('MogamiSdk (e2e)', () => {
   let sdk: MogamiSdk

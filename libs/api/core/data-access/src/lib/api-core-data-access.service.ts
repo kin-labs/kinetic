@@ -1,8 +1,8 @@
-import { AirdropConfig } from '@mogami/airdrop'
-import { hashPassword } from '@mogami/api/auth/util'
-import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
-import { Keypair } from '@mogami/keypair'
-import { getPublicKey, Solana } from '@mogami/solana'
+import { AirdropConfig } from '@kin-kinetic/airdrop'
+import { hashPassword } from '@kin-kinetic/api/auth/util'
+import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
+import { Keypair } from '@kin-kinetic/keypair'
+import { getPublicKey, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { App, AppUserRole, ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
@@ -171,7 +171,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       this.connections.set(
         appKey,
         new Solana(env.cluster.endpoint, {
-          logger: new Logger(`@mogami/solana:${appKey}`),
+          logger: new Logger(`@kin-kinetic/solana:${appKey}`),
         }),
       )
     }

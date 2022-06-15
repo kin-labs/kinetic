@@ -1,13 +1,13 @@
-import { useAdminAuth } from '@mogami/admin/auth/data-access'
-import { AdminUiLayout } from '@mogami/admin/ui/layout'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
+import { useAdminAuth } from '@kin-kinetic/admin/auth/data-access'
+import { AdminUiLayout } from '@kin-kinetic/admin/ui/layout'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { copyright, links, logo, name } from './admin-shell-constants'
 
-const AdminAppFeature = React.lazy(async () => import('@mogami/admin/app/feature'))
-const AdminHomeFeature = React.lazy(async () => import('@mogami/admin/home/feature'))
-const AdminSystemFeature = React.lazy(async () => import('@mogami/admin/system/feature'))
+const AdminAppFeature = React.lazy(async () => import('@kin-kinetic/admin/app/feature'))
+const AdminHomeFeature = React.lazy(async () => import('@kin-kinetic/admin/home/feature'))
+const AdminSystemFeature = React.lazy(async () => import('@kin-kinetic/admin/system/feature'))
 
 export function AdminShellAuthenticated() {
   const { logout, user } = useAdminAuth()

@@ -1,7 +1,7 @@
 import { Stack } from '@chakra-ui/react'
-import { useUserAppEnv } from '@mogami/admin/app/data-access'
-import { AdminClusterUiMints } from '@mogami/admin/cluster/ui'
-import { Mint } from '@mogami/shared/util/admin-sdk'
+import { useUserAppEnv } from '@kin-kinetic/admin/app/data-access'
+import { AdminClusterUiMints } from '@kin-kinetic/admin/cluster/ui'
+import { Mint } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { AdminAppUserAppEnvDetailLayout } from './admin-app-user-app-env-detail-layout'
 

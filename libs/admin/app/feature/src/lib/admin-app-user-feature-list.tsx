@@ -1,8 +1,8 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiGrid } from '@mogami/admin/app/ui'
-import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useUserAppsQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminAppUiGrid } from '@kin-kinetic/admin/app/ui'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { useUserAppsQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminAppUserFeatureList() {

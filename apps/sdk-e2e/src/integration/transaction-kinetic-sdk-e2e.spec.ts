@@ -1,7 +1,7 @@
-import { MogamiSdk } from '@mogami/sdk'
-import { Keypair } from '@mogami/keypair'
+import { MogamiSdk } from '@kin-kinetic/sdk'
+import { Keypair } from '@kin-kinetic/keypair'
 import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair } from './fixtures'
-import { Destination } from '@mogami/solana'
+import { Destination } from '@kin-kinetic/solana'
 import { AppTransactionStatus } from '@prisma/client'
 
 describe('MogamiSdk (e2e)', () => {

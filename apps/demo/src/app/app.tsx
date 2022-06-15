@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { DemoShellFeature } from '@mogami/demo/shell/feature'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { DemoShellFeature } from '@kin-kinetic/demo/shell/feature'
 import { Suspense } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 

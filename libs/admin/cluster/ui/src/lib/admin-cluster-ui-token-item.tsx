@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Flex } from '@chakra-ui/react'
-import { ClusterToken } from '@mogami/shared/util/admin-sdk'
+import { ClusterToken } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { AdminClusterUiToken } from './admin-cluster-ui-token'
 

@@ -5,9 +5,9 @@ import {
   AdminAppUiTransactionErrors,
   AdminAppUiTransactionStatus,
   AdminAppUiTransactionTimeline,
-} from '@mogami/admin/app/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AppTransactionStatus, useUserAppTransactionQuery } from '@mogami/shared/util/admin-sdk'
+} from '@kin-kinetic/admin/app/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { AppTransactionStatus, useUserAppTransactionQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useEffect } from 'react'
 
 export default function AdminAppUserFeatureTransactionDetail({

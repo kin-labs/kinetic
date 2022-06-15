@@ -1,4 +1,4 @@
-import { useUserAppEnv } from '@mogami/admin/app/data-access'
+import { useUserAppEnv } from '@kin-kinetic/admin/app/data-access'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import AdminAppUserFeatureWebhookDetail from './admin-app-user-feature-webhook-detail'

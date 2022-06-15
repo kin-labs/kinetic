@@ -1,11 +1,11 @@
-import { AdminUiLayout, AdminUiLink } from '@mogami/admin/ui/layout'
+import { AdminUiLayout, AdminUiLink } from '@kin-kinetic/admin/ui/layout'
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 
-const DemoHomeFeature = React.lazy(async () => import('@mogami/demo/home/feature'))
-const DemoKeypairFeature = React.lazy(async () => import('@mogami/demo/keypair/feature'))
-const DemoSdkFeature = React.lazy(async () => import('@mogami/demo/sdk/feature'))
-const DemoServerFeature = React.lazy(async () => import('@mogami/demo/server/feature'))
+const DemoHomeFeature = React.lazy(async () => import('@kin-kinetic/demo/home/feature'))
+const DemoKeypairFeature = React.lazy(async () => import('@kin-kinetic/demo/keypair/feature'))
+const DemoSdkFeature = React.lazy(async () => import('@kin-kinetic/demo/sdk/feature'))
+const DemoServerFeature = React.lazy(async () => import('@kin-kinetic/demo/server/feature'))
 
 export function DemoShellFeature() {
   const links: AdminUiLink[] = [

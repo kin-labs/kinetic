@@ -1,5 +1,5 @@
 import { Alert, Box, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
-import { UserEmail } from '@mogami/shared/util/admin-sdk'
+import { UserEmail } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export interface AdminUserUiEmailsProps {

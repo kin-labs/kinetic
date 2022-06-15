@@ -1,4 +1,4 @@
-import { MogamiSdk } from '@mogami/sdk'
+import { MogamiSdk } from '@kin-kinetic/sdk'
 import { daveKeypair } from './fixtures'
 
 describe('MogamiSdk (e2e) - Airdrop', () => {

@@ -1,7 +1,7 @@
 import { Box, Flex, Stack } from '@chakra-ui/react'
-import { AdminAppUiWebhookDetail } from '@mogami/admin/app/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useUserAppWebhookQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminAppUiWebhookDetail } from '@kin-kinetic/admin/app/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { useUserAppWebhookQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminAppUserFeatureWebhookDetail({

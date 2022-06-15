@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Float, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()

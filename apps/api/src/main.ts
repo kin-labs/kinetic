@@ -1,5 +1,5 @@
-import { ApiConfigDataAccessService } from '@mogami/api/config/data-access'
-import { OpenTelementrySdk } from '@mogami/api/core/util'
+import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
+import { OpenTelementrySdk } from '@kin-kinetic/api/core/util'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { HttpAdapterHost, NestFactory } from '@nestjs/core'
 import { exec } from 'child_process'

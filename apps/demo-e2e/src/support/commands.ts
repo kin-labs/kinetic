@@ -8,9 +8,9 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-import { demoKeypairDb } from '@mogami/demo/keypair/data-access'
-import { demoServerDb } from '@mogami/demo/server/data-access'
-import { Keypair } from '@mogami/keypair'
+import { demoKeypairDb } from '@kin-kinetic/demo/keypair/data-access'
+import { demoServerDb } from '@kin-kinetic/demo/server/data-access'
+import { Keypair } from '@kin-kinetic/keypair'
 
 // -- This is a parent command --
 Cypress.Commands.add('login', (email, password) => {

@@ -3,7 +3,7 @@ import {
   ApiAirdropDataAccessService,
   RequestAirdropRequest,
   RequestAirdropResponse,
-} from '@mogami/api/airdrop/data-access'
+} from '@kin-kinetic/api/airdrop/data-access'
 import { Body, Controller, Get, Post } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 

@@ -1,5 +1,5 @@
 import { Code, Flex, Image, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
-import { Cluster } from '@mogami/shared/util/admin-sdk'
+import { Cluster } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

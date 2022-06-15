@@ -1,4 +1,4 @@
-import { ApiConfigDataAccessService, ApiConfigSummary } from '@mogami/api/config/data-access'
+import { ApiConfigDataAccessService, ApiConfigSummary } from '@kin-kinetic/api/config/data-access'
 import { Controller, Get } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 

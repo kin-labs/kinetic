@@ -1,6 +1,6 @@
 import { Box, Stack } from '@chakra-ui/react'
-import { AdminUiForm, UiFormField } from '@mogami/admin/ui/form'
-import { AppEnv, AppEnvUpdateInput } from '@mogami/shared/util/admin-sdk'
+import { AdminUiForm, UiFormField } from '@kin-kinetic/admin/ui/form'
+import { AppEnv, AppEnvUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 import * as Yup from 'yup'

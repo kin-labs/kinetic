@@ -1,5 +1,5 @@
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
-import { OpenTelementrySdk } from '@mogami/api/core/util'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { OpenTelementrySdk } from '@kin-kinetic/api/core/util'
 import { Controller, Get, Response } from '@nestjs/common'
 
 @Controller()

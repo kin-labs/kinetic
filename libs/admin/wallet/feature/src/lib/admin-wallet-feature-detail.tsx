@@ -1,6 +1,6 @@
 import { Box, Stack } from '@chakra-ui/react'
-import { AdminUiTabs } from '@mogami/admin/ui/tabs'
-import { useAdminWalletQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
+import { useAdminWalletQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 

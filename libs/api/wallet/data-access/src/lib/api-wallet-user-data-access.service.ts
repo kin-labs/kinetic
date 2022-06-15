@@ -1,5 +1,5 @@
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
-import { Keypair } from '@mogami/keypair'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
 import { ClusterStatus } from '@prisma/client'

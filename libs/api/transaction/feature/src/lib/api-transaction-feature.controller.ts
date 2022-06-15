@@ -1,11 +1,11 @@
-import { AppTransaction } from '@mogami/api/app/data-access'
+import { AppTransaction } from '@kin-kinetic/api/app/data-access'
 import {
   ApiTransactionDataAccessService,
   MakeTransferRequest,
   MinimumRentExemptionBalanceRequest,
   MinimumRentExemptionBalanceResponse,
   LatestBlockhashResponse,
-} from '@mogami/api/transaction/data-access'
+} from '@kin-kinetic/api/transaction/data-access'
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 

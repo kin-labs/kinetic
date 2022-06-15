@@ -1,4 +1,4 @@
-import { Commitment } from '@mogami/solana'
+import { Commitment } from '@kin-kinetic/solana'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class MakeTransferRequest {

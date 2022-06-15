@@ -1,4 +1,4 @@
-import { Keypair } from '@mogami/keypair'
+import { Keypair } from '@kin-kinetic/keypair'
 
 // ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA
 export const ALICE_KEY = [

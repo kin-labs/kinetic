@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, Image, Stack, useColorModeValue } from '@chakra-ui/react'
-import { AdminAuthLogoutFn } from '@mogami/admin/auth/data-access'
-import { User } from '@mogami/shared/util/admin-sdk'
+import { AdminAuthLogoutFn } from '@kin-kinetic/admin/auth/data-access'
+import { User } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { AdminUiHeaderLink, AdminUiLink } from './admin-ui-header-link'

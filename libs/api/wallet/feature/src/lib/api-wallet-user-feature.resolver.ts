@@ -1,11 +1,11 @@
-import { ApiAuthGraphqlGuard, CtxUser } from '@mogami/api/auth/data-access'
-import { User } from '@mogami/api/user/data-access'
+import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
+import { User } from '@kin-kinetic/api/user/data-access'
 import {
   ApiWalletUserDataAccessService,
   Wallet,
   WalletAirdropResponse,
   WalletBalance,
-} from '@mogami/api/wallet/data-access'
+} from '@kin-kinetic/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Float, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
 

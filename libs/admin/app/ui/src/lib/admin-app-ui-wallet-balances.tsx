@@ -1,5 +1,5 @@
 import { Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import { useUserWalletBalancesQuery, Wallet } from '@mogami/shared/util/admin-sdk'
+import { useUserWalletBalancesQuery, Wallet } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { ShowSolBalance } from './show-sol-balance'
 

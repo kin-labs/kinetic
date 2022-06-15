@@ -1,8 +1,8 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiForm, AdminAppUiHeader, AdminAppUiUserModal, AdminAppUiUsers } from '@mogami/admin/app/ui'
-import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AdminUiTabs } from '@mogami/admin/ui/tabs'
+import { AdminAppUiForm, AdminAppUiHeader, AdminAppUiUserModal, AdminAppUiUsers } from '@kin-kinetic/admin/app/ui'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
 import {
   AppUpdateInput,
   AppUserAddInput,
@@ -12,7 +12,7 @@ import {
   useUserAppUserUpdateRoleMutation,
   useUserUpdateAppMutation,
   useUserAppQuery,
-} from '@mogami/shared/util/admin-sdk'
+} from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 import { AdminAppUserEnvironmentsTab } from './admin-app-user-environments-tab'

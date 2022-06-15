@@ -1,6 +1,6 @@
 import { Button, Flex, Stack, Text } from '@chakra-ui/react'
-import { ShowSolBalance } from '@mogami/admin/app/ui'
-import { Wallet } from '@mogami/shared/util/admin-sdk'
+import { ShowSolBalance } from '@kin-kinetic/admin/app/ui'
+import { Wallet } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

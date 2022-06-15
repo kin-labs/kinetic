@@ -1,8 +1,8 @@
 import { Box, Flex, Stack } from '@chakra-ui/react'
-import { useUserAppEnv } from '@mogami/admin/app/data-access'
-import { AdminAppUiHeader } from '@mogami/admin/app/ui'
-import { AdminClusterUiCluster } from '@mogami/admin/cluster/ui'
-import { AdminUiTabs } from '@mogami/admin/ui/tabs'
+import { useUserAppEnv } from '@kin-kinetic/admin/app/data-access'
+import { AdminAppUiHeader } from '@kin-kinetic/admin/app/ui'
+import { AdminClusterUiCluster } from '@kin-kinetic/admin/cluster/ui'
+import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
 import React, { PropsWithChildren } from 'react'
 
 export function AdminAppUserAppEnvDetailLayout({ children }: PropsWithChildren<any>) {

@@ -1,4 +1,4 @@
-import { AdminAuthProvider } from '@mogami/admin/auth/data-access'
+import { AdminAuthProvider } from '@kin-kinetic/admin/auth/data-access'
 import { render } from '@testing-library/react'
 
 import { AdminAuthFeature } from './admin-auth-feature'

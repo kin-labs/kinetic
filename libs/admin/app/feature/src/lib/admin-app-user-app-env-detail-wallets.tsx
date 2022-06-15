@@ -1,4 +1,4 @@
-import { useUserAppEnv } from '@mogami/admin/app/data-access'
+import { useUserAppEnv } from '@kin-kinetic/admin/app/data-access'
 import React from 'react'
 import { AdminAppUserAppEnvDetailLayout } from './admin-app-user-app-env-detail-layout'
 import { AdminAppUserWalletsTab } from './admin-app-user-wallets-tab'

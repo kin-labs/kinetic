@@ -1,7 +1,7 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { AdminWalletUiTable } from '@mogami/admin/wallet/ui'
-import { useAdminDeleteWalletMutation, useAdminWalletsQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { AdminWalletUiTable } from '@kin-kinetic/admin/wallet/ui'
+import { useAdminDeleteWalletMutation, useAdminWalletsQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminWalletFeatureList() {

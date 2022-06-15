@@ -1,5 +1,5 @@
 import { Avatar, Flex, Text, Tooltip } from '@chakra-ui/react'
-import { Mint } from '@mogami/shared/util/admin-sdk'
+import { Mint } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 function elipsify(str = '', len = 4) {

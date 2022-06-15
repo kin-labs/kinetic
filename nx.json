@@ -1,5 +1,5 @@
 {
-  "npmScope": "mogami",
+  "npmScope": "kin-kinetic",
   "affected": {
     "defaultBase": "dev"
   },

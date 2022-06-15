@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { AppModule } from '@mogami/api-app-module'
+import { AppModule } from '@kin-kinetic/api-app-module'
 
 export async function initializeE2eApp(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({

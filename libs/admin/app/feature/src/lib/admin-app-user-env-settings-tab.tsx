@@ -1,6 +1,6 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiAppEnvMintSettings, AdminAppUiAppEnvWebhookForm } from '@mogami/admin/app/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
+import { AdminAppUiAppEnvMintSettings, AdminAppUiAppEnvWebhookForm } from '@kin-kinetic/admin/app/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import {
   AppEnvUpdateInput,
   useUserAppEnvMintDisableMutation,
@@ -8,7 +8,7 @@ import {
   useUserAppEnvMintSetWalletMutation,
   useUserAppEnvQuery,
   useUserUpdateAppEnvMutation,
-} from '@mogami/shared/util/admin-sdk'
+} from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {

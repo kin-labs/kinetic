@@ -1,5 +1,5 @@
 import { Alert, Box, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
-import { AppWebhook } from '@mogami/shared/util/admin-sdk'
+import { AppWebhook } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

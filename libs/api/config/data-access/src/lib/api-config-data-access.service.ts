@@ -1,4 +1,4 @@
-import { createMintKin, createMintSol } from '@mogami/api/cluster/util'
+import { createMintKin, createMintSol } from '@kin-kinetic/api/cluster/util'
 import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'

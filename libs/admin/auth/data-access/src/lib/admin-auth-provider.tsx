@@ -1,4 +1,4 @@
-import { LoginInput, useLoginMutation, useLogoutMutation, useMeQuery, User } from '@mogami/shared/util/admin-sdk'
+import { LoginInput, useLoginMutation, useLogoutMutation, useMeQuery, User } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { ReactNode, useEffect, useState } from 'react'
 
 export type AdminAuthLoginFn = (input: LoginInput) => Promise<boolean>

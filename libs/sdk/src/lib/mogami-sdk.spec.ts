@@ -1,5 +1,5 @@
-import { Keypair } from '@mogami/keypair'
-import { Commitment } from '@mogami/solana'
+import { Keypair } from '@kin-kinetic/keypair'
+import { Commitment } from '@kin-kinetic/solana'
 import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
 import { MogamiSdkConfig } from './interfaces'
 import { MogamiSdk } from './mogami-sdk'

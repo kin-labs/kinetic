@@ -1,6 +1,6 @@
 import { Button, Input, Stack } from '@chakra-ui/react'
-import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
-import { MogamiSdk } from '@mogami/sdk'
+import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
+import { MogamiSdk } from '@kin-kinetic/sdk'
 import React, { ChangeEvent, useState } from 'react'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 

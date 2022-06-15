@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { ClusterType, MintType, Prisma } from '@prisma/client'
 import { ApiClusterDataAccessService } from './api-cluster-data-access.service'

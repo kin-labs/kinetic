@@ -1,5 +1,5 @@
 import { Avatar, Box, Code, Flex, Image, Stack } from '@chakra-ui/react'
-import { ClusterToken } from '@mogami/shared/util/admin-sdk'
+import { ClusterToken } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminClusterUiToken({ token }: { token: ClusterToken }) {

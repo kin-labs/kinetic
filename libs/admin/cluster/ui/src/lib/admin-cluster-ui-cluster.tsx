@@ -1,5 +1,5 @@
 import { Box, Image, Stack } from '@chakra-ui/react'
-import { Cluster } from '@mogami/shared/util/admin-sdk'
+import { Cluster } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminClusterUiCluster({ cluster }: { cluster: Cluster }) {

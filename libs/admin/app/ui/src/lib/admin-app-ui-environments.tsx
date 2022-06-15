@@ -14,7 +14,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-import { AppEnv } from '@mogami/shared/util/admin-sdk'
+import { AppEnv } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

@@ -1,4 +1,4 @@
-import { ApiConfigDataAccessModule } from '@mogami/api/config/data-access'
+import { ApiConfigDataAccessModule } from '@kin-kinetic/api/config/data-access'
 import { Test } from '@nestjs/testing'
 import { ApiConfigFeatureController } from './api-config-feature.controller'
 

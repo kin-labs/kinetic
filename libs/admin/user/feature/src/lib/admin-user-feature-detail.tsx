@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, Stack, Text, useToast } from '@chakra-ui/react'
-import { AdminUiTabs } from '@mogami/admin/ui/tabs'
-import { AdminUserUiApps, AdminUserUiEmails, AdminUserUiForm } from '@mogami/admin/user/ui'
-import { UserUpdateInput, useAdminUpdateUserMutation, useAdminUserQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
+import { AdminUserUiApps, AdminUserUiEmails, AdminUserUiForm } from '@kin-kinetic/admin/user/ui'
+import { UserUpdateInput, useAdminUpdateUserMutation, useAdminUserQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
 

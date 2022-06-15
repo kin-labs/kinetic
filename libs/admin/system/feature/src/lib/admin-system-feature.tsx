@@ -1,16 +1,16 @@
-import { AdminAppAdminFeatureList } from '@mogami/admin/app/feature'
-import { useAdminAuth } from '@mogami/admin/auth/data-access'
-import { AdminSystemUiDashboard, AdminSystemUiLayout } from '@mogami/admin/system/ui'
-import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { AdminUiLink } from '@mogami/admin/ui/layout'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { UserRole } from '@mogami/shared/util/admin-sdk'
+import { AdminAppAdminFeatureList } from '@kin-kinetic/admin/app/feature'
+import { useAdminAuth } from '@kin-kinetic/admin/auth/data-access'
+import { AdminSystemUiDashboard, AdminSystemUiLayout } from '@kin-kinetic/admin/system/ui'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { AdminUiLink } from '@kin-kinetic/admin/ui/layout'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { UserRole } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
-const AdminClusterFeature = React.lazy(async () => import('@mogami/admin/cluster/feature'))
-const AdminUserFeature = React.lazy(async () => import('@mogami/admin/user/feature'))
-const AdminWalletFeature = React.lazy(async () => import('@mogami/admin/wallet/feature'))
+const AdminClusterFeature = React.lazy(async () => import('@kin-kinetic/admin/cluster/feature'))
+const AdminUserFeature = React.lazy(async () => import('@kin-kinetic/admin/user/feature'))
+const AdminWalletFeature = React.lazy(async () => import('@kin-kinetic/admin/wallet/feature'))
 
 export function AdminSystemFeature() {
   const { loading, user } = useAdminAuth()

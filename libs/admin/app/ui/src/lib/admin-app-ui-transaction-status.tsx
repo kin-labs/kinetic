@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react'
-import { AppTransactionStatus } from '@mogami/shared/util/admin-sdk'
+import { AppTransactionStatus } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUiTransactionStatus({ status }: { status?: AppTransactionStatus }) {

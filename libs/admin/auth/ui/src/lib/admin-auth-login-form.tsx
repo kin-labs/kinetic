@@ -1,5 +1,5 @@
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Stack, useColorModeValue } from '@chakra-ui/react'
-import { AdminAuthLoginFn } from '@mogami/admin/auth/data-access'
+import { AdminAuthLoginFn } from '@kin-kinetic/admin/auth/data-access'
 import { ChangeEvent, useState } from 'react'
 
 export function AdminAuthLoginForm({ login }: { login: AdminAuthLoginFn }) {

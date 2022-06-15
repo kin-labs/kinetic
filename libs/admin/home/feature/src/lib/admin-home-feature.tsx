@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import { useUptimeQuery } from '@mogami/shared/util/admin-sdk'
+import { useUptimeQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminHomeFeature() {

@@ -1,4 +1,4 @@
-import { AppEnv } from '@mogami/shared/util/admin-sdk'
+import { AppEnv } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { ReactNode } from 'react'
 
 export interface UserAppEnvProviderContext {

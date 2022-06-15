@@ -1,5 +1,5 @@
-import { Keypair } from '@mogami/keypair'
-import { Commitment } from '@mogami/solana'
+import { Keypair } from '@kin-kinetic/keypair'
+import { Commitment } from '@kin-kinetic/solana'
 
 export interface CreateAccountOptions {
   owner: Keypair

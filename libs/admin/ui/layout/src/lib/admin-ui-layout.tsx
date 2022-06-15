@@ -1,6 +1,6 @@
 import { Container, Flex } from '@chakra-ui/react'
-import { AdminAuthLogoutFn } from '@mogami/admin/auth/data-access'
-import { User } from '@mogami/shared/util/admin-sdk'
+import { AdminAuthLogoutFn } from '@kin-kinetic/admin/auth/data-access'
+import { User } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { PropsWithChildren, ReactNode } from 'react'
 import { AdminUiFooter } from './admin-ui-footer'
 import { AdminUiHeader } from './admin-ui-header'

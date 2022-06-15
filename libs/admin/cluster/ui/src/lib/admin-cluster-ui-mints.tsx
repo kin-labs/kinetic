@@ -1,5 +1,5 @@
 import { Alert, Box, SimpleGrid } from '@chakra-ui/react'
-import { Mint } from '@mogami/shared/util/admin-sdk'
+import { Mint } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { AdminClusterUiMintDetails } from './admin-cluster-ui-mint-details'
 

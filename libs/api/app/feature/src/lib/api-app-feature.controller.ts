@@ -3,7 +3,7 @@ import {
   ApiAppWebhookDataAccessService,
   AppConfig,
   AppHealth,
-} from '@mogami/api/app/data-access'
+} from '@kin-kinetic/api/app/data-access'
 import { Controller, Get, Param, ParseIntPipe, Post, Req, Res } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Request, Response } from 'express'

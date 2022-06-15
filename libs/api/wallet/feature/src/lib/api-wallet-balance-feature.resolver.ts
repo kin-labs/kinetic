@@ -1,5 +1,5 @@
-import { AppEnv } from '@mogami/api/app/data-access'
-import { WalletBalance } from '@mogami/api/wallet/data-access'
+import { AppEnv } from '@kin-kinetic/api/app/data-access'
+import { WalletBalance } from '@kin-kinetic/api/wallet/data-access'
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => WalletBalance)

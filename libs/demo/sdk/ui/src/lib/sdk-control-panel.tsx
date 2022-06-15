@@ -1,7 +1,7 @@
 import { Stack } from '@chakra-ui/react'
-import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
-import { MogamiSdk } from '@mogami/sdk'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
+import { MogamiSdk } from '@kin-kinetic/sdk'
 import React from 'react'
 
 import { SdkControlPanelAccountBalance } from './sdk-control-panel-account-balance'

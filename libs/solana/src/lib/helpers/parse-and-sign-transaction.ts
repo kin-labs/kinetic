@@ -1,4 +1,4 @@
-import { SolanaKeypair } from '@mogami/keypair'
+import { SolanaKeypair } from '@kin-kinetic/keypair'
 import { Transaction } from '@solana/web3.js'
 
 export function parseAndSignTransaction({ tx, signer }: { tx: Buffer; signer: SolanaKeypair }): {

@@ -1,9 +1,9 @@
 import { DeleteIcon, ViewIcon } from '@chakra-ui/icons'
 import { Box, Button, ButtonGroup, Code, Flex, SimpleGrid, Stack } from '@chakra-ui/react'
-import { AdminUiAlert } from '@mogami/admin/ui/alert'
-import { demoKeypairDb, DemoKeypairEntity } from '@mogami/demo/keypair/data-access'
-import { ImportMnemonicModal, KeypairDetailsModal, ImportByteArrayModal } from '@mogami/demo/keypair/ui'
-import { Keypair } from '@mogami/keypair'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { demoKeypairDb, DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
+import { ImportMnemonicModal, KeypairDetailsModal, ImportByteArrayModal } from '@kin-kinetic/demo/keypair/ui'
+import { Keypair } from '@kin-kinetic/keypair'
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useState } from 'react'
 
@@ -56,7 +56,7 @@ export function DemoKeypairFeature() {
   return (
     <Stack spacing={6}>
       <div>
-        Here you can generate and import keypairs using the <code>@mogami/keypair</code> package.
+        Here you can generate and import keypairs using the <code>@kin-kinetic/keypair</code> package.
       </div>
       <Stack direction="row" spacing={2} alignItems="center">
         <Button className={'generate-keypair-btn'} onClick={generateMnemonic}>

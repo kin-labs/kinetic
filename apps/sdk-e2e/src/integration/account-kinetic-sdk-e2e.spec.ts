@@ -1,5 +1,5 @@
-import { MogamiSdk } from '@mogami/sdk'
-import { Keypair } from '@mogami/keypair'
+import { MogamiSdk } from '@kin-kinetic/sdk'
+import { Keypair } from '@kin-kinetic/keypair'
 import { daveKeypair, aliceKeypair } from './fixtures'
 import { AppTransactionStatus } from '@prisma/client'
 

@@ -1,4 +1,4 @@
-import { ApiAppDataAccessService, AppTransaction } from '@mogami/api/app/data-access'
+import { ApiAppDataAccessService, AppTransaction } from '@kin-kinetic/api/app/data-access'
 import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => AppTransaction)

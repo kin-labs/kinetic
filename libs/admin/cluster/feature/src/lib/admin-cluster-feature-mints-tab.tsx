@@ -1,7 +1,7 @@
 import { Stack } from '@chakra-ui/react'
-import { AdminClusterUiMintModal, AdminClusterUiMints } from '@mogami/admin/cluster/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { useAdminClusterQuery } from '@mogami/shared/util/admin-sdk'
+import { AdminClusterUiMintModal, AdminClusterUiMints } from '@kin-kinetic/admin/cluster/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { useAdminClusterQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminClusterFeatureMintsTab({ clusterId }: { clusterId: string }) {

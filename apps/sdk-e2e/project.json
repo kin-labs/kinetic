@@ -10,7 +10,7 @@
       }
     },
     "e2e": {
-      "executor": "@mogami-dev/jest:build",
+      "executor": "@kin-kinetic-dev/jest:build",
       "options": {
         "devServerTarget": "sdk-e2e:serve-api",
         "jestConfig": "apps/sdk-e2e/jest.config.ts",

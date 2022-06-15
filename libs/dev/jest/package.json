@@ -1,5 +1,5 @@
 {
-  "name": "@mogami-dev/jest",
+  "name": "@kin-kinetic-dev/jest",
   "version": "0.0.1",
   "main": "src/index.js",
   "executors": "./executors.json"

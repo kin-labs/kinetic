@@ -1,4 +1,4 @@
-import { ApiCoreFeatureModule } from '@mogami/api/core/feature'
+import { ApiCoreFeatureModule } from '@kin-kinetic/api/core/feature'
 import { Module } from '@nestjs/common'
 
 @Module({

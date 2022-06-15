@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Injectable } from '@nestjs/common'
 import { ClusterType } from '@prisma/client'
 import { TokenListProvider } from '@solana/spl-token-registry'

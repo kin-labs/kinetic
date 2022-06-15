@@ -12,7 +12,12 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import { Cluster, ClusterToken, ClusterTokenInput, useAdminAddClusterMintMutation } from '@mogami/shared/util/admin-sdk'
+import {
+  Cluster,
+  ClusterToken,
+  ClusterTokenInput,
+  useAdminAddClusterMintMutation,
+} from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useState } from 'react'
 import { AdminClusterUiMintForm } from './admin-cluster-ui-mint-form'
 import { AdminClusterUiTokenConfirm } from './admin-cluster-ui-token-confirm'

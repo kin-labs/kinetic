@@ -1,5 +1,5 @@
-import { hashPassword } from '@mogami/api/auth/util'
-import { ApiCoreDataAccessService } from '@mogami/api/core/data-access'
+import { hashPassword } from '@kin-kinetic/api/auth/util'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { UserCreateInput } from './dto/user-create.input'
 import { UserUpdateInput } from './dto/user-update.input'

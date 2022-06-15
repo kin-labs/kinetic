@@ -1,5 +1,5 @@
 import { TransactionType } from '@kin-tools/kin-memo'
-import { Commitment } from '@mogami/solana'
+import { Commitment } from '@kin-kinetic/solana'
 import {
   AccountApi,
   AirdropApi,

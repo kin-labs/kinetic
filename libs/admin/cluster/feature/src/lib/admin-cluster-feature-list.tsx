@@ -1,7 +1,7 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminClusterUiTable } from '@mogami/admin/cluster/ui'
-import { AdminUiLoader } from '@mogami/admin/ui/loader'
-import { Cluster, useAdminClustersQuery, useAdminDeleteClusterMutation } from '@mogami/shared/util/admin-sdk'
+import { AdminClusterUiTable } from '@kin-kinetic/admin/cluster/ui'
+import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { Cluster, useAdminClustersQuery, useAdminDeleteClusterMutation } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export default function AdminClusterFeatureList() {

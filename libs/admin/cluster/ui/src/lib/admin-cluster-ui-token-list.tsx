@@ -1,5 +1,5 @@
 import { Stack } from '@chakra-ui/react'
-import { ClusterToken } from '@mogami/shared/util/admin-sdk'
+import { ClusterToken } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { AdminClusterUiTokenItem } from './admin-cluster-ui-token-item'
 

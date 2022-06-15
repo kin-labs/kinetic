@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react'
-import { useAdminAuth } from '@mogami/admin/auth/data-access'
-import { AdminAuthLoginForm } from '@mogami/admin/auth/ui'
+import { useAdminAuth } from '@kin-kinetic/admin/auth/data-access'
+import { AdminAuthLoginForm } from '@kin-kinetic/admin/auth/ui'
 
 export function AdminAuthFeature() {
   const { login } = useAdminAuth()

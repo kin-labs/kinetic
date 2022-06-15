@@ -1,4 +1,4 @@
-import { ApiTransactionDataAccessModule } from '@mogami/api/transaction/data-access'
+import { ApiTransactionDataAccessModule } from '@kin-kinetic/api/transaction/data-access'
 import { Test } from '@nestjs/testing'
 import { ApiTransactionFeatureController } from './api-transaction-feature.controller'
 

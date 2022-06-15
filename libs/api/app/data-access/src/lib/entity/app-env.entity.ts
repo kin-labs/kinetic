@@ -1,4 +1,4 @@
-import { Cluster } from '@mogami/api/cluster/data-access'
+import { Cluster } from '@kin-kinetic/api/cluster/data-access'
 import { Field, HideField, ObjectType } from '@nestjs/graphql'
 import { AppMint } from './app-mint.entity'
 import { App } from './app.entity'

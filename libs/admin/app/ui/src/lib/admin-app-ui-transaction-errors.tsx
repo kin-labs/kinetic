@@ -1,6 +1,6 @@
 import { CheckCircleIcon, CloseIcon } from '@chakra-ui/icons'
 import { List, ListIcon, ListItem } from '@chakra-ui/react'
-import { AppTransaction } from '@mogami/shared/util/admin-sdk'
+import { AppTransaction } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUiTransactionErrors({ item }: { item: AppTransaction }) {

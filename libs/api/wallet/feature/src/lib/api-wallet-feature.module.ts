@@ -1,4 +1,4 @@
-import { ApiWalletDataAccessModule } from '@mogami/api/wallet/data-access'
+import { ApiWalletDataAccessModule } from '@kin-kinetic/api/wallet/data-access'
 import { Module } from '@nestjs/common'
 import { ApiWalletAdminFeatureResolver } from './api-wallet-admin-feature.resolver'
 import { ApiWalletBalanceFeatureResolver } from './api-wallet-balance-feature.resolver'

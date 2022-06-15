@@ -1,5 +1,5 @@
 import { Box, Button, ButtonGroup, Code, Input, Stack } from '@chakra-ui/react'
-import { useUserWalletAirdropQuery, useUserWalletBalanceQuery, Wallet } from '@mogami/shared/util/admin-sdk'
+import { useUserWalletAirdropQuery, useUserWalletBalanceQuery, Wallet } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { ChangeEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ShowSolBalance } from './show-sol-balance'

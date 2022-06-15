@@ -1,6 +1,6 @@
 import { Button, Flex, Stack } from '@chakra-ui/react'
-import { AdminClusterUiMintDetails } from '@mogami/admin/cluster/ui'
-import { Mint } from '@mogami/shared/util/admin-sdk'
+import { AdminClusterUiMintDetails } from '@kin-kinetic/admin/cluster/ui'
+import { Mint } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUiMintDisabledPanel({
