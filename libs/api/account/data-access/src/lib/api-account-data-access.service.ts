@@ -98,7 +98,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     } catch (error) {
       status = AppTransactionStatus.Failed
       this.createAccountSolanaTransactionErrorCounter.add(1, { appKey })
-      errors = parseError(error)
+      errors = { create: parseError(error) }
     }
 
     return this.data.appTransaction.update({
