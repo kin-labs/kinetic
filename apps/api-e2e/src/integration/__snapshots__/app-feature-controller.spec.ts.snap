@@ -7,12 +7,8 @@ exports[`AppFeatureController (e2e) Should not receive Incoming App Verify Webho
 exports[`AppFeatureController (e2e) Should not receive unknown Incoming App Webhooks  1`] = `
 Object {
   "message": "Unknown AppWebhookType",
-  "name": "BadRequestException",
-  "response": Object {
-    "error": "Bad Request",
-    "message": "Unknown AppWebhookType",
-    "statusCode": 400,
-  },
+  "name": "HttpException",
+  "response": "Unknown AppWebhookType",
   "status": 400,
 }
 `;

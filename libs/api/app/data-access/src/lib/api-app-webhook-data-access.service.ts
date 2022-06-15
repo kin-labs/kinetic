@@ -1,6 +1,6 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { HttpService } from '@nestjs/axios'
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
 import { AppWebhookType } from '@prisma/client'
 import { AxiosRequestHeaders } from 'axios'
 import { Response } from 'express'
@@ -66,7 +66,7 @@ export class ApiAppWebhookDataAccessService {
     // Make sure the webhook type is valid
     if (!isValidAppWebhookType(type)) {
       res.statusCode = 400
-      return res.send(new BadRequestException(`Unknown AppWebhookType`))
+      return res.send(new HttpException(`Unknown AppWebhookType`, HttpStatus.BAD_REQUEST))
     }
 
     try {
@@ -92,7 +92,7 @@ export class ApiAppWebhookDataAccessService {
       return res.send(created)
     } catch (e) {
       res.statusCode = 400
-      return res.send(new BadRequestException(`Something went wrong storing incoming webhook`))
+      return res.send(new HttpException(`Something went wrong storing incoming webhook`, HttpStatus.BAD_REQUEST))
     }
   }
 

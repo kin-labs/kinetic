@@ -5,7 +5,7 @@ import {
   HistoryResponse,
 } from '@kin-kinetic/api/account/data-access'
 import { AppTransaction } from '@kin-kinetic/api/app/data-access'
-import { AccountIdSchema, JoiValidationPipe } from '@kin-kinetic/api/core/util'
+import { PublicKeyPipe } from '@kin-kinetic/api/core/util'
 import { Commitment } from '@kin-kinetic/solana'
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -19,7 +19,7 @@ export class ApiAccountFeatureController {
   getAccountInfo(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
-    @Param('accountId', new JoiValidationPipe(AccountIdSchema)) accountId: string,
+    @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
     @Query('commitment') commitment?: Commitment,
   ) {
     return this.service.getAccountInfo(environment, index, accountId, commitment)
@@ -39,7 +39,7 @@ export class ApiAccountFeatureController {
   getBalance(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
-    @Param('accountId', new JoiValidationPipe(AccountIdSchema)) accountId: string,
+    @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
   ) {
     return this.service.getBalance(environment, index, accountId)
   }
@@ -50,7 +50,7 @@ export class ApiAccountFeatureController {
   getHistory(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
-    @Param('accountId', new JoiValidationPipe(AccountIdSchema)) accountId: string,
+    @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
   ) {
     return this.service.getHistory(environment, index, accountId)
   }
@@ -61,7 +61,7 @@ export class ApiAccountFeatureController {
   tokenAccounts(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
-    @Param('accountId', new JoiValidationPipe(AccountIdSchema)) accountId: string,
+    @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
   ) {
     return this.service.getTokenAccounts(environment, index, accountId)
   }
