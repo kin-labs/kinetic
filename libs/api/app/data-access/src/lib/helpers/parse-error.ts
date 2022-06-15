@@ -10,7 +10,7 @@ export function parseError(
   let instruction
 
   if (message.includes('invalid account data for instruction')) {
-    instruction = message.split(' ')[11]
+    instruction = Number(message.split(' ')[11].split(':')[0])
     type = AppTransactionErrorType.InvalidAccount
   }
 

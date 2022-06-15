@@ -151,11 +151,15 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${appTransaction.signature}`)
       this.makeTransferSolanaConfirmedCounter.add(1, { appKey })
     } catch (error) {
-      appTransaction.errors = { create: parseError(error) }
-      appTransaction.status = AppTransactionStatus.Failed
       this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${error}`)
-      appTransaction.solanaCommitted = new Date()
       this.makeTransferSolanaErrorCounter.add(1, { appKey })
+      return this.updateAppTransaction(created.id, {
+        solanaCommitted: new Date(),
+        status: AppTransactionStatus.Failed,
+        errors: {
+          create: parseError(error),
+        },
+      })
     }
 
     // Confirm transaction

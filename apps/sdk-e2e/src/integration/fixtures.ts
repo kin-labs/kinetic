@@ -1,3 +1,5 @@
+import { Keypair } from '@mogami/keypair'
+
 // ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA
 export const ALICE_KEY = [
   205, 213, 7, 246, 167, 206, 37, 209, 161, 129, 168, 160, 90, 103, 198, 142, 83, 177, 214, 203, 80, 29, 71, 245, 56,
@@ -25,3 +27,11 @@ export const DAVE_KEY = [
   73, 253, 235, 97, 243, 180, 21, 180, 186, 100, 202, 161, 4, 96, 215, 244, 173, 174, 184, 79, 108, 59, 85, 0, 114, 203,
   238, 237, 212, 159, 220, 81, 103, 142, 111, 199, 18, 74, 168,
 ]
+
+export const aliceKeypair = Keypair.fromByteArray(ALICE_KEY)
+
+export const bobKeypair = Keypair.fromByteArray(BOB_KEY)
+
+export const charlieKeypair = Keypair.fromByteArray(CHARLIE_KEY)
+
+export const daveKeypair = Keypair.fromByteArray(DAVE_KEY)
