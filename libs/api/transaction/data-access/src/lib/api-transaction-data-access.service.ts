@@ -145,18 +145,21 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     // Solana Transaction
     appTransaction.solanaStart = new Date()
     try {
-      const signature = await solana.sendRawTransaction(transaction)
-      appTransaction.signature = signature
+      appTransaction.signature = await solana.sendRawTransaction(transaction)
       appTransaction.status = AppTransactionStatus.Committed
       appTransaction.solanaCommitted = new Date()
       this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${appTransaction.signature}`)
       this.makeTransferSolanaConfirmedCounter.add(1, { appKey })
     } catch (error) {
-      appTransaction.errors = { create: parseError(error) }
-      appTransaction.status = AppTransactionStatus.Failed
       this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${error}`)
-      appTransaction.solanaCommitted = new Date()
       this.makeTransferSolanaErrorCounter.add(1, { appKey })
+      return this.updateAppTransaction(created.id, {
+        solanaCommitted: new Date(),
+        status: AppTransactionStatus.Failed,
+        errors: {
+          create: parseError(error),
+        },
+      })
     }
 
     // Confirm transaction
@@ -212,20 +215,8 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       }
     }
 
-    const { errors, signature, solanaStart, status } = appTransaction
-
     // Return object
-    return this.updateAppTransaction(created.id, {
-      webhookEventEnd,
-      errors,
-      mint: mint.mint.address,
-      feePayer,
-      signature,
-      solanaCommitted: new Date(),
-      solanaStart,
-      source,
-      status,
-    })
+    return this.updateAppTransaction(created.id, { webhookEventEnd })
   }
 
   updateAppTransaction(id: string, data: Prisma.AppTransactionUpdateInput) {
