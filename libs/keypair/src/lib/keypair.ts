@@ -74,11 +74,6 @@ export class Keypair {
     return new Keypair(secretKey)
   }
 
-  static generate(): Keypair {
-    console.warn(`Deprecated method, please use Keypair.random()`)
-    return this.random()
-  }
-
   static random(): Keypair {
     const mnemonic = this.generateMnemonic()
     const [kp] = this.fromMnemonicSet(mnemonic)

@@ -159,6 +159,6 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
       return Keypair.fromByteArray(JSON.parse(envVar))
     }
     this.logger.verbose(`getAppKeypair app ${index}: generated new keypair`)
-    return Keypair.generate()
+    return Keypair.random()
   }
 }
