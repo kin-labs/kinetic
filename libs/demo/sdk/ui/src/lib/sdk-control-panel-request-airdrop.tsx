@@ -24,7 +24,7 @@ export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: DemoK
           placeholder="Enter the amount (Max: 50000)"
         />
       </Stack>
-      <SdkControlPanelResult cyData="panel-request-airdrop" data={result} />
+      <SdkControlPanelResult data={result} />
     </Stack>
   )
 }

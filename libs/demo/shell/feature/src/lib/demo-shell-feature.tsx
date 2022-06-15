@@ -9,10 +9,10 @@ const DemoServerFeature = React.lazy(async () => import('@kin-kinetic/demo/serve
 
 export function DemoShellFeature() {
   const links: AdminUiLink[] = [
-    { label: 'Home', path: '/home', cyData: 'cy-nav-btn-home' },
-    { label: 'Keypair', path: '/keypair', cyData: 'cy-nav-btn-keypair' },
-    { label: 'SDK', path: '/sdk', cyData: 'cy-nav-btn-sdk' },
-    { label: 'Servers', path: '/servers', cyData: 'cy-nav-btn-servers' },
+    { label: 'Home', path: '/home' },
+    { label: 'Keypair', path: '/keypair' },
+    { label: 'SDK', path: '/sdk' },
+    { label: 'Servers', path: '/servers' },
   ]
   return (
     <AdminUiLayout

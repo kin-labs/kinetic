@@ -42,7 +42,7 @@ export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: Dem
           </Button>
         </div>
       </Stack>
-      <SdkControlPanelResult cyData="panel-submit-payment-batch" data={result} />
+      <SdkControlPanelResult data={result} />
     </Stack>
   )
 }

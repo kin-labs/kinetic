@@ -4,13 +4,11 @@ import { Link as RouterLink } from 'react-router-dom'
 export interface AdminUiLink {
   label: string
   path: string
-  cyData?: string
 }
 
 export function AdminUiHeaderLink({ link }: { link: AdminUiLink }) {
   return (
     <Link
-      cy-data={link.cyData}
       px={2}
       py={1}
       rounded={'md'}

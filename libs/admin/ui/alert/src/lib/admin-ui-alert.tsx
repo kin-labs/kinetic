@@ -5,16 +5,15 @@ export interface AdminUiAlertProps {
   message: string
   status?: 'info' | 'success' | 'warning' | 'error' | undefined
   title?: string
-  cyData?: string
 }
 
-export function AdminUiAlert({ message, status = 'info', title, cyData }: AdminUiAlertProps) {
+export function AdminUiAlert({ message, status = 'info', title }: AdminUiAlertProps) {
   return (
     <Alert status={status} colorScheme="teal">
       <Box flex="1">
         {title && (
           <AlertTitle>
-            <div cy-data={cyData}>{title}</div>
+            <div>{title}</div>
           </AlertTitle>
         )}
         {message && <AlertDescription display="block">{message}</AlertDescription>}

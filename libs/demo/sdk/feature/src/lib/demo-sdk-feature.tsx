@@ -66,24 +66,12 @@ export function DemoSdkFeature() {
 
   if (!keypairs || !keypairs?.length || !keypair) {
     return (
-      <AdminUiAlert
-        cyData="card-sdk-warning"
-        status="warning"
-        title="No Keypairs configured."
-        message="Add a new one on the Keypair page."
-      />
+      <AdminUiAlert status="warning" title="No Keypairs configured." message="Add a new one on the Keypair page." />
     )
   }
 
   if (!servers || !servers?.length) {
-    return (
-      <AdminUiAlert
-        cyData="card-sdk-warning"
-        status="warning"
-        title="No Servers configured."
-        message="Add a new one on the Servers page."
-      />
-    )
+    return <AdminUiAlert status="warning" title="No Servers configured." message="Add a new one on the Servers page." />
   }
 
   return (
