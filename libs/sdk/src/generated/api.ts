@@ -298,133 +298,133 @@ export interface AppTransaction {
    * @type {string}
    * @memberof AppTransaction
    */
-  id: string
+  id: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  createdAt: string
+  createdAt: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  updatedAt: string
+  updatedAt: string | null
   /**
    *
    * @type {number}
    * @memberof AppTransaction
    */
-  amount: number
+  amount: number | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  destination: string
+  destination: string | null
   /**
    *
    * @type {Array<AppTransactionError>}
    * @memberof AppTransaction
    */
-  errors: Array<AppTransactionError>
+  errors: Array<AppTransactionError> | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  explorerUrl: string
+  explorerUrl: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  feePayer: string
+  feePayer: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  mint: string
+  mint: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  referenceId: string
+  referenceId: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  referenceType: string
+  referenceType: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  signature: string
+  signature: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  solanaFinalized: string
+  solanaFinalized: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  solanaCommitted: string
+  solanaCommitted: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  solanaStart: string
+  solanaStart: string | null
   /**
    *
    * @type {object}
    * @memberof AppTransaction
    */
-  solanaTransaction: object
+  solanaTransaction: object | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  source: string
+  source: string | null
   /**
    *
    * @type {object}
    * @memberof AppTransaction
    */
-  status: object
+  status: object | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  webhookEventStart: string
+  webhookEventStart: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  webhookEventEnd: string
+  webhookEventEnd: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  webhookVerifyStart: string
+  webhookVerifyStart: string | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  webhookVerifyEnd: string
+  webhookVerifyEnd: string | null
 }
 /**
  *
