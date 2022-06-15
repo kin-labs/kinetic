@@ -1,13 +1,13 @@
 import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
-import { MogamiSdk } from '@kin-kinetic/sdk'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import React, { useState } from 'react'
 import { Button, Stack } from '@chakra-ui/react'
 
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
+export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
   const [result, setResult] = useState<unknown>(null)
 
   if (!keypair.secretKey) {

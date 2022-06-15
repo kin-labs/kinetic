@@ -32,7 +32,7 @@
       "title": "Kinetic Demo App",
       "tooltip": "Kinetic Demo App",
       "type": "link",
-      "url": "https://mogami.pages.dev"
+      "url": "https://kinetic.pages.dev"
     },
     {
       "asDropdown": false,
@@ -146,7 +146,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_transaction_make_transfer_solana_committed_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_make_transfer_solana_committed_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -227,7 +227,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_transaction_make_transfer_solana_confirmed_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_make_transfer_solana_confirmed_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -308,7 +308,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_transaction_make_transfer_solana_finalized_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_make_transfer_solana_finalized_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -389,7 +389,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_transaction_make_transfer_solana_error_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_make_transfer_solana_error_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -484,7 +484,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_app_get_app_config_success_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_app_get_app_config_success_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -565,7 +565,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_app_get_app_config_error_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_app_get_app_config_error_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -660,7 +660,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_app_get_app_config_success_counter_total{appKey=~\".+\"}[1m])",
+          "expr": "rate(kinetic_api_app_get_app_config_success_counter_total{appKey=~\".+\"}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -741,7 +741,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_app_get_app_config_error_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_app_get_app_config_error_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -836,7 +836,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_core_get_app_by_environment_index_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_core_get_app_by_environment_index_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -931,7 +931,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mogami_api_transaction_make_transfer_request_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_make_transfer_request_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -944,7 +944,7 @@
   "refresh": "5s",
   "schemaVersion": 30,
   "style": "dark",
-  "tags": ["mogami", "mogami-api"],
+  "tags": ["kinetic", "kinetic-api"],
   "templating": {
     "list": []
   },

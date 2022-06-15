@@ -1,10 +1,10 @@
 import { Button, Input, Stack } from '@chakra-ui/react'
-import { MogamiSdk } from '@kin-kinetic/sdk'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import React, { ChangeEvent, useState } from 'react'
 import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
+export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [value, setValue] = useState<string>(keypair.publicKey)
   const getResult = () => {

@@ -1,7 +1,7 @@
 import { Stack } from '@chakra-ui/react'
 import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
-import { MogamiSdk } from '@kin-kinetic/sdk'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import React from 'react'
 
 import { SdkControlPanelAccountBalance } from './sdk-control-panel-account-balance'
@@ -13,7 +13,7 @@ import { SdkControlPanelMakePayment } from './sdk-control-panel-make-payment'
 import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts'
 import { SdkControlPanelMakePaymentBatch } from './sdk-control-panel-make-payment-batch'
 
-export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: MogamiSdk }) {
+export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
   return (
     <Stack spacing={6}>
       <AdminUiAlert status="success" title="SDK Configured" message={`The SDK is connected to ${sdk.endpoint}`} />

@@ -2,7 +2,7 @@ import { Button, Stack, Text } from '@chakra-ui/react'
 import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { demoServerDb, DemoServerEntity } from '@kin-kinetic/demo/server/data-access'
 import { ServerCreateModal, ServerDetailsModal, ServerGrid } from '@kin-kinetic/demo/server/ui'
-import { MogamiSdkEndpoint, parseMogamiSdkEndpoint } from '@kin-kinetic/sdk'
+import { KineticSdkEndpoint, parseKineticSdkEndpoint } from '@kin-kinetic/sdk'
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useState } from 'react'
 
@@ -19,9 +19,9 @@ export function DemoServerFeature() {
     setServerDetailsVisible(true)
   }
 
-  const createServer = (endpoint: MogamiSdkEndpoint) => {
+  const createServer = (endpoint: KineticSdkEndpoint) => {
     const environment = endpoint.includes('mainnet') ? 'mainnet' : 'devnet'
-    const url = parseMogamiSdkEndpoint(endpoint)
+    const url = parseKineticSdkEndpoint(endpoint)
     const { host } = new URL(url)
     demoServerDb.server.add({ id: host, name: host, endpoint, environment })
     setServerCreateVisible(false)

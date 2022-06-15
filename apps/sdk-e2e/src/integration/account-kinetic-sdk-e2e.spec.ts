@@ -1,14 +1,14 @@
-import { MogamiSdk } from '@kin-kinetic/sdk'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import { Keypair } from '@kin-kinetic/keypair'
 import { daveKeypair, aliceKeypair } from './fixtures'
 import { AppTransactionStatus } from '@prisma/client'
 
-describe('MogamiSdk (e2e) - Account', () => {
-  let sdk: MogamiSdk
+describe('KineticSdk (e2e) - Account', () => {
+  let sdk: KineticSdk
   const defaultMint = process.env.DEFAULT_MINT_PUBLIC_KEY
 
   beforeEach(async () => {
-    sdk = await MogamiSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
+    sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
   })
 
   it('should get account balance', async () => {

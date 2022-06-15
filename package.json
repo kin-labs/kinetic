@@ -1,5 +1,5 @@
 {
-  "name": "mogami",
+  "name": "kinetic",
   "version": "1.0.0-beta.9",
   "license": "MIT",
   "scripts": {
@@ -17,9 +17,9 @@
     "dev:services": "docker compose up",
     "dev:services:postgres": "docker compose up postgres",
     "dev:services:solana": "docker compose up solana",
-    "docker:build": "docker build . -t ghcr.io/kin-labs/mogami",
-    "docker:push": "docker push ghcr.io/kin-labs/mogami",
-    "docker:run": "docker run -it -p 8000:3000 ghcr.io/kin-labs/mogami",
+    "docker:build": "docker build . -t ghcr.io/kin-labs/kinetic",
+    "docker:push": "docker push ghcr.io/kin-labs/kinetic",
+    "docker:run": "docker run -it -p 8000:3000 ghcr.io/kin-labs/kinetic",
     "format": "nx format:write",
     "format:check": "nx format:check",
     "format:write": "nx format:write",

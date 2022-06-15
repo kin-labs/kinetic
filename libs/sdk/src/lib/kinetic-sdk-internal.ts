@@ -15,7 +15,7 @@ import {
   TransactionApi,
 } from '../generated'
 import {
-  parseMogamiSdkEndpoint,
+  parseKineticSdkEndpoint,
   serializeCreateAccountTransaction,
   serializeMakeTransferBatchTransactions,
   serializeMakeTransferTransaction,
@@ -26,12 +26,12 @@ import {
   GetHistoryOptions,
   MakeTransferBatchOptions,
   MakeTransferOptions,
-  MogamiSdkConfigParsed,
-  MogamiSdkEnvironment,
+  KineticSdkConfigParsed,
+  KineticSdkEnvironment,
   RequestAirdropOptions,
 } from './interfaces'
 
-export class MogamiSdkInternal {
+export class KineticSdkInternal {
   private readonly accountApi: AccountApi
   private readonly airdropApi: AirdropApi
   private readonly appApi: AppApi
@@ -40,9 +40,9 @@ export class MogamiSdkInternal {
 
   appConfig?: AppConfig
 
-  constructor(readonly sdkConfig: MogamiSdkConfigParsed) {
+  constructor(readonly sdkConfig: KineticSdkConfigParsed) {
     // Create the API Configuration
-    const apiConfig = new Configuration({ basePath: parseMogamiSdkEndpoint(sdkConfig.endpoint) })
+    const apiConfig = new Configuration({ basePath: parseKineticSdkEndpoint(sdkConfig.endpoint) })
 
     // Configure the APIs
     this.accountApi = new AccountApi(apiConfig)
@@ -91,7 +91,7 @@ export class MogamiSdkInternal {
     return Promise.resolve(res.data)
   }
 
-  async getAppConfig(environment: MogamiSdkEnvironment, index: number) {
+  async getAppConfig(environment: KineticSdkEnvironment, index: number) {
     const res = await this.appApi.getAppConfig(environment, index)
     this.appConfig = res.data
     return this.appConfig

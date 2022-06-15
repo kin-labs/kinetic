@@ -1,11 +1,11 @@
-import { MogamiSdk } from '@kin-kinetic/sdk'
+import { KineticSdk } from '@kin-kinetic/sdk'
 
-describe('MogamiSdk (e2e)', () => {
-  let sdk: MogamiSdk
+describe('KineticSdk (e2e)', () => {
+  let sdk: KineticSdk
   const defaultMint = process.env.DEFAULT_MINT_PUBLIC_KEY
 
   beforeEach(async () => {
-    sdk = await MogamiSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
+    sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
   })
 
   it('should get App Config', () => {

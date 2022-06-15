@@ -11,7 +11,7 @@ services:
     volumes:
       - ./tmp/postgres:/var/lib/postgresql/data
   solana:
-    image: ghcr.io/kin-labs/mogami-solana-network
+    image: ghcr.io/kin-labs/kinetic-solana-network
     ports:
       - '8899:8899'
       - '8900:8900'

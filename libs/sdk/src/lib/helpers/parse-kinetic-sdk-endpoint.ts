@@ -1,11 +1,11 @@
-import { MogamiSdkEndpoint } from '../interfaces'
+import { KineticSdkEndpoint } from '../interfaces'
 
 /**
  * This method accepts one of the existing hosts (mainnet | devnet ) or the URL of a Kinetic API.
- * @param {MogamiSdkEndpoint} endpoint
+ * @param {KineticSdkEndpoint} endpoint
  * @returns {string}
  */
-export function parseMogamiSdkEndpoint(endpoint: MogamiSdkEndpoint): string {
+export function parseKineticSdkEndpoint(endpoint: KineticSdkEndpoint): string {
   switch (endpoint) {
     case 'devnet':
       return 'https://devnet.kinetic.kin.org'

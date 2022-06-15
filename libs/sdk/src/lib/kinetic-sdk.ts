@@ -1,27 +1,27 @@
-import { Solana } from '@mogami/solana'
+import { Solana } from '@kin-kinetic/solana'
 import { Cluster, clusterApiUrl } from '@solana/web3.js'
 import { AppTransaction } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
-import { parseMogamiSdkConfig } from './helpers/parse-mogami-sdk-config'
+import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
 import {
   CreateAccountOptions,
   GetBalanceOptions,
   GetHistoryOptions,
+  KineticSdkConfig,
+  KineticSdkConfigParsed,
   MakeTransferBatchOptions,
   MakeTransferOptions,
-  MogamiSdkConfig,
-  MogamiSdkConfigParsed,
   RequestAirdropOptions,
 } from './interfaces'
-import { MogamiSdkInternal } from './mogami-sdk-internal'
+import { KineticSdkInternal } from './kinetic-sdk-internal'
 
-export class MogamiSdk {
+export class KineticSdk {
   solana: Solana | undefined
 
-  private readonly internal: MogamiSdkInternal
+  private readonly internal: KineticSdkInternal
 
-  constructor(readonly sdkConfig: MogamiSdkConfigParsed) {
-    this.internal = new MogamiSdkInternal(sdkConfig)
+  constructor(readonly sdkConfig: KineticSdkConfigParsed) {
+    this.internal = new KineticSdkInternal(sdkConfig)
     this.sdkConfig.solanaRpcEndpoint = sdkConfig.solanaRpcEndpoint
       ? clusterApiUrl(getSolanaRpcEndpoint(sdkConfig.solanaRpcEndpoint) as Cluster)
       : getSolanaRpcEndpoint(sdkConfig.endpoint)
@@ -79,7 +79,7 @@ export class MogamiSdk {
       const { app } = await this.internal.getAppConfig(this.sdkConfig.environment, this.sdkConfig.index)
       this.solana = new Solana(this.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
       this.sdkConfig?.logger?.log(
-        `MogamiSdk: endpoint '${this.sdkConfig.endpoint}', environment '${this.sdkConfig.environment}', index: ${app.index}`,
+        `KineticSdk: endpoint '${this.sdkConfig.endpoint}', environment '${this.sdkConfig.environment}', index: ${app.index}`,
       )
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
@@ -87,8 +87,8 @@ export class MogamiSdk {
     }
   }
 
-  static async setup(config: MogamiSdkConfig): Promise<MogamiSdk> {
-    const sdk = new MogamiSdk(parseMogamiSdkConfig(config))
+  static async setup(config: KineticSdkConfig): Promise<KineticSdk> {
+    const sdk = new KineticSdk(parseKineticSdkConfig(config))
     try {
       await sdk.init().then(() => config.logger?.log(`SDK Setup done.`))
       return sdk

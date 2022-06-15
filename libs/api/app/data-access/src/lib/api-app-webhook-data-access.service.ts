@@ -153,7 +153,8 @@ export class ApiAppWebhookDataAccessService {
   private getHeaders = (appEnv: AppEnv, options: WebhookOptions) => ({
     ...options.headers,
     'content-type': 'application/json',
-    'mogami-app-index': appEnv.app?.index,
-    'mogami-webhook-type': options.type,
+    'kinetic-app-env': appEnv.name,
+    'kinetic-app-index': appEnv.app?.index,
+    'kinetic-webhook-type': options.type,
   })
 }

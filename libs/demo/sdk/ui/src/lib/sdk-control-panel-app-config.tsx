@@ -1,9 +1,9 @@
-import { MogamiSdk } from '@kin-kinetic/sdk'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import React, { useState } from 'react'
 import { Button, Stack } from '@chakra-ui/react'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
-export function SdkControlPanelAppConfig({ sdk }: { sdk: MogamiSdk }) {
+export function SdkControlPanelAppConfig({ sdk }: { sdk: KineticSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const getResult = () => {
     setResult(sdk.config())
