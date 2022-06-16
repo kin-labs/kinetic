@@ -1,4 +1,4 @@
-import { AppEnv } from '@kin-kinetic/api/app/data-access'
+import { AppEnv, AppMint } from '@kin-kinetic/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
 import { ApiWalletAdminDataAccessService, Wallet, WalletBalance } from '@kin-kinetic/api/wallet/data-access'
@@ -33,5 +33,10 @@ export class ApiWalletAdminFeatureResolver {
   @ResolveField(() => [AppEnv], { nullable: true })
   appEnvs(@Parent() wallet: Wallet) {
     return wallet.appEnvs
+  }
+
+  @ResolveField(() => [AppMint], { nullable: true })
+  appMints(@Parent() wallet: Wallet) {
+    return wallet.appMints
   }
 }

@@ -451,6 +451,7 @@ export type MutationUserAppUserUpdateRoleArgs = {
 }
 
 export type MutationUserDeleteWalletArgs = {
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
@@ -557,6 +558,7 @@ export type QueryUserAppTransactionsArgs = {
 }
 
 export type QueryUserWalletArgs = {
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
@@ -574,6 +576,10 @@ export type QueryUserWalletBalanceArgs = {
 export type QueryUserWalletBalancesArgs = {
   appEnvId: Scalars['String']
   walletId: Scalars['String']
+}
+
+export type QueryUserWalletsArgs = {
+  appEnvId: Scalars['String']
 }
 
 export type User = {
@@ -621,6 +627,7 @@ export type UserUpdateInput = {
 export type Wallet = {
   __typename?: 'Wallet'
   appEnvs?: Maybe<Array<AppEnv>>
+  appMints?: Maybe<Array<AppMint>>
   balances?: Maybe<Array<WalletBalance>>
   createdAt?: Maybe<Scalars['DateTime']>
   id: Scalars['String']
@@ -1369,20 +1376,24 @@ export const UserImportWallet = gql`
   ${WalletDetails}
 `
 export const UserDeleteWallet = gql`
-  mutation UserDeleteWallet($walletId: String!) {
-    deleted: userDeleteWallet(walletId: $walletId) {
+  mutation UserDeleteWallet($appEnvId: String!, $walletId: String!) {
+    deleted: userDeleteWallet(appEnvId: $appEnvId, walletId: $walletId) {
       ...WalletDetails
     }
   }
   ${WalletDetails}
 `
 export const UserWallet = gql`
-  query UserWallet($walletId: String!) {
-    item: userWallet(walletId: $walletId) {
+  query UserWallet($appEnvId: String!, $walletId: String!) {
+    item: userWallet(appEnvId: $appEnvId, walletId: $walletId) {
       ...WalletDetails
+      appMints {
+        ...AppMintDetails
+      }
     }
   }
   ${WalletDetails}
+  ${AppMintDetails}
 `
 export const UserWalletAirdrop = gql`
   query UserWalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!) {
@@ -1409,12 +1420,16 @@ export const UserWalletBalances = gql`
   ${WalletBalanceDetails}
 `
 export const UserWallets = gql`
-  query UserWallets {
-    items: userWallets {
+  query UserWallets($appEnvId: String!) {
+    items: userWallets(appEnvId: $appEnvId) {
       ...WalletDetails
+      appMints {
+        ...AppMintDetails
+      }
     }
   }
   ${WalletDetails}
+  ${AppMintDetails}
 `
 export type AdminCreateAppMutationVariables = Exact<{
   input: AppCreateInput
@@ -4275,6 +4290,7 @@ export type UserImportWalletMutation = {
 }
 
 export type UserDeleteWalletMutationVariables = Exact<{
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
@@ -4290,6 +4306,7 @@ export type UserDeleteWalletMutation = {
 }
 
 export type UserWalletQueryVariables = Exact<{
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
@@ -4301,6 +4318,36 @@ export type UserWalletQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    appMints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
+    }> | null
   } | null
 }
 
@@ -4349,7 +4396,9 @@ export type UserWalletBalancesQuery = {
   }> | null
 }
 
-export type UserWalletsQueryVariables = Exact<{ [key: string]: never }>
+export type UserWalletsQueryVariables = Exact<{
+  appEnvId: Scalars['String']
+}>
 
 export type UserWalletsQuery = {
   __typename?: 'Query'
@@ -4359,6 +4408,36 @@ export type UserWalletsQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    appMints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
+    }> | null
   }> | null
 }
 

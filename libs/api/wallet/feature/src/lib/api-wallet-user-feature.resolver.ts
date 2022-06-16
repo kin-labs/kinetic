@@ -25,13 +25,13 @@ export class ApiWalletUserFeatureResolver {
   }
 
   @Mutation(() => Wallet, { nullable: true })
-  userDeleteWallet(@CtxUser() user: User, @Args('walletId') walletId: string) {
-    return this.service.userDeleteWallet(user.id, walletId)
+  userDeleteWallet(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('walletId') walletId: string) {
+    return this.service.userDeleteWallet(user.id, appEnvId, walletId)
   }
 
   @Query(() => Wallet, { nullable: true })
-  userWallet(@CtxUser() user: User, @Args('walletId') walletId: string) {
-    return this.service.userWallet(user.id, walletId)
+  userWallet(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('walletId') walletId: string) {
+    return this.service.userWallet(user.id, appEnvId, walletId)
   }
 
   @Query(() => WalletAirdropResponse, { nullable: true })
@@ -55,7 +55,7 @@ export class ApiWalletUserFeatureResolver {
   }
 
   @Query(() => [Wallet], { nullable: true })
-  userWallets(@CtxUser() user: User) {
-    return this.service.userWallets(user.id)
+  userWallets(@CtxUser() user: User, @Args('appEnvId') appEnvId: string) {
+    return this.service.userWallets(user.id, appEnvId)
   }
 }

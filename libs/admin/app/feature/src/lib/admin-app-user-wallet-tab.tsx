@@ -14,7 +14,7 @@ export function AdminAppUserWalletTab({
   walletId: string
 }) {
   const toast = useToast()
-  const [{ data, error, fetching }] = useUserWalletQuery({ variables: { walletId } })
+  const [{ data, error, fetching }] = useUserWalletQuery({ variables: { appEnvId, walletId } })
 
   if (fetching) {
     return <AdminUiLoader />

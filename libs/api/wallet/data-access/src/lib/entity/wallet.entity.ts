@@ -15,4 +15,6 @@ export class Wallet {
   balances?: WalletBalance[]
   @HideField()
   appEnvs?: any
+  @HideField()
+  appMints?: any
 }

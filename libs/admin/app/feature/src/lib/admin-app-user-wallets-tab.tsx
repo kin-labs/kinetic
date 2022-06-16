@@ -1,17 +1,18 @@
-import { Alert, Box, Button, Flex, Stack, useToast } from '@chakra-ui/react'
+import { Alert, Box, Button, Flex, SimpleGrid, Stack, useToast } from '@chakra-ui/react'
 import { AdminAppUiWallet } from '@kin-kinetic/admin/app/ui'
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import {
   useUserAppEnvQuery,
   useUserGenerateWalletMutation,
   useUserImportWalletMutation,
+  useUserWalletsQuery,
   Wallet,
 } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUserWalletsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
   const toast = useToast()
-  const [{ data, fetching }] = useUserAppEnvQuery({ variables: { appId, appEnvId } })
+  const [{ data, error, fetching }] = useUserWalletsQuery({ variables: { appEnvId } })
   const [, generateWalletMutation] = useUserGenerateWalletMutation()
   const [, importWalletMutation] = useUserImportWalletMutation()
 
@@ -28,10 +29,14 @@ export function AdminAppUserWalletsTab({ appId, appEnvId }: { appId: string; app
       toast({ status: 'success', title: 'Wallet imported' })
     })
   }
+  if (error) {
+    toast({ status: 'error', title: 'Something went wrong', description: `${error}` })
+  }
+
   if (fetching) {
     return <AdminUiLoader />
   }
-  const wallets = data?.item?.wallets || []
+  const wallets = data?.items || []
   return (
     <Stack direction="column" spacing={6}>
       <Flex>
@@ -40,19 +45,15 @@ export function AdminAppUserWalletsTab({ appId, appEnvId }: { appId: string; app
         </Button>
         <Button onClick={importWallet}>Import Wallet</Button>
       </Flex>
-      {wallets?.length ? (
-        wallets.map((wallet: Wallet) => (
-          <Box key={wallet.id}>
-            {data?.item?.id ? (
-              <Stack direction="column" spacing={6}>
-                <AdminAppUiWallet appId={appId} appEnvId={data.item.id} wallet={wallet} />
-              </Stack>
-            ) : null}
-          </Box>
-        ))
-      ) : (
-        <Alert>No Wallets Found</Alert>
-      )}
+      <SimpleGrid columns={2} gap={6}>
+        {wallets?.length ? (
+          wallets.map((wallet: Wallet) => (
+            <AdminAppUiWallet key={wallet.id} appId={appId} appEnvId={appEnvId} wallet={wallet} />
+          ))
+        ) : (
+          <Alert>No Wallets Found</Alert>
+        )}
+      </SimpleGrid>
     </Stack>
   )
 }

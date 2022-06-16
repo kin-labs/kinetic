@@ -68,15 +68,18 @@ mutation UserImportWallet($appEnvId: String!, $secretKey: String!) {
   }
 }
 
-mutation UserDeleteWallet($walletId: String!) {
-  deleted: userDeleteWallet(walletId: $walletId) {
+mutation UserDeleteWallet($appEnvId: String!, $walletId: String!) {
+  deleted: userDeleteWallet(appEnvId: $appEnvId, walletId: $walletId) {
     ...WalletDetails
   }
 }
 
-query UserWallet($walletId: String!) {
-  item: userWallet(walletId: $walletId) {
+query UserWallet($appEnvId: String!, $walletId: String!) {
+  item: userWallet(appEnvId: $appEnvId, walletId: $walletId) {
     ...WalletDetails
+    appMints {
+      ...AppMintDetails
+    }
   }
 }
 
@@ -98,8 +101,11 @@ query UserWalletBalances($appEnvId: String!, $walletId: String!) {
   }
 }
 
-query UserWallets {
-  items: userWallets {
+query UserWallets($appEnvId: String!) {
+  items: userWallets(appEnvId: $appEnvId) {
     ...WalletDetails
+    appMints {
+      ...AppMintDetails
+    }
   }
 }

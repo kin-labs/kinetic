@@ -34,8 +34,8 @@ export class ApiWalletUserDataAccessService {
     }
   }
 
-  async userDeleteWallet(userId: string, walletId: string) {
-    const wallet = await this.userWallet(userId, walletId)
+  async userDeleteWallet(userId: string, appEnvId: string, walletId: string) {
+    const wallet = await this.userWallet(userId, appEnvId, walletId)
     if (wallet.appEnvs?.length) {
       throw new BadRequestException(`You can't delete a wallet that has environments`)
     }
@@ -43,8 +43,8 @@ export class ApiWalletUserDataAccessService {
   }
 
   async userGenerateWallet(userId: string, appEnvId: string) {
-    const app = await this.data.appEnv.findUnique({ where: { id: appEnvId } }).app()
-    await this.data.ensureAppOwner(userId, app.id)
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    await this.data.ensureAppOwner(userId, appEnv.app.id)
     const { publicKey, secretKey } = Keypair.random()
 
     return this.data.wallet.create({
@@ -54,8 +54,8 @@ export class ApiWalletUserDataAccessService {
   }
 
   async userImportWallet(userId: string, appEnvId: string, secret: string) {
-    const app = await this.data.appEnv.findUnique({ where: { id: appEnvId } }).app()
-    await this.data.ensureAppOwner(userId, app.id)
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    await this.data.ensureAppOwner(userId, appEnv.app.id)
 
     try {
       const { publicKey, secretKey } = Keypair.fromByteArray(JSON.parse(secret))
@@ -66,9 +66,16 @@ export class ApiWalletUserDataAccessService {
     }
   }
 
-  async userWallet(userId: string, walletId: string) {
-    await this.ensureWalletById(userId, walletId)
-    return this.data.wallet.findUnique({ where: { id: walletId }, include: { appEnvs: true } })
+  async userWallet(userId: string, appEnvId: string, walletId: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    await this.data.ensureAppUser(userId, appEnv.app.id)
+    await this.ensureWalletById(walletId)
+    const wallet = await this.data.wallet.findUnique({
+      where: { id: walletId },
+      include: { appEnvs: true, appMints: { include: { mint: true } } },
+    })
+    delete wallet.secretKey
+    return wallet
   }
 
   async userWalletAirdrop(
@@ -77,7 +84,7 @@ export class ApiWalletUserDataAccessService {
     walletId: string,
     amount: number,
   ): Promise<WalletAirdropResponse> {
-    const wallet = await this.ensureWalletById(userId, walletId)
+    const wallet = await this.userWallet(userId, appEnvId, walletId)
     const appEnv = await this.data.getAppEnvById(appEnvId)
     const solana = await this.data.getSolanaConnection(appEnv.name, appEnv.app.index)
     const floatAmount = parseFloat(amount?.toString())
@@ -89,7 +96,7 @@ export class ApiWalletUserDataAccessService {
   }
 
   async userWalletBalance(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance> {
-    const wallet = await this.ensureWalletById(userId, walletId)
+    const wallet = await this.userWallet(userId, appEnvId, walletId)
     const appEnv = await this.data.getAppEnvById(appEnvId)
     await this.data.ensureAppUser(userId, appEnv.app.id)
     const solana = await this.data.getSolanaConnection(appEnv.name, appEnv.app.index)
@@ -100,20 +107,32 @@ export class ApiWalletUserDataAccessService {
   }
 
   async userWalletBalances(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance[]> {
-    const wallet = await this.ensureWalletById(userId, walletId)
+    const wallet = await this.userWallet(userId, appEnvId, walletId)
     return this.data.walletBalance.findMany({
       where: { appEnvId, walletId: wallet.id },
       orderBy: { createdAt: 'desc' },
     })
   }
 
-  async userWallets(userId: string) {
-    await this.data.ensureAdminUser(userId)
-    return this.data.wallet.findMany()
+  async userWallets(userId: string, appEnvId: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    await this.data.ensureAppUser(userId, appEnv.app.id)
+    const wallets = await this.data.wallet.findMany({
+      where: { appEnvs: { some: { id: appEnvId } } },
+      include: {
+        appMints: {
+          include: { mint: true },
+        },
+      },
+    })
+
+    return wallets.map((wallet) => {
+      delete wallet.secretKey
+      return wallet
+    })
   }
 
-  private async ensureWalletById(userId: string, walletId: string) {
-    await this.data.ensureAdminUser(userId)
+  private async ensureWalletById(walletId: string) {
     const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
       throw new NotFoundException(`Wallet with id ${walletId} does not exist.`)
