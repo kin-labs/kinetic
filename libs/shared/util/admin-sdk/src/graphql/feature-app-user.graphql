@@ -97,18 +97,6 @@ query UserAppTransactions($appId: String!, $appEnvId: String!, $input: AppTransa
   }
 }
 
-query UserAppWebhook($appId: String!, $appWebhookId: String!) {
-  item: userAppWebhook(appId: $appId, appWebhookId: $appWebhookId) {
-    ...AppWebhookDetails
-  }
-}
-
-query UserAppWebhooks($appId: String!, $appEnvId: String!) {
-  items: userAppWebhooks(appId: $appId, appEnvId: $appEnvId) {
-    ...AppWebhookDetails
-  }
-}
-
 query UserApps {
   items: userApps {
     ...AppDetails

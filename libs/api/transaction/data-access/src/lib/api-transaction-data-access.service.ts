@@ -126,7 +126,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     if (appEnv.webhookVerifyEnabled && appEnv.webhookVerifyUrl) {
       appTransaction.webhookVerifyStart = new Date()
       try {
-        await this.sendVerifyWebhook(appEnv, appTransaction)
+        await this.sendVerifyWebhook(appEnv, appTransaction, created.id)
         appTransaction.webhookVerifyEnd = new Date()
         this.makeTransferWebhookVerifySuccessCounter.add(1, { appKey })
       } catch (err) {
@@ -136,7 +136,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
           errors: {
-            create: parseError(err, AppTransactionErrorType.WebhookFailed),
+            create: parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
           },
         })
       }
@@ -199,7 +199,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       })
 
       try {
-        await this.sendEventWebhook(appEnv, updated)
+        await this.sendEventWebhook(appEnv, updated, created.id)
         webhookEventEnd = new Date()
         this.makeTransferWebhookEventSuccessCounter.add(1, { appKey })
       } catch (err) {
@@ -209,7 +209,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
           webhookEventEnd,
           status: AppTransactionStatus.Failed,
           errors: {
-            create: parseError(err, AppTransactionErrorType.WebhookFailed),
+            create: parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
           },
         })
       }
@@ -228,12 +228,12 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sendEventWebhook(appEnv: AppEnv, payload: any) {
-    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, payload })
+  sendEventWebhook(appEnv: AppEnv, payload: any, transactionId: string) {
+    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, payload, transactionId })
   }
 
-  sendVerifyWebhook(appEnv: AppEnv, payload: Prisma.AppTransactionUpdateInput) {
-    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, payload })
+  sendVerifyWebhook(appEnv: AppEnv, payload: Prisma.AppTransactionUpdateInput, transactionId) {
+    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, payload, transactionId })
   }
 
   async confirmSignature(

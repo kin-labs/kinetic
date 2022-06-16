@@ -13,6 +13,7 @@ interface WebhookOptions {
   headers?: AxiosRequestHeaders
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any
+  transactionId: string
   type: AppWebhookType
 }
 
@@ -78,11 +79,18 @@ export class ApiAppWebhookDataAccessService {
         return res.send(new Error(`webhookAcceptIncoming is disabled`))
       }
 
+      if (!headers['kinetic-tx-id']) {
+        return res.send(new Error(`Error finding tx-id`))
+      }
+      const appTransactionId = headers['kinetic-tx-id'].toString()
+
+      console.log('appTransactionId, ', appTransactionId)
       // Store the incoming webhook
       const created = await this.data.appWebhook.create({
         data: {
           direction: AppWebhookDirection.Incoming,
           appEnvId: appEnv.id,
+          appTransactionId,
           headers,
           payload,
           type: type === 'event' ? AppWebhookType.Event : AppWebhookType.Verify,
@@ -92,6 +100,7 @@ export class ApiAppWebhookDataAccessService {
       return res.send(created)
     } catch (e) {
       res.statusCode = 400
+
       return res.send(new HttpException(`Something went wrong storing incoming webhook`, HttpStatus.BAD_REQUEST))
     }
   }
@@ -107,6 +116,7 @@ export class ApiAppWebhookDataAccessService {
             this.data.appWebhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
+                appTransaction: { connect: { id: options.transactionId } },
                 direction: AppWebhookDirection.Outgoing,
                 type: options.type,
                 responseError: res.statusText,
@@ -134,6 +144,7 @@ export class ApiAppWebhookDataAccessService {
             this.data.appWebhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
+                appTransaction: { connect: { id: options.transactionId } },
                 direction: AppWebhookDirection.Outgoing,
                 type: options.type,
                 responseError: res.statusText,
@@ -155,6 +166,7 @@ export class ApiAppWebhookDataAccessService {
     'content-type': 'application/json',
     'kinetic-app-env': appEnv.name,
     'kinetic-app-index': appEnv.app?.index,
+    'kinetic-tx-id': options.transactionId,
     'kinetic-webhook-type': options.type,
   })
 }

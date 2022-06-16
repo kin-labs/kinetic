@@ -1,19 +1,4 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Flex,
-  SimpleGrid,
-  Stack,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-} from '@chakra-ui/react'
+import { Alert, Box, Flex, SimpleGrid, Stack, Text } from '@chakra-ui/react'
 import { AppEnv } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Link } from 'react-router-dom'

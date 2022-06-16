@@ -65,7 +65,7 @@ export class ApiAppUserDataAccessService {
     await this.data.ensureAppUser(userId, appId)
     return this.data.appTransaction.findFirst({
       where: { id: appTransactionId, appEnvId },
-      include: { errors: true, appEnv: { include: { cluster: true } } },
+      include: { errors: true, appEnv: { include: { cluster: true } }, webhooks: true },
     })
   }
 
@@ -76,22 +76,6 @@ export class ApiAppUserDataAccessService {
       take: 100,
       orderBy: { createdAt: 'desc' },
       include: { errors: true, appEnv: { include: { cluster: true } } },
-    })
-  }
-
-  async userAppWebhook(userId: string, appId: string, appWebhookId: string) {
-    await this.data.ensureAppUser(userId, appId)
-    return this.data.appWebhook.findUnique({
-      where: { id: appWebhookId },
-    })
-  }
-
-  async userAppWebhooks(userId: string, appId: string, appEnvId: string) {
-    await this.data.ensureAppUser(userId, appId)
-    return this.data.appWebhook.findMany({
-      where: { appEnvId },
-      take: 100,
-      orderBy: { updatedAt: 'desc' },
     })
   }
 

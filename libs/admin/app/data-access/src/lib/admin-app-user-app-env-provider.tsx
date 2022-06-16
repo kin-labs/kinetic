@@ -14,7 +14,6 @@ function UserAppEnvProvider({ baseUrl, appEnv, children }: { baseUrl: string; ch
     { path: `${baseUrl}/overview`, label: 'Overview' },
     { path: `${baseUrl}/transactions`, label: 'Transactions' },
     { path: `${baseUrl}/wallets`, label: 'Wallets' },
-    { path: `${baseUrl}/webhooks`, label: 'Webhooks' },
     { path: `${baseUrl}/settings`, label: 'Settings' },
   ]
   const value = {
