@@ -135,7 +135,7 @@
         "tags": ["account"]
       }
     },
-    "/api/account/history/{environment}/{index}/{accountId}": {
+    "/api/account/history/{environment}/{index}/{accountId}/{mint}": {
       "get": {
         "operationId": "getHistory",
         "summary": "",
@@ -163,6 +163,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "mint",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -183,9 +191,9 @@
         "tags": ["account"]
       }
     },
-    "/api/account/token-accounts/{environment}/{index}/{accountId}": {
+    "/api/account/token-accounts/{environment}/{index}/{accountId}/{mint}": {
       "get": {
-        "operationId": "tokenAccounts",
+        "operationId": "getTokenAccounts",
         "summary": "",
         "parameters": [
           {
@@ -206,6 +214,14 @@
           },
           {
             "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mint",
             "required": true,
             "in": "path",
             "schema": {
@@ -859,7 +875,8 @@
             "type": "string"
           },
           "type": {
-            "type": "object"
+            "type": "string",
+            "enum": ["Custom", "SolanaDevnet", "SolanaMainnet", "SolanaTestnet"]
           }
         },
         "required": ["id", "name", "type"]

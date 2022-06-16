@@ -44,25 +44,27 @@ export class ApiAccountFeatureController {
     return this.service.getBalance(environment, index, accountId)
   }
 
-  @Get('history/:environment/:index/:accountId')
+  @Get('history/:environment/:index/:accountId/:mint')
   @ApiOperation({ operationId: 'getHistory' })
   @ApiResponse({ type: HistoryResponse, isArray: true })
   getHistory(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
     @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
+    @Param('mint', new PublicKeyPipe('mint')) mint: string,
   ) {
-    return this.service.getHistory(environment, index, accountId)
+    return this.service.getHistory(environment, index, accountId, mint)
   }
 
-  @Get('token-accounts/:environment/:index/:accountId')
-  @ApiOperation({ operationId: 'tokenAccounts' })
+  @Get('token-accounts/:environment/:index/:accountId/:mint')
+  @ApiOperation({ operationId: 'getTokenAccounts' })
   @ApiResponse({ type: String, isArray: true })
-  tokenAccounts(
+  getTokenAccounts(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
     @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
+    @Param('mint', new PublicKeyPipe('mint')) mint: string,
   ) {
-    return this.service.getTokenAccounts(environment, index, accountId)
+    return this.service.getTokenAccounts(environment, index, accountId, mint)
   }
 }

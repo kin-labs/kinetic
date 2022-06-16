@@ -35,7 +35,7 @@ describe('KineticSdk (e2e) - Account', () => {
   })
 
   it('should get the tokenAccounts', async () => {
-    const tokenAccounts = await sdk.tokenAccounts(aliceKeypair.publicKey)
+    const tokenAccounts = await sdk.getTokenAccounts({ account: aliceKeypair.publicKey })
     expect(tokenAccounts.data[0]).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
   })
 

@@ -183,11 +183,21 @@ export interface AppConfigCluster {
   name: string
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof AppConfigCluster
    */
-  type: object
+  type: AppConfigClusterTypeEnum
 }
+
+export const AppConfigClusterTypeEnum = {
+  Custom: 'Custom',
+  SolanaDevnet: 'SolanaDevnet',
+  SolanaMainnet: 'SolanaMainnet',
+  SolanaTestnet: 'SolanaTestnet',
+} as const
+
+export type AppConfigClusterTypeEnum = typeof AppConfigClusterTypeEnum[keyof typeof AppConfigClusterTypeEnum]
+
 /**
  *
  * @export
@@ -834,6 +844,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -841,6 +852,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       environment: string,
       index: number,
       accountId: string,
+      mint: string,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'environment' is not null or undefined
@@ -849,10 +861,13 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       assertParamExists('getHistory', 'index', index)
       // verify required parameter 'accountId' is not null or undefined
       assertParamExists('getHistory', 'accountId', accountId)
-      const localVarPath = `/api/account/history/{environment}/{index}/{accountId}`
+      // verify required parameter 'mint' is not null or undefined
+      assertParamExists('getHistory', 'mint', mint)
+      const localVarPath = `/api/account/history/{environment}/{index}/{accountId}/{mint}`
         .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
         .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
+        .replace(`{${'mint'}}`, encodeURIComponent(String(mint)))
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
       let baseOptions
@@ -878,25 +893,30 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    tokenAccounts: async (
+    getTokenAccounts: async (
       environment: string,
       index: number,
       accountId: string,
+      mint: string,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'environment' is not null or undefined
-      assertParamExists('tokenAccounts', 'environment', environment)
+      assertParamExists('getTokenAccounts', 'environment', environment)
       // verify required parameter 'index' is not null or undefined
-      assertParamExists('tokenAccounts', 'index', index)
+      assertParamExists('getTokenAccounts', 'index', index)
       // verify required parameter 'accountId' is not null or undefined
-      assertParamExists('tokenAccounts', 'accountId', accountId)
-      const localVarPath = `/api/account/token-accounts/{environment}/{index}/{accountId}`
+      assertParamExists('getTokenAccounts', 'accountId', accountId)
+      // verify required parameter 'mint' is not null or undefined
+      assertParamExists('getTokenAccounts', 'mint', mint)
+      const localVarPath = `/api/account/token-accounts/{environment}/{index}/{accountId}/{mint}`
         .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
         .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
+        .replace(`{${'mint'}}`, encodeURIComponent(String(mint)))
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
       let baseOptions
@@ -984,6 +1004,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -991,9 +1012,10 @@ export const AccountApiFp = function (configuration?: Configuration) {
       environment: string,
       index: number,
       accountId: string,
+      mint: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<HistoryResponse>>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(environment, index, accountId, options)
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(environment, index, accountId, mint, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -1001,16 +1023,24 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async tokenAccounts(
+    async getTokenAccounts(
       environment: string,
       index: number,
       accountId: string,
+      mint: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.tokenAccounts(environment, index, accountId, options)
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getTokenAccounts(
+        environment,
+        index,
+        accountId,
+        mint,
+        options,
+      )
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
   }
@@ -1066,6 +1096,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1073,21 +1104,31 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
       environment: string,
       index: number,
       accountId: string,
+      mint: string,
       options?: any,
     ): AxiosPromise<Array<HistoryResponse>> {
-      return localVarFp.getHistory(environment, index, accountId, options).then((request) => request(axios, basePath))
+      return localVarFp
+        .getHistory(environment, index, accountId, mint, options)
+        .then((request) => request(axios, basePath))
     },
     /**
      *
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    tokenAccounts(environment: string, index: number, accountId: string, options?: any): AxiosPromise<Array<string>> {
+    getTokenAccounts(
+      environment: string,
+      index: number,
+      accountId: string,
+      mint: string,
+      options?: any,
+    ): AxiosPromise<Array<string>> {
       return localVarFp
-        .tokenAccounts(environment, index, accountId, options)
+        .getTokenAccounts(environment, index, accountId, mint, options)
         .then((request) => request(axios, basePath))
     },
   }
@@ -1153,13 +1194,14 @@ export class AccountApi extends BaseAPI {
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
+   * @param {string} mint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApi
    */
-  public getHistory(environment: string, index: number, accountId: string, options?: AxiosRequestConfig) {
+  public getHistory(environment: string, index: number, accountId: string, mint: string, options?: AxiosRequestConfig) {
     return AccountApiFp(this.configuration)
-      .getHistory(environment, index, accountId, options)
+      .getHistory(environment, index, accountId, mint, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -1168,13 +1210,20 @@ export class AccountApi extends BaseAPI {
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
+   * @param {string} mint
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApi
    */
-  public tokenAccounts(environment: string, index: number, accountId: string, options?: AxiosRequestConfig) {
+  public getTokenAccounts(
+    environment: string,
+    index: number,
+    accountId: string,
+    mint: string,
+    options?: AxiosRequestConfig,
+  ) {
     return AccountApiFp(this.configuration)
-      .tokenAccounts(environment, index, accountId, options)
+      .getTokenAccounts(environment, index, accountId, mint, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }

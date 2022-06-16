@@ -6,21 +6,21 @@ import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 
 export async function serializeCreateAccountTransaction({
-  mint,
-  owner,
-  latestBlockhash,
-  feePayer,
   appIndex,
+  latestBlockhash,
+  mintFeePayer,
+  mintPublicKey,
+  owner,
 }: {
-  mint: PublicKeyString
-  owner: Keypair
-  latestBlockhash: string
-  feePayer: PublicKeyString
   appIndex: number
+  latestBlockhash: string
+  mintFeePayer: PublicKeyString
+  mintPublicKey: PublicKeyString
+  owner: Keypair
 }) {
   // Create objects from Response
-  const mintKey = getPublicKey(mint)
-  const feePayerKey = getPublicKey(feePayer)
+  const mintKey = getPublicKey(mintPublicKey)
+  const feePayerKey = getPublicKey(mintFeePayer)
 
   // Create Memo Instruction for KRE Ingestion - Must be Memo Program v1, not v2
   const appIndexMemoInstruction = generateKinMemoInstruction({

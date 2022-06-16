@@ -1,15 +1,18 @@
 import { Button, Stack } from '@chakra-ui/react'
-import { TransactionType } from '@kin-tools/kin-memo'
 import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
-import { KineticSdk } from '@kin-kinetic/sdk'
+import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
 import { Destination } from '@kin-kinetic/solana'
+import { TransactionType } from '@kin-tools/kin-memo'
 import React, { useState } from 'react'
+import { MintSwitcher } from './mint-switcher'
 
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
+  const mints = sdk?.config()?.mints || []
+  const [mint, setMint] = useState<AppConfigMint>(mints[0])
   const [result, setResult] = useState<unknown>(null)
   const destinations: Destination[] = [
     { destination: 'BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y', amount: '42' },
@@ -28,6 +31,7 @@ export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: Dem
     const res = await sdk.makeTransferBatch({
       destinations,
       owner: kp,
+      mint: mint.publicKey,
       type: TransactionType.Spend,
     })
     setResult(res)
@@ -41,6 +45,7 @@ export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: Dem
             Submit Payment Batch
           </Button>
         </div>
+        <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />
       </Stack>
       <SdkControlPanelResult data={result} />
     </Stack>

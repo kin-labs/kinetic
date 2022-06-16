@@ -102,9 +102,9 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       },
       include: { errors: true },
     })
-    const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
+    const mint = appEnv.mints.find(({ mint }) => mint.address === input.mint)
     if (!mint) {
-      this.makeTransferMintNotFoundErrorCounter.add(1, { appKey, mint: input.mint })
+      this.makeTransferMintNotFoundErrorCounter.add(1, { appKey, mint: input.mint.toString() })
       throw new Error(`${appKey}: Can't find mint ${input.mint}`)
     }
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
