@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/admin/ui/identicon/src",
+  "projectType": "library",
+  "tags": ["type:ui", "scope:admin"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/admin/ui/identicon/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/admin/ui/identicon"],
+      "options": {
+        "jestConfig": "libs/admin/ui/identicon/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
