@@ -57,18 +57,20 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     return solana.getBalance(accountId, mints)
   }
 
-  async getHistory(environment: string, index: number, accountId: PublicKeyString) {
+  async getHistory(environment: string, index: number, accountId: PublicKeyString, mint?: PublicKeyString) {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
+    mint = mint || appEnv.mint.publicKey
 
-    return solana.getTokenHistory(accountId, appEnv.mint.publicKey)
+    return solana.getTokenHistory(accountId, mint.toString())
   }
 
-  async getTokenAccounts(environment: string, index: number, accountId: PublicKeyString) {
+  async getTokenAccounts(environment: string, index: number, accountId: PublicKeyString, mint?: PublicKeyString) {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
+    mint = mint || appEnv.mint.publicKey
 
-    return solana.getTokenAccounts(accountId, appEnv.mint.publicKey)
+    return solana.getTokenAccounts(accountId, mint.toString())
   }
 
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
@@ -81,7 +83,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
       data: { appEnvId: appEnv.id },
       include: { errors: true },
     })
-    const mint = appEnv.mints.find(({ mint }) => mint.symbol === input.mint)
+    const mint = appEnv.mints.find(({ mint }) => mint.address === input.mint)
     if (!mint) {
       this.createAccountErrorMintNotFoundCounter.add(1, { appKey })
       throw new Error(`Can't find mint ${input.mint} in environment ${input.environment} for index ${input.index}`)

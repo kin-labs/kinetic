@@ -17,7 +17,7 @@ export function SdkControlPanelAccountBalance({ keypair, sdk }: { keypair: DemoK
           Get Account Balance
         </Button>
         <Input
-          w="full"
+          w="fit-content"
           value={account}
           onChange={(ev: ChangeEvent<HTMLInputElement>) => setAccount(ev.target.value)}
           placeholder="Enter the accountId (Public Key for the Account owner)"

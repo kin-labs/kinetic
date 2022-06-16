@@ -7,6 +7,7 @@ import {
   CreateAccountOptions,
   GetBalanceOptions,
   GetHistoryOptions,
+  GetTokenAccountsOptions,
   KineticSdkConfig,
   KineticSdkConfigParsed,
   MakeTransferBatchOptions,
@@ -55,6 +56,10 @@ export class KineticSdk {
     return this.internal.getHistory(options)
   }
 
+  getTokenAccounts(options: GetTokenAccountsOptions) {
+    return this.internal.getTokenAccounts(options)
+  }
+
   makeTransfer(options: MakeTransferOptions) {
     return this.internal.makeTransfer(options)
   }
@@ -64,7 +69,8 @@ export class KineticSdk {
   }
 
   tokenAccounts(account: string) {
-    return this.internal.tokenAccounts(account)
+    console.warn(`Deprecated method, please use getTokenAccounts()`)
+    return this.internal.getTokenAccounts({ account })
   }
 
   async init() {
@@ -74,6 +80,7 @@ export class KineticSdk {
       this.sdkConfig?.logger?.log(
         `KineticSdk: endpoint '${this.sdkConfig.endpoint}', environment '${this.sdkConfig.environment}', index: ${app.index}`,
       )
+      return app
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
       throw new Error(`Error initializing Server.`)
@@ -83,11 +90,11 @@ export class KineticSdk {
   static async setup(config: KineticSdkConfig): Promise<KineticSdk> {
     const sdk = new KineticSdk(parseKineticSdkConfig(config))
     try {
-      await sdk.init().then(() => config.logger?.log(`SDK Setup done.`))
+      await sdk.init().then(() => config.logger?.log(`KineticSdk: Setup done.`))
       return sdk
     } catch (e) {
-      config.logger?.error(`Error setting up SDK.`, e)
-      throw new Error(`Error setting up SDK.`)
+      config.logger?.error(`KineticSdk: Error setting up SDK.`, e)
+      throw new Error(`KineticSdk: Error setting up SDK.`)
     }
   }
 }

@@ -84,7 +84,6 @@ export class ApiAppWebhookDataAccessService {
       }
       const appTransactionId = headers['kinetic-tx-id'].toString()
 
-      console.log('appTransactionId, ', appTransactionId)
       // Store the incoming webhook
       const created = await this.data.appWebhook.create({
         data: {

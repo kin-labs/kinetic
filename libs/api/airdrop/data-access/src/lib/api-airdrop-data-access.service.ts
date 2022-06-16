@@ -20,7 +20,7 @@ export class ApiAirdropDataAccessService {
     const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
 
     // Make sure the requested mint is enabled for this app
-    const appMint = appEnv.mints.find(({ mint }) => mint.symbol === request.mint)
+    const appMint = appEnv.mints.find((mint) => mint.mint.address === request.mint)
     if (!appMint) {
       throw new Error(`Can't find mint ${request.mint} in environment ${environment} for index ${index}`)
     }
@@ -34,7 +34,7 @@ export class ApiAirdropDataAccessService {
 
     // Make sure there is an Airdrop configured with a Solana connection
     if (!this.airdrop.get(mint.id)) {
-      this.logger.verbose(`Creating airdrop for ${mint.symbol} on ${environment}`)
+      this.logger.verbose(`Creating airdrop for ${mint.symbol} (${mint.address}) on ${environment}`)
       this.airdrop.set(
         mint.id,
         new Airdrop({
@@ -47,7 +47,7 @@ export class ApiAirdropDataAccessService {
     try {
       const account = request.account
       const amount = request.amount ? request.amount : 1
-      this.logger.verbose(`Requesting airdrop: ${account} ${amount} ${mint.symbol} on ${environment}`)
+      this.logger.verbose(`Requesting airdrop: ${account} ${amount} ${mint.symbol} (${mint.address}) on ${environment}`)
       const result = await this.airdrop.get(mint.id).airdrop(account, amount)
       await this.data.airdrop.create({
         data: {

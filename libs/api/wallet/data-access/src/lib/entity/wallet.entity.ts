@@ -14,5 +14,5 @@ export class Wallet {
   @Field(() => [WalletBalance], { nullable: true })
   balances?: WalletBalance[]
   @HideField()
-  appEnvs?
+  appEnvs?: any
 }

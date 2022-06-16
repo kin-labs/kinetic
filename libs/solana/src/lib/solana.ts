@@ -49,6 +49,7 @@ export class Solana {
         history,
       }
     } catch (error) {
+      console.log(error)
       return error
     }
   }
@@ -69,11 +70,21 @@ export class Solana {
     try {
       const tokens: BalanceToken[] = []
 
-      const tokenAccounts: { mint: string; accounts: string[] }[] = await Promise.all(
+      const tokenAccountResult: PromiseSettledResult<{ mint: string; accounts: string[] }>[] = await Promise.allSettled(
         mints.map((mint) => {
           return this.getTokenAccounts(accountId, mint).then((accounts) => ({ mint, accounts }))
         }),
       )
+      const tokenAccounts = tokenAccountResult
+        .filter((item) => item.status === 'fulfilled')
+        .map((item) => (item as PromiseFulfilledResult<{ mint: string; accounts: string[] }>).value)
+
+      const mintMap: Record<string, string[]> = mints.reduce((acc, curr) => {
+        return {
+          ...acc,
+          [curr]: tokenAccounts.find((ta) => ta.mint === curr)?.accounts || [],
+        }
+      }, {})
 
       for (const { mint, accounts } of tokenAccounts) {
         for (const account of accounts) {
@@ -90,6 +101,7 @@ export class Solana {
 
       return {
         balance: mintBalance[defaultMint] ? mintBalance[defaultMint] : new BigNumber(0),
+        mintMap,
         mints: mintBalance,
         tokens,
       }
@@ -116,7 +128,7 @@ export class Solana {
   }
 
   async getTokenAccounts(account: PublicKeyString, mint: PublicKeyString) {
-    this.config.logger?.log(`Getting token account: ${getPublicKey(account)}`)
+    this.config.logger?.log(`Getting token account: ${getPublicKey(account)} / mint: ${getPublicKey(mint)}`)
     const res = await this.connection.getTokenAccountsByOwner(getPublicKey(account), { mint: getPublicKey(mint) })
     return res.value.map(({ pubkey }) => pubkey.toBase58())
   }
@@ -142,7 +154,7 @@ export class Solana {
   }
 
   async getTokenHistory(account: PublicKeyString, mint: PublicKeyString) {
-    this.config.logger?.log(`Getting token history: ${getPublicKey(account)}`)
+    this.config.logger?.log(`Getting token history: ${getPublicKey(account)} / ${getPublicKey(mint)} `)
     return this.getTokenAccounts(account, mint).then((accounts) => this.getTokenAccountsHistory(accounts))
   }
 

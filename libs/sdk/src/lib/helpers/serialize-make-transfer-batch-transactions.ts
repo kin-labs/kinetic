@@ -10,23 +10,23 @@ import { kinToQuarks } from './kin-to-quarks'
 export async function serializeMakeTransferBatchTransactions({
   appIndex,
   destinations,
-  feePayer,
   latestBlockhash,
-  mint,
+  mintFeePayer,
+  mintPublicKey,
   owner,
   type,
 }: {
   appIndex: number
   destinations: Destination[]
-  feePayer: PublicKeyString
   latestBlockhash: string
-  mint: PublicKeyString
+  mintFeePayer: PublicKeyString
+  mintPublicKey: PublicKeyString
   owner: Keypair
   type: TransactionType
 }) {
   // Create objects from Response
-  const mintKey = getPublicKey(mint)
-  const feePayerKey = getPublicKey(feePayer)
+  const mintKey = getPublicKey(mintPublicKey)
+  const feePayerKey = getPublicKey(mintFeePayer)
 
   // Get TokenAccount from Owner
   const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, owner.solanaPublicKey)

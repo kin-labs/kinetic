@@ -1,10 +1,11 @@
 import { TransactionType } from '@kin-tools/kin-memo'
-import { Commitment } from '@kin-kinetic/solana'
+import { Commitment, PublicKeyString } from '@kin-kinetic/solana'
 import {
   AccountApi,
   AirdropApi,
   AppApi,
   AppConfig,
+  AppConfigMint,
   AppTransaction,
   BalanceResponse,
   Configuration,
@@ -29,6 +30,7 @@ import {
   KineticSdkConfigParsed,
   KineticSdkEnvironment,
   RequestAirdropOptions,
+  GetTokenAccountsOptions,
 } from './interfaces'
 
 export class KineticSdkInternal {
@@ -65,24 +67,25 @@ export class KineticSdkInternal {
     return res.data as BalanceResponse
   }
 
-  async createAccount({ owner }: CreateAccountOptions): Promise<AppTransaction> {
+  async createAccount({ owner, mint }: CreateAccountOptions): Promise<AppTransaction> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    const { mint, feePayer, latestBlockhash } = await this.prepareTransaction()
+    mint = mint || this.appConfig.mint.publicKey
+    const { mintPublicKey, mintFeePayer, latestBlockhash } = await this.prepareTransaction({ mint })
 
     const tx = await serializeCreateAccountTransaction({
-      mint,
-      owner,
-      feePayer,
-      latestBlockhash,
       appIndex: this.appConfig.app.index,
+      latestBlockhash,
+      mintFeePayer,
+      mintPublicKey,
+      owner,
     })
 
     const request: CreateAccountRequest = {
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
-      mint: this.appConfig.mint?.symbol,
+      mint: mint.toString(),
       tx,
     }
 
@@ -97,17 +100,37 @@ export class KineticSdkInternal {
     return this.appConfig
   }
 
-  getHistory({ account }: GetHistoryOptions) {
+  getHistory({ account, mint }: GetHistoryOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    return this.accountApi.getHistory(this.appConfig.environment.name, this.appConfig.app.index, account.toString())
+    mint = mint || this.appConfig.mint.publicKey
+    return this.accountApi.getHistory(
+      this.appConfig.environment.name,
+      this.appConfig.app.index,
+      account.toString(),
+      mint.toString(),
+    )
+  }
+
+  getTokenAccounts({ account, mint }: GetTokenAccountsOptions) {
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    mint = mint || this.appConfig.mint.publicKey
+    return this.accountApi.getTokenAccounts(
+      this.appConfig.environment.name,
+      this.appConfig.app.index,
+      account.toString(),
+      mint.toString(),
+    )
   }
 
   async makeTransfer({
     amount,
     commitment,
     destination,
+    mint,
     owner,
     referenceId,
     referenceType,
@@ -116,16 +139,19 @@ export class KineticSdkInternal {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    const { mint, feePayer, latestBlockhash, lastValidBlockHeight } = await this.prepareTransaction()
+    mint = mint || this.appConfig.mint.publicKey
+    const { mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight } = await this.prepareTransaction({
+      mint,
+    })
 
     const tx = await serializeMakeTransferTransaction({
       amount,
-      destination,
-      mint,
-      owner,
-      latestBlockhash,
-      feePayer,
       appIndex: this.appConfig.app.index,
+      destination,
+      latestBlockhash,
+      mintFeePayer,
+      mintPublicKey,
+      owner,
       type: type || TransactionType.None,
     })
 
@@ -133,7 +159,7 @@ export class KineticSdkInternal {
       commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
-      mint: this.appConfig.mint.symbol,
+      mint: mint.toString(),
       lastValidBlockHeight,
       referenceId: referenceId || null,
       referenceType: referenceType || null,
@@ -148,6 +174,7 @@ export class KineticSdkInternal {
   async makeTransferBatch({
     commitment,
     destinations,
+    mint,
     owner,
     referenceId,
     referenceType,
@@ -162,16 +189,18 @@ export class KineticSdkInternal {
     if (destinations?.length > 15) {
       throw new Error('Maximum number of destinations exceeded')
     }
-
-    const { mint, feePayer, latestBlockhash, lastValidBlockHeight } = await this.prepareTransaction()
+    mint = mint || this.appConfig.mint.publicKey
+    const { mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight } = await this.prepareTransaction({
+      mint,
+    })
 
     const tx = await serializeMakeTransferBatchTransactions({
-      destinations,
-      mint,
-      owner,
-      latestBlockhash,
-      feePayer,
       appIndex: this.appConfig.app.index,
+      destinations,
+      latestBlockhash,
+      mintFeePayer,
+      mintPublicKey,
+      owner,
       type: type || TransactionType.None,
     })
 
@@ -179,7 +208,7 @@ export class KineticSdkInternal {
       commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
-      mint: this.appConfig.mint.symbol,
+      mint: mint.toString(),
       lastValidBlockHeight,
       referenceId: referenceId || null,
       referenceType: referenceType || null,
@@ -191,41 +220,39 @@ export class KineticSdkInternal {
     return Promise.resolve(res.data)
   }
 
-  requestAirdrop({ account, amount }: RequestAirdropOptions) {
+  requestAirdrop({ account, amount, mint }: RequestAirdropOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
+    mint = mint || this.appConfig.mint.publicKey
     return this.airdropApi.requestAirdrop({
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
-      mint: this.appConfig.mint.symbol,
+      mint,
       account: account?.toString(),
       amount,
     })
   }
 
-  tokenAccounts(account: string) {
-    if (!this.appConfig) {
-      throw new Error(`AppConfig not initialized`)
-    }
-    return this.accountApi.tokenAccounts(this.appConfig.environment.name, this.appConfig.app.index, account)
-  }
-
-  private async prepareTransaction(): Promise<{
-    mint: string
-    feePayer: string
+  private async prepareTransaction({ mint }: { mint?: string }): Promise<{
+    mintPublicKey: string
+    mintFeePayer: string
     latestBlockhash: string
     lastValidBlockHeight: number
   }> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-
-    const { publicKey: mint, feePayer } = this.appConfig.mint
+    mint = mint || this.appConfig.mint.publicKey
+    const found = this.appConfig.mints.find((item) => item.publicKey === mint)
+    if (!found) {
+      throw new Error(`Mint not found`)
+    }
+    const { publicKey: mintPublicKey, feePayer: mintFeePayer } = found
     const { blockhash: latestBlockhash, lastValidBlockHeight } = await this.transactionApi
       .getLatestBlockhash(this.appConfig.environment.name, this.appConfig.app.index)
       .then((res) => res.data as LatestBlockhashResponse)
 
-    return { mint, feePayer, latestBlockhash, lastValidBlockHeight }
+    return { mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight }
   }
 }

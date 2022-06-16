@@ -10,24 +10,24 @@ export async function serializeMakeTransferTransaction({
   amount,
   appIndex,
   destination,
-  feePayer,
   latestBlockhash,
-  mint,
+  mintFeePayer,
+  mintPublicKey,
   owner,
   type,
 }: {
   amount: string
   appIndex: number
   destination: PublicKeyString
-  feePayer: PublicKeyString
   latestBlockhash: string
-  mint: PublicKeyString
+  mintFeePayer: PublicKeyString
+  mintPublicKey: PublicKeyString
   owner: Keypair
   type: TransactionType
 }) {
   // Create objects from Response
-  const mintKey = getPublicKey(mint)
-  const feePayerKey = getPublicKey(feePayer)
+  const mintKey = getPublicKey(mintPublicKey)
+  const feePayerKey = getPublicKey(mintFeePayer)
 
   // Get TokenAccount from Owner and Destination
   const [ownerTokenAccount, destinationTokenAccount] = await Promise.all([
