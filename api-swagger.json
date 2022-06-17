@@ -890,11 +890,14 @@
           "name": {
             "type": "string"
           },
+          "explorer": {
+            "type": "string"
+          },
           "cluster": {
             "$ref": "#/components/schemas/AppConfigCluster"
           }
         },
-        "required": ["name", "cluster"]
+        "required": ["name", "explorer", "cluster"]
       },
       "AppConfigMint": {
         "type": "object",

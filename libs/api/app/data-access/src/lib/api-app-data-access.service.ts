@@ -80,6 +80,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
       },
       environment: {
         name: env.name,
+        explorer: env.cluster.explorer,
         cluster: {
           id: env.cluster.id,
           name: env.cluster.name,

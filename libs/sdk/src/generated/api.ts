@@ -212,6 +212,12 @@ export interface AppConfigEnvironment {
   name: string
   /**
    *
+   * @type {string}
+   * @memberof AppConfigEnvironment
+   */
+  explorer: string
+  /**
+   *
    * @type {AppConfigCluster}
    * @memberof AppConfigEnvironment
    */
