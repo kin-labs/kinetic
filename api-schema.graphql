@@ -288,6 +288,9 @@ input LoginInput {
 
 type Mint {
   address: String
+  airdropAmount: Int
+  airdropMax: Int
+  airdropPublicKey: String
   coingeckoId: String
   createdAt: DateTime
   decimals: Int

@@ -55,6 +55,9 @@ fragment MintDetails on Mint {
   createdAt
   updatedAt
   address
+  airdropAmount
+  airdropMax
+  airdropPublicKey
   coingeckoId
   decimals
   default
