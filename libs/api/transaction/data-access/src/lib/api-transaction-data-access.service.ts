@@ -157,7 +157,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
         solanaCommitted: new Date(),
         status: AppTransactionStatus.Failed,
         errors: {
-          create: parseError(error),
+          create: parseError(error, error.type, error.instruction),
         },
       })
     }

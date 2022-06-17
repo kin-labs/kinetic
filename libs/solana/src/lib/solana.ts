@@ -1,7 +1,7 @@
 import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
-import { convertCommitment, getPublicKey, parseEndpoint } from './helpers'
+import { convertCommitment, getPublicKey, parseEndpoint, parseTransactionSimulation, TransactionError } from './helpers'
 import {
   BalanceMintMap,
   BalanceSummary,
@@ -163,9 +163,16 @@ export class Solana {
     return this.connection.requestAirdrop(getPublicKey(account), amount)
   }
 
-  sendRawTransaction(tx: Transaction) {
+  async sendRawTransaction(tx: Transaction) {
+    await this.simulateTransaction(tx)
     this.config.logger?.log(`Send Raw Transaction`)
     return this.connection.sendRawTransaction(tx.serialize())
+  }
+
+  async simulateTransaction(tx: Transaction) {
+    this.config.logger?.log(`Simulate Transaction`)
+    const simulation = await this.connection.simulateTransaction(tx)
+    return parseTransactionSimulation(simulation.value)
   }
 
   async healthCheck() {
