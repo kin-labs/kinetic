@@ -908,10 +908,16 @@
           "airdropMax": {
             "type": "number"
           },
+          "decimals": {
+            "type": "number"
+          },
           "feePayer": {
             "type": "string"
           },
           "logoUrl": {
+            "type": "string"
+          },
+          "name": {
             "type": "string"
           },
           "programId": {
@@ -928,8 +934,10 @@
           "airdrop",
           "airdropAmount",
           "airdropMax",
+          "decimals",
           "feePayer",
           "logoUrl",
+          "name",
           "programId",
           "publicKey",
           "symbol"

@@ -243,6 +243,12 @@ export interface AppConfigMint {
   airdropMax: number
   /**
    *
+   * @type {number}
+   * @memberof AppConfigMint
+   */
+  decimals: number
+  /**
+   *
    * @type {string}
    * @memberof AppConfigMint
    */
@@ -253,6 +259,12 @@ export interface AppConfigMint {
    * @memberof AppConfigMint
    */
   logoUrl: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigMint
+   */
+  name: string
   /**
    *
    * @type {string}

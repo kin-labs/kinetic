@@ -8,9 +8,13 @@ export class AppConfigMint {
   @ApiProperty()
   airdropMax: number
   @ApiProperty()
+  decimals: number
+  @ApiProperty()
   feePayer: string
   @ApiProperty()
   logoUrl: string
+  @ApiProperty()
+  name: string
   @ApiProperty()
   programId: string
   @ApiProperty()

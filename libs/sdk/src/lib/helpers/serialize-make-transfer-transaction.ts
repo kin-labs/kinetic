@@ -1,16 +1,17 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { getPublicKey, PublicKeyString } from '@kin-kinetic/solana'
-import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { Transaction, TransactionInstruction } from '@solana/web3.js'
-import { kinToQuarks } from './kin-to-quarks'
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
+import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { Transaction, TransactionInstruction } from '@solana/web3.js'
+import { addDecimals } from './add-decimals'
 
 export async function serializeMakeTransferTransaction({
   amount,
   appIndex,
   destination,
   latestBlockhash,
+  mintDecimals,
   mintFeePayer,
   mintPublicKey,
   owner,
@@ -20,6 +21,7 @@ export async function serializeMakeTransferTransaction({
   appIndex: number
   destination: PublicKeyString
   latestBlockhash: string
+  mintDecimals: number
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
   owner: Keypair
@@ -35,8 +37,6 @@ export async function serializeMakeTransferTransaction({
     getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
   ])
 
-  const quarks = kinToQuarks(amount)
-
   const appIndexMemoInstruction = generateKinMemoInstruction({
     appIndex,
     type,
@@ -49,7 +49,7 @@ export async function serializeMakeTransferTransaction({
       ownerTokenAccount,
       destinationTokenAccount,
       owner.solanaPublicKey,
-      Number(quarks),
+      addDecimals(amount, mintDecimals).toNumber(),
       [],
       TOKEN_PROGRAM_ID,
     ),

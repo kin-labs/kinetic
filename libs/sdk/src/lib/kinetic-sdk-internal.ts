@@ -1,11 +1,10 @@
+import { Commitment } from '@kin-kinetic/solana'
 import { TransactionType } from '@kin-tools/kin-memo'
-import { Commitment, PublicKeyString } from '@kin-kinetic/solana'
 import {
   AccountApi,
   AirdropApi,
   AppApi,
   AppConfig,
-  AppConfigMint,
   AppTransaction,
   BalanceResponse,
   Configuration,
@@ -25,12 +24,12 @@ import {
   CreateAccountOptions,
   GetBalanceOptions,
   GetHistoryOptions,
-  MakeTransferBatchOptions,
-  MakeTransferOptions,
+  GetTokenAccountsOptions,
   KineticSdkConfigParsed,
   KineticSdkEnvironment,
+  MakeTransferBatchOptions,
+  MakeTransferOptions,
   RequestAirdropOptions,
-  GetTokenAccountsOptions,
 } from './interfaces'
 
 export class KineticSdkInternal {
@@ -140,22 +139,24 @@ export class KineticSdkInternal {
       throw new Error(`AppConfig not initialized`)
     }
     mint = mint || this.appConfig.mint.publicKey
-    const { mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight } = await this.prepareTransaction({
-      mint,
-    })
+    const { mintDecimals, mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight } =
+      await this.prepareTransaction({
+        mint,
+      })
 
     const tx = await serializeMakeTransferTransaction({
       amount,
       appIndex: this.appConfig.app.index,
       destination,
       latestBlockhash,
+      mintDecimals,
       mintFeePayer,
       mintPublicKey,
       owner,
       type: type || TransactionType.None,
     })
 
-    const request: MakeTransferRequest = {
+    return this.makeTransferRequest({
       commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
@@ -164,11 +165,7 @@ export class KineticSdkInternal {
       referenceId: referenceId || null,
       referenceType: referenceType || null,
       tx,
-    }
-
-    const res = await this.transactionApi.makeTransfer(request)
-
-    return Promise.resolve(res.data)
+    })
   }
 
   async makeTransferBatch({
@@ -190,21 +187,23 @@ export class KineticSdkInternal {
       throw new Error('Maximum number of destinations exceeded')
     }
     mint = mint || this.appConfig.mint.publicKey
-    const { mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight } = await this.prepareTransaction({
-      mint,
-    })
+    const { mintDecimals, mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight } =
+      await this.prepareTransaction({
+        mint,
+      })
 
     const tx = await serializeMakeTransferBatchTransactions({
       appIndex: this.appConfig.app.index,
       destinations,
       latestBlockhash,
+      mintDecimals,
       mintFeePayer,
       mintPublicKey,
       owner,
       type: type || TransactionType.None,
     })
 
-    const request: MakeTransferRequest = {
+    return this.makeTransferRequest({
       commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
@@ -213,8 +212,10 @@ export class KineticSdkInternal {
       referenceId: referenceId || null,
       referenceType: referenceType || null,
       tx,
-    }
+    })
+  }
 
+  async makeTransferRequest(request: MakeTransferRequest) {
     const res = await this.transactionApi.makeTransfer(request)
 
     return Promise.resolve(res.data)
@@ -235,8 +236,9 @@ export class KineticSdkInternal {
   }
 
   private async prepareTransaction({ mint }: { mint?: string }): Promise<{
-    mintPublicKey: string
+    mintDecimals: number
     mintFeePayer: string
+    mintPublicKey: string
     latestBlockhash: string
     lastValidBlockHeight: number
   }> {
@@ -248,11 +250,11 @@ export class KineticSdkInternal {
     if (!found) {
       throw new Error(`Mint not found`)
     }
-    const { publicKey: mintPublicKey, feePayer: mintFeePayer } = found
+    const { decimals: mintDecimals, publicKey: mintPublicKey, feePayer: mintFeePayer } = found
     const { blockhash: latestBlockhash, lastValidBlockHeight } = await this.transactionApi
       .getLatestBlockhash(this.appConfig.environment.name, this.appConfig.app.index)
       .then((res) => res.data as LatestBlockhashResponse)
 
-    return { mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight }
+    return { latestBlockhash, lastValidBlockHeight, mintDecimals, mintFeePayer, mintPublicKey }
   }
 }
