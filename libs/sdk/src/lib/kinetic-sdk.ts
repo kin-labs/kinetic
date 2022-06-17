@@ -52,6 +52,10 @@ export class KineticSdk {
     return this.internal.createAccount(options)
   }
 
+  getExplorerUrl(path: string) {
+    return this.internal?.appConfig?.environment?.explorer?.replace(`{path}`, path)
+  }
+
   getHistory(options: GetHistoryOptions) {
     return this.internal.getHistory(options)
   }

@@ -32,8 +32,8 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
     // Create an app environment for each active cluster
     for (const cluster of activeClusters) {
       const enabledMints = cluster.mints.filter((mint) => mint.default && mint.enabled)
-      let mints = []
-      let wallets = []
+      const mints = []
+      const wallets = []
       for (const mint of enabledMints) {
         const generated = await this.adminGenerateWallet(userId, input.index)
         mints.push({
