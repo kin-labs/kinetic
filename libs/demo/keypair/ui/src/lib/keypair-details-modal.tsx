@@ -1,5 +1,6 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text, Textarea } from '@chakra-ui/react'
+import { Box, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text } from '@chakra-ui/react'
 import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
+import { Keypair } from '@kin-kinetic/keypair'
 import React from 'react'
 
 export function KeypairDetailsModal({
@@ -11,17 +12,32 @@ export function KeypairDetailsModal({
   keypair?: DemoKeypairEntity | null | undefined
   visible: boolean
 }) {
+  const kp = keypair?.secretKey ? Keypair.fromSecretKey(keypair?.secretKey) : undefined
   return (
     <Modal isOpen={visible} onClose={toggle}>
       <ModalOverlay />
       <ModalContent>
         <ModalBody>
           <Text mb="8px">Mnemonic</Text>
-          <Textarea rows={2} w="full" className="text-area-mnemonic" readOnly value={keypair?.mnemonic} />
+          <Box as="pre" p="2" borderWidth="1px" borderRadius="lg" overflow="scroll" fontSize="xs">
+            {JSON.stringify(keypair?.mnemonic, null, 2)}
+          </Box>
           <Text mb="8px">Public Key</Text>
-          <Textarea rows={1} w="full" className="text-area-public-key" readOnly value={keypair?.publicKey} />
+          <Box as="pre" p="2" borderWidth="1px" borderRadius="lg" overflow="scroll" fontSize="xs">
+            {JSON.stringify(keypair?.publicKey, null, 2)}
+          </Box>
           <Text mb="8px">Secret Key</Text>
-          <Textarea rows={1} w="full" className="text-area-secret-key" readOnly value={keypair?.secretKey} />
+          <Box as="pre" p="2" borderWidth="1px" borderRadius="lg" overflow="scroll" fontSize="xs">
+            {JSON.stringify(keypair?.secretKey, null, 2)}
+          </Box>
+          {kp && (
+            <Box>
+              <Text mb="8px">Byte Array</Text>
+              <Box as="pre" p="2" borderWidth="1px" borderRadius="lg" overflow="scroll" fontSize="xs">
+                [{kp?.solanaSecretKey.toString()}]
+              </Box>
+            </Box>
+          )}
         </ModalBody>
         <ModalFooter>
           <Button className="close" colorScheme="teal" onClick={toggle}>

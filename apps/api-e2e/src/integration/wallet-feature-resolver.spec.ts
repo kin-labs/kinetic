@@ -52,9 +52,10 @@ describe('Wallet (e2e)', () => {
       })
 
       it('should find a wallet', async () => {
-        return runGraphQLQueryAdmin(app, token, UserWallet, { walletId })
+        return runGraphQLQueryAdmin(app, token, UserWallet, { appEnvId, walletId })
           .expect(200)
           .expect((res) => {
+            console.log('res', res.body)
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.item
 
@@ -64,19 +65,19 @@ describe('Wallet (e2e)', () => {
       })
 
       it('should find a list of wallets', async () => {
-        return runGraphQLQueryAdmin(app, token, UserWallets)
+        return runGraphQLQueryAdmin(app, token, UserWallets, { appEnvId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.items
 
-            expect(data.length).toBeGreaterThan(1)
+            expect(data.length).toBeGreaterThanOrEqual(1)
             expect(data.find((wallet) => wallet.publicKey === publicKey)).toBeDefined()
           })
       })
 
       it('should not delete a wallet with an environment', async () => {
-        return runGraphQLQueryAdmin(app, token, UserDeleteWallet, { walletId })
+        return runGraphQLQueryAdmin(app, token, UserDeleteWallet, { appEnvId, walletId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -91,7 +92,7 @@ describe('Wallet (e2e)', () => {
     describe('CRUD Constraints', () => {
       it('should not find a wallet that does not exist', async () => {
         const testWalletId = uniq('some-random-wallet-')
-        return runGraphQLQueryAdmin(app, token, UserWallet, { walletId: testWalletId })
+        return runGraphQLQueryAdmin(app, token, UserWallet, { walletId: testWalletId, appEnvId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -102,7 +103,7 @@ describe('Wallet (e2e)', () => {
 
       it('should not delete a wallet that does not exist', async () => {
         const testWalletId = uniq('some-random-wallet-')
-        return runGraphQLQueryAdmin(app, token, UserDeleteWallet, { walletId: testWalletId })
+        return runGraphQLQueryAdmin(app, token, UserDeleteWallet, { walletId: testWalletId, appEnvId })
           .expect(200)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -114,7 +115,7 @@ describe('Wallet (e2e)', () => {
 
     describe('Mall-formed Input', () => {
       it('should not find a wallet', async () => {
-        return runGraphQLQuery(app, UserWallet, { walletId: undefined })
+        return runGraphQLQuery(app, UserWallet, { walletId: undefined, appEnvId: undefined })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -124,7 +125,7 @@ describe('Wallet (e2e)', () => {
       })
 
       it('should not delete a wallet', async () => {
-        return runGraphQLQuery(app, UserDeleteWallet, { walletId: undefined })
+        return runGraphQLQuery(app, UserDeleteWallet, { walletId: undefined, appEnvId: undefined })
           .expect(400)
           .expect((res) => {
             expect(res).toHaveProperty('error')
@@ -147,19 +148,19 @@ describe('Wallet (e2e)', () => {
       })
 
       it('should not find a wallet', () => {
-        return runGraphQLQuery(app, UserWallet, { walletId })
+        return runGraphQLQuery(app, UserWallet, { walletId, appEnvId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })
 
       it('should not find a list of wallets', () => {
-        return runGraphQLQuery(app, UserWallets)
+        return runGraphQLQuery(app, UserWallets, { appEnvId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })
 
       it('should not delete a wallet', () => {
-        return runGraphQLQuery(app, UserDeleteWallet, { walletId })
+        return runGraphQLQuery(app, UserDeleteWallet, { walletId, appEnvId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
       })

@@ -1,13 +1,8 @@
-import { Avatar, Flex, Text, Tooltip } from '@chakra-ui/react'
+import { Avatar, Flex, Text } from '@chakra-ui/react'
+import { AdminUiAddress } from '@kin-kinetic/admin/ui/address'
 import { Mint } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
-function elipsify(str = '', len = 4) {
-  if (str.length > 30) {
-    return str.substr(0, len) + '...' + str.substr(str.length - len, str.length)
-  }
-  return str
-}
 export function AdminClusterUiMintDetails({ mint }: { mint: Mint }) {
   return (
     <Flex justifyContent="space-between" alignItems="center">
@@ -17,7 +12,7 @@ export function AdminClusterUiMintDetails({ mint }: { mint: Mint }) {
           <Text fontSize="2xl">{mint?.name}</Text>
           <Text color="gray.500">{mint?.symbol}</Text>
           <Text color="gray.500" fontSize="xs">
-            <Tooltip title={mint.address || ''}>{elipsify(mint?.address || '')}</Tooltip>
+            <AdminUiAddress address={mint.address || ''}></AdminUiAddress>
           </Text>
         </Flex>
       </Flex>

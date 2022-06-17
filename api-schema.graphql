@@ -334,7 +334,7 @@ type Mutation {
   userAppUserAdd(appId: String!, input: AppUserAddInput!): App
   userAppUserRemove(appId: String!, input: AppUserRemoveInput!): App
   userAppUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
-  userDeleteWallet(walletId: String!): Wallet
+  userDeleteWallet(appEnvId: String!, walletId: String!): Wallet
   userGenerateWallet(appEnvId: String!): Wallet
   userImportWallet(appEnvId: String!, secretKey: String!): Wallet
   userUpdateApp(appId: String!, input: AppUpdateInput!): App
@@ -361,11 +361,11 @@ type Query {
   userAppTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
   userAppTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
   userApps: [App!]
-  userWallet(walletId: String!): Wallet
+  userWallet(appEnvId: String!, walletId: String!): Wallet
   userWalletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
   userWalletBalance(appEnvId: String!, walletId: String!): WalletBalance
   userWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
-  userWallets: [Wallet!]
+  userWallets(appEnvId: String!): [Wallet!]
 }
 
 type User {
@@ -410,6 +410,7 @@ input UserUpdateInput {
 
 type Wallet {
   appEnvs: [AppEnv!]
+  appMints: [AppMint!]
   balances: [WalletBalance!]
   createdAt: DateTime
   id: String!

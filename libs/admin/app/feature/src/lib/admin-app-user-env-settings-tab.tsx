@@ -74,7 +74,7 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
       mintId,
       walletId,
     }).then(() => {
-      toast({ status: 'success', title: 'Wallet selected' })
+      toast({ status: 'success', title: 'Fee Payer updated' })
     })
   }
   if (fetching) {

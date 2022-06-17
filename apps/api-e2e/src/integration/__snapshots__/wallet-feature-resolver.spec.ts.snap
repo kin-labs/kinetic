@@ -14,6 +14,18 @@ Array [
         "line": 1,
       },
     ],
+    "message": "Variable \\"$appEnvId\\" of required type \\"String!\\" was not provided.",
+  },
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 47,
+        "line": 1,
+      },
+    ],
     "message": "Variable \\"$walletId\\" of required type \\"String!\\" was not provided.",
   },
 ]
@@ -28,6 +40,18 @@ Array [
     "locations": Array [
       Object {
         "column": 18,
+        "line": 1,
+      },
+    ],
+    "message": "Variable \\"$appEnvId\\" of required type \\"String!\\" was not provided.",
+  },
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+    },
+    "locations": Array [
+      Object {
+        "column": 38,
         "line": 1,
       },
     ],

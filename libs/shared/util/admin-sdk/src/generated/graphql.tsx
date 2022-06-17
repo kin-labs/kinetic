@@ -453,6 +453,7 @@ export type MutationUserAppUserUpdateRoleArgs = {
 }
 
 export type MutationUserDeleteWalletArgs = {
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
@@ -559,6 +560,7 @@ export type QueryUserAppTransactionsArgs = {
 }
 
 export type QueryUserWalletArgs = {
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
@@ -576,6 +578,10 @@ export type QueryUserWalletBalanceArgs = {
 export type QueryUserWalletBalancesArgs = {
   appEnvId: Scalars['String']
   walletId: Scalars['String']
+}
+
+export type QueryUserWalletsArgs = {
+  appEnvId: Scalars['String']
 }
 
 export type User = {
@@ -623,6 +629,7 @@ export type UserUpdateInput = {
 export type Wallet = {
   __typename?: 'Wallet'
   appEnvs?: Maybe<Array<AppEnv>>
+  appMints?: Maybe<Array<AppMint>>
   balances?: Maybe<Array<WalletBalance>>
   createdAt?: Maybe<Scalars['DateTime']>
   id: Scalars['String']
@@ -3504,6 +3511,7 @@ export type UserImportWalletMutation = {
 }
 
 export type UserDeleteWalletMutationVariables = Exact<{
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
@@ -3519,6 +3527,7 @@ export type UserDeleteWalletMutation = {
 }
 
 export type UserWalletQueryVariables = Exact<{
+  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }>
 
@@ -3530,6 +3539,36 @@ export type UserWalletQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    appMints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
+    }> | null
   } | null
 }
 
@@ -3578,7 +3617,9 @@ export type UserWalletBalancesQuery = {
   }> | null
 }
 
-export type UserWalletsQueryVariables = Exact<{ [key: string]: never }>
+export type UserWalletsQueryVariables = Exact<{
+  appEnvId: Scalars['String']
+}>
 
 export type UserWalletsQuery = {
   __typename?: 'Query'
@@ -3588,6 +3629,36 @@ export type UserWalletsQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    appMints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        address?: string | null
+        coingeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+      } | null
+    }> | null
   }> | null
 }
 
@@ -4507,8 +4578,8 @@ export function useUserImportWalletMutation() {
   return Urql.useMutation<UserImportWalletMutation, UserImportWalletMutationVariables>(UserImportWalletDocument)
 }
 export const UserDeleteWalletDocument = gql`
-  mutation UserDeleteWallet($walletId: String!) {
-    deleted: userDeleteWallet(walletId: $walletId) {
+  mutation UserDeleteWallet($appEnvId: String!, $walletId: String!) {
+    deleted: userDeleteWallet(appEnvId: $appEnvId, walletId: $walletId) {
       ...WalletDetails
     }
   }
@@ -4519,12 +4590,16 @@ export function useUserDeleteWalletMutation() {
   return Urql.useMutation<UserDeleteWalletMutation, UserDeleteWalletMutationVariables>(UserDeleteWalletDocument)
 }
 export const UserWalletDocument = gql`
-  query UserWallet($walletId: String!) {
-    item: userWallet(walletId: $walletId) {
+  query UserWallet($appEnvId: String!, $walletId: String!) {
+    item: userWallet(appEnvId: $appEnvId, walletId: $walletId) {
       ...WalletDetails
+      appMints {
+        ...AppMintDetails
+      }
     }
   }
   ${WalletDetailsFragmentDoc}
+  ${AppMintDetailsFragmentDoc}
 `
 
 export function useUserWalletQuery(options: Omit<Urql.UseQueryArgs<UserWalletQueryVariables>, 'query'>) {
@@ -4569,14 +4644,18 @@ export function useUserWalletBalancesQuery(
   return Urql.useQuery<UserWalletBalancesQuery>({ query: UserWalletBalancesDocument, ...options })
 }
 export const UserWalletsDocument = gql`
-  query UserWallets {
-    items: userWallets {
+  query UserWallets($appEnvId: String!) {
+    items: userWallets(appEnvId: $appEnvId) {
       ...WalletDetails
+      appMints {
+        ...AppMintDetails
+      }
     }
   }
   ${WalletDetailsFragmentDoc}
+  ${AppMintDetailsFragmentDoc}
 `
 
-export function useUserWalletsQuery(options?: Omit<Urql.UseQueryArgs<UserWalletsQueryVariables>, 'query'>) {
+export function useUserWalletsQuery(options: Omit<Urql.UseQueryArgs<UserWalletsQueryVariables>, 'query'>) {
   return Urql.useQuery<UserWalletsQuery>({ query: UserWalletsDocument, ...options })
 }

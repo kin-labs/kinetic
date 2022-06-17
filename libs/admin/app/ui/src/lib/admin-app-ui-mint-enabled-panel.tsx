@@ -1,6 +1,8 @@
 import { SettingsIcon } from '@chakra-ui/icons'
 import { Button, Code, Flex, Stack, Text } from '@chakra-ui/react'
 import { AdminClusterUiMintDetails } from '@kin-kinetic/admin/cluster/ui'
+import { AdminUiAddress } from '@kin-kinetic/admin/ui/address'
+import { AdminUiIdenticon } from '@kin-kinetic/admin/ui/identicon'
 import { Mint, Wallet } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useState } from 'react'
 
@@ -30,14 +32,29 @@ export function AdminAppUiMintEnabledPanel({
       </Flex>
       {showDetails ? (
         <Stack direction="column" spacing={6}>
-          <Code colorScheme="teal">{wallet?.publicKey}</Code>
+          <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
+            <AdminUiIdenticon name={wallet?.publicKey} size={'sm'} />
+            <Flex flexGrow={1}>
+              <Code colorScheme="teal">
+                <AdminUiAddress address={wallet?.publicKey || ''} />
+              </Code>
+            </Flex>
+            <Button size="sm" disabled>
+              Fee Payer
+            </Button>
+          </Stack>
           {availableWallets?.map((item) => (
-            <Flex justifyContent="space-between" alignItems="center" key={item.id}>
-              <Code colorScheme="teal">{item?.publicKey}</Code>
+            <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center" key={item.id}>
+              <AdminUiIdenticon name={item?.publicKey} size={'sm'} />
+              <Flex flexGrow={1}>
+                <Code colorScheme="teal">
+                  <AdminUiAddress address={item?.publicKey || ''} />
+                </Code>
+              </Flex>
               <Button size="sm" onClick={() => selectWallet(item.id!)}>
                 Use as Fee Payer
               </Button>
-            </Flex>
+            </Stack>
           ))}
           <Flex justifyContent="space-between" alignItems="center">
             <Button size="lg" disabled={!!mint?.default} onClick={() => disableMint(mint.id!)}>
