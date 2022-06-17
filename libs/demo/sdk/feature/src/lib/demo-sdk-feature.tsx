@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Stack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, ButtonGroup, Flex, Stack, useColorModeValue } from '@chakra-ui/react'
 import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { demoKeypairDb, DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { KeypairDropdown } from '@kin-kinetic/demo/keypair/ui'
@@ -74,6 +74,10 @@ export function DemoSdkFeature() {
     return <AdminUiAlert status="warning" title="No Servers configured." message="Add a new one on the Servers page." />
   }
 
+  if (!sdk) {
+    return <AdminUiAlert status="error" message={'No SDK configured.'} />
+  }
+
   return (
     <Stack spacing={6}>
       <Flex
@@ -85,9 +89,14 @@ export function DemoSdkFeature() {
         borderRadius="md"
       >
         <Box>
-          <Button color="ghost" disabled>
-            {server?.name}
-          </Button>
+          <ButtonGroup>
+            <Button color="ghost" disabled>
+              {server?.endpoint}
+            </Button>
+            <Button color="ghost" disabled>
+              {server?.environment}
+            </Button>
+          </ButtonGroup>
         </Box>
         <Box>
           <Stack direction="row" spacing={2} alignItems="center">
@@ -96,11 +105,7 @@ export function DemoSdkFeature() {
           </Stack>
         </Box>
       </Flex>
-      {sdk ? (
-        <SdkControlPanel keypair={keypair} sdk={sdk} />
-      ) : (
-        <AdminUiAlert status="error" message={'No SDK configured.'} />
-      )}
+      <SdkControlPanel keypair={keypair} sdk={sdk} />
     </Stack>
   )
 }

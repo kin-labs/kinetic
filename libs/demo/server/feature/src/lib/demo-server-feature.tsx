@@ -19,8 +19,7 @@ export function DemoServerFeature() {
     setServerDetailsVisible(true)
   }
 
-  const createServer = (endpoint: KineticSdkEndpoint) => {
-    const environment = endpoint.includes('mainnet') ? 'mainnet' : 'devnet'
+  const createServer = (endpoint: KineticSdkEndpoint, environment: string) => {
     const url = parseKineticSdkEndpoint(endpoint)
     const { host } = new URL(url)
     demoServerDb.server.add({ id: host, name: host, endpoint, environment })
