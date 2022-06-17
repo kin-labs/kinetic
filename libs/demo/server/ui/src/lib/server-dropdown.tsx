@@ -15,14 +15,12 @@ export function ServerDropdown({
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-        {selected ? `${selected.name} / {server.environment}` : 'Select Kinetic Server'}
+        {selected ? selected.name : 'Select Kinetic Server'}
       </MenuButton>
       <MenuList>
         {servers?.map((server) => (
           <MenuItem onClick={() => setServer(server)} key={server.id}>
-            <span>
-              {server.name} / {server.environment}
-            </span>
+            <span>{server.name}</span>
           </MenuItem>
         ))}
       </MenuList>

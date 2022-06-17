@@ -45,6 +45,8 @@ export function DemoSdkFeature() {
   }
 
   const selectServer = (server: DemoServerEntity) => {
+    setSdk(null)
+    setServer(null)
     KineticSdk.setup({
       endpoint: server.endpoint,
       environment: server.environment,

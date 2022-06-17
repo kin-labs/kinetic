@@ -106,6 +106,7 @@
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.9",
     "rxjs": "^7.5.5",
+    "slugify": "^1.6.5",
     "swagger-ui-express": "^4.4.0",
     "text-encoding": "^0.7.0",
     "ts-md5": "^1.2.11",

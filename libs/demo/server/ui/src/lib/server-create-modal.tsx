@@ -21,7 +21,7 @@ export function ServerCreateModal({
   visible: boolean
 }) {
   const [endpoint, setEndpoint] = useState<string>('http://localhost:3000')
-  const [environment, setEnvironment] = useState<string>('custom')
+  const [environment, setEnvironment] = useState<string>('local')
   return (
     <Modal isOpen={visible} onClose={toggle}>
       <ModalOverlay />
