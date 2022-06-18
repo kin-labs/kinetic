@@ -24,7 +24,7 @@ export class KineticSdk {
   constructor(readonly sdkConfig: KineticSdkConfigParsed) {
     this.internal = new KineticSdkInternal(sdkConfig)
     this.sdkConfig.solanaRpcEndpoint = sdkConfig.solanaRpcEndpoint
-      ? clusterApiUrl(getSolanaRpcEndpoint(sdkConfig.solanaRpcEndpoint) as Cluster)
+      ? getSolanaRpcEndpoint(sdkConfig.solanaRpcEndpoint)
       : getSolanaRpcEndpoint(sdkConfig.endpoint)
   }
 

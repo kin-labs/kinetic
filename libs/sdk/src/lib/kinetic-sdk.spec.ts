@@ -1,5 +1,6 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment } from '@kin-kinetic/solana'
+import { clusterApiUrl } from '@solana/web3.js'
 import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
 import { KineticSdkConfig } from './interfaces'
 import { KineticSdk } from './kinetic-sdk'
@@ -46,16 +47,29 @@ describe('sdk', () => {
         expect(sdk.sdkConfig.logger).toBeDefined()
       })
 
+      it('should configure the SDK with a default Solana RPC endpoint', async () => {
+        const config: KineticSdkConfig = {
+          environment: DEFAULT_APP_ENVIRONMENT,
+          endpoint: DEFAULT_APP_ENDPOINT,
+          index: DEFAULT_APP_INDEX,
+          logger: console,
+          solanaRpcEndpoint: clusterApiUrl(SOLANA_RPC_NAME),
+        }
+        sdk = new KineticSdk(parseKineticSdkConfig(config))
+        expect(sdk.sdkConfig.solanaRpcEndpoint).toEqual(SOLANA_RPC_ENDPOINT)
+        expect(sdk.sdkConfig.logger).toBeDefined()
+      })
+
       it('should configure the SDK with a custom Solana RPC endpoint', async () => {
         const config: KineticSdkConfig = {
           environment: DEFAULT_APP_ENVIRONMENT,
           endpoint: DEFAULT_APP_ENDPOINT,
           index: DEFAULT_APP_INDEX,
           logger: console,
-          solanaRpcEndpoint: SOLANA_RPC_NAME,
+          solanaRpcEndpoint: 'http://localhost:8899',
         }
         sdk = new KineticSdk(parseKineticSdkConfig(config))
-        expect(sdk.sdkConfig.solanaRpcEndpoint).toEqual(SOLANA_RPC_ENDPOINT)
+        expect(sdk.sdkConfig.solanaRpcEndpoint).toEqual('http://localhost:8899')
         expect(sdk.sdkConfig.logger).toBeDefined()
       })
 
