@@ -761,7 +761,10 @@
             "type": "object"
           },
           "tokens": {
-            "$ref": "#/components/schemas/BalanceToken"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BalanceToken"
+            }
           }
         },
         "required": ["balance", "mints", "tokens"]

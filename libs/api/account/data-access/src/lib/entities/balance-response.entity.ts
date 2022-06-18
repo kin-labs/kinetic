@@ -8,7 +8,7 @@ export class BalanceResponse {
   balance: BigNumber
   @ApiProperty()
   mints: BalanceMintMap
-  @ApiProperty({ type: () => BalanceToken })
+  @ApiProperty({ type: () => BalanceToken, isArray: true })
   tokens: BalanceToken[]
 }
 

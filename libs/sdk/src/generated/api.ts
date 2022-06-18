@@ -481,10 +481,10 @@ export interface BalanceResponse {
   mints: object
   /**
    *
-   * @type {BalanceToken}
+   * @type {Array<BalanceToken>}
    * @memberof BalanceResponse
    */
-  tokens: BalanceToken
+  tokens: Array<BalanceToken>
 }
 /**
  *
