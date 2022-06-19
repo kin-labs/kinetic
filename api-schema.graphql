@@ -417,7 +417,9 @@ type Wallet {
   balances: [WalletBalance!]
   createdAt: DateTime
   id: String!
+  owner: User
   publicKey: String
+  type: WalletType
   updatedAt: DateTime
 }
 
@@ -432,4 +434,10 @@ type WalletBalance {
   createdAt: DateTime
   id: String
   updatedAt: DateTime
+}
+
+enum WalletType {
+  Generated
+  Imported
+  Provisioned
 }

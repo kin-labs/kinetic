@@ -636,7 +636,9 @@ export type Wallet = {
   balances?: Maybe<Array<WalletBalance>>
   createdAt?: Maybe<Scalars['DateTime']>
   id: Scalars['String']
+  owner?: Maybe<User>
   publicKey?: Maybe<Scalars['String']>
+  type?: Maybe<WalletType>
   updatedAt?: Maybe<Scalars['DateTime']>
 }
 
@@ -653,6 +655,12 @@ export type WalletBalance = {
   createdAt?: Maybe<Scalars['DateTime']>
   id?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
+}
+
+export enum WalletType {
+  Generated = 'Generated',
+  Imported = 'Imported',
+  Provisioned = 'Provisioned',
 }
 
 export type AdminCreateAppMutationVariables = Exact<{
@@ -687,6 +695,7 @@ export type AdminCreateAppMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       }> | null
       app?: {
         __typename?: 'App'
@@ -758,6 +767,7 @@ export type AdminCreateAppMutation = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
@@ -900,6 +910,7 @@ export type AdminAppsQuery = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
@@ -938,6 +949,7 @@ export type AdminAppQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       }> | null
       app?: {
         __typename?: 'App'
@@ -1009,6 +1021,7 @@ export type AdminAppQuery = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
@@ -1126,6 +1139,7 @@ export type AppEnvDetailsFragment = {
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
+      type?: WalletType | null
     } | null
   }> | null
 }
@@ -1161,6 +1175,7 @@ export type AppMintDetailsFragment = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
   } | null
 }
 
@@ -1329,6 +1344,7 @@ export type UserUpdateAppMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       }> | null
       app?: {
         __typename?: 'App'
@@ -1400,6 +1416,7 @@ export type UserUpdateAppMutation = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
@@ -1459,6 +1476,7 @@ export type UserUpdateAppEnvMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
+      type?: WalletType | null
     }> | null
     app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
     cluster?: {
@@ -1523,6 +1541,7 @@ export type UserUpdateAppEnvMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   } | null
@@ -1741,6 +1760,7 @@ export type UserAppEnvMintDisableMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   } | null
@@ -1830,6 +1850,7 @@ export type UserAppEnvMintEnableMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   } | null
@@ -1920,6 +1941,7 @@ export type UserAppEnvMintSetWalletMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   } | null
@@ -1952,6 +1974,7 @@ export type UserAppEnvWalletAddMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
+      type?: WalletType | null
     }> | null
     app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
     cluster?: {
@@ -2016,6 +2039,7 @@ export type UserAppEnvWalletAddMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   } | null
@@ -2048,6 +2072,7 @@ export type UserAppEnvWalletRemoveMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
+      type?: WalletType | null
     }> | null
     app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
     cluster?: {
@@ -2112,6 +2137,7 @@ export type UserAppEnvWalletRemoveMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   } | null
@@ -2409,6 +2435,7 @@ export type UserAppsQuery = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
@@ -2448,6 +2475,7 @@ export type UserAppQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       }> | null
       app?: {
         __typename?: 'App'
@@ -2519,6 +2547,7 @@ export type UserAppQuery = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
@@ -2577,6 +2606,7 @@ export type UserAppEnvQuery = {
       createdAt?: any | null
       updatedAt?: any | null
       publicKey?: string | null
+      type?: WalletType | null
     }> | null
     app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
     cluster?: {
@@ -2641,6 +2671,7 @@ export type UserAppEnvQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   } | null
@@ -3180,6 +3211,7 @@ export type WalletDetailsFragment = {
   createdAt?: any | null
   updatedAt?: any | null
   publicKey?: string | null
+  type?: WalletType | null
 }
 
 export type WalletAirdropResponseDetailsFragment = { __typename?: 'WalletAirdropResponse'; signature?: string | null }
@@ -3205,6 +3237,7 @@ export type AdminDeleteWalletMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
   } | null
 }
 
@@ -3220,6 +3253,7 @@ export type AdminWalletQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
     appEnvs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -3303,9 +3337,21 @@ export type AdminWalletQuery = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
+    owner?: {
+      __typename?: 'User'
+      id: string
+      createdAt: any
+      updatedAt: any
+      avatarUrl?: string | null
+      email?: string | null
+      name?: string | null
+      username: string
+      role?: UserRole | null
+    } | null
   } | null
 }
 
@@ -3336,6 +3382,7 @@ export type AdminWalletsQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
     balances?: Array<{
       __typename?: 'WalletBalance'
       id?: string | null
@@ -3426,6 +3473,7 @@ export type AdminWalletsQuery = {
             createdAt?: any | null
             updatedAt?: any | null
             publicKey?: string | null
+            type?: WalletType | null
           } | null
         }> | null
       } | null
@@ -3513,9 +3561,21 @@ export type AdminWalletsQuery = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
+    owner?: {
+      __typename?: 'User'
+      id: string
+      createdAt: any
+      updatedAt: any
+      avatarUrl?: string | null
+      email?: string | null
+      name?: string | null
+      username: string
+      role?: UserRole | null
+    } | null
   }> | null
 }
 
@@ -3531,6 +3591,7 @@ export type UserGenerateWalletMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
     appEnvs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -3614,6 +3675,7 @@ export type UserGenerateWalletMutation = {
           createdAt?: any | null
           updatedAt?: any | null
           publicKey?: string | null
+          type?: WalletType | null
         } | null
       }> | null
     }> | null
@@ -3633,6 +3695,7 @@ export type UserImportWalletMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
   } | null
 }
 
@@ -3649,6 +3712,7 @@ export type UserDeleteWalletMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
   } | null
 }
 
@@ -3665,6 +3729,7 @@ export type UserWalletQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
     appMints?: Array<{
       __typename?: 'AppMint'
       id: string
@@ -3696,6 +3761,7 @@ export type UserWalletQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   } | null
@@ -3758,6 +3824,7 @@ export type UserWalletsQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     publicKey?: string | null
+    type?: WalletType | null
     appMints?: Array<{
       __typename?: 'AppMint'
       id: string
@@ -3789,6 +3856,7 @@ export type UserWalletsQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         publicKey?: string | null
+        type?: WalletType | null
       } | null
     }> | null
   }> | null
@@ -3833,6 +3901,7 @@ export const WalletDetailsFragmentDoc = gql`
     createdAt
     updatedAt
     publicKey
+    type
   }
 `
 export const AppMintDetailsFragmentDoc = gql`
@@ -4638,10 +4707,14 @@ export const AdminWalletDocument = gql`
       appEnvs {
         ...AppEnvDetails
       }
+      owner {
+        ...UserDetails
+      }
     }
   }
   ${WalletDetailsFragmentDoc}
   ${AppEnvDetailsFragmentDoc}
+  ${UserDetailsFragmentDoc}
 `
 
 export function useAdminWalletQuery(options: Omit<Urql.UseQueryArgs<AdminWalletQueryVariables>, 'query'>) {
@@ -4674,11 +4747,15 @@ export const AdminWalletsDocument = gql`
       appEnvs {
         ...AppEnvDetails
       }
+      owner {
+        ...UserDetails
+      }
     }
   }
   ${WalletDetailsFragmentDoc}
   ${WalletBalanceDetailsFragmentDoc}
   ${AppEnvDetailsFragmentDoc}
+  ${UserDetailsFragmentDoc}
 `
 
 export function useAdminWalletsQuery(options?: Omit<Urql.UseQueryArgs<AdminWalletsQueryVariables>, 'query'>) {

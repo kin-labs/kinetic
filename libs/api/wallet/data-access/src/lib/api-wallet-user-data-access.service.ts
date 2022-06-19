@@ -6,6 +6,7 @@ import { ClusterStatus } from '@prisma/client'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
 import { WalletBalance } from './entity/wallet-balance.entity'
+import { WalletType } from './entity/wallet-type.enum'
 import { Wallet } from './entity/wallet.entity'
 
 @Injectable()
@@ -48,7 +49,13 @@ export class ApiWalletUserDataAccessService {
     const { publicKey, secretKey } = Keypair.random()
 
     return this.data.wallet.create({
-      data: { secretKey, publicKey, appEnvs: { connect: { id: appEnvId } } },
+      data: {
+        secretKey,
+        publicKey,
+        appEnvs: { connect: { id: appEnvId } },
+        type: WalletType.Generated,
+        ownerId: userId,
+      },
       include: { appEnvs: true },
     })
   }
@@ -60,7 +67,15 @@ export class ApiWalletUserDataAccessService {
     try {
       const { publicKey, secretKey } = Keypair.fromByteArray(JSON.parse(secret))
 
-      return this.data.wallet.create({ data: { secretKey, publicKey, appEnvs: { connect: { id: appEnvId } } } })
+      return this.data.wallet.create({
+        data: {
+          secretKey,
+          publicKey,
+          appEnvs: { connect: { id: appEnvId } },
+          type: WalletType.Imported,
+          ownerId: userId,
+        },
+      })
     } catch (e) {
       throw new BadRequestException(`Error importing wallet`)
     }
