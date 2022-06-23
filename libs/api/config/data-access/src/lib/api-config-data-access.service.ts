@@ -10,16 +10,16 @@ import { getProvisionedApps } from './helpers/get-provisioned-apps'
 @Injectable()
 export class ApiConfigDataAccessService {
   readonly clusters: Prisma.ClusterCreateInput[] = [
-    this.isDevelopment
-      ? {
+    this.isProduction
+      ? undefined
+      : {
           id: 'local',
           name: 'Local',
           endpoint: 'http://localhost:8899',
           explorer: 'https://explorer.solana.com/{path}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899',
           type: ClusterType.Custom,
           status: ClusterStatus.Active,
-        }
-      : undefined,
+        },
     {
       id: 'solana-devnet',
       name: 'Solana Devnet',
@@ -37,7 +37,7 @@ export class ApiConfigDataAccessService {
     },
   ]
   readonly mints: Prisma.MintCreateInput[] = [
-    ...(this.isDevelopment
+    ...(!this.isProduction
       ? [
           createMintKin('local', 0, 'MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek', 5),
           createMintSol('local', 1),

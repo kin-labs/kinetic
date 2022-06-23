@@ -49,7 +49,7 @@ describe('Wallet (e2e)', () => {
             publicKey = data.publicKey
             expect(data.publicKey).toEqual(publicKey)
           })
-      })
+      }, 10_000)
 
       it('should find a wallet', async () => {
         return runGraphQLQueryAdmin(app, token, UserWallet, { appEnvId, walletId })
@@ -61,7 +61,7 @@ describe('Wallet (e2e)', () => {
             expect(data.id).toEqual(walletId)
             expect(data.publicKey).toEqual(publicKey)
           })
-      })
+      }, 10_000)
 
       it('should find a list of wallets', async () => {
         return runGraphQLQueryAdmin(app, token, UserWallets, { appEnvId })
