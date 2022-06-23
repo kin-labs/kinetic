@@ -10,6 +10,7 @@ import { AppTransaction } from './entity/app-transaction.entity'
 @Injectable()
 export class ApiAppDataAccessService implements OnModuleInit {
   readonly includeAppEnv: Prisma.AppEnvInclude = {
+    app: true,
     cluster: {
       include: {
         mints: {
@@ -28,6 +29,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   readonly include: Prisma.AppInclude = {
     users: { include: { user: true } },
     envs: {
+      orderBy: { name: 'asc' },
       include: this.includeAppEnv,
     },
   }
@@ -60,8 +62,10 @@ export class ApiAppDataAccessService implements OnModuleInit {
       airdrop: !!mint.airdropSecretKey,
       airdropAmount: mint.airdropAmount,
       airdropMax: mint.airdropMax,
+      decimals: mint.decimals,
       feePayer: wallet.publicKey,
       logoUrl: mint?.logoUrl,
+      name: mint?.name,
       programId: TOKEN_PROGRAM_ID.toBase58(),
       publicKey: mint?.address,
       symbol: mint?.symbol,
@@ -78,6 +82,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
       },
       environment: {
         name: env.name,
+        explorer: env.cluster.explorer,
         cluster: {
           id: env.cluster.id,
           name: env.cluster.name,

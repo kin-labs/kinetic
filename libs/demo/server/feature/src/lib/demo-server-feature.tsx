@@ -19,11 +19,10 @@ export function DemoServerFeature() {
     setServerDetailsVisible(true)
   }
 
-  const createServer = (endpoint: KineticSdkEndpoint) => {
-    const environment = endpoint.includes('mainnet') ? 'mainnet' : 'devnet'
+  const createServer = (endpoint: KineticSdkEndpoint, environment: string) => {
     const url = parseKineticSdkEndpoint(endpoint)
     const { host } = new URL(url)
-    demoServerDb.server.add({ id: host, name: host, endpoint, environment })
+    demoServerDb.server.add({ id: `${host}-${environment}`, name: `${host} / ${environment}`, endpoint, environment })
     setServerCreateVisible(false)
   }
 
@@ -31,9 +30,9 @@ export function DemoServerFeature() {
     <Stack spacing={6}>
       <Text>Here you can add and configure Kinetic servers.</Text>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button className="add-server-btn" onClick={() => setServerCreateVisible(true)}>
-          Add Server
-        </Button>
+        <Button onClick={() => setServerCreateVisible(true)}>Add Server</Button>
+        <Button onClick={() => createServer('http://localhost:3000/', 'local')}>Add Local</Button>
+        <Button onClick={() => createServer('devnet', 'devnet')}>Add Devnet</Button>
       </Stack>
       {result?.length ? (
         <ServerGrid servers={result} showServer={showServer} deleteServer={deleteServer} />

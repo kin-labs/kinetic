@@ -5,5 +5,7 @@ export class AppConfigEnvironment {
   @ApiProperty()
   name: string
   @ApiProperty()
+  explorer: string
+  @ApiProperty()
   cluster: AppConfigCluster
 }

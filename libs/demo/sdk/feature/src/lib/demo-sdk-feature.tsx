@@ -1,4 +1,6 @@
-import { Box, Button, Flex, Stack, useColorModeValue } from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { Box, Button, ButtonGroup, Flex, Link, Stack, Text, useColorModeValue } from '@chakra-ui/react'
+import { AdminUiAddress } from '@kin-kinetic/admin/ui/address'
 import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { demoKeypairDb, DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { KeypairDropdown } from '@kin-kinetic/demo/keypair/ui'
@@ -7,7 +9,7 @@ import { demoServerDb, DemoServerEntity } from '@kin-kinetic/demo/server/data-ac
 import { ServerDropdown } from '@kin-kinetic/demo/server/ui'
 import { KineticSdk } from '@kin-kinetic/sdk'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 export function DemoSdkFeature() {
   const [loading, setLoading] = useState(true)
@@ -45,6 +47,8 @@ export function DemoSdkFeature() {
   }
 
   const selectServer = (server: DemoServerEntity) => {
+    setSdk(null)
+    setServer(null)
     KineticSdk.setup({
       endpoint: server.endpoint,
       environment: server.environment,
@@ -74,6 +78,11 @@ export function DemoSdkFeature() {
     return <AdminUiAlert status="warning" title="No Servers configured." message="Add a new one on the Servers page." />
   }
 
+  if (!sdk) {
+    return <AdminUiAlert status="error" message={'No SDK configured.'} />
+  }
+  const link = sdk.getExplorerUrl('/address/' + keypair.publicKey)
+
   return (
     <Stack spacing={6}>
       <Flex
@@ -85,9 +94,13 @@ export function DemoSdkFeature() {
         borderRadius="md"
       >
         <Box>
-          <Button color="ghost" disabled>
-            {server?.name}
-          </Button>
+          <Link target="_blank" href={link}>
+            <Button>
+              <Text mr={2}>View in Explorer</Text>
+              <AdminUiAddress address={keypair.publicKey} />
+              <ExternalLinkIcon ml={2} />
+            </Button>
+          </Link>
         </Box>
         <Box>
           <Stack direction="row" spacing={2} alignItems="center">
@@ -96,11 +109,7 @@ export function DemoSdkFeature() {
           </Stack>
         </Box>
       </Flex>
-      {sdk ? (
-        <SdkControlPanel keypair={keypair} sdk={sdk} />
-      ) : (
-        <AdminUiAlert status="error" message={'No SDK configured.'} />
-      )}
+      <SdkControlPanel keypair={keypair} sdk={sdk} />
     </Stack>
   )
 }

@@ -6,12 +6,12 @@ import React from 'react'
 
 import { SdkControlPanelAccountBalance } from './sdk-control-panel-account-balance'
 import { SdkControlPanelAccountHistory } from './sdk-control-panel-account-history'
-import { SdkControlPanelCreateAccount } from './sdk-control-panel-create-account'
-import { SdkControlPanelRequestAirdrop } from './sdk-control-panel-request-airdrop'
 import { SdkControlPanelAppConfig } from './sdk-control-panel-app-config'
+import { SdkControlPanelCreateAccount } from './sdk-control-panel-create-account'
 import { SdkControlPanelMakePayment } from './sdk-control-panel-make-payment'
-import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts'
 import { SdkControlPanelMakePaymentBatch } from './sdk-control-panel-make-payment-batch'
+import { SdkControlPanelRequestAirdrop } from './sdk-control-panel-request-airdrop'
+import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts'
 
 export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
   return (

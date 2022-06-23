@@ -9,7 +9,7 @@ export class ClusterTokenExtensions {
   @Field({ nullable: true })
   bridgeContract?: string
   @Field({ nullable: true })
-  coingeckoId?: string
+  coinGeckoId?: string
   @Field({ nullable: true })
   description?: string
   @Field({ nullable: true })

@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { MintType } from './mint-type.enum'
 
 @ObjectType()
@@ -11,8 +11,14 @@ export class Mint {
   updatedAt?: Date
   @Field({ nullable: true })
   address: string
+  @Field(() => Int, { nullable: true })
+  airdropAmount?: number
+  @Field(() => Int, { nullable: true })
+  airdropMax?: number
+  @HideField()
+  airdropSecretKey?: string
   @Field({ nullable: true })
-  coingeckoId?: string
+  coinGeckoId?: string
   @Field(() => Int, { nullable: true })
   decimals: number
   @Field({ nullable: true })

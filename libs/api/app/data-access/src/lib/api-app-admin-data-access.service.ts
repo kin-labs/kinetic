@@ -3,6 +3,7 @@ import { UserRole } from '@kin-kinetic/api/user/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
+import slugify from 'slugify'
 import { ApiAppDataAccessService } from './api-app-data-access.service'
 import { AppCreateInput } from './dto/app-create.input'
 import { AppUserRole } from './entity/app-user-role.enum'
@@ -23,50 +24,54 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
     if (app) {
       throw new BadRequestException(`App with index ${input.index} already exists`)
     }
-    const clusters = await this.data.getActiveClusters()
     this.logger.verbose(`app ${input.index}: creating ${input.name}...`)
-    let wallets
-    if (!input.skipWalletCreation) {
-      const generated = await this.adminGenerateWallet(userId, input.index)
-      wallets = { connect: { id: generated.id } }
-      this.logger.verbose(`app ${input.index}: connecting wallet ${generated.publicKey}...`)
+    const activeClusters = await this.data.getActiveClusters()
+
+    const envs = []
+
+    // Create an app environment for each active cluster
+    for (const cluster of activeClusters) {
+      const enabledMints = cluster.mints.filter((mint) => mint.default && mint.enabled)
+      const mints = []
+      const wallets = []
+      for (const mint of enabledMints) {
+        const generated = await this.adminGenerateWallet(userId, input.index)
+        mints.push({
+          order: mint.order,
+          mint: { connect: { id: mint.id } },
+          wallet: { connect: { id: generated.id } },
+        })
+        wallets.push({ id: generated.id })
+      }
+      envs.push({
+        // Connect the cluster
+        cluster: { connect: { id: cluster.id } },
+        // Set the slugified name based on the cluster name, so 'Solana Devnet' => 'devnet'
+        name: slugify(cluster.name.toLowerCase().replace('solana', ''), { lower: true, strict: true }),
+        // Connect the wallets
+        wallets: { connect: wallets },
+        // Create the default mint and connect it to the wallet
+        mints: { create: mints },
+      })
     }
 
     const data: Prisma.AppCreateInput = {
       index: input.index,
       name: input.name,
       users: { create: { role: AppUserRole.Owner, userId } },
-      envs: {
-        // Create an app environment for each active cluster
-        create: [
-          ...clusters.map((cluster) => ({
-            // Connect the cluster
-            cluster: { connect: { id: cluster.id } },
-            // Set the name based on the type, so 'SolanaDevnet' => 'devnet'
-            name: cluster.type.toLowerCase().replace('solana', ''),
-            // Connect the wallet
-            wallets,
-            // Create the default mint and connect it to the wallet
-            mints: {
-              create: cluster.mints
-                .filter((mint) => mint.default)
-                .map((mint) => ({
-                  order: mint.order,
-                  mint: { connect: { id: mint.id } },
-                  wallet: wallets,
-                })),
-            },
-          })),
-        ],
-      },
+      envs: { create: envs },
     }
+
     const created = await this.data.app.create({
       data,
       include: {
         envs: {
+          orderBy: { name: 'asc' },
           include: {
+            app: true,
             cluster: true,
             mints: {
+              orderBy: { order: 'asc' },
               include: {
                 mint: true,
                 wallet: true,

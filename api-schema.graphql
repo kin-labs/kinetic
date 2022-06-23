@@ -234,7 +234,7 @@ type ClusterTokenExtensions {
   address: String
   assetContract: String
   bridgeContract: String
-  coingeckoId: String
+  coinGeckoId: String
   description: String
   discord: String
   explorer: String
@@ -288,7 +288,10 @@ input LoginInput {
 
 type Mint {
   address: String
-  coingeckoId: String
+  airdropAmount: Int
+  airdropMax: Int
+  airdropPublicKey: String
+  coinGeckoId: String
   createdAt: DateTime
   decimals: Int
   default: Boolean

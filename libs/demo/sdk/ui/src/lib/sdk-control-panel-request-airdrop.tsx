@@ -6,21 +6,23 @@ import { MintSwitcher } from './mint-switcher'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
-  const mints = sdk?.config()?.mints.filter((mint) => mint.airdrop) || []
-  const [mint, setMint] = useState<AppConfigMint>(mints[0])
+  const mints = sdk?.config()?.mints.filter((mint) => mint?.airdrop) || []
+  const [mint, setMint] = useState<AppConfigMint | undefined>(mints.length ? mints[0] : undefined)
   const [result, setResult] = useState<unknown>(null)
   const [amount, setAmount] = useState<string>('12345')
   const getResult = () => {
+    if (!mint) return
     sdk.requestAirdrop({ account: keypair.publicKey, amount, mint: mint.publicKey }).then((res) => setResult(res.data))
   }
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button className="request-airdrop-btn" onClick={getResult}>
+        <Button disabled={!mint} className="request-airdrop-btn" onClick={getResult}>
           Request Airdrop
         </Button>
-        <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />
+        {mint && <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />}
         <Input
+          disabled={!mint}
           w="fit-content"
           type="number"
           value={amount}

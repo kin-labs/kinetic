@@ -3,7 +3,6 @@ import { Avatar, AvatarGroup, Box, Button, ButtonGroup, Code, Flex, Input, Stack
 import { AdminUiIdenticon } from '@kin-kinetic/admin/ui/identicon'
 import {
   useUserAppEnvWalletRemoveMutation,
-  useUserDeleteWalletMutation,
   useUserWalletAirdropQuery,
   useUserWalletBalanceQuery,
   Wallet,

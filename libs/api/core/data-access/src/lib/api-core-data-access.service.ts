@@ -93,9 +93,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
                 mint: true,
                 wallet: true,
               },
-              orderBy: {
-                order: 'asc',
-              },
+              orderBy: { order: 'asc' },
             },
             wallets: true,
           },
@@ -137,6 +135,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       where: { index },
       include: {
         envs: {
+          orderBy: { name: 'asc' },
           include: {
             cluster: true,
             mints: {
@@ -144,9 +143,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
                 mint: true,
                 wallet: true,
               },
-              orderBy: {
-                order: 'asc',
-              },
+              orderBy: { order: 'asc' },
             },
             wallets: true,
           },
@@ -275,15 +272,17 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   private async configureDefaultClusters() {
     return Promise.all(
-      this.config.clusters.map((cluster) =>
-        this.cluster
-          .upsert({
-            where: { id: cluster.id },
-            update: { ...omit(cluster, 'status') },
-            create: { ...cluster },
-          })
-          .then((res) => this.logger.verbose(`Configured cluster ${res.name} (${res.status})`)),
-      ),
+      this.config.clusters
+        .filter((cluster) => !!cluster)
+        .map((cluster) =>
+          this.cluster
+            .upsert({
+              where: { id: cluster.id },
+              update: { ...omit(cluster, 'status') },
+              create: { ...cluster },
+            })
+            .then((res) => this.logger.verbose(`Configured cluster ${res.name} (${res.status})`)),
+        ),
     )
   }
 

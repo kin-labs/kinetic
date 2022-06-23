@@ -16,11 +16,12 @@ export function ServerCreateModal({
   toggle,
   visible,
 }: {
-  submit: (endpoint: string) => void
+  submit: (endpoint: string, environment: string) => void
   toggle: () => void
   visible: boolean
 }) {
-  const [value, setValue] = useState<string>('http://localhost:3000')
+  const [endpoint, setEndpoint] = useState<string>('http://localhost:3000')
+  const [environment, setEnvironment] = useState<string>('local')
   return (
     <Modal isOpen={visible} onClose={toggle}>
       <ModalOverlay />
@@ -28,10 +29,19 @@ export function ServerCreateModal({
         <ModalHeader>Add Server</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Input w="full" onChange={(ev: ChangeEvent<HTMLInputElement>) => setValue(ev.target.value)} value={value} />
+          <Input
+            w="full"
+            onChange={(ev: ChangeEvent<HTMLInputElement>) => setEndpoint(ev.target.value)}
+            value={endpoint}
+          />
+          <Input
+            w="full"
+            onChange={(ev: ChangeEvent<HTMLInputElement>) => setEnvironment(ev.target.value)}
+            value={environment}
+          />
         </ModalBody>
         <ModalFooter>
-          <Button className="submit" colorScheme="teal" mr={3} onClick={() => submit(value)}>
+          <Button className="submit" colorScheme="teal" mr={3} onClick={() => submit(endpoint, environment)}>
             Add
           </Button>
           <Button onClick={toggle}>Close</Button>

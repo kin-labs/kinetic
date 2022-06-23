@@ -52,6 +52,10 @@ export class KineticSdk {
     return this.internal.createAccount(options)
   }
 
+  getExplorerUrl(path: string) {
+    return this.internal?.appConfig?.environment?.explorer?.replace(`{path}`, path)
+  }
+
   getHistory(options: GetHistoryOptions) {
     return this.internal.getHistory(options)
   }
@@ -69,7 +73,7 @@ export class KineticSdk {
   }
 
   tokenAccounts(account: string) {
-    console.warn(`Deprecated method, please use getTokenAccounts()`)
+    console.warn(`[tokenAccounts] Deprecated method, please use getTokenAccounts()`)
     return this.internal.getTokenAccounts({ account })
   }
 

@@ -1,4 +1,4 @@
-import { createMintKin, createMintSol } from '@kin-kinetic/api/cluster/util'
+import { createMintKin, createMintSol, createMintUsdc } from '@kin-kinetic/api/cluster/util'
 import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
@@ -10,6 +10,16 @@ import { getProvisionedApps } from './helpers/get-provisioned-apps'
 @Injectable()
 export class ApiConfigDataAccessService {
   readonly clusters: Prisma.ClusterCreateInput[] = [
+    this.isProduction
+      ? undefined
+      : {
+          id: 'local',
+          name: 'Local',
+          endpoint: 'http://localhost:8899',
+          explorer: 'https://explorer.solana.com/{path}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899',
+          type: ClusterType.Custom,
+          status: ClusterStatus.Active,
+        },
     {
       id: 'solana-devnet',
       name: 'Solana Devnet',
@@ -27,6 +37,13 @@ export class ApiConfigDataAccessService {
     },
   ]
   readonly mints: Prisma.MintCreateInput[] = [
+    ...(!this.isProduction
+      ? [
+          createMintKin('local', 0, 'MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek', 5),
+          createMintSol('local', 1),
+          createMintUsdc('local', 2, 'USDzo281m7rjzeZyxevkzL1vr5Cibb9ek3ynyAjXjUM', 2),
+        ]
+      : []),
     createMintKin('solana-devnet', 0, this.defaultMintPublicKey, this.defaultMintDecimals),
     createMintKin('solana-mainnet', 0, 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6', 5),
     createMintSol('solana-devnet', 1),

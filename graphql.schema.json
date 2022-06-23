@@ -2225,7 +2225,7 @@
             "deprecationReason": null
           },
           {
-            "name": "coingeckoId",
+            "name": "coinGeckoId",
             "description": null,
             "args": [],
             "type": {
@@ -2656,7 +2656,43 @@
             "deprecationReason": null
           },
           {
-            "name": "coingeckoId",
+            "name": "airdropAmount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "airdropMax",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "airdropPublicKey",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "coinGeckoId",
             "description": null,
             "args": [],
             "type": {

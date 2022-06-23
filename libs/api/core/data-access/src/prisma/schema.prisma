@@ -239,7 +239,7 @@ model Mint {
   airdropMax       Int?
   airdropSecretKey String?
   appMints         AppMint[]
-  coingeckoId      String?
+  coinGeckoId      String?
   decimals         Int
   default          Boolean   @default(false)
   enabled          Boolean   @default(true)

@@ -64,12 +64,21 @@ describe('App (e2e)', () => {
 
             expect(data.index).toEqual(input.index)
             expect(data.name).toEqual(input.name)
-            expect(data.envs.length).toEqual(1)
+            expect(data.envs.length).toEqual(2)
+            expect(data.envs[0].name).toEqual('devnet')
+            expect(data.envs[0].cluster.name).toEqual('Solana Devnet')
             expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
             expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
             expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
             expect(data.envs[0].wallets).toBeDefined()
             expect(data.envs[0].wallets[0].publicKey).toBeDefined()
+            expect(data.envs[1].name).toEqual('local')
+            expect(data.envs[1].cluster.name).toEqual('Local')
+            expect(data.envs[1].cluster.type).toEqual(ClusterType.Custom)
+            expect(data.envs[1].mints[0].mint.symbol).toEqual('KIN')
+            expect(data.envs[1].mints[0].wallet.publicKey).toBeDefined()
+            expect(data.envs[1].wallets).toBeDefined()
+            expect(data.envs[1].wallets[0].publicKey).toBeDefined()
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
           })
@@ -88,11 +97,13 @@ describe('App (e2e)', () => {
 
             expect(data.index).toEqual(appIndex)
             expect(data.name).toEqual(input.name)
-            expect(data.envs.length).toEqual(1)
+            expect(data.envs.length).toEqual(2)
             expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
+            expect(data.envs[1].cluster.type).toEqual(ClusterType.Custom)
             expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
             expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
             expect(data.envs[0].name).toEqual('devnet')
+            expect(data.envs[1].name).toEqual('local')
             expect(data.envs[0].wallets).toBeDefined()
             expect(data.envs[0].wallets[0].publicKey).toBeDefined()
             expect(data.users.length).toEqual(1)
@@ -109,11 +120,14 @@ describe('App (e2e)', () => {
 
             expect(data.id).toEqual(appId)
             expect(data.index).toEqual(appIndex)
-            expect(data.envs.length).toEqual(1)
+            expect(data.envs.length).toEqual(2)
             expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
+            expect(data.envs[1].cluster.type).toEqual(ClusterType.Custom)
             expect(data.envs[0].mints[0].mint.symbol).toEqual('KIN')
             expect(data.envs[0].mints[0].wallet.publicKey).toBeDefined()
             expect(data.envs[0].wallets).toBeDefined()
+            expect(data.envs[0].name).toEqual('devnet')
+            expect(data.envs[1].name).toEqual('local')
             expect(data.envs[0].wallets[0].publicKey).toBeDefined()
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
@@ -130,7 +144,7 @@ describe('App (e2e)', () => {
             expect(data.length).toBeGreaterThan(0)
             expect(data.find((app) => app.index === appIndex)).toBeDefined()
           })
-      })
+      }, 10_000)
 
       it('should delete an app', async () => {
         return runGraphQLQueryAdmin(app, token, AdminDeleteApp, { appId })
@@ -159,7 +173,7 @@ describe('App (e2e)', () => {
 
         // Delete Second
         await runGraphQLQueryAdmin(app, token, AdminDeleteApp, { appId: created2.body?.data?.created?.id })
-      })
+      }, 10_000)
     })
 
     describe('AppUsers', () => {
@@ -292,7 +306,7 @@ describe('App (e2e)', () => {
             expect(data.appEnvs).toBeDefined()
             expect(data.appEnvs.length).toEqual(1)
           })
-      })
+      }, 10_000)
 
       it('should remove a wallet fom an app', async () => {
         await runGraphQLQueryAdmin(app, token, UserAppEnvWalletRemove, { appId, appEnvId, walletId })
@@ -300,9 +314,9 @@ describe('App (e2e)', () => {
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.item
-            expect(data.wallets).toEqual([])
+            expect(data.wallets?.find((item) => item.id === walletId)).toEqual(undefined)
           })
-      })
+      }, 10_000)
     })
   })
 

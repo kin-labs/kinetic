@@ -27,7 +27,8 @@ export function ServerGrid({
         >
           <Stack spacing={2}>
             <Code>{server.name}</Code>
-            <Text fontSize="sm">{server.endpoint}</Text>
+            <Code fontSize="sm">endpoint: {server.endpoint}</Code>
+            <Code fontSize="sm">environment: {server.environment}</Code>
           </Stack>
           <ButtonGroup variant="outline" spacing="2">
             <Button size="xs" onClick={() => showServer(server)} colorScheme="teal">

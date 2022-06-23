@@ -20,6 +20,12 @@ export function AdminClusterUiMintDetails({ mint }: { mint: Mint }) {
         <Flex direction="column" alignItems="end">
           <Text fontSize="lg">{mint?.decimals} decimals</Text>
           <Text color="gray.500">{mint?.type}</Text>
+          {mint.airdropPublicKey && (
+            <Text color="gray.500" fontSize="xs">
+              <Text mr={2}>Airdrop:</Text>
+              <AdminUiAddress address={mint.airdropPublicKey} />
+            </Text>
+          )}
         </Flex>
       </Flex>
     </Flex>
