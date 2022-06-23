@@ -73,7 +73,7 @@ export class KineticSdk {
   }
 
   tokenAccounts(account: string) {
-    console.warn(`Deprecated method, please use getTokenAccounts()`)
+    console.warn(`[tokenAccounts] Deprecated method, please use getTokenAccounts()`)
     return this.internal.getTokenAccounts({ account })
   }
 
