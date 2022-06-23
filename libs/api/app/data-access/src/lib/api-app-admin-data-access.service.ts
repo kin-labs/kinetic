@@ -66,10 +66,12 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
       data,
       include: {
         envs: {
+          orderBy: { name: 'asc' },
           include: {
             app: true,
             cluster: true,
             mints: {
+              orderBy: { order: 'asc' },
               include: {
                 mint: true,
                 wallet: true,

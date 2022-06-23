@@ -29,6 +29,7 @@ export class ApiAppDataAccessService implements OnModuleInit {
   readonly include: Prisma.AppInclude = {
     users: { include: { user: true } },
     envs: {
+      orderBy: { name: 'asc' },
       include: this.includeAppEnv,
     },
   }

@@ -89,6 +89,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
           include: {
             cluster: true,
             mints: {
+              orderBy: { order: 'asc' },
               include: {
                 mint: true,
                 wallet: true,
@@ -137,9 +138,11 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       where: { index },
       include: {
         envs: {
+          orderBy: { name: 'asc' },
           include: {
             cluster: true,
             mints: {
+              orderBy: { order: 'asc' },
               include: {
                 mint: true,
                 wallet: true,
