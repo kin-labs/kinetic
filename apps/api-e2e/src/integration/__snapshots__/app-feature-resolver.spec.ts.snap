@@ -98,3 +98,22 @@ Array [
   },
 ]
 `;
+
+exports[`App (e2e) Unexpected usage Unauthenticated Access should not find an app 1`] = `
+Array [
+  Object {
+    "extensions": Object {
+      "code": "BAD_USER_INPUT",
+      "response": Object {
+        "error": "Bad Request",
+        "message": Array [
+          "webhookEventUrl must be a url",
+          "webhookVerifyUrl must be a url",
+        ],
+        "statusCode": 400,
+      },
+    },
+    "message": "Bad Request Exception",
+  },
+]
+`;

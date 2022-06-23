@@ -140,7 +140,7 @@ describe('App (e2e)', () => {
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.items
-            console.log(JSON.stringify(data, null, 2))
+
             expect(data.length).toBeGreaterThan(0)
             expect(data.find((app) => app.index === appIndex)).toBeDefined()
           })
@@ -314,7 +314,7 @@ describe('App (e2e)', () => {
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.item
-            expect(data.wallets).toEqual([])
+            expect(data.wallets?.find((item) => item.id === walletId)).toEqual(undefined)
           })
       }, 10_000)
     })

@@ -10,6 +10,7 @@ import { AppTransaction } from './entity/app-transaction.entity'
 @Injectable()
 export class ApiAppDataAccessService implements OnModuleInit {
   readonly includeAppEnv: Prisma.AppEnvInclude = {
+    app: true,
     cluster: {
       include: {
         mints: {
