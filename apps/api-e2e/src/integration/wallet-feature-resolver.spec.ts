@@ -55,7 +55,6 @@ describe('Wallet (e2e)', () => {
         return runGraphQLQueryAdmin(app, token, UserWallet, { appEnvId, walletId })
           .expect(200)
           .expect((res) => {
-            console.log('res', res.body)
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.item
 

@@ -67,6 +67,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
       include: {
         envs: {
           include: {
+            app: true,
             cluster: true,
             mints: {
               include: {
