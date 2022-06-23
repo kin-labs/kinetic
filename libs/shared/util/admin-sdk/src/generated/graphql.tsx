@@ -261,7 +261,7 @@ export type ClusterTokenExtensions = {
   address?: Maybe<Scalars['String']>
   assetContract?: Maybe<Scalars['String']>
   bridgeContract?: Maybe<Scalars['String']>
-  coingeckoId?: Maybe<Scalars['String']>
+  coinGeckoId?: Maybe<Scalars['String']>
   description?: Maybe<Scalars['String']>
   discord?: Maybe<Scalars['String']>
   explorer?: Maybe<Scalars['String']>
@@ -309,7 +309,7 @@ export type Mint = {
   airdropAmount?: Maybe<Scalars['Int']>
   airdropMax?: Maybe<Scalars['Int']>
   airdropPublicKey?: Maybe<Scalars['String']>
-  coingeckoId?: Maybe<Scalars['String']>
+  coinGeckoId?: Maybe<Scalars['String']>
   createdAt?: Maybe<Scalars['DateTime']>
   decimals?: Maybe<Scalars['Int']>
   default?: Maybe<Scalars['Boolean']>
@@ -716,7 +716,7 @@ export type AdminCreateAppMutation = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -742,7 +742,7 @@ export type AdminCreateAppMutation = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -858,7 +858,7 @@ export type AdminAppsQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -884,7 +884,7 @@ export type AdminAppsQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -967,7 +967,7 @@ export type AdminAppQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -993,7 +993,7 @@ export type AdminAppQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -1084,7 +1084,7 @@ export type AppEnvDetailsFragment = {
       airdropAmount?: number | null
       airdropMax?: number | null
       airdropPublicKey?: string | null
-      coingeckoId?: string | null
+      coinGeckoId?: string | null
       decimals?: number | null
       default?: boolean | null
       enabled?: boolean | null
@@ -1110,7 +1110,7 @@ export type AppEnvDetailsFragment = {
       airdropAmount?: number | null
       airdropMax?: number | null
       airdropPublicKey?: string | null
-      coingeckoId?: string | null
+      coinGeckoId?: string | null
       decimals?: number | null
       default?: boolean | null
       enabled?: boolean | null
@@ -1145,7 +1145,7 @@ export type AppMintDetailsFragment = {
     airdropAmount?: number | null
     airdropMax?: number | null
     airdropPublicKey?: string | null
-    coingeckoId?: string | null
+    coinGeckoId?: string | null
     decimals?: number | null
     default?: boolean | null
     enabled?: boolean | null
@@ -1358,7 +1358,7 @@ export type UserUpdateAppMutation = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -1384,7 +1384,7 @@ export type UserUpdateAppMutation = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -1481,7 +1481,7 @@ export type UserUpdateAppEnvMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -1507,7 +1507,7 @@ export type UserUpdateAppEnvMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -1699,7 +1699,7 @@ export type UserAppEnvMintDisableMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -1725,7 +1725,7 @@ export type UserAppEnvMintDisableMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -1788,7 +1788,7 @@ export type UserAppEnvMintEnableMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -1814,7 +1814,7 @@ export type UserAppEnvMintEnableMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -1878,7 +1878,7 @@ export type UserAppEnvMintSetWalletMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -1904,7 +1904,7 @@ export type UserAppEnvMintSetWalletMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -1974,7 +1974,7 @@ export type UserAppEnvWalletAddMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -2000,7 +2000,7 @@ export type UserAppEnvWalletAddMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -2070,7 +2070,7 @@ export type UserAppEnvWalletRemoveMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -2096,7 +2096,7 @@ export type UserAppEnvWalletRemoveMutation = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -2367,7 +2367,7 @@ export type UserAppsQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -2393,7 +2393,7 @@ export type UserAppsQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -2477,7 +2477,7 @@ export type UserAppQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -2503,7 +2503,7 @@ export type UserAppQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -2599,7 +2599,7 @@ export type UserAppEnvQuery = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -2625,7 +2625,7 @@ export type UserAppEnvQuery = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -2743,7 +2743,7 @@ export type ClusterTokenDetailsFragment = {
     address?: string | null
     assetContract?: string | null
     bridgeContract?: string | null
-    coingeckoId?: string | null
+    coinGeckoId?: string | null
     description?: string | null
     discord?: string | null
     explorer?: string | null
@@ -2764,7 +2764,7 @@ export type ClusterTokenExtensionsDetailsFragment = {
   address?: string | null
   assetContract?: string | null
   bridgeContract?: string | null
-  coingeckoId?: string | null
+  coinGeckoId?: string | null
   description?: string | null
   discord?: string | null
   explorer?: string | null
@@ -2788,7 +2788,7 @@ export type MintDetailsFragment = {
   airdropAmount?: number | null
   airdropMax?: number | null
   airdropPublicKey?: string | null
-  coingeckoId?: string | null
+  coinGeckoId?: string | null
   decimals?: number | null
   default?: boolean | null
   enabled?: boolean | null
@@ -2825,7 +2825,7 @@ export type AdminAddClusterMintMutation = {
       airdropAmount?: number | null
       airdropMax?: number | null
       airdropPublicKey?: string | null
-      coingeckoId?: string | null
+      coinGeckoId?: string | null
       decimals?: number | null
       default?: boolean | null
       enabled?: boolean | null
@@ -2925,7 +2925,7 @@ export type AdminClusterQuery = {
       airdropAmount?: number | null
       airdropMax?: number | null
       airdropPublicKey?: string | null
-      coingeckoId?: string | null
+      coinGeckoId?: string | null
       decimals?: number | null
       default?: boolean | null
       enabled?: boolean | null
@@ -2957,7 +2957,7 @@ export type AdminClusterTokensQuery = {
       address?: string | null
       assetContract?: string | null
       bridgeContract?: string | null
-      coingeckoId?: string | null
+      coinGeckoId?: string | null
       description?: string | null
       discord?: string | null
       explorer?: string | null
@@ -2998,7 +2998,7 @@ export type AdminClustersQuery = {
       airdropAmount?: number | null
       airdropMax?: number | null
       airdropPublicKey?: string | null
-      coingeckoId?: string | null
+      coinGeckoId?: string | null
       decimals?: number | null
       default?: boolean | null
       enabled?: boolean | null
@@ -3261,7 +3261,7 @@ export type AdminWalletQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -3287,7 +3287,7 @@ export type AdminWalletQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -3384,7 +3384,7 @@ export type AdminWalletsQuery = {
             airdropAmount?: number | null
             airdropMax?: number | null
             airdropPublicKey?: string | null
-            coingeckoId?: string | null
+            coinGeckoId?: string | null
             decimals?: number | null
             default?: boolean | null
             enabled?: boolean | null
@@ -3410,7 +3410,7 @@ export type AdminWalletsQuery = {
             airdropAmount?: number | null
             airdropMax?: number | null
             airdropPublicKey?: string | null
-            coingeckoId?: string | null
+            coinGeckoId?: string | null
             decimals?: number | null
             default?: boolean | null
             enabled?: boolean | null
@@ -3471,7 +3471,7 @@ export type AdminWalletsQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -3497,7 +3497,7 @@ export type AdminWalletsQuery = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -3572,7 +3572,7 @@ export type UserGenerateWalletMutation = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -3598,7 +3598,7 @@ export type UserGenerateWalletMutation = {
           airdropAmount?: number | null
           airdropMax?: number | null
           airdropPublicKey?: string | null
-          coingeckoId?: string | null
+          coinGeckoId?: string | null
           decimals?: number | null
           default?: boolean | null
           enabled?: boolean | null
@@ -3680,7 +3680,7 @@ export type UserWalletQuery = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -3773,7 +3773,7 @@ export type UserWalletsQuery = {
         airdropAmount?: number | null
         airdropMax?: number | null
         airdropPublicKey?: string | null
-        coingeckoId?: string | null
+        coinGeckoId?: string | null
         decimals?: number | null
         default?: boolean | null
         enabled?: boolean | null
@@ -3816,7 +3816,7 @@ export const MintDetailsFragmentDoc = gql`
     airdropAmount
     airdropMax
     airdropPublicKey
-    coingeckoId
+    coinGeckoId
     decimals
     default
     enabled
@@ -4017,7 +4017,7 @@ export const ClusterTokenExtensionsDetailsFragmentDoc = gql`
     address
     assetContract
     bridgeContract
-    coingeckoId
+    coinGeckoId
     description
     discord
     explorer

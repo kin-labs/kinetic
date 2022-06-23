@@ -6,7 +6,7 @@ export class MintUpdateInput {
   @Field({ nullable: true })
   address: string
   @Field({ nullable: true })
-  coingeckoId?: string | null
+  coinGeckoId?: string | null
   @Field(() => Int, { nullable: true })
   decimals: number
   @Field({ nullable: true })

@@ -36,7 +36,7 @@ fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
   address
   assetContract
   bridgeContract
-  coingeckoId
+  coinGeckoId
   description
   discord
   explorer
@@ -58,7 +58,7 @@ fragment MintDetails on Mint {
   airdropAmount
   airdropMax
   airdropPublicKey
-  coingeckoId
+  coinGeckoId
   decimals
   default
   enabled

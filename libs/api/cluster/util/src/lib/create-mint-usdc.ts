@@ -7,7 +7,7 @@ export function createMintUsdc(clusterId: string, order: number, address: string
     airdropMax = parseInt(process.env['DEFAULT_MINT_AIRDROP_MAX'])
     airdropSecretKey = process.env['DEFAULT_MINT_AIRDROP_SECRET_KEY']
   }
-  const coingeckoId = 'usdc'
+  const coinGeckoId = 'usdc'
   const defaultMint = false
   const logoUrl =
     'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU/logo.png'
@@ -23,7 +23,7 @@ export function createMintUsdc(clusterId: string, order: number, address: string
     symbol,
     defaultMint,
     logoUrl,
-    coingeckoId,
+    coinGeckoId,
     airdropAmount,
     airdropMax,
     airdropSecretKey,

@@ -3,7 +3,7 @@ import { createMint } from './create-mint'
 
 export function createMintSol(clusterId: string, order: number): Prisma.MintCreateInput {
   const address = 'So11111111111111111111111111111111111111112'
-  const coingeckoId = 'solana'
+  const coinGeckoId = 'solana'
   const decimals = 9
   const defaultMint = false
   const logoUrl =
@@ -11,5 +11,5 @@ export function createMintSol(clusterId: string, order: number): Prisma.MintCrea
   const name = 'Wrapped SOL'
   const symbol = 'SOL'
 
-  return createMint(clusterId, order, address, decimals, name, symbol, defaultMint, logoUrl, coingeckoId)
+  return createMint(clusterId, order, address, decimals, name, symbol, defaultMint, logoUrl, coinGeckoId)
 }

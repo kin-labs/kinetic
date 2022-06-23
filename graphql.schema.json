@@ -2225,7 +2225,7 @@
             "deprecationReason": null
           },
           {
-            "name": "coingeckoId",
+            "name": "coinGeckoId",
             "description": null,
             "args": [],
             "type": {
@@ -2692,7 +2692,7 @@
             "deprecationReason": null
           },
           {
-            "name": "coingeckoId",
+            "name": "coinGeckoId",
             "description": null,
             "args": [],
             "type": {

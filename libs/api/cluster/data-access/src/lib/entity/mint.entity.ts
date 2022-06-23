@@ -18,7 +18,7 @@ export class Mint {
   @HideField()
   airdropSecretKey?: string
   @Field({ nullable: true })
-  coingeckoId?: string
+  coinGeckoId?: string
   @Field(() => Int, { nullable: true })
   decimals: number
   @Field({ nullable: true })

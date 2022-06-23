@@ -80,7 +80,7 @@ export class ApiClusterAdminDataAccessService {
     const order = cluster.mints[cluster.mints.length - 1].order + 1
     const mint: Prisma.MintUncheckedCreateWithoutClusterInput = {
       address: token.address,
-      coingeckoId: token.extensions.coingeckoId,
+      coinGeckoId: token.extensions.coinGeckoId,
       decimals: token.decimals,
       logoUrl: token.logoURI,
       name: token.name,
