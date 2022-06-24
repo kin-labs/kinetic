@@ -1,9 +1,10 @@
-name: Create and publish a Docker image
+name: build-publish-docker
 
 on:
   pull_request:
   push:
     branches:
+      - dev
       - main
 
 env:
@@ -34,8 +35,25 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker (dev)
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        if: github.ref == 'refs/heads/dev'
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker (main)
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        if: github.ref == 'refs/heads/main'
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker (pr)
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        if: github.ref != 'refs/heads/dev' && github.ref != 'refs/heads/main'
         with:
           context: .
           push: true
