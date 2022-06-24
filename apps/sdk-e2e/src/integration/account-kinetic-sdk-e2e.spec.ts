@@ -54,6 +54,6 @@ describe('KineticSdk (e2e) - Account', () => {
     expect(res.amount).toBeNull()
     expect(res.errors.length).toBeGreaterThan(0)
     expect(res.status).toBe(AppTransactionStatus.Failed)
-    expect(res.errors[0].message).toContain('Error: failed to send transaction') // TODO: Account already exists
+    expect(res.errors[0].message).toContain('Error: Account already exists.')
   })
 })

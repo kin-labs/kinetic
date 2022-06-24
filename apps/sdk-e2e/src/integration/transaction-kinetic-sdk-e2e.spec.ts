@@ -86,7 +86,7 @@ describe('KineticSdk (e2e)', () => {
     expect(res.amount).toBeNull()
     expect(res.errors.length).toBeGreaterThan(0)
     expect(res.status).toBe(AppTransactionStatus.Failed)
-    expect(res.errors[0].message).toContain('Error: failed to send transaction') // TODO: Insufficient funds
+    expect(res.errors[0].message).toContain('Error: Insufficient funds.')
   })
 
   it('should throw when insufficient funds in a batch transaction', async () => {
@@ -99,6 +99,6 @@ describe('KineticSdk (e2e)', () => {
     expect(res.signature).toBeNull()
     expect(res.errors.length).toBeGreaterThan(0)
     expect(res.status).toBe(AppTransactionStatus.Failed)
-    expect(res.errors[0].message).toContain('Error: failed to send transaction') // TODO: Insufficient funds
+    expect(res.errors[0].message).toContain('Error: Insufficient funds.')
   })
 })
