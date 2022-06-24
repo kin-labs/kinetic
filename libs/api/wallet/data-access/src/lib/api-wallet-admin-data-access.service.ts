@@ -19,6 +19,7 @@ export class ApiWalletAdminDataAccessService {
         wallets: true,
       },
     },
+    owner: true,
   }
   constructor(private readonly data: ApiCoreDataAccessService) {}
 

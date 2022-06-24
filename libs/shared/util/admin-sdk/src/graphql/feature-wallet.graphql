@@ -3,6 +3,7 @@ fragment WalletDetails on Wallet {
   createdAt
   updatedAt
   publicKey
+  type
 }
 
 fragment WalletAirdropResponseDetails on WalletAirdropResponse {
@@ -29,6 +30,9 @@ query AdminWallet($walletId: String!) {
     appEnvs {
       ...AppEnvDetails
     }
+    owner {
+      ...UserDetails
+    }
   }
 }
 
@@ -49,6 +53,9 @@ query AdminWallets {
     }
     appEnvs {
       ...AppEnvDetails
+    }
+    owner {
+      ...UserDetails
     }
   }
 }

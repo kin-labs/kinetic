@@ -1,5 +1,6 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { UserRole } from '@kin-kinetic/api/user/data-access'
+import { WalletType } from '@kin-kinetic/api/wallet/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
@@ -154,7 +155,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
     await this.data.ensureAdminUser(userId)
     const { publicKey, secretKey } = this.getAppKeypair(index)
 
-    return this.data.wallet.create({ data: { secretKey, publicKey } })
+    return this.data.wallet.create({ data: { secretKey, publicKey, type: WalletType.Provisioned, ownerId: userId } })
   }
 
   private getAppKeypair(index: number): Keypair {

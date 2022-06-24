@@ -1,4 +1,4 @@
-import { Button, Flex, Stack, Text } from '@chakra-ui/react'
+import { Button, Flex, Stack, Tag, Text } from '@chakra-ui/react'
 import { ShowSolBalance } from '@kin-kinetic/admin/app/ui'
 import { Wallet } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
@@ -19,6 +19,7 @@ export function AdminWalletUiTable({ wallets, deleteWallet }: AdminWalletUiTable
               <Text fontSize="2xl" color="gray.500">
                 {wallet.publicKey}
               </Text>
+              <Tag>{wallet?.type}</Tag>
             </Link>
             <Button disabled={Boolean(wallet.appEnvs?.length)} size="xs" onClick={() => deleteWallet(wallet.id)}>
               Delete Wallet

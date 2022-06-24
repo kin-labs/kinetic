@@ -7,7 +7,7 @@ import {
   WalletBalance,
 } from '@kin-kinetic/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
-import { Args, Float, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Float, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()
 @UseGuards(ApiAuthGraphqlGuard)

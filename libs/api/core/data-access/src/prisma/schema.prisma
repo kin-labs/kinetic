@@ -271,6 +271,7 @@ model User {
   username  String      @unique
   apps      AppUser[]   @relation()
   emails    UserEmail[] @relation()
+  Wallet    Wallet[]
 }
 
 model UserEmail {
@@ -291,11 +292,20 @@ model Wallet {
   id        String          @id @default(cuid())
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
+  type      WalletType
   publicKey String
   secretKey String
   appMints  AppMint[]
   appEnvs   AppEnv[]        @relation()
+  owner     User?           @relation(fields: [ownerId], references: [id])
+  ownerId   String?
   balances  WalletBalance[]
+}
+
+enum WalletType {
+  Generated
+  Imported
+  Provisioned
 }
 
 model WalletBalance {

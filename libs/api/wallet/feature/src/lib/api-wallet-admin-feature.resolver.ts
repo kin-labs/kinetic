@@ -39,4 +39,9 @@ export class ApiWalletAdminFeatureResolver {
   appMints(@Parent() wallet: Wallet) {
     return wallet.appMints
   }
+
+  @ResolveField(() => User, { nullable: true })
+  owner(@Parent() wallet: Wallet) {
+    return wallet.owner
+  }
 }
