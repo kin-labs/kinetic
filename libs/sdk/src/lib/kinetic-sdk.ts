@@ -1,5 +1,4 @@
 import { Solana } from '@kin-kinetic/solana'
-import { Cluster, clusterApiUrl } from '@solana/web3.js'
 import { AppTransaction } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'

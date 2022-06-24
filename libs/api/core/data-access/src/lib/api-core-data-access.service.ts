@@ -167,7 +167,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       const env = await this.getAppByEnvironmentIndex(environment, index)
       this.connections.set(
         appKey,
-        new Solana(env.cluster.endpoint, {
+        new Solana(env.cluster.endpointPrivate, {
           logger: new Logger(`@kin-kinetic/solana:${appKey}`),
         }),
       )

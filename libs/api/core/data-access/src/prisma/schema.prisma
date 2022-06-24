@@ -192,18 +192,19 @@ enum AppUserRole {
 }
 
 model Cluster {
-  id          String        @id @default(cuid())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-  enableStats Boolean       @default(false)
-  endpoint    String
-  explorer    String
-  envs        AppEnv[]
-  mints       Mint[]
-  name        String
-  status      ClusterStatus @default(Active)
-  type        ClusterType
-  stats       ClusterStat[]
+  id              String        @id @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @default(now()) @updatedAt
+  enableStats     Boolean       @default(false)
+  endpointPublic  String
+  endpointPrivate String
+  explorer        String
+  envs            AppEnv[]
+  mints           Mint[]
+  name            String
+  status          ClusterStatus @default(Active)
+  type            ClusterType
+  stats           ClusterStat[]
 }
 
 model ClusterStat {
