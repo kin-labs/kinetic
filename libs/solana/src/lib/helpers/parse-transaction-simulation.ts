@@ -1,19 +1,29 @@
 import { SimulatedTransactionResponse } from '@solana/web3.js'
 import { TransactionError } from './transaction-error'
 
-const errorMessageMap = {
-  0: {
-    type: 'CUSTOM_ZERO',
-    message: 'Account already exists.',
-  },
-  1: {
-    type: 'InsufficientFunds',
-    message: 'Insufficient funds.',
-  },
-  InvalidAccountData: {
-    type: 'InvalidAccountData',
-    message: 'Insufficient funds.',
-  },
+function errorMessageMap(index: number | string | undefined) {
+  switch (index) {
+    case 0:
+      return {
+        type: 'CUSTOM_ZERO',
+        message: 'Account already exists.',
+      }
+    case 1:
+      return {
+        type: 'InsufficientFunds',
+        message: 'Insufficient funds.',
+      }
+    case 'InvalidAccountData':
+      return {
+        type: 'InvalidAccountData',
+        message: 'Insufficient funds.',
+      }
+    default:
+      return {
+        type: 'Unknown',
+        message: 'Unknown error.',
+      }
+  }
 }
 
 export function parseTransactionSimulation(simulation: SimulatedTransactionResponse) {
@@ -21,11 +31,8 @@ export function parseTransactionSimulation(simulation: SimulatedTransactionRespo
   if (simulation?.err && typeof simulation.err === 'object' && 'InstructionError' in simulation.err) {
     const [instructionIndex, instructionError] = simulation.err['InstructionError'] as [number, string?]
     const { Custom } = instructionError as any
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const error = Custom !== undefined ? errorMessageMap[Custom] : errorMessageMap[instructionError]
-    error.instruction = instructionIndex
-    throw new TransactionError(error.message, logs, error.type, error.instruction)
+    const error = Custom !== undefined ? errorMessageMap(Custom) : errorMessageMap(instructionError)
+    throw new TransactionError(error.message, logs, error.type, instructionIndex)
   }
 
   return simulation
