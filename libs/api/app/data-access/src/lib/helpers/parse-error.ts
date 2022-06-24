@@ -3,18 +3,15 @@ import { AppTransactionErrorType } from '../entity/app-transaction-error-type.en
 
 export function parseError(
   error,
-  errorType: AppTransactionErrorType = AppTransactionErrorType.Unknown,
+  errorType?: string,
+  instruction?: number,
 ): Prisma.AppTransactionErrorCreateWithoutAppTransactionInput {
   const message = error.toString()
-  let type = errorType
-  let instruction
+  let type: AppTransactionErrorType = AppTransactionErrorType.Unknown
 
-  if (message.includes('invalid account data for instruction')) {
-    instruction = Number(message.split(' ')[11].split(':')[0])
+  if (errorType === 'InvalidAccountData') {
     type = AppTransactionErrorType.InvalidAccount
   }
-
-  // Add other cases
 
   return {
     message,
