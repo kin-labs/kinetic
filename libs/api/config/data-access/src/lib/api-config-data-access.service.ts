@@ -15,8 +15,8 @@ export class ApiConfigDataAccessService {
       : {
           id: 'local',
           name: 'Local',
-          endpointPublic: 'http://localhost:8899',
           endpointPrivate: 'http://localhost:8899',
+          endpointPublic: 'http://localhost:8899',
           explorer: 'https://explorer.solana.com/{path}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899',
           type: ClusterType.Custom,
           status: ClusterStatus.Active,
@@ -24,16 +24,16 @@ export class ApiConfigDataAccessService {
     {
       id: 'solana-devnet',
       name: 'Solana Devnet',
-      endpointPublic: this.solanaDevnetRpcEndpoint,
       endpointPrivate: this.solanaDevnetRpcEndpoint,
+      endpointPublic: this.solanaDevnetRpcEndpoint,
       explorer: 'https://explorer.solana.com/{path}?cluster=devnet',
       type: ClusterType.SolanaDevnet,
     },
     {
       id: 'solana-mainnet',
       name: 'Solana Mainnet',
-      endpointPublic: this.solanaMainnetRpcEndpoint,
       endpointPrivate: this.solanaMainnetRpcEndpoint,
+      endpointPublic: this.solanaMainnetRpcEndpoint,
       explorer: 'https://explorer.solana.com/{path}',
       type: ClusterType.SolanaMainnet,
       status: ClusterStatus.Inactive,

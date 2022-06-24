@@ -196,8 +196,8 @@ model Cluster {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @default(now()) @updatedAt
   enableStats     Boolean       @default(false)
-  endpointPublic  String
   endpointPrivate String
+  endpointPublic  String
   explorer        String
   envs            AppEnv[]
   mints           Mint[]

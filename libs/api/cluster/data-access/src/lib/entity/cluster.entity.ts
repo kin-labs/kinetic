@@ -14,9 +14,9 @@ export class Cluster {
   @Field({ nullable: true })
   enableStats?: boolean
   @Field({ nullable: true })
-  endpointPublic?: string
-  @Field({ nullable: true })
   endpointPrivate?: string
+  @Field({ nullable: true })
+  endpointPublic?: string
   @Field({ nullable: true })
   explorer?: string
   @Field({ nullable: true })

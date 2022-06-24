@@ -19,7 +19,8 @@ export function AdminClusterFeatureSettingsTab({ clusterId }: { clusterId: strin
         input: {
           enableStats: input?.enableStats,
           name: input.name,
-          endpoint: input?.endpoint,
+          endpointPublic: input?.endpointPublic,
+          endpointPrivate: input?.endpointPrivate,
           explorer: input?.explorer,
           status: input?.status,
         },

@@ -3,7 +3,8 @@ fragment ClusterDetails on Cluster {
   createdAt
   updatedAt
   enableStats
-  endpoint
+  endpointPrivate
+  endpointPublic
   explorer
   name
   status
