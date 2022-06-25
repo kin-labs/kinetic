@@ -8,4 +8,6 @@ export class AppConfigCluster {
   name: string
   @ApiProperty({ enum: ClusterType })
   type: ClusterType
+  @ApiProperty()
+  endpointPublic: string
 }

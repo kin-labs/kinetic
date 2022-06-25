@@ -884,9 +884,12 @@
           "type": {
             "type": "string",
             "enum": ["Custom", "SolanaDevnet", "SolanaMainnet", "SolanaTestnet"]
+          },
+          "endpointPublic": {
+            "type": "string"
           }
         },
-        "required": ["id", "name", "type"]
+        "required": ["id", "name", "type", "endpointPublic"]
       },
       "AppConfigEnvironment": {
         "type": "object",
