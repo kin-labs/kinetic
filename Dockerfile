@@ -68,6 +68,8 @@ FROM base as final
 
 #RUN apk --no-cache add krb5-libs
 
+COPY libs/api/core/data-access/src/prisma/schema.prisma /workspace/libs/api/core/data-access/src/prisma/schema.prisma
+
 # Copy over artifacts from builder image
 COPY --from=builder /workspace/dist /workspace/dist
 
