@@ -12,6 +12,7 @@ import {
   DefaultApi,
   LatestBlockhashResponse,
   MakeTransferRequest,
+  RequestAirdropResponse,
   TransactionApi,
 } from '../generated'
 import {
@@ -221,18 +222,22 @@ export class KineticSdkInternal {
     return Promise.resolve(res.data)
   }
 
-  requestAirdrop({ account, amount, mint }: RequestAirdropOptions) {
+  requestAirdrop({ account, amount, commitment, mint }: RequestAirdropOptions): Promise<RequestAirdropResponse> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
     mint = mint || this.appConfig.mint.publicKey
-    return this.airdropApi.requestAirdrop({
-      environment: this.appConfig.environment.name,
-      index: this.appConfig.app.index,
-      mint,
-      account: account?.toString(),
-      amount,
-    })
+    commitment = commitment || Commitment.Finalized
+    return this.airdropApi
+      .requestAirdrop({
+        account: account?.toString(),
+        amount,
+        commitment,
+        environment: this.appConfig.environment.name,
+        index: this.appConfig.app.index,
+        mint,
+      })
+      .then((res) => res.data)
   }
 
   private async prepareTransaction({ mint }: { mint?: string }): Promise<{

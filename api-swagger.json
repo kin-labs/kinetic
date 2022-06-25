@@ -793,6 +793,10 @@
           "amount": {
             "type": "string"
           },
+          "commitment": {
+            "type": "string",
+            "enum": ["Confirmed", "Finalized", "Processed"]
+          },
           "environment": {
             "type": "string"
           },
@@ -803,7 +807,7 @@
             "type": "string"
           }
         },
-        "required": ["account", "environment", "index", "mint"]
+        "required": ["account", "commitment", "environment", "index", "mint"]
       },
       "RequestAirdropResponse": {
         "type": "object",

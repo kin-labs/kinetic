@@ -699,6 +699,12 @@ export interface RequestAirdropRequest {
    * @type {string}
    * @memberof RequestAirdropRequest
    */
+  commitment: RequestAirdropRequestCommitmentEnum
+  /**
+   *
+   * @type {string}
+   * @memberof RequestAirdropRequest
+   */
   environment: string
   /**
    *
@@ -713,6 +719,16 @@ export interface RequestAirdropRequest {
    */
   mint: string
 }
+
+export const RequestAirdropRequestCommitmentEnum = {
+  Confirmed: 'Confirmed',
+  Finalized: 'Finalized',
+  Processed: 'Processed',
+} as const
+
+export type RequestAirdropRequestCommitmentEnum =
+  typeof RequestAirdropRequestCommitmentEnum[keyof typeof RequestAirdropRequestCommitmentEnum]
+
 /**
  *
  * @export

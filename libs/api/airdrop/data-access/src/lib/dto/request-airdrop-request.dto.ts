@@ -1,3 +1,4 @@
+import { Commitment } from '@kin-kinetic/solana'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class RequestAirdropRequest {
@@ -5,6 +6,8 @@ export class RequestAirdropRequest {
   account: string
   @ApiProperty({ required: false })
   amount?: string
+  @ApiProperty({ enum: Commitment })
+  commitment: Commitment
   @ApiProperty({ required: true })
   environment: string
   @ApiProperty()
