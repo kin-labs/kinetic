@@ -84,10 +84,10 @@ export class ApiAppDataAccessService implements OnModuleInit {
         name: env.name,
         explorer: env.cluster.explorer,
         cluster: {
+          endpoint: env.cluster.endpointPublic,
           id: env.cluster.id,
           name: env.cluster.name,
           type: env.cluster.type,
-          endpointPublic: env.cluster.endpointPublic,
         },
       },
       mint: mints[0],

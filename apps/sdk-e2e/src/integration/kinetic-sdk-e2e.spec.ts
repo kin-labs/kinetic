@@ -17,7 +17,7 @@ describe('KineticSdk (e2e)', () => {
     expect(res.environment.cluster.id).toEqual('solana-devnet')
     expect(res.environment.cluster.name).toEqual('Solana Devnet')
     expect(res.environment.cluster.type).toEqual('SolanaDevnet')
-    expect(res.environment.cluster.endpointPublic).toEqual('http://localhost:8899')
+    expect(res.environment.cluster.endpoint).toEqual('http://localhost:8899')
     expect(res.mint.symbol).toEqual('KIN')
     expect(res.mint.publicKey).toEqual(defaultMint)
     expect(res.mints.length).toEqual(1)

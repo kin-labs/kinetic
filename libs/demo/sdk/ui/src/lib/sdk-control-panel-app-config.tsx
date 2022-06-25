@@ -5,7 +5,7 @@ import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelAppConfig({ sdk }: { sdk: KineticSdk }) {
   const [result, setResult] = useState<unknown>(null)
-  const getResult = () => {
+  const getResult = async () => {
     setResult(sdk.config())
   }
   return (

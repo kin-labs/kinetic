@@ -174,6 +174,12 @@ export interface AppConfigCluster {
    * @type {string}
    * @memberof AppConfigCluster
    */
+  endpoint: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigCluster
+   */
   id: string
   /**
    *
@@ -187,12 +193,6 @@ export interface AppConfigCluster {
    * @memberof AppConfigCluster
    */
   type: AppConfigClusterTypeEnum
-  /**
-   *
-   * @type {string}
-   * @memberof AppConfigCluster
-   */
-  endpointPublic: string
 }
 
 export const AppConfigClusterTypeEnum = {

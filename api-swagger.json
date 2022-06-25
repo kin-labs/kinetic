@@ -875,6 +875,9 @@
       "AppConfigCluster": {
         "type": "object",
         "properties": {
+          "endpoint": {
+            "type": "string"
+          },
           "id": {
             "type": "string"
           },
@@ -884,12 +887,9 @@
           "type": {
             "type": "string",
             "enum": ["Custom", "SolanaDevnet", "SolanaMainnet", "SolanaTestnet"]
-          },
-          "endpointPublic": {
-            "type": "string"
           }
         },
-        "required": ["id", "name", "type", "endpointPublic"]
+        "required": ["endpoint", "id", "name", "type"]
       },
       "AppConfigEnvironment": {
         "type": "object",

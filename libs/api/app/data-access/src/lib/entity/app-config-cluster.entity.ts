@@ -3,11 +3,11 @@ import { ApiProperty } from '@nestjs/swagger'
 
 export class AppConfigCluster {
   @ApiProperty()
+  endpoint: string
+  @ApiProperty()
   id: string
   @ApiProperty()
   name: string
   @ApiProperty({ enum: ClusterType })
   type: ClusterType
-  @ApiProperty()
-  endpointPublic: string
 }

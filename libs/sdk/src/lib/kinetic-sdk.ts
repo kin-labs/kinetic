@@ -22,9 +22,6 @@ export class KineticSdk {
 
   constructor(readonly sdkConfig: KineticSdkConfigParsed) {
     this.internal = new KineticSdkInternal(sdkConfig)
-    this.sdkConfig.solanaRpcEndpoint = sdkConfig.solanaRpcEndpoint
-      ? getSolanaRpcEndpoint(sdkConfig.solanaRpcEndpoint)
-      : getSolanaRpcEndpoint(sdkConfig.endpoint)
   }
 
   get endpoint() {
@@ -78,8 +75,13 @@ export class KineticSdk {
 
   async init() {
     try {
-      const { app } = await this.internal.getAppConfig(this.sdkConfig.environment, this.sdkConfig.index)
-      this.solana = new Solana(this.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
+      const { app, environment } = await this.internal.getAppConfig(this.sdkConfig.environment, this.sdkConfig.index)
+
+      this.sdkConfig.solanaRpcEndpoint = this.sdkConfig.solanaRpcEndpoint
+        ? getSolanaRpcEndpoint(this.sdkConfig.solanaRpcEndpoint)
+        : getSolanaRpcEndpoint(environment.cluster.endpoint)
+
+      this.solana = new Solana(this.sdkConfig.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
       this.sdkConfig?.logger?.log(
         `KineticSdk: endpoint '${this.sdkConfig.endpoint}', environment '${this.sdkConfig.environment}', index: ${app.index}`,
       )
