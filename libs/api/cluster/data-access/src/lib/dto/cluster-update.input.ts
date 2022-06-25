@@ -6,7 +6,9 @@ export class ClusterUpdateInput {
   @Field({ nullable: true })
   enableStats?: boolean
   @Field({ nullable: true })
-  endpoint?: string
+  endpointPrivate?: string
+  @Field({ nullable: true })
+  endpointPublic?: string
   @Field({ nullable: true })
   explorer?: string
   @Field({ nullable: true })

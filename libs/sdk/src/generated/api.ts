@@ -174,6 +174,12 @@ export interface AppConfigCluster {
    * @type {string}
    * @memberof AppConfigCluster
    */
+  endpoint: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigCluster
+   */
   id: string
   /**
    *

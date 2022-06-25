@@ -21,7 +21,8 @@ const validationSchema = Yup.object({
 const fields: UiFormField[] = [
   UiFormField.input('type', { disabled: true, label: 'Type' }),
   UiFormField.input('name', { label: 'Name' }),
-  UiFormField.input('endpoint', { label: 'Endpoint' }),
+  UiFormField.input('endpointPrivate', { label: 'Endpoint Private' }),
+  UiFormField.input('endpointPublic', { label: 'Endpoint Public' }),
   UiFormField.input('explorer', { label: 'Explorer' }),
   UiFormField.radio('status', {
     label: 'Status',
@@ -41,7 +42,8 @@ export function AdminClusterUiForm({ cluster, onSubmit }: AdminClusterUiProps) {
           data={{
             name: cluster?.name,
             enableStats: cluster?.enableStats,
-            endpoint: cluster?.endpoint,
+            endpointPrivate: cluster?.endpointPrivate,
+            endpointPublic: cluster?.endpointPublic,
             explorer: cluster?.explorer,
             type: cluster?.type,
             status: cluster?.status,

@@ -1758,7 +1758,19 @@
             "deprecationReason": null
           },
           {
-            "name": "endpoint",
+            "name": "endpointPrivate",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "endpointPublic",
             "description": null,
             "args": [],
             "type": {
@@ -1874,7 +1886,23 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "endpoint",
+            "name": "endpointPrivate",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "endpointPublic",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -2503,7 +2531,19 @@
             "deprecationReason": null
           },
           {
-            "name": "endpoint",
+            "name": "endpointPrivate",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "endpointPublic",
             "description": null,
             "type": {
               "kind": "SCALAR",

@@ -210,7 +210,8 @@ export type Cluster = {
   __typename?: 'Cluster'
   createdAt?: Maybe<Scalars['DateTime']>
   enableStats?: Maybe<Scalars['Boolean']>
-  endpoint?: Maybe<Scalars['String']>
+  endpointPrivate?: Maybe<Scalars['String']>
+  endpointPublic?: Maybe<Scalars['String']>
   explorer?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['String']>
   mints?: Maybe<Array<Mint>>
@@ -221,7 +222,8 @@ export type Cluster = {
 }
 
 export type ClusterCreateInput = {
-  endpoint: Scalars['String']
+  endpointPrivate: Scalars['String']
+  endpointPublic: Scalars['String']
   explorer?: InputMaybe<Scalars['String']>
   name: Scalars['String']
   type: ClusterType
@@ -290,7 +292,8 @@ export enum ClusterType {
 
 export type ClusterUpdateInput = {
   enableStats?: InputMaybe<Scalars['Boolean']>
-  endpoint?: InputMaybe<Scalars['String']>
+  endpointPrivate?: InputMaybe<Scalars['String']>
+  endpointPublic?: InputMaybe<Scalars['String']>
   explorer?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
   status?: InputMaybe<ClusterStatus>
@@ -667,7 +670,8 @@ export const ClusterDetails = gql`
     createdAt
     updatedAt
     enableStats
-    endpoint
+    endpointPrivate
+    endpointPublic
     explorer
     name
     status
@@ -1502,7 +1506,8 @@ export type AdminCreateAppMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -1645,7 +1650,8 @@ export type AdminAppsQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -1756,7 +1762,8 @@ export type AdminAppQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -1874,7 +1881,8 @@ export type AppEnvDetailsFragment = {
     createdAt?: any | null
     updatedAt?: any | null
     enableStats?: boolean | null
-    endpoint?: string | null
+    endpointPrivate?: string | null
+    endpointPublic?: string | null
     explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -2151,7 +2159,8 @@ export type UserUpdateAppMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -2276,7 +2285,8 @@ export type UserUpdateAppEnvMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       enableStats?: boolean | null
-      endpoint?: string | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
       explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -2495,7 +2505,8 @@ export type UserAppEnvMintDisableMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       enableStats?: boolean | null
-      endpoint?: string | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
       explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -2585,7 +2596,8 @@ export type UserAppEnvMintEnableMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       enableStats?: boolean | null
-      endpoint?: string | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
       explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -2676,7 +2688,8 @@ export type UserAppEnvMintSetWalletMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       enableStats?: boolean | null
-      endpoint?: string | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
       explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -2774,7 +2787,8 @@ export type UserAppEnvWalletAddMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       enableStats?: boolean | null
-      endpoint?: string | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
       explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -2872,7 +2886,8 @@ export type UserAppEnvWalletRemoveMutation = {
       createdAt?: any | null
       updatedAt?: any | null
       enableStats?: boolean | null
-      endpoint?: string | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
       explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -3170,7 +3185,8 @@ export type UserAppsQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -3282,7 +3298,8 @@ export type UserAppQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -3406,7 +3423,8 @@ export type UserAppEnvQuery = {
       createdAt?: any | null
       updatedAt?: any | null
       enableStats?: boolean | null
-      endpoint?: string | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
       explorer?: string | null
       name?: string | null
       status?: ClusterStatus | null
@@ -3534,7 +3552,8 @@ export type ClusterDetailsFragment = {
   createdAt?: any | null
   updatedAt?: any | null
   enableStats?: boolean | null
-  endpoint?: string | null
+  endpointPrivate?: string | null
+  endpointPublic?: string | null
   explorer?: string | null
   name?: string | null
   status?: ClusterStatus | null
@@ -3633,7 +3652,8 @@ export type AdminAddClusterMintMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     enableStats?: boolean | null
-    endpoint?: string | null
+    endpointPrivate?: string | null
+    endpointPublic?: string | null
     explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -3672,7 +3692,8 @@ export type AdminCreateClusterMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     enableStats?: boolean | null
-    endpoint?: string | null
+    endpointPrivate?: string | null
+    endpointPublic?: string | null
     explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -3692,7 +3713,8 @@ export type AdminDeleteClusterMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     enableStats?: boolean | null
-    endpoint?: string | null
+    endpointPrivate?: string | null
+    endpointPublic?: string | null
     explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -3713,7 +3735,8 @@ export type AdminUpdateClusterMutation = {
     createdAt?: any | null
     updatedAt?: any | null
     enableStats?: boolean | null
-    endpoint?: string | null
+    endpointPrivate?: string | null
+    endpointPublic?: string | null
     explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -3733,7 +3756,8 @@ export type AdminClusterQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     enableStats?: boolean | null
-    endpoint?: string | null
+    endpointPrivate?: string | null
+    endpointPublic?: string | null
     explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -3806,7 +3830,8 @@ export type AdminClustersQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     enableStats?: boolean | null
-    endpoint?: string | null
+    endpointPrivate?: string | null
+    endpointPublic?: string | null
     explorer?: string | null
     name?: string | null
     status?: ClusterStatus | null
@@ -4072,7 +4097,8 @@ export type AdminWalletQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -4208,7 +4234,8 @@ export type AdminWalletsQuery = {
           createdAt?: any | null
           updatedAt?: any | null
           enableStats?: boolean | null
-          endpoint?: string | null
+          endpointPrivate?: string | null
+          endpointPublic?: string | null
           explorer?: string | null
           name?: string | null
           status?: ClusterStatus | null
@@ -4296,7 +4323,8 @@ export type AdminWalletsQuery = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null
@@ -4410,7 +4438,8 @@ export type UserGenerateWalletMutation = {
         createdAt?: any | null
         updatedAt?: any | null
         enableStats?: boolean | null
-        endpoint?: string | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
         explorer?: string | null
         name?: string | null
         status?: ClusterStatus | null

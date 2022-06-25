@@ -8,7 +8,9 @@ export class ClusterCreateInput {
   @Field()
   name: string
   @Field()
-  endpoint: string
+  endpointPrivate: string
+  @Field()
+  endpointPublic: string
   @Field(() => ClusterType)
   type: ClusterType
 }

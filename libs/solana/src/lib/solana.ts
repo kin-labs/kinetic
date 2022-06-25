@@ -1,7 +1,7 @@
 import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
-import { convertCommitment, getPublicKey, parseEndpoint, parseTransactionSimulation, TransactionError } from './helpers'
+import { convertCommitment, getPublicKey, parseEndpoint, parseTransactionSimulation } from './helpers'
 import {
   BalanceMintMap,
   BalanceSummary,

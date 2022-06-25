@@ -188,7 +188,8 @@ scalar BigInt
 type Cluster {
   createdAt: DateTime
   enableStats: Boolean
-  endpoint: String
+  endpointPrivate: String
+  endpointPublic: String
   explorer: String
   id: String
   mints: [Mint!]
@@ -199,7 +200,8 @@ type Cluster {
 }
 
 input ClusterCreateInput {
-  endpoint: String!
+  endpointPrivate: String!
+  endpointPublic: String!
   explorer: String
   name: String!
   type: ClusterType!
@@ -265,7 +267,8 @@ enum ClusterType {
 
 input ClusterUpdateInput {
   enableStats: Boolean
-  endpoint: String
+  endpointPrivate: String
+  endpointPublic: String
   explorer: String
   name: String
   status: ClusterStatus
