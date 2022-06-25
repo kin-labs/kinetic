@@ -1,4 +1,4 @@
-import { getPublicKey, PublicKeyString, TokenBalance } from '@kin-kinetic/solana'
+import { Commitment, convertCommitment, getPublicKey, PublicKeyString, TokenBalance } from '@kin-kinetic/solana'
 import { createAssociatedTokenAccount, transferChecked } from '@solana/spl-token'
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
@@ -15,7 +15,7 @@ export class Airdrop {
     this.mint = getPublicKey(config.mint)
   }
 
-  async airdrop(account: PublicKeyString, amount?: number | string): Promise<AirdropResponse> {
+  async airdrop(account: PublicKeyString, amount?: number | string, commitment?: Commitment): Promise<AirdropResponse> {
     amount = amount && amount?.toString()?.length && Number(amount) > 0 ? Number(amount) : this.config.airdropAmount
     if (Number(amount) > this.config.airdropMax) {
       throw new Error(`Try requesting ${this.config.airdropMax} or less.`)
@@ -42,6 +42,7 @@ export class Airdrop {
     // Make transaction
     const signature = await this.sendTokens({
       amount: Number(amount * Math.pow(10, this.config.decimals)),
+      commitment,
       toTokenAccount,
       fromTokenAccount,
       fromOwner,
@@ -116,11 +117,13 @@ export class Airdrop {
 
   private async sendTokens({
     amount,
+    commitment,
     fromOwner,
     fromTokenAccount,
     toTokenAccount,
   }: {
     amount: bigint | number
+    commitment: Commitment
     fromOwner: PublicKeyString
     toTokenAccount: PublicKeyString
     fromTokenAccount: PublicKeyString
@@ -134,6 +137,10 @@ export class Airdrop {
       getPublicKey(fromOwner),
       amount,
       this.config.decimals,
+      [],
+      {
+        commitment: convertCommitment(commitment),
+      },
     )
   }
 }

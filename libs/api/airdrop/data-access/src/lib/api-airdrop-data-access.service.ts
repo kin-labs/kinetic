@@ -1,5 +1,6 @@
 import { Airdrop } from '@kin-kinetic/airdrop'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { Commitment } from '@kin-kinetic/solana'
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
 import { RequestAirdropRequest } from './dto/request-airdrop-request.dto'
 import { AirdropStatsCounts } from './entity/airdrop-stats-counts.entity'
@@ -45,10 +46,11 @@ export class ApiAirdropDataAccessService {
     }
 
     try {
+      const commitment = request.commitment || Commitment.Finalized
       const account = request.account
       const amount = request.amount ? request.amount : 1
       this.logger.verbose(`Requesting airdrop: ${account} ${amount} ${mint.symbol} (${mint.address}) on ${environment}`)
-      const result = await this.airdrop.get(mint.id).airdrop(account, amount)
+      const result = await this.airdrop.get(mint.id).airdrop(account, amount, commitment)
       await this.data.airdrop.create({
         data: {
           amount: result.amount,
