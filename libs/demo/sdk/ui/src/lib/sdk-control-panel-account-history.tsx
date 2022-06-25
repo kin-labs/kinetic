@@ -11,7 +11,7 @@ export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: DemoK
   const [result, setResult] = useState<unknown>(null)
   const [account, setAccount] = useState<string>(keypair.publicKey)
   const getResult = () => {
-    sdk.getHistory({ account, mint: mint.publicKey }).then((res) => setResult(res.data))
+    sdk.getHistory({ account, mint: mint.publicKey }).then((res) => setResult(res))
   }
   return (
     <Stack spacing={3}>

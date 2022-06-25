@@ -30,13 +30,13 @@ describe('KineticSdk (e2e) - Account', () => {
 
   it('should get the account history', async () => {
     const accountHistory = await sdk.getHistory({ account: aliceKeypair.publicKey })
-    expect(accountHistory.data.length).toBeGreaterThan(0)
-    expect(accountHistory.data[0].account).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
+    expect(accountHistory.length).toBeGreaterThan(0)
+    expect(accountHistory[0].account).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
   })
 
   it('should get the tokenAccounts', async () => {
     const tokenAccounts = await sdk.getTokenAccounts({ account: aliceKeypair.publicKey })
-    expect(tokenAccounts.data[0]).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
+    expect(tokenAccounts[0]).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
   })
 
   it('should throw an error when publicKey does not exits or is incorrect', async () => {

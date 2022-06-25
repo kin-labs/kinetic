@@ -10,7 +10,7 @@ export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: DemoKe
   const [mint, setMint] = useState<AppConfigMint>(mints[0])
   const [result, setResult] = useState<unknown>(null)
   const [account, setAccount] = useState<string>(keypair.publicKey)
-  const getResult = () => sdk.getTokenAccounts({ account, mint: mint.publicKey }).then((res) => setResult(res.data))
+  const getResult = () => sdk.getTokenAccounts({ account, mint: mint.publicKey }).then((res) => setResult(res))
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">

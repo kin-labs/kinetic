@@ -10,6 +10,7 @@ import {
   Configuration,
   CreateAccountRequest,
   DefaultApi,
+  HistoryResponse,
   LatestBlockhashResponse,
   MakeTransferRequest,
   RequestAirdropResponse,
@@ -100,30 +101,24 @@ export class KineticSdkInternal {
     return this.appConfig
   }
 
-  getHistory({ account, mint }: GetHistoryOptions) {
+  getHistory({ account, mint }: GetHistoryOptions): Promise<HistoryResponse[]> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
     mint = mint || this.appConfig.mint.publicKey
-    return this.accountApi.getHistory(
-      this.appConfig.environment.name,
-      this.appConfig.app.index,
-      account.toString(),
-      mint.toString(),
-    )
+    return this.accountApi
+      .getHistory(this.appConfig.environment.name, this.appConfig.app.index, account.toString(), mint.toString())
+      .then((res) => res.data)
   }
 
-  getTokenAccounts({ account, mint }: GetTokenAccountsOptions) {
+  getTokenAccounts({ account, mint }: GetTokenAccountsOptions): Promise<string[]> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
     mint = mint || this.appConfig.mint.publicKey
-    return this.accountApi.getTokenAccounts(
-      this.appConfig.environment.name,
-      this.appConfig.app.index,
-      account.toString(),
-      mint.toString(),
-    )
+    return this.accountApi
+      .getTokenAccounts(this.appConfig.environment.name, this.appConfig.app.index, account.toString(), mint.toString())
+      .then((res) => res.data)
   }
 
   async makeTransfer({

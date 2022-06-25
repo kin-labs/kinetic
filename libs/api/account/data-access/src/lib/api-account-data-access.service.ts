@@ -10,6 +10,7 @@ import { BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } 
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
+import { HistoryResponse } from './entities/history.entity'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {
@@ -57,7 +58,12 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     return solana.getBalance(accountId, mints)
   }
 
-  async getHistory(environment: string, index: number, accountId: PublicKeyString, mint?: PublicKeyString) {
+  async getHistory(
+    environment: string,
+    index: number,
+    accountId: PublicKeyString,
+    mint?: PublicKeyString,
+  ): Promise<HistoryResponse[]> {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
     mint = mint || appEnv.mint.publicKey
@@ -65,7 +71,12 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     return solana.getTokenHistory(accountId, mint.toString())
   }
 
-  async getTokenAccounts(environment: string, index: number, accountId: PublicKeyString, mint?: PublicKeyString) {
+  async getTokenAccounts(
+    environment: string,
+    index: number,
+    accountId: PublicKeyString,
+    mint?: PublicKeyString,
+  ): Promise<string[]> {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
     mint = mint || appEnv.mint.publicKey
