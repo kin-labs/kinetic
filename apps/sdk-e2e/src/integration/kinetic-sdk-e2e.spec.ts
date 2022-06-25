@@ -24,4 +24,8 @@ describe('KineticSdk (e2e)', () => {
     expect(res.mints[0].symbol).toEqual('KIN')
     expect(res.mints[0].publicKey).toEqual(defaultMint)
   })
+
+  it('should use the RPC public endpoint', () => {
+    expect(sdk?.solana?.connection.rpcEndpoint).toEqual('http://localhost:8899')
+  })
 })
