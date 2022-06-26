@@ -11,12 +11,6 @@ const DEFAULT_APP_ENDPOINT = 'http://localhost:3000'
 const SOLANA_RPC_NAME = 'mainnet-beta'
 const SOLANA_RPC_ENDPOINT = 'https://api.mainnet-beta.solana.com/'
 
-function expectConfiguredSdk(sdk: KineticSdk) {
-  expect(sdk.solana.endpoint).toEqual(SOLANA_RPC_ENDPOINT)
-  expect(sdk.solana.connection).toBeDefined()
-  expect(sdk.solanaRpcEndpoint).toEqual(SOLANA_RPC_NAME)
-}
-
 describe('sdk', () => {
   let sdk: KineticSdk
 

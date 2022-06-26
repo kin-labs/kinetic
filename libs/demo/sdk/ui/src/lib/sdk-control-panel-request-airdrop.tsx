@@ -8,7 +8,7 @@ import { MintSwitcher } from './mint-switcher'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
-  const mints = sdk?.config()?.mints.filter((mint) => mint?.airdrop) || []
+  const mints = sdk?.config?.mints.filter((mint) => mint?.airdrop) || []
   const [mint, setMint] = useState<AppConfigMint | undefined>(mints.length ? mints[0] : undefined)
   const [result, setResult] = useState<unknown>(null)
   const [commitment, setCommitment] = useState<Commitment>(Commitment.Confirmed)

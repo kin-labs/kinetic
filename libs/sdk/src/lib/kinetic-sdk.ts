@@ -1,5 +1,6 @@
 import { Solana } from '@kin-kinetic/solana'
-import { AppTransaction } from '../generated'
+import { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
+export { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
 import {
@@ -24,68 +25,62 @@ export class KineticSdk {
     this.internal = new KineticSdkInternal(sdkConfig)
   }
 
-  get endpoint() {
+  get config(): AppConfig | undefined {
+    return this.internal.appConfig
+  }
+
+  get endpoint(): string {
     return this.sdkConfig.endpoint
   }
 
-  get solanaRpcEndpoint() {
-    return this.sdkConfig.solanaRpcEndpoint || 'mainnet-beta'
-  }
-
-  requestAirdrop(options: RequestAirdropOptions) {
-    return this.internal.requestAirdrop(options)
-  }
-
-  getBalance(option: GetBalanceOptions) {
-    return this.internal.getBalance(option)
-  }
-
-  config() {
-    return this.internal.appConfig
+  get solanaRpcEndpoint(): string | undefined {
+    return this.sdkConfig.solanaRpcEndpoint
   }
 
   createAccount(options: CreateAccountOptions): Promise<AppTransaction> {
     return this.internal.createAccount(options)
   }
 
-  getExplorerUrl(path: string) {
+  getBalance(option: GetBalanceOptions): Promise<BalanceResponse> {
+    return this.internal.getBalance(option)
+  }
+
+  getExplorerUrl(path: string): string | undefined {
     return this.internal?.appConfig?.environment?.explorer?.replace(`{path}`, path)
   }
 
-  getHistory(options: GetHistoryOptions) {
+  getHistory(options: GetHistoryOptions): Promise<HistoryResponse[]> {
     return this.internal.getHistory(options)
   }
 
-  getTokenAccounts(options: GetTokenAccountsOptions) {
+  getTokenAccounts(options: GetTokenAccountsOptions): Promise<string[]> {
     return this.internal.getTokenAccounts(options)
   }
 
-  makeTransfer(options: MakeTransferOptions) {
+  makeTransfer(options: MakeTransferOptions): Promise<AppTransaction> {
     return this.internal.makeTransfer(options)
   }
 
-  makeTransferBatch(options: MakeTransferBatchOptions) {
+  makeTransferBatch(options: MakeTransferBatchOptions): Promise<AppTransaction> {
     return this.internal.makeTransferBatch(options)
   }
 
-  tokenAccounts(account: string) {
-    console.warn(`[tokenAccounts] Deprecated method, please use getTokenAccounts()`)
-    return this.internal.getTokenAccounts({ account })
+  requestAirdrop(options: RequestAirdropOptions) {
+    return this.internal.requestAirdrop(options)
   }
 
-  async init() {
+  async init(): Promise<AppConfig> {
     try {
-      const { app, environment } = await this.internal.getAppConfig(this.sdkConfig.environment, this.sdkConfig.index)
-
+      const config = await this.internal.getAppConfig(this.sdkConfig.environment, this.sdkConfig.index)
       this.sdkConfig.solanaRpcEndpoint = this.sdkConfig.solanaRpcEndpoint
         ? getSolanaRpcEndpoint(this.sdkConfig.solanaRpcEndpoint)
-        : getSolanaRpcEndpoint(environment.cluster.endpoint)
+        : getSolanaRpcEndpoint(config.environment.cluster.endpoint)
 
       this.solana = new Solana(this.sdkConfig.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
       this.sdkConfig?.logger?.log(
-        `KineticSdk: endpoint '${this.sdkConfig.endpoint}', environment '${this.sdkConfig.environment}', index: ${app.index}`,
+        `KineticSdk: endpoint '${this.sdkConfig.endpoint}', environment '${this.sdkConfig.environment}', index: ${config.app.index}`,
       )
-      return app
+      return config
     } catch (e) {
       this.sdkConfig?.logger?.error(`Error initializing Server.`)
       throw new Error(`Error initializing Server.`)

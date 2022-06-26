@@ -6,7 +6,7 @@ import { SdkControlPanelResult } from './sdk-control-panel-result'
 import { MintSwitcher } from './mint-switcher'
 
 export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
-  const mints = sdk?.config()?.mints || []
+  const mints = sdk?.config?.mints || []
   const [mint, setMint] = useState<AppConfigMint>(mints[0])
   const [result, setResult] = useState<unknown>(null)
   const [account, setAccount] = useState<string>(keypair.publicKey)

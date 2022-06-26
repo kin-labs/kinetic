@@ -9,7 +9,7 @@ import { MintSwitcher } from './mint-switcher'
 import { SdkControlPanelResult } from './sdk-control-panel-result'
 
 export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
-  const mints = sdk?.config()?.mints || []
+  const mints = sdk?.config?.mints || []
   const [mint, setMint] = useState<AppConfigMint>(mints[0])
   const [result, setResult] = useState<unknown>(null)
 
