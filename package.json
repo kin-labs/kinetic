@@ -1,6 +1,6 @@
 {
   "name": "kinetic",
-  "version": "1.0.0-beta.15",
+  "version": "1.0.0-beta.16",
   "license": "MIT",
   "scripts": {
     "build": "yarn build:admin && yarn prisma generate && yarn build:api",
