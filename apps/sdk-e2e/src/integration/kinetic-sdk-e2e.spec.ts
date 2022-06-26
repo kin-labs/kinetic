@@ -9,7 +9,7 @@ describe('KineticSdk (e2e)', () => {
   })
 
   it('should get App Config', () => {
-    const res = sdk.config()
+    const res = sdk.config
 
     expect(res.app.index).toEqual(1)
     expect(res.app.name).toEqual('App 1')
