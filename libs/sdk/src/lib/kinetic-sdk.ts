@@ -25,7 +25,7 @@ export class KineticSdk {
     this.internal = new KineticSdkInternal(sdkConfig)
   }
 
-  get config(): AppConfig {
+  get config(): AppConfig | undefined {
     return this.internal.appConfig
   }
 
@@ -33,23 +33,19 @@ export class KineticSdk {
     return this.sdkConfig.endpoint
   }
 
-  get solanaRpcEndpoint(): string {
+  get solanaRpcEndpoint(): string | undefined {
     return this.sdkConfig.solanaRpcEndpoint
-  }
-
-  requestAirdrop(options: RequestAirdropOptions) {
-    return this.internal.requestAirdrop(options)
-  }
-
-  getBalance(option: GetBalanceOptions): Promise<BalanceResponse> {
-    return this.internal.getBalance(option)
   }
 
   createAccount(options: CreateAccountOptions): Promise<AppTransaction> {
     return this.internal.createAccount(options)
   }
 
-  getExplorerUrl(path: string): string {
+  getBalance(option: GetBalanceOptions): Promise<BalanceResponse> {
+    return this.internal.getBalance(option)
+  }
+
+  getExplorerUrl(path: string): string | undefined {
     return this.internal?.appConfig?.environment?.explorer?.replace(`{path}`, path)
   }
 
@@ -69,9 +65,8 @@ export class KineticSdk {
     return this.internal.makeTransferBatch(options)
   }
 
-  tokenAccounts(account: string) {
-    console.warn(`[tokenAccounts] Deprecated method, please use getTokenAccounts()`)
-    return this.internal.getTokenAccounts({ account })
+  requestAirdrop(options: RequestAirdropOptions) {
+    return this.internal.requestAirdrop(options)
   }
 
   async init(): Promise<AppConfig> {
