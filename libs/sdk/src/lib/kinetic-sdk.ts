@@ -1,6 +1,6 @@
 import { Solana } from '@kin-kinetic/solana'
 import { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
-export { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
+export type { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
 import {
