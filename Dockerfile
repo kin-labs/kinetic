@@ -9,7 +9,6 @@ FROM node:16.14-alpine as base
 
 RUN apk add --update --no-cache git
 
-ENV DISABLE_ERD=true
 ENV HUSKY=0
 
 # Apply Yarn settings
