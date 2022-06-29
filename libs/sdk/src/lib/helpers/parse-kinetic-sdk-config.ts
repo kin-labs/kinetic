@@ -1,6 +1,10 @@
 import { KineticSdkConfig } from '../interfaces'
 import { KineticSdkConfigParsed } from '../interfaces/kinetic-sdk-config-parsed'
 
+function removeTrailingSlash(str: string) {
+  return str.replace(/\/+$/, '')
+}
+
 /**
  * This method accepts a Kinetic Sdk Config and will fill in any missing defaults
  * @param {KineticSdkConfig} config
@@ -14,6 +18,6 @@ export function parseKineticSdkConfig(config: KineticSdkConfig): KineticSdkConfi
 
   return {
     ...config,
-    endpoint,
+    endpoint: removeTrailingSlash(endpoint),
   }
 }
