@@ -6,7 +6,7 @@ import { AdminUiLink } from '@kin-kinetic/admin/ui/layout'
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import { UserRole } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 const AdminClusterFeature = React.lazy(async () => import('@kin-kinetic/admin/cluster/feature'))
 const AdminUserFeature = React.lazy(async () => import('@kin-kinetic/admin/user/feature'))
@@ -34,19 +34,17 @@ export function AdminSystemFeature() {
   return (
     <AdminSystemUiLayout links={links}>
       <React.Suspense fallback={<AdminUiLoader />}>
-        <Switch>
-          <Route path="/system" exact>
-            <Redirect to="/system/dashboard" />
-          </Route>
-          <Route path="/system/apps" render={() => <AdminAppAdminFeatureList />} />
-          <Route path="/system/clusters" render={() => <AdminClusterFeature />} />
+        <Routes>
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="apps/*" element={<AdminAppAdminFeatureList />} />
+          <Route path="clusters/*" element={<AdminClusterFeature />} />
           <Route
-            path="/system/dashboard"
-            render={() => <AdminSystemUiDashboard links={links.filter((link) => link.label !== 'Dashboard')} />}
+            path="dashboard/*"
+            element={<AdminSystemUiDashboard links={links.filter((link) => link.label !== 'Dashboard')} />}
           />
-          <Route path="/system/users" render={() => <AdminUserFeature />} />
-          <Route path="/system/wallets" render={() => <AdminWalletFeature />} />
-        </Switch>
+          <Route path="users/*" element={<AdminUserFeature />} />
+          <Route path="wallets/*" element={<AdminWalletFeature />} />
+        </Routes>
       </React.Suspense>
     </AdminSystemUiLayout>
   )

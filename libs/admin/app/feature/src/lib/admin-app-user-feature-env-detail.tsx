@@ -4,7 +4,7 @@ import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import { useUserAppEnvQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
-import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { AdminAppUserAppEnvDetailOverview } from './admin-app-user-app-env-detail-overview'
 import { AdminAppUserAppEnvDetailSettings } from './admin-app-user-app-env-detail-settings'
 import { AdminAppUserAppEnvDetailTransaction } from './admin-app-user-app-env-detail-transaction'
@@ -14,8 +14,6 @@ import { AdminAppUserAppEnvDetailWallets } from './admin-app-user-app-env-detail
 
 export default function AdminAppUserFeatureEnvDetail() {
   const toast = useToast()
-
-  const { path, url } = useRouteMatch()
   const { appId, appEnvId } = useParams<{ appId: string; appEnvId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data, error, fetching }] = useUserAppEnvQuery({ variables: { appId: appId!, appEnvId: appEnvId! } })
@@ -31,19 +29,16 @@ export default function AdminAppUserFeatureEnvDetail() {
   return (
     <React.Suspense fallback={<AdminUiLoader />}>
       {data?.item ? (
-        <UserAppEnvProvider appEnv={data.item} baseUrl={url}>
-          <Switch>
-            <Route path={path} exact render={() => <Redirect to={`${url}/overview`} />} />
-            <Route path={`${path}/overview`} render={() => <AdminAppUserAppEnvDetailOverview />} />
-            <Route path={`${path}/settings`} render={() => <AdminAppUserAppEnvDetailSettings />} />
-            <Route
-              path={`${path}/transactions/:appTransactionId`}
-              render={() => <AdminAppUserAppEnvDetailTransaction />}
-            />
-            <Route path={`${path}/transactions`} render={() => <AdminAppUserAppEnvDetailTransactions />} />
-            <Route path={`${path}/wallets/:walletId`} render={() => <AdminAppUserAppEnvDetailWallet />} />
-            <Route path={`${path}/wallets`} render={() => <AdminAppUserAppEnvDetailWallets />} />
-          </Switch>
+        <UserAppEnvProvider appEnv={data.item}>
+          <Routes>
+            <Route index element={<Navigate to="overview" />} />
+            <Route path="overview" element={<AdminAppUserAppEnvDetailOverview />} />
+            <Route path="settings" element={<AdminAppUserAppEnvDetailSettings />} />
+            <Route path="transactions/:appTransactionId" element={<AdminAppUserAppEnvDetailTransaction />} />
+            <Route path="transactions" element={<AdminAppUserAppEnvDetailTransactions />} />
+            <Route path="wallets/:walletId" element={<AdminAppUserAppEnvDetailWallet />} />
+            <Route path="wallets" element={<AdminAppUserAppEnvDetailWallets />} />
+          </Routes>
         </UserAppEnvProvider>
       ) : (
         <AdminUiAlert status="warning" message={'App environment not found'} />

@@ -3,13 +3,12 @@ import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
 import { useAdminClusterQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
-import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { AdminClusterFeatureMintsTab } from './admin-cluster-feature-mints-tab'
 import { AdminClusterFeatureSettingsTab } from './admin-cluster-feature-settings-tab'
 import { AdminClusterFeatureStatsTab } from './admin-cluster-feature-stats-tab'
 
 export default function AdminClusterFeatureDetail() {
-  const { path, url } = useRouteMatch()
   const { clusterId } = useParams<{ clusterId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data, fetching }] = useAdminClusterQuery({ variables: { clusterId: clusterId! } })
@@ -18,9 +17,9 @@ export default function AdminClusterFeatureDetail() {
     return <AdminUiLoader />
   }
   const tabs = [
-    { path: `${url}/mints`, label: 'Mints' },
-    { path: `${url}/stats`, label: 'Stats' },
-    { path: `${url}/settings`, label: 'Settings' },
+    { path: `../mints`, label: 'Mints' },
+    { path: `../stats`, label: 'Stats' },
+    { path: `../settings`, label: 'Settings' },
   ]
   return (
     <Stack direction="column" spacing={6}>
@@ -34,29 +33,29 @@ export default function AdminClusterFeatureDetail() {
           </Box>
         </Flex>
       </Box>
-      <Switch>
-        <Route path={path} exact render={() => <Redirect to={`${url}/mints`} />} />
+      <Routes>
+        <Route index element={<Navigate to="mints" />} />
         <Route
-          path={`${path}/mints`}
-          render={() => (
+          path="mints"
+          element={
             <AdminUiTabs tabs={tabs}>{clusterId && <AdminClusterFeatureMintsTab clusterId={clusterId} />}</AdminUiTabs>
-          )}
+          }
         />
         <Route
-          path={`${path}/stats`}
-          render={() => (
+          path="stats"
+          element={
             <AdminUiTabs tabs={tabs}>{clusterId && <AdminClusterFeatureStatsTab clusterId={clusterId} />}</AdminUiTabs>
-          )}
+          }
         />
         <Route
-          path={`${path}/settings`}
-          render={() => (
+          path="settings"
+          element={
             <AdminUiTabs tabs={tabs}>
               {clusterId && <AdminClusterFeatureSettingsTab clusterId={clusterId} />}
             </AdminUiTabs>
-          )}
+          }
         />
-      </Switch>
+      </Routes>
     </Stack>
   )
 }

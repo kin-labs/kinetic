@@ -1,13 +1,12 @@
 import { Avatar, Box, Flex, Stack, Text, useToast } from '@chakra-ui/react'
 import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
 import { AdminUserUiApps, AdminUserUiEmails, AdminUserUiForm } from '@kin-kinetic/admin/user/ui'
-import { UserUpdateInput, useAdminUpdateUserMutation, useAdminUserQuery } from '@kin-kinetic/shared/util/admin-sdk'
+import { useAdminUpdateUserMutation, useAdminUserQuery, UserUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
-import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 
 export default function AdminUserFeatureDetail() {
   const toast = useToast()
-  const { path, url } = useRouteMatch()
   const { userId } = useParams<{ userId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data }] = useAdminUserQuery({ variables: { userId: userId! } })
@@ -23,9 +22,9 @@ export default function AdminUserFeatureDetail() {
     return res?.data?.updated
   }
   const tabs = [
-    { path: `${url}/apps`, label: 'Apps' },
-    { path: `${url}/emails`, label: 'Emails' },
-    { path: `${url}/settings`, label: 'Settings' },
+    { path: `../apps`, label: 'Apps' },
+    { path: `../emails`, label: 'Emails' },
+    { path: `../settings`, label: 'Settings' },
   ]
   return (
     <Stack direction="column" spacing={6}>
@@ -40,33 +39,33 @@ export default function AdminUserFeatureDetail() {
           </Flex>
         </Box>
       </Box>
-      <Switch>
-        <Route path={path} exact render={() => <Redirect to={`${url}/apps`} />} />
+      <Routes>
+        <Route index element={<Navigate to="apps" />} />
         <Route
-          path={`${path}/apps`}
-          render={() => (
+          path="apps"
+          element={
             <AdminUiTabs tabs={tabs}>
               <AdminUserUiApps apps={data?.item?.apps} />
             </AdminUiTabs>
-          )}
+          }
         />
         <Route
-          path={`${path}/emails`}
-          render={() => (
+          path="emails"
+          element={
             <AdminUiTabs tabs={tabs}>
               <AdminUserUiEmails emails={data?.item?.emails} />
             </AdminUiTabs>
-          )}
+          }
         />
         <Route
-          path={`${path}/settings`}
-          render={() => (
+          path="settings"
+          element={
             <AdminUiTabs tabs={tabs}>
               <AdminUserUiForm user={data?.item} onSubmit={onSubmit} />
             </AdminUiTabs>
-          )}
+          }
         />
-      </Switch>
+      </Routes>
     </Stack>
   )
 }

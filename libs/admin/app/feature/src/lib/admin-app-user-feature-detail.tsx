@@ -8,13 +8,13 @@ import {
   AppUserAddInput,
   AppUserRole,
   AppUserUpdateRoleInput,
+  useUserAppQuery,
   useUserAppUserAddMutation,
   useUserAppUserUpdateRoleMutation,
   useUserUpdateAppMutation,
-  useUserAppQuery,
 } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
-import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { AdminAppUserEnvironmentsTab } from './admin-app-user-environments-tab'
 
 export default function AdminAppUserFeatureDetail() {
@@ -53,13 +53,12 @@ export default function AdminAppUserFeatureDetail() {
     return res?.data?.updated
   }
   const role = data?.role || AppUserRole.Member
-  const { path, url } = useRouteMatch()
-  const tabs = [{ path: `${url}/environments`, label: 'Environments' }]
+  const tabs = [{ path: `../environments`, label: 'Environments' }]
   if (role === AppUserRole.Owner) {
     tabs.push(
       ...[
-        { path: `${url}/users`, label: 'Users' },
-        { path: `${url}/settings`, label: 'Settings' },
+        { path: `../users`, label: 'Users' },
+        { path: `../settings`, label: 'Settings' },
       ],
     )
   }
@@ -80,26 +79,26 @@ export default function AdminAppUserFeatureDetail() {
     return <AdminUiLoader />
   }
 
-  if (!data?.item) {
+  if (!data?.item || !appId) {
     return <AdminUiAlert status="warning" message="App not found :(" />
   }
 
   return (
     <Stack direction="column" spacing={6}>
       <AdminAppUiHeader app={data?.item} />
-      <Switch>
-        <Route path={path} exact render={() => <Redirect to={`${url}/environments`} />} />
+      <Routes>
+        <Route index element={<Navigate to="environments" />} />
         <Route
-          path={`${path}/environments`}
-          render={() => (
+          path="environments"
+          element={
             <AdminUiTabs tabs={tabs}>
               <AdminAppUserEnvironmentsTab appId={appId} />
             </AdminUiTabs>
-          )}
+          }
         />
         <Route
-          path={`${path}/users`}
-          render={() => (
+          path="users"
+          element={
             <AdminUiTabs tabs={tabs}>
               <Stack direction="column" spacing={6}>
                 <Box w="full">
@@ -110,17 +109,17 @@ export default function AdminAppUserFeatureDetail() {
                 </Box>
               </Stack>
             </AdminUiTabs>
-          )}
+          }
         />
         <Route
-          path={`${path}/settings`}
-          render={() => (
+          path="settings"
+          element={
             <AdminUiTabs tabs={tabs}>
               <AdminAppUiForm app={data?.item} onSubmit={onSubmit} />
             </AdminUiTabs>
-          )}
+          }
         />
-      </Switch>
+      </Routes>
     </Stack>
   )
 }

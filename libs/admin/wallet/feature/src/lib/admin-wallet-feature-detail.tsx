@@ -2,15 +2,14 @@ import { Box, Stack } from '@chakra-ui/react'
 import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
 import { useAdminWalletQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
-import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 
 export default function AdminWalletFeatureDetail() {
-  const { path, url } = useRouteMatch()
   const { walletId } = useParams<{ walletId: string }>()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [{ data }] = useAdminWalletQuery({ variables: { walletId: walletId! } })
 
-  const tabs = [{ path: `${url}/overview`, label: 'Overview' }]
+  const tabs = [{ path: `../overview`, label: 'Overview' }]
   return (
     <Stack direction="column" spacing={6}>
       <Box p="6" borderWidth="1px" borderRadius="lg" overflow="hidden">
@@ -18,19 +17,19 @@ export default function AdminWalletFeatureDetail() {
           {data?.item?.publicKey}
         </Box>
       </Box>
-      <Switch>
-        <Route path={path} exact render={() => <Redirect to={`${url}/overview`} />} />
+      <Routes>
+        <Route index element={<Navigate to="overview" />} />
         <Route
-          path={`${path}/overview`}
-          render={() => (
+          path="overview"
+          element={
             <AdminUiTabs tabs={tabs}>
               <Box as="pre" fontSize="xs" color="gray.500">
                 {JSON.stringify(data, null, 2)}
               </Box>
             </AdminUiTabs>
-          )}
+          }
         />
-      </Switch>
+      </Routes>
     </Stack>
   )
 }
