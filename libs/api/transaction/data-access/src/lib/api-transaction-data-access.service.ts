@@ -110,7 +110,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
 
     const { amount, blockhash, destination, feePayer, source, transaction } = parseAndSignTokenTransfer({
-      tx: input.tx,
+      tx: Buffer.from(input.tx, 'base64'),
       signer: signer.solana,
     })
 

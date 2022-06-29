@@ -7,6 +7,6 @@ export class CreateAccountRequest {
   index: number
   @ApiProperty()
   mint: string
-  @ApiProperty()
-  tx: Buffer
+  @ApiProperty({ type: 'string', format: 'binary' })
+  tx: string
 }
