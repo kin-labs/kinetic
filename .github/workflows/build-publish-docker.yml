@@ -1,7 +1,6 @@
 name: build-publish-docker
 
 on:
-  pull_request:
   push:
     branches:
       - dev
@@ -50,12 +49,4 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          labels: ${{ steps.meta.outputs.labels }}
-      - name: Build and push Docker (pr)
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        if: github.ref != 'refs/heads/dev' && github.ref != 'refs/heads/main'
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
