@@ -10,4 +10,5 @@ export interface MakeTransferOptions extends TransferDestination {
   referenceId?: string
   referenceType?: string
   type?: TransactionType
+  senderCreate?: boolean
 }
