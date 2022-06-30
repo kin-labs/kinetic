@@ -561,10 +561,10 @@ export interface CreateAccountRequest {
   mint: string
   /**
    *
-   * @type {any}
+   * @type {string}
    * @memberof CreateAccountRequest
    */
-  tx: any
+  tx: string
 }
 /**
  *
@@ -654,10 +654,10 @@ export interface MakeTransferRequest {
   referenceType: string | null
   /**
    *
-   * @type {any}
+   * @type {string}
    * @memberof MakeTransferRequest
    */
-  tx: any
+  tx: string
 }
 
 export const MakeTransferRequestCommitmentEnum = {

@@ -580,7 +580,7 @@
           },
           "tx": {
             "type": "string",
-            "format": "binary"
+            "format": "byte"
           }
         },
         "required": ["environment", "index", "mint", "tx"]
@@ -1049,7 +1049,7 @@
           },
           "tx": {
             "type": "string",
-            "format": "binary"
+            "format": "byte"
           }
         },
         "required": [
