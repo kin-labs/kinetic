@@ -9,7 +9,9 @@ export function AdminAppUserAppEnvDetailWallet() {
   const { appEnv } = useUserAppEnv()
   return (
     <AdminAppUserAppEnvDetailLayout>
-      {appEnv.app?.id && <AdminAppUserWalletTab appId={appEnv.app.id} appEnvId={appEnv.id} walletId={walletId} />}
+      {appEnv.app?.id && walletId && (
+        <AdminAppUserWalletTab appId={appEnv.app.id} appEnvId={appEnv.id} walletId={walletId} />
+      )}
     </AdminAppUserAppEnvDetailLayout>
   )
 }

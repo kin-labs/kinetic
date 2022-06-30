@@ -1,6 +1,6 @@
 import { AdminUiLayout, AdminUiLink } from '@kin-kinetic/admin/ui/layout'
 import React from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 const DemoHomeFeature = React.lazy(async () => import('@kin-kinetic/demo/home/feature'))
 const DemoKeypairFeature = React.lazy(async () => import('@kin-kinetic/demo/keypair/feature'))
@@ -21,13 +21,13 @@ export function DemoShellFeature() {
       copyright={<div>Kin Foundation &copy; 2022</div>}
       name={'Kinetic'}
     >
-      <Route path="/" exact>
-        <Redirect to="/home" />
-      </Route>
-      <Route path="/home" render={() => <DemoHomeFeature />} />
-      <Route path="/keypair" render={() => <DemoKeypairFeature />} />
-      <Route path="/sdk" render={() => <DemoSdkFeature />} />
-      <Route path="/servers" render={() => <DemoServerFeature />} />
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/home" element={<DemoHomeFeature />} />
+        <Route path="/keypair" element={<DemoKeypairFeature />} />
+        <Route path="/sdk" element={<DemoSdkFeature />} />
+        <Route path="/servers" element={<DemoServerFeature />} />
+      </Routes>
     </AdminUiLayout>
   )
 }

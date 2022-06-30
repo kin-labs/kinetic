@@ -24,7 +24,6 @@
       "@kin-kinetic/admin/auth/ui": ["libs/admin/auth/ui/src/index.ts"],
       "@kin-kinetic/admin/cluster/feature": ["libs/admin/cluster/feature/src/index.ts"],
       "@kin-kinetic/admin/cluster/ui": ["libs/admin/cluster/ui/src/index.ts"],
-      "@kin-kinetic/admin/home/feature": ["libs/admin/home/feature/src/index.ts"],
       "@kin-kinetic/admin/shell/feature": ["libs/admin/shell/feature/src/index.ts"],
       "@kin-kinetic/admin/system/feature": ["libs/admin/system/feature/src/index.ts"],
       "@kin-kinetic/admin/system/ui": ["libs/admin/system/ui/src/index.ts"],

@@ -1,23 +1,22 @@
 import { AppEnv } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 
 export interface UserAppEnvProviderContext {
-  baseUrl: string
   appEnv: AppEnv
   tabs: { label: string; path: string }[]
 }
 
 const AppEnvContext = React.createContext<UserAppEnvProviderContext>({} as UserAppEnvProviderContext)
 
-function UserAppEnvProvider({ baseUrl, appEnv, children }: { baseUrl: string; children: ReactNode; appEnv: AppEnv }) {
+function UserAppEnvProvider({ appEnv, children }: { children: ReactNode; appEnv: AppEnv }) {
   const tabs = [
-    { path: `${baseUrl}/overview`, label: 'Overview' },
-    { path: `${baseUrl}/transactions`, label: 'Transactions' },
-    { path: `${baseUrl}/wallets`, label: 'Wallets' },
-    { path: `${baseUrl}/settings`, label: 'Settings' },
+    { path: `../overview`, label: 'Overview' },
+    { path: `../transactions`, label: 'Transactions' },
+    { path: `../wallets`, label: 'Wallets' },
+    { path: `../settings`, label: 'Settings' },
   ]
   const value = {
-    baseUrl,
     appEnv,
     tabs,
   }
