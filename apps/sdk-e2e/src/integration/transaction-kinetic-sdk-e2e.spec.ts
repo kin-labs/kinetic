@@ -101,4 +101,15 @@ describe('KineticSdk (e2e)', () => {
     expect(res.status).toBe(AppTransactionStatus.Failed)
     expect(res.errors[0].message).toContain('Error: Insufficient funds.')
   })
+
+  it('sendOrCreate', async () => {
+    const destination = Keypair.random()
+    const tx = await sdk.makeTransfer({ amount: '43', destination: destination.publicKey, owner: aliceKeypair })
+    expect(tx).not.toBeNull()
+    const { signature, errors, amount, source } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+    expect(Number(amount)).toBe(4300000)
+    expect(source).toBe(aliceKeypair.publicKey)
+  })
 })
