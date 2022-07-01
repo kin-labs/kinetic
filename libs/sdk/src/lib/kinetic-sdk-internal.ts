@@ -141,6 +141,8 @@ export class KineticSdkInternal {
         mint,
       })
 
+    const account = await this.getTokenAccounts({ account: destination, mint })
+
     const tx = await serializeMakeTransferTransaction({
       amount,
       appIndex: this.appConfig.app.index,
@@ -152,7 +154,7 @@ export class KineticSdkInternal {
       mintPublicKey,
       owner,
       type: type || TransactionType.None,
-      senderCreate,
+      senderCreate: account?.length === 0 && senderCreate,
     })
 
     return this.makeTransferRequest({

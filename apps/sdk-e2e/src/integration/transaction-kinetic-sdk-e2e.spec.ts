@@ -102,7 +102,7 @@ describe('KineticSdk (e2e)', () => {
     expect(res.errors[0].message).toContain('Error: Insufficient funds.')
   })
 
-  it.skip('should allow the sender to create an account', async () => {
+  it('should allow the sender to create an account', async () => {
     const destination = Keypair.random()
     const tx = await sdk.makeTransfer({
       amount: '43',
@@ -110,7 +110,6 @@ describe('KineticSdk (e2e)', () => {
       owner: aliceKeypair,
       senderCreate: true,
     })
-    console.log(tx)
     expect(tx).not.toBeNull()
     const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
