@@ -566,10 +566,6 @@
   ],
   "components": {
     "schemas": {
-      "Buffer": {
-        "type": "object",
-        "properties": {}
-      },
       "CreateAccountRequest": {
         "type": "object",
         "properties": {
@@ -583,7 +579,8 @@
             "type": "string"
           },
           "tx": {
-            "$ref": "#/components/schemas/Buffer"
+            "type": "string",
+            "format": "byte"
           }
         },
         "required": ["environment", "index", "mint", "tx"]
@@ -1051,7 +1048,8 @@
             "nullable": true
           },
           "tx": {
-            "$ref": "#/components/schemas/Buffer"
+            "type": "string",
+            "format": "byte"
           }
         },
         "required": [

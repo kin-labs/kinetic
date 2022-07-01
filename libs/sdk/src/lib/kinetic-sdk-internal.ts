@@ -87,7 +87,7 @@ export class KineticSdkInternal {
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
       mint: mint.toString(),
-      tx,
+      tx: tx.toString('base64'),
     }
 
     const res = await this.accountApi.createAccount(request)
@@ -160,7 +160,7 @@ export class KineticSdkInternal {
       lastValidBlockHeight,
       referenceId: referenceId || null,
       referenceType: referenceType || null,
-      tx,
+      tx: tx.toString('base64'),
     })
   }
 
@@ -207,7 +207,7 @@ export class KineticSdkInternal {
       lastValidBlockHeight,
       referenceId: referenceId || null,
       referenceType: referenceType || null,
-      tx,
+      tx: tx.toString('base64'),
     })
   }
 

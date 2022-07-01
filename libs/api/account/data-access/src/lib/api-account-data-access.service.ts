@@ -101,7 +101,10 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     }
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
 
-    const { feePayer, source, transaction } = parseAndSignTransaction({ tx: input.tx, signer: signer.solana })
+    const { feePayer, source, transaction } = parseAndSignTransaction({
+      tx: Buffer.from(input.tx, 'base64'),
+      signer: signer.solana,
+    })
     let errors
 
     let status: AppTransactionStatus
