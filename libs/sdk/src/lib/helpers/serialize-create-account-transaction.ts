@@ -17,7 +17,7 @@ export async function serializeCreateAccountTransaction({
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
   owner: Keypair
-}) {
+}): Promise<Buffer> {
   // Create objects from Response
   const mintKey = getPublicKey(mintPublicKey)
   const feePayerKey = getPublicKey(mintFeePayer)

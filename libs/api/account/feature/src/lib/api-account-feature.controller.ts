@@ -7,8 +7,8 @@ import {
 import { AppTransaction } from '@kin-kinetic/api/app/data-access'
 import { PublicKeyPipe } from '@kin-kinetic/api/core/util'
 import { Commitment } from '@kin-kinetic/solana'
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UsePipes } from '@nestjs/common'
+import { ApiBody, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('account')
 @Controller('account')
@@ -16,6 +16,8 @@ export class ApiAccountFeatureController {
   constructor(private readonly service: ApiAccountDataAccessService) {}
 
   @Get('info/:environment/:index/:accountId')
+  @ApiOperation({ operationId: 'getAccountInfo' })
+  @ApiParam({ name: 'index', type: 'integer' })
   getAccountInfo(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
@@ -35,6 +37,7 @@ export class ApiAccountFeatureController {
 
   @Get('balance/:environment/:index/:accountId')
   @ApiOperation({ operationId: 'getBalance' })
+  @ApiParam({ name: 'index', type: 'integer' })
   @ApiResponse({ type: BalanceResponse })
   getBalance(
     @Param('environment') environment: string,
@@ -46,6 +49,7 @@ export class ApiAccountFeatureController {
 
   @Get('history/:environment/:index/:accountId/:mint')
   @ApiOperation({ operationId: 'getHistory' })
+  @ApiParam({ name: 'index', type: 'integer' })
   @ApiResponse({ type: HistoryResponse, isArray: true })
   getHistory(
     @Param('environment') environment: string,
@@ -58,6 +62,7 @@ export class ApiAccountFeatureController {
 
   @Get('token-accounts/:environment/:index/:accountId/:mint')
   @ApiOperation({ operationId: 'getTokenAccounts' })
+  @ApiParam({ name: 'index', type: 'integer' })
   @ApiResponse({ type: String, isArray: true })
   getTokenAccounts(
     @Param('environment') environment: string,

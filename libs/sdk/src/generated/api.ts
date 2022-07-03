@@ -431,10 +431,10 @@ export interface AppTransaction {
   source: string | null
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof AppTransaction
    */
-  status: object | null
+  status: AppTransactionStatusEnum
   /**
    *
    * @type {string}
@@ -460,6 +460,17 @@ export interface AppTransaction {
    */
   webhookVerifyEnd: string | null
 }
+
+export const AppTransactionStatusEnum = {
+  Committed: 'Committed',
+  Confirmed: 'Confirmed',
+  Failed: 'Failed',
+  Finalized: 'Finalized',
+  Processing: 'Processing',
+} as const
+
+export type AppTransactionStatusEnum = typeof AppTransactionStatusEnum[keyof typeof AppTransactionStatusEnum]
+
 /**
  *
  * @export
@@ -480,11 +491,28 @@ export interface AppTransactionError {
   message: string
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof AppTransactionError
    */
-  type: object
+  type: AppTransactionErrorTypeEnum
+  /**
+   *
+   * @type {number}
+   * @memberof AppTransactionError
+   */
+  instruction: number
 }
+
+export const AppTransactionErrorTypeEnum = {
+  BadNonce: 'BadNonce',
+  InvalidAccount: 'InvalidAccount',
+  SomeError: 'SomeError',
+  Unknown: 'Unknown',
+  WebhookFailed: 'WebhookFailed',
+} as const
+
+export type AppTransactionErrorTypeEnum = typeof AppTransactionErrorTypeEnum[keyof typeof AppTransactionErrorTypeEnum]
+
 /**
  *
  * @export
@@ -757,50 +785,6 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
   return {
     /**
      *
-     * @param {string} environment
-     * @param {number} index
-     * @param {string} accountId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiAccountFeatureControllerGetAccountInfo: async (
-      environment: string,
-      index: number,
-      accountId: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'environment' is not null or undefined
-      assertParamExists('apiAccountFeatureControllerGetAccountInfo', 'environment', environment)
-      // verify required parameter 'index' is not null or undefined
-      assertParamExists('apiAccountFeatureControllerGetAccountInfo', 'index', index)
-      // verify required parameter 'accountId' is not null or undefined
-      assertParamExists('apiAccountFeatureControllerGetAccountInfo', 'accountId', accountId)
-      const localVarPath = `/api/account/info/{environment}/{index}/{accountId}`
-        .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
-        .replace(`{${'index'}}`, encodeURIComponent(String(index)))
-        .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -829,6 +813,50 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
       localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
       localVarRequestOptions.data = serializeDataIfNeeded(createAccountRequest, localVarRequestOptions, configuration)
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} accountId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getAccountInfo: async (
+      environment: string,
+      index: number,
+      accountId: string,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'environment' is not null or undefined
+      assertParamExists('getAccountInfo', 'environment', environment)
+      // verify required parameter 'index' is not null or undefined
+      assertParamExists('getAccountInfo', 'index', index)
+      // verify required parameter 'accountId' is not null or undefined
+      assertParamExists('getAccountInfo', 'accountId', accountId)
+      const localVarPath = `/api/account/info/{environment}/{index}/{accountId}`
+        .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
+        .replace(`{${'index'}}`, encodeURIComponent(String(index)))
+        .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
 
       return {
         url: toPathString(localVarUrlObj),
@@ -989,28 +1017,6 @@ export const AccountApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @param {string} environment
-     * @param {number} index
-     * @param {string} accountId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiAccountFeatureControllerGetAccountInfo(
-      environment: string,
-      index: number,
-      accountId: string,
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAccountFeatureControllerGetAccountInfo(
-        environment,
-        index,
-        accountId,
-        options,
-      )
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1020,6 +1026,23 @@ export const AccountApiFp = function (configuration?: Configuration) {
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AppTransaction>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createAccount(createAccountRequest, options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} accountId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getAccountInfo(
+      environment: string,
+      index: number,
+      accountId: string,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountInfo(environment, index, accountId, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -1095,30 +1118,25 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
   return {
     /**
      *
-     * @param {string} environment
-     * @param {number} index
-     * @param {string} accountId
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiAccountFeatureControllerGetAccountInfo(
-      environment: string,
-      index: number,
-      accountId: string,
-      options?: any,
-    ): AxiosPromise<void> {
-      return localVarFp
-        .apiAccountFeatureControllerGetAccountInfo(environment, index, accountId, options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createAccount(createAccountRequest: CreateAccountRequest, options?: any): AxiosPromise<AppTransaction> {
       return localVarFp.createAccount(createAccountRequest, options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} accountId
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getAccountInfo(environment: string, index: number, accountId: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .getAccountInfo(environment, index, accountId, options)
+        .then((request) => request(axios, basePath))
     },
     /**
      *
@@ -1183,26 +1201,6 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
 export class AccountApi extends BaseAPI {
   /**
    *
-   * @param {string} environment
-   * @param {number} index
-   * @param {string} accountId
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof AccountApi
-   */
-  public apiAccountFeatureControllerGetAccountInfo(
-    environment: string,
-    index: number,
-    accountId: string,
-    options?: AxiosRequestConfig,
-  ) {
-    return AccountApiFp(this.configuration)
-      .apiAccountFeatureControllerGetAccountInfo(environment, index, accountId, options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
    * @param {CreateAccountRequest} createAccountRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1211,6 +1209,21 @@ export class AccountApi extends BaseAPI {
   public createAccount(createAccountRequest: CreateAccountRequest, options?: AxiosRequestConfig) {
     return AccountApiFp(this.configuration)
       .createAccount(createAccountRequest, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {string} environment
+   * @param {number} index
+   * @param {string} accountId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApi
+   */
+  public getAccountInfo(environment: string, index: number, accountId: string, options?: AxiosRequestConfig) {
+    return AccountApiFp(this.configuration)
+      .getAccountInfo(environment, index, accountId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 

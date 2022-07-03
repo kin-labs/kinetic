@@ -10,9 +10,10 @@ export class AppTransactionError {
   @ApiProperty()
   @Field({ nullable: true })
   message?: string
-  @ApiProperty()
+  @ApiProperty({ enum: AppTransactionErrorType })
   @Field(() => AppTransactionErrorType)
   type: AppTransactionErrorType
+  @ApiProperty({ type: 'integer' })
   @Field(() => Int, { nullable: true })
   instruction?: number
 }

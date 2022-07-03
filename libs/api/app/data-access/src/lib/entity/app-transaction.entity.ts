@@ -17,7 +17,7 @@ export class AppTransaction {
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   updatedAt?: Date
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ type: 'integer', nullable: true })
   @Field(() => Int, { nullable: true })
   amount?: number
   @ApiProperty({ nullable: true })
@@ -63,7 +63,7 @@ export class AppTransaction {
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   source?: string
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, enum: AppTransactionStatus })
   @Field(() => AppTransactionStatus)
   status: AppTransactionStatus
   @HideField()

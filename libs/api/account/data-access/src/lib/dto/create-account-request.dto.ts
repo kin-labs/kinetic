@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger'
 export class CreateAccountRequest {
   @ApiProperty()
   environment: string
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   index: number
   @ApiProperty()
   mint: string

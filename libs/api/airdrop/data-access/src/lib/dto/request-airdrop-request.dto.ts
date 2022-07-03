@@ -10,7 +10,7 @@ export class RequestAirdropRequest {
   commitment: Commitment
   @ApiProperty({ required: true })
   environment: string
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   index: number
   @ApiProperty()
   mint: string

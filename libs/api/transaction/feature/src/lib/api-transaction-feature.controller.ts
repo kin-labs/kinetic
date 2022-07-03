@@ -7,7 +7,7 @@ import {
   LatestBlockhashResponse,
 } from '@kin-kinetic/api/transaction/data-access'
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('transaction')
 @Controller('transaction')
@@ -16,6 +16,7 @@ export class ApiTransactionFeatureController {
 
   @Get('latest-blockhash/:environment/:index')
   @ApiOperation({ operationId: 'getLatestBlockhash' })
+  @ApiParam({ name: 'index', type: 'integer' })
   @ApiResponse({ type: LatestBlockhashResponse })
   getLatestBlockhash(@Param('environment') environment: string, @Param('index', ParseIntPipe) index: number) {
     return this.service.getLatestBlockhash(environment, index)
@@ -23,6 +24,7 @@ export class ApiTransactionFeatureController {
 
   @Get('minimum-rent-exemption-balance/:environment/:index')
   @ApiOperation({ operationId: 'getMinimumRentExemptionBalance' })
+  @ApiParam({ name: 'index', type: 'integer' })
   @ApiResponse({ type: MinimumRentExemptionBalanceResponse })
   getMinimumRentExemptionBalance(
     @Param('environment') environment: string,
