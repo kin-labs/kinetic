@@ -1,11 +1,9 @@
+import { Keypair } from '@kin-kinetic/keypair'
+import { addDecimals, Destination, getPublicKey, PublicKeyString } from '@kin-kinetic/solana'
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
-import { Keypair } from '@kin-kinetic/keypair'
-import { getPublicKey, Destination, PublicKeyString } from '@kin-kinetic/solana'
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
-import BigNumber from 'bignumber.js'
-import { addDecimals } from './add-decimals'
 
 export async function serializeMakeTransferBatchTransactions({
   appIndex,
