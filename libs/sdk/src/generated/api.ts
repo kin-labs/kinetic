@@ -431,10 +431,10 @@ export interface AppTransaction {
   source: string | null
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof AppTransaction
    */
-  status: object | null
+  status: AppTransactionStatusEnum
   /**
    *
    * @type {string}
@@ -460,6 +460,17 @@ export interface AppTransaction {
    */
   webhookVerifyEnd: string | null
 }
+
+export const AppTransactionStatusEnum = {
+  Committed: 'Committed',
+  Confirmed: 'Confirmed',
+  Failed: 'Failed',
+  Finalized: 'Finalized',
+  Processing: 'Processing',
+} as const
+
+export type AppTransactionStatusEnum = typeof AppTransactionStatusEnum[keyof typeof AppTransactionStatusEnum]
+
 /**
  *
  * @export
@@ -480,10 +491,10 @@ export interface AppTransactionError {
   message: string
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof AppTransactionError
    */
-  type: object
+  type: AppTransactionErrorTypeEnum
   /**
    *
    * @type {number}
@@ -491,6 +502,17 @@ export interface AppTransactionError {
    */
   instruction: number
 }
+
+export const AppTransactionErrorTypeEnum = {
+  BadNonce: 'BadNonce',
+  InvalidAccount: 'InvalidAccount',
+  SomeError: 'SomeError',
+  Unknown: 'Unknown',
+  WebhookFailed: 'WebhookFailed',
+} as const
+
+export type AppTransactionErrorTypeEnum = typeof AppTransactionErrorTypeEnum[keyof typeof AppTransactionErrorTypeEnum]
+
 /**
  *
  * @export

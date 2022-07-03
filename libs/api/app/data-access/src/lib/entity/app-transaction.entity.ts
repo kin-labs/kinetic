@@ -63,7 +63,7 @@ export class AppTransaction {
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   source?: string
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, enum: AppTransactionStatus })
   @Field(() => AppTransactionStatus)
   status: AppTransactionStatus
   @HideField()

@@ -596,7 +596,8 @@
             "type": "string"
           },
           "type": {
-            "type": "object"
+            "type": "string",
+            "enum": ["BadNonce", "InvalidAccount", "SomeError", "Unknown", "WebhookFailed"]
           },
           "instruction": {
             "type": "integer"
@@ -684,8 +685,9 @@
             "nullable": true
           },
           "status": {
-            "type": "object",
-            "nullable": true
+            "type": "string",
+            "nullable": true,
+            "enum": ["Committed", "Confirmed", "Failed", "Finalized", "Processing"]
           },
           "webhookEventStart": {
             "format": "date-time",
