@@ -1,10 +1,9 @@
 import { Keypair } from '@kin-kinetic/keypair'
-import { getPublicKey, PublicKeyString } from '@kin-kinetic/solana'
+import { addDecimals, getPublicKey, PublicKeyString } from '@kin-kinetic/solana'
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
-import { addDecimals } from './add-decimals'
 
 export async function serializeMakeTransferTransaction({
   amount,

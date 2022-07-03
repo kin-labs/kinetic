@@ -1,3 +1,4 @@
+export * from './add-remove-decimals'
 export * from './convert-commitment'
 export * from './get-public-key'
 export * from './parse-and-sign-token-transfer'
