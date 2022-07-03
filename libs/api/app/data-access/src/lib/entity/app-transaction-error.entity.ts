@@ -13,6 +13,7 @@ export class AppTransactionError {
   @ApiProperty()
   @Field(() => AppTransactionErrorType)
   type: AppTransactionErrorType
+  @ApiProperty({ type: 'integer' })
   @Field(() => Int, { nullable: true })
   instruction?: number
 }

@@ -17,7 +17,7 @@ export class AppTransaction {
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   updatedAt?: Date
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ type: 'integer', nullable: true })
   @Field(() => Int, { nullable: true })
   amount?: number
   @ApiProperty({ nullable: true })

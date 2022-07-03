@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 export class AirdropStatsCounts {
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   averageValue: number
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   total: number
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   totalValue: number
 }

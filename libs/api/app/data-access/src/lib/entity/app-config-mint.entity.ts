@@ -3,11 +3,11 @@ import { ApiProperty } from '@nestjs/swagger'
 export class AppConfigMint {
   @ApiProperty()
   airdrop: boolean
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   airdropAmount: number
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   airdropMax: number
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   decimals: number
   @ApiProperty()
   feePayer: string

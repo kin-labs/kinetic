@@ -3,6 +3,6 @@ import { ApiProperty } from '@nestjs/swagger'
 export class AirdropStatsDate {
   @ApiProperty()
   date: string
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   count: number
 }

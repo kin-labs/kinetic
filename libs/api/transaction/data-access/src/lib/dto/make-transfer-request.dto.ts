@@ -6,11 +6,11 @@ export class MakeTransferRequest {
   commitment: Commitment
   @ApiProperty()
   environment: string
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   index: number
   @ApiProperty()
   mint: string
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   lastValidBlockHeight: number
   @ApiProperty({ nullable: true })
   referenceId?: string

@@ -25,7 +25,8 @@
     },
     "/api/account/info/{environment}/{index}/{accountId}": {
       "get": {
-        "operationId": "ApiAccountFeatureController_getAccountInfo",
+        "operationId": "getAccountInfo",
+        "summary": "",
         "parameters": [
           {
             "name": "environment",
@@ -40,7 +41,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           },
           {
@@ -108,7 +109,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           },
           {
@@ -153,7 +154,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           },
           {
@@ -209,7 +210,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           },
           {
@@ -315,7 +316,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           }
         ],
@@ -352,7 +353,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           }
         ],
@@ -446,7 +447,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           }
         ],
@@ -483,7 +484,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           },
           {
@@ -491,7 +492,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "number"
+              "type": "integer"
             }
           }
         ],
@@ -573,7 +574,7 @@
             "type": "string"
           },
           "index": {
-            "type": "number"
+            "type": "integer"
           },
           "mint": {
             "type": "string"
@@ -596,9 +597,12 @@
           },
           "type": {
             "type": "object"
+          },
+          "instruction": {
+            "type": "integer"
           }
         },
-        "required": ["id", "message", "type"]
+        "required": ["id", "message", "type", "instruction"]
       },
       "AppTransaction": {
         "type": "object",
@@ -618,7 +622,7 @@
             "nullable": true
           },
           "amount": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "destination": {
@@ -798,7 +802,7 @@
             "type": "string"
           },
           "index": {
-            "type": "number"
+            "type": "integer"
           },
           "mint": {
             "type": "string"
@@ -819,13 +823,13 @@
         "type": "object",
         "properties": {
           "averageValue": {
-            "type": "number"
+            "type": "integer"
           },
           "total": {
-            "type": "number"
+            "type": "integer"
           },
           "totalValue": {
-            "type": "number"
+            "type": "integer"
           }
         },
         "required": ["averageValue", "total", "totalValue"]
@@ -837,7 +841,7 @@
             "type": "string"
           },
           "count": {
-            "type": "number"
+            "type": "integer"
           }
         },
         "required": ["date", "count"]
@@ -861,7 +865,7 @@
         "type": "object",
         "properties": {
           "index": {
-            "type": "number"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -910,13 +914,13 @@
             "type": "boolean"
           },
           "airdropAmount": {
-            "type": "number"
+            "type": "integer"
           },
           "airdropMax": {
-            "type": "number"
+            "type": "integer"
           },
           "decimals": {
-            "type": "number"
+            "type": "integer"
           },
           "feePayer": {
             "type": "string"
@@ -1006,7 +1010,7 @@
             "type": "string"
           },
           "lastValidBlockHeight": {
-            "type": "number"
+            "type": "integer"
           }
         },
         "required": ["blockhash", "lastValidBlockHeight"]
@@ -1015,7 +1019,7 @@
         "type": "object",
         "properties": {
           "lamports": {
-            "type": "number"
+            "type": "float"
           }
         },
         "required": ["lamports"]
@@ -1031,13 +1035,13 @@
             "type": "string"
           },
           "index": {
-            "type": "number"
+            "type": "integer"
           },
           "mint": {
             "type": "string"
           },
           "lastValidBlockHeight": {
-            "type": "number"
+            "type": "integer"
           },
           "referenceId": {
             "type": "string",
