@@ -1,13 +1,16 @@
 import { Keypair } from '@kin-kinetic/keypair'
-import { addDecimals, Destination, getPublicKey, PublicKeyString } from '@kin-kinetic/solana'
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
+import { Transaction, TransactionInstruction } from '@solana/web3.js'
+import { PublicKeyString } from '../interfaces'
+import { addDecimals } from './add-remove-decimals'
+import { getPublicKey } from './get-public-key'
 
-export async function serializeMakeTransferBatchTransactions({
+export async function serializeMakeTransferTransaction({
+  amount,
   appIndex,
-  destinations,
+  destination,
   latestBlockhash,
   mintDecimals,
   mintFeePayer,
@@ -15,8 +18,9 @@ export async function serializeMakeTransferBatchTransactions({
   owner,
   type,
 }: {
+  amount: string
   appIndex: number
-  destinations: Destination[]
+  destination: PublicKeyString
   latestBlockhash: string
   mintDecimals: number
   mintFeePayer: PublicKeyString
@@ -28,26 +32,27 @@ export async function serializeMakeTransferBatchTransactions({
   const mintKey = getPublicKey(mintPublicKey)
   const feePayerKey = getPublicKey(mintFeePayer)
 
-  // Get TokenAccount from Owner
-  const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, owner.solanaPublicKey)
-
-  // Get TokenAccount from Destination
-  const destinationInfo: { amount: number; destination: PublicKey }[] = await Promise.all(
-    destinations.map(async ({ amount, destination }) => ({
-      amount: addDecimals(amount, mintDecimals).toNumber(),
-      destination: await getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
-    })),
-  )
+  // Get TokenAccount from Owner and Destination
+  const [ownerTokenAccount, destinationTokenAccount] = await Promise.all([
+    getAssociatedTokenAddress(mintKey, owner.solanaPublicKey),
+    getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
+  ])
 
   const appIndexMemoInstruction = generateKinMemoInstruction({
     appIndex,
     type,
   })
 
+  // Create Transaction
   const instructions: TransactionInstruction[] = [
     appIndexMemoInstruction,
-    ...destinationInfo.map(({ amount, destination }) =>
-      createTransferInstruction(ownerTokenAccount, destination, owner.solanaPublicKey, amount, [], TOKEN_PROGRAM_ID),
+    createTransferInstruction(
+      ownerTokenAccount,
+      destinationTokenAccount,
+      owner.solanaPublicKey,
+      addDecimals(amount, mintDecimals).toNumber(),
+      [],
+      TOKEN_PROGRAM_ID,
     ),
   ]
 
