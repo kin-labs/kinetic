@@ -11,6 +11,7 @@ export async function serializeMakeTransferTransaction({
   amount,
   appIndex,
   destination,
+  lastValidBlockHeight,
   latestBlockhash,
   mintDecimals,
   mintFeePayer,
@@ -21,6 +22,7 @@ export async function serializeMakeTransferTransaction({
   amount: string
   appIndex: number
   destination: PublicKeyString
+  lastValidBlockHeight: number
   latestBlockhash: string
   mintDecimals: number
   mintFeePayer: PublicKeyString
@@ -57,13 +59,14 @@ export async function serializeMakeTransferTransaction({
   ]
 
   const transaction = new Transaction({
+    blockhash: latestBlockhash,
     feePayer: feePayerKey,
-    recentBlockhash: latestBlockhash,
+    lastValidBlockHeight,
     signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
   }).add(...instructions)
 
   // Sign and Serialize Transaction
-  transaction.partialSign(...[owner.solana])
+  transaction.partialSign(owner.solana)
 
   return transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
 }

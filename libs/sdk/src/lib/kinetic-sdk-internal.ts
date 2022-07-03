@@ -73,10 +73,13 @@ export class KineticSdkInternal {
       throw new Error(`AppConfig not initialized`)
     }
     mint = mint || this.appConfig.mint.publicKey
-    const { mintPublicKey, mintFeePayer, latestBlockhash } = await this.prepareTransaction({ mint })
+    const { lastValidBlockHeight, latestBlockhash, mintFeePayer, mintPublicKey } = await this.prepareTransaction({
+      mint,
+    })
 
     const tx = await serializeCreateAccountTransaction({
       appIndex: this.appConfig.app.index,
+      lastValidBlockHeight,
       latestBlockhash,
       mintFeePayer,
       mintPublicKey,
@@ -135,7 +138,7 @@ export class KineticSdkInternal {
       throw new Error(`AppConfig not initialized`)
     }
     mint = mint || this.appConfig.mint.publicKey
-    const { mintDecimals, mintPublicKey, mintFeePayer, latestBlockhash, lastValidBlockHeight } =
+    const { lastValidBlockHeight, latestBlockhash, mintDecimals, mintFeePayer, mintPublicKey } =
       await this.prepareTransaction({
         mint,
       })
@@ -144,6 +147,7 @@ export class KineticSdkInternal {
       amount,
       appIndex: this.appConfig.app.index,
       destination,
+      lastValidBlockHeight,
       latestBlockhash,
       mintDecimals,
       mintFeePayer,
@@ -156,8 +160,8 @@ export class KineticSdkInternal {
       commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
-      mint: mint.toString(),
       lastValidBlockHeight,
+      mint: mint.toString(),
       referenceId: referenceId || null,
       referenceType: referenceType || null,
       tx: tx.toString('base64'),
@@ -191,6 +195,7 @@ export class KineticSdkInternal {
     const tx = await serializeMakeTransferBatchTransactions({
       appIndex: this.appConfig.app.index,
       destinations,
+      lastValidBlockHeight,
       latestBlockhash,
       mintDecimals,
       mintFeePayer,
@@ -203,8 +208,8 @@ export class KineticSdkInternal {
       commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
-      mint: mint.toString(),
       lastValidBlockHeight,
+      mint: mint.toString(),
       referenceId: referenceId || null,
       referenceType: referenceType || null,
       tx: tx.toString('base64'),
