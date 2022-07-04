@@ -34,6 +34,9 @@
     "test:sdk-e2e:watch": "nx run sdk-e2e:e2e --verbose --watch"
   },
   "private": true,
+  "resolutions": {
+    "@solana/web3.js": "1.47.3"
+  },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",
     "@chakra-ui/react": "^2.2.1",
@@ -67,7 +70,7 @@
     "@solana/buffer-layout": "^4.0.0",
     "@solana/spl-token": "^0.2.0",
     "@solana/spl-token-registry": "^0.2.4154",
-    "@solana/web3.js": "^1.43.2",
+    "@solana/web3.js": "^1.47.3",
     "apollo-server-express": "^3.8.1",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
