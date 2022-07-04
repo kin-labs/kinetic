@@ -328,10 +328,10 @@ export interface AppTransaction {
   updatedAt: string | null
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof AppTransaction
    */
-  amount: number | null
+  amount: string | null
   /**
    *
    * @type {string}

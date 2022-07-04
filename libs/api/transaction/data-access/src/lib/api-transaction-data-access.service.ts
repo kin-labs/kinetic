@@ -127,7 +127,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
     // Update AppTransaction
     appTransaction = await this.updateAppTransaction(appTransaction.id, {
-      amount,
+      amount: amount.toString(),
       destination: destination.pubkey.toBase58(),
       feePayer,
       mint: mint?.mint?.address,
@@ -317,7 +317,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     input.solanaConfirmed = new Date()
     this.makeTransferSolanaCommittedCounter.add(1, { appKey })
     this.logger.verbose(`${appKey}: makeTransfer ${transaction.status} ${commitment} ${transaction.signature}`)
-    return await this.updateAppTransaction(transaction.id, input)
+    return this.updateAppTransaction(transaction.id, input)
   }
 
   private createAppTransaction({
@@ -345,7 +345,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private updateAppTransaction(id: string, data: Prisma.AppTransactionUpdateInput): Promise<AppTransactionWithErrors> {
     return this.data.appTransaction.update({
       where: { id },
-      data: { ...data },
+      data,
       include: { errors: true },
     })
   }

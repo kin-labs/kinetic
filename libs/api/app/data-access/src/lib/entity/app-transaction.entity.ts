@@ -1,4 +1,4 @@
-import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, ObjectType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger'
 import { GraphQLJSON } from 'graphql-type-json'
 import { AppEnv } from './app-env.entity'
@@ -17,9 +17,9 @@ export class AppTransaction {
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   updatedAt?: Date
-  @ApiProperty({ type: 'integer', nullable: true })
-  @Field(() => Int, { nullable: true })
-  amount?: number
+  @ApiProperty({ nullable: true })
+  @Field({ nullable: true })
+  amount?: string
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   destination?: string
