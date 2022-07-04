@@ -93,20 +93,19 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const appKey = this.data.getAppKey(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
 
-    const created = await this.data.appTransaction.create({
-      data: {
-        appEnvId: appEnv.id,
-        commitment: input.commitment,
-        referenceId: input.referenceId,
-        referenceType: input.referenceType,
-      },
-      include: { errors: true },
-    })
     const mint = appEnv.mints.find(({ mint }) => mint.address === input.mint)
     if (!mint) {
       this.makeTransferMintNotFoundErrorCounter.add(1, { appKey, mint: input.mint.toString() })
       throw new Error(`${appKey}: Can't find mint ${input.mint}`)
     }
+
+    const { id: appTransactionId } = await this.createAppTransaction({
+      appEnvId: appEnv.id,
+      commitment: input.commitment,
+      referenceId: input.referenceId,
+      referenceType: input.referenceType,
+    })
+
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
 
     const { amount, blockhash, destination, feePayer, source, transaction } = parseAndSignTokenTransfer({
@@ -126,13 +125,13 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     if (appEnv.webhookVerifyEnabled && appEnv.webhookVerifyUrl) {
       appTransaction.webhookVerifyStart = new Date()
       try {
-        await this.sendVerifyWebhook(appEnv, appTransaction, created.id)
+        await this.sendVerifyWebhook(appEnv, appTransaction, appTransactionId)
         appTransaction.webhookVerifyEnd = new Date()
         this.makeTransferWebhookVerifySuccessCounter.add(1, { appKey })
       } catch (err) {
         appTransaction.webhookVerifyEnd = new Date()
         this.makeTransferWebhookVerifyErrorCounter.add(1, { appKey })
-        return this.updateAppTransaction(created.id, {
+        return this.updateAppTransaction(appTransactionId, {
           ...appTransaction,
           status: AppTransactionStatus.Failed,
           errors: {
@@ -153,7 +152,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     } catch (error) {
       this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${error}`)
       this.makeTransferSolanaErrorCounter.add(1, { appKey })
-      return this.updateAppTransaction(created.id, {
+      return this.updateAppTransaction(appTransactionId, {
         solanaCommitted: new Date(),
         status: AppTransactionStatus.Failed,
         errors: {
@@ -177,14 +176,14 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       appTransaction.status = AppTransactionStatus.Confirmed
       appTransaction.solanaConfirmed = new Date()
       this.makeTransferSolanaCommittedCounter.add(1, { appKey })
-      await this.updateAppTransaction(created.id, {
+      await this.updateAppTransaction(appTransactionId, {
         ...appTransaction,
       })
       this.logger.verbose(
         `${appKey}: makeTransfer ${appTransaction.status} ${input.commitment} ${appTransaction.signature}`,
       )
 
-      this.confirmSignature(input.environment, input.index, created.id, {
+      this.confirmSignature(input.environment, input.index, appTransactionId, {
         blockhash,
         signature: appTransaction.signature as string,
         lastValidBlockHeight: input.lastValidBlockHeight,
@@ -194,18 +193,18 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     // Send Event Webhook
     let webhookEventEnd
     if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl) {
-      const updated = await this.updateAppTransaction(created.id, {
+      const updated = await this.updateAppTransaction(appTransactionId, {
         webhookEventStart: new Date(),
       })
 
       try {
-        await this.sendEventWebhook(appEnv, updated, created.id)
+        await this.sendEventWebhook(appEnv, updated, appTransactionId)
         webhookEventEnd = new Date()
         this.makeTransferWebhookEventSuccessCounter.add(1, { appKey })
       } catch (err) {
         webhookEventEnd = new Date()
         this.makeTransferWebhookEventErrorCounter.add(1, { appKey })
-        return this.updateAppTransaction(created.id, {
+        return this.updateAppTransaction(appTransactionId, {
           webhookEventEnd,
           status: AppTransactionStatus.Failed,
           errors: {
@@ -216,24 +215,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     }
 
     // Return object
-    return this.updateAppTransaction(created.id, { webhookEventEnd })
-  }
-
-  updateAppTransaction(id: string, data: Prisma.AppTransactionUpdateInput) {
-    return this.data.appTransaction.update({
-      where: { id },
-      data: { ...data },
-      include: { errors: true },
-    })
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sendEventWebhook(appEnv: AppEnv, payload: any, transactionId: string) {
-    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, payload, transactionId })
-  }
-
-  sendVerifyWebhook(appEnv: AppEnv, payload: Prisma.AppTransactionUpdateInput, transactionId) {
-    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, payload, transactionId })
+    return this.updateAppTransaction(appTransactionId, { webhookEventEnd })
   }
 
   async confirmSignature(
@@ -276,5 +258,43 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       this.makeTransferSolanaFinalizedCounter.add(1, { appKey })
       this.logger.verbose(`${appKey}: confirmSignature: finished ${signature}`)
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private sendEventWebhook(appEnv: AppEnv, payload: any, transactionId: string) {
+    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, payload, transactionId })
+  }
+
+  private sendVerifyWebhook(appEnv: AppEnv, payload: Prisma.AppTransactionUpdateInput, transactionId) {
+    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, payload, transactionId })
+  }
+
+  private createAppTransaction({
+    appEnvId,
+    commitment,
+    referenceId,
+    referenceType,
+  }: {
+    appEnvId: string
+    commitment: Commitment
+    referenceId?: string
+    referenceType?: string
+  }) {
+    return this.data.appTransaction.create({
+      data: {
+        appEnvId,
+        commitment,
+        referenceId,
+        referenceType,
+      },
+    })
+  }
+
+  private updateAppTransaction(id: string, data: Prisma.AppTransactionUpdateInput) {
+    return this.data.appTransaction.update({
+      where: { id },
+      data: { ...data },
+      include: { errors: true },
+    })
   }
 }
