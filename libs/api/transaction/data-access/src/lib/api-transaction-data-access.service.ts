@@ -5,19 +5,23 @@ import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/sola
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
+  AppMint,
   AppTransaction,
   AppTransactionError,
   AppTransactionErrorType,
   AppTransactionStatus,
+  Mint,
   Prisma,
+  Wallet,
 } from '@prisma/client'
-import { Transaction } from '@solana/web3.js'
+import { AccountMeta, Transaction } from '@solana/web3.js'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 
 type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[] }
+type AppMintWithWallet = AppMint & { mint: Mint; wallet: Wallet }
 
 @Injectable()
 export class ApiTransactionDataAccessService implements OnModuleInit {
@@ -91,7 +95,6 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   async makeTransfer(input: MakeTransferRequest): Promise<AppTransactionWithErrors> {
-    const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
     const appKey = this.data.getAppKey(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
@@ -113,17 +116,57 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     // Process the Solana transaction
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
 
-    const {
-      amount,
-      blockhash,
-      destination,
-      feePayer,
-      source,
-      transaction: solanaTransaction,
-    } = parseAndSignTokenTransfer({
+    const { amount, blockhash, destination, feePayer, source, transaction } = parseAndSignTokenTransfer({
       tx: Buffer.from(input.tx, 'base64'),
       signer: signer.solana,
     })
+
+    return this.handleTransaction({
+      amount,
+      appEnv,
+      appKey,
+      appTransaction,
+      blockhash,
+      commitment: input.commitment,
+      destination,
+      feePayer,
+      lastValidBlockHeight: input.lastValidBlockHeight,
+      mint,
+      solanaTransaction: transaction,
+      source,
+    })
+  }
+
+  async handleTransaction({
+    amount,
+    appEnv,
+    appKey,
+    appTransaction,
+    blockhash,
+    commitment,
+    destination,
+    feePayer,
+    lastValidBlockHeight,
+    mint,
+    solanaTransaction,
+    source,
+  }: {
+    appEnv: AppEnv
+    appKey: string
+    appTransaction: AppTransactionWithErrors
+    amount: number
+    blockhash: string
+    commitment: Commitment
+    destination: AccountMeta
+    feePayer: string
+    lastValidBlockHeight: number
+    mint: AppMintWithWallet
+    source: string
+    solanaTransaction: Transaction
+  }): Promise<AppTransactionWithErrors> {
+    const environment = appEnv.name
+    const index = appEnv.app.index
+    const solana = await this.data.getSolanaConnection(environment, index)
 
     // Update AppTransaction
     appTransaction = await this.updateAppTransaction(appTransaction.id, {
@@ -153,8 +196,8 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       appTransaction = await this.confirmTransaction(
         appKey,
         blockhash,
-        input.commitment,
-        input.lastValidBlockHeight,
+        commitment,
+        lastValidBlockHeight,
         appTransaction,
         solana,
       )
@@ -162,7 +205,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       this.confirmSignature(appEnv, appTransaction.id, {
         blockhash,
         signature: appTransaction.signature as string,
-        lastValidBlockHeight: input.lastValidBlockHeight,
+        lastValidBlockHeight: lastValidBlockHeight,
       })
 
       if (appTransaction.status === AppTransactionStatus.Failed) {
