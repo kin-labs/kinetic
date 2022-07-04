@@ -97,25 +97,6 @@ export interface AirdropStatsDate {
 /**
  *
  * @export
- * @interface ApiConfigSummary
- */
-export interface ApiConfigSummary {
-  /**
-   *
-   * @type {number}
-   * @memberof ApiConfigSummary
-   */
-  port: number
-  /**
-   *
-   * @type {string}
-   * @memberof ApiConfigSummary
-   */
-  environment: string
-}
-/**
- *
- * @export
  * @interface AppConfig
  */
 export interface AppConfig {
@@ -1457,50 +1438,6 @@ export const AppApiAxiosParamCreator = function (configuration?: Configuration) 
      *
      * @param {string} environment
      * @param {number} index
-     * @param {string} type
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiAppFeatureControllerAppWebhook: async (
-      environment: string,
-      index: number,
-      type: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'environment' is not null or undefined
-      assertParamExists('apiAppFeatureControllerAppWebhook', 'environment', environment)
-      // verify required parameter 'index' is not null or undefined
-      assertParamExists('apiAppFeatureControllerAppWebhook', 'index', index)
-      // verify required parameter 'type' is not null or undefined
-      assertParamExists('apiAppFeatureControllerAppWebhook', 'type', type)
-      const localVarPath = `/api/app/{environment}/{index}/webhook/{type}`
-        .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
-        .replace(`{${'index'}}`, encodeURIComponent(String(index)))
-        .replace(`{${'type'}}`, encodeURIComponent(String(type)))
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @param {string} environment
-     * @param {number} index
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1589,28 +1526,6 @@ export const AppApiFp = function (configuration?: Configuration) {
      *
      * @param {string} environment
      * @param {number} index
-     * @param {string} type
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiAppFeatureControllerAppWebhook(
-      environment: string,
-      index: number,
-      type: string,
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiAppFeatureControllerAppWebhook(
-        environment,
-        index,
-        type,
-        options,
-      )
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @param {string} environment
-     * @param {number} index
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1651,24 +1566,6 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
      *
      * @param {string} environment
      * @param {number} index
-     * @param {string} type
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiAppFeatureControllerAppWebhook(
-      environment: string,
-      index: number,
-      type: string,
-      options?: any,
-    ): AxiosPromise<void> {
-      return localVarFp
-        .apiAppFeatureControllerAppWebhook(environment, index, type, options)
-        .then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @param {string} environment
-     * @param {number} index
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1699,26 +1596,6 @@ export class AppApi extends BaseAPI {
    *
    * @param {string} environment
    * @param {number} index
-   * @param {string} type
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof AppApi
-   */
-  public apiAppFeatureControllerAppWebhook(
-    environment: string,
-    index: number,
-    type: string,
-    options?: AxiosRequestConfig,
-  ) {
-    return AppApiFp(this.configuration)
-      .apiAppFeatureControllerAppWebhook(environment, index, type, options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
-   * @param {string} environment
-   * @param {number} index
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AppApi
@@ -1740,254 +1617,6 @@ export class AppApi extends BaseAPI {
   public getAppHealth(environment: string, index: number, options?: AxiosRequestConfig) {
     return AppApiFp(this.configuration)
       .getAppHealth(environment, index, options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-}
-
-/**
- * ConfigApi - axios parameter creator
- * @export
- */
-export const ConfigApiAxiosParamCreator = function (configuration?: Configuration) {
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    config: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/config`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-  }
-}
-
-/**
- * ConfigApi - functional programming interface
- * @export
- */
-export const ConfigApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = ConfigApiAxiosParamCreator(configuration)
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async config(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiConfigSummary>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.config(options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-  }
-}
-
-/**
- * ConfigApi - factory interface
- * @export
- */
-export const ConfigApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-  const localVarFp = ConfigApiFp(configuration)
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    config(options?: any): AxiosPromise<ApiConfigSummary> {
-      return localVarFp.config(options).then((request) => request(axios, basePath))
-    },
-  }
-}
-
-/**
- * ConfigApi - object-oriented interface
- * @export
- * @class ConfigApi
- * @extends {BaseAPI}
- */
-export class ConfigApi extends BaseAPI {
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ConfigApi
-   */
-  public config(options?: AxiosRequestConfig) {
-    return ConfigApiFp(this.configuration)
-      .config(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-}
-
-/**
- * DefaultApi - axios parameter creator
- * @export
- */
-export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiCoreFeatureControllerMetrics: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/metrics`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiCoreFeatureControllerUptime: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/uptime`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-  }
-}
-
-/**
- * DefaultApi - functional programming interface
- * @export
- */
-export const DefaultApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiCoreFeatureControllerMetrics(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiCoreFeatureControllerMetrics(options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async apiCoreFeatureControllerUptime(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.apiCoreFeatureControllerUptime(options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-  }
-}
-
-/**
- * DefaultApi - factory interface
- * @export
- */
-export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-  const localVarFp = DefaultApiFp(configuration)
-  return {
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiCoreFeatureControllerMetrics(options?: any): AxiosPromise<void> {
-      return localVarFp.apiCoreFeatureControllerMetrics(options).then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    apiCoreFeatureControllerUptime(options?: any): AxiosPromise<void> {
-      return localVarFp.apiCoreFeatureControllerUptime(options).then((request) => request(axios, basePath))
-    },
-  }
-}
-
-/**
- * DefaultApi - object-oriented interface
- * @export
- * @class DefaultApi
- * @extends {BaseAPI}
- */
-export class DefaultApi extends BaseAPI {
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public apiCoreFeatureControllerMetrics(options?: AxiosRequestConfig) {
-    return DefaultApiFp(this.configuration)
-      .apiCoreFeatureControllerMetrics(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
-  /**
-   *
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public apiCoreFeatureControllerUptime(options?: AxiosRequestConfig) {
-    return DefaultApiFp(this.configuration)
-      .apiCoreFeatureControllerUptime(options)
       .then((request) => request(this.axios, this.basePath))
   }
 }

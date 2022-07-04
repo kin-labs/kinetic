@@ -153,8 +153,8 @@ export class KineticSdkInternal {
       mintFeePayer,
       mintPublicKey,
       owner,
-      type: type || TransactionType.None,
       senderCreate: account?.length === 0 && senderCreate,
+      type: type || TransactionType.None,
     })
 
     return this.makeTransferRequest({

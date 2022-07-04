@@ -1,28 +1,6 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/api/metrics": {
-      "get": {
-        "operationId": "ApiCoreFeatureController_metrics",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/uptime": {
-      "get": {
-        "operationId": "ApiCoreFeatureController_uptime",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/account/info/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "getAccountInfo",
@@ -370,63 +348,6 @@
           }
         },
         "tags": ["app"]
-      }
-    },
-    "/api/app/{environment}/{index}/webhook/{type}": {
-      "post": {
-        "operationId": "ApiAppFeatureController_appWebhook",
-        "parameters": [
-          {
-            "name": "environment",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "index",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "type",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": ["app"]
-      }
-    },
-    "/api/config": {
-      "get": {
-        "operationId": "config",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiConfigSummary"
-                }
-              }
-            }
-          }
-        },
-        "tags": ["config"]
       }
     },
     "/api/transaction/latest-blockhash/{environment}/{index}": {
@@ -992,18 +913,6 @@
           }
         },
         "required": ["isSolanaOk", "isKineticOk", "time"]
-      },
-      "ApiConfigSummary": {
-        "type": "object",
-        "properties": {
-          "port": {
-            "type": "number"
-          },
-          "environment": {
-            "type": "string"
-          }
-        },
-        "required": ["port", "environment"]
       },
       "LatestBlockhashResponse": {
         "type": "object",

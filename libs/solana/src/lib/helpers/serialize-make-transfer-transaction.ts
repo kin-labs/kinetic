@@ -1,4 +1,3 @@
-import { getPublicKey } from '@kin-kinetic/solana'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import {
   createAssociatedTokenAccountInstruction,
@@ -7,8 +6,9 @@ import {
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
-import { SerializeMakeTransferOptions } from '../interfaces/serialize-make-transfer-transaction-options'
-import { addDecimals } from './add-decimals'
+import { SerializeMakeTransferOptions } from '../interfaces'
+import { addDecimals } from './add-remove-decimals'
+import { getPublicKey } from './get-public-key'
 
 export async function serializeMakeTransferTransaction({
   amount,
@@ -20,8 +20,8 @@ export async function serializeMakeTransferTransaction({
   mintFeePayer,
   mintPublicKey,
   owner,
-  type,
   senderCreate,
+  type,
 }: SerializeMakeTransferOptions) {
   // Create objects from Response
   const mintKey = getPublicKey(mintPublicKey)
@@ -39,16 +39,15 @@ export async function serializeMakeTransferTransaction({
   })
 
   // Create Transaction
-  const instructions: TransactionInstruction[] = [
-    appIndexMemoInstruction,
-    senderCreate
-      ? createAssociatedTokenAccountInstruction(
-          feePayerKey,
-          destinationTokenAccount,
-          getPublicKey(destination),
-          mintKey,
-        )
-      : ([] as unknown as TransactionInstruction),
+  const instructions: TransactionInstruction[] = [appIndexMemoInstruction]
+
+  if (senderCreate) {
+    instructions.push(
+      createAssociatedTokenAccountInstruction(feePayerKey, destinationTokenAccount, getPublicKey(destination), mintKey),
+    )
+  }
+
+  instructions.push(
     createTransferInstruction(
       ownerTokenAccount,
       destinationTokenAccount,
@@ -57,7 +56,7 @@ export async function serializeMakeTransferTransaction({
       [],
       TOKEN_PROGRAM_ID,
     ),
-  ]
+  )
 
   const transaction = new Transaction({
     blockhash: latestBlockhash,

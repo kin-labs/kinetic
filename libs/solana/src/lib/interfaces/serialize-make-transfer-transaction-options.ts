@@ -1,9 +1,8 @@
-import { PublicKeyString } from '@kin-kinetic/solana'
+import { PublicKeyString } from '../interfaces'
 import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@kin-kinetic/keypair'
-import { TransferDestination } from './transfer-destination'
 
-export interface SerializeMakeTransferOptions extends TransferDestination {
+export interface SerializeMakeTransferOptions {
   amount: string
   appIndex: number
   destination: PublicKeyString
@@ -13,6 +12,6 @@ export interface SerializeMakeTransferOptions extends TransferDestination {
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
   owner: Keypair
-  type: TransactionType
   senderCreate?: boolean
+  type: TransactionType
 }

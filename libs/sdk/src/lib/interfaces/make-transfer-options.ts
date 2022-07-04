@@ -9,6 +9,6 @@ export interface MakeTransferOptions extends TransferDestination {
   owner: Keypair
   referenceId?: string
   referenceType?: string
-  type?: TransactionType
   senderCreate?: boolean
+  type?: TransactionType
 }
