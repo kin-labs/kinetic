@@ -39,6 +39,36 @@
         "tags": ["account"]
       }
     },
+    "/api/account/close": {
+      "post": {
+        "operationId": "closeAccount",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloseAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppTransaction"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["account"]
+      }
+    },
     "/api/account/create": {
       "post": {
         "operationId": "createAccount",
@@ -488,7 +518,7 @@
   ],
   "components": {
     "schemas": {
-      "CreateAccountRequest": {
+      "CloseAccountRequest": {
         "type": "object",
         "properties": {
           "environment": {
@@ -685,6 +715,25 @@
           "webhookVerifyEnd",
           "webhookVerifyDuration"
         ]
+      },
+      "CreateAccountRequest": {
+        "type": "object",
+        "properties": {
+          "environment": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          },
+          "mint": {
+            "type": "string"
+          },
+          "tx": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "required": ["environment", "index", "mint", "tx"]
       },
       "BigNumber": {
         "type": "object",

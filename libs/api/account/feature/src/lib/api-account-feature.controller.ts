@@ -1,14 +1,15 @@
 import {
   ApiAccountDataAccessService,
   BalanceResponse,
+  CloseAccountRequest,
   CreateAccountRequest,
   HistoryResponse,
 } from '@kin-kinetic/api/account/data-access'
 import { AppTransaction } from '@kin-kinetic/api/app/data-access'
 import { PublicKeyPipe } from '@kin-kinetic/api/core/util'
 import { Commitment } from '@kin-kinetic/solana'
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UsePipes } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('account')
 @Controller('account')
@@ -25,6 +26,14 @@ export class ApiAccountFeatureController {
     @Query('commitment') commitment?: Commitment,
   ) {
     return this.service.getAccountInfo(environment, index, accountId, commitment)
+  }
+
+  @Post('close')
+  @ApiBody({ type: CloseAccountRequest })
+  @ApiOperation({ operationId: 'closeAccount' })
+  @ApiResponse({ type: AppTransaction })
+  closeAccount(@Body() body: CloseAccountRequest) {
+    return this.service.createAccount(body)
   }
 
   @Post('create')

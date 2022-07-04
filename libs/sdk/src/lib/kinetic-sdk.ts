@@ -1,9 +1,9 @@
 import { Solana } from '@kin-kinetic/solana'
 import { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
 export type { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
-import { getSolanaRpcEndpoint } from './helpers'
-import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
+import { getSolanaRpcEndpoint, parseKineticSdkConfig } from './helpers'
 import {
+  CloseAccountOptions,
   CreateAccountOptions,
   GetBalanceOptions,
   GetHistoryOptions,
@@ -35,6 +35,10 @@ export class KineticSdk {
 
   get solanaRpcEndpoint(): string | undefined {
     return this.sdkConfig.solanaRpcEndpoint
+  }
+
+  closeAccount(options: CloseAccountOptions): Promise<AppTransaction> {
+    return this.internal.closeAccount(options)
   }
 
   createAccount(options: CreateAccountOptions): Promise<AppTransaction> {
