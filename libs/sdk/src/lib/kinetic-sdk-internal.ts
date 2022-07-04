@@ -130,6 +130,7 @@ export class KineticSdkInternal {
     referenceId,
     referenceType,
     type,
+    senderCreate,
   }: MakeTransferOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
@@ -139,6 +140,8 @@ export class KineticSdkInternal {
       await this.prepareTransaction({
         mint,
       })
+
+    const account = await this.getTokenAccounts({ account: destination, mint })
 
     const tx = await serializeMakeTransferTransaction({
       amount,
@@ -150,6 +153,7 @@ export class KineticSdkInternal {
       mintFeePayer,
       mintPublicKey,
       owner,
+      senderCreate: account?.length === 0 && senderCreate,
       type: type || TransactionType.None,
     })
 

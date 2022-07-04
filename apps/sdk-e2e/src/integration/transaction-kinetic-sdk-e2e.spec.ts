@@ -101,4 +101,35 @@ describe('KineticSdk (e2e)', () => {
     expect(res.status).toBe(AppTransactionStatus.Failed)
     expect(res.errors[0].message).toContain('Error: Insufficient funds.')
   })
+
+  it('should allow the sender to create an account', async () => {
+    const destination = Keypair.random()
+    const tx = await sdk.makeTransfer({
+      amount: '43',
+      destination: destination.publicKey,
+      owner: aliceKeypair,
+      senderCreate: true,
+    })
+    expect(tx).not.toBeNull()
+    const { signature, errors, amount, source } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+    expect(Number(amount)).toBe(4300000)
+    expect(source).toBe(aliceKeypair.publicKey)
+  })
+
+  it('should not allow the sender to create an account when senderCreate params is false or undefined', async () => {
+    const destination = Keypair.random()
+    const tx = await sdk.makeTransfer({
+      amount: '43',
+      destination: destination.publicKey,
+      owner: aliceKeypair,
+      senderCreate: false,
+    })
+    expect(tx.signature).toBeNull()
+    expect(tx.amount).toBeNull()
+    expect(tx.errors.length).toBeGreaterThan(0)
+    expect(tx.status).toBe(AppTransactionStatus.Failed)
+    expect(tx.errors[0].message).toContain(`Error: Insufficient funds.`) // Destination account doesn't exist.
+  })
 })

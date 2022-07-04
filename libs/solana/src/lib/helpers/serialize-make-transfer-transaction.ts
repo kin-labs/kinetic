@@ -1,9 +1,12 @@
-import { Keypair } from '@kin-kinetic/keypair'
-import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
-import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import {
+  createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
-import { PublicKeyString } from '../interfaces'
+import { SerializeMakeTransferOptions } from '../interfaces'
 import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
@@ -17,19 +20,9 @@ export async function serializeMakeTransferTransaction({
   mintFeePayer,
   mintPublicKey,
   owner,
+  senderCreate,
   type,
-}: {
-  amount: string
-  appIndex: number
-  destination: PublicKeyString
-  lastValidBlockHeight: number
-  latestBlockhash: string
-  mintDecimals: number
-  mintFeePayer: PublicKeyString
-  mintPublicKey: PublicKeyString
-  owner: Keypair
-  type: TransactionType
-}) {
+}: SerializeMakeTransferOptions) {
   // Create objects from Response
   const mintKey = getPublicKey(mintPublicKey)
   const feePayerKey = getPublicKey(mintFeePayer)
@@ -46,8 +39,15 @@ export async function serializeMakeTransferTransaction({
   })
 
   // Create Transaction
-  const instructions: TransactionInstruction[] = [
-    appIndexMemoInstruction,
+  const instructions: TransactionInstruction[] = [appIndexMemoInstruction]
+
+  if (senderCreate) {
+    instructions.push(
+      createAssociatedTokenAccountInstruction(feePayerKey, destinationTokenAccount, getPublicKey(destination), mintKey),
+    )
+  }
+
+  instructions.push(
     createTransferInstruction(
       ownerTokenAccount,
       destinationTokenAccount,
@@ -56,7 +56,7 @@ export async function serializeMakeTransferTransaction({
       [],
       TOKEN_PROGRAM_ID,
     ),
-  ]
+  )
 
   const transaction = new Transaction({
     blockhash: latestBlockhash,
