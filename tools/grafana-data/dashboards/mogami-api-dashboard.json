@@ -146,7 +146,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(kinetic_api_transaction_make_transfer_solana_committed_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_confirm_transaction_solana_confirmed_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -227,7 +227,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(kinetic_api_transaction_make_transfer_solana_confirmed_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_send_solana_transaction_confirmed_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -308,7 +308,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(kinetic_api_transaction_make_transfer_solana_finalized_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_confirm_signature_finalized_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"
@@ -389,7 +389,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(kinetic_api_transaction_make_transfer_solana_error_counter_total{}[1m])",
+          "expr": "rate(kinetic_api_transaction_send_solana_transaction_error_counter_total{}[1m])",
           "interval": "",
           "legendFormat": "{{ appKey }}",
           "refId": "A"

@@ -23,52 +23,57 @@ type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[]
 export class ApiTransactionDataAccessService implements OnModuleInit {
   private logger = new Logger(ApiTransactionDataAccessService.name)
 
+  private confirmSignatureFinalizedCounter: Counter
+  private confirmTransactionSolanaConfirmedCounter: Counter
   private makeTransferMintNotFoundErrorCounter: Counter
   private makeTransferRequestCounter: Counter
-  private makeTransferSolanaCommittedCounter: Counter
-  private makeTransferSolanaConfirmedCounter: Counter
-  private makeTransferSolanaErrorCounter: Counter
-  private makeTransferSolanaFinalizedCounter: Counter
-  private makeTransferWebhookEventErrorCounter: Counter
-  private makeTransferWebhookEventSuccessCounter: Counter
-  private makeTransferWebhookVerifyErrorCounter: Counter
-  private makeTransferWebhookVerifySuccessCounter: Counter
+  private sendEventWebhookErrorCounter: Counter
+  private sendEventWebhookSuccessCounter: Counter
+  private sendSolanaTransactionConfirmedCounter: Counter
+  private sendSolanaTransactionErrorCounter: Counter
+  private sendVerifyWebhookErrorCounter: Counter
+  private sendVerifyWebhookSuccessCounter: Counter
 
   constructor(readonly data: ApiCoreDataAccessService, private readonly appWebhook: ApiAppWebhookDataAccessService) {}
 
   onModuleInit() {
-    const prefix = `api_transaction_make_transfer`
-    this.makeTransferRequestCounter = this.data.metrics.getCounter(`${prefix}_request_counter`, {
+    this.confirmSignatureFinalizedCounter = this.data.metrics.getCounter(
+      `api_transaction_confirm_signature_finalized_counter`,
+      { description: 'Number of makeTransfer finalized Solana transactions' },
+    )
+    this.confirmTransactionSolanaConfirmedCounter = this.data.metrics.getCounter(
+      `api_transaction_confirm_transaction_solana_confirmed_counter`,
+      { description: 'Number of makeTransfer committed Solana transactions' },
+    )
+    this.makeTransferMintNotFoundErrorCounter = this.data.metrics.getCounter(
+      `api_transaction_make_transfer_mint_not_found_error_counter`,
+      { description: 'Number of makeTransfer mint not found errors' },
+    )
+    this.makeTransferRequestCounter = this.data.metrics.getCounter(`api_transaction_make_transfer_request_counter`, {
       description: 'Number of requests to makeTransfer',
     })
-    this.makeTransferMintNotFoundErrorCounter = this.data.metrics.getCounter(`${prefix}_error_mint_not_found_counter`, {
-      description: 'Number of makeTransfer mint not found errors',
-    })
-    this.makeTransferSolanaCommittedCounter = this.data.metrics.getCounter(`${prefix}_solana_committed_counter`, {
-      description: 'Number of makeTransfer committed Solana transactions',
-    })
-    this.makeTransferSolanaConfirmedCounter = this.data.metrics.getCounter(`${prefix}_solana_confirmed_counter`, {
-      description: 'Number of makeTransfer confirmed Solana transactions',
-    })
-    this.makeTransferSolanaFinalizedCounter = this.data.metrics.getCounter(`${prefix}_solana_finalized_counter`, {
-      description: 'Number of makeTransfer finalized Solana transactions',
-    })
-    this.makeTransferSolanaErrorCounter = this.data.metrics.getCounter(`${prefix}_solana_error_counter`, {
-      description: 'Number of makeTransfer Solana errors',
-    })
-    this.makeTransferWebhookEventErrorCounter = this.data.metrics.getCounter(`${prefix}_webhook_event_error_counter`, {
-      description: 'Number of makeTransfer webhook event errors',
-    })
-    this.makeTransferWebhookEventSuccessCounter = this.data.metrics.getCounter(
-      `${prefix}_webhook_event_success_counter`,
+    this.sendEventWebhookErrorCounter = this.data.metrics.getCounter(
+      `api_transaction_send_event_webhook_error_counter`,
+      { description: 'Number of makeTransfer webhook event errors' },
+    )
+    this.sendEventWebhookSuccessCounter = this.data.metrics.getCounter(
+      `api_transaction_send_event_webhook_success_counter`,
       { description: 'Number of makeTransfer webhook event success' },
     )
-    this.makeTransferWebhookVerifyErrorCounter = this.data.metrics.getCounter(
-      `${prefix}_webhook_verify_error_counter`,
+    this.sendSolanaTransactionConfirmedCounter = this.data.metrics.getCounter(
+      `api_transaction_send_solana_transaction_confirmed_counter`,
+      { description: 'Number of makeTransfer confirmed Solana transactions' },
+    )
+    this.sendSolanaTransactionErrorCounter = this.data.metrics.getCounter(
+      `api_transaction_send_solana_transaction_error_counter`,
+      { description: 'Number of makeTransfer Solana errors' },
+    )
+    this.sendVerifyWebhookErrorCounter = this.data.metrics.getCounter(
+      `api_transaction_send_verify_webhook_error_counter`,
       { description: 'Number of makeTransfer webhook verify errors' },
     )
-    this.makeTransferWebhookVerifySuccessCounter = this.data.metrics.getCounter(
-      `${prefix}_webhook_verify_success_counter`,
+    this.sendVerifyWebhookSuccessCounter = this.data.metrics.getCounter(
+      `api_transaction_send_verify_webhook_success_counter`,
       { description: 'Number of makeTransfer webhook verify success' },
     )
   }
@@ -247,7 +252,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
         solanaTransaction: solanaTransaction ? JSON.parse(JSON.stringify(solanaTransaction)) : undefined,
         status: AppTransactionStatus.Finalized,
       })
-      this.makeTransferSolanaFinalizedCounter.add(1, { appKey })
+      this.confirmSignatureFinalizedCounter.add(1, { appKey })
       // Send Event Webhook
       if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl) {
         return this.sendEventWebhook(appKey, appEnv, appTransaction)
@@ -267,13 +272,13 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     try {
       await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, transaction })
       input.webhookEventEnd = new Date()
-      this.makeTransferWebhookEventSuccessCounter.add(1, { appKey })
+      this.sendEventWebhookSuccessCounter.add(1, { appKey })
       return this.updateAppTransaction(transaction.id, input)
     } catch (err) {
       input.errors = {
         create: parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
       }
-      this.makeTransferWebhookEventErrorCounter.add(1, { appKey })
+      this.sendEventWebhookErrorCounter.add(1, { appKey })
       input.webhookEventEnd = new Date()
       return this.handleAppTransactionError(
         transaction.id,
@@ -292,10 +297,10 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     try {
       await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, transaction })
       input.webhookVerifyEnd = new Date()
-      this.makeTransferWebhookVerifySuccessCounter.add(1, { appKey })
+      this.sendVerifyWebhookSuccessCounter.add(1, { appKey })
       return this.updateAppTransaction(transaction.id, input)
     } catch (err) {
-      this.makeTransferWebhookVerifyErrorCounter.add(1, { appKey })
+      this.sendVerifyWebhookErrorCounter.add(1, { appKey })
       input.webhookVerifyEnd = new Date()
       return this.handleAppTransactionError(
         transaction.id,
@@ -317,11 +322,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       input.status = AppTransactionStatus.Committed
       input.solanaCommitted = new Date()
       this.logger.verbose(`${appKey}: sendSolanaTransaction ${input.status} ${input.signature}`)
-      this.makeTransferSolanaConfirmedCounter.add(1, { appKey })
+      this.sendSolanaTransactionConfirmedCounter.add(1, { appKey })
       return this.updateAppTransaction(appTransactionId, input)
     } catch (error) {
       this.logger.verbose(`${appKey}: sendSolanaTransaction ${input.status} ${error}`)
-      this.makeTransferSolanaErrorCounter.add(1, { appKey })
+      this.sendSolanaTransactionErrorCounter.add(1, { appKey })
       input.solanaCommitted = new Date()
       return this.handleAppTransactionError(appTransactionId, input, parseError(error, error.type, error.instruction))
     }
@@ -361,7 +366,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     )
     input.status = AppTransactionStatus.Confirmed
     input.solanaConfirmed = new Date()
-    this.makeTransferSolanaCommittedCounter.add(1, { appKey })
+    this.confirmTransactionSolanaConfirmedCounter.add(1, { appKey })
     this.logger.verbose(`${appKey}: confirmTransaction ${transaction.status} ${commitment} ${transaction.signature}`)
     return this.updateAppTransaction(transaction.id, input)
   }
