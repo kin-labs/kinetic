@@ -1,8 +1,8 @@
-import { PublicKeyString } from '../interfaces'
 import { TransactionType } from '@kin-tools/kin-memo'
-import { Keypair } from '@kin-kinetic/keypair'
+import { Keypair } from '@solana/web3.js'
+import { PublicKeyString } from '../interfaces'
 
-export interface SerializeMakeTransferOptions {
+export interface GenerateMakeTransferOptions {
   amount: string
   appIndex: number
   destination: PublicKeyString
@@ -11,7 +11,7 @@ export interface SerializeMakeTransferOptions {
   mintDecimals: number
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
-  owner: Keypair
+  signer: Keypair
   senderCreate?: boolean
   type: TransactionType
 }

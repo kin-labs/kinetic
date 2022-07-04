@@ -1,13 +1,11 @@
-import { Keypair } from '@kin-kinetic/keypair'
-import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
-import { Destination, PublicKeyString } from '../interfaces'
+import { GenerateMakeTransferBatchTransactionsOptions } from '../interfaces'
 import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
-export async function serializeMakeTransferBatchTransactions({
+export async function generateMakeTransferBatchTransaction({
   appIndex,
   destinations,
   lastValidBlockHeight,
@@ -15,25 +13,15 @@ export async function serializeMakeTransferBatchTransactions({
   mintDecimals,
   mintFeePayer,
   mintPublicKey,
-  owner,
+  signer,
   type,
-}: {
-  appIndex: number
-  destinations: Destination[]
-  lastValidBlockHeight: number
-  latestBlockhash: string
-  mintDecimals: number
-  mintFeePayer: PublicKeyString
-  mintPublicKey: PublicKeyString
-  owner: Keypair
-  type: TransactionType
-}) {
+}: GenerateMakeTransferBatchTransactionsOptions): Promise<Transaction> {
   // Create objects from Response
   const mintKey = getPublicKey(mintPublicKey)
   const feePayerKey = getPublicKey(mintFeePayer)
 
   // Get TokenAccount from Owner
-  const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, owner.solanaPublicKey)
+  const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, signer.publicKey)
 
   // Get TokenAccount from Destination
   const destinationInfo: { amount: number; destination: PublicKey }[] = await Promise.all(
@@ -51,7 +39,7 @@ export async function serializeMakeTransferBatchTransactions({
   const instructions: TransactionInstruction[] = [
     appIndexMemoInstruction,
     ...destinationInfo.map(({ amount, destination }) =>
-      createTransferInstruction(ownerTokenAccount, destination, owner.solanaPublicKey, amount, [], TOKEN_PROGRAM_ID),
+      createTransferInstruction(ownerTokenAccount, destination, signer.publicKey, amount, [], TOKEN_PROGRAM_ID),
     ),
   ]
 
@@ -59,11 +47,11 @@ export async function serializeMakeTransferBatchTransactions({
     blockhash: latestBlockhash,
     feePayer: feePayerKey,
     lastValidBlockHeight,
-    signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
+    signatures: [{ publicKey: signer.publicKey, signature: null }],
   }).add(...instructions)
 
-  // Sign and Serialize Transaction
-  transaction.partialSign(owner.solana)
+  // Partially sign the transaction
+  transaction.partialSign(signer)
 
-  return transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
+  return transaction
 }
