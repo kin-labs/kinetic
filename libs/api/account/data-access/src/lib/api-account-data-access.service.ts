@@ -86,8 +86,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
 
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
-    const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
-    const appKey = this.data.getAppKey(input.environment, input.index)
+    const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.createAccountRequestCounter.add(1, { appKey })
 
     const created = await this.data.appTransaction.create({

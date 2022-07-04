@@ -5,23 +5,19 @@ import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/sola
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
-  AppMint,
   AppTransaction,
   AppTransactionError,
   AppTransactionErrorType,
   AppTransactionStatus,
-  Mint,
   Prisma,
-  Wallet,
 } from '@prisma/client'
-import { AccountMeta, Transaction } from '@solana/web3.js'
+import { Transaction } from '@solana/web3.js'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 
 type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[] }
-type AppMintWithWallet = AppMint & { mint: Mint; wallet: Wallet }
 
 @Injectable()
 export class ApiTransactionDataAccessService implements OnModuleInit {
@@ -95,8 +91,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   async makeTransfer(input: MakeTransferRequest): Promise<AppTransactionWithErrors> {
-    const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
-    const appKey = this.data.getAppKey(input.environment, input.index)
+    const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
 
     const mint = appEnv.mints.find(({ mint }) => mint.address === input.mint)
@@ -106,7 +101,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     }
 
     // Create the AppTransaction
-    let appTransaction: AppTransactionWithErrors = await this.createAppTransaction({
+    const appTransaction: AppTransactionWithErrors = await this.createAppTransaction({
       appEnvId: appEnv.id,
       commitment: input.commitment,
       referenceId: input.referenceId,
@@ -125,13 +120,13 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       amount,
       appEnv,
       appKey,
-      appTransaction,
+      appTransactionId: appTransaction.id,
       blockhash,
-      commitment: input.commitment,
-      destination,
+      commitment: input?.commitment,
+      destination: destination?.pubkey.toBase58(),
       feePayer,
-      lastValidBlockHeight: input.lastValidBlockHeight,
-      mint,
+      lastValidBlockHeight: input?.lastValidBlockHeight,
+      mintPublicKey: mint?.mint?.address,
       solanaTransaction: transaction,
       source,
     })
@@ -141,26 +136,26 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     amount,
     appEnv,
     appKey,
-    appTransaction,
+    appTransactionId,
     blockhash,
     commitment,
     destination,
     feePayer,
     lastValidBlockHeight,
-    mint,
+    mintPublicKey,
     solanaTransaction,
     source,
   }: {
     appEnv: AppEnv
     appKey: string
-    appTransaction: AppTransactionWithErrors
+    appTransactionId: string
     amount: number
     blockhash: string
     commitment: Commitment
-    destination: AccountMeta
+    destination: string
     feePayer: string
     lastValidBlockHeight: number
-    mint: AppMintWithWallet
+    mintPublicKey: string
     source: string
     solanaTransaction: Transaction
   }): Promise<AppTransactionWithErrors> {
@@ -169,55 +164,55 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const solana = await this.data.getSolanaConnection(environment, index)
 
     // Update AppTransaction
-    appTransaction = await this.updateAppTransaction(appTransaction.id, {
+    const updatedAppTransaction = await this.updateAppTransaction(appTransactionId, {
       amount: amount.toString(),
-      destination: destination.pubkey.toBase58(),
+      destination,
       feePayer,
-      mint: mint?.mint?.address,
+      mint: mintPublicKey,
       source,
     })
 
     // Send Verify Webhook
     if (appEnv.webhookVerifyEnabled && appEnv.webhookVerifyUrl) {
-      appTransaction = await this.sendVerifyWebhook(appKey, appEnv, appTransaction)
-      if (appTransaction.status === AppTransactionStatus.Failed) {
-        return appTransaction
+      const verifiedAppTransaction = await this.sendVerifyWebhook(appKey, appEnv, updatedAppTransaction)
+      if (verifiedAppTransaction.status === AppTransactionStatus.Failed) {
+        return verifiedAppTransaction
       }
     }
 
     // Solana Transaction
-    appTransaction = await this.sendSolanaTransaction(appKey, appTransaction.id, solana, solanaTransaction)
-    if (appTransaction.status === AppTransactionStatus.Failed) {
-      return appTransaction
+    const solanaAppTransaction = await this.sendSolanaTransaction(appKey, appTransactionId, solana, solanaTransaction)
+    if (solanaAppTransaction.status === AppTransactionStatus.Failed) {
+      return solanaAppTransaction
     }
 
     // Confirm transaction
-    if (appTransaction.signature) {
-      appTransaction = await this.confirmTransaction(
+    if (solanaAppTransaction.signature) {
+      const confirmedAppTransaction = await this.confirmTransaction(
         appKey,
         blockhash,
         commitment,
         lastValidBlockHeight,
-        appTransaction,
+        solanaAppTransaction,
         solana,
       )
 
-      this.confirmSignature(appEnv, appTransaction.id, {
+      this.confirmSignature(appEnv, appTransactionId, {
         blockhash,
-        signature: appTransaction.signature as string,
+        signature: solanaAppTransaction.signature as string,
         lastValidBlockHeight: lastValidBlockHeight,
       })
 
-      if (appTransaction.status === AppTransactionStatus.Failed) {
-        return appTransaction
+      if (confirmedAppTransaction.status === AppTransactionStatus.Failed) {
+        return confirmedAppTransaction
       }
     }
 
     // Return object
-    return appTransaction
+    return solanaAppTransaction
   }
 
-  async confirmSignature(
+  private async confirmSignature(
     appEnv: AppEnv,
     appTransactionId: string,
     {
@@ -321,11 +316,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       input.signature = await solana.sendRawTransaction(solanaTransaction)
       input.status = AppTransactionStatus.Committed
       input.solanaCommitted = new Date()
-      this.logger.verbose(`${appKey}: makeTransfer ${input.status} ${input.signature}`)
+      this.logger.verbose(`${appKey}: sendSolanaTransaction ${input.status} ${input.signature}`)
       this.makeTransferSolanaConfirmedCounter.add(1, { appKey })
       return this.updateAppTransaction(appTransactionId, input)
     } catch (error) {
-      this.logger.verbose(`${appKey}: makeTransfer ${input.status} ${error}`)
+      this.logger.verbose(`${appKey}: sendSolanaTransaction ${input.status} ${error}`)
       this.makeTransferSolanaErrorCounter.add(1, { appKey })
       input.solanaCommitted = new Date()
       return this.handleAppTransactionError(appTransactionId, input, parseError(error, error.type, error.instruction))
@@ -352,7 +347,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     transaction: AppTransactionWithErrors,
     solana: Solana,
   ): Promise<AppTransactionWithErrors> {
-    this.logger.verbose(`${appKey}: makeTransfer confirming ${commitment} ${transaction.signature}...`)
+    this.logger.verbose(`${appKey}: confirmTransaction confirming ${commitment} ${transaction.signature}...`)
     const input: Prisma.AppTransactionUpdateInput = {}
 
     // Start listening for commitment
@@ -367,7 +362,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     input.status = AppTransactionStatus.Confirmed
     input.solanaConfirmed = new Date()
     this.makeTransferSolanaCommittedCounter.add(1, { appKey })
-    this.logger.verbose(`${appKey}: makeTransfer ${transaction.status} ${commitment} ${transaction.signature}`)
+    this.logger.verbose(`${appKey}: confirmTransaction ${transaction.status} ${commitment} ${transaction.signature}`)
     return this.updateAppTransaction(transaction.id, input)
   }
 
