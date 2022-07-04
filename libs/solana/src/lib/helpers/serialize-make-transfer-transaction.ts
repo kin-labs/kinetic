@@ -1,11 +1,14 @@
-import { Keypair } from '@kin-kinetic/keypair'
-import { TransactionType } from '@kin-tools/kin-memo'
+import { getPublicKey } from '@kin-kinetic/solana'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
-import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import {
+  createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
-import { PublicKeyString } from '../interfaces'
-import { addDecimals } from './add-remove-decimals'
-import { getPublicKey } from './get-public-key'
+import { SerializeMakeTransferOptions } from '../interfaces/serialize-make-transfer-transaction-options'
+import { addDecimals } from './add-decimals'
 
 export async function serializeMakeTransferTransaction({
   amount,
@@ -18,18 +21,8 @@ export async function serializeMakeTransferTransaction({
   mintPublicKey,
   owner,
   type,
-}: {
-  amount: string
-  appIndex: number
-  destination: PublicKeyString
-  lastValidBlockHeight: number
-  latestBlockhash: string
-  mintDecimals: number
-  mintFeePayer: PublicKeyString
-  mintPublicKey: PublicKeyString
-  owner: Keypair
-  type: TransactionType
-}) {
+  senderCreate,
+}: SerializeMakeTransferOptions) {
   // Create objects from Response
   const mintKey = getPublicKey(mintPublicKey)
   const feePayerKey = getPublicKey(mintFeePayer)
@@ -48,6 +41,14 @@ export async function serializeMakeTransferTransaction({
   // Create Transaction
   const instructions: TransactionInstruction[] = [
     appIndexMemoInstruction,
+    senderCreate
+      ? createAssociatedTokenAccountInstruction(
+          feePayerKey,
+          destinationTokenAccount,
+          getPublicKey(destination),
+          mintKey,
+        )
+      : ([] as unknown as TransactionInstruction),
     createTransferInstruction(
       ownerTokenAccount,
       destinationTokenAccount,

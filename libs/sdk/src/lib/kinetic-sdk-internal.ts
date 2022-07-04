@@ -130,6 +130,7 @@ export class KineticSdkInternal {
     referenceId,
     referenceType,
     type,
+    senderCreate,
   }: MakeTransferOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
@@ -151,6 +152,7 @@ export class KineticSdkInternal {
       mintPublicKey,
       owner,
       type: type || TransactionType.None,
+      senderCreate,
     })
 
     return this.makeTransferRequest({
