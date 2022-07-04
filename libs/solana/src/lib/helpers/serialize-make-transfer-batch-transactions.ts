@@ -10,6 +10,7 @@ import { getPublicKey } from './get-public-key'
 export async function serializeMakeTransferBatchTransactions({
   appIndex,
   destinations,
+  lastValidBlockHeight,
   latestBlockhash,
   mintDecimals,
   mintFeePayer,
@@ -19,6 +20,7 @@ export async function serializeMakeTransferBatchTransactions({
 }: {
   appIndex: number
   destinations: Destination[]
+  lastValidBlockHeight: number
   latestBlockhash: string
   mintDecimals: number
   mintFeePayer: PublicKeyString
@@ -54,13 +56,14 @@ export async function serializeMakeTransferBatchTransactions({
   ]
 
   const transaction = new Transaction({
+    blockhash: latestBlockhash,
     feePayer: feePayerKey,
-    recentBlockhash: latestBlockhash,
+    lastValidBlockHeight,
     signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
   }).add(...instructions)
 
   // Sign and Serialize Transaction
-  transaction.partialSign(...[owner.solana])
+  transaction.partialSign(owner.solana)
 
   return transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
 }

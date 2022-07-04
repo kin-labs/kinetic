@@ -21,6 +21,9 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
     throw new Error(`parseAndSignTokenTransfer: Can't find token transfer instruction`)
   }
 
+  if (!transaction.recentBlockhash) {
+    throw new Error(`parseAndSignTokenTransfer: Can't find recentBlockhash`)
+  }
   // Get the amount and destination from the instruction
   const {
     data: { amount },
@@ -29,8 +32,7 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
 
   return {
     amount: Number(amount),
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    blockhash: transaction.recentBlockhash!.toString(),
+    blockhash: transaction.recentBlockhash.toString(),
     destination,
     feePayer,
     source,

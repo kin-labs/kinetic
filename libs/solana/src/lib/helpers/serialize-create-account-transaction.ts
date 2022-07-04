@@ -1,19 +1,21 @@
 import { Keypair } from '@kin-kinetic/keypair'
-import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress } from '@solana/spl-token'
-import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
+import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress } from '@solana/spl-token'
+import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { PublicKeyString } from '../interfaces'
 import { getPublicKey } from './get-public-key'
 
 export async function serializeCreateAccountTransaction({
   appIndex,
+  lastValidBlockHeight,
   latestBlockhash,
   mintFeePayer,
   mintPublicKey,
   owner,
 }: {
   appIndex: number
+  lastValidBlockHeight: number
   latestBlockhash: string
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
@@ -39,13 +41,14 @@ export async function serializeCreateAccountTransaction({
   ]
 
   const transaction = new Transaction({
+    blockhash: latestBlockhash,
     feePayer: feePayerKey,
-    recentBlockhash: latestBlockhash,
+    lastValidBlockHeight,
     signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
   }).add(...instructions)
 
   // Sign and Serialize Transaction
-  transaction.partialSign(...[owner.solana])
+  transaction.partialSign(owner.solana)
 
   return transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
 }
