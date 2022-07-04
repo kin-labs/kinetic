@@ -14,7 +14,6 @@ import {
   BalanceResponse,
   Configuration,
   CreateAccountRequest,
-  DefaultApi,
   HistoryResponse,
   LatestBlockhashResponse,
   MakeTransferRequest,
@@ -38,7 +37,6 @@ export class KineticSdkInternal {
   private readonly accountApi: AccountApi
   private readonly airdropApi: AirdropApi
   private readonly appApi: AppApi
-  private readonly defaultApi: DefaultApi
   private readonly transactionApi: TransactionApi
 
   appConfig?: AppConfig
@@ -51,7 +49,6 @@ export class KineticSdkInternal {
     this.accountApi = new AccountApi(apiConfig)
     this.airdropApi = new AirdropApi(apiConfig)
     this.appApi = new AppApi(apiConfig)
-    this.defaultApi = new DefaultApi(apiConfig)
     this.transactionApi = new TransactionApi(apiConfig)
   }
 
