@@ -7,13 +7,12 @@ import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
 import { switchMap } from 'rxjs'
 import { AppEnv } from './entity/app-env.entity'
+import { AppTransaction } from './entity/app-transaction.entity'
 import { AppWebhookDirection } from './entity/app-webhook-direction.enum'
 
 interface WebhookOptions {
   headers?: AxiosRequestHeaders
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload: any
-  transactionId: string
+  transaction: AppTransaction
   type: AppWebhookType
 }
 
@@ -107,7 +106,7 @@ export class ApiAppWebhookDataAccessService {
   private sendEventWebhook(appEnv: AppEnv, options: WebhookOptions) {
     return new Promise((resolve, reject) => {
       this.http
-        .post(appEnv.webhookEventUrl, options.payload, {
+        .post(appEnv.webhookEventUrl, options.transaction, {
           headers: this.getHeaders(appEnv, options),
         })
         .pipe(
@@ -115,7 +114,7 @@ export class ApiAppWebhookDataAccessService {
             this.data.appWebhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
-                appTransaction: { connect: { id: options.transactionId } },
+                appTransaction: { connect: { id: options.transaction.id } },
                 direction: AppWebhookDirection.Outgoing,
                 type: options.type,
                 responseError: res.statusText,
@@ -135,7 +134,7 @@ export class ApiAppWebhookDataAccessService {
   private sendVerifyWebhook(appEnv: AppEnv, options: WebhookOptions) {
     return new Promise((resolve, reject) =>
       this.http
-        .post(appEnv.webhookVerifyUrl, options.payload, {
+        .post(appEnv.webhookVerifyUrl, options.transaction, {
           headers: this.getHeaders(appEnv, options),
         })
         .pipe(
@@ -143,7 +142,7 @@ export class ApiAppWebhookDataAccessService {
             this.data.appWebhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
-                appTransaction: { connect: { id: options.transactionId } },
+                appTransaction: { connect: { id: options.transaction.id } },
                 direction: AppWebhookDirection.Outgoing,
                 type: options.type,
                 responseError: res.statusText,
@@ -165,7 +164,7 @@ export class ApiAppWebhookDataAccessService {
     'content-type': 'application/json',
     'kinetic-app-env': appEnv.name,
     'kinetic-app-index': appEnv.app?.index,
-    'kinetic-tx-id': options.transactionId,
+    'kinetic-tx-id': options.transaction.id,
     'kinetic-webhook-type': options.type,
   })
 }

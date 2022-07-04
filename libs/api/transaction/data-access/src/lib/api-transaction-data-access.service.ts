@@ -7,14 +7,17 @@ import {
 } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
-import { Commitment, parseAndSignTokenTransfer } from '@kin-kinetic/solana'
+import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
-import { AppTransactionErrorType, AppTransactionStatus, Prisma } from '@prisma/client'
+import { AppTransactionError, AppTransactionErrorType, AppTransactionStatus, Prisma } from '@prisma/client'
+import { Transaction } from '@solana/web3.js'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
+
+type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[] }
 
 @Injectable()
 export class ApiTransactionDataAccessService implements OnModuleInit {
@@ -87,7 +90,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     return { lamports } as MinimumRentExemptionBalanceResponse
   }
 
-  async makeTransfer(input: MakeTransferRequest): Promise<AppTransaction> {
+  async makeTransfer(input: MakeTransferRequest): Promise<AppTransactionWithErrors> {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
     const appKey = this.data.getAppKey(input.environment, input.index)
@@ -99,123 +102,83 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       throw new Error(`${appKey}: Can't find mint ${input.mint}`)
     }
 
-    const { id: appTransactionId } = await this.createAppTransaction({
+    // Create the AppTransaction
+    let appTransaction: AppTransactionWithErrors = await this.createAppTransaction({
       appEnvId: appEnv.id,
       commitment: input.commitment,
       referenceId: input.referenceId,
       referenceType: input.referenceType,
     })
 
+    // Process the Solana transaction
     const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
 
-    const { amount, blockhash, destination, feePayer, source, transaction } = parseAndSignTokenTransfer({
+    const {
+      amount,
+      blockhash,
+      destination,
+      feePayer,
+      source,
+      transaction: solanaTransaction,
+    } = parseAndSignTokenTransfer({
       tx: Buffer.from(input.tx, 'base64'),
       signer: signer.solana,
     })
 
-    const appTransaction: Prisma.AppTransactionUpdateInput = {
+    // Update AppTransaction
+    appTransaction = await this.updateAppTransaction(appTransaction.id, {
       amount,
       destination: destination.pubkey.toBase58(),
       feePayer,
       mint: mint?.mint?.address,
       source,
-    }
+    })
 
     // Send Verify Webhook
     if (appEnv.webhookVerifyEnabled && appEnv.webhookVerifyUrl) {
-      appTransaction.webhookVerifyStart = new Date()
-      try {
-        await this.sendVerifyWebhook(appEnv, appTransaction, appTransactionId)
-        appTransaction.webhookVerifyEnd = new Date()
-        this.makeTransferWebhookVerifySuccessCounter.add(1, { appKey })
-      } catch (err) {
-        appTransaction.webhookVerifyEnd = new Date()
-        this.makeTransferWebhookVerifyErrorCounter.add(1, { appKey })
-        return this.updateAppTransaction(appTransactionId, {
-          ...appTransaction,
-          status: AppTransactionStatus.Failed,
-          errors: {
-            create: parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
-          },
-        })
+      appTransaction = await this.sendVerifyWebhook(appKey, appEnv, appTransaction)
+      if (appTransaction.status === AppTransactionStatus.Failed) {
+        return appTransaction
       }
     }
 
     // Solana Transaction
-    appTransaction.solanaStart = new Date()
-    try {
-      appTransaction.signature = await solana.sendRawTransaction(transaction)
-      appTransaction.status = AppTransactionStatus.Committed
-      appTransaction.solanaCommitted = new Date()
-      this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${appTransaction.signature}`)
-      this.makeTransferSolanaConfirmedCounter.add(1, { appKey })
-    } catch (error) {
-      this.logger.verbose(`${appKey}: makeTransfer ${appTransaction.status} ${error}`)
-      this.makeTransferSolanaErrorCounter.add(1, { appKey })
-      return this.updateAppTransaction(appTransactionId, {
-        solanaCommitted: new Date(),
-        status: AppTransactionStatus.Failed,
-        errors: {
-          create: parseError(error, error.type, error.instruction),
-        },
-      })
+    appTransaction = await this.sendSolanaTransaction(appKey, appTransaction, solana, solanaTransaction)
+    if (appTransaction.status === AppTransactionStatus.Failed) {
+      return appTransaction
     }
 
     // Confirm transaction
     if (appTransaction.signature) {
-      this.logger.verbose(`${appKey}: makeTransfer confirming ${input.commitment} ${appTransaction.signature}...`)
-      // Start listening for commitment
-      await solana.confirmTransaction(
-        {
-          blockhash,
-          lastValidBlockHeight: input.lastValidBlockHeight,
-          signature: appTransaction.signature as string,
-        },
-        input.commitment,
-      )
-      appTransaction.status = AppTransactionStatus.Confirmed
-      appTransaction.solanaConfirmed = new Date()
-      this.makeTransferSolanaCommittedCounter.add(1, { appKey })
-      await this.updateAppTransaction(appTransactionId, {
-        ...appTransaction,
-      })
-      this.logger.verbose(
-        `${appKey}: makeTransfer ${appTransaction.status} ${input.commitment} ${appTransaction.signature}`,
-      )
-
-      this.confirmSignature(input.environment, input.index, appTransactionId, {
+      appTransaction = await this.confirmTransaction(
+        appKey,
         blockhash,
-        signature: appTransaction.signature as string,
-        lastValidBlockHeight: input.lastValidBlockHeight,
-      })
-    }
+        input.commitment,
+        input.lastValidBlockHeight,
+        appTransaction,
+        solana,
+      )
 
-    // Send Event Webhook
-    let webhookEventEnd
-    if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl) {
-      const updated = await this.updateAppTransaction(appTransactionId, {
-        webhookEventStart: new Date(),
-      })
-
-      try {
-        await this.sendEventWebhook(appEnv, updated, appTransactionId)
-        webhookEventEnd = new Date()
-        this.makeTransferWebhookEventSuccessCounter.add(1, { appKey })
-      } catch (err) {
-        webhookEventEnd = new Date()
-        this.makeTransferWebhookEventErrorCounter.add(1, { appKey })
-        return this.updateAppTransaction(appTransactionId, {
-          webhookEventEnd,
-          status: AppTransactionStatus.Failed,
-          errors: {
-            create: parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
-          },
+      if (appTransaction.status !== AppTransactionStatus.Finalized) {
+        this.confirmSignature(appEnv.name, appEnv.app.index, appTransaction.id, {
+          blockhash,
+          signature: appTransaction.signature as string,
+          lastValidBlockHeight: input.lastValidBlockHeight,
         })
+      }
+
+      if (appTransaction.status === AppTransactionStatus.Failed) {
+        return appTransaction
       }
     }
 
+    // Send Event Webhook
+    if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl) {
+      return this.sendEventWebhook(appKey, appEnv, appTransaction)
+    }
+
     // Return object
-    return this.updateAppTransaction(appTransactionId, { webhookEventEnd })
+    return appTransaction
   }
 
   async confirmSignature(
@@ -260,13 +223,101 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private sendEventWebhook(appEnv: AppEnv, payload: any, transactionId: string) {
-    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, payload, transactionId })
+  private async sendEventWebhook(appKey: string, appEnv: AppEnv, transaction: AppTransaction) {
+    const input: Prisma.AppTransactionUpdateInput = { webhookEventStart: new Date() }
+
+    try {
+      await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, transaction })
+      input.webhookEventEnd = new Date()
+      this.makeTransferWebhookEventSuccessCounter.add(1, { appKey })
+      return this.updateAppTransaction(transaction.id, input)
+    } catch (err) {
+      input.errors = {
+        create: parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
+      }
+      input.status = AppTransactionStatus.Failed
+      input.webhookEventEnd = new Date()
+      this.makeTransferWebhookEventErrorCounter.add(1, { appKey })
+      return this.updateAppTransaction(transaction.id, input)
+    }
   }
 
-  private sendVerifyWebhook(appEnv: AppEnv, payload: Prisma.AppTransactionUpdateInput, transactionId) {
-    return this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, payload, transactionId })
+  private async sendVerifyWebhook(
+    appKey: string,
+    appEnv: AppEnv,
+    transaction: AppTransaction,
+  ): Promise<AppTransaction & { errors: AppTransactionError[] }> {
+    const input: Prisma.AppTransactionUpdateInput = { webhookVerifyStart: new Date() }
+    try {
+      await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, transaction })
+      input.webhookVerifyEnd = new Date()
+      this.makeTransferWebhookVerifySuccessCounter.add(1, { appKey })
+      return this.updateAppTransaction(transaction.id, input)
+    } catch (err) {
+      input.webhookVerifyEnd = new Date()
+      this.makeTransferWebhookVerifyErrorCounter.add(1, { appKey })
+      return this.updateAppTransaction(transaction.id, {
+        ...input,
+        status: AppTransactionStatus.Failed,
+        errors: {
+          create: parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
+        },
+      })
+    }
+  }
+
+  private async sendSolanaTransaction(
+    appKey: string,
+    appTransaction: AppTransactionWithErrors,
+    solana: Solana,
+    solanaTransaction: Transaction,
+  ) {
+    const input: Prisma.AppTransactionUpdateInput = { solanaStart: new Date() }
+    try {
+      input.signature = await solana.sendRawTransaction(solanaTransaction)
+      input.status = AppTransactionStatus.Committed
+      input.solanaCommitted = new Date()
+      this.logger.verbose(`${appKey}: makeTransfer ${input.status} ${input.signature}`)
+      this.makeTransferSolanaConfirmedCounter.add(1, { appKey })
+      return this.updateAppTransaction(appTransaction.id, input)
+    } catch (error) {
+      this.logger.verbose(`${appKey}: makeTransfer ${input.status} ${error}`)
+      this.makeTransferSolanaErrorCounter.add(1, { appKey })
+      return this.updateAppTransaction(appTransaction.id, {
+        solanaCommitted: new Date(),
+        status: AppTransactionStatus.Failed,
+        errors: {
+          create: parseError(error, error.type, error.instruction),
+        },
+      })
+    }
+  }
+
+  private async confirmTransaction(
+    appKey: string,
+    blockhash: string,
+    commitment: Commitment,
+    lastValidBlockHeight: number,
+    transaction: AppTransactionWithErrors,
+    solana: Solana,
+  ) {
+    this.logger.verbose(`${appKey}: makeTransfer confirming ${commitment} ${transaction.signature}...`)
+    const input: Prisma.AppTransactionUpdateInput = {}
+
+    // Start listening for commitment
+    await solana.confirmTransaction(
+      {
+        blockhash,
+        lastValidBlockHeight: lastValidBlockHeight,
+        signature: transaction.signature as string,
+      },
+      commitment,
+    )
+    input.status = AppTransactionStatus.Confirmed
+    input.solanaConfirmed = new Date()
+    this.makeTransferSolanaCommittedCounter.add(1, { appKey })
+    this.logger.verbose(`${appKey}: makeTransfer ${transaction.status} ${commitment} ${transaction.signature}`)
+    return await this.updateAppTransaction(transaction.id, input)
   }
 
   private createAppTransaction({
@@ -287,10 +338,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
         referenceId,
         referenceType,
       },
+      include: { errors: true },
     })
   }
 
-  private updateAppTransaction(id: string, data: Prisma.AppTransactionUpdateInput) {
+  private updateAppTransaction(id: string, data: Prisma.AppTransactionUpdateInput): Promise<AppTransactionWithErrors> {
     return this.data.appTransaction.update({
       where: { id },
       data: { ...data },
