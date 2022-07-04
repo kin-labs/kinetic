@@ -5,7 +5,7 @@ import {
   AppHealth,
 } from '@kin-kinetic/api/app/data-access'
 import { Controller, Get, Param, ParseIntPipe, Post, Req, Res } from '@nestjs/common'
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiExcludeEndpoint, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Request, Response } from 'express'
 
 @ApiTags('app')
@@ -33,6 +33,7 @@ export class ApiAppFeatureController {
   }
 
   @Post('/:environment/:index/webhook/:type')
+  @ApiExcludeEndpoint()
   async appWebhook(
     @Req() req: Request,
     @Res() res: Response,
