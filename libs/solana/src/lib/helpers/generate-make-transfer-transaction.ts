@@ -6,11 +6,11 @@ import {
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
-import { SerializeMakeTransferOptions } from '../interfaces'
+import { GenerateMakeTransferOptions } from '../interfaces'
 import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
-export async function serializeMakeTransferTransaction({
+export async function generateMakeTransferTransaction({
   amount,
   appIndex,
   destination,
@@ -19,17 +19,17 @@ export async function serializeMakeTransferTransaction({
   mintDecimals,
   mintFeePayer,
   mintPublicKey,
-  owner,
+  signer,
   senderCreate,
   type,
-}: SerializeMakeTransferOptions) {
+}: GenerateMakeTransferOptions): Promise<Transaction> {
   // Create objects from Response
   const mintKey = getPublicKey(mintPublicKey)
   const feePayerKey = getPublicKey(mintFeePayer)
 
   // Get TokenAccount from Owner and Destination
   const [ownerTokenAccount, destinationTokenAccount] = await Promise.all([
-    getAssociatedTokenAddress(mintKey, owner.solanaPublicKey),
+    getAssociatedTokenAddress(mintKey, signer.publicKey),
     getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
   ])
 
@@ -51,7 +51,7 @@ export async function serializeMakeTransferTransaction({
     createTransferInstruction(
       ownerTokenAccount,
       destinationTokenAccount,
-      owner.solanaPublicKey,
+      signer.publicKey,
       addDecimals(amount, mintDecimals).toNumber(),
       [],
       TOKEN_PROGRAM_ID,
@@ -62,11 +62,11 @@ export async function serializeMakeTransferTransaction({
     blockhash: latestBlockhash,
     feePayer: feePayerKey,
     lastValidBlockHeight,
-    signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
+    signatures: [{ publicKey: signer.publicKey, signature: null }],
   }).add(...instructions)
 
-  // Sign and Serialize Transaction
-  transaction.partialSign(owner.solana)
+  // Partially sign the transaction
+  transaction.partialSign(signer)
 
-  return transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
+  return transaction
 }

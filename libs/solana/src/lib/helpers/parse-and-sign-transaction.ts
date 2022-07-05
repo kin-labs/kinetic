@@ -1,7 +1,6 @@
-import { SolanaKeypair } from '@kin-kinetic/keypair'
-import { Transaction } from '@solana/web3.js'
+import { Keypair, Transaction } from '@solana/web3.js'
 
-export function parseAndSignTransaction({ tx, signer }: { tx: Buffer; signer: SolanaKeypair }): {
+export function parseAndSignTransaction({ tx, signer }: { tx: Buffer; signer: Keypair }): {
   feePayer: string
   source: string
   transaction: Transaction

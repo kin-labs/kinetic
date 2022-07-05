@@ -1,9 +1,8 @@
-import { SolanaKeypair } from '@kin-kinetic/keypair'
 import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { AccountMeta, Transaction } from '@solana/web3.js'
+import { AccountMeta, Keypair, Transaction } from '@solana/web3.js'
 import { parseAndSignTransaction } from './parse-and-sign-transaction'
 
-export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: SolanaKeypair }): {
+export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: Keypair }): {
   amount: number
   blockhash: string
   destination: AccountMeta

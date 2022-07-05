@@ -1,8 +1,9 @@
 import {
   Commitment,
-  serializeCreateAccountTransaction,
-  serializeMakeTransferBatchTransactions,
-  serializeMakeTransferTransaction,
+  generateCreateAccountTransaction,
+  generateMakeTransferBatchTransaction,
+  generateMakeTransferTransaction,
+  serializeTransaction,
 } from '@kin-kinetic/solana'
 import { TransactionType } from '@kin-tools/kin-memo'
 import {
@@ -74,20 +75,20 @@ export class KineticSdkInternal {
       mint,
     })
 
-    const tx = await serializeCreateAccountTransaction({
+    const tx = await generateCreateAccountTransaction({
       appIndex: this.appConfig.app.index,
       lastValidBlockHeight,
       latestBlockhash,
       mintFeePayer,
       mintPublicKey,
-      owner,
+      signer: owner.solana,
     })
 
     const request: CreateAccountRequest = {
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
       mint: mint.toString(),
-      tx: tx.toString('base64'),
+      tx: serializeTransaction(tx),
     }
 
     const res = await this.accountApi.createAccount(request)
@@ -143,7 +144,7 @@ export class KineticSdkInternal {
 
     const account = await this.getTokenAccounts({ account: destination, mint })
 
-    const tx = await serializeMakeTransferTransaction({
+    const tx = await generateMakeTransferTransaction({
       amount,
       appIndex: this.appConfig.app.index,
       destination,
@@ -152,7 +153,7 @@ export class KineticSdkInternal {
       mintDecimals,
       mintFeePayer,
       mintPublicKey,
-      owner,
+      signer: owner.solana,
       senderCreate: account?.length === 0 && senderCreate,
       type: type || TransactionType.None,
     })
@@ -165,7 +166,7 @@ export class KineticSdkInternal {
       mint: mint.toString(),
       referenceId: referenceId || null,
       referenceType: referenceType || null,
-      tx: tx.toString('base64'),
+      tx: serializeTransaction(tx),
     })
   }
 
@@ -193,7 +194,7 @@ export class KineticSdkInternal {
         mint,
       })
 
-    const tx = await serializeMakeTransferBatchTransactions({
+    const tx = await generateMakeTransferBatchTransaction({
       appIndex: this.appConfig.app.index,
       destinations,
       lastValidBlockHeight,
@@ -201,7 +202,7 @@ export class KineticSdkInternal {
       mintDecimals,
       mintFeePayer,
       mintPublicKey,
-      owner,
+      signer: owner.solana,
       type: type || TransactionType.None,
     })
 
@@ -213,7 +214,7 @@ export class KineticSdkInternal {
       mint: mint.toString(),
       referenceId: referenceId || null,
       referenceType: referenceType || null,
-      tx: tx.toString('base64'),
+      tx: serializeTransaction(tx),
     })
   }
 
