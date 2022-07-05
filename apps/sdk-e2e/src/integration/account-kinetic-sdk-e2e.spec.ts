@@ -1,6 +1,6 @@
 import { KineticSdk } from '@kin-kinetic/sdk'
 import { Keypair } from '@kin-kinetic/keypair'
-import { aliceKeypair, charlieKeypair, daveKeypair } from './fixtures'
+import { aliceKeypair, daveKeypair } from './fixtures'
 import { AppTransactionStatus } from '@prisma/client'
 
 describe('KineticSdk (e2e) - Account', () => {
@@ -31,14 +31,14 @@ describe('KineticSdk (e2e) - Account', () => {
   it('should close an account', async () => {
     const owner = Keypair.random()
     await sdk.createAccount({ owner })
-    const tx = await sdk.closeAccount({ owner })
-    expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(defaultMint)
-    const { signature, errors } = tx
+    const closeTx = await sdk.closeAccount({ owner })
+    expect(closeTx).not.toBeNull()
+    expect(closeTx.mint).toBe(defaultMint)
+    const { signature, errors } = closeTx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
     const res = await sdk.getTokenAccounts({ account: owner.solanaPublicKey, mint: defaultMint })
-    expect(res).toBe([])
+    expect(res).toEqual([])
   })
 
   it('should get the account history', async () => {

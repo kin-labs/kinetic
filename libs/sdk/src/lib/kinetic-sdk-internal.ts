@@ -1,5 +1,6 @@
 import {
   Commitment,
+  generateCloseAccountTransaction,
   generateCreateAccountTransaction,
   generateMakeTransferBatchTransaction,
   generateMakeTransferTransaction,
@@ -77,7 +78,7 @@ export class KineticSdkInternal {
       mint,
     })
 
-    const tx = await serializeCreateAccountTransaction({
+    const tx = await generateCloseAccountTransaction({
       appIndex: this.appConfig.app.index,
       lastValidBlockHeight,
       latestBlockhash,

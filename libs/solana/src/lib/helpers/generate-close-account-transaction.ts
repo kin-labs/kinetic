@@ -6,7 +6,7 @@ import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { PublicKeyString } from '../interfaces'
 import { getPublicKey } from './get-public-key'
 
-export async function serializeCreateAccountTransaction({
+export async function generateCloseAccountTransaction({
   appIndex,
   lastValidBlockHeight,
   latestBlockhash,
