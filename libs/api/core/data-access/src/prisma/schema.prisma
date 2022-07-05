@@ -80,32 +80,38 @@ model AppMint {
 }
 
 model AppTransaction {
-  id                 String                    @id @default(cuid())
-  createdAt          DateTime                  @default(now())
-  updatedAt          DateTime                  @updatedAt
-  amount             String?
-  commitment         AppTransactionCommitment?
-  destination        String?
-  errors             AppTransactionError[]
-  feePayer           String?
-  mint               String?
-  referenceId        String?
-  referenceType      String?
-  signature          String?
-  solanaCommitted    DateTime?
-  solanaConfirmed    DateTime?
-  solanaFinalized    DateTime?
-  solanaStart        DateTime?
-  solanaTransaction  Json?
-  source             String?
-  status             AppTransactionStatus      @default(Processing)
-  webhooks           AppWebhook[]
-  webhookEventStart  DateTime?
-  webhookEventEnd    DateTime?
-  webhookVerifyStart DateTime?
-  webhookVerifyEnd   DateTime?
-  appEnv             AppEnv?                   @relation(fields: [appEnvId], references: [id])
-  appEnvId           String?
+  id                      String                    @id @default(cuid())
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  amount                  String?
+  commitment              AppTransactionCommitment?
+  destination             String?
+  errors                  AppTransactionError[]
+  feePayer                String?
+  mint                    String?
+  processingDuration      Int?
+  referenceId             String?
+  referenceType           String?
+  signature               String?
+  solanaCommitted         DateTime?
+  solanaCommittedDuration Int?
+  solanaConfirmed         DateTime?
+  solanaFinalized         DateTime?
+  solanaFinalizedDuration Int?
+  solanaStart             DateTime?
+  solanaTransaction       Json?
+  source                  String?
+  status                  AppTransactionStatus      @default(Processing)
+  totalDuration           Int?
+  webhooks                AppWebhook[]
+  webhookEventStart       DateTime?
+  webhookEventEnd         DateTime?
+  webhookEventDuration    Int?
+  webhookVerifyStart      DateTime?
+  webhookVerifyEnd        DateTime?
+  webhookVerifyDuration   Int?
+  appEnv                  AppEnv?                   @relation(fields: [appEnvId], references: [id])
+  appEnvId                String?
 }
 
 enum AppTransactionCommitment {

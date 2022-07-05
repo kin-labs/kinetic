@@ -5,7 +5,7 @@ import {
   AppWebhookDirection,
   AppWebhookType,
 } from '@kin-kinetic/api/app/data-access'
-import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
+import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => AppTransaction)
 export class ApiAppTransactionFeatureResolver {
@@ -14,31 +14,6 @@ export class ApiAppTransactionFeatureResolver {
   @ResolveField(() => String, { nullable: true })
   explorerUrl(@Parent() tx: AppTransaction) {
     return this.service.explorerUrl(tx)
-  }
-
-  @ResolveField(() => Int, { nullable: true })
-  processingDuration(@Parent() tx: AppTransaction) {
-    return this.service.processingDuration(tx)
-  }
-
-  @ResolveField(() => Int, { nullable: true })
-  solanaCommittedDuration(@Parent() tx: AppTransaction) {
-    return this.service.solanaCommittedDuration(tx)
-  }
-
-  @ResolveField(() => Int, { nullable: true })
-  solanaFinalizedDuration(@Parent() tx: AppTransaction) {
-    return this.service.solanaFinalizedDuration(tx)
-  }
-
-  @ResolveField(() => Int, { nullable: true })
-  totalDuration(@Parent() tx: AppTransaction) {
-    return this.service.totalDuration(tx)
-  }
-
-  @ResolveField(() => Int, { nullable: true })
-  webhookEventDuration(@Parent() tx: AppTransaction) {
-    return this.service.webhookEventDuration(tx)
   }
 
   @ResolveField(() => AppWebhook, { nullable: true })
@@ -53,11 +28,6 @@ export class ApiAppTransactionFeatureResolver {
     return tx.webhooks?.find(
       ({ direction, type }) => direction === AppWebhookDirection.Outgoing && type === AppWebhookType.Event,
     )
-  }
-
-  @ResolveField(() => Int, { nullable: true })
-  webhookVerifyDuration(@Parent() tx: AppTransaction) {
-    return this.service.webhookVerifyDuration(tx)
   }
 
   @ResolveField(() => AppWebhook, { nullable: true })

@@ -1,4 +1,4 @@
-import { Field, HideField, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger'
 import { GraphQLJSON } from 'graphql-type-json'
 import { AppEnv } from './app-env.entity'
@@ -39,6 +39,9 @@ export class AppTransaction {
   @Field({ nullable: true })
   mint?: string
   @ApiProperty({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  processingDuration?: number
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   referenceId?: string
   @ApiProperty({ nullable: true })
@@ -49,10 +52,16 @@ export class AppTransaction {
   signature?: string
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
-  solanaFinalized?: Date
+  solanaCommitted?: Date
+  @ApiProperty({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  solanaCommittedDuration?: number
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
-  solanaCommitted?: Date
+  solanaFinalized?: Date
+  @ApiProperty({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  solanaFinalizedDuration?: number
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   solanaStart?: Date
@@ -66,6 +75,9 @@ export class AppTransaction {
   @ApiProperty({ nullable: true, enum: AppTransactionStatus })
   @Field(() => AppTransactionStatus)
   status: AppTransactionStatus
+  @ApiProperty({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  totalDuration?: number
   @HideField()
   webhooks?: AppWebhook[]
   @ApiProperty({ nullable: true })
@@ -75,11 +87,17 @@ export class AppTransaction {
   @Field({ nullable: true })
   webhookEventEnd?: Date
   @ApiProperty({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  webhookEventDuration?: number
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   webhookVerifyStart?: Date
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   webhookVerifyEnd?: Date
+  @ApiProperty({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  webhookVerifyDuration?: number
   @HideField()
   appEnv?: AppEnv
 }

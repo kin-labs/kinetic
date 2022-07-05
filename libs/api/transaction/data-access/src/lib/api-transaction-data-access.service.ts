@@ -125,7 +125,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       amount,
       appEnv,
       appKey,
-      appTransactionId: appTransaction.id,
+      appTransaction,
       blockhash,
       commitment: input?.commitment,
       destination: destination?.pubkey.toBase58(),
@@ -141,7 +141,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     amount,
     appEnv,
     appKey,
-    appTransactionId,
+    appTransaction,
     blockhash,
     commitment,
     destination,
@@ -153,7 +153,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }: {
     appEnv: AppEnv
     appKey: string
-    appTransactionId: string
+    appTransaction: AppTransaction
     amount: number
     blockhash: string
     commitment: Commitment
@@ -169,11 +169,12 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const solana = await this.data.getSolanaConnection(environment, index)
 
     // Update AppTransaction
-    const updatedAppTransaction = await this.updateAppTransaction(appTransactionId, {
+    const updatedAppTransaction = await this.updateAppTransaction(appTransaction.id, {
       amount: amount.toString(),
       destination,
       feePayer,
       mint: mintPublicKey,
+      processingDuration: new Date().getTime() - appTransaction.createdAt.getTime(),
       source,
     })
 
@@ -186,7 +187,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     }
 
     // Solana Transaction
-    const solanaAppTransaction = await this.sendSolanaTransaction(appKey, appTransactionId, solana, solanaTransaction)
+    const solanaAppTransaction = await this.sendSolanaTransaction(appKey, appTransaction.id, solana, solanaTransaction)
     if (solanaAppTransaction.status === AppTransactionStatus.Failed) {
       return solanaAppTransaction
     }
@@ -202,10 +203,14 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
         solana,
       )
 
-      this.confirmSignature(appEnv, appTransactionId, {
+      this.confirmSignature({
+        appEnv,
+        appTransactionId: appTransaction.id,
         blockhash,
-        signature: solanaAppTransaction.signature as string,
         lastValidBlockHeight: lastValidBlockHeight,
+        signature: solanaAppTransaction.signature as string,
+        solanaStart: confirmedAppTransaction.solanaStart,
+        transactionStart: confirmedAppTransaction.createdAt,
       })
 
       if (confirmedAppTransaction.status === AppTransactionStatus.Failed) {
@@ -213,23 +218,26 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       }
     }
 
-    // Return object
     return solanaAppTransaction
   }
 
-  private async confirmSignature(
-    appEnv: AppEnv,
-    appTransactionId: string,
-    {
-      blockhash,
-      lastValidBlockHeight,
-      signature,
-    }: {
-      blockhash: string
-      lastValidBlockHeight: number
-      signature: string
-    },
-  ) {
+  private async confirmSignature({
+    appEnv,
+    appTransactionId,
+    blockhash,
+    lastValidBlockHeight,
+    signature,
+    solanaStart,
+    transactionStart,
+  }: {
+    appEnv: AppEnv
+    appTransactionId: string
+    blockhash: string
+    lastValidBlockHeight: number
+    signature: string
+    solanaStart: Date
+    transactionStart: Date
+  }) {
     const environment = appEnv.name
     const index = appEnv.app.index
     const appKey = this.data.getAppKey(environment, index)
@@ -245,12 +253,17 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       Commitment.Finalized,
     )
     if (finalized) {
+      const solanaFinalized = new Date()
+      const solanaFinalizedDuration = solanaFinalized.getTime() - solanaStart.getTime()
+      const totalDuration = solanaFinalized.getTime() - transactionStart.getTime()
       this.logger.verbose(`${appKey}: confirmSignature: ${Commitment.Finalized} ${signature}`)
       const solanaTransaction = await solana.connection.getParsedTransaction(signature, 'finalized')
       const appTransaction = await this.updateAppTransaction(appTransactionId, {
-        solanaFinalized: new Date(),
+        solanaFinalized,
+        solanaFinalizedDuration,
         solanaTransaction: solanaTransaction ? JSON.parse(JSON.stringify(solanaTransaction)) : undefined,
         status: AppTransactionStatus.Finalized,
+        totalDuration,
       })
       this.confirmSignatureFinalizedCounter.add(1, { appKey })
       // Send Event Webhook
@@ -267,22 +280,20 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     appEnv: AppEnv,
     transaction: AppTransaction,
   ): Promise<AppTransactionWithErrors> {
-    const input: Prisma.AppTransactionUpdateInput = { webhookEventStart: new Date() }
-
+    const webhookEventStart = new Date()
     try {
       await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, transaction })
-      input.webhookEventEnd = new Date()
+      const webhookEventEnd = new Date()
+      const webhookEventDuration = webhookEventEnd?.getTime() - webhookEventStart.getTime()
       this.sendEventWebhookSuccessCounter.add(1, { appKey })
-      return this.updateAppTransaction(transaction.id, input)
+      return this.updateAppTransaction(transaction.id, { webhookEventStart, webhookEventEnd, webhookEventDuration })
     } catch (err) {
-      input.errors = {
-        create: parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
-      }
       this.sendEventWebhookErrorCounter.add(1, { appKey })
-      input.webhookEventEnd = new Date()
+      const webhookEventEnd = new Date()
+      const webhookEventDuration = webhookEventEnd?.getTime() - webhookEventStart.getTime()
       return this.handleAppTransactionError(
         transaction.id,
-        input,
+        { webhookEventStart, webhookEventEnd, webhookEventDuration },
         parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
       )
     }
@@ -293,18 +304,20 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     appEnv: AppEnv,
     transaction: AppTransaction,
   ): Promise<AppTransactionWithErrors> {
-    const input: Prisma.AppTransactionUpdateInput = { webhookVerifyStart: new Date() }
+    const webhookVerifyStart = new Date()
     try {
       await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, transaction })
-      input.webhookVerifyEnd = new Date()
+      const webhookVerifyEnd = new Date()
+      const webhookVerifyDuration = webhookVerifyEnd?.getTime() - webhookVerifyStart.getTime()
       this.sendVerifyWebhookSuccessCounter.add(1, { appKey })
-      return this.updateAppTransaction(transaction.id, input)
+      return this.updateAppTransaction(transaction.id, { webhookVerifyStart, webhookVerifyEnd, webhookVerifyDuration })
     } catch (err) {
       this.sendVerifyWebhookErrorCounter.add(1, { appKey })
-      input.webhookVerifyEnd = new Date()
+      const webhookVerifyEnd = new Date()
+      const webhookVerifyDuration = webhookVerifyEnd?.getTime() - webhookVerifyStart.getTime()
       return this.handleAppTransactionError(
         transaction.id,
-        input,
+        { webhookVerifyStart, webhookVerifyEnd, webhookVerifyDuration },
         parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
       )
     }
@@ -316,19 +329,35 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     solana: Solana,
     solanaTransaction: Transaction,
   ): Promise<AppTransactionWithErrors> {
-    const input: Prisma.AppTransactionUpdateInput = { solanaStart: new Date() }
+    const solanaStart = new Date()
     try {
-      input.signature = await solana.sendRawTransaction(solanaTransaction)
-      input.status = AppTransactionStatus.Committed
-      input.solanaCommitted = new Date()
-      this.logger.verbose(`${appKey}: sendSolanaTransaction ${input.status} ${input.signature}`)
+      const signature = await solana.sendRawTransaction(solanaTransaction)
+      const status = AppTransactionStatus.Committed
+      const solanaCommitted = new Date()
+      const solanaCommittedDuration = solanaCommitted.getTime() - solanaStart.getTime()
       this.sendSolanaTransactionConfirmedCounter.add(1, { appKey })
-      return this.updateAppTransaction(appTransactionId, input)
+      this.logger.verbose(`${appKey}: sendSolanaTransaction ${status} ${signature}`)
+      return this.updateAppTransaction(appTransactionId, {
+        signature,
+        status,
+        solanaStart,
+        solanaCommitted,
+        solanaCommittedDuration,
+      })
     } catch (error) {
-      this.logger.verbose(`${appKey}: sendSolanaTransaction ${input.status} ${error}`)
+      this.logger.verbose(`${appKey}: sendSolanaTransaction ${error}`)
       this.sendSolanaTransactionErrorCounter.add(1, { appKey })
-      input.solanaCommitted = new Date()
-      return this.handleAppTransactionError(appTransactionId, input, parseError(error, error.type, error.instruction))
+      const solanaCommitted = new Date()
+      const solanaCommittedDuration = solanaCommitted.getTime() - solanaStart.getTime()
+      return this.handleAppTransactionError(
+        appTransactionId,
+        {
+          solanaStart,
+          solanaCommitted,
+          solanaCommittedDuration,
+        },
+        parseError(error, error.type, error.instruction),
+      )
     }
   }
 
@@ -353,7 +382,6 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     solana: Solana,
   ): Promise<AppTransactionWithErrors> {
     this.logger.verbose(`${appKey}: confirmTransaction confirming ${commitment} ${transaction.signature}...`)
-    const input: Prisma.AppTransactionUpdateInput = {}
 
     // Start listening for commitment
     await solana.confirmTransaction(
@@ -364,11 +392,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       },
       commitment,
     )
-    input.status = AppTransactionStatus.Confirmed
-    input.solanaConfirmed = new Date()
+    const status = AppTransactionStatus.Confirmed
+    const solanaConfirmed = new Date()
     this.confirmTransactionSolanaConfirmedCounter.add(1, { appKey })
-    this.logger.verbose(`${appKey}: confirmTransaction ${transaction.status} ${commitment} ${transaction.signature}`)
-    return this.updateAppTransaction(transaction.id, input)
+    this.logger.verbose(`${appKey}: confirmTransaction ${status} ${commitment} ${transaction.signature}`)
+    return this.updateAppTransaction(transaction.id, { status, solanaConfirmed })
   }
 
   private createAppTransaction({

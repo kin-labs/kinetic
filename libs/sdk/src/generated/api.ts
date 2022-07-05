@@ -364,6 +364,12 @@ export interface AppTransaction {
   mint: string | null
   /**
    *
+   * @type {number}
+   * @memberof AppTransaction
+   */
+  processingDuration: number | null
+  /**
+   *
    * @type {string}
    * @memberof AppTransaction
    */
@@ -385,13 +391,25 @@ export interface AppTransaction {
    * @type {string}
    * @memberof AppTransaction
    */
-  solanaFinalized: string | null
+  solanaCommitted: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof AppTransaction
+   */
+  solanaCommittedDuration: number | null
   /**
    *
    * @type {string}
    * @memberof AppTransaction
    */
-  solanaCommitted: string | null
+  solanaFinalized: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof AppTransaction
+   */
+  solanaFinalizedDuration: number | null
   /**
    *
    * @type {string}
@@ -418,6 +436,12 @@ export interface AppTransaction {
   status: AppTransactionStatusEnum
   /**
    *
+   * @type {number}
+   * @memberof AppTransaction
+   */
+  totalDuration: number | null
+  /**
+   *
    * @type {string}
    * @memberof AppTransaction
    */
@@ -430,6 +454,12 @@ export interface AppTransaction {
   webhookEventEnd: string | null
   /**
    *
+   * @type {number}
+   * @memberof AppTransaction
+   */
+  webhookEventDuration: number | null
+  /**
+   *
    * @type {string}
    * @memberof AppTransaction
    */
@@ -440,6 +470,12 @@ export interface AppTransaction {
    * @memberof AppTransaction
    */
   webhookVerifyEnd: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof AppTransaction
+   */
+  webhookVerifyDuration: number | null
 }
 
 export const AppTransactionStatusEnum = {
