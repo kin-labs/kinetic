@@ -112,34 +112,4 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
     return explorer.replace('{path}', `/tx/${tx.signature}`)
   }
-
-  processingDuration(tx: AppTransaction) {
-    if (!tx.createdAt || !tx.solanaStart) return null
-    return tx?.solanaStart?.getTime() - tx?.createdAt?.getTime()
-  }
-
-  solanaCommittedDuration(tx: AppTransaction) {
-    if (!tx.solanaCommitted || !tx.solanaStart) return null
-    return tx?.solanaCommitted?.getTime() - tx?.solanaStart?.getTime()
-  }
-
-  solanaFinalizedDuration(tx: AppTransaction) {
-    if (!tx.solanaFinalized || !tx.solanaStart) return null
-    return tx?.solanaFinalized?.getTime() - tx?.solanaStart?.getTime()
-  }
-
-  totalDuration(tx: AppTransaction) {
-    if (!tx.solanaFinalized) return null
-    return tx?.solanaFinalized?.getTime() - tx?.createdAt?.getTime()
-  }
-
-  webhookEventDuration(tx: AppTransaction) {
-    if (!tx.webhookEventEnd || !tx.webhookEventStart) return null
-    return tx?.webhookEventEnd?.getTime() - tx?.webhookEventStart?.getTime()
-  }
-
-  webhookVerifyDuration(tx: AppTransaction) {
-    if (!tx.webhookVerifyEnd || !tx.webhookVerifyStart) return null
-    return tx?.webhookVerifyEnd?.getTime() - tx?.webhookVerifyStart?.getTime()
-  }
 }

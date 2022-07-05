@@ -570,6 +570,10 @@
             "type": "string",
             "nullable": true
           },
+          "processingDuration": {
+            "type": "number",
+            "nullable": true
+          },
           "referenceId": {
             "type": "string",
             "nullable": true
@@ -582,14 +586,22 @@
             "type": "string",
             "nullable": true
           },
+          "solanaCommitted": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "solanaCommittedDuration": {
+            "type": "number",
+            "nullable": true
+          },
           "solanaFinalized": {
             "format": "date-time",
             "type": "string",
             "nullable": true
           },
-          "solanaCommitted": {
-            "format": "date-time",
-            "type": "string",
+          "solanaFinalizedDuration": {
+            "type": "number",
             "nullable": true
           },
           "solanaStart": {
@@ -610,6 +622,10 @@
             "nullable": true,
             "enum": ["Committed", "Confirmed", "Failed", "Finalized", "Processing"]
           },
+          "totalDuration": {
+            "type": "number",
+            "nullable": true
+          },
           "webhookEventStart": {
             "format": "date-time",
             "type": "string",
@@ -620,6 +636,10 @@
             "type": "string",
             "nullable": true
           },
+          "webhookEventDuration": {
+            "type": "number",
+            "nullable": true
+          },
           "webhookVerifyStart": {
             "format": "date-time",
             "type": "string",
@@ -628,6 +648,10 @@
           "webhookVerifyEnd": {
             "format": "date-time",
             "type": "string",
+            "nullable": true
+          },
+          "webhookVerifyDuration": {
+            "type": "number",
             "nullable": true
           }
         },
@@ -641,19 +665,25 @@
           "explorerUrl",
           "feePayer",
           "mint",
+          "processingDuration",
           "referenceId",
           "referenceType",
           "signature",
-          "solanaFinalized",
           "solanaCommitted",
+          "solanaCommittedDuration",
+          "solanaFinalized",
+          "solanaFinalizedDuration",
           "solanaStart",
           "solanaTransaction",
           "source",
           "status",
+          "totalDuration",
           "webhookEventStart",
           "webhookEventEnd",
+          "webhookEventDuration",
           "webhookVerifyStart",
-          "webhookVerifyEnd"
+          "webhookVerifyEnd",
+          "webhookVerifyDuration"
         ]
       },
       "BigNumber": {

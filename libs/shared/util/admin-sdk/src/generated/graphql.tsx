@@ -79,7 +79,7 @@ export type AppMint = {
 
 export type AppTransaction = {
   __typename?: 'AppTransaction'
-  amount?: Maybe<Scalars['Int']>
+  amount?: Maybe<Scalars['String']>
   createdAt?: Maybe<Scalars['DateTime']>
   destination?: Maybe<Scalars['String']>
   errors?: Maybe<Array<AppTransactionError>>
@@ -1191,7 +1191,7 @@ export type AppTransactionDetailsFragment = {
   id?: string | null
   createdAt?: any | null
   updatedAt?: any | null
-  amount?: number | null
+  amount?: string | null
   destination?: string | null
   explorerUrl?: string | null
   feePayer?: string | null
@@ -2170,7 +2170,7 @@ export type UserAppTransactionQuery = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
-    amount?: number | null
+    amount?: string | null
     destination?: string | null
     explorerUrl?: string | null
     feePayer?: string | null
@@ -2269,7 +2269,7 @@ export type UserAppTransactionsQuery = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
-    amount?: number | null
+    amount?: string | null
     destination?: string | null
     explorerUrl?: string | null
     feePayer?: string | null
