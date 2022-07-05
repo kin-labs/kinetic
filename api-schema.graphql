@@ -55,7 +55,7 @@ type AppMint {
 }
 
 type AppTransaction {
-  amount: Int
+  amount: String
   createdAt: DateTime
   destination: String
   errors: [AppTransactionError!]

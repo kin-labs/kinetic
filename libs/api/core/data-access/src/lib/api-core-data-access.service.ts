@@ -5,9 +5,16 @@ import { Keypair } from '@kin-kinetic/keypair'
 import { getPublicKey, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
-import { App, AppUserRole, ClusterStatus, PrismaClient, UserRole } from '@prisma/client'
+import { App, AppEnv, AppUserRole, Cluster, ClusterStatus, Mint, PrismaClient, UserRole, Wallet } from '@prisma/client'
 import { omit } from 'lodash'
 import { MetricService } from 'nestjs-otel'
+
+type AppEnvironment = AppEnv & {
+  app: App
+  cluster: Cluster
+  mints: { mint: Mint; wallet: Wallet }[]
+  wallets: Wallet[]
+}
 
 @Injectable()
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
@@ -107,7 +114,16 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     })
   }
 
-  getAppByEnvironmentIndex(environment: string, index: number) {
+  async getAppEnvironment(environment: string, index: number): Promise<{ appEnv: AppEnvironment; appKey: string }> {
+    const appEnv = await this.getAppByEnvironmentIndex(environment, index)
+    const appKey = this.getAppKey(environment, index)
+    return {
+      appEnv,
+      appKey,
+    }
+  }
+
+  getAppByEnvironmentIndex(environment: string, index: number): Promise<AppEnvironment> {
     const appKey = this.getAppKey(environment, index)
     this.getAppByEnvironmentIndexCounter?.add(1, { appKey })
     return this.appEnv.findFirst({

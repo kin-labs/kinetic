@@ -83,7 +83,7 @@ describe('KineticSdk (e2e)', () => {
       owner: aliceKeypair,
     })
     expect(res.signature).toBeNull()
-    expect(res.amount).toBeNull()
+    expect(res.amount).toEqual('9999999999999900000')
     expect(res.errors.length).toBeGreaterThan(0)
     expect(res.status).toBe(AppTransactionStatus.Failed)
     expect(res.errors[0].message).toContain('Error: Insufficient funds.')
@@ -95,7 +95,7 @@ describe('KineticSdk (e2e)', () => {
     const kp = Keypair.random()
     destinations.push({ destination: kp.publicKey, amount: '99999999999999' })
     const res = await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })
-    expect(res.amount).toBeNull()
+    expect(Number(res.amount)).toBe(1500000)
     expect(res.signature).toBeNull()
     expect(res.errors.length).toBeGreaterThan(0)
     expect(res.status).toBe(AppTransactionStatus.Failed)
@@ -127,7 +127,7 @@ describe('KineticSdk (e2e)', () => {
       senderCreate: false,
     })
     expect(tx.signature).toBeNull()
-    expect(tx.amount).toBeNull()
+    expect(Number(tx.amount)).toBe(4300000)
     expect(tx.errors.length).toBeGreaterThan(0)
     expect(tx.status).toBe(AppTransactionStatus.Failed)
     expect(tx.errors[0].message).toContain(`Error: Insufficient funds.`) // Destination account doesn't exist.

@@ -50,15 +50,14 @@ export class ApiAppDataAccessService implements OnModuleInit {
   }
 
   async getAppConfig(environment: string, index: number): Promise<AppConfig> {
-    const appKey = this.data.getAppKey(environment, index)
-    const env = await this.data.getAppByEnvironmentIndex(environment, index)
-    if (!env) {
+    const { appEnv, appKey } = await this.data.getAppEnvironment(environment, index)
+    if (!appEnv) {
       this.getAppConfigErrorCounter.add(1, { appKey })
       throw new NotFoundException(`App not found :(`)
     }
     this.getAppConfigSuccessCounter.add(1, { appKey })
     this.logger.verbose(`getAppConfig ${appKey}`)
-    const mints = env?.mints?.map(({ mint, wallet }) => ({
+    const mints = appEnv?.mints?.map(({ mint, wallet }) => ({
       airdrop: !!mint.airdropSecretKey,
       airdropAmount: mint.airdropAmount,
       airdropMax: mint.airdropMax,
@@ -77,17 +76,17 @@ export class ApiAppDataAccessService implements OnModuleInit {
 
     return {
       app: {
-        index: env.app.index,
-        name: env.app.name,
+        index: appEnv.app.index,
+        name: appEnv.app.name,
       },
       environment: {
-        name: env.name,
-        explorer: env.cluster.explorer,
+        name: appEnv.name,
+        explorer: appEnv.cluster.explorer,
         cluster: {
-          endpoint: env.cluster.endpointPublic,
-          id: env.cluster.id,
-          name: env.cluster.name,
-          type: env.cluster.type,
+          endpoint: appEnv.cluster.endpointPublic,
+          id: appEnv.cluster.id,
+          name: appEnv.cluster.name,
+          type: appEnv.cluster.type,
         },
       },
       mint: mints[0],

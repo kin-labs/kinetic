@@ -544,7 +544,7 @@
             "nullable": true
           },
           "amount": {
-            "type": "integer",
+            "type": "string",
             "nullable": true
           },
           "destination": {
