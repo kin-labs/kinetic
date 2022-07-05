@@ -84,14 +84,14 @@ export class KineticSdkInternal {
       latestBlockhash,
       mintFeePayer,
       mintPublicKey,
-      owner,
+      signer: owner.solana,
     })
 
     const request: CloseAccountRequest = {
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
       mint: mint.toString(),
-      tx: tx.toString('base64'),
+      tx: serializeTransaction(tx),
     }
 
     const res = await this.accountApi.closeAccount(request)

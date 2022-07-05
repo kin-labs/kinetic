@@ -33,7 +33,7 @@ export class ApiAccountFeatureController {
   @ApiOperation({ operationId: 'closeAccount' })
   @ApiResponse({ type: AppTransaction })
   closeAccount(@Body() body: CloseAccountRequest) {
-    return this.service.createAccount(body)
+    return this.service.closeAccount(body)
   }
 
   @Post('create')

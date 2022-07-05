@@ -1,9 +1,8 @@
-import { Keypair } from '@kin-kinetic/keypair'
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import { createCloseAccountInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
-import { PublicKeyString } from '../interfaces'
+import { GenerateCloseAccountTransactionOptions } from '../interfaces'
 import { getPublicKey } from './get-public-key'
 
 export async function generateCloseAccountTransaction({
@@ -12,15 +11,8 @@ export async function generateCloseAccountTransaction({
   latestBlockhash,
   mintFeePayer,
   mintPublicKey,
-  owner,
-}: {
-  appIndex: number
-  lastValidBlockHeight: number
-  latestBlockhash: string
-  mintFeePayer: PublicKeyString
-  mintPublicKey: PublicKeyString
-  owner: Keypair
-}): Promise<Buffer> {
+  signer,
+}: GenerateCloseAccountTransactionOptions): Promise<Transaction> {
   // Create objects from Response
   const mintKey = getPublicKey(mintPublicKey)
   const feePayerKey = getPublicKey(mintFeePayer)
@@ -32,7 +24,7 @@ export async function generateCloseAccountTransaction({
   })
 
   // Get AssociatedTokenAccount
-  const associatedTokenAccount = await getAssociatedTokenAddress(mintKey, owner.solanaPublicKey)
+  const associatedTokenAccount = await getAssociatedTokenAddress(mintKey, signer.publicKey)
 
   // Create Transaction
   const instructions: TransactionInstruction[] = [
@@ -42,13 +34,13 @@ export async function generateCloseAccountTransaction({
 
   const transaction = new Transaction({
     blockhash: latestBlockhash,
-    feePayer: feePayerKey,
+    feePayer: getPublicKey(mintFeePayer),
     lastValidBlockHeight,
-    signatures: [{ publicKey: owner.solana.publicKey, signature: null }],
+    signatures: [{ publicKey: signer.publicKey, signature: null }],
   }).add(...instructions)
 
-  // Sign and Serialize Transaction
-  transaction.partialSign(owner.solana)
+  // Partially sign the transaction
+  transaction.partialSign(signer)
 
-  return transaction.serialize({ requireAllSignatures: false, verifySignatures: false })
+  return transaction
 }
