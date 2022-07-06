@@ -1,4 +1,5 @@
 import { ApiAppWebhookDataAccessService, AppEnv, AppWebhookType, parseError } from '@kin-kinetic/api/app/data-access'
+import { ApiClusterDataAccessService } from '@kin-kinetic/api/cluster/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
@@ -34,7 +35,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private sendVerifyWebhookErrorCounter: Counter
   private sendVerifyWebhookSuccessCounter: Counter
 
-  constructor(readonly data: ApiCoreDataAccessService, private readonly appWebhook: ApiAppWebhookDataAccessService) {}
+  constructor(
+    readonly data: ApiCoreDataAccessService,
+    private readonly appWebhook: ApiAppWebhookDataAccessService,
+    private readonly cluster: ApiClusterDataAccessService,
+  ) {}
 
   onModuleInit() {
     this.confirmSignatureFinalizedCounter = this.data.metrics.getCounter(
@@ -120,6 +125,9 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       tx: Buffer.from(input.tx, 'base64'),
       signer: signer.solana,
     })
+    if (this.cluster.tokens.get(appEnv.cluster.type)?.find((mint) => mint.address === destination.pubkey.toString())) {
+      throw new Error(`Transfers to a mint are not allowed`)
+    }
 
     return this.handleTransaction({
       amount,
