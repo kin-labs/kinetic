@@ -41,7 +41,7 @@ export function ServerCreateModal({
           />
         </ModalBody>
         <ModalFooter>
-          <Button className="submit" colorScheme="teal" mr={3} onClick={() => submit(endpoint, environment)}>
+          <Button colorScheme="teal" mr={3} onClick={() => submit(endpoint, environment)}>
             Add
           </Button>
           <Button onClick={toggle}>Close</Button>

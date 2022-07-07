@@ -41,9 +41,7 @@ export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: Dem
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
         <div>
-          <Button className="submit-batch-payments-btn" onClick={getResult}>
-            Submit Payment Batch
-          </Button>
+          <Button onClick={getResult}>Submit Payment Batch</Button>
         </div>
         <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />
       </Stack>

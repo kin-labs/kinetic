@@ -16,9 +16,7 @@ export function SdkControlPanelAccountHistory({ keypair, sdk }: { keypair: DemoK
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button className="get-account-history-btn" onClick={getResult}>
-          Get Account History
-        </Button>
+        <Button onClick={getResult}>Get Account History</Button>
         <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />
         <Input
           w="fit-content"

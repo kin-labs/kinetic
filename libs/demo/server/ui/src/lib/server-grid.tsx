@@ -32,7 +32,7 @@ export function ServerGrid({
           </Stack>
           <ButtonGroup variant="outline" spacing="2">
             <Button size="xs" onClick={() => showServer(server)} colorScheme="teal">
-              <ViewIcon className="keypair-eye-icon" />
+              <ViewIcon />
             </Button>
             <Button size="xs" onClick={() => deleteServer(server)}>
               <DeleteIcon />

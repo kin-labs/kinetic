@@ -13,9 +13,7 @@ export function SdkControlPanelAccountBalance({ keypair, sdk }: { keypair: DemoK
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button className="get-account-balance-btn" onClick={getResult}>
-          Get Account Balance
-        </Button>
+        <Button onClick={getResult}>Get Account Balance</Button>
         <Input
           w="fit-content"
           value={account}

@@ -40,7 +40,7 @@ export function KeypairDetailsModal({
           )}
         </ModalBody>
         <ModalFooter>
-          <Button className="close" colorScheme="teal" onClick={toggle}>
+          <Button colorScheme="teal" onClick={toggle}>
             Close
           </Button>
         </ModalFooter>
