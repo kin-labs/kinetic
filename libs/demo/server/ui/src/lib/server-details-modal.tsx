@@ -35,9 +35,7 @@ export function ServerDetailsModal({
           <Textarea rows={1} w="full" readOnly value={server?.endpoint} />
         </ModalBody>
         <ModalFooter>
-          <Button className="close" onClick={toggle}>
-            Close
-          </Button>
+          <Button onClick={toggle}>Close</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

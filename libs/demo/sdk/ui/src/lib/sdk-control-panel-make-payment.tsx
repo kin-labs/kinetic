@@ -42,9 +42,7 @@ export function SdkControlPanelMakePayment({ keypair, sdk }: { keypair: DemoKeyp
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
         <div>
-          <Button className="submit-payment-btn" onClick={getResult}>
-            Submit Payment
-          </Button>
+          <Button onClick={getResult}>Submit Payment</Button>
         </div>
         <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />
         <Input

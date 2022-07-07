@@ -32,13 +32,12 @@ export function ImportMnemonicModal({
           <Textarea
             rows={2}
             w="full"
-            className="import-mnemonic"
             onChange={(ev: ChangeEvent<HTMLTextAreaElement>) => setValue(ev.target.value)}
             value={value}
           />
         </ModalBody>
         <ModalFooter>
-          <Button className="submit" colorScheme="teal" mr={3} onClick={submit}>
+          <Button colorScheme="teal" mr={3} onClick={submit}>
             Import
           </Button>
           <Button onClick={toggle}>Close</Button>

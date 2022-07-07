@@ -22,7 +22,7 @@ export function SdkControlPanelRequestAirdrop({ keypair, sdk }: { keypair: DemoK
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button disabled={!mint} className="request-airdrop-btn" onClick={getResult}>
+        <Button disabled={!mint} onClick={getResult}>
           Request Airdrop
         </Button>
         {mint && <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />}

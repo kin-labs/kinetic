@@ -14,9 +14,7 @@ export function SdkControlPanelTokenAccounts({ keypair, sdk }: { keypair: DemoKe
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button className="get-token-accounts-btn" onClick={getResult}>
-          Get Token Accounts
-        </Button>
+        <Button onClick={getResult}>Get Token Accounts</Button>
         <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />
         <Input
           w="fit-content"

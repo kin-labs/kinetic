@@ -11,9 +11,7 @@ export function SdkControlPanelAppConfig({ sdk }: { sdk: KineticSdk }) {
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button className="get-app-config-btn" onClick={getResult}>
-          Get App Config
-        </Button>
+        <Button onClick={getResult}>Get App Config</Button>
       </Stack>
       <SdkControlPanelResult data={result} />
     </Stack>

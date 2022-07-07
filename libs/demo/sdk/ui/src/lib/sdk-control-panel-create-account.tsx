@@ -28,9 +28,7 @@ export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKe
   return (
     <Stack spacing={3}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button className="create-account-btn" onClick={getResult}>
-          Create Account
-        </Button>
+        <Button onClick={getResult}>Create Account</Button>
         <MintSwitcher mint={mint} mints={mints} selectMint={setMint} />
       </Stack>
       <SdkControlPanelResult data={result} />

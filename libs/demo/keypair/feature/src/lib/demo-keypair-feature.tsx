@@ -59,15 +59,9 @@ export function DemoKeypairFeature() {
         Here you can generate and import keypairs using the <code>@kin-kinetic/keypair</code> package.
       </div>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button className={'generate-keypair-btn'} onClick={generateMnemonic}>
-          Generate Keypair
-        </Button>
-        <Button className={'import-mnemonic-btn'} onClick={() => toggleImportVisible(true)}>
-          Import Mnemonic
-        </Button>
-        <Button className={'import-bytearray-btn'} onClick={() => toggleImportByteArrayVisible(true)}>
-          Import ByteArray
-        </Button>
+        <Button onClick={generateMnemonic}>Generate Keypair</Button>
+        <Button onClick={() => toggleImportVisible(true)}>Import Mnemonic</Button>
+        <Button onClick={() => toggleImportByteArrayVisible(true)}>Import ByteArray</Button>
       </Stack>
       {result?.length ? (
         <SimpleGrid columns={[1, 2]} gap={[3, 6]}>
@@ -79,7 +73,7 @@ export function DemoKeypairFeature() {
                 </Box>
                 <ButtonGroup variant="outline" spacing="2">
                   <Button size="xs" onClick={() => showKeypair(kp)} colorScheme="teal">
-                    <ViewIcon className="keypair-eye-icon" />
+                    <ViewIcon />
                   </Button>
                   <Button size="xs" onClick={() => deleteKeypair(kp)}>
                     <DeleteIcon />
