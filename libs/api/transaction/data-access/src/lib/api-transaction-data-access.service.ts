@@ -3,6 +3,7 @@ import { ApiClusterDataAccessService } from '@kin-kinetic/api/cluster/data-acces
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
+import { getPublicKey } from '@kin-tools/kin-transaction'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
@@ -12,6 +13,7 @@ import {
   AppTransactionStatus,
   Prisma,
 } from '@prisma/client'
+import { getAssociatedTokenAddress } from '@solana/spl-token'
 import { Transaction } from '@solana/web3.js'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
@@ -125,7 +127,21 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       tx: Buffer.from(input.tx, 'base64'),
       signer: signer.solana,
     })
-    if (this.cluster.tokens.get(appEnv.cluster.type)?.find((mint) => mint.address === destination.pubkey.toString())) {
+
+    const tokenList = await Promise.all(
+      this.cluster.tokens.get(appEnv.cluster.type).map(async (token) => {
+        try {
+          const tokenAddress = await getAssociatedTokenAddress(
+            getPublicKey(mint.mint.address),
+            getPublicKey(token.address),
+          )
+          return tokenAddress.toBase58()
+          // eslint-disable-next-line no-empty
+        } catch (e) {}
+      }),
+    )
+
+    if (tokenList?.includes(destination.pubkey.toBase58())) {
       throw new Error(`Transfers to a mint are not allowed`)
     }
 
