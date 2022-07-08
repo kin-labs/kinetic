@@ -46,6 +46,7 @@ input AppEnvUpdateInput {
 }
 
 type AppMint {
+  addMemo: Boolean
   createdAt: DateTime!
   id: String!
   mint: Mint
@@ -291,6 +292,7 @@ input LoginInput {
 }
 
 type Mint {
+  addMemo: Boolean
   address: String
   airdropAmount: Int
   airdropMax: Int

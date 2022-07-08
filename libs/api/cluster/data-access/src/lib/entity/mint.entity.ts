@@ -10,7 +10,7 @@ export class Mint {
   @Field({ nullable: true })
   updatedAt?: Date
   @Field({ nullable: true })
-  addMemo: string
+  addMemo?: boolean
   @Field({ nullable: true })
   address: string
   @Field(() => Int, { nullable: true })

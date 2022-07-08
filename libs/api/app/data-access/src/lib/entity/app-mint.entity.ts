@@ -10,8 +10,8 @@ export class AppMint {
   createdAt?: Date
   @Field()
   updatedAt?: Date
-  @Field()
-  addMemo: boolean
+  @Field(() => Boolean, { nullable: true })
+  addMemo?: boolean
   @Field(() => Int, { nullable: true })
   order?: number
   @Field(() => Mint, { nullable: true })

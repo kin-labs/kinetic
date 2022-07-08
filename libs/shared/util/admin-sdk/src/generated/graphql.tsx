@@ -69,6 +69,7 @@ export type AppEnvUpdateInput = {
 
 export type AppMint = {
   __typename?: 'AppMint'
+  addMemo?: Maybe<Scalars['Boolean']>
   createdAt: Scalars['DateTime']
   id: Scalars['String']
   mint?: Maybe<Mint>
@@ -309,6 +310,7 @@ export type LoginInput = {
 
 export type Mint = {
   __typename?: 'Mint'
+  addMemo?: Maybe<Scalars['Boolean']>
   address?: Maybe<Scalars['String']>
   airdropAmount?: Maybe<Scalars['Int']>
   airdropMax?: Maybe<Scalars['Int']>
