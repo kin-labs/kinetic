@@ -71,6 +71,7 @@ model AppMint {
   order     Int      @default(0)
   appEnv    AppEnv?  @relation(fields: [appEnvId], references: [id])
   appEnvId  String?
+  addMemo   Boolean  @default(false)
   mint      Mint?    @relation(fields: [mintId], references: [id])
   mintId    String?
   wallet    Wallet?  @relation(fields: [walletId], references: [id])
@@ -237,6 +238,7 @@ model Mint {
   id               String    @id @default(cuid())
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @default(now()) @updatedAt
+  addMemo          Boolean   @default(false)
   address          String
   airdropAmount    Int?
   airdropMax       Int?

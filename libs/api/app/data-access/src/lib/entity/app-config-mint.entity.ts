@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger'
 
 export class AppConfigMint {
   @ApiProperty()
+  addMemo: boolean
+  @ApiProperty()
   airdrop: boolean
   @ApiProperty({ type: 'integer' })
   airdropAmount: number

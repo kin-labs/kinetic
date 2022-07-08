@@ -10,6 +10,8 @@ export class Mint {
   @Field({ nullable: true })
   updatedAt?: Date
   @Field({ nullable: true })
+  addMemo: string
+  @Field({ nullable: true })
   address: string
   @Field(() => Int, { nullable: true })
   airdropAmount?: number

@@ -7,6 +7,7 @@ export function createMintUsdc(clusterId: string, order: number, address: string
     airdropMax = parseInt(process.env['DEFAULT_MINT_AIRDROP_MAX'])
     airdropSecretKey = process.env['DEFAULT_MINT_AIRDROP_SECRET_KEY']
   }
+  const addMemo = false
   const coinGeckoId = 'usdc'
   const defaultMint = false
   const logoUrl =
@@ -17,6 +18,7 @@ export function createMintUsdc(clusterId: string, order: number, address: string
   return createMint(
     clusterId,
     order,
+    addMemo,
     address,
     decimals,
     name,

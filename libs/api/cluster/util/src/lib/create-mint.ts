@@ -3,6 +3,7 @@ import { MintType, Prisma } from '@prisma/client'
 export function createMint(
   clusterId: string,
   order: number,
+  addMemo: boolean,
   address: string,
   decimals: number,
   name: string,
@@ -17,6 +18,7 @@ export function createMint(
   return {
     id: `${clusterId}-${symbol.toLowerCase()}`,
     cluster: { connect: { id: clusterId } },
+    addMemo,
     address,
     coinGeckoId,
     decimals,

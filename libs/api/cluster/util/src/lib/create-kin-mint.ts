@@ -7,6 +7,7 @@ export function createMintKin(clusterId: string, order: number, address: string,
     airdropMax = parseInt(process.env['DEFAULT_MINT_AIRDROP_MAX'])
     airdropSecretKey = process.env['DEFAULT_MINT_AIRDROP_SECRET_KEY']
   }
+  const addMemo = true
   const coinGeckoId = 'kin'
   const defaultMint = true
   const logoUrl =
@@ -17,6 +18,7 @@ export function createMintKin(clusterId: string, order: number, address: string,
   return createMint(
     clusterId,
     order,
+    addMemo,
     address,
     decimals,
     name,

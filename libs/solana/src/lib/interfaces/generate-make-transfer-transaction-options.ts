@@ -3,6 +3,7 @@ import { Keypair } from '@solana/web3.js'
 import { PublicKeyString } from '../interfaces'
 
 export interface GenerateMakeTransferOptions {
+  addMemo: boolean
   amount: string
   appIndex: number
   destination: PublicKeyString
