@@ -55,6 +55,7 @@ fragment MintDetails on Mint {
   id
   createdAt
   updatedAt
+  addMemo
   address
   airdropAmount
   airdropMax

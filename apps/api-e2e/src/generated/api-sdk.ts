@@ -686,6 +686,7 @@ export const MintDetails = gql`
     id
     createdAt
     updatedAt
+    addMemo
     address
     airdropAmount
     airdropMax
@@ -1521,6 +1522,7 @@ export type AdminCreateAppMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1547,6 +1549,7 @@ export type AdminCreateAppMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1665,6 +1668,7 @@ export type AdminAppsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1691,6 +1695,7 @@ export type AdminAppsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1777,6 +1782,7 @@ export type AdminAppQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1803,6 +1809,7 @@ export type AdminAppQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1896,6 +1903,7 @@ export type AppEnvDetailsFragment = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -1922,6 +1930,7 @@ export type AppEnvDetailsFragment = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -1958,6 +1967,7 @@ export type AppMintDetailsFragment = {
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    addMemo?: boolean | null
     address?: string | null
     airdropAmount?: number | null
     airdropMax?: number | null
@@ -2176,6 +2186,7 @@ export type UserUpdateAppMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -2202,6 +2213,7 @@ export type UserUpdateAppMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -2302,6 +2314,7 @@ export type UserUpdateAppEnvMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2328,6 +2341,7 @@ export type UserUpdateAppEnvMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2522,6 +2536,7 @@ export type UserAppEnvMintDisableMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2548,6 +2563,7 @@ export type UserAppEnvMintDisableMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2613,6 +2629,7 @@ export type UserAppEnvMintEnableMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2639,6 +2656,7 @@ export type UserAppEnvMintEnableMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2705,6 +2723,7 @@ export type UserAppEnvMintSetWalletMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2731,6 +2750,7 @@ export type UserAppEnvMintSetWalletMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2804,6 +2824,7 @@ export type UserAppEnvWalletAddMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2830,6 +2851,7 @@ export type UserAppEnvWalletAddMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2903,6 +2925,7 @@ export type UserAppEnvWalletRemoveMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2929,6 +2952,7 @@ export type UserAppEnvWalletRemoveMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -3204,6 +3228,7 @@ export type UserAppsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3230,6 +3255,7 @@ export type UserAppsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3317,6 +3343,7 @@ export type UserAppQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3343,6 +3370,7 @@ export type UserAppQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3442,6 +3470,7 @@ export type UserAppEnvQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -3468,6 +3497,7 @@ export type UserAppEnvQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -3633,6 +3663,7 @@ export type MintDetailsFragment = {
   id?: string | null
   createdAt?: any | null
   updatedAt?: any | null
+  addMemo?: boolean | null
   address?: string | null
   airdropAmount?: number | null
   airdropMax?: number | null
@@ -3671,6 +3702,7 @@ export type AdminAddClusterMintMutation = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -3775,6 +3807,7 @@ export type AdminClusterQuery = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -3849,6 +3882,7 @@ export type AdminClustersQuery = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -4116,6 +4150,7 @@ export type AdminWalletQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -4142,6 +4177,7 @@ export type AdminWalletQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -4253,6 +4289,7 @@ export type AdminWalletsQuery = {
             id?: string | null
             createdAt?: any | null
             updatedAt?: any | null
+            addMemo?: boolean | null
             address?: string | null
             airdropAmount?: number | null
             airdropMax?: number | null
@@ -4279,6 +4316,7 @@ export type AdminWalletsQuery = {
             id?: string | null
             createdAt?: any | null
             updatedAt?: any | null
+            addMemo?: boolean | null
             address?: string | null
             airdropAmount?: number | null
             airdropMax?: number | null
@@ -4342,6 +4380,7 @@ export type AdminWalletsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -4368,6 +4407,7 @@ export type AdminWalletsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -4457,6 +4497,7 @@ export type UserGenerateWalletMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -4483,6 +4524,7 @@ export type UserGenerateWalletMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -4569,6 +4611,7 @@ export type UserWalletQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -4664,6 +4707,7 @@ export type UserWalletsQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
