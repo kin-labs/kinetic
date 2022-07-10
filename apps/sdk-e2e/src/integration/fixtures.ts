@@ -35,3 +35,5 @@ export const bobKeypair = Keypair.fromByteArray(BOB_KEY)
 export const charlieKeypair = Keypair.fromByteArray(CHARLIE_KEY)
 
 export const daveKeypair = Keypair.fromByteArray(DAVE_KEY)
+
+export const usdMint = 'USDzo281m7rjzeZyxevkzL1vr5Cibb9ek3ynyAjXjUM'
