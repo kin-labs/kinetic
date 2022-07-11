@@ -133,16 +133,6 @@ describe('KineticSdk (e2e)', () => {
     expect(tx.errors[0].message).toContain(`Error: Insufficient funds.`) // Destination account doesn't exist.
   })
 
-  it('should create an account using a mint', async () => {
-    const account = Keypair.random()
-    const tx = await sdk.createAccount({ owner: account, mint: usdMint })
-    expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(usdMint)
-    const { signature, errors } = tx
-    expect(typeof signature).toBe('string')
-    expect(errors).toEqual([])
-  })
-
   it('should make a transfer using a mint', async () => {
     const tx = await sdk.makeTransfer({
       amount: '1',
@@ -158,10 +148,4 @@ describe('KineticSdk (e2e)', () => {
     expect(Number(amount)).toBe(1)
     expect(source).toBe(aliceKeypair.publicKey)
   })
-
-  it('should request an airdrop using a mint', async () => {
-    const tx = await sdk.requestAirdrop({ account: aliceKeypair.publicKey, amount: '20', mint: usdMint })
-    expect(tx).not.toBeNull()
-    expect(typeof tx.signature).toBe('string')
-  }, 30000)
 })
