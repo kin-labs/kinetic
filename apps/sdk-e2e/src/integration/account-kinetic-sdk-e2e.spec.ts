@@ -29,7 +29,7 @@ describe('KineticSdk (e2e) - Account', () => {
   })
 
   it('should close an account', async () => {
-    const owner = Keypair.random()
+    const owner = Keypair.fromMnemonic('hen steak staff pig tonight mushroom cake joke lend napkin ball pelican') // 4nJvkRyjvA3CMEqk1ntHWSHsEASWaS6epRrCv3xg5rjg
     await sdk.createAccount({ owner })
     const closeTx = await sdk.closeAccount({ owner })
     expect(closeTx).not.toBeNull()

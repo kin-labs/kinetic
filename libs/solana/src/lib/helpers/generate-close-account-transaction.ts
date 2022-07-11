@@ -1,6 +1,6 @@
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
-import { createCloseAccountInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { createCloseAccountInstruction } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateCloseAccountTransactionOptions } from '../interfaces'
 import { getPublicKey } from './get-public-key'
@@ -24,12 +24,12 @@ export async function generateCloseAccountTransaction({
   })
 
   // Get AssociatedTokenAccount
-  const associatedTokenAccount = await getAssociatedTokenAddress(mintKey, signer.publicKey)
+  // const associatedTokenAccount = await getAssociatedTokenAddress(mintKey, signer.publicKey)
 
   // Create Transaction
   const instructions: TransactionInstruction[] = [
     appIndexMemoInstruction,
-    createCloseAccountInstruction(TOKEN_PROGRAM_ID, associatedTokenAccount, feePayerKey, []),
+    createCloseAccountInstruction(signer.publicKey, feePayerKey, feePayerKey, []),
   ]
 
   const transaction = new Transaction({
