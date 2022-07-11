@@ -1,6 +1,11 @@
 import { TransactionType } from '@kin-tools/kin-memo'
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
-import { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress } from '@solana/spl-token'
+import {
+  AuthorityType,
+  createAssociatedTokenAccountInstruction,
+  createSetAuthorityInstruction,
+  getAssociatedTokenAddress,
+} from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateCreateAccountTransactionOptions } from '../interfaces'
 import { getPublicKey } from './get-public-key'
@@ -30,6 +35,7 @@ export async function generateCreateAccountTransaction({
   const instructions: TransactionInstruction[] = [
     appIndexMemoInstruction,
     createAssociatedTokenAccountInstruction(feePayerKey, associatedTokenAccount, signer.publicKey, mintKey),
+    createSetAuthorityInstruction(associatedTokenAccount, signer.publicKey, AuthorityType.CloseAccount, feePayerKey),
   ]
 
   const transaction = new Transaction({
