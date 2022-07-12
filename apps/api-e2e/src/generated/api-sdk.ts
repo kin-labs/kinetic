@@ -115,6 +115,7 @@ export type AppTransactionError = {
   __typename?: 'AppTransactionError'
   id?: Maybe<Scalars['String']>
   instruction?: Maybe<Scalars['Int']>
+  logs?: Maybe<Array<Scalars['String']>>
   message?: Maybe<Scalars['String']>
   type: AppTransactionErrorType
 }
@@ -760,6 +761,7 @@ export const AppEnvDetails = gql`
 export const AppTransactionErrorDetails = gql`
   fragment AppTransactionErrorDetails on AppTransactionError {
     id
+    logs
     message
     type
     instruction
@@ -2010,6 +2012,7 @@ export type AppTransactionDetailsFragment = {
   errors?: Array<{
     __typename?: 'AppTransactionError'
     id?: string | null
+    logs?: Array<string> | null
     message?: string | null
     type: AppTransactionErrorType
     instruction?: number | null
@@ -2071,6 +2074,7 @@ export type AppTransactionDetailsFragment = {
 export type AppTransactionErrorDetailsFragment = {
   __typename?: 'AppTransactionError'
   id?: string | null
+  logs?: Array<string> | null
   message?: string | null
   type: AppTransactionErrorType
   instruction?: number | null
@@ -2989,6 +2993,7 @@ export type UserAppTransactionQuery = {
     errors?: Array<{
       __typename?: 'AppTransactionError'
       id?: string | null
+      logs?: Array<string> | null
       message?: string | null
       type: AppTransactionErrorType
       instruction?: number | null
@@ -3088,6 +3093,7 @@ export type UserAppTransactionsQuery = {
     errors?: Array<{
       __typename?: 'AppTransactionError'
       id?: string | null
+      logs?: Array<string> | null
       message?: string | null
       type: AppTransactionErrorType
       instruction?: number | null

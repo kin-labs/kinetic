@@ -92,6 +92,7 @@ type AppTransaction {
 type AppTransactionError {
   id: String
   instruction: Int
+  logs: [String!]
   message: String
   type: AppTransactionErrorType!
 }
