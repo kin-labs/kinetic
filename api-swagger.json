@@ -513,6 +513,12 @@
           "id": {
             "type": "string"
           },
+          "logs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "message": {
             "type": "string"
           },
@@ -524,7 +530,7 @@
             "type": "integer"
           }
         },
-        "required": ["id", "message", "type", "instruction"]
+        "required": ["id", "logs", "message", "type", "instruction"]
       },
       "AppTransaction": {
         "type": "object",

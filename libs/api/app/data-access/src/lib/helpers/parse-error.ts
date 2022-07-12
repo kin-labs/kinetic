@@ -14,6 +14,7 @@ export function parseError(
   }
 
   return {
+    logs: error.logs,
     message,
     instruction,
     type,

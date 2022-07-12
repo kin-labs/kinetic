@@ -9,6 +9,9 @@ export class AppTransactionError {
   id?: string
   @ApiProperty()
   @Field({ nullable: true })
+  logs?: string[]
+  @ApiProperty()
+  @Field({ nullable: true })
   message?: string
   @ApiProperty({ enum: AppTransactionErrorType })
   @Field(() => AppTransactionErrorType)
