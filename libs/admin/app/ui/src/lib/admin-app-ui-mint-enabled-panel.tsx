@@ -1,5 +1,5 @@
 import { SettingsIcon } from '@chakra-ui/icons'
-import { Button, Code, Flex, Stack, Text } from '@chakra-ui/react'
+import { Button, Code, Flex, FormControl, FormLabel, Stack, Switch, Text } from '@chakra-ui/react'
 import { AdminClusterUiMintDetails } from '@kin-kinetic/admin/cluster/ui'
 import { AdminUiAddress } from '@kin-kinetic/admin/ui/address'
 import { AdminUiIdenticon } from '@kin-kinetic/admin/ui/identicon'
@@ -20,6 +20,7 @@ export function AdminAppUiMintEnabledPanel({
   wallets?: Wallet[]
 }) {
   const [showDetails, setShowDetails] = useState(false)
+  const [addMemo, setAddMemo] = useState<boolean>(!!mint?.addMemo)
   const toggleDetails = () => setShowDetails((value) => !value)
   const availableWallets = wallets?.filter((item) => item.id !== wallet?.id)
   return mint && mint?.id ? (
@@ -32,6 +33,12 @@ export function AdminAppUiMintEnabledPanel({
       </Flex>
       {showDetails ? (
         <Stack direction="column" spacing={6}>
+          <FormControl display="flex" alignItems="center">
+            <FormLabel htmlFor="add-memo" mb="0">
+              Add Memo Instruction
+            </FormLabel>
+            <Switch id="add-memo" disabled isChecked={addMemo} onChange={() => setAddMemo(!addMemo)} />
+          </FormControl>
           <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
             <AdminUiIdenticon name={wallet?.publicKey} size={'sm'} />
             <Flex flexGrow={1}>

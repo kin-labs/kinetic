@@ -1,10 +1,9 @@
-import { Avatar, Flex, FormControl, FormLabel, Switch, Text } from '@chakra-ui/react'
+import { Avatar, Flex, Text } from '@chakra-ui/react'
 import { AdminUiAddress } from '@kin-kinetic/admin/ui/address'
 import { Mint } from '@kin-kinetic/shared/util/admin-sdk'
-import React, { useState } from 'react'
+import React from 'react'
 
 export function AdminClusterUiMintDetails({ mint }: { mint: Mint }) {
-  const [addMemo, setAddMemo] = useState(false)
   return (
     <Flex direction="column">
       <Flex justifyContent="space-between" alignItems="center">
@@ -31,12 +30,6 @@ export function AdminClusterUiMintDetails({ mint }: { mint: Mint }) {
           </Flex>
         </Flex>
       </Flex>
-      <FormControl display="flex" alignItems="center">
-        <FormLabel htmlFor="add-memo" mb="0">
-          Add Memo Instruction
-        </FormLabel>
-        <Switch id="add-memo" isChecked={addMemo} onChange={() => setAddMemo(!addMemo)} />
-      </FormControl>
     </Flex>
   )
 }
