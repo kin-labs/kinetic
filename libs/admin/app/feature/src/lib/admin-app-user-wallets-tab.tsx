@@ -45,7 +45,7 @@ export function AdminAppUserWalletsTab({ appId, appEnvId }: { appId: string; app
         </Button>
         <Button onClick={importWallet}>Import Wallet</Button>
       </Flex>
-      <SimpleGrid columns={2} gap={6}>
+      <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
         {wallets?.length ? (
           wallets.map((wallet: Wallet) => (
             <AdminAppUiWallet key={wallet.id} appId={appId} appEnvId={appEnvId} wallet={wallet} />

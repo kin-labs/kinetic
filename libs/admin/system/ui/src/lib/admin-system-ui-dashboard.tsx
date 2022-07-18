@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export function AdminSystemUiDashboard({ links }: { links: AdminUiLink[] }) {
   return (
-    <SimpleGrid columns={2} gap={6}>
+    <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
       {links?.map((link) => (
         <Stack spacing={6} borderWidth="1px" borderRadius="lg" key={link.path} justifyContent={'center'}>
           <Flex as={Link} to={link.path} justifyContent="space-between" alignItems="center" p={6}>
