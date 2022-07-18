@@ -57,8 +57,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
     }
     this.getAppConfigSuccessCounter.add(1, { appKey })
     this.logger.verbose(`getAppConfig ${appKey}`)
-    const mints = appEnv?.mints?.map(({ mint, wallet }) => ({
-      addMemo: !!mint.addMemo,
+    const mints = appEnv?.mints?.map(({ addMemo, mint, wallet }) => ({
+      addMemo: !!addMemo,
       airdrop: !!mint.airdropSecretKey,
       airdropAmount: mint.airdropAmount,
       airdropMax: mint.airdropMax,

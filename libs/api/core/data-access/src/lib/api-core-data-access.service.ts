@@ -12,7 +12,7 @@ import { MetricService } from 'nestjs-otel'
 type AppEnvironment = AppEnv & {
   app: App
   cluster: Cluster
-  mints: { mint: Mint; wallet: Wallet }[]
+  mints: { addMemo: boolean; mint: Mint; wallet: Wallet }[]
   wallets: Wallet[]
 }
 
