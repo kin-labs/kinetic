@@ -238,7 +238,7 @@ model Mint {
   id               String    @id @default(cuid())
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @default(now()) @updatedAt
-  addMemo          Boolean?   @default(false)
+  addMemo          Boolean?  @default(false)
   address          String
   airdropAmount    Int?
   airdropMax       Int?
