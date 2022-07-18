@@ -7,6 +7,9 @@ export class AppTransactionError {
   @ApiProperty()
   @Field({ nullable: true })
   id?: string
+  @ApiProperty({ type: [String] })
+  @Field(() => [String], { nullable: true })
+  logs?: string[]
   @ApiProperty()
   @Field({ nullable: true })
   message?: string

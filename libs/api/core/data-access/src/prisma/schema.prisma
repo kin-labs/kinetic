@@ -138,6 +138,7 @@ enum AppTransactionErrorType {
 
 model AppTransactionError {
   id               String                  @id @default(cuid())
+  logs             String[]
   message          String
   type             AppTransactionErrorType @default(Unknown)
   instruction      Int?

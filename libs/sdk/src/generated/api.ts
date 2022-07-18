@@ -502,6 +502,12 @@ export interface AppTransactionError {
   id: string
   /**
    *
+   * @type {Array<string>}
+   * @memberof AppTransactionError
+   */
+  logs: Array<string>
+  /**
+   *
    * @type {string}
    * @memberof AppTransactionError
    */

@@ -96,6 +96,7 @@ fragment AppTransactionDetails on AppTransaction {
 
 fragment AppTransactionErrorDetails on AppTransactionError {
   id
+  logs
   message
   type
   instruction
