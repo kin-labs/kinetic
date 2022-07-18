@@ -25,7 +25,11 @@ export function AdminAppUiMintEnabledPanel({
   const [addMemo, setAddMemo] = useState<boolean>(!!appMint?.addMemo)
   const toggleDetails = () => setShowDetails((value) => !value)
   const availableWallets = wallets?.filter((item) => item.id !== wallet?.id)
-  return appMint && appMint?.mint?.id ? (
+  const disable = () => {
+    if (!appMint?.mint?.id) return
+    disableMint(appMint.mint!.id!)
+  }
+  return appMint && appMint?.mint && appMint?.mint?.id ? (
     <Stack direction="column" spacing={6} p={6} borderWidth="1px" borderRadius="lg">
       <AdminClusterUiMintDetails mint={appMint?.mint} />
       <Flex justifyContent="space-between" alignItems="center">
@@ -71,7 +75,7 @@ export function AdminAppUiMintEnabledPanel({
             </Stack>
           ))}
           <Flex justifyContent="space-between" alignItems="center">
-            <Button size="lg" disabled={!!appMint?.mint?.default} onClick={() => disableMint(appMint?.mint?.id!)}>
+            <Button size="lg" disabled={!!appMint?.mint?.default} onClick={disable}>
               {appMint?.mint?.default ? 'Default mint' : `Disable ${appMint?.mint?.symbol}`}
             </Button>
           </Flex>
