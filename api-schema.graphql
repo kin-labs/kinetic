@@ -55,6 +55,10 @@ type AppMint {
   wallet: Wallet
 }
 
+input AppMintUpdateInput {
+  addMemo: Boolean
+}
+
 type AppTransaction {
   amount: String
   createdAt: DateTime
@@ -348,6 +352,7 @@ type Mutation {
   userImportWallet(appEnvId: String!, secretKey: String!): Wallet
   userUpdateApp(appId: String!, input: AppUpdateInput!): App
   userUpdateAppEnv(appEnvId: String!, appId: String!, input: AppEnvUpdateInput!): AppEnv
+  userUpdateAppMint(appId: String!, appMintId: String!, input: AppMintUpdateInput!): AppMint
 }
 
 type Query {

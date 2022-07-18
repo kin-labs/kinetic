@@ -22,6 +22,12 @@ mutation UserUpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpd
   }
 }
 
+mutation UserUpdateAppMint($appId: String!, $appMintId: String!, $input: AppMintUpdateInput!) {
+  updated: userUpdateAppMint(appId: $appId, appMintId: $appMintId, input: $input) {
+    ...AppMintDetails
+  }
+}
+
 mutation UserAppUserAdd($appId: String!, $input: AppUserAddInput!) {
   item: userAppUserAdd(appId: $appId, input: $input) {
     ...AppDetails

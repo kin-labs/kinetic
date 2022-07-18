@@ -3,6 +3,8 @@ import {
   App,
   AppEnv,
   AppEnvUpdateInput,
+  AppMint,
+  AppMintUpdateInput,
   AppTransaction,
   AppTransactionListInput,
   AppUpdateInput,
@@ -73,6 +75,16 @@ export class ApiAppUserFeatureResolver {
     @Args('input') input: AppEnvUpdateInput,
   ) {
     return this.service.userUpdateAppEnv(user.id, appId, appEnvId, input)
+  }
+
+  @Mutation(() => AppMint, { nullable: true })
+  userUpdateAppMint(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appMintId') appMintId: string,
+    @Args('input') input: AppMintUpdateInput,
+  ) {
+    return this.service.userUpdateAppMint(user.id, appId, appMintId, input)
   }
 
   @Mutation(() => AppEnv, { nullable: true })

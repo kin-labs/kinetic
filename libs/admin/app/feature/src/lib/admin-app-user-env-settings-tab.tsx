@@ -3,19 +3,21 @@ import { AdminAppUiAppEnvMintSettings, AdminAppUiAppEnvWebhookForm } from '@kin-
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import {
   AppEnvUpdateInput,
+  AppMintUpdateInput,
   useUserAppEnvMintDisableMutation,
   useUserAppEnvMintEnableMutation,
   useUserAppEnvMintSetWalletMutation,
   useUserAppEnvQuery,
   useUserUpdateAppEnvMutation,
+  useUserUpdateAppMintMutation,
 } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string; appEnvId: string }) {
   const toast = useToast()
   const [{ data, fetching }] = useUserAppEnvQuery({ variables: { appId, appEnvId: appEnvId } })
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const [, updateAppEnvMutation] = useUserUpdateAppEnvMutation()
+  const [, updateAppMintMutation] = useUserUpdateAppMintMutation()
   const [, disableMintMutation] = useUserAppEnvMintDisableMutation()
   const [, enableMintMutation] = useUserAppEnvMintEnableMutation()
   const [, setWalletMutation] = useUserAppEnvMintSetWalletMutation()
@@ -58,6 +60,11 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
       toast({ status: 'success', title: 'Mint disabled' })
     })
   }
+  const updateAppMint = (appMintId: string, input: AppMintUpdateInput) => {
+    updateAppMintMutation({ appId, appMintId, input }).then(() => {
+      toast({ status: 'success', title: 'Mint updated' })
+    })
+  }
   const enableMint = (mintId: string) => {
     enableMintMutation({
       appId,
@@ -89,6 +96,7 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
             disableMint={disableMint}
             enableMint={enableMint}
             selectWallet={selectWallet}
+            updateAppMint={updateAppMint}
           />
           <AdminAppUiAppEnvWebhookForm appEnv={data.item} onSubmit={onSubmit} />
         </Stack>
