@@ -13,7 +13,7 @@ export function AdminAppUiEnvironments({ appId, environments }: AdminAppUiEnviro
     return <Alert>No environments found.</Alert>
   }
   return (
-    <SimpleGrid columns={2} gap={6}>
+    <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
       {environments?.map((environment) => (
         <Stack spacing={6} borderWidth="1px" borderRadius="lg" key={environment.id} p={6} justifyContent={'center'}>
           <Flex justifyContent="space-between" alignItems="center">

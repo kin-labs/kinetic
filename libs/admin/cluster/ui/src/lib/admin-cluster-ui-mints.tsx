@@ -13,7 +13,7 @@ export function AdminClusterUiMints({ mints }: AdminClusterUiMintsProps) {
     return <Alert>No mints found.</Alert>
   }
   return (
-    <SimpleGrid columns={2} gap={6}>
+    <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
       {mints?.map((mint) => (
         <Box p={6} borderWidth="1px" borderRadius="lg" overflow="hidden">
           <AdminClusterUiMintDetails key={mint?.id} mint={mint} />

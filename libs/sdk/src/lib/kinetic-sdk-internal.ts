@@ -76,6 +76,7 @@ export class KineticSdkInternal {
     })
 
     const tx = await generateCreateAccountTransaction({
+      addMemo: this.appConfig.mint.addMemo,
       appIndex: this.appConfig.app.index,
       lastValidBlockHeight,
       latestBlockhash,
@@ -145,6 +146,7 @@ export class KineticSdkInternal {
     const account = await this.getTokenAccounts({ account: destination, mint })
 
     const tx = await generateMakeTransferTransaction({
+      addMemo: this.appConfig.mint.addMemo,
       amount,
       appIndex: this.appConfig.app.index,
       destination,
@@ -195,6 +197,7 @@ export class KineticSdkInternal {
       })
 
     const tx = await generateMakeTransferBatchTransaction({
+      addMemo: this.appConfig.mint.addMemo,
       appIndex: this.appConfig.app.index,
       destinations,
       lastValidBlockHeight,

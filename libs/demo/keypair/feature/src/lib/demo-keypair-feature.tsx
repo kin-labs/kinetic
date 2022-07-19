@@ -64,7 +64,7 @@ export function DemoKeypairFeature() {
         <Button onClick={() => toggleImportByteArrayVisible(true)}>Import ByteArray</Button>
       </Stack>
       {result?.length ? (
-        <SimpleGrid columns={[1, 2]} gap={[3, 6]}>
+        <SimpleGrid columns={{ base: 1, lg: 2 }} gap={[3, 6]}>
           {result?.map((kp) => (
             <Box key={kp.publicKey} borderWidth="1px" borderRadius="lg" overflow="hidden" p={6} bg="gray.800">
               <Flex justifyContent="space-between" alignItems="center">

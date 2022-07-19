@@ -6,6 +6,7 @@ import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
 export async function generateMakeTransferBatchTransaction({
+  addMemo,
   appIndex,
   destinations,
   lastValidBlockHeight,
@@ -31,17 +32,23 @@ export async function generateMakeTransferBatchTransaction({
     })),
   )
 
-  const appIndexMemoInstruction = generateKinMemoInstruction({
-    appIndex,
-    type,
-  })
+  // Create Transaction
+  const instructions: TransactionInstruction[] = []
 
-  const instructions: TransactionInstruction[] = [
-    appIndexMemoInstruction,
-    ...destinationInfo.map(({ amount, destination }) =>
+  if (addMemo) {
+    instructions.push(
+      generateKinMemoInstruction({
+        appIndex,
+        type,
+      }),
+    )
+  }
+
+  destinationInfo.map(({ amount, destination }) =>
+    instructions.push(
       createTransferInstruction(ownerTokenAccount, destination, signer.publicKey, amount, [], TOKEN_PROGRAM_ID),
     ),
-  ]
+  )
 
   const transaction = new Transaction({
     blockhash: latestBlockhash,

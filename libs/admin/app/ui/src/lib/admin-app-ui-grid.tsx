@@ -9,7 +9,7 @@ export interface AdminAppUiGridProps {
 
 export function AdminAppUiGrid({ apps }: AdminAppUiGridProps) {
   return (
-    <SimpleGrid columns={2} gap={6}>
+    <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
       {apps?.map((app) => (
         <Stack spacing={6} borderWidth="1px" borderRadius="lg" key={app.id} p={6} justifyContent={'center'}>
           <Flex justifyContent="space-between" alignItems="center">

@@ -14,7 +14,7 @@ export function ServerGrid({
 }) {
   const bgColor = useColorModeValue('gray.100', 'gray.900')
   return (
-    <SimpleGrid columns={2} gap={6}>
+    <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
       {servers?.map((server) => (
         <Flex
           key={server.id}

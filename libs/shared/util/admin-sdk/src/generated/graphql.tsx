@@ -69,12 +69,17 @@ export type AppEnvUpdateInput = {
 
 export type AppMint = {
   __typename?: 'AppMint'
+  addMemo?: Maybe<Scalars['Boolean']>
   createdAt: Scalars['DateTime']
   id: Scalars['String']
   mint?: Maybe<Mint>
   order?: Maybe<Scalars['Int']>
   updatedAt: Scalars['DateTime']
   wallet?: Maybe<Wallet>
+}
+
+export type AppMintUpdateInput = {
+  addMemo?: InputMaybe<Scalars['Boolean']>
 }
 
 export type AppTransaction = {
@@ -309,6 +314,7 @@ export type LoginInput = {
 
 export type Mint = {
   __typename?: 'Mint'
+  addMemo?: Maybe<Scalars['Boolean']>
   address?: Maybe<Scalars['String']>
   airdropAmount?: Maybe<Scalars['Int']>
   airdropMax?: Maybe<Scalars['Int']>
@@ -365,6 +371,7 @@ export type Mutation = {
   userImportWallet?: Maybe<Wallet>
   userUpdateApp?: Maybe<App>
   userUpdateAppEnv?: Maybe<AppEnv>
+  userUpdateAppMint?: Maybe<AppMint>
 }
 
 export type MutationAdminAddClusterMintArgs = {
@@ -482,6 +489,12 @@ export type MutationUserUpdateAppEnvArgs = {
   appEnvId: Scalars['String']
   appId: Scalars['String']
   input: AppEnvUpdateInput
+}
+
+export type MutationUserUpdateAppMintArgs = {
+  appId: Scalars['String']
+  appMintId: Scalars['String']
+  input: AppMintUpdateInput
 }
 
 export type Query = {
@@ -726,6 +739,7 @@ export type AdminCreateAppMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -746,12 +760,14 @@ export type AdminCreateAppMutation = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -870,6 +886,7 @@ export type AdminAppsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -890,12 +907,14 @@ export type AdminAppsQuery = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -982,6 +1001,7 @@ export type AdminAppQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1002,12 +1022,14 @@ export type AdminAppQuery = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1101,6 +1123,7 @@ export type AppEnvDetailsFragment = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -1121,12 +1144,14 @@ export type AppEnvDetailsFragment = {
     id: string
     createdAt: any
     updatedAt: any
+    addMemo?: boolean | null
     order?: number | null
     mint?: {
       __typename?: 'Mint'
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -1157,12 +1182,14 @@ export type AppMintDetailsFragment = {
   id: string
   createdAt: any
   updatedAt: any
+  addMemo?: boolean | null
   order?: number | null
   mint?: {
     __typename?: 'Mint'
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
+    addMemo?: boolean | null
     address?: string | null
     airdropAmount?: number | null
     airdropMax?: number | null
@@ -1381,6 +1408,7 @@ export type UserUpdateAppMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1401,12 +1429,14 @@ export type UserUpdateAppMutation = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -1507,6 +1537,7 @@ export type UserUpdateAppEnvMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -1527,12 +1558,14 @@ export type UserUpdateAppEnvMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -1556,6 +1589,52 @@ export type UserUpdateAppEnvMutation = {
         type?: WalletType | null
       } | null
     }> | null
+  } | null
+}
+
+export type UserUpdateAppMintMutationVariables = Exact<{
+  appId: Scalars['String']
+  appMintId: Scalars['String']
+  input: AppMintUpdateInput
+}>
+
+export type UserUpdateAppMintMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'AppMint'
+    id: string
+    createdAt: any
+    updatedAt: any
+    addMemo?: boolean | null
+    order?: number | null
+    mint?: {
+      __typename?: 'Mint'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      addMemo?: boolean | null
+      address?: string | null
+      airdropAmount?: number | null
+      airdropMax?: number | null
+      airdropPublicKey?: string | null
+      coinGeckoId?: string | null
+      decimals?: number | null
+      default?: boolean | null
+      enabled?: boolean | null
+      logoUrl?: string | null
+      name?: string | null
+      order?: number | null
+      symbol?: string | null
+      type?: MintType | null
+    } | null
+    wallet?: {
+      __typename?: 'Wallet'
+      id: string
+      createdAt?: any | null
+      updatedAt?: any | null
+      publicKey?: string | null
+      type?: WalletType | null
+    } | null
   } | null
 }
 
@@ -1727,6 +1806,7 @@ export type UserAppEnvMintDisableMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -1747,12 +1827,14 @@ export type UserAppEnvMintDisableMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -1818,6 +1900,7 @@ export type UserAppEnvMintEnableMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -1838,12 +1921,14 @@ export type UserAppEnvMintEnableMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -1910,6 +1995,7 @@ export type UserAppEnvMintSetWalletMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -1930,12 +2016,14 @@ export type UserAppEnvMintSetWalletMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2009,6 +2097,7 @@ export type UserAppEnvWalletAddMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2029,12 +2118,14 @@ export type UserAppEnvWalletAddMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2108,6 +2199,7 @@ export type UserAppEnvWalletRemoveMutation = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2128,12 +2220,14 @@ export type UserAppEnvWalletRemoveMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2409,6 +2503,7 @@ export type UserAppsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -2429,12 +2524,14 @@ export type UserAppsQuery = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -2522,6 +2619,7 @@ export type UserAppQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -2542,12 +2640,14 @@ export type UserAppQuery = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -2647,6 +2747,7 @@ export type UserAppEnvQuery = {
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2667,12 +2768,14 @@ export type UserAppEnvQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -2838,6 +2941,7 @@ export type MintDetailsFragment = {
   id?: string | null
   createdAt?: any | null
   updatedAt?: any | null
+  addMemo?: boolean | null
   address?: string | null
   airdropAmount?: number | null
   airdropMax?: number | null
@@ -2876,6 +2980,7 @@ export type AdminAddClusterMintMutation = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -2980,6 +3085,7 @@ export type AdminClusterQuery = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -3054,6 +3160,7 @@ export type AdminClustersQuery = {
       id?: string | null
       createdAt?: any | null
       updatedAt?: any | null
+      addMemo?: boolean | null
       address?: string | null
       airdropAmount?: number | null
       airdropMax?: number | null
@@ -3321,6 +3428,7 @@ export type AdminWalletQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3341,12 +3449,14 @@ export type AdminWalletQuery = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3458,6 +3568,7 @@ export type AdminWalletsQuery = {
             id?: string | null
             createdAt?: any | null
             updatedAt?: any | null
+            addMemo?: boolean | null
             address?: string | null
             airdropAmount?: number | null
             airdropMax?: number | null
@@ -3478,12 +3589,14 @@ export type AdminWalletsQuery = {
           id: string
           createdAt: any
           updatedAt: any
+          addMemo?: boolean | null
           order?: number | null
           mint?: {
             __typename?: 'Mint'
             id?: string | null
             createdAt?: any | null
             updatedAt?: any | null
+            addMemo?: boolean | null
             address?: string | null
             airdropAmount?: number | null
             airdropMax?: number | null
@@ -3547,6 +3660,7 @@ export type AdminWalletsQuery = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3567,12 +3681,14 @@ export type AdminWalletsQuery = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3662,6 +3778,7 @@ export type UserGenerateWalletMutation = {
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3682,12 +3799,14 @@ export type UserGenerateWalletMutation = {
         id: string
         createdAt: any
         updatedAt: any
+        addMemo?: boolean | null
         order?: number | null
         mint?: {
           __typename?: 'Mint'
           id?: string | null
           createdAt?: any | null
           updatedAt?: any | null
+          addMemo?: boolean | null
           address?: string | null
           airdropAmount?: number | null
           airdropMax?: number | null
@@ -3768,12 +3887,14 @@ export type UserWalletQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -3863,12 +3984,14 @@ export type UserWalletsQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      addMemo?: boolean | null
       order?: number | null
       mint?: {
         __typename?: 'Mint'
         id?: string | null
         createdAt?: any | null
         updatedAt?: any | null
+        addMemo?: boolean | null
         address?: string | null
         airdropAmount?: number | null
         airdropMax?: number | null
@@ -3914,6 +4037,7 @@ export const MintDetailsFragmentDoc = gql`
     id
     createdAt
     updatedAt
+    addMemo
     address
     airdropAmount
     airdropMax
@@ -3943,6 +4067,7 @@ export const AppMintDetailsFragmentDoc = gql`
     id
     createdAt
     updatedAt
+    addMemo
     order
     mint {
       ...MintDetails
@@ -4287,6 +4412,18 @@ export const UserUpdateAppEnvDocument = gql`
 
 export function useUserUpdateAppEnvMutation() {
   return Urql.useMutation<UserUpdateAppEnvMutation, UserUpdateAppEnvMutationVariables>(UserUpdateAppEnvDocument)
+}
+export const UserUpdateAppMintDocument = gql`
+  mutation UserUpdateAppMint($appId: String!, $appMintId: String!, $input: AppMintUpdateInput!) {
+    updated: userUpdateAppMint(appId: $appId, appMintId: $appMintId, input: $input) {
+      ...AppMintDetails
+    }
+  }
+  ${AppMintDetailsFragmentDoc}
+`
+
+export function useUserUpdateAppMintMutation() {
+  return Urql.useMutation<UserUpdateAppMintMutation, UserUpdateAppMintMutationVariables>(UserUpdateAppMintDocument)
 }
 export const UserAppUserAddDocument = gql`
   mutation UserAppUserAdd($appId: String!, $input: AppUserAddInput!) {

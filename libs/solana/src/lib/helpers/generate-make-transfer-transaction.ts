@@ -11,6 +11,7 @@ import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
 export async function generateMakeTransferTransaction({
+  addMemo,
   amount,
   appIndex,
   destination,
@@ -33,13 +34,17 @@ export async function generateMakeTransferTransaction({
     getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
   ])
 
-  const appIndexMemoInstruction = generateKinMemoInstruction({
-    appIndex,
-    type,
-  })
-
   // Create Transaction
-  const instructions: TransactionInstruction[] = [appIndexMemoInstruction]
+  const instructions: TransactionInstruction[] = []
+
+  if (addMemo) {
+    instructions.push(
+      generateKinMemoInstruction({
+        appIndex,
+        type,
+      }),
+    )
+  }
 
   if (senderCreate) {
     instructions.push(

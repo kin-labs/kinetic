@@ -40,6 +40,7 @@ fragment AppMintDetails on AppMint {
   id
   createdAt
   updatedAt
+  addMemo
   order
   mint {
     ...MintDetails

@@ -221,6 +221,12 @@ export interface AppConfigMint {
    * @type {boolean}
    * @memberof AppConfigMint
    */
+  addMemo: boolean
+  /**
+   *
+   * @type {boolean}
+   * @memberof AppConfigMint
+   */
   airdrop: boolean
   /**
    *

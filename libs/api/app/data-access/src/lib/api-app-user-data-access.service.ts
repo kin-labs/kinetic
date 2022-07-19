@@ -4,6 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { ApiAppDataAccessService } from './api-app-data-access.service'
 import { AppEnvUpdateInput } from './dto/app-env-update.input'
+import { AppMintUpdateInput } from './dto/app-mint-update.input'
 import { AppTransactionListInput } from './dto/app-transaction-list.input'
 import { AppUpdateInput } from './dto/app-update.input'
 import { AppUserAddInput } from './dto/app-user-add.input'
@@ -93,6 +94,14 @@ export class ApiAppUserDataAccessService {
         ...this.app.includeAppEnv,
         app: true,
       },
+    })
+  }
+
+  async userUpdateAppMint(userId: string, appId: string, appMintId: string, data: AppMintUpdateInput) {
+    await this.data.ensureAppOwner(userId, appId)
+    return this.data.appMint.update({
+      where: { id: appMintId },
+      data,
     })
   }
 

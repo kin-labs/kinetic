@@ -46,12 +46,17 @@ input AppEnvUpdateInput {
 }
 
 type AppMint {
+  addMemo: Boolean
   createdAt: DateTime!
   id: String!
   mint: Mint
   order: Int
   updatedAt: DateTime!
   wallet: Wallet
+}
+
+input AppMintUpdateInput {
+  addMemo: Boolean
 }
 
 type AppTransaction {
@@ -291,6 +296,7 @@ input LoginInput {
 }
 
 type Mint {
+  addMemo: Boolean
   address: String
   airdropAmount: Int
   airdropMax: Int
@@ -346,6 +352,7 @@ type Mutation {
   userImportWallet(appEnvId: String!, secretKey: String!): Wallet
   userUpdateApp(appId: String!, input: AppUpdateInput!): App
   userUpdateAppEnv(appEnvId: String!, appId: String!, input: AppEnvUpdateInput!): AppEnv
+  userUpdateAppMint(appId: String!, appMintId: String!, input: AppMintUpdateInput!): AppMint
 }
 
 type Query {

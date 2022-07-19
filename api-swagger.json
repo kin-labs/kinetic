@@ -869,6 +869,9 @@
       "AppConfigMint": {
         "type": "object",
         "properties": {
+          "addMemo": {
+            "type": "boolean"
+          },
           "airdrop": {
             "type": "boolean"
           },
@@ -901,6 +904,7 @@
           }
         },
         "required": [
+          "addMemo",
           "airdrop",
           "airdropAmount",
           "airdropMax",

@@ -4,6 +4,7 @@ import { Destination } from './destination'
 import { PublicKeyString } from './public-key-string'
 
 export interface GenerateMakeTransferBatchTransactionsOptions {
+  addMemo: boolean
   appIndex: number
   destinations: Destination[]
   lastValidBlockHeight: number

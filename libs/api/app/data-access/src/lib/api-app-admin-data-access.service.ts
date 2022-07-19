@@ -38,6 +38,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
       for (const mint of enabledMints) {
         const generated = await this.adminGenerateWallet(userId, input.index)
         mints.push({
+          addMemo: mint.addMemo,
           order: mint.order,
           mint: { connect: { id: mint.id } },
           wallet: { connect: { id: generated.id } },
