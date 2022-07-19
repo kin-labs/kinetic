@@ -1,6 +1,6 @@
 import { KineticSdk } from '@kin-kinetic/sdk'
 import { Keypair } from '@kin-kinetic/keypair'
-import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair } from './fixtures'
+import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair, usdMint } from './fixtures'
 import { Destination } from '@kin-kinetic/solana'
 import { AppTransactionStatus } from '@prisma/client'
 
@@ -131,5 +131,21 @@ describe('KineticSdk (e2e)', () => {
     expect(tx.errors.length).toBeGreaterThan(0)
     expect(tx.status).toBe(AppTransactionStatus.Failed)
     expect(tx.errors[0].message).toContain(`Error: Insufficient funds.`) // Destination account doesn't exist.
+  })
+
+  it('should make a transfer using a mint', async () => {
+    const tx = await sdk.makeTransfer({
+      amount: '1',
+      destination: bobKeypair.publicKey,
+      owner: aliceKeypair,
+      mint: usdMint,
+    })
+    expect(tx).not.toBeNull()
+    expect(tx.mint).toBe(usdMint)
+    const { signature, errors, amount, source } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+    expect(Number(amount)).toBe(1)
+    expect(source).toBe(aliceKeypair.publicKey)
   })
 })

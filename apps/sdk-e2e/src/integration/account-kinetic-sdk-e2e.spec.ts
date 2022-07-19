@@ -1,6 +1,6 @@
 import { KineticSdk } from '@kin-kinetic/sdk'
 import { Keypair } from '@kin-kinetic/keypair'
-import { daveKeypair, aliceKeypair } from './fixtures'
+import { daveKeypair, aliceKeypair, usdMint } from './fixtures'
 import { AppTransactionStatus } from '@prisma/client'
 
 describe('KineticSdk (e2e) - Account', () => {
@@ -23,6 +23,16 @@ describe('KineticSdk (e2e) - Account', () => {
     const tx = await sdk.createAccount({ owner })
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(defaultMint)
+    const { signature, errors } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+  })
+
+  it('should create an account using a mint', async () => {
+    const account = Keypair.random()
+    const tx = await sdk.createAccount({ owner: account, mint: usdMint })
+    expect(tx).not.toBeNull()
+    expect(tx.mint).toBe(usdMint)
     const { signature, errors } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
