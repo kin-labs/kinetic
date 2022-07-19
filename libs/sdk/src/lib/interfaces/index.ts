@@ -1,4 +1,5 @@
 export * from './app-config-mint'
+export * from './close-account-options'
 export * from './create-account-options'
 export * from './get-balance-options'
 export * from './get-history-options'

@@ -1,5 +1,6 @@
 export * from './add-remove-decimals'
 export * from './convert-commitment'
+export * from './generate-close-account-transaction'
 export * from './generate-create-account-transaction'
 export * from './generate-make-transfer-batch-transaction'
 export * from './generate-make-transfer-transaction'

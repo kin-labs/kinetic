@@ -1,5 +1,6 @@
 import {
   Commitment,
+  generateCloseAccountTransaction,
   generateCreateAccountTransaction,
   generateMakeTransferBatchTransaction,
   generateMakeTransferTransaction,
@@ -14,6 +15,7 @@ import {
   AppTransaction,
   BalanceResponse,
   Configuration,
+  CloseAccountRequest,
   CreateAccountRequest,
   HistoryResponse,
   LatestBlockhashResponse,
@@ -23,6 +25,7 @@ import {
 } from '../generated'
 import { parseKineticSdkEndpoint } from './helpers'
 import {
+  CloseAccountOptions,
   CreateAccountOptions,
   GetBalanceOptions,
   GetHistoryOptions,
@@ -64,6 +67,36 @@ export class KineticSdkInternal {
     )
 
     return res.data as BalanceResponse
+  }
+
+  async closeAccount({ owner, mint }: CloseAccountOptions): Promise<AppTransaction> {
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    mint = mint || this.appConfig.mint.publicKey
+    const { lastValidBlockHeight, latestBlockhash, mintFeePayer, mintPublicKey } = await this.prepareTransaction({
+      mint,
+    })
+
+    const tx = await generateCloseAccountTransaction({
+      appIndex: this.appConfig.app.index,
+      lastValidBlockHeight,
+      latestBlockhash,
+      mintFeePayer,
+      mintPublicKey,
+      signer: owner.solana,
+    })
+
+    const request: CloseAccountRequest = {
+      environment: this.appConfig.environment.name,
+      index: this.appConfig.app.index,
+      mint: mint.toString(),
+      tx: serializeTransaction(tx),
+    }
+
+    const res = await this.accountApi.closeAccount(request)
+
+    return Promise.resolve(res.data)
   }
 
   async createAccount({ owner, mint }: CreateAccountOptions): Promise<AppTransaction> {

@@ -9,11 +9,16 @@ import { Keypair } from '@kin-kinetic/keypair'
 import { BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@kin-kinetic/solana'
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
+import { CloseAccountRequest } from './dto/close-account-request.dto'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 import { HistoryResponse } from './entities/history.entity'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {
+  private closeAccountRequestCounter: Counter
+  private closeAccountErrorMintNotFoundCounter: Counter
+  private closeAccountSolanaTransactionSuccessCounter: Counter
+  private closeAccountSolanaTransactionErrorCounter: Counter
   private createAccountRequestCounter: Counter
   private createAccountErrorMintNotFoundCounter: Counter
   private createAccountSolanaTransactionSuccessCounter: Counter
@@ -23,6 +28,24 @@ export class ApiAccountDataAccessService implements OnModuleInit {
 
   onModuleInit() {
     const prefix = 'api_account_create_account'
+    this.closeAccountRequestCounter = this.data.metrics.getCounter(`${prefix}_request`, {
+      description: 'Number of createAccount requests',
+    })
+    this.closeAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(`${prefix}_error_mint_not_found`, {
+      description: 'Number of closeAccount mint not found errors',
+    })
+    this.closeAccountSolanaTransactionSuccessCounter = this.data.metrics.getCounter(
+      `${prefix}_send_solana_transaction_success`,
+      {
+        description: 'Number of closeAccount Solana transaction success',
+      },
+    )
+    this.closeAccountSolanaTransactionErrorCounter = this.data.metrics.getCounter(
+      `${prefix}_send_solana_transaction_error`,
+      {
+        description: 'Number of closeAccount Solana transaction errors',
+      },
+    )
     this.createAccountRequestCounter = this.data.metrics.getCounter(`${prefix}_request`, {
       description: 'Number of createAccount requests',
     })
@@ -82,6 +105,60 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     mint = mint || appEnv.mint.publicKey
 
     return solana.getTokenAccounts(accountId, mint.toString())
+  }
+
+  async closeAccount(input: CloseAccountRequest): Promise<AppTransaction> {
+    const solana = await this.data.getSolanaConnection(input.environment, input.index)
+    const appEnv = await this.data.getAppByEnvironmentIndex(input.environment, input.index)
+    const appKey = this.data.getAppKey(input.environment, input.index)
+    this.closeAccountRequestCounter.add(1, { appKey })
+
+    const created = await this.data.appTransaction.create({
+      data: { appEnvId: appEnv.id },
+      include: { errors: true },
+    })
+    const mint = appEnv.mints.find(({ mint }) => mint.address === input.mint)
+    if (!mint) {
+      this.closeAccountErrorMintNotFoundCounter.add(1, { appKey })
+      throw new Error(`Can't find mint ${input.mint} in environment ${input.environment} for index ${input.index}`)
+    }
+    const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
+
+    const { feePayer, source, transaction } = parseAndSignTransaction({
+      tx: Buffer.from(input.tx, 'base64'),
+      signer: signer.solana,
+    })
+    let errors
+
+    let status: AppTransactionStatus
+    let signature: string
+
+    const solanaStart = new Date()
+
+    try {
+      signature = await solana.sendRawTransaction(transaction)
+      status = AppTransactionStatus.Committed
+      this.closeAccountSolanaTransactionSuccessCounter.add(1, { appKey })
+    } catch (error) {
+      status = AppTransactionStatus.Failed
+      this.closeAccountSolanaTransactionErrorCounter.add(1, { appKey })
+      errors = { create: parseError(error) }
+    }
+
+    return this.data.appTransaction.update({
+      where: { id: created.id },
+      data: {
+        errors,
+        feePayer,
+        mint: mint.mint.address,
+        signature,
+        solanaStart,
+        solanaCommitted: new Date(),
+        source,
+        status,
+      },
+      include: { errors: true },
+    })
   }
 
   async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
