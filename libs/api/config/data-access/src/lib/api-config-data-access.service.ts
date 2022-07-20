@@ -1,9 +1,11 @@
 import { createMintKin, createMintSol, createMintUsdc } from '@kin-kinetic/api/cluster/util'
+import { ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ClusterStatus, ClusterType, Prisma } from '@prisma/client'
 import * as fs from 'fs'
+import { join } from 'path'
 import { ProvisionedApp } from './entities/provisioned-app.entity'
 import { getProvisionedApps } from './helpers/get-provisioned-apps'
 
@@ -64,6 +66,13 @@ export class ApiConfigDataAccessService {
     return this.config.get('admin.password')
   }
 
+  get cors() {
+    return {
+      credentials: true,
+      origin: this.corsOrigins,
+    }
+  }
+
   get corsOrigins(): string[] {
     return this.config.get('cors.origin')
   }
@@ -86,6 +95,16 @@ export class ApiConfigDataAccessService {
 
   get environment() {
     return this.config.get('environment')
+  }
+
+  get graphqlConfig(): ApolloDriverConfig {
+    return {
+      autoSchemaFile: join(process.cwd(), 'api-schema.graphql'),
+      context: ({ req, res }) => ({ req, res }),
+      cors: this.cors,
+      playground: { settings: { 'request.credentials': 'include' } },
+      sortSchema: true,
+    }
   }
 
   get isDevelopment(): boolean {

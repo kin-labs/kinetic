@@ -13,7 +13,7 @@ async function bootstrap() {
   await OpenTelementrySdk.start(config.metricsEnabled)
   app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
-  app.enableCors({ origin: config.corsOrigins })
+  app.enableCors(config.cors)
   app.use(redirectSSL.create({ enabled: config.isProduction }))
   config.configureSwagger(app)
   app.use(cookieParser())
