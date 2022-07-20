@@ -15,7 +15,6 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { OpenTelemetryModule } from 'nestjs-otel'
-import { join } from 'path'
 import { ApiCoreFeatureController } from './api-core-feature.controller'
 import { ApiCoreFeatureResolver } from './api-core-feature.resolver'
 import { serveStaticFactory } from './serve-static.factory'
@@ -24,16 +23,11 @@ import { serveStaticFactory } from './serve-static.factory'
   controllers: [ApiCoreFeatureController],
   providers: [ApiCoreFeatureResolver],
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      autoSchemaFile: join(process.cwd(), 'api-schema.graphql'),
-      context: ({ req, res }) => ({ req, res }),
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      playground: {
-        settings: {
-          'request.credentials': 'include',
-        },
-      },
-      sortSchema: true,
+      imports: [ApiConfigDataAccessModule],
+      inject: [ApiConfigDataAccessService],
+      useFactory: (cfg: ApiConfigDataAccessService) => cfg.graphqlConfig,
     }),
     ServeStaticModule.forRootAsync({ useFactory: serveStaticFactory() }),
     ApiAccountFeatureModule,
