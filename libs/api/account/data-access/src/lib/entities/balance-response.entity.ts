@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
-import BigNumber from 'bignumber.js'
 
-export type BalanceMintMap = Record<string, BigNumber>
+export type BalanceMintMap = Record<string, string>
 
 export class BalanceResponse {
   @ApiProperty()
-  balance: BigNumber
+  balance: string
   @ApiProperty()
   mints: BalanceMintMap
   @ApiProperty({ type: () => BalanceToken, isArray: true })
@@ -16,7 +15,7 @@ export class BalanceToken {
   @ApiProperty()
   account: string
   @ApiProperty()
-  balance: BigNumber
+  balance: string
   @ApiProperty()
   mint: string
 }

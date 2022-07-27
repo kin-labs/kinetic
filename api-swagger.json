@@ -692,10 +692,6 @@
           "webhookVerifyDuration"
         ]
       },
-      "BigNumber": {
-        "type": "object",
-        "properties": {}
-      },
       "BalanceToken": {
         "type": "object",
         "properties": {
@@ -703,7 +699,7 @@
             "type": "string"
           },
           "balance": {
-            "$ref": "#/components/schemas/BigNumber"
+            "type": "string"
           },
           "mint": {
             "type": "string"
@@ -715,7 +711,7 @@
         "type": "object",
         "properties": {
           "balance": {
-            "$ref": "#/components/schemas/BigNumber"
+            "type": "string"
           },
           "mints": {
             "type": "object"
@@ -729,16 +725,37 @@
         },
         "required": ["balance", "mints", "tokens"]
       },
+      "ConfirmedSignatureInfo": {
+        "type": "object",
+        "properties": {
+          "signature": {
+            "type": "string"
+          },
+          "slot": {
+            "type": "number"
+          },
+          "err": {
+            "type": "string"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "blockTime": {
+            "type": "number"
+          }
+        },
+        "required": ["signature", "slot", "err", "memo", "blockTime"]
+      },
       "HistoryResponse": {
         "type": "object",
         "properties": {
           "account": {
-            "type": "object"
+            "type": "string"
           },
           "history": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/ConfirmedSignatureInfo"
             }
           }
         },

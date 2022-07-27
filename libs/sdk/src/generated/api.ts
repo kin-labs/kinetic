@@ -550,10 +550,10 @@ export type AppTransactionErrorTypeEnum = typeof AppTransactionErrorTypeEnum[key
 export interface BalanceResponse {
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof BalanceResponse
    */
-  balance: object
+  balance: string
   /**
    *
    * @type {object}
@@ -581,16 +581,53 @@ export interface BalanceToken {
   account: string
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof BalanceToken
    */
-  balance: object
+  balance: string
   /**
    *
    * @type {string}
    * @memberof BalanceToken
    */
   mint: string
+}
+/**
+ *
+ * @export
+ * @interface ConfirmedSignatureInfo
+ */
+export interface ConfirmedSignatureInfo {
+  /**
+   *
+   * @type {string}
+   * @memberof ConfirmedSignatureInfo
+   */
+  signature: string
+  /**
+   *
+   * @type {number}
+   * @memberof ConfirmedSignatureInfo
+   */
+  slot: number
+  /**
+   *
+   * @type {string}
+   * @memberof ConfirmedSignatureInfo
+   */
+  err: string
+  /**
+   *
+   * @type {string}
+   * @memberof ConfirmedSignatureInfo
+   */
+  memo: string
+  /**
+   *
+   * @type {number}
+   * @memberof ConfirmedSignatureInfo
+   */
+  blockTime: number
 }
 /**
  *
@@ -631,16 +668,16 @@ export interface CreateAccountRequest {
 export interface HistoryResponse {
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof HistoryResponse
    */
-  account: object
+  account: string
   /**
    *
-   * @type {Array<string>}
+   * @type {Array<ConfirmedSignatureInfo>}
    * @memberof HistoryResponse
    */
-  history: Array<string>
+  history: Array<ConfirmedSignatureInfo>
 }
 /**
  *
