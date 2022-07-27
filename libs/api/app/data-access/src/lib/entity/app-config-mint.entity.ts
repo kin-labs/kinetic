@@ -5,9 +5,9 @@ export class AppConfigMint {
   addMemo: boolean
   @ApiProperty()
   airdrop: boolean
-  @ApiProperty({ type: 'integer' })
-  airdropAmount: number
-  @ApiProperty({ type: 'integer' })
+  @ApiProperty({ type: 'integer', required: false })
+  airdropAmount?: number
+  @ApiProperty({ type: 'integer', required: false })
   airdropMax: number
   @ApiProperty({ type: 'integer' })
   decimals: number

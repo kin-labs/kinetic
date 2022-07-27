@@ -1,7 +1,7 @@
 export interface AppConfigMint {
   airdrop: boolean
-  airdropAmount: number
-  airdropMax: number
+  airdropAmount?: number
+  airdropMax?: number
   feePayer: string
   logoUrl: string
   programId: string
