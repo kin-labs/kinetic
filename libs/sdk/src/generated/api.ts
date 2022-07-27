@@ -233,13 +233,13 @@ export interface AppConfigMint {
    * @type {number}
    * @memberof AppConfigMint
    */
-  airdropAmount: number
+  airdropAmount?: number
   /**
    *
    * @type {number}
    * @memberof AppConfigMint
    */
-  airdropMax: number
+  airdropMax?: number
   /**
    *
    * @type {number}

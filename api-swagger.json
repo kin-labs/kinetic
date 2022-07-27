@@ -923,8 +923,6 @@
         "required": [
           "addMemo",
           "airdrop",
-          "airdropAmount",
-          "airdropMax",
           "decimals",
           "feePayer",
           "logoUrl",
