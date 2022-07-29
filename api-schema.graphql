@@ -4,10 +4,12 @@
 
 type App {
   createdAt: DateTime!
+  defaultEnvUrl: String
   envs: [AppEnv!]
   id: String!
   index: Int!
   name: String
+  settingsUrl: String
   updatedAt: DateTime!
   users: [AppUser!]
 }

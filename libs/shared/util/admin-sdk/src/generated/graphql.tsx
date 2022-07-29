@@ -25,10 +25,12 @@ export type Scalars = {
 export type App = {
   __typename?: 'App'
   createdAt: Scalars['DateTime']
+  defaultEnvUrl?: Maybe<Scalars['String']>
   envs?: Maybe<Array<AppEnv>>
   id: Scalars['String']
   index: Scalars['Int']
   name?: Maybe<Scalars['String']>
+  settingsUrl?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
   users?: Maybe<Array<AppUser>>
 }
@@ -693,6 +695,8 @@ export type AdminCreateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -805,6 +809,8 @@ export type AdminCreateAppMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        defaultEnvUrl?: string | null
+        settingsUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -834,6 +840,8 @@ export type AdminDeleteAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
   } | null
 }
 
@@ -848,6 +856,8 @@ export type AdminAppsQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -955,6 +965,8 @@ export type AdminAppQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -1067,6 +1079,8 @@ export type AdminAppQuery = {
         updatedAt: any
         index: number
         name?: string | null
+        defaultEnvUrl?: string | null
+        settingsUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1090,6 +1104,8 @@ export type AppDetailsFragment = {
   updatedAt: any
   index: number
   name?: string | null
+  defaultEnvUrl?: string | null
+  settingsUrl?: string | null
 }
 
 export type AppEnvDetailsFragment = {
@@ -1320,7 +1336,16 @@ export type AppUserDetailsFragment = {
   createdAt: any
   updatedAt: any
   role: AppUserRole
-  app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+  app?: {
+    __typename?: 'App'
+    id: string
+    createdAt: any
+    updatedAt: any
+    index: number
+    name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
+  } | null
   user?: {
     __typename?: 'User'
     id: string
@@ -1362,6 +1387,8 @@ export type UserUpdateAppMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -1474,6 +1501,8 @@ export type UserUpdateAppMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        defaultEnvUrl?: string | null
+        settingsUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1652,6 +1681,8 @@ export type UserAppUserAddMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -1665,6 +1696,8 @@ export type UserAppUserAddMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        defaultEnvUrl?: string | null
+        settingsUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1695,6 +1728,8 @@ export type UserAppUserRemoveMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -1708,6 +1743,8 @@ export type UserAppUserRemoveMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        defaultEnvUrl?: string | null
+        settingsUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -1738,6 +1775,8 @@ export type UserAppUserUpdateRoleMutation = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     users?: Array<{
       __typename?: 'AppUser'
       id: string
@@ -1751,6 +1790,8 @@ export type UserAppUserUpdateRoleMutation = {
         updatedAt: any
         index: number
         name?: string | null
+        defaultEnvUrl?: string | null
+        settingsUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -2465,6 +2506,8 @@ export type UserAppsQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -2573,6 +2616,8 @@ export type UserAppQuery = {
     updatedAt: any
     index: number
     name?: string | null
+    defaultEnvUrl?: string | null
+    settingsUrl?: string | null
     envs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -2685,6 +2730,8 @@ export type UserAppQuery = {
         updatedAt: any
         index: number
         name?: string | null
+        defaultEnvUrl?: string | null
+        settingsUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -3307,6 +3354,8 @@ export type AdminUserQuery = {
         updatedAt: any
         index: number
         name?: string | null
+        defaultEnvUrl?: string | null
+        settingsUrl?: string | null
       } | null
       user?: {
         __typename?: 'User'
@@ -4191,6 +4240,8 @@ export const AppDetailsFragmentDoc = gql`
     updatedAt
     index
     name
+    defaultEnvUrl
+    settingsUrl
   }
 `
 export const UserDetailsFragmentDoc = gql`
