@@ -30,6 +30,18 @@
             "deprecationReason": null
           },
           {
+            "name": "defaultEnvUrl",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "envs",
             "description": null,
             "args": [],
@@ -83,6 +95,18 @@
           },
           {
             "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "settingsUrl",
             "description": null,
             "args": [],
             "type": {

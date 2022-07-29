@@ -4,6 +4,8 @@ fragment AppDetails on App {
   updatedAt
   index
   name
+  defaultEnvUrl
+  settingsUrl
 }
 
 fragment AppEnvDetails on AppEnv {
