@@ -10,6 +10,7 @@ import { AppUpdateInput } from './dto/app-update.input'
 import { AppUserAddInput } from './dto/app-user-add.input'
 import { AppUserRemoveInput } from './dto/app-user-remove.input'
 import { AppUserUpdateRoleInput } from './dto/app-user-update-role.input'
+import { AppTransactionCounter } from './entity/app-transaction-counter.entity'
 
 @Injectable()
 export class ApiAppUserDataAccessService {
@@ -58,6 +59,33 @@ export class ApiAppUserDataAccessService {
     })
   }
 
+  private userAppTransactionsWhere(
+    appEnvId: string,
+    input: AppTransactionListInput = {},
+  ): Prisma.AppTransactionWhereInput {
+    const { destination, referenceId, referenceType, signature, source, status } = input
+    return {
+      appEnvId,
+      destination,
+      referenceId,
+      referenceType,
+      signature,
+      source,
+      status: status?.length ? { in: status } : undefined,
+    }
+  }
+
+  private userAppTransactionsLimit(input: AppTransactionListInput = {}) {
+    const page = input.page && input.page > 0 ? input.page : 1
+    const take = input.limit && input.limit > 0 ? input.limit : 10
+    const skip = take * page - take
+    return {
+      page,
+      take,
+      skip: skip > 0 ? skip : 0,
+    }
+  }
+
   userAppRole(userId: string, appId: string) {
     return this.data.ensureAppUser(userId, appId)
   }
@@ -72,12 +100,34 @@ export class ApiAppUserDataAccessService {
 
   async userAppTransactions(userId: string, appId: string, appEnvId: string, input: AppTransactionListInput = {}) {
     await this.data.ensureAppUser(userId, appId)
+    const { skip, take } = this.userAppTransactionsLimit(input)
     return this.data.appTransaction.findMany({
-      where: { appEnvId, ...input },
-      take: 100,
-      orderBy: { createdAt: 'desc' },
       include: { errors: true, appEnv: { include: { cluster: true } } },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take,
+      where: this.userAppTransactionsWhere(appEnvId, input),
     })
+  }
+
+  async userAppTransactionCounter(
+    userId: string,
+    appId: string,
+    appEnvId: string,
+    input: AppTransactionListInput = {},
+  ): Promise<AppTransactionCounter> {
+    await this.data.ensureAppUser(userId, appId)
+    const total = await this.data.appTransaction.count({
+      where: this.userAppTransactionsWhere(appEnvId, input),
+    })
+    const { page, take } = this.userAppTransactionsLimit(input)
+    const pageCount = Math.ceil(total / take)
+    return {
+      page,
+      pageCount,
+      limit: take,
+      total,
+    }
   }
 
   async userUpdateApp(userId: string, appId: string, data: AppUpdateInput) {

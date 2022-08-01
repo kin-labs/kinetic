@@ -96,6 +96,13 @@ type AppTransaction {
   webhookVerifyStart: DateTime
 }
 
+type AppTransactionCounter {
+  limit: Float
+  page: Float
+  pageCount: Float
+  total: Float
+}
+
 type AppTransactionError {
   id: String
   instruction: Int
@@ -113,11 +120,14 @@ enum AppTransactionErrorType {
 }
 
 input AppTransactionListInput {
+  destination: String
+  limit: Float
+  page: Float
   referenceId: String
   referenceType: String
   signature: String
   source: String
-  status: AppTransactionStatus
+  status: [AppTransactionStatus!]
 }
 
 enum AppTransactionStatus {
@@ -375,6 +385,7 @@ type Query {
   userAppEnv(appEnvId: String!, appId: String!): AppEnv
   userAppRole(appId: String!): AppUserRole
   userAppTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
+  userAppTransactionCounter(appEnvId: String!, appId: String!, input: AppTransactionListInput): AppTransactionCounter
   userAppTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
   userApps: [App!]
   userWallet(appEnvId: String!, walletId: String!): Wallet

@@ -6,6 +6,7 @@ import {
   AppMint,
   AppMintUpdateInput,
   AppTransaction,
+  AppTransactionCounter,
   AppTransactionListInput,
   AppUpdateInput,
   AppUserAddInput,
@@ -55,6 +56,16 @@ export class ApiAppUserFeatureResolver {
     @Args({ name: 'input', type: () => AppTransactionListInput, nullable: true }) input: AppTransactionListInput,
   ) {
     return this.service.userAppTransactions(user.id, appId, appEnvId, input)
+  }
+
+  @Query(() => AppTransactionCounter, { nullable: true })
+  userAppTransactionCounter(
+    @CtxUser() user: User,
+    @Args('appId') appId: string,
+    @Args('appEnvId') appEnvId: string,
+    @Args({ name: 'input', type: () => AppTransactionListInput, nullable: true }) input: AppTransactionListInput,
+  ) {
+    return this.service.userAppTransactionCounter(user.id, appId, appEnvId, input)
   }
 
   @Query(() => [App], { nullable: true })
