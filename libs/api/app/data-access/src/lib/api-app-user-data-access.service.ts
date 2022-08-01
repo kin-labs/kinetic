@@ -64,7 +64,15 @@ export class ApiAppUserDataAccessService {
     input: AppTransactionListInput = {},
   ): Prisma.AppTransactionWhereInput {
     const { destination, referenceId, referenceType, signature, source, status } = input
-    return { appEnvId, destination, referenceId, referenceType, signature, source, status }
+    return {
+      appEnvId,
+      destination,
+      referenceId,
+      referenceType,
+      signature,
+      source,
+      status: status?.length ? { in: status } : undefined,
+    }
   }
 
   private userAppTransactionsLimit(input: AppTransactionListInput = {}) {

@@ -17,6 +17,6 @@ export class AppTransactionListInput {
   signature?: string
   @Field({ nullable: true })
   source?: string
-  @Field(() => AppTransactionStatus, { nullable: true })
-  status?: AppTransactionStatus
+  @Field(() => [AppTransactionStatus], { nullable: true })
+  status?: AppTransactionStatus[]
 }
