@@ -3,6 +3,11 @@ const originsEnv: string[] = process.env.CORS_ORIGINS?.includes(',')
   ? process.env.CORS_ORIGINS?.split(',')
   : [process.env.CORS_ORIGINS]
 
+// Get the cookie domains from the ENV
+const domains: string[] = process.env.COOKIE_DOMAINS?.includes(',')
+  ? process.env.COOKIE_DOMAINS?.split(',')
+  : [process.env.COOKIE_DOMAINS]
+
 // Allow configuring wildcard origin
 const origin = originsEnv.length && originsEnv[0] === '*' ? '*' : originsEnv
 
@@ -12,6 +17,10 @@ export default () => ({
     password: process.env.ADMIN_PASSWORD,
   },
   cors: { origin },
+  cookie: {
+    domains,
+    name: process.env.COOKIE_NAME,
+  },
   environment: process.env.NODE_ENV,
   jwt: {
     secret: process.env.JWT_SECRET,

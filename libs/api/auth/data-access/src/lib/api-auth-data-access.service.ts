@@ -1,20 +1,14 @@
 import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
 import { validatePassword } from '@kin-kinetic/api/auth/util'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService, JwtSignOptions } from '@nestjs/jwt'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { LoginInput } from './dto/login.input'
 import { AuthToken } from './entities/auth-token.entity'
 
 @Injectable()
 export class ApiAuthDataAccessService {
-  private readonly logger = new Logger(ApiAuthDataAccessService.name)
-  private readonly cookieOptions = {
-    httpOnly: true,
-    secure: false,
-    domain: process.env.COOKIE_DOMAIN,
-  }
   private readonly jwtOptions: JwtSignOptions = {}
 
   constructor(
@@ -23,12 +17,12 @@ export class ApiAuthDataAccessService {
     private readonly jwt: JwtService,
   ) {}
 
-  resetCookie(res: Response) {
-    return res.clearCookie(process.env.COOKIE_NAME, this.cookieOptions)
+  resetCookie(req: Request, res: Response) {
+    return res.clearCookie(this.data.config.cookieName, this.data.config.cookieOptions(req.hostname))
   }
 
-  setCookie(res: Response, token: string) {
-    return res?.cookie(process.env.COOKIE_NAME, token, this.cookieOptions)
+  setCookie(req: Request, res: Response, token: string) {
+    return res?.cookie(this.data.config.cookieName, token, this.data.config.cookieOptions(req.hostname))
   }
 
   sign(payload: { id: string; username: string }): string {
@@ -50,10 +44,10 @@ export class ApiAuthDataAccessService {
     return user
   }
 
-  async login(res: Response, input: LoginInput): Promise<AuthToken> {
+  async login(req: Request, res: Response, input: LoginInput): Promise<AuthToken> {
     const user = await this.validateUser(input)
     const token = this.sign({ username: user.username, id: user.id })
-    this.setCookie(res, token)
+    this.setCookie(req, res, token)
     return { token, user }
   }
 }

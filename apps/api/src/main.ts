@@ -20,9 +20,9 @@ async function bootstrap() {
   try {
     await app.listen(config.port)
     Logger.log(
-      `🚀 API is running on http://localhost:${config.port}/${config.prefix} with CORS ${
-        config?.corsOrigins ? `enabled for: ${config?.corsOrigins}` : 'disabled'
-      }.`,
+      `🚀 API is running on http://localhost:${config.port}/${config.prefix}. CORS ${
+        config?.corsOrigins ? `enabled for: [${config?.corsOrigins?.join(', ')}]` : 'disabled'
+      }. Cookie domains: [${config?.cookieDomains?.join(', ')}].`,
     )
     Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
     if (config.isDevelopment) {

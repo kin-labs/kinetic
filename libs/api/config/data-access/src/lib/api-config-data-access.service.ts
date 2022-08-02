@@ -1,9 +1,10 @@
 import { createMintKin, createMintSol, createMintUsdc } from '@kin-kinetic/api/cluster/util'
 import { ApolloDriverConfig } from '@nestjs/apollo'
-import { INestApplication, Injectable } from '@nestjs/common'
+import { INestApplication, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { ClusterStatus, ClusterType, Prisma } from '@prisma/client'
+import { CookieOptions } from 'express-serve-static-core'
 import * as fs from 'fs'
 import { join } from 'path'
 import { ProvisionedApp } from './entities/provisioned-app.entity'
@@ -11,6 +12,7 @@ import { getProvisionedApps } from './helpers/get-provisioned-apps'
 
 @Injectable()
 export class ApiConfigDataAccessService {
+  private readonly logger = new Logger(ApiConfigDataAccessService.name)
   readonly clusters: Prisma.ClusterCreateInput[] = [
     this.isProduction
       ? undefined
@@ -64,6 +66,26 @@ export class ApiConfigDataAccessService {
 
   get adminPassword(): string {
     return this.config.get('admin.password')
+  }
+
+  get cookieDomains(): string[] {
+    return this.config.get('cookie.domains')
+  }
+
+  get cookieName(): string {
+    return this.config.get('cookie.name')
+  }
+
+  cookieOptions(hostname: string): CookieOptions {
+    const found = this.cookieDomains.find((domain) => hostname.endsWith(domain))
+    if (!found) {
+      this.logger.warn(`Not configured to set cookies for ${hostname}`)
+    }
+    return {
+      httpOnly: true,
+      secure: false,
+      domain: found || this.cookieDomains[0],
+    }
   }
 
   get cors() {
