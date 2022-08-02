@@ -15,12 +15,12 @@ export class ApiAuthFeatureResolver {
 
   @Mutation(() => AuthToken, { nullable: true })
   async login(@Context() context, @Args('input') input: LoginInput) {
-    return this.service.login(context.res, input)
+    return this.service.login(context.req, context.res, input)
   }
 
   @Mutation(() => Boolean, { nullable: true })
   async logout(@Context() context) {
-    this.service.resetCookie(context.res)
+    this.service.resetCookie(context.req, context.res)
     return true
   }
 
