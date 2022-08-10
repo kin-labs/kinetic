@@ -133,6 +133,7 @@ enum AppTransactionErrorType {
   BadNonce
   InvalidAccount
   SomeError
+  Timeout
   Unknown
   WebhookFailed
 }

@@ -3,6 +3,7 @@ import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { Cron } from '@nestjs/schedule'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
   AppTransaction,
@@ -19,6 +20,10 @@ import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exe
 
 type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[] }
 
+function getExpiredTime(minutes: number) {
+  return new Date(new Date().getTime() - minutes * 60_000)
+}
+
 @Injectable()
 export class ApiTransactionDataAccessService implements OnModuleInit {
   private logger = new Logger(ApiTransactionDataAccessService.name)
@@ -27,6 +32,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private confirmTransactionSolanaConfirmedCounter: Counter
   private makeTransferMintNotFoundErrorCounter: Counter
   private makeTransferRequestCounter: Counter
+  private markTransactionTimeoutCounter: Counter
   private sendEventWebhookErrorCounter: Counter
   private sendEventWebhookSuccessCounter: Counter
   private sendSolanaTransactionConfirmedCounter: Counter
@@ -35,6 +41,47 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private sendVerifyWebhookSuccessCounter: Counter
 
   constructor(readonly data: ApiCoreDataAccessService, private readonly appWebhook: ApiAppWebhookDataAccessService) {}
+
+  @Cron('* * * * * *')
+  async cleanupStaleTransactions() {
+    const stale = await this.getExpiredTransactions()
+    if (!stale.length) return
+    this.timeoutAppTransactions(stale.map((item) => item.id)).then((res) => {
+      this.logger.verbose(
+        `cleanupStaleTransactions set ${stale?.length} stale transactions: ${res.map((item) => item.id)} `,
+      )
+    })
+  }
+
+  private getExpiredTransactions(): Promise<AppTransaction[]> {
+    const expiredMinutes = 5
+    const expired = getExpiredTime(expiredMinutes)
+    return this.data.appTransaction.findMany({
+      where: {
+        status: { notIn: [AppTransactionStatus.Finalized, AppTransactionStatus.Failed] },
+        updatedAt: { lt: expired },
+      },
+    })
+  }
+
+  private timeoutAppTransactions(ids: string[]): Promise<AppTransaction[]> {
+    return Promise.all(ids.map((id) => this.timeoutAppTransaction(id)))
+  }
+
+  private timeoutAppTransaction(id: string): Promise<AppTransaction> {
+    return this.data.appTransaction.update({
+      where: { id: id },
+      data: {
+        status: AppTransactionStatus.Failed,
+        errors: {
+          create: {
+            type: AppTransactionErrorType.Timeout,
+            message: `Transaction timed out`,
+          },
+        },
+      },
+    })
+  }
 
   onModuleInit() {
     this.confirmSignatureFinalizedCounter = this.data.metrics.getCounter(
@@ -52,6 +99,12 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     this.makeTransferRequestCounter = this.data.metrics.getCounter(`api_transaction_make_transfer_request_counter`, {
       description: 'Number of requests to makeTransfer',
     })
+    this.markTransactionTimeoutCounter = this.data.metrics.getCounter(
+      `api_transaction_mark_transaction_timeout_counter`,
+      {
+        description: 'Number of transactions that are marked as Timeout',
+      },
+    )
     this.sendEventWebhookErrorCounter = this.data.metrics.getCounter(
       `api_transaction_send_event_webhook_error_counter`,
       { description: 'Number of makeTransfer webhook event errors' },
