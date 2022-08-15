@@ -524,7 +524,7 @@
           },
           "type": {
             "type": "string",
-            "enum": ["BadNonce", "InvalidAccount", "SomeError", "Unknown", "WebhookFailed"]
+            "enum": ["BadNonce", "InvalidAccount", "SomeError", "Timeout", "Unknown", "WebhookFailed"]
           },
           "instruction": {
             "type": "integer"
