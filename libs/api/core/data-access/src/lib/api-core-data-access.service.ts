@@ -203,6 +203,14 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     return this.user.findUnique({ where: { username }, include: { emails: true } })
   }
 
+  async userAppEnvAddBlockedIp(userId: string, appEnvId: string, ip: string) {
+    // TODO
+  }
+
+  async userAppEnvRemoveBlockedIp(userId: string, appEnvId: string, ip: string) {
+    // TODO
+  }
+
   async configureDefaultData() {
     await this.configureDefaultUsers()
     await this.configureDefaultClusters()

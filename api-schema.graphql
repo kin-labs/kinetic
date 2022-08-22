@@ -353,9 +353,11 @@ type Mutation {
   adminUpdateUser(input: UserUpdateInput!, userId: String!): User
   login(input: LoginInput!): AuthToken
   logout: Boolean
+  userAppEnvAddBlockedIp(appEnvId: String!, ip: String!): AppEnv
   userAppEnvMintDisable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
   userAppEnvMintEnable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
   userAppEnvMintSetWallet(appEnvId: String!, appId: String!, mintId: String!, walletId: String!): AppEnv
+  userAppEnvRemoveBlockedIp(appEnvId: String!, ip: String!): AppEnv
   userAppEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   userAppEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   userAppUserAdd(appId: String!, input: AppUserAddInput!): App

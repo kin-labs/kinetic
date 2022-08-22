@@ -371,9 +371,11 @@ export type Mutation = {
   adminUpdateUser?: Maybe<User>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
+  userAppEnvAddBlockedIp?: Maybe<AppEnv>
   userAppEnvMintDisable?: Maybe<AppEnv>
   userAppEnvMintEnable?: Maybe<AppEnv>
   userAppEnvMintSetWallet?: Maybe<AppEnv>
+  userAppEnvRemoveBlockedIp?: Maybe<AppEnv>
   userAppEnvWalletAdd?: Maybe<AppEnv>
   userAppEnvWalletRemove?: Maybe<AppEnv>
   userAppUserAdd?: Maybe<App>
@@ -433,6 +435,11 @@ export type MutationLoginArgs = {
   input: LoginInput
 }
 
+export type MutationUserAppEnvAddBlockedIpArgs = {
+  appEnvId: Scalars['String']
+  ip: Scalars['String']
+}
+
 export type MutationUserAppEnvMintDisableArgs = {
   appEnvId: Scalars['String']
   appId: Scalars['String']
@@ -450,6 +457,11 @@ export type MutationUserAppEnvMintSetWalletArgs = {
   appId: Scalars['String']
   mintId: Scalars['String']
   walletId: Scalars['String']
+}
+
+export type MutationUserAppEnvRemoveBlockedIpArgs = {
+  appEnvId: Scalars['String']
+  ip: Scalars['String']
 }
 
 export type MutationUserAppEnvWalletAddArgs = {
