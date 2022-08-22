@@ -25,6 +25,7 @@ type AppEnv {
   cluster: Cluster
   createdAt: DateTime!
   id: String!
+  ipsBlocked: [String!]
   key: String
   mints: [AppMint!]
   name: String

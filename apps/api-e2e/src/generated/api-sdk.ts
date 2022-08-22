@@ -45,6 +45,7 @@ export type AppEnv = {
   cluster?: Maybe<Cluster>
   createdAt: Scalars['DateTime']
   id: Scalars['String']
+  ipsBlocked?: Maybe<Array<Scalars['String']>>
   key?: Maybe<Scalars['String']>
   mints?: Maybe<Array<AppMint>>
   name?: Maybe<Scalars['String']>
@@ -779,6 +780,7 @@ export const AppEnvDetails = gql`
         ...MintDetails
       }
     }
+    ipsBlocked
     mints {
       ...AppMintDetails
     }
@@ -1527,6 +1529,7 @@ export type AdminCreateAppMutation = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -1688,6 +1691,7 @@ export type AdminAppsQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -1797,6 +1801,7 @@ export type AdminAppQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -1938,6 +1943,7 @@ export type AppEnvDetailsFragment = {
   createdAt: any
   updatedAt: any
   key?: string | null
+  ipsBlocked?: Array<string> | null
   name?: string | null
   webhookAcceptIncoming?: boolean | null
   webhookEventEnabled?: boolean | null
@@ -2219,6 +2225,7 @@ export type UserUpdateAppMutation = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -2357,6 +2364,7 @@ export type UserUpdateAppEnvMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -2646,6 +2654,7 @@ export type UserAppEnvMintDisableMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -2740,6 +2749,7 @@ export type UserAppEnvMintEnableMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -2835,6 +2845,7 @@ export type UserAppEnvMintSetWalletMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -2929,6 +2940,7 @@ export type UserAppEnvWalletAddMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -3031,6 +3043,7 @@ export type UserAppEnvWalletRemoveMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -3338,6 +3351,7 @@ export type UserAppsQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -3448,6 +3462,7 @@ export type UserAppQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -3585,6 +3600,7 @@ export type UserAppEnvQuery = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
     webhookEventEnabled?: boolean | null
@@ -4269,6 +4285,7 @@ export type AdminWalletQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -4409,6 +4426,7 @@ export type AdminWalletsQuery = {
         createdAt: any
         updatedAt: any
         key?: string | null
+        ipsBlocked?: Array<string> | null
         name?: string | null
         webhookAcceptIncoming?: boolean | null
         webhookEventEnabled?: boolean | null
@@ -4501,6 +4519,7 @@ export type AdminWalletsQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null
@@ -4619,6 +4638,7 @@ export type UserGenerateWalletMutation = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
       webhookEventEnabled?: boolean | null

@@ -26,6 +26,7 @@ fragment AppEnvDetails on AppEnv {
       ...MintDetails
     }
   }
+  ipsBlocked
   mints {
     ...AppMintDetails
   }
