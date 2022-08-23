@@ -204,11 +204,16 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   async userAppEnvAddBlockedIp(userId: string, appEnvId: string, ip: string) {
-    // TODO
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const ips = appEnv?.ipsBlocked ? appEnv.ipsBlocked : []
+    ips.push(ip)
+    return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
   }
 
   async userAppEnvRemoveBlockedIp(userId: string, appEnvId: string, ip: string) {
-    // TODO
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const ips = appEnv.ipsBlocked.filter((ipAddress) => ipAddress !== ip)
+    return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
   }
 
   async configureDefaultData() {
