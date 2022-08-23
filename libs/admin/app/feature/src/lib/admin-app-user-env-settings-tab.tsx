@@ -1,5 +1,9 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
-import { AdminAppUiAppEnvMintSettings, AdminAppUiAppEnvWebhookForm } from '@kin-kinetic/admin/app/ui'
+import {
+  AdminAppUiAppEnvBlockedIpsForm,
+  AdminAppUiAppEnvMintSettings,
+  AdminAppUiAppEnvWebhookForm,
+} from '@kin-kinetic/admin/app/ui'
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import {
   AppEnvUpdateInput,
@@ -99,6 +103,7 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
             updateAppMint={updateAppMint}
           />
           <AdminAppUiAppEnvWebhookForm appEnv={data.item} onSubmit={onSubmit} />
+          <AdminAppUiAppEnvBlockedIpsForm appEnv={data.item} />
         </Stack>
       ) : (
         <Box as="pre" p="6" borderWidth="1px" borderRadius="lg" overflow="hidden" fontSize="xs">

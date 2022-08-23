@@ -1846,6 +1846,100 @@ export type UserAppUserUpdateRoleMutation = {
   } | null
 }
 
+export type UserAppEnvAddBlockedIpMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  ip: Scalars['String']
+}>
+
+export type UserAppEnvAddBlockedIpMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
 export type UserAppEnvMintDisableMutationVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
@@ -4575,6 +4669,20 @@ export const UserAppUserUpdateRoleDocument = gql`
 export function useUserAppUserUpdateRoleMutation() {
   return Urql.useMutation<UserAppUserUpdateRoleMutation, UserAppUserUpdateRoleMutationVariables>(
     UserAppUserUpdateRoleDocument,
+  )
+}
+export const UserAppEnvAddBlockedIpDocument = gql`
+  mutation userAppEnvAddBlockedIp($appEnvId: String!, $ip: String!) {
+    item: userAppEnvAddBlockedIp(appEnvId: $appEnvId, ip: $ip) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetailsFragmentDoc}
+`
+
+export function useUserAppEnvAddBlockedIpMutation() {
+  return Urql.useMutation<UserAppEnvAddBlockedIpMutation, UserAppEnvAddBlockedIpMutationVariables>(
+    UserAppEnvAddBlockedIpDocument,
   )
 }
 export const UserAppEnvMintDisableDocument = gql`
