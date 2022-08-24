@@ -14,7 +14,7 @@ export class AppEnv {
   @Field({ nullable: true })
   name: string
   @Field(() => [String], { nullable: true })
-  ipsBlocked: string[]
+  ipsBlocked?: string[]
   @Field({ nullable: true })
   webhookAcceptIncoming?: boolean
   @Field({ nullable: true })

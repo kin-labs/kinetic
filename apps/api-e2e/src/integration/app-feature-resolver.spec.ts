@@ -1,3 +1,4 @@
+import { AppEnv } from '@kin-kinetic/api/app/data-access'
 import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import {
@@ -21,6 +22,8 @@ import {
   UserGenerateWallet,
   UserUpdateApp,
   UserUpdateAppEnv,
+  UserAppEnvAddBlockedIp,
+  UserAppEnvRemoveBlockedIp,
 } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
@@ -480,6 +483,50 @@ describe('App (e2e)', () => {
         return runGraphQLQuery(app, AdminDeleteApp, { appId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
+      })
+    })
+
+    describe('IP Blocking', () => {
+      let appEnv: AppEnv
+
+      beforeEach(async () => {
+        const name = uniq('app-')
+        const index = uniqInt()
+        const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
+          input: { index, name },
+        })
+        appEnv = createdApp.body.data.created.envs[0]
+      })
+      it('should block an IP', async () => {
+        const ip = '23.56.89.15'
+        await runGraphQLQueryAdmin(app, token, UserAppEnvAddBlockedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const ipsBlocked: string[] = res.body.data?.item?.ipsBlocked
+            expect(ipsBlocked.includes(ip)).toBeTruthy()
+          })
+      })
+
+      it('should unblock an IP', async () => {
+        const ip = '23.56.89.16'
+        await runGraphQLQueryAdmin(app, token, UserAppEnvAddBlockedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+        await runGraphQLQueryAdmin(app, token, UserAppEnvRemoveBlockedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const ipsBlocked: string[] = res.body.data?.item?.ipsBlocked
+            expect(ipsBlocked.includes(ip)).toBeFalsy()
+          })
       })
     })
   })
