@@ -203,14 +203,15 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     return this.user.findUnique({ where: { username }, include: { emails: true } })
   }
 
-  async userAppEnvAddBlockedIp(userId: string, appEnvId: string, ip: string) {
+  async userAppEnvAddBlockedIp(appEnvId: string, ip: string) {
     const appEnv = await this.getAppEnvById(appEnvId)
+    console.log('Block IP ENV', appEnv)
     const ips = appEnv?.ipsBlocked ? appEnv.ipsBlocked : []
     ips.push(ip)
     return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
   }
 
-  async userAppEnvRemoveBlockedIp(userId: string, appEnvId: string, ip: string) {
+  async userAppEnvRemoveBlockedIp(appEnvId: string, ip: string) {
     const appEnv = await this.getAppEnvById(appEnvId)
     const ips = appEnv.ipsBlocked.filter((ipAddress) => ipAddress !== ip)
     return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })

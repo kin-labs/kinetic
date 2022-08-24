@@ -61,6 +61,12 @@ mutation userAppEnvAddBlockedIp($appEnvId: String!, $ip: String!) {
   }
 }
 
+mutation userAppEnvRemoveBlockedIp($appEnvId: String!, $ip: String!) {
+  item: userAppEnvRemoveBlockedIp(appEnvId: $appEnvId, ip: $ip) {
+    ...AppEnvDetails
+  }
+}
+
 mutation UserAppEnvMintDisable($appId: String!, $appEnvId: String!, $mintId: String!) {
   item: userAppEnvMintDisable(appId: $appId, appEnvId: $appEnvId, mintId: $mintId) {
     ...AppEnvDetails
