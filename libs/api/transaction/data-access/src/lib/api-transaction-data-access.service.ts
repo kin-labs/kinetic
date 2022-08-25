@@ -192,18 +192,21 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   async getTransaction(environment: string, index: number, signature: string) {
     const solana = await this.data.getSolanaConnection(environment, index)
-
-    const transaction = await solana.getTransaction(signature)
-    const txResponse = { ...transaction, payments: [] }
-    txResponse.payments.push({
-      type: 1,
-      quarks:
-        transaction.meta.preTokenBalances[0].uiTokenAmount.uiAmount -
-        transaction.meta.postTokenBalances[0].uiTokenAmount.uiAmount,
-      sender: transaction.meta.postTokenBalances[0].owner,
-      destination: transaction.meta.postTokenBalances[1].owner,
-      memo: 'RQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',
-    })
+    const { status, transaction } = await solana.getTransaction(signature)
+    const txResponse = {
+      ...transaction,
+      payments: [
+        {
+          quarks:
+            transaction.meta.preTokenBalances[0].uiTokenAmount.uiAmount -
+            transaction.meta.postTokenBalances[0].uiTokenAmount.uiAmount,
+          sender: transaction.meta.postTokenBalances[0].owner,
+          destination: transaction.meta.postTokenBalances[1].owner,
+        },
+      ],
+      txState: status.value.confirmationStatus,
+    }
+    txResponse.payments.push()
     return txResponse
   }
 

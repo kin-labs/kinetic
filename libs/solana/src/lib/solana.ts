@@ -158,9 +158,14 @@ export class Solana {
     return this.getTokenAccounts(account, mint).then((accounts) => this.getTokenAccountsHistory(accounts))
   }
 
-  async getTransaction(signature: string): Promise<TransactionResponse | null> {
+  async getTransaction(signature: string) {
     this.config.logger?.log(`Getting transaction: ${signature} `)
-    return this.connection.getTransaction(signature)
+    const status = await this.connection.getSignatureStatus(signature, { searchTransactionHistory: true })
+    const transaction = await this.connection.getTransaction(signature)
+    return {
+      status,
+      transaction,
+    }
   }
 
   requestAirdrop(account: PublicKeyString, amount: number) {
