@@ -1801,6 +1801,50 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     },
     /**
      *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} signature
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTransaction: async (
+      environment: string,
+      index: number,
+      signature: string,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'environment' is not null or undefined
+      assertParamExists('getTransaction', 'environment', environment)
+      // verify required parameter 'index' is not null or undefined
+      assertParamExists('getTransaction', 'index', index)
+      // verify required parameter 'signature' is not null or undefined
+      assertParamExists('getTransaction', 'signature', signature)
+      const localVarPath = `/api/transaction/transaction/{environment}/{index}/{signature}`
+        .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
+        .replace(`{${'index'}}`, encodeURIComponent(String(index)))
+        .replace(`{${'signature'}}`, encodeURIComponent(String(signature)))
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1884,6 +1928,23 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} signature
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getTransaction(
+      environment: string,
+      index: number,
+      signature: string,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getTransaction(environment, index, signature, options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1939,6 +2000,19 @@ export const TransactionApiFactory = function (
     },
     /**
      *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} signature
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTransaction(environment: string, index: number, signature: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .getTransaction(environment, index, signature, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1987,6 +2061,21 @@ export class TransactionApi extends BaseAPI {
   ) {
     return TransactionApiFp(this.configuration)
       .getMinimumRentExemptionBalance(environment, index, dataLength, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {string} environment
+   * @param {number} index
+   * @param {string} signature
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApi
+   */
+  public getTransaction(environment: string, index: number, signature: string, options?: AxiosRequestConfig) {
+    return TransactionApiFp(this.configuration)
+      .getTransaction(environment, index, signature, options)
       .then((request) => request(this.axios, this.basePath))
   }
 

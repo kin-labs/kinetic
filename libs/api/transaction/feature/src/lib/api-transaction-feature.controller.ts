@@ -41,4 +41,16 @@ export class ApiTransactionFeatureController {
   makeTransfer(@Body() body: MakeTransferRequest) {
     return this.service.makeTransfer(body)
   }
+
+  @Get('transaction/:environment/:index/:signature')
+  @ApiOperation({ operationId: 'getTransaction' })
+  @ApiParam({ name: 'index', type: 'integer' })
+  // @ApiResponse({ type: LatestBlockhashResponse })
+  getTransaction(
+    @Param('environment') environment: string,
+    @Param('index', ParseIntPipe) index: number,
+    @Param('signature') signature: string,
+  ) {
+    return this.service.getTransaction(environment, index, signature)
+  }
 }

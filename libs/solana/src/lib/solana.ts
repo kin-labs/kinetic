@@ -1,4 +1,4 @@
-import { Connection, PublicKey, Transaction } from '@solana/web3.js'
+import { Connection, PublicKey, Transaction, TransactionResponse } from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { convertCommitment, getPublicKey, parseEndpoint, parseTransactionSimulation } from './helpers'
@@ -156,6 +156,11 @@ export class Solana {
   async getTokenHistory(account: PublicKeyString, mint: PublicKeyString) {
     this.config.logger?.log(`Getting token history: ${getPublicKey(account)} / ${getPublicKey(mint)} `)
     return this.getTokenAccounts(account, mint).then((accounts) => this.getTokenAccountsHistory(accounts))
+  }
+
+  async getTransaction(signature: string): Promise<TransactionResponse | null> {
+    this.config.logger?.log(`Getting transaction: ${signature} `)
+    return this.connection.getTransaction(signature)
   }
 
   requestAirdrop(account: PublicKeyString, amount: number) {

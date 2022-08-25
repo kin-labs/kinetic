@@ -57,6 +57,10 @@ export class KineticSdk {
     return this.internal.getTokenAccounts(options)
   }
 
+  getTransaction(signature: string) {
+    return this.internal.getTransaction(signature)
+  }
+
   makeTransfer(options: MakeTransferOptions): Promise<AppTransaction> {
     return this.internal.makeTransfer(options)
   }

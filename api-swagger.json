@@ -461,6 +461,44 @@
         },
         "tags": ["transaction"]
       }
+    },
+    "/api/transaction/transaction/{environment}/{index}/{signature}": {
+      "get": {
+        "operationId": "getTransaction",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "signature",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["transaction"]
+      }
     }
   },
   "info": {

@@ -123,6 +123,13 @@ export class KineticSdkInternal {
       .then((res) => res.data)
   }
 
+  getTransaction(signature: string) {
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    return this.transactionApi.getTransaction(this.appConfig.environment.name, this.appConfig.app.index, signature)
+  }
+
   async makeTransfer({
     amount,
     commitment,
