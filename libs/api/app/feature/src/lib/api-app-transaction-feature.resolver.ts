@@ -5,6 +5,7 @@ import {
   AppWebhookDirection,
   AppWebhookType,
 } from '@kin-kinetic/api/app/data-access'
+import { quarksToKin } from '@kin-kinetic/sdk'
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => AppTransaction)
@@ -42,5 +43,10 @@ export class ApiAppTransactionFeatureResolver {
     return tx.webhooks?.find(
       ({ direction, type }) => direction === AppWebhookDirection.Outgoing && type === AppWebhookType.Verify,
     )
+  }
+
+  @ResolveField(() => String, { nullable: true })
+  amount(@Parent() webhook: AppWebhook) {
+    return quarksToKin(webhook.payload.amount)
   }
 }

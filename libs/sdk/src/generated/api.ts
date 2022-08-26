@@ -536,6 +536,7 @@ export const AppTransactionErrorTypeEnum = {
   BadNonce: 'BadNonce',
   InvalidAccount: 'InvalidAccount',
   SomeError: 'SomeError',
+  Timeout: 'Timeout',
   Unknown: 'Unknown',
   WebhookFailed: 'WebhookFailed',
 } as const
