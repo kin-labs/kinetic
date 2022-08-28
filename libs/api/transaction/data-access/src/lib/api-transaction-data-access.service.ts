@@ -158,6 +158,10 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       throw new UnauthorizedException('Request not allowed')
     }
 
+    if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(ip)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+
     const mint = appEnv.mints.find(({ mint }) => mint.address === input.mint)
     if (!mint) {
       this.makeTransferMintNotFoundErrorCounter.add(1, { appKey, mint: input.mint.toString() })

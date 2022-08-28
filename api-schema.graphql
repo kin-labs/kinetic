@@ -25,6 +25,7 @@ type AppEnv {
   cluster: Cluster
   createdAt: DateTime!
   id: String!
+  ipsAllowed: [String!]
   ipsBlocked: [String!]
   key: String
   mints: [AppMint!]
@@ -353,10 +354,12 @@ type Mutation {
   adminUpdateUser(input: UserUpdateInput!, userId: String!): User
   login(input: LoginInput!): AuthToken
   logout: Boolean
+  userAppEnvAddAllowedIp(appEnvId: String!, ip: String!): AppEnv
   userAppEnvAddBlockedIp(appEnvId: String!, ip: String!): AppEnv
   userAppEnvMintDisable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
   userAppEnvMintEnable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
   userAppEnvMintSetWallet(appEnvId: String!, appId: String!, mintId: String!, walletId: String!): AppEnv
+  userAppEnvRemoveAllowedIp(appEnvId: String!, ip: String!): AppEnv
   userAppEnvRemoveBlockedIp(appEnvId: String!, ip: String!): AppEnv
   userAppEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   userAppEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv

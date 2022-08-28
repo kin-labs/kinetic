@@ -44,6 +44,7 @@ model AppEnv {
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
   name                  String
+  ipsAllowed            String[]
   ipsBlocked            String[]
   mints                 AppMint[]
   transaction           AppTransaction[]

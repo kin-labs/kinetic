@@ -1,5 +1,6 @@
 export * from './lib/admin-app-ui-app-env-mint-settings'
 export * from './lib/admin-app-ui-app-env-webhook-form'
+export * from './lib/admin-app-ui-app-env-allowed-ips-form'
 export * from './lib/admin-app-ui-app-env-blocked-ips-form'
 export * from './lib/admin-app-ui-environments'
 export * from './lib/admin-app-ui-form'

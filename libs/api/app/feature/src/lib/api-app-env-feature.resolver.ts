@@ -17,6 +17,16 @@ export class ApiAppEnvFeatureResolver {
   }
 
   @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvAddAllowedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
+    return this.service.userAppEnvAddAllowedIp(appEnvId, ip)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvRemoveAllowedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
+    return this.service.userAppEnvRemoveAllowedIp(appEnvId, ip)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
   userAppEnvAddBlockedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
     return this.service.userAppEnvAddBlockedIp(appEnvId, ip)
   }

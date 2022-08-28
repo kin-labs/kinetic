@@ -1,5 +1,6 @@
 import { Box, Stack, useToast } from '@chakra-ui/react'
 import {
+  AdminAppUiAppEnvAllowedIpsForm,
   AdminAppUiAppEnvBlockedIpsForm,
   AdminAppUiAppEnvMintSettings,
   AdminAppUiAppEnvWebhookForm,
@@ -103,6 +104,7 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
             updateAppMint={updateAppMint}
           />
           <AdminAppUiAppEnvWebhookForm appEnv={data.item} onSubmit={onSubmit} />
+          <AdminAppUiAppEnvAllowedIpsForm appEnv={data.item} />
           <AdminAppUiAppEnvBlockedIpsForm appEnv={data.item} />
         </Stack>
       ) : (

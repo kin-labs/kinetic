@@ -47,6 +47,7 @@ export type AppEnv = {
   cluster?: Maybe<Cluster>
   createdAt: Scalars['DateTime']
   id: Scalars['String']
+  ipsAllowed?: Maybe<Array<Scalars['String']>>
   ipsBlocked?: Maybe<Array<Scalars['String']>>
   key?: Maybe<Scalars['String']>
   mints?: Maybe<Array<AppMint>>
@@ -373,10 +374,12 @@ export type Mutation = {
   adminUpdateUser?: Maybe<User>
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
+  userAppEnvAddAllowedIp?: Maybe<AppEnv>
   userAppEnvAddBlockedIp?: Maybe<AppEnv>
   userAppEnvMintDisable?: Maybe<AppEnv>
   userAppEnvMintEnable?: Maybe<AppEnv>
   userAppEnvMintSetWallet?: Maybe<AppEnv>
+  userAppEnvRemoveAllowedIp?: Maybe<AppEnv>
   userAppEnvRemoveBlockedIp?: Maybe<AppEnv>
   userAppEnvWalletAdd?: Maybe<AppEnv>
   userAppEnvWalletRemove?: Maybe<AppEnv>
@@ -437,6 +440,11 @@ export type MutationLoginArgs = {
   input: LoginInput
 }
 
+export type MutationUserAppEnvAddAllowedIpArgs = {
+  appEnvId: Scalars['String']
+  ip: Scalars['String']
+}
+
 export type MutationUserAppEnvAddBlockedIpArgs = {
   appEnvId: Scalars['String']
   ip: Scalars['String']
@@ -459,6 +467,11 @@ export type MutationUserAppEnvMintSetWalletArgs = {
   appId: Scalars['String']
   mintId: Scalars['String']
   walletId: Scalars['String']
+}
+
+export type MutationUserAppEnvRemoveAllowedIpArgs = {
+  appEnvId: Scalars['String']
+  ip: Scalars['String']
 }
 
 export type MutationUserAppEnvRemoveBlockedIpArgs = {
@@ -735,6 +748,7 @@ export type AdminCreateAppMutation = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -897,6 +911,7 @@ export type AdminAppsQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -1007,6 +1022,7 @@ export type AdminAppQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -1149,6 +1165,7 @@ export type AppEnvDetailsFragment = {
   createdAt: any
   updatedAt: any
   key?: string | null
+  ipsAllowed?: Array<string> | null
   ipsBlocked?: Array<string> | null
   name?: string | null
   webhookAcceptIncoming?: boolean | null
@@ -1431,6 +1448,7 @@ export type UserUpdateAppMutation = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -1570,6 +1588,7 @@ export type UserUpdateAppEnvMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -1846,6 +1865,196 @@ export type UserAppUserUpdateRoleMutation = {
   } | null
 }
 
+export type UserAppEnvAddAllowedIpMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  ip: Scalars['String']
+}>
+
+export type UserAppEnvAddAllowedIpMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    ipsAllowed?: Array<string> | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserAppEnvRemoveAllowedIpMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  ip: Scalars['String']
+}>
+
+export type UserAppEnvRemoveAllowedIpMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    ipsAllowed?: Array<string> | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    webhookAcceptIncoming?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
 export type UserAppEnvAddBlockedIpMutationVariables = Exact<{
   appEnvId: Scalars['String']
   ip: Scalars['String']
@@ -1859,6 +2068,7 @@ export type UserAppEnvAddBlockedIpMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -1953,6 +2163,7 @@ export type UserAppEnvRemoveBlockedIpMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -2048,6 +2259,7 @@ export type UserAppEnvMintDisableMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -2143,6 +2355,7 @@ export type UserAppEnvMintEnableMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -2239,6 +2452,7 @@ export type UserAppEnvMintSetWalletMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -2334,6 +2548,7 @@ export type UserAppEnvWalletAddMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -2437,6 +2652,7 @@ export type UserAppEnvWalletRemoveMutation = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -2745,6 +2961,7 @@ export type UserAppsQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -2856,6 +3073,7 @@ export type UserAppQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -2994,6 +3212,7 @@ export type UserAppEnvQuery = {
     createdAt: any
     updatedAt: any
     key?: string | null
+    ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
     webhookAcceptIncoming?: boolean | null
@@ -3679,6 +3898,7 @@ export type AdminWalletQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -3820,6 +4040,7 @@ export type AdminWalletsQuery = {
         createdAt: any
         updatedAt: any
         key?: string | null
+        ipsAllowed?: Array<string> | null
         ipsBlocked?: Array<string> | null
         name?: string | null
         webhookAcceptIncoming?: boolean | null
@@ -3913,6 +4134,7 @@ export type AdminWalletsQuery = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -4032,6 +4254,7 @@ export type UserGenerateWalletMutation = {
       createdAt: any
       updatedAt: any
       key?: string | null
+      ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
       webhookAcceptIncoming?: boolean | null
@@ -4385,6 +4608,7 @@ export const AppEnvDetailsFragmentDoc = gql`
         ...MintDetails
       }
     }
+    ipsAllowed
     ipsBlocked
     mints {
       ...AppMintDetails
@@ -4763,6 +4987,34 @@ export const UserAppUserUpdateRoleDocument = gql`
 export function useUserAppUserUpdateRoleMutation() {
   return Urql.useMutation<UserAppUserUpdateRoleMutation, UserAppUserUpdateRoleMutationVariables>(
     UserAppUserUpdateRoleDocument,
+  )
+}
+export const UserAppEnvAddAllowedIpDocument = gql`
+  mutation userAppEnvAddAllowedIp($appEnvId: String!, $ip: String!) {
+    item: userAppEnvAddAllowedIp(appEnvId: $appEnvId, ip: $ip) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetailsFragmentDoc}
+`
+
+export function useUserAppEnvAddAllowedIpMutation() {
+  return Urql.useMutation<UserAppEnvAddAllowedIpMutation, UserAppEnvAddAllowedIpMutationVariables>(
+    UserAppEnvAddAllowedIpDocument,
+  )
+}
+export const UserAppEnvRemoveAllowedIpDocument = gql`
+  mutation userAppEnvRemoveAllowedIp($appEnvId: String!, $ip: String!) {
+    item: userAppEnvRemoveAllowedIp(appEnvId: $appEnvId, ip: $ip) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetailsFragmentDoc}
+`
+
+export function useUserAppEnvRemoveAllowedIpMutation() {
+  return Urql.useMutation<UserAppEnvRemoveAllowedIpMutation, UserAppEnvRemoveAllowedIpMutationVariables>(
+    UserAppEnvRemoveAllowedIpDocument,
   )
 }
 export const UserAppEnvAddBlockedIpDocument = gql`
