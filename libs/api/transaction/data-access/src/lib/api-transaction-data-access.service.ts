@@ -18,6 +18,7 @@ import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption
 import { GetTransactionResponse } from './entities/get-transaction.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
+import { Request } from 'express'
 
 type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[] }
 
@@ -149,11 +150,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     return { lamports } as MinimumRentExemptionBalanceResponse
   }
 
-  async makeTransfer(input: MakeTransferRequest, ip: string): Promise<AppTransactionWithErrors> {
+  async makeTransfer(input: MakeTransferRequest, req: Request): Promise<AppTransactionWithErrors> {
     const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
 
-    if (appEnv?.ipsBlocked.includes(ip)) {
+    if (appEnv?.ipsBlocked.includes(req.ip)) {
       throw new UnauthorizedException('Request not allowed')
     }
 
@@ -167,7 +168,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const appTransaction: AppTransactionWithErrors = await this.createAppTransaction({
       appEnvId: appEnv.id,
       commitment: input.commitment,
-      ip,
+      ip: req.ip,
       referenceId: input.referenceId,
       referenceType: input.referenceType,
     })

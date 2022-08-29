@@ -41,7 +41,7 @@ export class ApiTransactionFeatureController {
   @ApiOperation({ operationId: 'makeTransfer' })
   @ApiResponse({ type: AppTransaction })
   makeTransfer(@Body() body: MakeTransferRequest, @Req() req: Request) {
-    return this.service.makeTransfer(body, req.ip)
+    return this.service.makeTransfer(body, req)
   }
 
   @Get('transaction/:environment/:index/:signature')
