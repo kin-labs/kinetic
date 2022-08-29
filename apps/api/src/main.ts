@@ -18,7 +18,7 @@ async function bootstrap() {
   config.configureSwagger(app)
   app.use(cookieParser())
   try {
-    await app.listen(config.port)
+    await app.listen(config.port, config.host)
     Logger.log(
       `🚀 API is running on http://localhost:${config.port}/${config.prefix}. CORS ${
         config?.corsOrigins ? `enabled for: [${config?.corsOrigins?.join(', ')}]` : 'disabled'

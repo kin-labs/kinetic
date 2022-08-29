@@ -141,6 +141,10 @@ export class ApiConfigDataAccessService {
     return this.environment === 'production'
   }
 
+  get host() {
+    return this.config.get('host')
+  }
+
   get port() {
     return this.config.get('port')
   }

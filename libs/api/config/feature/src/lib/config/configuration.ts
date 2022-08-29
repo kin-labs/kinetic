@@ -29,6 +29,7 @@ export default () => ({
   defaultMintPublicKey: process.env.DEFAULT_MINT_PUBLIC_KEY,
   defaultMintAirdropAmount: process.env.DEFAULT_MINT_AIRDROP_AMOUNT,
   defaultMintAirdropMax: process.env.DEFAULT_MINT_AIRDROP_MAX,
+  host: process.env.HOST,
   metricsEnabled: process.env.METRICS_ENABLED?.toLowerCase() !== 'false',
   port: parseInt(process.env.PORT, 10),
   solanaDevnetRpcEndpoint: process.env.SOLANA_DEVNET_RPC_ENDPOINT,
