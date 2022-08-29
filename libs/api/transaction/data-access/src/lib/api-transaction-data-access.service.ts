@@ -154,11 +154,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
 
-    if (appEnv?.ipsBlocked.includes(req.ip)) {
+    if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(req.ip)) {
       throw new UnauthorizedException('Request not allowed')
     }
 
-    if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(ip)) {
+    if (appEnv?.ipsBlocked.length > 0 && appEnv?.ipsBlocked.includes(req.ip)) {
       throw new UnauthorizedException('Request not allowed')
     }
 
