@@ -7,7 +7,7 @@ export function SdkControlPanelGetTransaction({ sdk }: { sdk: KineticSdk }) {
   const [result, setResult] = useState<unknown>(null)
   const [signature, setSignature] = useState<string>('')
   const getResult = () => {
-    sdk.getTransaction(signature).then((res) => setResult(res))
+    sdk.getTransaction({ signature }).then((res) => setResult(res))
   }
   return (
     <Stack spacing={3}>

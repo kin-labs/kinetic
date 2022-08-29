@@ -27,6 +27,7 @@ import {
   GetBalanceOptions,
   GetHistoryOptions,
   GetTokenAccountsOptions,
+  GetTransactionOptions,
   KineticSdkConfigParsed,
   KineticSdkEnvironment,
   MakeTransferBatchOptions,
@@ -123,7 +124,7 @@ export class KineticSdkInternal {
       .then((res) => res.data)
   }
 
-  getTransaction(signature: string) {
+  getTransaction({ signature }: GetTransactionOptions) {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
