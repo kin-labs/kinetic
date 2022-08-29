@@ -120,6 +120,14 @@ export type AppTransaction = {
   webhookVerifyStart?: Maybe<Scalars['DateTime']>
 }
 
+export type AppTransactionCounter = {
+  __typename?: 'AppTransactionCounter'
+  limit?: Maybe<Scalars['Float']>
+  page?: Maybe<Scalars['Float']>
+  pageCount?: Maybe<Scalars['Float']>
+  total?: Maybe<Scalars['Float']>
+}
+
 export type AppTransactionError = {
   __typename?: 'AppTransactionError'
   id?: Maybe<Scalars['String']>
@@ -133,16 +141,20 @@ export enum AppTransactionErrorType {
   BadNonce = 'BadNonce',
   InvalidAccount = 'InvalidAccount',
   SomeError = 'SomeError',
+  Timeout = 'Timeout',
   Unknown = 'Unknown',
   WebhookFailed = 'WebhookFailed',
 }
 
 export type AppTransactionListInput = {
+  destination?: InputMaybe<Scalars['String']>
+  limit?: InputMaybe<Scalars['Float']>
+  page?: InputMaybe<Scalars['Float']>
   referenceId?: InputMaybe<Scalars['String']>
   referenceType?: InputMaybe<Scalars['String']>
   signature?: InputMaybe<Scalars['String']>
   source?: InputMaybe<Scalars['String']>
-  status?: InputMaybe<AppTransactionStatus>
+  status?: InputMaybe<Array<AppTransactionStatus>>
 }
 
 export enum AppTransactionStatus {
@@ -518,6 +530,7 @@ export type Query = {
   userAppEnv?: Maybe<AppEnv>
   userAppRole?: Maybe<AppUserRole>
   userAppTransaction?: Maybe<AppTransaction>
+  userAppTransactionCounter?: Maybe<AppTransactionCounter>
   userAppTransactions?: Maybe<Array<AppTransaction>>
   userApps?: Maybe<Array<App>>
   userWallet?: Maybe<Wallet>
@@ -573,6 +586,12 @@ export type QueryUserAppTransactionArgs = {
   appEnvId: Scalars['String']
   appId: Scalars['String']
   appTransactionId: Scalars['String']
+}
+
+export type QueryUserAppTransactionCounterArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  input?: InputMaybe<AppTransactionListInput>
 }
 
 export type QueryUserAppTransactionsArgs = {
