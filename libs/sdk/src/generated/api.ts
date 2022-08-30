@@ -664,6 +664,31 @@ export interface CreateAccountRequest {
 /**
  *
  * @export
+ * @interface GetTransactionResponse
+ */
+export interface GetTransactionResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof GetTransactionResponse
+   */
+  signature: string
+  /**
+   *
+   * @type {SignatureStatus}
+   * @memberof GetTransactionResponse
+   */
+  status: SignatureStatus
+  /**
+   *
+   * @type {TransactionResponse}
+   * @memberof GetTransactionResponse
+   */
+  transaction: TransactionResponse
+}
+/**
+ *
+ * @export
  * @interface HistoryResponse
  */
 export interface HistoryResponse {
@@ -1939,7 +1964,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
       index: number,
       signature: string,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LatestBlockhashResponse>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTransactionResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getTransaction(environment, index, signature, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -2011,7 +2036,7 @@ export const TransactionApiFactory = function (
       index: number,
       signature: string,
       options?: any,
-    ): AxiosPromise<LatestBlockhashResponse> {
+    ): AxiosPromise<GetTransactionResponse> {
       return localVarFp
         .getTransaction(environment, index, signature, options)
         .then((request) => request(axios, basePath))

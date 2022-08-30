@@ -15,6 +15,7 @@ import {
 import { Transaction } from '@solana/web3.js'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
+import { GetTransactionResponse } from './entities/get-transaction.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 
@@ -190,7 +191,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     })
   }
 
-  async getTransaction(environment: string, index: number, signature: string) {
+  async getTransaction(environment: string, index: number, signature: string): Promise<GetTransactionResponse> {
     const solana = await this.data.getSolanaConnection(environment, index)
     return solana.getTransaction(signature)
   }

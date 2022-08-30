@@ -498,7 +498,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LatestBlockhashResponse"
+                  "$ref": "#/components/schemas/GetTransactionResponse"
                 }
               }
             }
@@ -1077,6 +1077,21 @@
           "referenceType",
           "tx"
         ]
+      },
+      "GetTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "signature": {
+            "type": "string"
+          },
+          "status": {
+            "type": "SignatureStatus"
+          },
+          "transaction": {
+            "type": "TransactionResponse"
+          }
+        },
+        "required": ["signature", "status", "transaction"]
       }
     }
   }
