@@ -162,10 +162,7 @@ export class Solana {
     this.config.logger?.log(`Getting transaction: ${signature} `)
     const status = await this.connection.getSignatureStatus(signature, { searchTransactionHistory: true })
     const transaction = await this.connection.getTransaction(signature)
-    return {
-      status,
-      transaction,
-    }
+    return { signature, status, transaction }
   }
 
   requestAirdrop(account: PublicKeyString, amount: number) {

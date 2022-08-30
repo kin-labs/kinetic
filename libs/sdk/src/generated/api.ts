@@ -1939,7 +1939,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
       index: number,
       signature: string,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LatestBlockhashResponse>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getTransaction(environment, index, signature, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -2006,7 +2006,12 @@ export const TransactionApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getTransaction(environment: string, index: number, signature: string, options?: any): AxiosPromise<void> {
+    getTransaction(
+      environment: string,
+      index: number,
+      signature: string,
+      options?: any,
+    ): AxiosPromise<LatestBlockhashResponse> {
       return localVarFp
         .getTransaction(environment, index, signature, options)
         .then((request) => request(axios, basePath))

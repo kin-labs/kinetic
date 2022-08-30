@@ -45,7 +45,7 @@ export class ApiTransactionFeatureController {
   @Get('transaction/:environment/:index/:signature')
   @ApiOperation({ operationId: 'getTransaction' })
   @ApiParam({ name: 'index', type: 'integer' })
-  // @ApiResponse({ type: LatestBlockhashResponse })
+  @ApiResponse({ type: LatestBlockhashResponse })
   getTransaction(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
