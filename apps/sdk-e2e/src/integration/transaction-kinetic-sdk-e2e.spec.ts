@@ -130,6 +130,6 @@ describe('KineticSdk (e2e)', () => {
     expect(Number(tx.amount)).toBe(4300000)
     expect(tx.errors.length).toBeGreaterThan(0)
     expect(tx.status).toBe(AppTransactionStatus.Failed)
-    expect(tx.errors[0].message).toContain(`Error: Insufficient funds.`) // Destination account doesn't exist.
+    expect(tx.errors[0].message).toContain(`Destination account doesn't exist.`)
   })
 })
