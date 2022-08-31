@@ -8,6 +8,7 @@ import {
   GetBalanceOptions,
   GetHistoryOptions,
   GetTokenAccountsOptions,
+  GetTransactionOptions,
   KineticSdkConfig,
   KineticSdkConfigParsed,
   MakeTransferBatchOptions,
@@ -55,6 +56,10 @@ export class KineticSdk {
 
   getTokenAccounts(options: GetTokenAccountsOptions): Promise<string[]> {
     return this.internal.getTokenAccounts(options)
+  }
+
+  getTransaction({ signature }: GetTransactionOptions) {
+    return this.internal.getTransaction({ signature })
   }
 
   makeTransfer(options: MakeTransferOptions): Promise<AppTransaction> {

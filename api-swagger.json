@@ -461,6 +461,51 @@
         },
         "tags": ["transaction"]
       }
+    },
+    "/api/transaction/transaction/{environment}/{index}/{signature}": {
+      "get": {
+        "operationId": "getTransaction",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "signature",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTransactionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["transaction"]
+      }
     }
   },
   "info": {
@@ -1032,6 +1077,133 @@
           "referenceType",
           "tx"
         ]
+      },
+      "SignatureStatus": {
+        "type": "object",
+        "properties": {
+          "slot": {
+            "type": "number"
+          },
+          "confirmations": {
+            "type": "number"
+          },
+          "err": {
+            "type": "object"
+          },
+          "confirmationStatus": {
+            "type": "object"
+          }
+        },
+        "required": ["slot", "confirmations", "err", "confirmationStatus"]
+      },
+      "Message": {
+        "type": "object",
+        "properties": {}
+      },
+      "TransactionData": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/Message"
+          },
+          "signatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["message", "signatures"]
+      },
+      "ConfirmedTransactionMeta": {
+        "type": "object",
+        "properties": {
+          "fee": {
+            "type": "number"
+          },
+          "innerInstructions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "preBalances": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "postBalances": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "logMessages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "preTokenBalances": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "postTokenBalances": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "err": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "fee",
+          "innerInstructions",
+          "preBalances",
+          "postBalances",
+          "logMessages",
+          "preTokenBalances",
+          "postTokenBalances",
+          "err"
+        ]
+      },
+      "TransactionResponse": {
+        "type": "object",
+        "properties": {
+          "slot": {
+            "type": "number"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/TransactionData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ConfirmedTransactionMeta"
+          },
+          "blockTime": {
+            "type": "number"
+          }
+        },
+        "required": ["slot", "transaction", "meta", "blockTime"]
+      },
+      "GetTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "signature": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/SignatureStatus"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/TransactionResponse"
+          }
+        },
+        "required": ["signature", "status", "transaction"]
       }
     }
   }

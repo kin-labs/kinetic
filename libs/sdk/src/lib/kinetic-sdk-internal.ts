@@ -27,6 +27,7 @@ import {
   GetBalanceOptions,
   GetHistoryOptions,
   GetTokenAccountsOptions,
+  GetTransactionOptions,
   KineticSdkConfigParsed,
   KineticSdkEnvironment,
   MakeTransferBatchOptions,
@@ -121,6 +122,13 @@ export class KineticSdkInternal {
     return this.accountApi
       .getTokenAccounts(this.appConfig.environment.name, this.appConfig.app.index, account.toString(), mint.toString())
       .then((res) => res.data)
+  }
+
+  getTransaction({ signature }: GetTransactionOptions) {
+    if (!this.appConfig) {
+      throw new Error(`AppConfig not initialized`)
+    }
+    return this.transactionApi.getTransaction(this.appConfig.environment.name, this.appConfig.app.index, signature)
   }
 
   async makeTransfer({

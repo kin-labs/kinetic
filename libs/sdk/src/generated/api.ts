@@ -633,6 +633,61 @@ export interface ConfirmedSignatureInfo {
 /**
  *
  * @export
+ * @interface ConfirmedTransactionMeta
+ */
+export interface ConfirmedTransactionMeta {
+  /**
+   *
+   * @type {number}
+   * @memberof ConfirmedTransactionMeta
+   */
+  fee: number
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  innerInstructions: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  preBalances: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  postBalances: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  logMessages: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  preTokenBalances: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  postTokenBalances: Array<string>
+  /**
+   *
+   * @type {object}
+   * @memberof ConfirmedTransactionMeta
+   */
+  err: object
+}
+/**
+ *
+ * @export
  * @interface CreateAccountRequest
  */
 export interface CreateAccountRequest {
@@ -660,6 +715,31 @@ export interface CreateAccountRequest {
    * @memberof CreateAccountRequest
    */
   tx: string
+}
+/**
+ *
+ * @export
+ * @interface GetTransactionResponse
+ */
+export interface GetTransactionResponse {
+  /**
+   *
+   * @type {string}
+   * @memberof GetTransactionResponse
+   */
+  signature: string
+  /**
+   *
+   * @type {SignatureStatus}
+   * @memberof GetTransactionResponse
+   */
+  status: SignatureStatus
+  /**
+   *
+   * @type {TransactionResponse}
+   * @memberof GetTransactionResponse
+   */
+  transaction: TransactionResponse
 }
 /**
  *
@@ -842,6 +922,87 @@ export interface RequestAirdropResponse {
    * @memberof RequestAirdropResponse
    */
   signature: string
+}
+/**
+ *
+ * @export
+ * @interface SignatureStatus
+ */
+export interface SignatureStatus {
+  /**
+   *
+   * @type {number}
+   * @memberof SignatureStatus
+   */
+  slot: number
+  /**
+   *
+   * @type {number}
+   * @memberof SignatureStatus
+   */
+  confirmations: number
+  /**
+   *
+   * @type {object}
+   * @memberof SignatureStatus
+   */
+  err: object
+  /**
+   *
+   * @type {object}
+   * @memberof SignatureStatus
+   */
+  confirmationStatus: object
+}
+/**
+ *
+ * @export
+ * @interface TransactionData
+ */
+export interface TransactionData {
+  /**
+   *
+   * @type {object}
+   * @memberof TransactionData
+   */
+  message: object
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof TransactionData
+   */
+  signatures: Array<string>
+}
+/**
+ *
+ * @export
+ * @interface TransactionResponse
+ */
+export interface TransactionResponse {
+  /**
+   *
+   * @type {number}
+   * @memberof TransactionResponse
+   */
+  slot: number
+  /**
+   *
+   * @type {TransactionData}
+   * @memberof TransactionResponse
+   */
+  transaction: TransactionData
+  /**
+   *
+   * @type {ConfirmedTransactionMeta}
+   * @memberof TransactionResponse
+   */
+  meta: ConfirmedTransactionMeta
+  /**
+   *
+   * @type {number}
+   * @memberof TransactionResponse
+   */
+  blockTime: number
 }
 
 /**
@@ -1801,6 +1962,50 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     },
     /**
      *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} signature
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTransaction: async (
+      environment: string,
+      index: number,
+      signature: string,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'environment' is not null or undefined
+      assertParamExists('getTransaction', 'environment', environment)
+      // verify required parameter 'index' is not null or undefined
+      assertParamExists('getTransaction', 'index', index)
+      // verify required parameter 'signature' is not null or undefined
+      assertParamExists('getTransaction', 'signature', signature)
+      const localVarPath = `/api/transaction/transaction/{environment}/{index}/{signature}`
+        .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
+        .replace(`{${'index'}}`, encodeURIComponent(String(index)))
+        .replace(`{${'signature'}}`, encodeURIComponent(String(signature)))
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1884,6 +2089,23 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} signature
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getTransaction(
+      environment: string,
+      index: number,
+      signature: string,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTransactionResponse>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getTransaction(environment, index, signature, options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1939,6 +2161,24 @@ export const TransactionApiFactory = function (
     },
     /**
      *
+     * @param {string} environment
+     * @param {number} index
+     * @param {string} signature
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getTransaction(
+      environment: string,
+      index: number,
+      signature: string,
+      options?: any,
+    ): AxiosPromise<GetTransactionResponse> {
+      return localVarFp
+        .getTransaction(environment, index, signature, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     *
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1987,6 +2227,21 @@ export class TransactionApi extends BaseAPI {
   ) {
     return TransactionApiFp(this.configuration)
       .getMinimumRentExemptionBalance(environment, index, dataLength, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   *
+   * @param {string} environment
+   * @param {number} index
+   * @param {string} signature
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApi
+   */
+  public getTransaction(environment: string, index: number, signature: string, options?: AxiosRequestConfig) {
+    return TransactionApiFp(this.configuration)
+      .getTransaction(environment, index, signature, options)
       .then((request) => request(this.axios, this.basePath))
   }
 

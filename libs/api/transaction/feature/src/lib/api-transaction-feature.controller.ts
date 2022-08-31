@@ -2,6 +2,7 @@ import { AppTransaction } from '@kin-kinetic/api/app/data-access'
 import {
   ApiTransactionDataAccessService,
   MakeTransferRequest,
+  GetTransactionResponse,
   MinimumRentExemptionBalanceRequest,
   MinimumRentExemptionBalanceResponse,
   LatestBlockhashResponse,
@@ -40,5 +41,17 @@ export class ApiTransactionFeatureController {
   @ApiResponse({ type: AppTransaction })
   makeTransfer(@Body() body: MakeTransferRequest) {
     return this.service.makeTransfer(body)
+  }
+
+  @Get('transaction/:environment/:index/:signature')
+  @ApiOperation({ operationId: 'getTransaction' })
+  @ApiParam({ name: 'index', type: 'integer' })
+  @ApiResponse({ type: GetTransactionResponse })
+  getTransaction(
+    @Param('environment') environment: string,
+    @Param('index', ParseIntPipe) index: number,
+    @Param('signature') signature: string,
+  ) {
+    return this.service.getTransaction(environment, index, signature)
   }
 }
