@@ -71,6 +71,7 @@ type AppTransaction {
   explorerUrl: String
   feePayer: String
   id: String
+  ip: String
   mint: String
   processingDuration: Int
   referenceId: String

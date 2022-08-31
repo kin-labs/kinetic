@@ -65,6 +65,7 @@ fragment AppTransactionDetails on AppTransaction {
   }
   explorerUrl
   feePayer
+  ip
   mint
   processingDuration
   referenceId

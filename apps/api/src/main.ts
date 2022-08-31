@@ -5,6 +5,7 @@ import { NestFactory } from '@nestjs/core'
 import { exec } from 'child_process'
 import cookieParser from 'cookie-parser'
 import redirectSSL from 'redirect-ssl'
+import * as requestIp from 'request-ip'
 import { AppModule } from './app/app.module'
 
 async function bootstrap() {
@@ -17,6 +18,7 @@ async function bootstrap() {
   app.use(redirectSSL.create({ enabled: config.isProduction }))
   config.configureSwagger(app)
   app.use(cookieParser())
+  app.use(requestIp.mw())
   try {
     await app.listen(config.port, config.host)
     Logger.log(

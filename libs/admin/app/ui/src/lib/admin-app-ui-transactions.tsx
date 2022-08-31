@@ -22,6 +22,7 @@ export function AdminAppUiTransactions({ appId, appEnvId, transactions }: AdminA
           <Thead>
             <Tr>
               <Th>Status</Th>
+              <Th>IP</Th>
               <Th>Source</Th>
               <Th>Reference</Th>
               <Th isNumeric>Created</Th>
@@ -36,6 +37,7 @@ export function AdminAppUiTransactions({ appId, appEnvId, transactions }: AdminA
                     <AdminAppUiTransactionStatus status={transaction?.status} />
                   </RouterLink>
                 </Td>
+                <Td>{transaction.ip}</Td>
                 <Td>
                   <Flex alignItems="center">
                     {transaction?.explorerUrl && transaction?.signature && (

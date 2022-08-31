@@ -93,6 +93,7 @@ export type AppTransaction = {
   explorerUrl?: Maybe<Scalars['String']>
   feePayer?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['String']>
+  ip?: Maybe<Scalars['String']>
   mint?: Maybe<Scalars['String']>
   processingDuration?: Maybe<Scalars['Int']>
   referenceId?: Maybe<Scalars['String']>
@@ -857,6 +858,7 @@ export const AppTransactionDetails = gql`
     }
     explorerUrl
     feePayer
+    ip
     mint
     processingDuration
     referenceId
@@ -2131,6 +2133,7 @@ export type AppTransactionDetailsFragment = {
   destination?: string | null
   explorerUrl?: string | null
   feePayer?: string | null
+  ip?: string | null
   mint?: string | null
   processingDuration?: number | null
   referenceId?: string | null
@@ -3598,6 +3601,7 @@ export type UserAppTransactionQuery = {
     destination?: string | null
     explorerUrl?: string | null
     feePayer?: string | null
+    ip?: string | null
     mint?: string | null
     processingDuration?: number | null
     referenceId?: string | null
@@ -3698,6 +3702,7 @@ export type UserAppTransactionsQuery = {
     destination?: string | null
     explorerUrl?: string | null
     feePayer?: string | null
+    ip?: string | null
     mint?: string | null
     processingDuration?: number | null
     referenceId?: string | null
