@@ -53,6 +53,7 @@ jobs:
         with:
           node-version: '14'
       - run: yarn install --frozen-lockfile
+      - run: yarn cypress install
       - run: yarn prisma db push
       - run: yarn nx e2e admin-e2e --skip-nx-cache
   pr:
@@ -81,5 +82,6 @@ jobs:
         with:
           node-version: '14'
       - run: yarn install --frozen-lockfile
+      - run: yarn cypress install
       - run: yarn prisma db push
       - run: yarn nx e2e admin-e2e --skip-nx-cache

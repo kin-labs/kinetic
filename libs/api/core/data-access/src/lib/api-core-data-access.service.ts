@@ -205,7 +205,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async userAppEnvAddBlockedIp(appEnvId: string, ip: string) {
     const appEnv = await this.getAppEnvById(appEnvId)
-    console.log('Block IP ENV', appEnv)
     const ips = appEnv?.ipsBlocked ? appEnv.ipsBlocked : []
     ips.push(ip)
     return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })

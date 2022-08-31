@@ -7,8 +7,9 @@ import {
   MinimumRentExemptionBalanceResponse,
   LatestBlockhashResponse,
 } from '@kin-kinetic/api/transaction/data-access'
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Req } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Request } from 'express'
 
 @ApiTags('transaction')
 @Controller('transaction')
@@ -39,8 +40,8 @@ export class ApiTransactionFeatureController {
   @ApiBody({ type: MakeTransferRequest })
   @ApiOperation({ operationId: 'makeTransfer' })
   @ApiResponse({ type: AppTransaction })
-  makeTransfer(@Body() body: MakeTransferRequest) {
-    return this.service.makeTransfer(body)
+  makeTransfer(@Body() body: MakeTransferRequest, @Req() req: Request) {
+    return this.service.makeTransfer(body, req.ip)
   }
 
   @Get('transaction/:environment/:index/:signature')
