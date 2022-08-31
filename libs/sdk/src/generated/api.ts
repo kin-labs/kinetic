@@ -633,6 +633,61 @@ export interface ConfirmedSignatureInfo {
 /**
  *
  * @export
+ * @interface ConfirmedTransactionMeta
+ */
+export interface ConfirmedTransactionMeta {
+  /**
+   *
+   * @type {number}
+   * @memberof ConfirmedTransactionMeta
+   */
+  fee: number
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  innerInstructions: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  preBalances: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  postBalances: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  logMessages: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  preTokenBalances: Array<string>
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ConfirmedTransactionMeta
+   */
+  postTokenBalances: Array<string>
+  /**
+   *
+   * @type {object}
+   * @memberof ConfirmedTransactionMeta
+   */
+  err: object
+}
+/**
+ *
+ * @export
  * @interface CreateAccountRequest
  */
 export interface CreateAccountRequest {
@@ -867,6 +922,87 @@ export interface RequestAirdropResponse {
    * @memberof RequestAirdropResponse
    */
   signature: string
+}
+/**
+ *
+ * @export
+ * @interface SignatureStatus
+ */
+export interface SignatureStatus {
+  /**
+   *
+   * @type {number}
+   * @memberof SignatureStatus
+   */
+  slot: number
+  /**
+   *
+   * @type {number}
+   * @memberof SignatureStatus
+   */
+  confirmations: number
+  /**
+   *
+   * @type {object}
+   * @memberof SignatureStatus
+   */
+  err: object
+  /**
+   *
+   * @type {object}
+   * @memberof SignatureStatus
+   */
+  confirmationStatus: object
+}
+/**
+ *
+ * @export
+ * @interface TransactionData
+ */
+export interface TransactionData {
+  /**
+   *
+   * @type {object}
+   * @memberof TransactionData
+   */
+  message: object
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof TransactionData
+   */
+  signatures: Array<string>
+}
+/**
+ *
+ * @export
+ * @interface TransactionResponse
+ */
+export interface TransactionResponse {
+  /**
+   *
+   * @type {number}
+   * @memberof TransactionResponse
+   */
+  slot: number
+  /**
+   *
+   * @type {TransactionData}
+   * @memberof TransactionResponse
+   */
+  transaction: TransactionData
+  /**
+   *
+   * @type {ConfirmedTransactionMeta}
+   * @memberof TransactionResponse
+   */
+  meta: ConfirmedTransactionMeta
+  /**
+   *
+   * @type {number}
+   * @memberof TransactionResponse
+   */
+  blockTime: number
 }
 
 /**
