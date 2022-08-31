@@ -33,8 +33,8 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private confirmSignatureFinalizedCounter: Counter
   private confirmTransactionSolanaConfirmedCounter: Counter
   private makeTransferMintNotFoundErrorCounter: Counter
-  private makeTransferRequestCounter: Counter
   private markTransactionTimeoutCounter: Counter
+  private makeTransferRequestCounter: Counter
   private sendEventWebhookErrorCounter: Counter
   private sendEventWebhookSuccessCounter: Counter
   private sendSolanaTransactionConfirmedCounter: Counter
@@ -154,7 +154,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
 
-    if (appEnv?.ipsBlocked.includes(req.ip)) {
+    if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(req.ip)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+
+    if (appEnv?.ipsBlocked.length > 0 && appEnv?.ipsBlocked.includes(req.ip)) {
       throw new UnauthorizedException('Request not allowed')
     }
 

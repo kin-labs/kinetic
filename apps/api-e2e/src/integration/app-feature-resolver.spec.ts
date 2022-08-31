@@ -24,6 +24,8 @@ import {
   UserUpdateAppEnv,
   UserAppEnvAddBlockedIp,
   UserAppEnvRemoveBlockedIp,
+  UserAppEnvAddAllowedIp,
+  UserAppEnvRemoveAllowedIp,
 } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
@@ -483,6 +485,50 @@ describe('App (e2e)', () => {
         return runGraphQLQuery(app, AdminDeleteApp, { appId })
           .expect(200)
           .expect((res) => expectUnauthorized(res))
+      })
+    })
+
+    describe('IP Allowing', () => {
+      let appEnv: AppEnv
+
+      beforeEach(async () => {
+        const name = uniq('app-')
+        const index = uniqInt()
+        const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
+          input: { index, name },
+        })
+        appEnv = createdApp.body.data.created.envs[0]
+      })
+      it('should allow an IP', async () => {
+        const ip = '23.56.89.15'
+        await runGraphQLQueryAdmin(app, token, UserAppEnvAddAllowedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const ipsAllowed: string[] = res.body.data?.item?.ipsAllowed
+            expect(ipsAllowed.includes(ip)).toBeTruthy()
+          })
+      })
+
+      it('should remove an IP from the allowed list', async () => {
+        const ip = '23.56.89.16'
+        await runGraphQLQueryAdmin(app, token, UserAppEnvAddAllowedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+        await runGraphQLQueryAdmin(app, token, UserAppEnvRemoveAllowedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+          .expect(200)
+          .expect((res) => {
+            expect(res).toHaveProperty('body.data')
+            const ipsAllowed: string[] = res.body.data?.item?.ipsAllowed
+            expect(ipsAllowed.includes(ip)).toBeFalsy()
+          })
       })
     })
 

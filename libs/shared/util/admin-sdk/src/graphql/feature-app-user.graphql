@@ -55,6 +55,18 @@ mutation UserAppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!)
   }
 }
 
+mutation userAppEnvAddAllowedIp($appEnvId: String!, $ip: String!) {
+  item: userAppEnvAddAllowedIp(appEnvId: $appEnvId, ip: $ip) {
+    ...AppEnvDetails
+  }
+}
+
+mutation userAppEnvRemoveAllowedIp($appEnvId: String!, $ip: String!) {
+  item: userAppEnvRemoveAllowedIp(appEnvId: $appEnvId, ip: $ip) {
+    ...AppEnvDetails
+  }
+}
+
 mutation userAppEnvAddBlockedIp($appEnvId: String!, $ip: String!) {
   item: userAppEnvAddBlockedIp(appEnvId: $appEnvId, ip: $ip) {
     ...AppEnvDetails
