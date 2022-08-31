@@ -150,7 +150,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     return { lamports } as MinimumRentExemptionBalanceResponse
   }
 
-  async makeTransfer(input: MakeTransferRequest, req: Request): Promise<AppTransactionWithErrors> {
+  async makeTransfer(req: Request, input: MakeTransferRequest): Promise<AppTransactionWithErrors> {
     const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
 
