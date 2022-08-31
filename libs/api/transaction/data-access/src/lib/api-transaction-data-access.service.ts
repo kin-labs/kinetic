@@ -33,6 +33,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private confirmSignatureFinalizedCounter: Counter
   private confirmTransactionSolanaConfirmedCounter: Counter
   private makeTransferMintNotFoundErrorCounter: Counter
+  private markTransactionTimeoutCounter: Counter
   private makeTransferRequestCounter: Counter
   private sendEventWebhookErrorCounter: Counter
   private sendEventWebhookSuccessCounter: Counter

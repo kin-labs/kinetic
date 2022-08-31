@@ -205,8 +205,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async userAppEnvAddAllowedIp(appEnvId: string, ip: string) {
     const appEnv = await this.getAppEnvById(appEnvId)
-    const ips = appEnv?.ipsAllowed ? appEnv.ipsAllowed : []
-    ips.push(ip)
+    const ips = appEnv?.ipsAllowed ? [...appEnv.ipsAllowed, ip] : [ip]
     return this.appEnv.update({ where: { id: appEnvId }, data: { ipsAllowed: ips } })
   }
 
@@ -218,8 +217,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async userAppEnvAddBlockedIp(appEnvId: string, ip: string) {
     const appEnv = await this.getAppEnvById(appEnvId)
-    const ips = appEnv?.ipsBlocked ? appEnv.ipsBlocked : []
-    ips.push(ip)
+    const ips = appEnv?.ipsBlocked ? [...appEnv.ipsBlocked, ip] : [ip]
     return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
   }
 
