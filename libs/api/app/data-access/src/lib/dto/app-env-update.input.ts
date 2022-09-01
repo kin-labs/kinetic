@@ -5,7 +5,7 @@ import { IsOptional, IsUrl } from 'class-validator'
 export class AppEnvUpdateInput {
   @IsOptional()
   @Field({ nullable: true })
-  webhookAcceptIncoming?: boolean
+  webhookDebugging?: boolean
   @IsOptional()
   @Field({ nullable: true })
   webhookEventEnabled?: boolean

@@ -32,7 +32,7 @@ fragment AppEnvDetails on AppEnv {
     ...AppMintDetails
   }
   name
-  webhookAcceptIncoming
+  webhookDebugging
   webhookEventEnabled
   webhookEventUrl
   webhookSecret

@@ -396,7 +396,7 @@
             "deprecationReason": null
           },
           {
-            "name": "webhookAcceptIncoming",
+            "name": "webhookDebugging",
             "description": null,
             "args": [],
             "type": {
@@ -480,7 +480,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "webhookAcceptIncoming",
+            "name": "webhookDebugging",
             "description": null,
             "type": {
               "kind": "SCALAR",

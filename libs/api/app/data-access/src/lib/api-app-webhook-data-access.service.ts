@@ -31,23 +31,27 @@ export class ApiAppWebhookDataAccessService {
     const appKey = this.data.getAppKey(appEnv.name, appEnv.app?.index)
     switch (options.type) {
       case AppWebhookType.Event:
-        if (!appEnv.webhookEventEnabled) {
-          this.logger.warn(`Skip webhook for app ${appKey}, webhookEventEnabled is false`)
-          return
-        }
-        if (!appEnv.webhookEventUrl) {
-          this.logger.warn(`Skip webhook for app ${appKey}, webhookEventUrl not set`)
-          return
+        if (!appEnv.webhookDebugging) {
+          if (!appEnv.webhookEventEnabled) {
+            this.logger.warn(`Skip webhook for app ${appKey}, webhookEventEnabled is false`)
+            return
+          }
+          if (!appEnv.webhookEventUrl) {
+            this.logger.warn(`Skip webhook for app ${appKey}, webhookEventUrl not set`)
+            return
+          }
         }
         return this.sendEventWebhook(appEnv, options)
       case AppWebhookType.Verify:
-        if (!appEnv.webhookVerifyEnabled) {
-          this.logger.warn(`Skip webhook for app ${appKey}, webhookVerifyEnabled is false`)
-          return
-        }
-        if (!appEnv.webhookVerifyUrl) {
-          this.logger.warn(`Skip webhook for app ${appKey}, webhookVerifyUrl not set`)
-          return
+        if (!appEnv.webhookDebugging) {
+          if (!appEnv.webhookVerifyEnabled) {
+            this.logger.warn(`Skip webhook for app ${appKey}, webhookVerifyEnabled is false`)
+            return
+          }
+          if (!appEnv.webhookVerifyUrl) {
+            this.logger.warn(`Skip webhook for app ${appKey}, webhookVerifyUrl not set`)
+            return
+          }
         }
         return this.sendVerifyWebhook(appEnv, options)
       default:
@@ -72,10 +76,10 @@ export class ApiAppWebhookDataAccessService {
     try {
       // Get the app by Index
       const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
-      if (!appEnv.webhookAcceptIncoming) {
-        this.logger.warn(`storeIncomingWebhook ignoring request, webhookAcceptIncoming is disabled`)
+      if (!appEnv.webhookDebugging) {
+        this.logger.warn(`storeIncomingWebhook ignoring request, webhookDebugging is disabled`)
         res.statusCode = 400
-        return res.send(new Error(`webhookAcceptIncoming is disabled`))
+        return res.send(new Error(`webhookDebugging is disabled`))
       }
 
       if (!headers['kinetic-tx-id']) {
@@ -103,10 +107,18 @@ export class ApiAppWebhookDataAccessService {
     }
   }
 
+  getDebugUrl(appEnv: AppEnv, type: AppWebhookType, defaultUrl: string) {
+    if (!appEnv.webhookDebugging) {
+      return defaultUrl
+    }
+    return `${this.data.config.apiUrl}/app/${appEnv.name}/${appEnv.app?.index}/webhook/${type.toLowerCase()}`
+  }
+
   private sendEventWebhook(appEnv: AppEnv, options: WebhookOptions) {
+    const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookEventUrl)
     return new Promise((resolve, reject) => {
       this.http
-        .post(appEnv.webhookEventUrl, options.transaction, {
+        .post(url, options.transaction, {
           headers: this.getHeaders(appEnv, options),
         })
         .pipe(
@@ -132,9 +144,10 @@ export class ApiAppWebhookDataAccessService {
   }
 
   private sendVerifyWebhook(appEnv: AppEnv, options: WebhookOptions) {
+    const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookVerifyUrl)
     return new Promise((resolve, reject) =>
       this.http
-        .post(appEnv.webhookVerifyUrl, options.transaction, {
+        .post(url, options.transaction, {
           headers: this.getHeaders(appEnv, options),
         })
         .pipe(

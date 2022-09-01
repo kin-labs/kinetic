@@ -40,27 +40,27 @@ model App {
 }
 
 model AppEnv {
-  id                    String           @id @default(cuid())
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime         @updatedAt
-  name                  String
-  ipsAllowed            String[]
-  ipsBlocked            String[]
-  mints                 AppMint[]
-  transaction           AppTransaction[]
-  webhookAcceptIncoming Boolean          @default(false)
-  webhookEventEnabled   Boolean          @default(false)
-  webhookEventUrl       String?
-  webhookSecret         String?
-  webhookVerifyEnabled  Boolean          @default(false)
-  webhookVerifyUrl      String?
-  webhooks              AppWebhook[]
-  app                   App              @relation(fields: [appId], references: [id])
-  appId                 String
-  cluster               Cluster          @relation(fields: [clusterId], references: [id])
-  clusterId             String
-  walletBalances        WalletBalance[]
-  wallets               Wallet[]
+  id                   String           @id @default(cuid())
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  name                 String
+  ipsAllowed           String[]
+  ipsBlocked           String[]
+  mints                AppMint[]
+  transaction          AppTransaction[]
+  webhookDebugging     Boolean          @default(false)
+  webhookEventEnabled  Boolean          @default(false)
+  webhookEventUrl      String?
+  webhookSecret        String?
+  webhookVerifyEnabled Boolean          @default(false)
+  webhookVerifyUrl     String?
+  webhooks             AppWebhook[]
+  app                  App              @relation(fields: [appId], references: [id])
+  appId                String
+  cluster              Cluster          @relation(fields: [clusterId], references: [id])
+  clusterId            String
+  walletBalances       WalletBalance[]
+  wallets              Wallet[]
 
   @@unique([appId, clusterId])
   @@unique([appId, name])
