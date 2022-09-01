@@ -44,6 +44,8 @@ model AppEnv {
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
   name                  String
+  ipsAllowed            String[]
+  ipsBlocked            String[]
   mints                 AppMint[]
   transaction           AppTransaction[]
   webhookAcceptIncoming Boolean          @default(false)
@@ -89,6 +91,7 @@ model AppTransaction {
   destination             String?
   errors                  AppTransactionError[]
   feePayer                String?
+  ip                      String?
   mint                    String?
   processingDuration      Int?
   referenceId             String?

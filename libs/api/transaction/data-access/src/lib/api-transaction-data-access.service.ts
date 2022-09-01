@@ -2,7 +2,7 @@ import { ApiAppWebhookDataAccessService, AppEnv, AppWebhookType, parseError } fr
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { Injectable, Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
@@ -18,6 +18,8 @@ import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption
 import { GetTransactionResponse } from './entities/get-transaction.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
+import { Request } from 'express'
+import * as requestIp from 'request-ip'
 
 type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[] }
 
@@ -32,8 +34,8 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private confirmSignatureFinalizedCounter: Counter
   private confirmTransactionSolanaConfirmedCounter: Counter
   private makeTransferMintNotFoundErrorCounter: Counter
-  private makeTransferRequestCounter: Counter
   private markTransactionTimeoutCounter: Counter
+  private makeTransferRequestCounter: Counter
   private sendEventWebhookErrorCounter: Counter
   private sendEventWebhookSuccessCounter: Counter
   private sendSolanaTransactionConfirmedCounter: Counter
@@ -149,9 +151,19 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     return { lamports } as MinimumRentExemptionBalanceResponse
   }
 
-  async makeTransfer(input: MakeTransferRequest): Promise<AppTransactionWithErrors> {
+  async makeTransfer(req: Request, input: MakeTransferRequest): Promise<AppTransactionWithErrors> {
     const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
+
+    const ip = requestIp.getClientIp(req)
+
+    if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(ip)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+
+    if (appEnv?.ipsBlocked.length > 0 && appEnv?.ipsBlocked.includes(ip)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
 
     const mint = appEnv.mints.find(({ mint }) => mint.address === input.mint)
     if (!mint) {
@@ -163,6 +175,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const appTransaction: AppTransactionWithErrors = await this.createAppTransaction({
       appEnvId: appEnv.id,
       commitment: input.commitment,
+      ip,
       referenceId: input.referenceId,
       referenceType: input.referenceType,
     })
@@ -461,11 +474,13 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private createAppTransaction({
     appEnvId,
     commitment,
+    ip,
     referenceId,
     referenceType,
   }: {
     appEnvId: string
     commitment: Commitment
+    ip: string
     referenceId?: string
     referenceType?: string
   }): Promise<AppTransactionWithErrors> {
@@ -473,6 +488,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       data: {
         appEnvId,
         commitment,
+        ip,
         referenceId,
         referenceType,
       },

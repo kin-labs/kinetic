@@ -26,6 +26,8 @@ fragment AppEnvDetails on AppEnv {
       ...MintDetails
     }
   }
+  ipsAllowed
+  ipsBlocked
   mints {
     ...AppMintDetails
   }
@@ -63,6 +65,7 @@ fragment AppTransactionDetails on AppTransaction {
   }
   explorerUrl
   feePayer
+  ip
   mint
   processingDuration
   referenceId

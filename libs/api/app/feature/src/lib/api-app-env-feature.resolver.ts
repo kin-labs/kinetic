@@ -1,7 +1,7 @@
 import { AppEnv } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Wallet } from '@kin-kinetic/api/wallet/data-access'
-import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => AppEnv)
 export class ApiAppEnvFeatureResolver {
@@ -14,5 +14,25 @@ export class ApiAppEnvFeatureResolver {
   @ResolveField(() => [Wallet], { nullable: true })
   wallets(@Parent() appEnv: AppEnv) {
     return appEnv.wallets
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvAddAllowedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
+    return this.service.userAppEnvAddAllowedIp(appEnvId, ip)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvRemoveAllowedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
+    return this.service.userAppEnvRemoveAllowedIp(appEnvId, ip)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvAddBlockedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
+    return this.service.userAppEnvAddBlockedIp(appEnvId, ip)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvRemoveBlockedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
+    return this.service.userAppEnvRemoveBlockedIp(appEnvId, ip)
   }
 }

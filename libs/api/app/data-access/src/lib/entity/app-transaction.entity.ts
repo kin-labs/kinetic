@@ -37,6 +37,9 @@ export class AppTransaction {
   feePayer?: string
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
+  ip?: string
+  @ApiProperty({ nullable: true })
+  @Field({ nullable: true })
   mint?: string
   @ApiProperty({ nullable: true })
   @Field(() => Int, { nullable: true })

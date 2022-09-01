@@ -367,6 +367,12 @@ export interface AppTransaction {
    * @type {string}
    * @memberof AppTransaction
    */
+  ip: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
   mint: string | null
   /**
    *

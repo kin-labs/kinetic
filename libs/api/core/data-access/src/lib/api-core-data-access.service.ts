@@ -203,6 +203,30 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     return this.user.findUnique({ where: { username }, include: { emails: true } })
   }
 
+  async userAppEnvAddAllowedIp(appEnvId: string, ip: string) {
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const ips = appEnv?.ipsAllowed ? [...appEnv.ipsAllowed, ip] : [ip]
+    return this.appEnv.update({ where: { id: appEnvId }, data: { ipsAllowed: ips } })
+  }
+
+  async userAppEnvRemoveAllowedIp(appEnvId: string, ip: string) {
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const ips = appEnv.ipsAllowed.filter((ipAddress) => ipAddress !== ip)
+    return this.appEnv.update({ where: { id: appEnvId }, data: { ipsAllowed: ips } })
+  }
+
+  async userAppEnvAddBlockedIp(appEnvId: string, ip: string) {
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const ips = appEnv?.ipsBlocked ? [...appEnv.ipsBlocked, ip] : [ip]
+    return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
+  }
+
+  async userAppEnvRemoveBlockedIp(appEnvId: string, ip: string) {
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const ips = appEnv.ipsBlocked.filter((ipAddress) => ipAddress !== ip)
+    return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
+  }
+
   async configureDefaultData() {
     await this.configureDefaultUsers()
     await this.configureDefaultClusters()

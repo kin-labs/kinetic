@@ -617,6 +617,10 @@
             "type": "string",
             "nullable": true
           },
+          "ip": {
+            "type": "string",
+            "nullable": true
+          },
           "mint": {
             "type": "string",
             "nullable": true
@@ -715,6 +719,7 @@
           "errors",
           "explorerUrl",
           "feePayer",
+          "ip",
           "mint",
           "processingDuration",
           "referenceId",
