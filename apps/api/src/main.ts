@@ -19,12 +19,12 @@ async function bootstrap() {
   app.use(cookieParser())
   try {
     await app.listen(config.port, config.host)
-    Logger.log(
-      `🚀 API is running on http://localhost:${config.port}/${config.prefix}. CORS ${
-        config?.corsOrigins ? `enabled for: [${config?.corsOrigins?.join(', ')}]` : 'disabled'
-      }. Cookie domains: [${config?.cookieDomains?.join(', ')}].`,
-    )
+    Logger.log(`🚀 API is running on http://${config.host}:${config.port}/${config.prefix}.`)
     Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
+    Logger.log(`🔋 API_URL: ${config.apiUrl}`)
+    Logger.log(`🔋 COOKIE_DOMAINS: ${config.cookieDomains.join(', ')}`)
+    Logger.log(`🔋 CORS: ${config?.corsOrigins ? `enabled for: ${config?.corsOrigins?.join(', ')}` : 'disabled'}`)
+
     if (config.isDevelopment) {
       exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })
     }

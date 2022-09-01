@@ -16,6 +16,9 @@ export default () => ({
     username: process.env.ADMIN_USERNAME,
     password: process.env.ADMIN_PASSWORD,
   },
+  api: {
+    url: process.env.API_URL,
+  },
   cors: { origin },
   cookie: {
     domains,
