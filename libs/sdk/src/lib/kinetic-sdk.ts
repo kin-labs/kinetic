@@ -1,5 +1,5 @@
 import { Solana } from '@kin-kinetic/solana'
-import { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
+import { AppConfig, AppTransaction, BalanceResponse, GetTransactionResponse, HistoryResponse } from '../generated'
 export type { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
@@ -58,7 +58,7 @@ export class KineticSdk {
     return this.internal.getTokenAccounts(options)
   }
 
-  getTransaction({ signature }: GetTransactionOptions) {
+  getTransaction({ signature }: GetTransactionOptions): Promise<GetTransactionResponse> {
     return this.internal.getTransaction({ signature })
   }
 
