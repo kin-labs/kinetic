@@ -15,6 +15,7 @@ import {
   BalanceResponse,
   Configuration,
   CreateAccountRequest,
+  GetTransactionResponse,
   HistoryResponse,
   LatestBlockhashResponse,
   MakeTransferRequest,
@@ -128,7 +129,9 @@ export class KineticSdkInternal {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
-    return this.transactionApi.getTransaction(this.appConfig.environment.name, this.appConfig.app.index, signature)
+    return this.transactionApi
+      .getTransaction(this.appConfig.environment.name, this.appConfig.app.index, signature)
+      .then((res) => res.data)
   }
 
   async makeTransfer({
