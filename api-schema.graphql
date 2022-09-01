@@ -32,7 +32,7 @@ type AppEnv {
   name: String
   updatedAt: DateTime!
   wallets: [Wallet!]
-  webhookAcceptIncoming: Boolean
+  webhookDebugging: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String
   webhookSecret: String
@@ -41,7 +41,7 @@ type AppEnv {
 }
 
 input AppEnvUpdateInput {
-  webhookAcceptIncoming: Boolean
+  webhookDebugging: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String
   webhookSecret: String

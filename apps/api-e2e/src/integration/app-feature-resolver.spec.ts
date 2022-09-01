@@ -258,7 +258,7 @@ describe('App (e2e)', () => {
 
         const input: AppEnvUpdateInput = {
           webhookSecret: 'WebHookSecret',
-          webhookAcceptIncoming: true,
+          webhookDebugging: true,
           webhookEventEnabled: true,
           webhookEventUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/event',
           webhookVerifyEnabled: true,
@@ -271,7 +271,7 @@ describe('App (e2e)', () => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.updated
 
-            expect(data.webhookAcceptIncoming).toEqual(input.webhookAcceptIncoming)
+            expect(data.webhookDebugging).toEqual(input.webhookDebugging)
             expect(data.webhookSecret).toEqual(input.webhookSecret)
             expect(data.webhookEventEnabled).toEqual(input.webhookEventEnabled)
             expect(data.webhookEventUrl).toEqual(input.webhookEventUrl)

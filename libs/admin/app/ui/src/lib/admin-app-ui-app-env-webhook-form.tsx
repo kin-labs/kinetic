@@ -11,7 +11,7 @@ export interface AdminAppUiAppEnvWebhookFormProps {
 }
 
 const validationSchema = Yup.object({
-  webhookAcceptIncoming: Yup.boolean().optional(),
+  webhookDebugging: Yup.boolean().optional(),
   webhookEventEnabled: Yup.boolean().optional(),
   webhookEventUrl: Yup.string().optional(),
   webhookSecret: Yup.string().optional(),
@@ -34,7 +34,7 @@ const fields: UiFormField[] = [
     label: 'Webhook secret',
     hideExpression: (d) => !d['webhookEventEnabled'] && !d['webhookVerifyEnabled'],
   }),
-  UiFormField.checkbox('webhookAcceptIncoming', { label: 'Accept incoming webhooks' }),
+  UiFormField.checkbox('webhookDebugging', { label: 'Enable webhook debugging' }),
 ]
 
 export function AdminAppUiAppEnvWebhookForm({ appEnv, onSubmit }: AdminAppUiAppEnvWebhookFormProps) {
@@ -49,7 +49,7 @@ export function AdminAppUiAppEnvWebhookForm({ appEnv, onSubmit }: AdminAppUiAppE
         </Box>
         <AdminUiForm
           data={{
-            webhookAcceptIncoming: appEnv?.webhookAcceptIncoming,
+            webhookDebugging: appEnv?.webhookDebugging,
             webhookEventEnabled: appEnv?.webhookEventEnabled,
             webhookEventUrl,
             webhookSecret: appEnv?.webhookSecret || 'hunter2',
