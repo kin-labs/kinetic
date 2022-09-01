@@ -68,6 +68,10 @@ export class ApiConfigDataAccessService {
     return this.config.get('admin.password')
   }
 
+  get apiUrl(): string {
+    return this.config.get('api.url')
+  }
+
   get cookieDomains(): string[] {
     return this.config.get('cookie.domains')
   }
