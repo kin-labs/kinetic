@@ -1,4 +1,3 @@
-import { AppEnv } from '@kin-kinetic/api/app/data-access'
 import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import {
@@ -26,6 +25,7 @@ import {
   UserAppEnvRemoveBlockedIp,
   UserAppEnvAddAllowedIp,
   UserAppEnvRemoveAllowedIp,
+  AppEnv,
 } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
