@@ -19,6 +19,7 @@ import { GetTransactionResponse } from './entities/get-transaction.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { Request } from 'express'
+import * as requestIp from 'request-ip'
 
 type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[] }
 
@@ -154,11 +155,13 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.makeTransferRequestCounter.add(1, { appKey })
 
-    if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(req.ip)) {
+    const ip = requestIp.getClientIp(req)
+
+    if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(ip)) {
       throw new UnauthorizedException('Request not allowed')
     }
 
-    if (appEnv?.ipsBlocked.length > 0 && appEnv?.ipsBlocked.includes(req.ip)) {
+    if (appEnv?.ipsBlocked.length > 0 && appEnv?.ipsBlocked.includes(ip)) {
       throw new UnauthorizedException('Request not allowed')
     }
 
@@ -172,7 +175,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const appTransaction: AppTransactionWithErrors = await this.createAppTransaction({
       appEnvId: appEnv.id,
       commitment: input.commitment,
-      ip: req.ip,
+      ip,
       referenceId: input.referenceId,
       referenceType: input.referenceType,
     })
