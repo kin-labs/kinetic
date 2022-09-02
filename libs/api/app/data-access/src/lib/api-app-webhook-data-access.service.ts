@@ -172,12 +172,19 @@ export class ApiAppWebhookDataAccessService {
     )
   }
 
-  private getHeaders = (appEnv: AppEnv, options: WebhookOptions) => ({
-    ...options.headers,
-    'content-type': 'application/json',
-    'kinetic-app-env': appEnv.name,
-    'kinetic-app-index': appEnv.app?.index,
-    'kinetic-tx-id': options.transaction.id,
-    'kinetic-webhook-type': options.type,
-  })
+  private getHeaders = (appEnv: AppEnv, options: WebhookOptions) => {
+    // Pass along any request headers that start with 'kinetic'
+    const headers = Object.keys(options.headers)
+      .filter((k) => k.startsWith('kinetic'))
+      .reduce((acc, curr) => ({ ...acc, [curr]: options.headers[curr] }), {})
+
+    return {
+      ...headers,
+      'content-type': 'application/json',
+      'kinetic-environment': appEnv.name,
+      'kinetic-index': appEnv.app?.index,
+      'kinetic-tx-id': options.transaction.id,
+      'kinetic-webhook-type': options.type,
+    }
+  }
 }
