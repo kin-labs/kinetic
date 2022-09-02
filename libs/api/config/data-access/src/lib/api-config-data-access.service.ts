@@ -137,8 +137,19 @@ export class ApiConfigDataAccessService {
     return this.environment === 'development'
   }
 
+  get metricsConfig(): { enabled: boolean; port: number } {
+    return {
+      enabled: this.metricsEnabled,
+      port: this.metricsPort,
+    }
+  }
+
   get metricsEnabled(): boolean {
-    return this.config.get('metricsEnabled')
+    return this.config.get('metrics.enabled')
+  }
+
+  get metricsPort(): number {
+    return this.config.get('metrics.port')
   }
 
   get isProduction(): boolean {

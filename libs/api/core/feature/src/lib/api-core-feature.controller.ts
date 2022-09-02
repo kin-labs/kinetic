@@ -1,5 +1,5 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
-import { OpenTelementrySdk } from '@kin-kinetic/api/core/util'
+import { OpenTelemetrySdk } from '@kin-kinetic/api/core/util'
 import { Controller, Get, Response } from '@nestjs/common'
 import { ApiExcludeEndpoint } from '@nestjs/swagger'
 
@@ -10,7 +10,7 @@ export class ApiCoreFeatureController {
   @Get('metrics')
   @ApiExcludeEndpoint()
   metrics(@Response() response) {
-    return OpenTelementrySdk.getMetrics(response)
+    return OpenTelemetrySdk.getMetrics(response)
   }
 
   @Get('uptime')
