@@ -6,6 +6,7 @@ import {
   serializeTransaction,
 } from '@kin-kinetic/solana'
 import { TransactionType } from '@kin-tools/kin-memo'
+import { AxiosRequestConfig } from 'axios'
 import {
   AccountApi,
   AirdropApi,
@@ -15,13 +16,13 @@ import {
   BalanceResponse,
   Configuration,
   CreateAccountRequest,
-  GetTransactionResponse,
   HistoryResponse,
   LatestBlockhashResponse,
   MakeTransferRequest,
   RequestAirdropResponse,
   TransactionApi,
 } from '../generated'
+import { NAME, VERSION } from '../version'
 import { parseKineticSdkEndpoint } from './helpers'
 import {
   CreateAccountOptions,
@@ -44,9 +45,23 @@ export class KineticSdkInternal {
 
   appConfig?: AppConfig
 
+  private requestConfig(headers: Record<string, string> = {}): AxiosRequestConfig {
+    return {
+      headers: {
+        ...headers,
+        'kinetic-environment': `${this.appConfig?.environment?.name}`,
+        'kinetic-index': `${this.appConfig?.app?.index}`,
+        'kinetic-user-agent': `${NAME}@${VERSION}`,
+      },
+    }
+  }
+
   constructor(readonly sdkConfig: KineticSdkConfigParsed) {
     // Create the API Configuration
-    const apiConfig = new Configuration({ basePath: parseKineticSdkEndpoint(sdkConfig.endpoint) })
+    const apiConfig = new Configuration({
+      baseOptions: this.requestConfig(this.sdkConfig.headers),
+      basePath: parseKineticSdkEndpoint(sdkConfig.endpoint),
+    })
 
     // Configure the APIs
     this.accountApi = new AccountApi(apiConfig)
