@@ -1,6 +1,6 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
-import { OpenTelementrySdk } from '@kin-kinetic/api/core/util'
-import { Controller, Get, Response } from '@nestjs/common'
+import { OpenTelemetrySdk } from '@kin-kinetic/api/core/util'
+import { Controller, Get, NotFoundException, Response } from '@nestjs/common'
 import { ApiExcludeEndpoint } from '@nestjs/swagger'
 
 @Controller()
@@ -10,7 +10,10 @@ export class ApiCoreFeatureController {
   @Get('metrics')
   @ApiExcludeEndpoint()
   metrics(@Response() response) {
-    return OpenTelementrySdk.getMetrics(response)
+    if (!this.service.config.metricsEndpointEnabled) {
+      throw new NotFoundException()
+    }
+    return OpenTelemetrySdk.getMetrics(response)
   }
 
   @Get('uptime')

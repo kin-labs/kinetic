@@ -1,5 +1,5 @@
 import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
-import { OpenTelementrySdk } from '@kin-kinetic/api/core/util'
+import { OpenTelemetrySdk } from '@kin-kinetic/api/core/util'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { exec } from 'child_process'
@@ -10,7 +10,7 @@ import { AppModule } from './app/app.module'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ApiConfigDataAccessService)
-  await OpenTelementrySdk.start(config.metricsEnabled)
+  await OpenTelemetrySdk.start(config.metricsConfig)
   app.setGlobalPrefix(config.prefix)
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
   app.enableCors(config.cors)

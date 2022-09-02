@@ -3,20 +3,24 @@ import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { NodeSDK } from '@opentelemetry/sdk-node'
 import { ServerResponse } from 'http'
 
-export class OpenTelementrySdk {
+export class OpenTelemetrySdk {
   static sdk: NodeSDK
   private static metricExporter: PrometheusExporter
 
-  static start(metricsEnabled: boolean) {
-    if (!metricsEnabled) {
+  static start({ enabled, port }: { enabled: boolean; port: number }) {
+    if (!enabled) {
       Logger.verbose(`Metrics are disabled, set METRICS_ENABLED=true to enable them`, 'OpenTelementrySdk')
       return true
     }
-    Logger.verbose(`Metrics are enabled`, 'OpenTelementrySdk')
+    Logger.verbose(`Metrics are enabled`, 'OpenTelemetrySdk')
+    if (port > 0) {
+      Logger.verbose(`Metrics listening on port ${port}`, 'OpenTelemetrySdk')
+    }
 
     this.metricExporter = new PrometheusExporter({
       prefix: 'kinetic',
-      preventServerStart: true,
+      preventServerStart: !port,
+      port,
     })
 
     this.sdk = new NodeSDK({

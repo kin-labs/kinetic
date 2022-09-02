@@ -15,6 +15,8 @@ export const validationSchema = Joi.object({
   HOST: Joi.string().default('127.0.0.1'),
   JWT_SECRET: Joi.string().required(),
   METRICS_ENABLED: Joi.boolean().default(false),
+  METRICS_ENDPOINT_ENABLED: Joi.boolean().default(false),
+  METRICS_PORT: Joi.number().default(0),
   NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
   PORT: Joi.number().default(3000),
   SOLANA_DEVNET_RPC_ENDPOINT: Joi.string().default('devnet'),
