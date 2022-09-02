@@ -1,4 +1,5 @@
 import { Box, Button, ButtonGroup, Input, Stack } from '@chakra-ui/react'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import {
   AppEnv,
   useUserAppEnvAddBlockedUaMutation,
@@ -38,7 +39,7 @@ export function AdminAppUiAppEnvBlockedUasForm({ appEnv }: AdminAppUiAppEnvBlock
           </Button>
         </ButtonGroup>
         <Stack direction="column" spacing={6}>
-          {appEnv?.uasBlocked?.length === 0 && <>There are none SDK user agents blocked</>}
+          {!appEnv?.uasBlocked?.length && <AdminUiAlert message="There are no blocked SDK user agents" />}
           {appEnv?.uasBlocked?.map((userAgent) => (
             <ButtonGroup>
               <span>{userAgent}</span>

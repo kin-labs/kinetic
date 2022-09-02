@@ -175,7 +175,7 @@ export class ApiAppWebhookDataAccessService {
   private getHeaders = (appEnv: AppEnv, options: WebhookOptions) => {
     // Pass along any request headers that start with 'kinetic'
     const headers = Object.keys(options.headers)
-      .filter((k) => k.startsWith('kinetic'))
+      .filter((k) => k.startsWith('kinetic-'))
       .reduce((acc, curr) => ({ ...acc, [curr]: options.headers[curr] }), {})
 
     return {

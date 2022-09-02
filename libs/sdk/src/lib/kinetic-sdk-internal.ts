@@ -171,7 +171,7 @@ export class KineticSdkInternal {
 
     const account = await this.getTokenAccounts({ account: destination, mint })
 
-    if (!senderCreate && account?.length === 0) {
+    if (!account?.length && !senderCreate) {
       throw new Error(`Destination account doesn't exist.`)
     }
 
@@ -186,7 +186,7 @@ export class KineticSdkInternal {
       mintFeePayer,
       mintPublicKey,
       signer: owner.solana,
-      senderCreate: account?.length === 0 && senderCreate,
+      senderCreate: !account?.length && senderCreate,
       type: type || TransactionType.None,
     })
 
