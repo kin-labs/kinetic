@@ -156,12 +156,21 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     this.makeTransferRequestCounter.add(1, { appKey })
 
     const ip = requestIp.getClientIp(req)
+    const ua = req.headers['user-agent']
 
     if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(ip)) {
       throw new UnauthorizedException('Request not allowed')
     }
 
     if (appEnv?.ipsBlocked.length > 0 && appEnv?.ipsBlocked.includes(ip)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+
+    if (appEnv?.uasAllowed.length > 0 && !appEnv?.uasAllowed.includes(ua)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+
+    if (appEnv?.uasBlocked.length > 0 && appEnv?.uasBlocked.includes(ua)) {
       throw new UnauthorizedException('Request not allowed')
     }
 
