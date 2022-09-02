@@ -35,4 +35,24 @@ export class ApiAppEnvFeatureResolver {
   userAppEnvRemoveBlockedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
     return this.service.userAppEnvRemoveBlockedIp(appEnvId, ip)
   }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvAddAllowedUa(@Args('appEnvId') appEnvId: string, @Args('ua') ua: string) {
+    return this.service.userAppEnvAddAllowedUa(appEnvId, ua)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvRemoveAllowedUa(@Args('appEnvId') appEnvId: string, @Args('ua') ua: string) {
+    return this.service.userAppEnvRemoveAllowedUa(appEnvId, ua)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvAddBlockedUa(@Args('appEnvId') appEnvId: string, @Args('ua') ua: string) {
+    return this.service.userAppEnvAddBlockedUa(appEnvId, ua)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvRemoveBlockedUa(@Args('appEnvId') appEnvId: string, @Args('ua') ua: string) {
+    return this.service.userAppEnvRemoveBlockedUa(appEnvId, ua)
+  }
 }

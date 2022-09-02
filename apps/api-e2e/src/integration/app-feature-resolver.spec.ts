@@ -11,6 +11,7 @@ import {
   UserAppEnvWalletRemove,
   AppUpdateInput,
   UserAppUserAdd,
+  AppEnv,
   AppUserAddInput,
   UserAppUserRemove,
   AppUserRemoveInput,
@@ -25,7 +26,10 @@ import {
   UserAppEnvRemoveBlockedIp,
   UserAppEnvAddAllowedIp,
   UserAppEnvRemoveAllowedIp,
-  AppEnv,
+  UserAppEnvAddBlockedUa,
+  UserAppEnvRemoveBlockedUa,
+  UserAppEnvRemoveAllowedUa,
+  UserAppEnvAddAllowedUa,
 } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
@@ -574,6 +578,94 @@ describe('App (e2e)', () => {
             expect(ipsBlocked.includes(ip)).toBeFalsy()
           })
       })
+    })
+  })
+
+  describe('User Agent Allowing', () => {
+    let appEnv: AppEnv
+
+    beforeEach(async () => {
+      const name = uniq('app-')
+      const index = uniqInt()
+      const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
+        input: { index, name },
+      })
+      appEnv = createdApp.body.data.created.envs[0]
+    })
+    it('should allow an User Agent', async () => {
+      const ua = 'node/1.0.0'
+      await runGraphQLQueryAdmin(app, token, UserAppEnvAddAllowedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+        .expect(200)
+        .expect((res) => {
+          expect(res).toHaveProperty('body.data')
+          const uasAllowed: string[] = res.body.data?.item?.uasAllowed
+          expect(uasAllowed.includes(ua)).toBeTruthy()
+        })
+    })
+
+    it('should remove an User Agent from the allowed list', async () => {
+      const ua = 'node/1.0.1'
+      await runGraphQLQueryAdmin(app, token, UserAppEnvAddAllowedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+      await runGraphQLQueryAdmin(app, token, UserAppEnvRemoveAllowedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+        .expect(200)
+        .expect((res) => {
+          expect(res).toHaveProperty('body.data')
+          const uasAllowed: string[] = res.body.data?.item?.ipsAllowed
+          expect(uasAllowed.includes(ua)).toBeFalsy()
+        })
+    })
+  })
+
+  describe('User Agent Blocking', () => {
+    let appEnv: AppEnv
+
+    beforeEach(async () => {
+      const name = uniq('app-')
+      const index = uniqInt()
+      const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
+        input: { index, name },
+      })
+      appEnv = createdApp.body.data.created.envs[0]
+    })
+    it('should block an User Agent', async () => {
+      const ua = 'node/1.0.0'
+      await runGraphQLQueryAdmin(app, token, UserAppEnvAddBlockedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+        .expect(200)
+        .expect((res) => {
+          expect(res).toHaveProperty('body.data')
+          const uasBlocked: string[] = res.body.data?.item?.uasBlocked
+          expect(uasBlocked.includes(ua)).toBeTruthy()
+        })
+    })
+
+    it('should unblock an User Agent', async () => {
+      const ua = 'node/1.0.1'
+      await runGraphQLQueryAdmin(app, token, UserAppEnvAddBlockedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+      await runGraphQLQueryAdmin(app, token, UserAppEnvRemoveBlockedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+        .expect(200)
+        .expect((res) => {
+          expect(res).toHaveProperty('body.data')
+          const uasBlocked: string[] = res.body.data?.item?.uasBlocked
+          expect(uasBlocked.includes(ua)).toBeFalsy()
+        })
     })
   })
 })

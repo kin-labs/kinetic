@@ -2,6 +2,8 @@ import { Box, Stack, useToast } from '@chakra-ui/react'
 import {
   AdminAppUiAppEnvAllowedIpsForm,
   AdminAppUiAppEnvBlockedIpsForm,
+  AdminAppUiAppEnvBlockedUasForm,
+  AdminAppUiAppEnvAllowedUasForm,
   AdminAppUiAppEnvMintSettings,
   AdminAppUiAppEnvWebhookForm,
 } from '@kin-kinetic/admin/app/ui'
@@ -106,6 +108,8 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
           <AdminAppUiAppEnvWebhookForm appEnv={data.item} onSubmit={onSubmit} />
           <AdminAppUiAppEnvAllowedIpsForm appEnv={data.item} />
           <AdminAppUiAppEnvBlockedIpsForm appEnv={data.item} />
+          <AdminAppUiAppEnvAllowedUasForm appEnv={data.item} />
+          <AdminAppUiAppEnvBlockedUasForm appEnv={data.item} />
         </Stack>
       ) : (
         <Box as="pre" p="6" borderWidth="1px" borderRadius="lg" overflow="hidden" fontSize="xs">

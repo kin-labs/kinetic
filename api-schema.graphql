@@ -30,6 +30,8 @@ type AppEnv {
   key: String
   mints: [AppMint!]
   name: String
+  uasAllowed: [String!]
+  uasBlocked: [String!]
   updatedAt: DateTime!
   wallets: [Wallet!]
   webhookDebugging: Boolean
@@ -356,12 +358,16 @@ type Mutation {
   login(input: LoginInput!): AuthToken
   logout: Boolean
   userAppEnvAddAllowedIp(appEnvId: String!, ip: String!): AppEnv
+  userAppEnvAddAllowedUa(appEnvId: String!, ua: String!): AppEnv
   userAppEnvAddBlockedIp(appEnvId: String!, ip: String!): AppEnv
+  userAppEnvAddBlockedUa(appEnvId: String!, ua: String!): AppEnv
   userAppEnvMintDisable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
   userAppEnvMintEnable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
   userAppEnvMintSetWallet(appEnvId: String!, appId: String!, mintId: String!, walletId: String!): AppEnv
   userAppEnvRemoveAllowedIp(appEnvId: String!, ip: String!): AppEnv
+  userAppEnvRemoveAllowedUa(appEnvId: String!, ua: String!): AppEnv
   userAppEnvRemoveBlockedIp(appEnvId: String!, ip: String!): AppEnv
+  userAppEnvRemoveBlockedUa(appEnvId: String!, ua: String!): AppEnv
   userAppEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   userAppEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   userAppUserAdd(appId: String!, input: AppUserAddInput!): App

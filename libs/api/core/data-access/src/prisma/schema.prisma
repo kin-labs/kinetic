@@ -48,6 +48,8 @@ model AppEnv {
   ipsBlocked           String[]
   mints                AppMint[]
   transaction          AppTransaction[]
+  uasAllowed           String[]
+  uasBlocked           String[]
   webhookDebugging     Boolean          @default(false)
   webhookEventEnabled  Boolean          @default(false)
   webhookEventUrl      String?
@@ -107,6 +109,7 @@ model AppTransaction {
   source                  String?
   status                  AppTransactionStatus      @default(Processing)
   totalDuration           Int?
+  ua                      String?
   webhooks                AppWebhook[]
   webhookEventStart       DateTime?
   webhookEventEnd         DateTime?
