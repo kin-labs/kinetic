@@ -156,6 +156,10 @@ export class KineticSdkInternal {
 
     const account = await this.getTokenAccounts({ account: destination, mint })
 
+    if (!senderCreate && account?.length === 0) {
+      throw new Error(`Destination account doesn't exist.`)
+    }
+
     const tx = await generateMakeTransferTransaction({
       addMemo: this.appConfig.mint.addMemo,
       amount,
