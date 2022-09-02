@@ -120,16 +120,15 @@ describe('KineticSdk (e2e)', () => {
 
   it('should not allow the sender to create an account when senderCreate params is false or undefined', async () => {
     const destination = Keypair.random()
-    const tx = await sdk.makeTransfer({
-      amount: '43',
-      destination: destination.publicKey,
-      owner: aliceKeypair,
-      senderCreate: false,
-    })
-    expect(tx.signature).toBeNull()
-    expect(Number(tx.amount)).toBe(4300000)
-    expect(tx.errors.length).toBeGreaterThan(0)
-    expect(tx.status).toBe(AppTransactionStatus.Failed)
-    expect(tx.errors[0].message).toContain(`Destination account doesn't exist.`)
+    try {
+      await sdk.makeTransfer({
+        amount: '43',
+        destination: destination.publicKey,
+        owner: aliceKeypair,
+        senderCreate: false,
+      })
+    } catch (e) {
+      expect(e.message).toBe(`Destination account doesn't exist.`)
+    }
   })
 })
