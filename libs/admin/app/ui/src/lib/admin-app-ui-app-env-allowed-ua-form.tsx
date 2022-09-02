@@ -48,7 +48,7 @@ export function AdminAppUiAppEnvAllowedUasForm({ appEnv }: AdminAppUiAppEnvAllow
                   removeAllowedUaMutation({ appEnvId: appEnv.id, ua: userAgent })
                 }}
               >
-                Unblock SDK User Agent
+                Delete
               </Button>
             </ButtonGroup>
           ))}

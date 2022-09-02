@@ -110,6 +110,7 @@ export type AppTransaction = {
   source?: Maybe<Scalars['String']>
   status: AppTransactionStatus
   totalDuration?: Maybe<Scalars['Int']>
+  ua?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
   webhookEventDuration?: Maybe<Scalars['Int']>
   webhookEventEnd?: Maybe<Scalars['DateTime']>
@@ -901,6 +902,7 @@ export const AppTransactionDetails = gql`
     source
     status
     totalDuration
+    ua
     webhookEventDuration
     webhookEventIncoming {
       ...AppWebhookDetails
@@ -2216,6 +2218,7 @@ export type AppTransactionDetailsFragment = {
   source?: string | null
   status: AppTransactionStatus
   totalDuration?: number | null
+  ua?: string | null
   webhookEventDuration?: number | null
   webhookEventEnd?: any | null
   webhookEventStart?: any | null
@@ -4094,6 +4097,7 @@ export type UserAppTransactionQuery = {
     source?: string | null
     status: AppTransactionStatus
     totalDuration?: number | null
+    ua?: string | null
     webhookEventDuration?: number | null
     webhookEventEnd?: any | null
     webhookEventStart?: any | null
@@ -4195,6 +4199,7 @@ export type UserAppTransactionsQuery = {
     source?: string | null
     status: AppTransactionStatus
     totalDuration?: number | null
+    ua?: string | null
     webhookEventDuration?: number | null
     webhookEventEnd?: any | null
     webhookEventStart?: any | null

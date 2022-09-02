@@ -235,7 +235,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async userAppEnvRemoveAllowedUa(appEnvId: string, ua: string) {
     const appEnv = await this.getAppEnvById(appEnvId)
-    const uas = appEnv.uasAllowed.filter((uaAddress) => uaAddress !== ua)
+    const uas = appEnv.uasAllowed.filter((userAgent) => userAgent !== ua)
     return this.appEnv.update({ where: { id: appEnvId }, data: { uasAllowed: uas } })
   }
 

@@ -187,6 +187,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       ip,
       referenceId: input.referenceId,
       referenceType: input.referenceType,
+      ua,
     })
 
     // Process the Solana transaction
@@ -486,12 +487,14 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     ip,
     referenceId,
     referenceType,
+    ua,
   }: {
     appEnvId: string
     commitment: Commitment
     ip: string
     referenceId?: string
     referenceType?: string
+    ua: string
   }): Promise<AppTransactionWithErrors> {
     return this.data.appTransaction.create({
       data: {
@@ -500,6 +503,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
         ip,
         referenceId,
         referenceType,
+        ua,
       },
       include: { errors: true },
     })

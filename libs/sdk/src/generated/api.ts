@@ -457,6 +457,12 @@ export interface AppTransaction {
    * @type {string}
    * @memberof AppTransaction
    */
+  ua: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof AppTransaction
+   */
   webhookEventStart: string | null
   /**
    *
