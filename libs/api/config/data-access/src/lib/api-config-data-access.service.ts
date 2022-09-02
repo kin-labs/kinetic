@@ -148,6 +148,10 @@ export class ApiConfigDataAccessService {
     return this.config.get('metrics.enabled')
   }
 
+  get metricsEndpointEnabled(): boolean {
+    return this.config.get('metrics.endpointEnabled')
+  }
+
   get metricsPort(): number {
     return this.config.get('metrics.port')
   }

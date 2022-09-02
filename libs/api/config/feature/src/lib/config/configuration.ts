@@ -35,6 +35,7 @@ export default () => ({
   host: process.env.HOST,
   metrics: {
     enabled: process.env.METRICS_ENABLED?.toLowerCase() !== 'false',
+    endpointEnabled: process.env.METRICS_ENDPOINT_ENABLED?.toLowerCase() !== 'false',
     port: parseInt(process.env.METRICS_PORT, 10),
   },
   port: parseInt(process.env.PORT, 10),
