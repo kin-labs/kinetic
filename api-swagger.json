@@ -681,6 +681,10 @@
             "type": "number",
             "nullable": true
           },
+          "ua": {
+            "type": "string",
+            "nullable": true
+          },
           "webhookEventStart": {
             "format": "date-time",
             "type": "string",
@@ -734,6 +738,7 @@
           "source",
           "status",
           "totalDuration",
+          "ua",
           "webhookEventStart",
           "webhookEventEnd",
           "webhookEventDuration",

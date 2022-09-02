@@ -81,6 +81,9 @@ export class AppTransaction {
   @ApiProperty({ nullable: true })
   @Field(() => Int, { nullable: true })
   totalDuration?: number
+  @ApiProperty({ nullable: true })
+  @Field({ nullable: true })
+  ua?: string
   @HideField()
   webhooks?: AppWebhook[]
   @ApiProperty({ nullable: true })

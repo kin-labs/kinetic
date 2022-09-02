@@ -79,6 +79,30 @@ mutation userAppEnvRemoveBlockedIp($appEnvId: String!, $ip: String!) {
   }
 }
 
+mutation userAppEnvAddAllowedUa($appEnvId: String!, $ua: String!) {
+  item: userAppEnvAddAllowedUa(appEnvId: $appEnvId, ua: $ua) {
+    ...AppEnvDetails
+  }
+}
+
+mutation userAppEnvRemoveAllowedUa($appEnvId: String!, $ua: String!) {
+  item: userAppEnvRemoveAllowedUa(appEnvId: $appEnvId, ua: $ua) {
+    ...AppEnvDetails
+  }
+}
+
+mutation userAppEnvAddBlockedUa($appEnvId: String!, $ua: String!) {
+  item: userAppEnvAddBlockedUa(appEnvId: $appEnvId, ua: $ua) {
+    ...AppEnvDetails
+  }
+}
+
+mutation userAppEnvRemoveBlockedUa($appEnvId: String!, $ua: String!) {
+  item: userAppEnvRemoveBlockedUa(appEnvId: $appEnvId, ua: $ua) {
+    ...AppEnvDetails
+  }
+}
+
 mutation UserAppEnvMintDisable($appId: String!, $appEnvId: String!, $mintId: String!) {
   item: userAppEnvMintDisable(appId: $appId, appEnvId: $appEnvId, mintId: $mintId) {
     ...AppEnvDetails

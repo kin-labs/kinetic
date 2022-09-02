@@ -32,6 +32,8 @@ fragment AppEnvDetails on AppEnv {
     ...AppMintDetails
   }
   name
+  uasAllowed
+  uasBlocked
   webhookDebugging
   webhookEventEnabled
   webhookEventUrl
@@ -80,6 +82,7 @@ fragment AppTransactionDetails on AppTransaction {
   source
   status
   totalDuration
+  ua
   webhookEventDuration
   webhookEventIncoming {
     ...AppWebhookDetails

@@ -17,6 +17,10 @@ export class AppEnv {
   ipsAllowed?: string[]
   @Field(() => [String], { nullable: true })
   ipsBlocked?: string[]
+  @Field(() => [String], { nullable: true })
+  uasAllowed?: string[]
+  @Field(() => [String], { nullable: true })
+  uasBlocked?: string[]
   @Field({ nullable: true })
   webhookDebugging?: boolean
   @Field({ nullable: true })

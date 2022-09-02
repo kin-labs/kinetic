@@ -227,6 +227,30 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     return this.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
   }
 
+  async userAppEnvAddAllowedUa(appEnvId: string, ua: string) {
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const uas = appEnv?.uasAllowed ? [...appEnv.uasAllowed, ua] : [ua]
+    return this.appEnv.update({ where: { id: appEnvId }, data: { uasAllowed: uas } })
+  }
+
+  async userAppEnvRemoveAllowedUa(appEnvId: string, ua: string) {
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const uas = appEnv.uasAllowed.filter((userAgent) => userAgent !== ua)
+    return this.appEnv.update({ where: { id: appEnvId }, data: { uasAllowed: uas } })
+  }
+
+  async userAppEnvAddBlockedUa(appEnvId: string, ua: string) {
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const uas = appEnv?.uasBlocked ? [...appEnv.uasBlocked, ua] : [ua]
+    return this.appEnv.update({ where: { id: appEnvId }, data: { uasBlocked: uas } })
+  }
+
+  async userAppEnvRemoveBlockedUa(appEnvId: string, ua: string) {
+    const appEnv = await this.getAppEnvById(appEnvId)
+    const uas = appEnv.uasBlocked.filter((userAgent) => userAgent !== ua)
+    return this.appEnv.update({ where: { id: appEnvId }, data: { uasBlocked: uas } })
+  }
+
   async configureDefaultData() {
     await this.configureDefaultUsers()
     await this.configureDefaultClusters()

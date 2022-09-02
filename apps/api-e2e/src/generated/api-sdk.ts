@@ -50,6 +50,8 @@ export type AppEnv = {
   key?: Maybe<Scalars['String']>
   mints?: Maybe<Array<AppMint>>
   name?: Maybe<Scalars['String']>
+  uasAllowed?: Maybe<Array<Scalars['String']>>
+  uasBlocked?: Maybe<Array<Scalars['String']>>
   updatedAt: Scalars['DateTime']
   wallets?: Maybe<Array<Wallet>>
   webhookDebugging?: Maybe<Scalars['Boolean']>
@@ -108,6 +110,7 @@ export type AppTransaction = {
   source?: Maybe<Scalars['String']>
   status: AppTransactionStatus
   totalDuration?: Maybe<Scalars['Int']>
+  ua?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
   webhookEventDuration?: Maybe<Scalars['Int']>
   webhookEventEnd?: Maybe<Scalars['DateTime']>
@@ -374,12 +377,16 @@ export type Mutation = {
   login?: Maybe<AuthToken>
   logout?: Maybe<Scalars['Boolean']>
   userAppEnvAddAllowedIp?: Maybe<AppEnv>
+  userAppEnvAddAllowedUa?: Maybe<AppEnv>
   userAppEnvAddBlockedIp?: Maybe<AppEnv>
+  userAppEnvAddBlockedUa?: Maybe<AppEnv>
   userAppEnvMintDisable?: Maybe<AppEnv>
   userAppEnvMintEnable?: Maybe<AppEnv>
   userAppEnvMintSetWallet?: Maybe<AppEnv>
   userAppEnvRemoveAllowedIp?: Maybe<AppEnv>
+  userAppEnvRemoveAllowedUa?: Maybe<AppEnv>
   userAppEnvRemoveBlockedIp?: Maybe<AppEnv>
+  userAppEnvRemoveBlockedUa?: Maybe<AppEnv>
   userAppEnvWalletAdd?: Maybe<AppEnv>
   userAppEnvWalletRemove?: Maybe<AppEnv>
   userAppUserAdd?: Maybe<App>
@@ -444,9 +451,19 @@ export type MutationUserAppEnvAddAllowedIpArgs = {
   ip: Scalars['String']
 }
 
+export type MutationUserAppEnvAddAllowedUaArgs = {
+  appEnvId: Scalars['String']
+  ua: Scalars['String']
+}
+
 export type MutationUserAppEnvAddBlockedIpArgs = {
   appEnvId: Scalars['String']
   ip: Scalars['String']
+}
+
+export type MutationUserAppEnvAddBlockedUaArgs = {
+  appEnvId: Scalars['String']
+  ua: Scalars['String']
 }
 
 export type MutationUserAppEnvMintDisableArgs = {
@@ -473,9 +490,19 @@ export type MutationUserAppEnvRemoveAllowedIpArgs = {
   ip: Scalars['String']
 }
 
+export type MutationUserAppEnvRemoveAllowedUaArgs = {
+  appEnvId: Scalars['String']
+  ua: Scalars['String']
+}
+
 export type MutationUserAppEnvRemoveBlockedIpArgs = {
   appEnvId: Scalars['String']
   ip: Scalars['String']
+}
+
+export type MutationUserAppEnvRemoveBlockedUaArgs = {
+  appEnvId: Scalars['String']
+  ua: Scalars['String']
 }
 
 export type MutationUserAppEnvWalletAddArgs = {
@@ -812,6 +839,8 @@ export const AppEnvDetails = gql`
       ...AppMintDetails
     }
     name
+    uasAllowed
+    uasBlocked
     webhookDebugging
     webhookEventEnabled
     webhookEventUrl
@@ -873,6 +902,7 @@ export const AppTransactionDetails = gql`
     source
     status
     totalDuration
+    ua
     webhookEventDuration
     webhookEventIncoming {
       ...AppWebhookDetails
@@ -1173,6 +1203,38 @@ export const UserAppEnvAddBlockedIp = gql`
 export const UserAppEnvRemoveBlockedIp = gql`
   mutation userAppEnvRemoveBlockedIp($appEnvId: String!, $ip: String!) {
     item: userAppEnvRemoveBlockedIp(appEnvId: $appEnvId, ip: $ip) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetails}
+`
+export const UserAppEnvAddAllowedUa = gql`
+  mutation userAppEnvAddAllowedUa($appEnvId: String!, $ua: String!) {
+    item: userAppEnvAddAllowedUa(appEnvId: $appEnvId, ua: $ua) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetails}
+`
+export const UserAppEnvRemoveAllowedUa = gql`
+  mutation userAppEnvRemoveAllowedUa($appEnvId: String!, $ua: String!) {
+    item: userAppEnvRemoveAllowedUa(appEnvId: $appEnvId, ua: $ua) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetails}
+`
+export const UserAppEnvAddBlockedUa = gql`
+  mutation userAppEnvAddBlockedUa($appEnvId: String!, $ua: String!) {
+    item: userAppEnvAddBlockedUa(appEnvId: $appEnvId, ua: $ua) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetails}
+`
+export const UserAppEnvRemoveBlockedUa = gql`
+  mutation userAppEnvRemoveBlockedUa($appEnvId: String!, $ua: String!) {
+    item: userAppEnvRemoveBlockedUa(appEnvId: $appEnvId, ua: $ua) {
       ...AppEnvDetails
     }
   }
@@ -1592,6 +1654,8 @@ export type AdminCreateAppMutation = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -1755,6 +1819,8 @@ export type AdminAppsQuery = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -1866,6 +1932,8 @@ export type AdminAppQuery = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -2009,6 +2077,8 @@ export type AppEnvDetailsFragment = {
   ipsAllowed?: Array<string> | null
   ipsBlocked?: Array<string> | null
   name?: string | null
+  uasAllowed?: Array<string> | null
+  uasBlocked?: Array<string> | null
   webhookDebugging?: boolean | null
   webhookEventEnabled?: boolean | null
   webhookEventUrl?: string | null
@@ -2148,6 +2218,7 @@ export type AppTransactionDetailsFragment = {
   source?: string | null
   status: AppTransactionStatus
   totalDuration?: number | null
+  ua?: string | null
   webhookEventDuration?: number | null
   webhookEventEnd?: any | null
   webhookEventStart?: any | null
@@ -2293,6 +2364,8 @@ export type UserUpdateAppMutation = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -2433,6 +2506,8 @@ export type UserUpdateAppEnvMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2723,6 +2798,8 @@ export type UserAppEnvAddAllowedIpMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2818,6 +2895,8 @@ export type UserAppEnvRemoveAllowedIpMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2913,6 +2992,8 @@ export type UserAppEnvAddBlockedIpMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3008,6 +3089,396 @@ export type UserAppEnvRemoveBlockedIpMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
+    webhookDebugging?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserAppEnvAddAllowedUaMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  ua: Scalars['String']
+}>
+
+export type UserAppEnvAddAllowedUaMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    ipsAllowed?: Array<string> | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
+    webhookDebugging?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserAppEnvRemoveAllowedUaMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  ua: Scalars['String']
+}>
+
+export type UserAppEnvRemoveAllowedUaMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    ipsAllowed?: Array<string> | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
+    webhookDebugging?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserAppEnvAddBlockedUaMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  ua: Scalars['String']
+}>
+
+export type UserAppEnvAddBlockedUaMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    ipsAllowed?: Array<string> | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
+    webhookDebugging?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: { __typename?: 'App'; id: string; createdAt: any; updatedAt: any; index: number; name?: string | null } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserAppEnvRemoveBlockedUaMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  ua: Scalars['String']
+}>
+
+export type UserAppEnvRemoveBlockedUaMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    key?: string | null
+    ipsAllowed?: Array<string> | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3104,6 +3575,8 @@ export type UserAppEnvMintDisableMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3200,6 +3673,8 @@ export type UserAppEnvMintEnableMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3297,6 +3772,8 @@ export type UserAppEnvMintSetWalletMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3393,6 +3870,8 @@ export type UserAppEnvWalletAddMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3497,6 +3976,8 @@ export type UserAppEnvWalletRemoveMutation = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3616,6 +4097,7 @@ export type UserAppTransactionQuery = {
     source?: string | null
     status: AppTransactionStatus
     totalDuration?: number | null
+    ua?: string | null
     webhookEventDuration?: number | null
     webhookEventEnd?: any | null
     webhookEventStart?: any | null
@@ -3717,6 +4199,7 @@ export type UserAppTransactionsQuery = {
     source?: string | null
     status: AppTransactionStatus
     totalDuration?: number | null
+    ua?: string | null
     webhookEventDuration?: number | null
     webhookEventEnd?: any | null
     webhookEventStart?: any | null
@@ -3808,6 +4291,8 @@ export type UserAppsQuery = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -3920,6 +4405,8 @@ export type UserAppQuery = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -4059,6 +4546,8 @@ export type UserAppEnvQuery = {
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
     name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -4745,6 +5234,8 @@ export type AdminWalletQuery = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -4887,6 +5378,8 @@ export type AdminWalletsQuery = {
         ipsAllowed?: Array<string> | null
         ipsBlocked?: Array<string> | null
         name?: string | null
+        uasAllowed?: Array<string> | null
+        uasBlocked?: Array<string> | null
         webhookDebugging?: boolean | null
         webhookEventEnabled?: boolean | null
         webhookEventUrl?: string | null
@@ -4981,6 +5474,8 @@ export type AdminWalletsQuery = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -5101,6 +5596,8 @@ export type UserGenerateWalletMutation = {
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
       name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
