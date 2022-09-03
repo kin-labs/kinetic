@@ -87,8 +87,9 @@ export class ApiConfigDataAccessService {
     }
     return {
       httpOnly: true,
-      secure: false,
+      secure: true,
       domain: found || this.cookieDomains[0],
+      sameSite: this.cookieDomains?.length > 1 ? 'none' : 'strict',
     }
   }
 
