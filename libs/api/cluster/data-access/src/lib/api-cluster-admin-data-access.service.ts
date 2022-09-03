@@ -1,6 +1,6 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { ClusterType, MintType, Prisma } from '@prisma/client'
+import { MintType, Prisma } from '@prisma/client'
 import { ApiClusterDataAccessService } from './api-cluster-data-access.service'
 import { ClusterCreateInput } from './dto/cluster-create.input'
 import { ClusterTokenInput } from './dto/cluster-token.input'
@@ -71,21 +71,16 @@ export class ApiClusterAdminDataAccessService {
       throw new BadRequestException('Cluster must be active to add Mints')
     }
 
-    const token = this.getClusterToken(cluster.type, input)
-    if (!token) {
-      throw new BadRequestException('No such token found')
-    }
-
     // Get the order of the last mint and increase by 1
     const order = cluster.mints[cluster.mints.length - 1].order + 1
     const mint: Prisma.MintUncheckedCreateWithoutClusterInput = {
-      address: token.address,
-      coinGeckoId: token.extensions.coinGeckoId,
-      decimals: token.decimals,
-      logoUrl: token.logoURI,
-      name: token.name,
+      address: input.address,
+      coinGeckoId: input.coinGeckoId,
+      decimals: input.decimals,
+      logoUrl: input.logoUrl,
+      name: input.name,
       order,
-      symbol: token.symbol,
+      symbol: input.symbol,
       type: MintType.SplToken,
     }
 
@@ -94,17 +89,5 @@ export class ApiClusterAdminDataAccessService {
       where: { id: cluster.id },
       include: { mints: true },
     })
-  }
-
-  private getClusterToken(type: ClusterType, { address, name, symbol }: MintAddInput) {
-    return this.cluster.tokens.get(type).find(
-      (token) =>
-        // Match address
-        token?.address === address &&
-        // Match name
-        token?.name === name &&
-        // Match symbol
-        token?.symbol === symbol,
-    )
   }
 }

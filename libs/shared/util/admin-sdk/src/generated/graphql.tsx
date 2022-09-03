@@ -356,6 +356,9 @@ export type Mint = {
 export type MintAddInput = {
   address: Scalars['String']
   clusterId: Scalars['String']
+  coinGeckoId?: InputMaybe<Scalars['String']>
+  decimals: Scalars['Int']
+  logoUrl?: InputMaybe<Scalars['String']>
   name: Scalars['String']
   symbol: Scalars['String']
 }
