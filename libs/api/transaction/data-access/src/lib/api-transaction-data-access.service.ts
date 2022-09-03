@@ -156,7 +156,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     this.makeTransferRequestCounter.add(1, { appKey })
 
     const ip = requestIp.getClientIp(req)
-    const ua = req.headers['user-agent']
+    const ua = `${req.headers['kinetic-user-agent'] || req.headers['user-agent']}`
 
     if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(ip)) {
       throw new UnauthorizedException('Request not allowed')
@@ -207,6 +207,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       commitment: input?.commitment,
       destination: destination?.pubkey.toBase58(),
       feePayer,
+      headers: req.headers as Record<string, string>,
       lastValidBlockHeight: input?.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
       solanaTransaction: transaction,
@@ -228,6 +229,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     commitment,
     destination,
     feePayer,
+    headers,
     lastValidBlockHeight,
     mintPublicKey,
     solanaTransaction,
@@ -241,6 +243,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     commitment: Commitment
     destination: string
     feePayer: string
+    headers?: Record<string, string>
     lastValidBlockHeight: number
     mintPublicKey: string
     source: string
@@ -262,7 +265,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
     // Send Verify Webhook
     if (appEnv.webhookVerifyEnabled && appEnv.webhookVerifyUrl) {
-      const verifiedAppTransaction = await this.sendVerifyWebhook(appKey, appEnv, updatedAppTransaction)
+      const verifiedAppTransaction = await this.sendVerifyWebhook(appKey, appEnv, updatedAppTransaction, headers)
       if (verifiedAppTransaction.status === AppTransactionStatus.Failed) {
         return verifiedAppTransaction
       }
@@ -289,6 +292,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
         appEnv,
         appTransactionId: appTransaction.id,
         blockhash,
+        headers,
         lastValidBlockHeight: lastValidBlockHeight,
         signature: solanaAppTransaction.signature as string,
         solanaStart: confirmedAppTransaction.solanaStart,
@@ -307,6 +311,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     appEnv,
     appTransactionId,
     blockhash,
+    headers,
     lastValidBlockHeight,
     signature,
     solanaStart,
@@ -315,6 +320,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     appEnv: AppEnv
     appTransactionId: string
     blockhash: string
+    headers?: Record<string, string>
     lastValidBlockHeight: number
     signature: string
     solanaStart: Date
@@ -350,7 +356,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       this.confirmSignatureFinalizedCounter.add(1, { appKey })
       // Send Event Webhook
       if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl) {
-        return this.sendEventWebhook(appKey, appEnv, appTransaction)
+        return this.sendEventWebhook(appKey, appEnv, appTransaction, headers)
       }
 
       this.logger.verbose(`${appKey}: confirmSignature: finished ${signature}`)
@@ -361,10 +367,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     appKey: string,
     appEnv: AppEnv,
     transaction: AppTransaction,
+    headers?: Record<string, string>,
   ): Promise<AppTransactionWithErrors> {
     const webhookEventStart = new Date()
     try {
-      await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, transaction })
+      await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, transaction, headers })
       const webhookEventEnd = new Date()
       const webhookEventDuration = webhookEventEnd?.getTime() - webhookEventStart.getTime()
       this.sendEventWebhookSuccessCounter.add(1, { appKey })
@@ -384,11 +391,12 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private async sendVerifyWebhook(
     appKey: string,
     appEnv: AppEnv,
-    transaction: AppTransaction,
+    transaction,
+    headers: Record<string, string>,
   ): Promise<AppTransactionWithErrors> {
     const webhookVerifyStart = new Date()
     try {
-      await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, transaction })
+      await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, transaction, headers })
       const webhookVerifyEnd = new Date()
       const webhookVerifyDuration = webhookVerifyEnd?.getTime() - webhookVerifyStart.getTime()
       this.sendVerifyWebhookSuccessCounter.add(1, { appKey })
@@ -400,7 +408,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       return this.handleAppTransactionError(
         transaction.id,
         { webhookVerifyStart, webhookVerifyEnd, webhookVerifyDuration },
-        parseError(err.response?.data?.message, AppTransactionErrorType.WebhookFailed),
+        parseError(err?.response?.data?.message, AppTransactionErrorType.WebhookFailed),
       )
     }
   }

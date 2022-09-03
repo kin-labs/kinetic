@@ -1,4 +1,5 @@
 import { Box, Button, ButtonGroup, Input, Stack } from '@chakra-ui/react'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import {
   AppEnv,
   useUserAppEnvAddAllowedIpMutation,
@@ -38,7 +39,7 @@ export function AdminAppUiAppEnvAllowedIpsForm({ appEnv }: AdminAppUiAppEnvAllow
           </Button>
         </ButtonGroup>
         <Stack direction="column" spacing={6}>
-          {appEnv?.ipsAllowed?.length === 0 && <>There are none IP addresses allowed</>}
+          {!appEnv?.ipsAllowed?.length && <AdminUiAlert message={'There are no allowed IP addresses'} />}
           {appEnv?.ipsAllowed?.map((ip) => (
             <ButtonGroup>
               <span>{ip}</span>

@@ -1,4 +1,5 @@
 import { Box, Button, ButtonGroup, Input, Stack } from '@chakra-ui/react'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import {
   AppEnv,
   useUserAppEnvAddBlockedIpMutation,
@@ -38,7 +39,7 @@ export function AdminAppUiAppEnvBlockedIpsForm({ appEnv }: AdminAppUiAppEnvBlock
           </Button>
         </ButtonGroup>
         <Stack direction="column" spacing={6}>
-          {appEnv?.ipsBlocked?.length === 0 && <>There are none IP addresses blocked</>}
+          {!appEnv?.ipsBlocked?.length && <AdminUiAlert message="There are no blocked IP addresses" />}
           {appEnv?.ipsBlocked?.map((ip) => (
             <ButtonGroup>
               <span>{ip}</span>

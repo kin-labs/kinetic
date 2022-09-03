@@ -52,6 +52,9 @@ export function DemoSdkFeature() {
     KineticSdk.setup({
       endpoint: server.endpoint,
       environment: server.environment,
+      headers: {
+        'kinetic-custom-header': 'yay!',
+      },
       index: 1,
       logger: console,
     })
