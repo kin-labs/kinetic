@@ -1,6 +1,7 @@
 import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
+import { NAME } from '../version'
 import { convertCommitment, getPublicKey, parseEndpoint, parseTransactionSimulation } from './helpers'
 import {
   BalanceMintMap,
@@ -19,7 +20,7 @@ export class Solana {
   constructor(endpoint: string, private readonly config: SolanaConfig = {}) {
     this.endpoint = parseEndpoint(endpoint)
     this.connection = new Connection(this.endpoint)
-    config.logger?.log(`Solana RPC Endpoint: ${this.endpoint}`)
+    config.logger?.log(`${NAME}: Solana RPC Endpoint: ${this.endpoint}`)
   }
 
   confirmTransaction(

@@ -4,6 +4,18 @@
   "projectType": "library",
   "targets": {
     "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx run keypair:update-version", "nx run keypair:build-lib"]
+      }
+    },
+    "update-version": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "yarn update-version keypair"
+      }
+    },
+    "build-lib": {
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {

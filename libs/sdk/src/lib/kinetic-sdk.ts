@@ -1,6 +1,6 @@
 import { Solana } from '@kin-kinetic/solana'
 import { AppConfig, AppTransaction, BalanceResponse, GetTransactionResponse, HistoryResponse } from '../generated'
-export type { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
+import { NAME, VERSION } from '../version'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
 import {
@@ -16,6 +16,8 @@ import {
   RequestAirdropOptions,
 } from './interfaces'
 import { KineticSdkInternal } from './kinetic-sdk-internal'
+
+export type { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
 
 export class KineticSdk {
   solana: Solana | undefined
@@ -76,6 +78,7 @@ export class KineticSdk {
 
   async init(): Promise<AppConfig> {
     try {
+      this.sdkConfig?.logger?.log(`${NAME}: initializing ${NAME}@${VERSION}`)
       const config = await this.internal.getAppConfig(this.sdkConfig.environment, this.sdkConfig.index)
       this.sdkConfig.solanaRpcEndpoint = this.sdkConfig.solanaRpcEndpoint
         ? getSolanaRpcEndpoint(this.sdkConfig.solanaRpcEndpoint)
@@ -83,7 +86,7 @@ export class KineticSdk {
 
       this.solana = new Solana(this.sdkConfig.solanaRpcEndpoint, { logger: this.sdkConfig?.logger })
       this.sdkConfig?.logger?.log(
-        `KineticSdk: endpoint '${this.sdkConfig.endpoint}', environment '${this.sdkConfig.environment}', index: ${config.app.index}`,
+        `${NAME}: endpoint '${this.sdkConfig.endpoint}', environment '${this.sdkConfig.environment}', index: ${config.app.index}`,
       )
       return config
     } catch (e) {
@@ -95,11 +98,11 @@ export class KineticSdk {
   static async setup(config: KineticSdkConfig): Promise<KineticSdk> {
     const sdk = new KineticSdk(parseKineticSdkConfig(config))
     try {
-      await sdk.init().then(() => config.logger?.log(`KineticSdk: Setup done.`))
+      await sdk.init().then(() => config.logger?.log(`${NAME}: Setup done.`))
       return sdk
     } catch (e) {
-      config.logger?.error(`KineticSdk: Error setting up SDK.`, e)
-      throw new Error(`KineticSdk: Error setting up SDK.`)
+      config.logger?.error(`${NAME}: Error setting up SDK.`, e)
+      throw new Error(`${NAME}: Error setting up SDK.`)
     }
   }
 }
