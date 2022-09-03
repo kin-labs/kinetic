@@ -1,5 +1,5 @@
 // Get the origins from the ENV
-const originsEnv: string[] = process.env.CORS_ORIGINS?.includes(',')
+const origins: string[] = process.env.CORS_ORIGINS?.includes(',')
   ? process.env.CORS_ORIGINS?.split(',')
   : [process.env.CORS_ORIGINS]
 
@@ -7,9 +7,6 @@ const originsEnv: string[] = process.env.CORS_ORIGINS?.includes(',')
 const domains: string[] = process.env.COOKIE_DOMAINS?.includes(',')
   ? process.env.COOKIE_DOMAINS?.split(',')
   : [process.env.COOKIE_DOMAINS]
-
-// Allow configuring wildcard origin
-const origin = originsEnv.length && originsEnv[0] === '*' ? '*' : originsEnv
 
 export default () => ({
   admin: {
@@ -19,7 +16,7 @@ export default () => ({
   api: {
     url: process.env.API_URL,
   },
-  cors: { origin },
+  cors: { origins },
   cookie: {
     domains,
     name: process.env.COOKIE_NAME,
