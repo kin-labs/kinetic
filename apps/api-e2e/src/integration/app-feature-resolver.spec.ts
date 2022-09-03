@@ -218,7 +218,7 @@ describe('App (e2e)', () => {
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.users[1].role).toEqual(AppUserRole.Member)
           })
-      })
+      }, 10000)
 
       it('should change a user role in an app', async () => {
         const input: AppUserUpdateRoleInput = {
@@ -235,7 +235,7 @@ describe('App (e2e)', () => {
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.users[1].role).toEqual(AppUserRole.Owner)
           })
-      })
+      }, 10000)
 
       it('should remove a user fom an app', async () => {
         const input: AppUserRemoveInput = { userId }
@@ -247,7 +247,7 @@ describe('App (e2e)', () => {
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
           })
-      })
+      }, 10000)
     })
 
     describe('AppEnvs', () => {
@@ -287,7 +287,7 @@ describe('App (e2e)', () => {
             expect(data.wallets).toBeDefined()
             expect(data.wallets[0].publicKey).toBeDefined()
           })
-      })
+      }, 10000)
     })
 
     describe('Wallets', () => {
