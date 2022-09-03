@@ -6,7 +6,7 @@ export function parseError(
   errorType?: string,
   instruction?: number,
 ): Prisma.AppTransactionErrorCreateWithoutAppTransactionInput {
-  const message = error.toString()
+  const message = error?.toString()
   let type: AppTransactionErrorType = AppTransactionErrorType.Unknown
 
   if (errorType === 'InvalidAccountData') {
@@ -14,8 +14,8 @@ export function parseError(
   }
 
   return {
-    logs: error.logs,
-    message,
+    logs: error?.logs,
+    message: message || ' ** NO ERROR MESSAGE ** ',
     instruction,
     type,
   }
