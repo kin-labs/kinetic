@@ -149,6 +149,12 @@ query UserAppTransactions($appId: String!, $appEnvId: String!, $input: AppTransa
   items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
     ...AppTransactionDetails
   }
+  count: userAppTransactionCounter(appId: $appId, appEnvId: $appEnvId, input: $input) {
+    limit
+    page
+    pageCount
+    total
+  }
 }
 
 query UserApps {
