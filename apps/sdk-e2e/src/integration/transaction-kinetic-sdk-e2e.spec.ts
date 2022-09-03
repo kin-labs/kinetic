@@ -131,4 +131,30 @@ describe('KineticSdk (e2e)', () => {
       expect(e.message).toBe(`Destination account doesn't exist.`)
     }
   })
+
+  it('should not allow transfers to a mint', async () => {
+    const kinMint = 'MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek'
+    try {
+      await sdk.makeTransfer({
+        amount: '43',
+        destination: kinMint,
+        owner: aliceKeypair,
+        senderCreate: false,
+      })
+    } catch (e) {
+      expect(e.message).toBe(`Transfers to a mint are not allowed.`)
+    }
+  })
+
+  it('should not allow transfers to a mint in batch transfer', async () => {
+    try {
+      const kinMint = 'MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek'
+      const destinations: Destination[] = []
+      destinations.push({ destination: bobKeypair.publicKey, amount: '15' })
+      destinations.push({ destination: kinMint, amount: '12' })
+      await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })
+    } catch (e) {
+      expect(e.message).toBe(`Transfers to a mint are not allowed.`)
+    }
+  })
 })
