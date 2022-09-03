@@ -104,9 +104,13 @@ export class ApiConfigDataAccessService {
             }
             if (allowed?.includes('*')) {
               const [start, end] = allowed.split('*')
-              const { hostname } = new URL(origin)
+              try {
+                const { hostname } = new URL(origin)
 
-              return origin.startsWith(start) && hostname.endsWith(end)
+                return origin.startsWith(start) && hostname.endsWith(end)
+              } catch (e) {
+                return false
+              }
             }
             return false
           })
