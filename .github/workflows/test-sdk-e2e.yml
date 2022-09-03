@@ -15,6 +15,7 @@ env:
   APP_1_NAME: 'App 1'
   COOKIE_DOMAINS: 'localhost'
   COOKIE_NAME: '__session'
+  CORS_ORIGINS: '*'
   DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=kinetic'
   DEFAULT_MINT_AIRDROP_AMOUNT: 1000
   DEFAULT_MINT_AIRDROP_MAX: 50000
