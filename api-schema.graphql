@@ -247,42 +247,6 @@ enum ClusterStatus {
   Inactive
 }
 
-type ClusterToken {
-  address: String
-  decimals: Int
-  extensions: ClusterTokenExtensions
-  logoURI: String
-  name: String
-  symbol: String
-  tags: [String!]
-}
-
-type ClusterTokenExtensions {
-  address: String
-  assetContract: String
-  bridgeContract: String
-  coinGeckoId: String
-  description: String
-  discord: String
-  explorer: String
-  github: String
-  imageUrl: String
-  medium: String
-  serumV3Usdc: String
-  serumV3Usdt: String
-  tgann: String
-  tggroup: String
-  twitter: String
-  website: String
-}
-
-input ClusterTokenInput {
-  address: String
-  name: String
-  symbol: String
-  type: ClusterType!
-}
-
 enum ClusterType {
   Custom
   SolanaDevnet
@@ -389,7 +353,6 @@ type Query {
   adminApp(appId: String!): App
   adminApps: [App!]
   adminCluster(clusterId: String!): Cluster
-  adminClusterTokens(input: ClusterTokenInput!): [ClusterToken!]
   adminClusters: [Cluster!]
   adminUser(userId: String!): User
   adminUsers: [User!]

@@ -69,7 +69,6 @@
     "@scure/bip39": "^1.0.0",
     "@solana/buffer-layout": "^4.0.0",
     "@solana/spl-token": "^0.2.0",
-    "@solana/spl-token-registry": "^0.2.4154",
     "@solana/web3.js": "^1.47.3",
     "apollo-server-express": "^3.8.1",
     "axios": "^0.27.2",

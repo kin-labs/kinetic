@@ -1,17 +1,14 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { MintType, Prisma } from '@prisma/client'
-import { ApiClusterDataAccessService } from './api-cluster-data-access.service'
 import { ClusterCreateInput } from './dto/cluster-create.input'
-import { ClusterTokenInput } from './dto/cluster-token.input'
 import { ClusterUpdateInput } from './dto/cluster-update.input'
 import { MintAddInput } from './dto/mint-add.input'
 import { ClusterStatus } from './entity/cluster-status.enum'
-import { ClusterToken } from './entity/cluster-token.entity'
 
 @Injectable()
 export class ApiClusterAdminDataAccessService {
-  constructor(private readonly cluster: ApiClusterDataAccessService, private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async adminCreateCluster(userId: string, data: ClusterCreateInput) {
     await this.data.ensureAdminUser(userId)
@@ -39,21 +36,6 @@ export class ApiClusterAdminDataAccessService {
   async adminCluster(userId: string, clusterId: string) {
     await this.data.ensureAdminUser(userId)
     return this.data.cluster.findUnique({ where: { id: clusterId }, include: { mints: { orderBy: { order: 'asc' } } } })
-  }
-
-  async adminClusterTokens(userId: string, input: ClusterTokenInput): Promise<ClusterToken[]> {
-    await this.data.ensureAdminUser(userId)
-    let tokens = this.cluster.tokens.get(input.type)
-    if (input.address) {
-      tokens = tokens.filter((item) => item.address === input.address)
-    }
-    if (input.symbol) {
-      tokens = tokens.filter((item) => item.symbol?.toLowerCase() === input.symbol?.toLowerCase())
-    }
-    if (input.name) {
-      tokens = tokens.filter((item) => item.name?.toLowerCase()?.includes(input.name?.toLowerCase()))
-    }
-    return (tokens || []).slice(0, 100)
   }
 
   async adminUpdateCluster(userId: string, clusterId: string, data: ClusterUpdateInput) {
