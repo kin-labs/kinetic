@@ -1,4 +1,5 @@
 import { Box, Button, ButtonGroup, Input, Stack } from '@chakra-ui/react'
+import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import {
   AppEnv,
   useUserAppEnvAddAllowedUaMutation,
@@ -38,7 +39,7 @@ export function AdminAppUiAppEnvAllowedUasForm({ appEnv }: AdminAppUiAppEnvAllow
           </Button>
         </ButtonGroup>
         <Stack direction="column" spacing={6}>
-          {appEnv?.uasAllowed?.length === 0 && <>There are none SDK user agents allowed</>}
+          {!appEnv?.uasAllowed?.length && <AdminUiAlert message="There are no allowed SDK user agents" />}
           {appEnv?.uasAllowed?.map((userAgent) => (
             <ButtonGroup>
               <span>{userAgent}</span>
