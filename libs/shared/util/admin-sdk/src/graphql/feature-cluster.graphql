@@ -21,36 +21,6 @@ fragment ClusterStatDetails on ClusterStat {
   slot
 }
 
-fragment ClusterTokenDetails on ClusterToken {
-  address
-  name
-  decimals
-  symbol
-  logoURI
-  tags
-  extensions {
-    ...ClusterTokenExtensionsDetails
-  }
-}
-
-fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
-  address
-  assetContract
-  bridgeContract
-  coinGeckoId
-  description
-  discord
-  explorer
-  github
-  imageUrl
-  medium
-  serumV3Usdc
-  serumV3Usdt
-  tgann
-  tggroup
-  twitter
-  website
-}
 fragment MintDetails on Mint {
   id
   createdAt
@@ -104,12 +74,6 @@ query AdminCluster($clusterId: String!) {
     mints {
       ...MintDetails
     }
-  }
-}
-
-query AdminClusterTokens($input: ClusterTokenInput!) {
-  items: adminClusterTokens(input: $input) {
-    ...ClusterTokenDetails
   }
 }
 

@@ -1,17 +1,14 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { ClusterType, MintType, Prisma } from '@prisma/client'
-import { ApiClusterDataAccessService } from './api-cluster-data-access.service'
+import { MintType, Prisma } from '@prisma/client'
 import { ClusterCreateInput } from './dto/cluster-create.input'
-import { ClusterTokenInput } from './dto/cluster-token.input'
 import { ClusterUpdateInput } from './dto/cluster-update.input'
 import { MintAddInput } from './dto/mint-add.input'
 import { ClusterStatus } from './entity/cluster-status.enum'
-import { ClusterToken } from './entity/cluster-token.entity'
 
 @Injectable()
 export class ApiClusterAdminDataAccessService {
-  constructor(private readonly cluster: ApiClusterDataAccessService, private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async adminCreateCluster(userId: string, data: ClusterCreateInput) {
     await this.data.ensureAdminUser(userId)
@@ -41,21 +38,6 @@ export class ApiClusterAdminDataAccessService {
     return this.data.cluster.findUnique({ where: { id: clusterId }, include: { mints: { orderBy: { order: 'asc' } } } })
   }
 
-  async adminClusterTokens(userId: string, input: ClusterTokenInput): Promise<ClusterToken[]> {
-    await this.data.ensureAdminUser(userId)
-    let tokens = this.cluster.tokens.get(input.type)
-    if (input.address) {
-      tokens = tokens.filter((item) => item.address === input.address)
-    }
-    if (input.symbol) {
-      tokens = tokens.filter((item) => item.symbol?.toLowerCase() === input.symbol?.toLowerCase())
-    }
-    if (input.name) {
-      tokens = tokens.filter((item) => item.name?.toLowerCase()?.includes(input.name?.toLowerCase()))
-    }
-    return (tokens || []).slice(0, 100)
-  }
-
   async adminUpdateCluster(userId: string, clusterId: string, data: ClusterUpdateInput) {
     await this.data.ensureAdminUser(userId)
     return this.data.cluster.update({ where: { id: clusterId }, data })
@@ -71,21 +53,16 @@ export class ApiClusterAdminDataAccessService {
       throw new BadRequestException('Cluster must be active to add Mints')
     }
 
-    const token = this.getClusterToken(cluster.type, input)
-    if (!token) {
-      throw new BadRequestException('No such token found')
-    }
-
     // Get the order of the last mint and increase by 1
     const order = cluster.mints[cluster.mints.length - 1].order + 1
     const mint: Prisma.MintUncheckedCreateWithoutClusterInput = {
-      address: token.address,
-      coinGeckoId: token.extensions.coinGeckoId,
-      decimals: token.decimals,
-      logoUrl: token.logoURI,
-      name: token.name,
+      address: input.address,
+      coinGeckoId: input.coinGeckoId,
+      decimals: input.decimals,
+      logoUrl: input.logoUrl,
+      name: input.name,
       order,
-      symbol: token.symbol,
+      symbol: input.symbol,
       type: MintType.SplToken,
     }
 
@@ -94,17 +71,5 @@ export class ApiClusterAdminDataAccessService {
       where: { id: cluster.id },
       include: { mints: true },
     })
-  }
-
-  private getClusterToken(type: ClusterType, { address, name, symbol }: MintAddInput) {
-    return this.cluster.tokens.get(type).find(
-      (token) =>
-        // Match address
-        token?.address === address &&
-        // Match name
-        token?.name === name &&
-        // Match symbol
-        token?.symbol === symbol,
-    )
   }
 }

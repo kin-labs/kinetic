@@ -273,44 +273,6 @@ export enum ClusterStatus {
   Inactive = 'Inactive',
 }
 
-export type ClusterToken = {
-  __typename?: 'ClusterToken'
-  address?: Maybe<Scalars['String']>
-  decimals?: Maybe<Scalars['Int']>
-  extensions?: Maybe<ClusterTokenExtensions>
-  logoURI?: Maybe<Scalars['String']>
-  name?: Maybe<Scalars['String']>
-  symbol?: Maybe<Scalars['String']>
-  tags?: Maybe<Array<Scalars['String']>>
-}
-
-export type ClusterTokenExtensions = {
-  __typename?: 'ClusterTokenExtensions'
-  address?: Maybe<Scalars['String']>
-  assetContract?: Maybe<Scalars['String']>
-  bridgeContract?: Maybe<Scalars['String']>
-  coinGeckoId?: Maybe<Scalars['String']>
-  description?: Maybe<Scalars['String']>
-  discord?: Maybe<Scalars['String']>
-  explorer?: Maybe<Scalars['String']>
-  github?: Maybe<Scalars['String']>
-  imageUrl?: Maybe<Scalars['String']>
-  medium?: Maybe<Scalars['String']>
-  serumV3Usdc?: Maybe<Scalars['String']>
-  serumV3Usdt?: Maybe<Scalars['String']>
-  tgann?: Maybe<Scalars['String']>
-  tggroup?: Maybe<Scalars['String']>
-  twitter?: Maybe<Scalars['String']>
-  website?: Maybe<Scalars['String']>
-}
-
-export type ClusterTokenInput = {
-  address?: InputMaybe<Scalars['String']>
-  name?: InputMaybe<Scalars['String']>
-  symbol?: InputMaybe<Scalars['String']>
-  type: ClusterType
-}
-
 export enum ClusterType {
   Custom = 'Custom',
   SolanaDevnet = 'SolanaDevnet',
@@ -356,6 +318,9 @@ export type Mint = {
 export type MintAddInput = {
   address: Scalars['String']
   clusterId: Scalars['String']
+  coinGeckoId?: InputMaybe<Scalars['String']>
+  decimals: Scalars['Int']
+  logoUrl?: InputMaybe<Scalars['String']>
   name: Scalars['String']
   symbol: Scalars['String']
 }
@@ -570,7 +535,6 @@ export type Query = {
   adminApp?: Maybe<App>
   adminApps?: Maybe<Array<App>>
   adminCluster?: Maybe<Cluster>
-  adminClusterTokens?: Maybe<Array<ClusterToken>>
   adminClusters?: Maybe<Array<Cluster>>
   adminUser?: Maybe<User>
   adminUsers?: Maybe<Array<User>>
@@ -600,10 +564,6 @@ export type QueryAdminAppArgs = {
 
 export type QueryAdminClusterArgs = {
   clusterId: Scalars['String']
-}
-
-export type QueryAdminClusterTokensArgs = {
-  input: ClusterTokenInput
 }
 
 export type QueryAdminUserArgs = {
@@ -3852,55 +3812,6 @@ export type ClusterStatDetailsFragment = {
   slot: number
 }
 
-export type ClusterTokenDetailsFragment = {
-  __typename?: 'ClusterToken'
-  address?: string | null
-  name?: string | null
-  decimals?: number | null
-  symbol?: string | null
-  logoURI?: string | null
-  tags?: Array<string> | null
-  extensions?: {
-    __typename?: 'ClusterTokenExtensions'
-    address?: string | null
-    assetContract?: string | null
-    bridgeContract?: string | null
-    coinGeckoId?: string | null
-    description?: string | null
-    discord?: string | null
-    explorer?: string | null
-    github?: string | null
-    imageUrl?: string | null
-    medium?: string | null
-    serumV3Usdc?: string | null
-    serumV3Usdt?: string | null
-    tgann?: string | null
-    tggroup?: string | null
-    twitter?: string | null
-    website?: string | null
-  } | null
-}
-
-export type ClusterTokenExtensionsDetailsFragment = {
-  __typename?: 'ClusterTokenExtensions'
-  address?: string | null
-  assetContract?: string | null
-  bridgeContract?: string | null
-  coinGeckoId?: string | null
-  description?: string | null
-  discord?: string | null
-  explorer?: string | null
-  github?: string | null
-  imageUrl?: string | null
-  medium?: string | null
-  serumV3Usdc?: string | null
-  serumV3Usdt?: string | null
-  tgann?: string | null
-  tggroup?: string | null
-  twitter?: string | null
-  website?: string | null
-}
-
 export type MintDetailsFragment = {
   __typename?: 'Mint'
   id?: string | null
@@ -4066,42 +3977,6 @@ export type AdminClusterQuery = {
       type?: MintType | null
     }> | null
   } | null
-}
-
-export type AdminClusterTokensQueryVariables = Exact<{
-  input: ClusterTokenInput
-}>
-
-export type AdminClusterTokensQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'ClusterToken'
-    address?: string | null
-    name?: string | null
-    decimals?: number | null
-    symbol?: string | null
-    logoURI?: string | null
-    tags?: Array<string> | null
-    extensions?: {
-      __typename?: 'ClusterTokenExtensions'
-      address?: string | null
-      assetContract?: string | null
-      bridgeContract?: string | null
-      coinGeckoId?: string | null
-      description?: string | null
-      discord?: string | null
-      explorer?: string | null
-      github?: string | null
-      imageUrl?: string | null
-      medium?: string | null
-      serumV3Usdc?: string | null
-      serumV3Usdt?: string | null
-      tgann?: string | null
-      tggroup?: string | null
-      twitter?: string | null
-      website?: string | null
-    } | null
-  }> | null
 }
 
 export type AdminClustersQueryVariables = Exact<{ [key: string]: never }>
@@ -5232,40 +5107,6 @@ export const ClusterStatDetailsFragmentDoc = gql`
     slot
   }
 `
-export const ClusterTokenExtensionsDetailsFragmentDoc = gql`
-  fragment ClusterTokenExtensionsDetails on ClusterTokenExtensions {
-    address
-    assetContract
-    bridgeContract
-    coinGeckoId
-    description
-    discord
-    explorer
-    github
-    imageUrl
-    medium
-    serumV3Usdc
-    serumV3Usdt
-    tgann
-    tggroup
-    twitter
-    website
-  }
-`
-export const ClusterTokenDetailsFragmentDoc = gql`
-  fragment ClusterTokenDetails on ClusterToken {
-    address
-    name
-    decimals
-    symbol
-    logoURI
-    tags
-    extensions {
-      ...ClusterTokenExtensionsDetails
-    }
-  }
-  ${ClusterTokenExtensionsDetailsFragmentDoc}
-`
 export const UserEmailDetailsFragmentDoc = gql`
   fragment UserEmailDetails on UserEmail {
     id
@@ -5849,20 +5690,6 @@ export const AdminClusterDocument = gql`
 
 export function useAdminClusterQuery(options: Omit<Urql.UseQueryArgs<AdminClusterQueryVariables>, 'query'>) {
   return Urql.useQuery<AdminClusterQuery>({ query: AdminClusterDocument, ...options })
-}
-export const AdminClusterTokensDocument = gql`
-  query AdminClusterTokens($input: ClusterTokenInput!) {
-    items: adminClusterTokens(input: $input) {
-      ...ClusterTokenDetails
-    }
-  }
-  ${ClusterTokenDetailsFragmentDoc}
-`
-
-export function useAdminClusterTokensQuery(
-  options: Omit<Urql.UseQueryArgs<AdminClusterTokensQueryVariables>, 'query'>,
-) {
-  return Urql.useQuery<AdminClusterTokensQuery>({ query: AdminClusterTokensDocument, ...options })
 }
 export const AdminClustersDocument = gql`
   query AdminClusters {

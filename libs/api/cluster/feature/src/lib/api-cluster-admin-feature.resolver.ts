@@ -3,8 +3,6 @@ import {
   ApiClusterAdminDataAccessService,
   Cluster,
   ClusterCreateInput,
-  ClusterToken,
-  ClusterTokenInput,
   ClusterUpdateInput,
   MintAddInput,
 } from '@kin-kinetic/api/cluster/data-access'
@@ -40,11 +38,6 @@ export class ApiClusterAdminFeatureResolver {
   @Query(() => Cluster, { nullable: true })
   adminCluster(@CtxUser() user: User, @Args('clusterId') clusterId: string) {
     return this.service.adminCluster(user.id, clusterId)
-  }
-
-  @Query(() => [ClusterToken], { nullable: true })
-  adminClusterTokens(@CtxUser() user: User, @Args('input') input: ClusterTokenInput) {
-    return this.service.adminClusterTokens(user.id, input)
   }
 
   @Mutation(() => Cluster, { nullable: true })
