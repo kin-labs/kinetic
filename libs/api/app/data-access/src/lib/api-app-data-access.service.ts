@@ -80,6 +80,10 @@ export class ApiAppDataAccessService implements OnModuleInit {
         index: appEnv.app.index,
         name: appEnv.app.name,
       },
+      api: {
+        name: this.data.config.apiName,
+        version: this.data.config.apiVersion,
+      },
       environment: {
         name: appEnv.name,
         explorer: appEnv.cluster.explorer,

@@ -904,6 +904,18 @@
         },
         "required": ["index", "name"]
       },
+      "AppConfigApi": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "version"]
+      },
       "AppConfigCluster": {
         "type": "object",
         "properties": {
@@ -993,6 +1005,9 @@
           "app": {
             "$ref": "#/components/schemas/AppConfigApp"
           },
+          "api": {
+            "$ref": "#/components/schemas/AppConfigApi"
+          },
           "environment": {
             "$ref": "#/components/schemas/AppConfigEnvironment"
           },
@@ -1006,7 +1021,7 @@
             }
           }
         },
-        "required": ["app", "environment", "mint", "mints"]
+        "required": ["app", "api", "environment", "mint", "mints"]
       },
       "AppHealth": {
         "type": "object",

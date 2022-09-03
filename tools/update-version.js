@@ -10,16 +10,31 @@ if (!pkg || !packages.includes(pkg)) {
   console.log(`WRONG PACKAGE... ${pkg}`)
   return
 }
+// Check if package.json can be found in the package
+const workspaceJson = join(process.cwd(), 'workspace.json')
+if (!existsSync(workspaceJson)) {
+  console.log(`FILE NOT FOUND: ${workspaceJson}`)
+  return
+}
+
+const { projects } = require(workspaceJson)
+
+if (!projects[pkg]) {
+  console.log(`CAN'T FIND PACKAGE IN WORKSPACE... ${pkg}`)
+  return
+}
+
+const pkgPath = projects[pkg]
 
 // Check if version.ts can be found in the package
-const file = join(process.cwd(), 'libs', pkg, 'src', 'version.ts')
+const file = join(process.cwd(), pkgPath, 'src', 'version.ts')
 if (!existsSync(file)) {
   console.log(`FILE NOT FOUND: ${file}`)
   return
 }
 
 // Check if package.json can be found in the package
-const packageJson = join(process.cwd(), 'libs', pkg, 'package.json')
+const packageJson = join(process.cwd(), pkgPath, 'package.json')
 if (!existsSync(packageJson)) {
   console.log(`FILE NOT FOUND: ${packageJson}`)
   return
@@ -28,12 +43,16 @@ if (!existsSync(packageJson)) {
 // Get 'name' and 'version' from package.json
 const { name: NAME, version: VERSION } = require(packageJson)
 
-// Declare consts and exports
-const CONST_NAME = `export const NAME = '${NAME}'`
-const CONST_VERSION = `export const VERSION = '${VERSION}'`
-
 // Write to file and format code
-writeFileSync(file, [CONST_NAME, CONST_VERSION].join('\n'))
-execSync(`prettier --write ${file}`)
+writeFile(file, NAME, VERSION)
+writeFile(join(process.cwd(), projects['api-core-data-access'], 'src/version.ts'), NAME.replace(pkg, 'api'), VERSION)
 
-console.log(` => Updating ${file}`, { NAME, VERSION })
+function writeFile(file, NAME, VERSION) {
+  // Declare consts and exports
+  const CONST_NAME = `export const NAME = '${NAME}'`
+  const CONST_VERSION = `export const VERSION = '${VERSION}'`
+
+  writeFileSync(file, [CONST_NAME, CONST_VERSION].join('\n'))
+  execSync(`prettier --write ${file}`)
+  console.log(` => Updating ${file}`, { NAME, VERSION })
+}

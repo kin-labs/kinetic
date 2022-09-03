@@ -1,3 +1,5 @@
+import { NAME, VERSION } from '@kin-kinetic/api/core/data-access'
+
 // Get the origins from the ENV
 const origins: string[] = process.env.CORS_ORIGINS?.includes(',')
   ? process.env.CORS_ORIGINS?.split(',')
@@ -15,6 +17,8 @@ export default () => ({
   },
   api: {
     url: process.env.API_URL,
+    name: NAME,
+    version: VERSION,
   },
   cors: { origins },
   cookie: {

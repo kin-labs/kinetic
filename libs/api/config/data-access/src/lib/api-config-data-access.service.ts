@@ -68,8 +68,16 @@ export class ApiConfigDataAccessService {
     return this.config.get('admin.password')
   }
 
+  get apiName(): string {
+    return this.config.get('api.name')
+  }
+
   get apiUrl(): string {
     return this.config.get('api.url')
+  }
+
+  get apiVersion(): string {
+    return this.config.get('api.version')
   }
 
   get cookieDomains(): string[] {
@@ -206,7 +214,8 @@ export class ApiConfigDataAccessService {
   configSummary() {
     return {
       environment: this.environment,
-      port: this.port,
+      name: this.config.get('api.name'),
+      version: this.config.get('api.version'),
     }
   }
 

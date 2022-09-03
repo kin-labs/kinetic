@@ -108,6 +108,12 @@ export interface AppConfig {
   app: AppConfigApp
   /**
    *
+   * @type {AppConfigApi}
+   * @memberof AppConfig
+   */
+  api: AppConfigApi
+  /**
+   *
    * @type {AppConfigEnvironment}
    * @memberof AppConfig
    */
@@ -124,6 +130,25 @@ export interface AppConfig {
    * @memberof AppConfig
    */
   mints: Array<AppConfigMint>
+}
+/**
+ *
+ * @export
+ * @interface AppConfigApi
+ */
+export interface AppConfigApi {
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigApi
+   */
+  name: string
+  /**
+   *
+   * @type {string}
+   * @memberof AppConfigApi
+   */
+  version: string
 }
 /**
  *
