@@ -1301,6 +1301,12 @@ export const UserAppTransactions = gql`
     items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
       ...AppTransactionDetails
     }
+    count: userAppTransactionCounter(appId: $appId, appEnvId: $appEnvId, input: $input) {
+      limit
+      page
+      pageCount
+      total
+    }
   }
   ${AppTransactionDetails}
 `
@@ -4267,6 +4273,13 @@ export type UserAppTransactionsQuery = {
       type: AppWebhookType
     } | null
   }> | null
+  count?: {
+    __typename?: 'AppTransactionCounter'
+    limit?: number | null
+    page?: number | null
+    pageCount?: number | null
+    total?: number | null
+  } | null
 }
 
 export type UserAppsQueryVariables = Exact<{ [key: string]: never }>
