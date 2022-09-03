@@ -23,7 +23,13 @@ async function bootstrap() {
     Logger.log(`🚀 Admin API is running on http://localhost:${config.port}/graphql.`)
     Logger.log(`🔋 API_URL: ${config.apiUrl}`)
     Logger.log(`🔋 COOKIE_DOMAINS: ${config.cookieDomains.join(', ')}`)
-    Logger.log(`🔋 CORS: ${config?.corsOrigins ? `enabled for: ${config?.corsOrigins?.join(', ')}` : 'disabled'}`)
+    Logger.log(
+      `🔋 CORS: ${
+        config?.corsOrigins
+          ? `enabled for: ${Array.isArray(config?.corsOrigins) ? config?.corsOrigins?.join(', ') : config?.corsOrigins}`
+          : 'disabled'
+      }`,
+    )
 
     if (config.isDevelopment) {
       exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })
