@@ -2,22 +2,71 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AdminAppCreateInput {
+  index: Int!
+  name: String!
+  skipWalletCreation: Boolean
+}
+
+input AdminAppUpdateInput {
+  index: Int
+  maxEnvs: Int
+  name: String
+}
+
+input AdminClusterCreateInput {
+  endpointPrivate: String!
+  endpointPublic: String!
+  explorer: String
+  name: String!
+  type: ClusterType!
+}
+
+input AdminClusterUpdateInput {
+  enableStats: Boolean
+  endpointPrivate: String
+  endpointPublic: String
+  explorer: String
+  name: String
+  status: ClusterStatus
+}
+
+input AdminMintCreateInput {
+  address: String!
+  clusterId: String!
+  coinGeckoId: String
+  decimals: Int!
+  logoUrl: String
+  name: String!
+  symbol: String!
+}
+
+input AdminUserCreateInput {
+  avatarUrl: String
+  email: String!
+  name: String
+  password: String!
+  role: UserRole
+  username: String
+}
+
+input AdminUserUpdateInput {
+  avatarUrl: String
+  name: String
+  role: UserRole
+}
+
 type App {
   createdAt: DateTime!
   defaultEnvUrl: String
   envs: [AppEnv!]
   id: String!
   index: Int!
+  maxEnvs: Int!
   name: String
   settingsUrl: String
   updatedAt: DateTime!
   users: [AppUser!]
-}
-
-input AppCreateInput {
-  index: Int!
-  name: String!
-  skipWalletCreation: Boolean
 }
 
 type AppEnv {
@@ -42,15 +91,6 @@ type AppEnv {
   webhookVerifyUrl: String
 }
 
-input AppEnvUpdateInput {
-  webhookDebugging: Boolean
-  webhookEventEnabled: Boolean
-  webhookEventUrl: String
-  webhookSecret: String
-  webhookVerifyEnabled: Boolean
-  webhookVerifyUrl: String
-}
-
 type AppMint {
   addMemo: Boolean
   createdAt: DateTime!
@@ -59,10 +99,6 @@ type AppMint {
   order: Int
   updatedAt: DateTime!
   wallet: Wallet
-}
-
-input AppMintUpdateInput {
-  addMemo: Boolean
 }
 
 type AppTransaction {
@@ -126,27 +162,12 @@ enum AppTransactionErrorType {
   WebhookFailed
 }
 
-input AppTransactionListInput {
-  destination: String
-  limit: Float
-  page: Float
-  referenceId: String
-  referenceType: String
-  signature: String
-  source: String
-  status: [AppTransactionStatus!]
-}
-
 enum AppTransactionStatus {
   Committed
   Confirmed
   Failed
   Finalized
   Processing
-}
-
-input AppUpdateInput {
-  name: String
 }
 
 type AppUser {
@@ -158,23 +179,9 @@ type AppUser {
   user: User
 }
 
-input AppUserAddInput {
-  role: AppUserRole!
-  userId: String!
-}
-
-input AppUserRemoveInput {
-  userId: String!
-}
-
 enum AppUserRole {
   Member
   Owner
-}
-
-input AppUserUpdateRoleInput {
-  role: AppUserRole!
-  userId: String!
 }
 
 type AppWebhook {
@@ -224,14 +231,6 @@ type Cluster {
   updatedAt: DateTime
 }
 
-input ClusterCreateInput {
-  endpointPrivate: String!
-  endpointPublic: String!
-  explorer: String
-  name: String!
-  type: ClusterType!
-}
-
 type ClusterStat {
   createdAt: DateTime!
   id: String!
@@ -254,15 +253,6 @@ enum ClusterType {
   SolanaTestnet
 }
 
-input ClusterUpdateInput {
-  enableStats: Boolean
-  endpointPrivate: String
-  endpointPublic: String
-  explorer: String
-  name: String
-  status: ClusterStatus
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -272,11 +262,6 @@ scalar DateTime
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSON
-
-input LoginInput {
-  password: String!
-  username: String!
-}
 
 type Mint {
   addMemo: Boolean
@@ -298,32 +283,24 @@ type Mint {
   updatedAt: DateTime
 }
 
-input MintAddInput {
-  address: String!
-  clusterId: String!
-  coinGeckoId: String
-  decimals: Int!
-  logoUrl: String
-  name: String!
-  symbol: String!
-}
-
 enum MintType {
   SplToken
 }
 
 type Mutation {
-  adminAddClusterMint(input: MintAddInput!): Cluster
-  adminCreateApp(input: AppCreateInput!): App
-  adminCreateCluster(input: ClusterCreateInput!): Cluster
-  adminCreateUser(input: UserCreateInput!): User
+  adminCreateApp(input: AdminAppCreateInput!): App
+  adminCreateCluster(input: AdminClusterCreateInput!): Cluster
+  adminCreateUser(input: AdminUserCreateInput!): User
   adminDeleteApp(appId: String!): App
+  adminDeleteAppEnv(appEnvId: String!, appId: String!): AppEnv
   adminDeleteCluster(clusterId: String!): Cluster
   adminDeleteUser(userId: String!): User
   adminDeleteWallet(walletId: String!): Wallet
-  adminUpdateCluster(clusterId: String!, input: ClusterUpdateInput!): Cluster
-  adminUpdateUser(input: UserUpdateInput!, userId: String!): User
-  login(input: LoginInput!): AuthToken
+  adminMintCreate(input: AdminMintCreateInput!): Cluster
+  adminUpdateApp(appId: String!, input: AdminAppUpdateInput!): App
+  adminUpdateCluster(clusterId: String!, input: AdminClusterUpdateInput!): Cluster
+  adminUpdateUser(input: AdminUserUpdateInput!, userId: String!): User
+  login(input: UserLoginInput!): AuthToken
   logout: Boolean
   userAppEnvAddAllowedIp(appEnvId: String!, ip: String!): AppEnv
   userAppEnvAddAllowedUa(appEnvId: String!, ua: String!): AppEnv
@@ -338,15 +315,16 @@ type Mutation {
   userAppEnvRemoveBlockedUa(appEnvId: String!, ua: String!): AppEnv
   userAppEnvWalletAdd(appEnvId: String!, appId: String!, walletId: String!): AppEnv
   userAppEnvWalletRemove(appEnvId: String!, appId: String!, walletId: String!): AppEnv
-  userAppUserAdd(appId: String!, input: AppUserAddInput!): App
-  userAppUserRemove(appId: String!, input: AppUserRemoveInput!): App
-  userAppUserUpdateRole(appId: String!, input: AppUserUpdateRoleInput!): App
+  userAppUserAdd(appId: String!, input: UserAppUserAddInput!): App
+  userAppUserRemove(appId: String!, input: UserAppUserRemoveInput!): App
+  userAppUserUpdateRole(appId: String!, input: UserAppUserUpdateRoleInput!): App
+  userCreateAppEnv(appId: String!, clusterId: String!, input: UserAppEnvCreateInput!): AppEnv
   userDeleteWallet(appEnvId: String!, walletId: String!): Wallet
   userGenerateWallet(appEnvId: String!): Wallet
   userImportWallet(appEnvId: String!, secretKey: String!): Wallet
-  userUpdateApp(appId: String!, input: AppUpdateInput!): App
-  userUpdateAppEnv(appEnvId: String!, appId: String!, input: AppEnvUpdateInput!): AppEnv
-  userUpdateAppMint(appId: String!, appMintId: String!, input: AppMintUpdateInput!): AppMint
+  userUpdateApp(appId: String!, input: UserAppUpdateInput!): App
+  userUpdateAppEnv(appEnvId: String!, appId: String!, input: UserAppEnvUpdateInput!): AppEnv
+  userUpdateAppMint(appId: String!, appMintId: String!, input: UserAppMintUpdateInput!): AppMint
 }
 
 type Query {
@@ -366,9 +344,15 @@ type Query {
   userAppEnv(appEnvId: String!, appId: String!): AppEnv
   userAppRole(appId: String!): AppUserRole
   userAppTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
-  userAppTransactionCounter(appEnvId: String!, appId: String!, input: AppTransactionListInput): AppTransactionCounter
-  userAppTransactions(appEnvId: String!, appId: String!, input: AppTransactionListInput): [AppTransaction!]
+  userAppTransactionCounter(
+    appEnvId: String!
+    appId: String!
+    input: UserAppTransactionListInput
+  ): AppTransactionCounter
+  userAppTransactions(appEnvId: String!, appId: String!, input: UserAppTransactionListInput): [AppTransaction!]
   userApps: [App!]
+  userCluster(clusterId: String!): Cluster
+  userClusters: [Cluster!]
   userWallet(appEnvId: String!, walletId: String!): Wallet
   userWalletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
   userWalletBalance(appEnvId: String!, walletId: String!): WalletBalance
@@ -389,13 +373,52 @@ type User {
   username: String!
 }
 
-input UserCreateInput {
-  avatarUrl: String
-  email: String!
+input UserAppEnvCreateInput {
+  name: String!
+}
+
+input UserAppEnvUpdateInput {
+  webhookDebugging: Boolean
+  webhookEventEnabled: Boolean
+  webhookEventUrl: String
+  webhookSecret: String
+  webhookVerifyEnabled: Boolean
+  webhookVerifyUrl: String
+}
+
+input UserAppMintUpdateInput {
+  addMemo: Boolean
+}
+
+input UserAppTransactionListInput {
+  destination: String
+  ip: String
+  limit: Float
+  page: Float
+  referenceId: String
+  referenceType: String
+  signature: String
+  source: String
+  status: [AppTransactionStatus!]
+  ua: String
+}
+
+input UserAppUpdateInput {
   name: String
-  password: String!
-  role: UserRole
-  username: String
+}
+
+input UserAppUserAddInput {
+  role: AppUserRole!
+  userId: String!
+}
+
+input UserAppUserRemoveInput {
+  userId: String!
+}
+
+input UserAppUserUpdateRoleInput {
+  role: AppUserRole!
+  userId: String!
 }
 
 type UserEmail {
@@ -405,15 +428,14 @@ type UserEmail {
   updatedAt: DateTime!
 }
 
+input UserLoginInput {
+  password: String!
+  username: String!
+}
+
 enum UserRole {
   Admin
   User
-}
-
-input UserUpdateInput {
-  avatarUrl: String
-  name: String
-  role: UserRole
 }
 
 type Wallet {

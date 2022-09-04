@@ -2,9 +2,9 @@ import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import {
   ApiClusterAdminDataAccessService,
   Cluster,
-  ClusterCreateInput,
-  ClusterUpdateInput,
-  MintAddInput,
+  AdminClusterCreateInput,
+  AdminClusterUpdateInput,
+  AdminMintCreateInput,
 } from '@kin-kinetic/api/cluster/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
@@ -16,12 +16,12 @@ export class ApiClusterAdminFeatureResolver {
   constructor(private readonly service: ApiClusterAdminDataAccessService) {}
 
   @Mutation(() => Cluster, { nullable: true })
-  adminAddClusterMint(@CtxUser() user: User, @Args('input') input: MintAddInput) {
-    return this.service.addClusterMint(user.id, input)
+  adminMintCreate(@CtxUser() user: User, @Args('input') input: AdminMintCreateInput) {
+    return this.service.adminMintCreate(user.id, input)
   }
 
   @Mutation(() => Cluster, { nullable: true })
-  adminCreateCluster(@CtxUser() user: User, @Args('input') input: ClusterCreateInput) {
+  adminCreateCluster(@CtxUser() user: User, @Args('input') input: AdminClusterCreateInput) {
     return this.service.adminCreateCluster(user.id, input)
   }
 
@@ -44,7 +44,7 @@ export class ApiClusterAdminFeatureResolver {
   adminUpdateCluster(
     @CtxUser() user: User,
     @Args('clusterId') clusterId: string,
-    @Args('input') input: ClusterUpdateInput,
+    @Args('input') input: AdminClusterUpdateInput,
   ) {
     return this.service.adminUpdateCluster(user.id, clusterId, input)
   }

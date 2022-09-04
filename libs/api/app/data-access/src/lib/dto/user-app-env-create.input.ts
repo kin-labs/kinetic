@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql'
 
 @InputType()
-export class AppUserRemoveInput {
+export class UserAppEnvCreateInput {
   @Field()
-  userId: string
+  name: string
 }

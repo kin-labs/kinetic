@@ -1,4 +1,4 @@
-mutation UserUpdateApp($appId: String!, $input: AppUpdateInput!) {
+mutation UserUpdateApp($appId: String!, $input: UserAppUpdateInput!) {
   updated: userUpdateApp(appId: $appId, input: $input) {
     ...AppDetails
     envs {
@@ -13,7 +13,16 @@ mutation UserUpdateApp($appId: String!, $input: AppUpdateInput!) {
   }
 }
 
-mutation UserUpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpdateInput!) {
+mutation UserCreateAppEnv($appId: String!, $clusterId: String!, $input: UserAppEnvCreateInput!) {
+  created: userCreateAppEnv(appId: $appId, clusterId: $clusterId, input: $input) {
+    ...AppEnvDetails
+    wallets {
+      ...WalletDetails
+    }
+  }
+}
+
+mutation UserUpdateAppEnv($appId: String!, $appEnvId: String!, $input: UserAppEnvUpdateInput!) {
   updated: userUpdateAppEnv(appId: $appId, appEnvId: $appEnvId, input: $input) {
     ...AppEnvDetails
     wallets {
@@ -22,13 +31,13 @@ mutation UserUpdateAppEnv($appId: String!, $appEnvId: String!, $input: AppEnvUpd
   }
 }
 
-mutation UserUpdateAppMint($appId: String!, $appMintId: String!, $input: AppMintUpdateInput!) {
+mutation UserUpdateAppMint($appId: String!, $appMintId: String!, $input: UserAppMintUpdateInput!) {
   updated: userUpdateAppMint(appId: $appId, appMintId: $appMintId, input: $input) {
     ...AppMintDetails
   }
 }
 
-mutation UserAppUserAdd($appId: String!, $input: AppUserAddInput!) {
+mutation UserAppUserAdd($appId: String!, $input: UserAppUserAddInput!) {
   item: userAppUserAdd(appId: $appId, input: $input) {
     ...AppDetails
     users {
@@ -37,7 +46,7 @@ mutation UserAppUserAdd($appId: String!, $input: AppUserAddInput!) {
   }
 }
 
-mutation UserAppUserRemove($appId: String!, $input: AppUserRemoveInput!) {
+mutation UserAppUserRemove($appId: String!, $input: UserAppUserRemoveInput!) {
   item: userAppUserRemove(appId: $appId, input: $input) {
     ...AppDetails
     users {
@@ -46,7 +55,7 @@ mutation UserAppUserRemove($appId: String!, $input: AppUserRemoveInput!) {
   }
 }
 
-mutation UserAppUserUpdateRole($appId: String!, $input: AppUserUpdateRoleInput!) {
+mutation UserAppUserUpdateRole($appId: String!, $input: UserAppUserUpdateRoleInput!) {
   item: userAppUserUpdateRole(appId: $appId, input: $input) {
     ...AppDetails
     users {
@@ -145,7 +154,7 @@ query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId:
   }
 }
 
-query UserAppTransactions($appId: String!, $appEnvId: String!, $input: AppTransactionListInput) {
+query UserAppTransactions($appId: String!, $appEnvId: String!, $input: UserAppTransactionListInput) {
   items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
     ...AppTransactionDetails
   }

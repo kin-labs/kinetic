@@ -1,6 +1,6 @@
 import { Box, SimpleGrid, Stack, Text } from '@chakra-ui/react'
 import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
-import { AppEnv, AppMintUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
+import { AppEnv, UserAppMintUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { AdminAppUiMintDisabledPanel } from './admin-app-ui-mint-disabled-panel'
 import { AdminAppUiMintEnabledPanel } from './admin-app-ui-mint-enabled-panel'
@@ -10,7 +10,7 @@ export interface AdminAppUiAppEnvMintSettingsProps {
   disableMint: (mintId: string) => void
   enableMint: (mintId: string) => void
   selectWallet: (mintId: string, walletId: string) => void
-  updateAppMint: (mintId: string, input: AppMintUpdateInput) => void
+  updateAppMint: (mintId: string, input: UserAppMintUpdateInput) => void
 }
 
 export function AdminAppUiAppEnvMintSettings({

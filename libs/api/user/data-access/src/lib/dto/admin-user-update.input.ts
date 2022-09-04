@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql'
 import { UserRole } from '../entities/user-role.enum'
 
 @InputType()
-export class UserUpdateInput {
+export class AdminUserUpdateInput {
   @Field({ nullable: true })
   avatarUrl?: string
   @Field({ nullable: true })

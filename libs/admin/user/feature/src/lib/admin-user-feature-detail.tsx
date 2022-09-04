@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, Stack, Text, useToast } from '@chakra-ui/react'
 import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
 import { AdminUserUiApps, AdminUserUiEmails, AdminUserUiForm } from '@kin-kinetic/admin/user/ui'
-import { useAdminUpdateUserMutation, useAdminUserQuery, UserUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
+import { useAdminUpdateUserMutation, useAdminUserQuery, AdminUserUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ export default function AdminUserFeatureDetail() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, updateUserMutation] = useAdminUpdateUserMutation()
 
-  const onSubmit = async (input: UserUpdateInput) => {
+  const onSubmit = async (input: AdminUserUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await updateUserMutation({ userId: userId!, input })
     if (res?.data?.updated) {

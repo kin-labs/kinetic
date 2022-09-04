@@ -1,13 +1,13 @@
 import { Box, Stack } from '@chakra-ui/react'
 import { AdminUiForm, UiFormField } from '@kin-kinetic/admin/ui/form'
-import { User, UserUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
+import { User, AdminUserUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 import * as Yup from 'yup'
 
 export interface AdminUserUiProps {
   user?: User | null | undefined
-  onSubmit: (input: UserUpdateInput) => Promise<unknown>
+  onSubmit: (input: AdminUserUpdateInput) => Promise<unknown>
 }
 
 const validationSchema = Yup.object({

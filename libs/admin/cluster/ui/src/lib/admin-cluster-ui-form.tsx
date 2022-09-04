@@ -1,13 +1,13 @@
 import { Box, Stack } from '@chakra-ui/react'
 import { AdminUiForm, UiFormField } from '@kin-kinetic/admin/ui/form'
-import { Cluster, ClusterStatus, ClusterUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
+import { Cluster, ClusterStatus, AdminClusterUpdateInput } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
 import * as Yup from 'yup'
 
 export interface AdminClusterUiProps {
   cluster?: Cluster | null | undefined
-  onSubmit: (input: ClusterUpdateInput) => Promise<unknown>
+  onSubmit: (input: AdminClusterUpdateInput) => Promise<unknown>
 }
 
 const validationSchema = Yup.object({

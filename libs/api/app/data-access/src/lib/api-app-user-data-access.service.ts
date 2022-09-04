@@ -1,19 +1,22 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { UserRole } from '@kin-kinetic/api/user/data-access'
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
+import slugify from 'slugify'
 import { ApiAppDataAccessService } from './api-app-data-access.service'
-import { AppEnvUpdateInput } from './dto/app-env-update.input'
-import { AppMintUpdateInput } from './dto/app-mint-update.input'
-import { AppTransactionListInput } from './dto/app-transaction-list.input'
-import { AppUpdateInput } from './dto/app-update.input'
-import { AppUserAddInput } from './dto/app-user-add.input'
-import { AppUserRemoveInput } from './dto/app-user-remove.input'
-import { AppUserUpdateRoleInput } from './dto/app-user-update-role.input'
+import { UserAppEnvCreateInput } from './dto/user-app-env-create.input'
+import { UserAppEnvUpdateInput } from './dto/user-app-env-update.input'
+import { UserAppMintUpdateInput } from './dto/user-app-mint-update.input'
+import { UserAppTransactionListInput } from './dto/user-app-transaction-list.input'
+import { UserAppUpdateInput } from './dto/user-app-update.input'
+import { UserAppUserAddInput } from './dto/user-app-user-add.input'
+import { UserAppUserRemoveInput } from './dto/user-app-user-remove.input'
+import { UserAppUserUpdateRoleInput } from './dto/user-app-user-update-role.input'
 import { AppTransactionCounter } from './entity/app-transaction-counter.entity'
 
 @Injectable()
 export class ApiAppUserDataAccessService {
+  private readonly logger = new Logger(ApiAppUserDataAccessService.name)
   constructor(private readonly app: ApiAppDataAccessService, private readonly data: ApiCoreDataAccessService) {}
 
   async userApps(userId: string) {
@@ -61,21 +64,23 @@ export class ApiAppUserDataAccessService {
 
   private userAppTransactionsWhere(
     appEnvId: string,
-    input: AppTransactionListInput = {},
+    input: UserAppTransactionListInput = {},
   ): Prisma.AppTransactionWhereInput {
-    const { destination, referenceId, referenceType, signature, source, status } = input
+    const { destination, ip, referenceId, referenceType, signature, source, status, ua } = input
     return {
       appEnvId,
       destination,
+      ip,
       referenceId,
       referenceType,
       signature,
       source,
       status: status?.length ? { in: status } : undefined,
+      ua,
     }
   }
 
-  private userAppTransactionsLimit(input: AppTransactionListInput = {}) {
+  private userAppTransactionsLimit(input: UserAppTransactionListInput = {}) {
     const page = input.page && input.page > 0 ? input.page : 1
     const take = input.limit && input.limit > 0 ? input.limit : 10
     const skip = take * page - take
@@ -98,7 +103,7 @@ export class ApiAppUserDataAccessService {
     })
   }
 
-  async userAppTransactions(userId: string, appId: string, appEnvId: string, input: AppTransactionListInput = {}) {
+  async userAppTransactions(userId: string, appId: string, appEnvId: string, input: UserAppTransactionListInput = {}) {
     await this.data.ensureAppUser(userId, appId)
     const { skip, take } = this.userAppTransactionsLimit(input)
     return this.data.appTransaction.findMany({
@@ -114,7 +119,7 @@ export class ApiAppUserDataAccessService {
     userId: string,
     appId: string,
     appEnvId: string,
-    input: AppTransactionListInput = {},
+    input: UserAppTransactionListInput = {},
   ): Promise<AppTransactionCounter> {
     await this.data.ensureAppUser(userId, appId)
     const total = await this.data.appTransaction.count({
@@ -130,12 +135,62 @@ export class ApiAppUserDataAccessService {
     }
   }
 
-  async userUpdateApp(userId: string, appId: string, data: AppUpdateInput) {
+  async userUpdateApp(userId: string, appId: string, data: UserAppUpdateInput) {
     await this.data.ensureAppOwner(userId, appId)
     return this.data.app.update({ where: { id: appId }, data, include: this.app.include })
   }
 
-  async userUpdateAppEnv(userId: string, appId: string, appEnvId: string, data: AppEnvUpdateInput) {
+  async userCreateAppEnv(userId: string, appId: string, clusterId: string, data: UserAppEnvCreateInput) {
+    await this.data.ensureAppOwner(userId, appId)
+    const app = await this.data.getAppById(appId)
+    if (app.envs.length >= app.maxEnvs) {
+      this.logger.warn(`User ${userId} reached max number of environments for app ${appId}`)
+      throw new Error(
+        `The maximum number of environments has been reached for this app. Please contact your administrator to increase the maximum.`,
+      )
+    }
+    const activeClusters = await this.data.getActiveClusters()
+    const cluster = activeClusters.find((cluster) => cluster.id === clusterId)
+
+    if (!cluster) {
+      throw new BadRequestException(`Cluster not found or Inactive`)
+    }
+
+    const enabledMints = cluster.mints.filter((mint) => mint.default && mint.enabled)
+    const mints = []
+    const wallets = []
+    for (const mint of enabledMints) {
+      const generated = await this.data.generateAppWallet(userId, app.index)
+      mints.push({
+        addMemo: mint.addMemo,
+        order: mint.order,
+        mint: { connect: { id: mint.id } },
+        wallet: { connect: { id: generated.id } },
+      })
+      wallets.push({ id: generated.id })
+    }
+
+    return this.data.appEnv.create({
+      data: {
+        // Connect the app
+        app: { connect: { id: app.id } },
+        // Connect the cluster
+        cluster: { connect: { id: cluster.id } },
+        // Set the slugified name based on the input name
+        name: slugify(data.name.toLowerCase(), { lower: true, strict: true }),
+        // Connect the wallets
+        wallets: { connect: wallets },
+        // Create the default mint and connect it to the wallet
+        mints: { create: mints },
+      },
+      include: {
+        ...this.app.includeAppEnv,
+        app: true,
+      },
+    })
+  }
+
+  async userUpdateAppEnv(userId: string, appId: string, appEnvId: string, data: UserAppEnvUpdateInput) {
     await this.data.ensureAppOwner(userId, appId)
     return this.data.appEnv.update({
       where: { id: appEnvId },
@@ -147,7 +202,7 @@ export class ApiAppUserDataAccessService {
     })
   }
 
-  async userUpdateAppMint(userId: string, appId: string, appMintId: string, data: AppMintUpdateInput) {
+  async userUpdateAppMint(userId: string, appId: string, appMintId: string, data: UserAppMintUpdateInput) {
     await this.data.ensureAppOwner(userId, appId)
     return this.data.appMint.update({
       where: { id: appMintId },
@@ -243,7 +298,7 @@ export class ApiAppUserDataAccessService {
     })
   }
 
-  async userAppUserAdd(userId: string, appId: string, input: AppUserAddInput) {
+  async userAppUserAdd(userId: string, appId: string, input: UserAppUserAddInput) {
     await this.data.ensureAppOwner(userId, appId)
     return this.data.app.update({
       where: { id: appId },
@@ -252,7 +307,7 @@ export class ApiAppUserDataAccessService {
     })
   }
 
-  async userAppUserRemove(userId: string, appId: string, input: AppUserRemoveInput) {
+  async userAppUserRemove(userId: string, appId: string, input: UserAppUserRemoveInput) {
     await this.data.ensureAppOwner(userId, appId)
     return this.data.app.update({
       where: { id: appId },
@@ -261,7 +316,7 @@ export class ApiAppUserDataAccessService {
     })
   }
 
-  async userAppUserUpdateRole(userId: string, appId: string, input: AppUserUpdateRoleInput) {
+  async userAppUserUpdateRole(userId: string, appId: string, input: UserAppUserUpdateRoleInput) {
     await this.data.ensureAppOwner(userId, appId)
     const existing = await this.data.appUser.findFirst({ where: { userId: input.userId, appId: appId } })
     return this.data.app.update({

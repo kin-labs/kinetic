@@ -16,7 +16,7 @@ fragment UserEmailDetails on UserEmail {
   email
 }
 
-mutation AdminCreateUser($input: UserCreateInput!) {
+mutation AdminCreateUser($input: AdminUserCreateInput!) {
   created: adminCreateUser(input: $input) {
     ...UserDetails
   }
@@ -28,7 +28,7 @@ mutation AdminDeleteUser($userId: String!) {
   }
 }
 
-mutation AdminUpdateUser($userId: String!, $input: UserUpdateInput!) {
+mutation AdminUpdateUser($userId: String!, $input: AdminUserUpdateInput!) {
   updated: adminUpdateUser(userId: $userId, input: $input) {
     ...UserDetails
   }

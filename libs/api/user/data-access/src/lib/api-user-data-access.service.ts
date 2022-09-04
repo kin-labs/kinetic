@@ -1,15 +1,15 @@
 import { hashPassword } from '@kin-kinetic/api/auth/util'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { UserCreateInput } from './dto/user-create.input'
-import { UserUpdateInput } from './dto/user-update.input'
+import { AdminUserCreateInput } from './dto/admin-user-create.input'
+import { AdminUserUpdateInput } from './dto/admin-user-update.input'
 import { UserRole } from './entities/user-role.enum'
 
 @Injectable()
 export class ApiUserDataAccessService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
-  async adminCreateUser(adminId: string, input: UserCreateInput) {
+  async adminCreateUser(adminId: string, input: AdminUserCreateInput) {
     await this.data.ensureAdminUser(adminId)
     const { email: inputEmail, ...data } = input
     const email = inputEmail.trim()
@@ -64,7 +64,7 @@ export class ApiUserDataAccessService {
     return this.ensureUserById(adminId, userId)
   }
 
-  async updateUser(adminId: string, userId: string, data: UserUpdateInput) {
+  async updateUser(adminId: string, userId: string, data: AdminUserUpdateInput) {
     await this.ensureUserById(adminId, userId)
     return this.data.user.update({ where: { id: userId }, data })
   }

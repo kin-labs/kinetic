@@ -2,7 +2,7 @@ import { useToast } from '@chakra-ui/react'
 import { AdminClusterUiForm } from '@kin-kinetic/admin/cluster/ui'
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import {
-  ClusterUpdateInput,
+  AdminClusterUpdateInput,
   useAdminClusterQuery,
   useAdminUpdateClusterMutation,
 } from '@kin-kinetic/shared/util/admin-sdk'
@@ -12,7 +12,7 @@ export function AdminClusterFeatureSettingsTab({ clusterId }: { clusterId: strin
   const toast = useToast()
   const [{ data, fetching }] = useAdminClusterQuery({ variables: { clusterId } })
   const [{ fetching: updateFetching }, updateCluster] = useAdminUpdateClusterMutation()
-  const update = async (input: ClusterUpdateInput) => {
+  const update = async (input: AdminClusterUpdateInput) => {
     try {
       await updateCluster({
         clusterId,

@@ -5,7 +5,18 @@ import { Keypair } from '@kin-kinetic/keypair'
 import { getPublicKey, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
-import { App, AppEnv, AppUserRole, Cluster, ClusterStatus, Mint, PrismaClient, UserRole, Wallet } from '@prisma/client'
+import {
+  App,
+  AppEnv,
+  AppUserRole,
+  Cluster,
+  ClusterStatus,
+  Mint,
+  PrismaClient,
+  UserRole,
+  Wallet,
+  WalletType,
+} from '@prisma/client'
 import { omit } from 'lodash'
 import { MetricService } from 'nestjs-otel'
 
@@ -78,6 +89,22 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       throw new NotFoundException(`User ${userId} does not have access to app ${appId}.`)
     }
     return appUser?.role
+  }
+
+  async generateAppWallet(userId: string, index: number) {
+    const { publicKey, secretKey } = this.getAppKeypair(index)
+
+    return this.wallet.create({ data: { secretKey, publicKey, type: WalletType.Provisioned, ownerId: userId } })
+  }
+
+  private getAppKeypair(index: number): Keypair {
+    const envVar = process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]
+    if (envVar) {
+      this.logger.verbose(`getAppKeypair app ${index}: read from env var`)
+      return Keypair.fromByteArray(JSON.parse(envVar))
+    }
+    this.logger.verbose(`getAppKeypair app ${index}: generated new keypair`)
+    return Keypair.random()
   }
 
   getActiveClusters() {
