@@ -17,7 +17,8 @@ describe('ConfigFeatureController (e2e)', () => {
       .expect(200)
       .then((res) => {
         expect(res.body.environment).toEqual('test')
-        expect(res.body.port).toEqual(parseInt(process.env.PORT || '3000'))
+        expect(res.body.name).toContain('@kin-kinetic/api')
+        expect(res.body.version).toBeDefined()
       })
   })
 })
