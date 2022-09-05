@@ -1,17 +1,17 @@
 import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { Test } from '@nestjs/testing'
-import { ApiUserDataAccessService } from './api-user-data-access.service'
+import { ApiUserAdminDataAccessService } from './api-user-admin-data-access.service'
 
 describe('ApiUserDataAccessService', () => {
-  let service: ApiUserDataAccessService
+  let service: ApiUserAdminDataAccessService
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [ApiCoreDataAccessModule],
-      providers: [ApiUserDataAccessService],
+      providers: [ApiUserAdminDataAccessService],
     }).compile()
 
-    service = module.get(ApiUserDataAccessService)
+    service = module.get(ApiUserAdminDataAccessService)
   })
 
   it('should be defined', () => {

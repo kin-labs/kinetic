@@ -15,5 +15,6 @@ export function getProvisionedApps(envVars: string[]): ProvisionedApp[] {
     feePayerByteArray: JSON.parse(process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]),
     index,
     name: process.env[`APP_${index}_NAME`],
+    logoUrl: process.env[`APP_${index}_LOGO_URL`],
   }))
 }

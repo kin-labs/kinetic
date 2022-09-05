@@ -24,12 +24,14 @@ export type Scalars = {
 
 export type AdminAppCreateInput = {
   index: Scalars['Int']
+  logoUrl?: InputMaybe<Scalars['String']>
   name: Scalars['String']
   skipWalletCreation?: InputMaybe<Scalars['Boolean']>
 }
 
 export type AdminAppUpdateInput = {
   index?: InputMaybe<Scalars['Int']>
+  logoUrl?: InputMaybe<Scalars['String']>
   maxEnvs?: InputMaybe<Scalars['Int']>
   name?: InputMaybe<Scalars['String']>
 }
@@ -83,6 +85,7 @@ export type App = {
   envs?: Maybe<Array<AppEnv>>
   id: Scalars['String']
   index: Scalars['Int']
+  logoUrl?: Maybe<Scalars['String']>
   maxEnvs: Scalars['Int']
   name?: Maybe<Scalars['String']>
   settingsUrl?: Maybe<Scalars['String']>
@@ -95,6 +98,7 @@ export type AppEnv = {
   app?: Maybe<App>
   cluster?: Maybe<Cluster>
   createdAt: Scalars['DateTime']
+  endpoint?: Maybe<Scalars['String']>
   id: Scalars['String']
   ipsAllowed?: Maybe<Array<Scalars['String']>>
   ipsBlocked?: Maybe<Array<Scalars['String']>>
@@ -111,6 +115,20 @@ export type AppEnv = {
   webhookSecret?: Maybe<Scalars['String']>
   webhookVerifyEnabled?: Maybe<Scalars['Boolean']>
   webhookVerifyUrl?: Maybe<Scalars['String']>
+}
+
+export type AppEnvStats = {
+  __typename?: 'AppEnvStats'
+  transactionCount?: Maybe<AppEnvTransactionCount>
+}
+
+export type AppEnvTransactionCount = {
+  __typename?: 'AppEnvTransactionCount'
+  Committed?: Maybe<Scalars['Int']>
+  Confirmed?: Maybe<Scalars['Int']>
+  Failed?: Maybe<Scalars['Int']>
+  Finalized?: Maybe<Scalars['Int']>
+  Processing?: Maybe<Scalars['Int']>
 }
 
 export type AppMint = {
@@ -337,6 +355,7 @@ export type Mutation = {
   userAppUserRemove?: Maybe<App>
   userAppUserUpdateRole?: Maybe<App>
   userCreateAppEnv?: Maybe<AppEnv>
+  userDeleteAppEnv?: Maybe<AppEnv>
   userDeleteWallet?: Maybe<Wallet>
   userGenerateWallet?: Maybe<Wallet>
   userImportWallet?: Maybe<Wallet>
@@ -493,6 +512,11 @@ export type MutationUserCreateAppEnvArgs = {
   input: UserAppEnvCreateInput
 }
 
+export type MutationUserDeleteAppEnvArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+}
+
 export type MutationUserDeleteWalletArgs = {
   appEnvId: Scalars['String']
   walletId: Scalars['String']
@@ -540,6 +564,7 @@ export type Query = {
   uptime: Scalars['Float']
   userApp?: Maybe<App>
   userAppEnv?: Maybe<AppEnv>
+  userAppEnvStats?: Maybe<AppEnvStats>
   userAppRole?: Maybe<AppUserRole>
   userAppTransaction?: Maybe<AppTransaction>
   userAppTransactionCounter?: Maybe<AppTransactionCounter>
@@ -547,6 +572,7 @@ export type Query = {
   userApps?: Maybe<Array<App>>
   userCluster?: Maybe<Cluster>
   userClusters?: Maybe<Array<Cluster>>
+  userSearchUsers?: Maybe<Array<User>>
   userWallet?: Maybe<Wallet>
   userWalletAirdrop?: Maybe<WalletAirdropResponse>
   userWalletBalance?: Maybe<WalletBalance>
@@ -588,6 +614,10 @@ export type QueryUserAppEnvArgs = {
   appId: Scalars['String']
 }
 
+export type QueryUserAppEnvStatsArgs = {
+  appEnvId: Scalars['String']
+}
+
 export type QueryUserAppRoleArgs = {
   appId: Scalars['String']
 }
@@ -612,6 +642,10 @@ export type QueryUserAppTransactionsArgs = {
 
 export type QueryUserClusterArgs = {
   clusterId: Scalars['String']
+}
+
+export type QueryUserSearchUsersArgs = {
+  input: UserSearchUserInput
 }
 
 export type QueryUserWalletArgs = {
@@ -684,6 +718,7 @@ export type UserAppTransactionListInput = {
 }
 
 export type UserAppUpdateInput = {
+  logoUrl?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
 }
 
@@ -717,6 +752,10 @@ export type UserLoginInput = {
 export enum UserRole {
   Admin = 'Admin',
   User = 'User',
+}
+
+export type UserSearchUserInput = {
+  query?: InputMaybe<Scalars['String']>
 }
 
 export type Wallet = {
@@ -765,6 +804,7 @@ export type AdminCreateAppMutation = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -774,6 +814,7 @@ export type AdminCreateAppMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -885,6 +926,7 @@ export type AdminCreateAppMutation = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -918,6 +960,7 @@ export type AdminUpdateAppMutation = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -927,6 +970,7 @@ export type AdminUpdateAppMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -1038,6 +1082,7 @@ export type AdminUpdateAppMutation = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -1070,6 +1115,7 @@ export type AdminDeleteAppMutation = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -1089,6 +1135,7 @@ export type AdminDeleteAppEnvMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -1192,6 +1239,7 @@ export type AdminAppsQuery = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -1201,6 +1249,7 @@ export type AdminAppsQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -1307,6 +1356,7 @@ export type AdminAppQuery = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -1316,6 +1366,7 @@ export type AdminAppQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -1427,6 +1478,7 @@ export type AdminAppQuery = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -1453,6 +1505,7 @@ export type AppDetailsFragment = {
   createdAt: any
   updatedAt: any
   index: number
+  logoUrl?: string | null
   maxEnvs: number
   name?: string | null
   defaultEnvUrl?: string | null
@@ -1464,6 +1517,7 @@ export type AppEnvDetailsFragment = {
   id: string
   createdAt: any
   updatedAt: any
+  endpoint?: string | null
   key?: string | null
   ipsAllowed?: Array<string> | null
   ipsBlocked?: Array<string> | null
@@ -1554,6 +1608,27 @@ export type AppEnvDetailsFragment = {
       type?: WalletType | null
     } | null
   }> | null
+}
+
+export type AppEnvStatsDetailsFragment = {
+  __typename?: 'AppEnvStats'
+  transactionCount?: {
+    __typename?: 'AppEnvTransactionCount'
+    Committed?: number | null
+    Confirmed?: number | null
+    Failed?: number | null
+    Finalized?: number | null
+    Processing?: number | null
+  } | null
+}
+
+export type AppEnvTransactionCountDetailsFragment = {
+  __typename?: 'AppEnvTransactionCount'
+  Committed?: number | null
+  Confirmed?: number | null
+  Failed?: number | null
+  Finalized?: number | null
+  Processing?: number | null
 }
 
 export type AppMintDetailsFragment = {
@@ -1707,6 +1782,7 @@ export type AppUserDetailsFragment = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -1739,6 +1815,25 @@ export type AppWebhookDetailsFragment = {
   type: AppWebhookType
 }
 
+export type UserAppEnvStatsQueryVariables = Exact<{
+  appEnvId: Scalars['String']
+}>
+
+export type UserAppEnvStatsQuery = {
+  __typename?: 'Query'
+  stats?: {
+    __typename?: 'AppEnvStats'
+    transactionCount?: {
+      __typename?: 'AppEnvTransactionCount'
+      Committed?: number | null
+      Confirmed?: number | null
+      Failed?: number | null
+      Finalized?: number | null
+      Processing?: number | null
+    } | null
+  } | null
+}
+
 export type UserUpdateAppMutationVariables = Exact<{
   appId: Scalars['String']
   input: UserAppUpdateInput
@@ -1752,6 +1847,7 @@ export type UserUpdateAppMutation = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -1761,6 +1857,7 @@ export type UserUpdateAppMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -1872,6 +1969,7 @@ export type UserUpdateAppMutation = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -1905,6 +2003,7 @@ export type UserCreateAppEnvMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -2019,6 +2118,7 @@ export type UserUpdateAppEnvMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -2179,6 +2279,7 @@ export type UserAppUserAddMutation = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -2195,6 +2296,7 @@ export type UserAppUserAddMutation = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -2228,6 +2330,7 @@ export type UserAppUserRemoveMutation = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -2244,6 +2347,7 @@ export type UserAppUserRemoveMutation = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -2277,6 +2381,7 @@ export type UserAppUserUpdateRoleMutation = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -2293,6 +2398,7 @@ export type UserAppUserUpdateRoleMutation = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -2325,6 +2431,7 @@ export type UserAppEnvAddAllowedIpMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -2430,6 +2537,7 @@ export type UserAppEnvRemoveAllowedIpMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -2535,6 +2643,7 @@ export type UserAppEnvAddBlockedIpMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -2640,6 +2749,7 @@ export type UserAppEnvRemoveBlockedIpMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -2745,6 +2855,7 @@ export type UserAppEnvAddAllowedUaMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -2850,6 +2961,7 @@ export type UserAppEnvRemoveAllowedUaMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -2955,6 +3067,7 @@ export type UserAppEnvAddBlockedUaMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -3060,6 +3173,7 @@ export type UserAppEnvRemoveBlockedUaMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -3166,6 +3280,7 @@ export type UserAppEnvMintDisableMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -3272,6 +3387,7 @@ export type UserAppEnvMintEnableMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -3379,6 +3495,7 @@ export type UserAppEnvMintSetWalletMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -3485,6 +3602,7 @@ export type UserAppEnvWalletAddMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -3599,6 +3717,7 @@ export type UserAppEnvWalletRemoveMutation = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -3619,6 +3738,112 @@ export type UserAppEnvWalletRemoveMutation = {
       publicKey?: string | null
       type?: WalletType | null
     }> | null
+    app?: {
+      __typename?: 'App'
+      id: string
+      createdAt: any
+      updatedAt: any
+      index: number
+      maxEnvs: number
+      name?: string | null
+    } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      enableStats?: boolean | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserDeleteAppEnvMutationVariables = Exact<{
+  appId: Scalars['String']
+  appEnvId: Scalars['String']
+}>
+
+export type UserDeleteAppEnvMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    endpoint?: string | null
+    key?: string | null
+    ipsAllowed?: Array<string> | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
+    webhookDebugging?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
     app?: {
       __typename?: 'App'
       id: string
@@ -3921,6 +4146,7 @@ export type UserAppsQuery = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -3930,6 +4156,7 @@ export type UserAppsQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -4037,6 +4264,7 @@ export type UserAppQuery = {
     createdAt: any
     updatedAt: any
     index: number
+    logoUrl?: string | null
     maxEnvs: number
     name?: string | null
     defaultEnvUrl?: string | null
@@ -4046,6 +4274,7 @@ export type UserAppQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -4157,6 +4386,7 @@ export type UserAppQuery = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -4189,6 +4419,7 @@ export type UserAppEnvQuery = {
     id: string
     createdAt: any
     updatedAt: any
+    endpoint?: string | null
     key?: string | null
     ipsAllowed?: Array<string> | null
     ipsBlocked?: Array<string> | null
@@ -4789,6 +5020,7 @@ export type AdminUserQuery = {
         createdAt: any
         updatedAt: any
         index: number
+        logoUrl?: string | null
         maxEnvs: number
         name?: string | null
         defaultEnvUrl?: string | null
@@ -4813,6 +5045,25 @@ export type AdminUserQuery = {
 export type AdminUsersQueryVariables = Exact<{ [key: string]: never }>
 
 export type AdminUsersQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'User'
+    id: string
+    createdAt: any
+    updatedAt: any
+    avatarUrl?: string | null
+    email?: string | null
+    name?: string | null
+    username: string
+    role?: UserRole | null
+  }> | null
+}
+
+export type UserSearchUsersQueryVariables = Exact<{
+  input: UserSearchUserInput
+}>
+
+export type UserSearchUsersQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'User'
@@ -4881,6 +5132,7 @@ export type AdminWalletQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -5026,6 +5278,7 @@ export type AdminWalletsQuery = {
         id: string
         createdAt: any
         updatedAt: any
+        endpoint?: string | null
         key?: string | null
         ipsAllowed?: Array<string> | null
         ipsBlocked?: Array<string> | null
@@ -5123,6 +5376,7 @@ export type AdminWalletsQuery = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -5246,6 +5500,7 @@ export type UserGenerateWalletMutation = {
       id: string
       createdAt: any
       updatedAt: any
+      endpoint?: string | null
       key?: string | null
       ipsAllowed?: Array<string> | null
       ipsBlocked?: Array<string> | null
@@ -5590,6 +5845,7 @@ export const AppEnvDetailsFragmentDoc = gql`
     id
     createdAt
     updatedAt
+    endpoint
     key
     app {
       id
@@ -5623,6 +5879,23 @@ export const AppEnvDetailsFragmentDoc = gql`
   ${ClusterDetailsFragmentDoc}
   ${MintDetailsFragmentDoc}
   ${AppMintDetailsFragmentDoc}
+`
+export const AppEnvTransactionCountDetailsFragmentDoc = gql`
+  fragment AppEnvTransactionCountDetails on AppEnvTransactionCount {
+    Committed
+    Confirmed
+    Failed
+    Finalized
+    Processing
+  }
+`
+export const AppEnvStatsDetailsFragmentDoc = gql`
+  fragment AppEnvStatsDetails on AppEnvStats {
+    transactionCount {
+      ...AppEnvTransactionCountDetails
+    }
+  }
+  ${AppEnvTransactionCountDetailsFragmentDoc}
 `
 export const AppTransactionErrorDetailsFragmentDoc = gql`
   fragment AppTransactionErrorDetails on AppTransactionError {
@@ -5703,6 +5976,7 @@ export const AppDetailsFragmentDoc = gql`
     createdAt
     updatedAt
     index
+    logoUrl
     maxEnvs
     name
     defaultEnvUrl
@@ -5890,6 +6164,18 @@ export const AdminAppDocument = gql`
 
 export function useAdminAppQuery(options: Omit<Urql.UseQueryArgs<AdminAppQueryVariables>, 'query'>) {
   return Urql.useQuery<AdminAppQuery>({ query: AdminAppDocument, ...options })
+}
+export const UserAppEnvStatsDocument = gql`
+  query UserAppEnvStats($appEnvId: String!) {
+    stats: userAppEnvStats(appEnvId: $appEnvId) {
+      ...AppEnvStatsDetails
+    }
+  }
+  ${AppEnvStatsDetailsFragmentDoc}
+`
+
+export function useUserAppEnvStatsQuery(options: Omit<Urql.UseQueryArgs<UserAppEnvStatsQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserAppEnvStatsQuery>({ query: UserAppEnvStatsDocument, ...options })
 }
 export const UserUpdateAppDocument = gql`
   mutation UserUpdateApp($appId: String!, $input: UserAppUpdateInput!) {
@@ -6198,6 +6484,18 @@ export function useUserAppEnvWalletRemoveMutation() {
   return Urql.useMutation<UserAppEnvWalletRemoveMutation, UserAppEnvWalletRemoveMutationVariables>(
     UserAppEnvWalletRemoveDocument,
   )
+}
+export const UserDeleteAppEnvDocument = gql`
+  mutation UserDeleteAppEnv($appId: String!, $appEnvId: String!) {
+    item: userDeleteAppEnv(appId: $appId, appEnvId: $appEnvId) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetailsFragmentDoc}
+`
+
+export function useUserDeleteAppEnvMutation() {
+  return Urql.useMutation<UserDeleteAppEnvMutation, UserDeleteAppEnvMutationVariables>(UserDeleteAppEnvDocument)
 }
 export const UserAppTransactionDocument = gql`
   query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
@@ -6527,6 +6825,18 @@ export const AdminUsersDocument = gql`
 
 export function useAdminUsersQuery(options?: Omit<Urql.UseQueryArgs<AdminUsersQueryVariables>, 'query'>) {
   return Urql.useQuery<AdminUsersQuery>({ query: AdminUsersDocument, ...options })
+}
+export const UserSearchUsersDocument = gql`
+  query UserSearchUsers($input: UserSearchUserInput!) {
+    items: userSearchUsers(input: $input) {
+      ...UserDetails
+    }
+  }
+  ${UserDetailsFragmentDoc}
+`
+
+export function useUserSearchUsersQuery(options: Omit<Urql.UseQueryArgs<UserSearchUsersQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserSearchUsersQuery>({ query: UserSearchUsersDocument, ...options })
 }
 export const AdminDeleteWalletDocument = gql`
   mutation AdminDeleteWallet($walletId: String!) {

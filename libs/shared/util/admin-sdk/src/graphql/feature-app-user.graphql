@@ -1,3 +1,9 @@
+query UserAppEnvStats($appEnvId: String!) {
+  stats: userAppEnvStats(appEnvId: $appEnvId) {
+    ...AppEnvStatsDetails
+  }
+}
+
 mutation UserUpdateApp($appId: String!, $input: UserAppUpdateInput!) {
   updated: userUpdateApp(appId: $appId, input: $input) {
     ...AppDetails
@@ -145,6 +151,12 @@ mutation UserAppEnvWalletRemove($appId: String!, $appEnvId: String!, $walletId: 
     wallets {
       ...WalletDetails
     }
+  }
+}
+
+mutation UserDeleteAppEnv($appId: String!, $appEnvId: String!) {
+  item: userDeleteAppEnv(appId: $appId, appEnvId: $appEnvId) {
+    ...AppEnvDetails
   }
 }
 

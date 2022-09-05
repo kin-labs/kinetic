@@ -51,3 +51,9 @@ query AdminUsers {
     ...UserDetails
   }
 }
+
+query UserSearchUsers($input: UserSearchUserInput!) {
+  items: userSearchUsers(input: $input) {
+    ...UserDetails
+  }
+}
