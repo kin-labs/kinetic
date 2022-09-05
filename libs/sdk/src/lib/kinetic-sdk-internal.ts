@@ -225,7 +225,7 @@ export class KineticSdkInternal {
     if (destinations?.length > 15) {
       throw new Error('Maximum number of destinations exceeded')
     }
-    destinations.map((transfer) => {
+    destinations.forEach((transfer) => {
       if (this.appConfig?.mints.find((mint) => mint.publicKey === transfer.destination)) {
         throw new Error(`Transfers to a mint are not allowed.`)
       }
