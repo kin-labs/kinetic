@@ -5,6 +5,9 @@ export class AdminAppUpdateInput {
   @Field(() => Int, { nullable: true })
   index?: number
 
+  @Field({ nullable: true })
+  logoUrl?: string
+
   @Field(() => Int, { nullable: true })
   maxEnvs?: number
 

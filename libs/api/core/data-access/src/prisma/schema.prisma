@@ -35,6 +35,7 @@ model App {
   updatedAt DateTime  @updatedAt
   envs      AppEnv[]
   index     Int       @unique
+  logoUrl   String?
   maxEnvs   Int       @default(5)
   name      String
   users     AppUser[]

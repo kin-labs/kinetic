@@ -60,6 +60,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
     const data: Prisma.AppCreateInput = {
       index: input.index,
       name: input.name,
+      logoUrl: input.logoUrl,
       users: { create: { role: AppUserRole.Owner, userId } },
       envs: { create: envs },
     }
@@ -154,7 +155,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
             })
             adminId = admin.id
           }
-          await this.adminCreateApp(adminId, { index: app.index, name: app.name })
+          await this.adminCreateApp(adminId, { index: app.index, name: app.name, logoUrl: app?.logoUrl })
         }
       }),
     )

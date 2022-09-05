@@ -4,12 +4,14 @@
 
 input AdminAppCreateInput {
   index: Int!
+  logoUrl: String
   name: String!
   skipWalletCreation: Boolean
 }
 
 input AdminAppUpdateInput {
   index: Int
+  logoUrl: String
   maxEnvs: Int
   name: String
 }
@@ -62,6 +64,7 @@ type App {
   envs: [AppEnv!]
   id: String!
   index: Int!
+  logoUrl: String
   maxEnvs: Int!
   name: String
   settingsUrl: String
@@ -73,6 +76,7 @@ type AppEnv {
   app: App
   cluster: Cluster
   createdAt: DateTime!
+  endpoint: String
   id: String!
   ipsAllowed: [String!]
   ipsBlocked: [String!]
@@ -89,6 +93,18 @@ type AppEnv {
   webhookSecret: String
   webhookVerifyEnabled: Boolean
   webhookVerifyUrl: String
+}
+
+type AppEnvStats {
+  transactionCount: AppEnvTransactionCount
+}
+
+type AppEnvTransactionCount {
+  Committed: Int
+  Confirmed: Int
+  Failed: Int
+  Finalized: Int
+  Processing: Int
 }
 
 type AppMint {
@@ -320,6 +336,7 @@ type Mutation {
   userAppUserRemove(appId: String!, input: UserAppUserRemoveInput!): App
   userAppUserUpdateRole(appId: String!, input: UserAppUserUpdateRoleInput!): App
   userCreateAppEnv(appId: String!, clusterId: String!, input: UserAppEnvCreateInput!): AppEnv
+  userDeleteAppEnv(appEnvId: String!, appId: String!): AppEnv
   userDeleteWallet(appEnvId: String!, walletId: String!): Wallet
   userGenerateWallet(appEnvId: String!): Wallet
   userImportWallet(appEnvId: String!, secretKey: String!): Wallet
@@ -343,6 +360,7 @@ type Query {
   uptime: Float!
   userApp(appId: String!): App
   userAppEnv(appEnvId: String!, appId: String!): AppEnv
+  userAppEnvStats(appEnvId: String!): AppEnvStats
   userAppRole(appId: String!): AppUserRole
   userAppTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
   userAppTransactionCounter(
@@ -354,6 +372,7 @@ type Query {
   userApps: [App!]
   userCluster(clusterId: String!): Cluster
   userClusters: [Cluster!]
+  userSearchUsers(input: UserSearchUserInput!): [User!]
   userWallet(appEnvId: String!, walletId: String!): Wallet
   userWalletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
   userWalletBalance(appEnvId: String!, walletId: String!): WalletBalance
@@ -405,6 +424,7 @@ input UserAppTransactionListInput {
 }
 
 input UserAppUpdateInput {
+  logoUrl: String
   name: String
 }
 
@@ -437,6 +457,10 @@ input UserLoginInput {
 enum UserRole {
   Admin
   User
+}
+
+input UserSearchUserInput {
+  query: String
 }
 
 type Wallet {
