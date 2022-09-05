@@ -120,6 +120,7 @@ type AppMint {
 type AppTransaction {
   amount: String
   createdAt: DateTime
+  decimals: Int
   destination: String
   errors: [AppTransactionError!]
   explorerUrl: String

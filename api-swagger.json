@@ -598,6 +598,10 @@
             "type": "string",
             "nullable": true
           },
+          "decimals": {
+            "type": "number",
+            "nullable": true
+          },
           "destination": {
             "type": "string",
             "nullable": true
@@ -719,6 +723,7 @@
           "createdAt",
           "updatedAt",
           "amount",
+          "decimals",
           "destination",
           "errors",
           "explorerUrl",

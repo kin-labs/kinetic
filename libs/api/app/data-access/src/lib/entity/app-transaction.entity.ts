@@ -21,6 +21,9 @@ export class AppTransaction {
   @Field({ nullable: true })
   amount?: string
   @ApiProperty({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  decimals?: number
+  @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   destination?: string
   @ApiProperty({

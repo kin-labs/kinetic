@@ -79,6 +79,7 @@ fragment AppTransactionDetails on AppTransaction {
   createdAt
   updatedAt
   amount
+  decimals
   destination
   errors {
     ...AppTransactionErrorDetails
