@@ -2,7 +2,7 @@ import { Field, InputType, Int } from '@nestjs/graphql'
 import { MintType } from '../entity/mint-type.enum'
 
 @InputType()
-export class MintUpdateInput {
+export class AdminMintUpdateInput {
   @Field({ nullable: true })
   address: string
   @Field({ nullable: true })

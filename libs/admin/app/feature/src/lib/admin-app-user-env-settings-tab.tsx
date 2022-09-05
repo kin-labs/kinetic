@@ -9,8 +9,8 @@ import {
 } from '@kin-kinetic/admin/app/ui'
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import {
-  AppEnvUpdateInput,
-  AppMintUpdateInput,
+  UserAppEnvUpdateInput,
+  UserAppMintUpdateInput,
   useUserAppEnvMintDisableMutation,
   useUserAppEnvMintEnableMutation,
   useUserAppEnvMintSetWalletMutation,
@@ -28,7 +28,7 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
   const [, disableMintMutation] = useUserAppEnvMintDisableMutation()
   const [, enableMintMutation] = useUserAppEnvMintEnableMutation()
   const [, setWalletMutation] = useUserAppEnvMintSetWalletMutation()
-  const onSubmit = async (input: AppEnvUpdateInput) => {
+  const onSubmit = async (input: UserAppEnvUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await updateAppEnvMutation({
       appId: appId,
@@ -67,7 +67,7 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
       toast({ status: 'success', title: 'Mint disabled' })
     })
   }
-  const updateAppMint = (appMintId: string, input: AppMintUpdateInput) => {
+  const updateAppMint = (appMintId: string, input: UserAppMintUpdateInput) => {
     updateAppMintMutation({ appId, appMintId, input }).then(() => {
       toast({ status: 'success', title: 'Mint updated' })
     })

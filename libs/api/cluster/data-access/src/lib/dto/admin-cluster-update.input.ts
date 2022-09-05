@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql'
 import { ClusterStatus } from '../entity/cluster-status.enum'
 
 @InputType()
-export class ClusterUpdateInput {
+export class AdminClusterUpdateInput {
   @Field({ nullable: true })
   enableStats?: boolean
   @Field({ nullable: true })

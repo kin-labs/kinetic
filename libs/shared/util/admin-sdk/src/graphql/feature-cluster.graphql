@@ -41,8 +41,8 @@ fragment MintDetails on Mint {
   type
 }
 
-mutation AdminAddClusterMint($input: MintAddInput!) {
-  adminAddClusterMint(input: $input) {
+mutation AdminMintCreate($input: AdminMintCreateInput!) {
+  adminMintCreate(input: $input) {
     ...ClusterDetails
     mints {
       ...MintDetails
@@ -50,7 +50,7 @@ mutation AdminAddClusterMint($input: MintAddInput!) {
   }
 }
 
-mutation AdminCreateCluster($input: ClusterCreateInput!) {
+mutation AdminCreateCluster($input: AdminClusterCreateInput!) {
   created: adminCreateCluster(input: $input) {
     ...ClusterDetails
   }
@@ -62,7 +62,7 @@ mutation AdminDeleteCluster($clusterId: String!) {
   }
 }
 
-mutation AdminUpdateCluster($clusterId: String!, $input: ClusterUpdateInput!) {
+mutation AdminUpdateCluster($clusterId: String!, $input: AdminClusterUpdateInput!) {
   updated: adminUpdateCluster(clusterId: $clusterId, input: $input) {
     ...ClusterDetails
   }
@@ -89,5 +89,23 @@ query AdminClusters {
 query ClusterStats($clusterId: String!) {
   items: clusterStats(clusterId: $clusterId) {
     ...ClusterStatDetails
+  }
+}
+
+query UserCluster($clusterId: String!) {
+  item: userCluster(clusterId: $clusterId) {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
+  }
+}
+
+query UserClusters {
+  items: userClusters {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
   }
 }

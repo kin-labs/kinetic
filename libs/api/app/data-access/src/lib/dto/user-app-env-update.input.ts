@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql'
 import { IsOptional, IsUrl } from 'class-validator'
 
 @InputType()
-export class AppEnvUpdateInput {
+export class UserAppEnvUpdateInput {
   @IsOptional()
   @Field({ nullable: true })
   webhookDebugging?: boolean

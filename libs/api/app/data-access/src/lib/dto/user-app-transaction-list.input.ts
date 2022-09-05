@@ -2,9 +2,11 @@ import { Field, InputType } from '@nestjs/graphql'
 import { AppTransactionStatus } from '../entity/app-transaction-status.enum'
 
 @InputType()
-export class AppTransactionListInput {
+export class UserAppTransactionListInput {
   @Field({ nullable: true })
   destination?: string
+  @Field({ nullable: true })
+  ip?: string
   @Field({ nullable: true })
   limit?: number
   @Field({ nullable: true })
@@ -19,4 +21,6 @@ export class AppTransactionListInput {
   source?: string
   @Field(() => [AppTransactionStatus], { nullable: true })
   status?: AppTransactionStatus[]
+  @Field({ nullable: true })
+  ua?: string
 }

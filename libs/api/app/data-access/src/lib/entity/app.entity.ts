@@ -14,6 +14,8 @@ export class App {
   envs?: AppEnv[]
   @Field(() => Int)
   index: number
+  @Field(() => Int)
+  maxEnvs: number
   @Field({ nullable: true })
   name: string
   @Field(() => [AppUser], { nullable: true })

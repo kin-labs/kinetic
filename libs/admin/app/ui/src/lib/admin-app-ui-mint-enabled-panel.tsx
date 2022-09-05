@@ -3,7 +3,7 @@ import { Button, Code, Flex, FormControl, FormLabel, Stack, Switch, Text } from 
 import { AdminClusterUiMintDetails } from '@kin-kinetic/admin/cluster/ui'
 import { AdminUiAddress } from '@kin-kinetic/admin/ui/address'
 import { AdminUiIdenticon } from '@kin-kinetic/admin/ui/identicon'
-import { AppMint, AppMintUpdateInput, Wallet } from '@kin-kinetic/shared/util/admin-sdk'
+import { AppMint, UserAppMintUpdateInput, Wallet } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useState } from 'react'
 
 export function AdminAppUiMintEnabledPanel({
@@ -17,7 +17,7 @@ export function AdminAppUiMintEnabledPanel({
   appMint: AppMint
   disableMint: (mintId: string) => void
   selectWallet: (walletId: string) => void
-  updateAppMint: (input: AppMintUpdateInput) => void
+  updateAppMint: (input: UserAppMintUpdateInput) => void
   wallet?: Wallet | null
   wallets?: Wallet[]
 }) {

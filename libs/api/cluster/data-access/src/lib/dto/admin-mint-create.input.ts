@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql'
 
 @InputType()
-export class MintAddInput {
+export class AdminMintCreateInput {
   @Field()
   address: string
   @Field()

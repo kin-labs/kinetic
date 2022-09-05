@@ -2,34 +2,34 @@ import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import {
   AdminApp,
+  AdminAppCreateInput,
   AdminApps,
+  AdminAppUpdateInput,
   AdminCreateApp,
   AdminCreateUser,
   AdminDeleteApp,
-  AppCreateInput,
-  AppEnvUpdateInput,
-  UserAppEnvWalletRemove,
-  AppUpdateInput,
-  UserAppUserAdd,
   AppEnv,
-  AppUserAddInput,
-  UserAppUserRemove,
-  AppUserRemoveInput,
   AppUserRole,
-  UserAppUserUpdateRole,
-  AppUserUpdateRoleInput,
   ClusterType,
+  UserAppEnvAddAllowedIp,
+  UserAppEnvAddAllowedUa,
+  UserAppEnvAddBlockedIp,
+  UserAppEnvAddBlockedUa,
+  UserAppEnvRemoveAllowedIp,
+  UserAppEnvRemoveAllowedUa,
+  UserAppEnvRemoveBlockedIp,
+  UserAppEnvRemoveBlockedUa,
+  UserAppEnvUpdateInput,
+  UserAppEnvWalletRemove,
+  UserAppUserAdd,
+  UserAppUserAddInput,
+  UserAppUserRemove,
+  UserAppUserRemoveInput,
+  UserAppUserUpdateRole,
+  UserAppUserUpdateRoleInput,
   UserGenerateWallet,
   UserUpdateApp,
   UserUpdateAppEnv,
-  UserAppEnvAddBlockedIp,
-  UserAppEnvRemoveBlockedIp,
-  UserAppEnvAddAllowedIp,
-  UserAppEnvRemoveAllowedIp,
-  UserAppEnvAddBlockedUa,
-  UserAppEnvRemoveBlockedUa,
-  UserAppEnvRemoveAllowedUa,
-  UserAppEnvAddAllowedUa,
 } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
@@ -62,7 +62,7 @@ describe('App (e2e)', () => {
   describe('Expected usage', () => {
     describe('CRUD', () => {
       it('should create an app', async () => {
-        const input: AppCreateInput = { index: appIndex, name: `App ${appIndex}` }
+        const input: AdminAppCreateInput = { index: appIndex, name: `App ${appIndex}` }
 
         return runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
           .expect(200)
@@ -94,7 +94,7 @@ describe('App (e2e)', () => {
       })
 
       it('should update an app', async () => {
-        const input: AppUpdateInput = {
+        const input: AdminAppUpdateInput = {
           name: `App ${appIndex} edited`,
         }
 
@@ -169,7 +169,7 @@ describe('App (e2e)', () => {
 
       it('should create and delete the same app multiple times', async () => {
         const index = randomAppIndex()
-        const input: AppCreateInput = { index, name: `App ${index}` }
+        const input: AdminAppCreateInput = { index, name: `App ${index}` }
 
         // Create First
         const created1 = await runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
@@ -204,7 +204,7 @@ describe('App (e2e)', () => {
         })
         userId = createdUser.body.data.created.id
 
-        const input: AppUserAddInput = {
+        const input: UserAppUserAddInput = {
           role: AppUserRole.Member,
           userId,
         }
@@ -221,7 +221,7 @@ describe('App (e2e)', () => {
       }, 10000)
 
       it('should change a user role in an app', async () => {
-        const input: AppUserUpdateRoleInput = {
+        const input: UserAppUserUpdateRoleInput = {
           role: AppUserRole.Owner,
           userId,
         }
@@ -238,7 +238,7 @@ describe('App (e2e)', () => {
       }, 10000)
 
       it('should remove a user fom an app', async () => {
-        const input: AppUserRemoveInput = { userId }
+        const input: UserAppUserRemoveInput = { userId }
         await runGraphQLQueryAdmin(app, token, UserAppUserRemove, { appId, input })
           .expect(200)
           .expect((res) => {
@@ -260,7 +260,7 @@ describe('App (e2e)', () => {
         const appId = createdApp.body.data.created.id
         const appEnvId = createdApp.body.data.created.envs[0].id
 
-        const input: AppEnvUpdateInput = {
+        const input: UserAppEnvUpdateInput = {
           webhookSecret: 'WebHookSecret',
           webhookDebugging: true,
           webhookEventEnabled: true,
@@ -333,7 +333,7 @@ describe('App (e2e)', () => {
     describe('CRUD Constraints', () => {
       it('should not create an app with existing index', async () => {
         const index = randomAppIndex()
-        const input: AppCreateInput = { index, name: `App ${index}` }
+        const input: AdminAppCreateInput = { index, name: `App ${index}` }
 
         // Run once
         await runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
@@ -349,7 +349,7 @@ describe('App (e2e)', () => {
 
       it('should not update an app that does not exist', async () => {
         const testAppId = uniq('app-')
-        const input: AppUpdateInput = { name: `App ${testAppId}` }
+        const input: AdminAppUpdateInput = { name: `App ${testAppId}` }
 
         return runGraphQLQueryAdmin(app, token, UserUpdateApp, { appId: testAppId, input })
           .expect(200)
@@ -369,7 +369,7 @@ describe('App (e2e)', () => {
         const createdAppId = createdApp.body.data.created.id
         const createdAppEnvId = createdApp.body.data.created.envs[0].id
 
-        const input: AppEnvUpdateInput = { webhookVerifyUrl: 'test', webhookEventUrl: 'test' }
+        const input: UserAppEnvUpdateInput = { webhookVerifyUrl: 'test', webhookEventUrl: 'test' }
 
         return runGraphQLQueryAdmin(app, token, UserUpdateAppEnv, {
           appId: createdAppId,
@@ -408,7 +408,7 @@ describe('App (e2e)', () => {
 
     describe('Mall-formed Input', () => {
       it('should not create an app', async () => {
-        const input: AppCreateInput = { index: undefined, name: undefined }
+        const input: AdminAppCreateInput = { index: undefined, name: undefined }
 
         return runGraphQLQuery(app, AdminCreateApp, { input })
           .expect(400)
@@ -420,7 +420,7 @@ describe('App (e2e)', () => {
       })
 
       it('should not update an app', async () => {
-        const input: AppUpdateInput = { name: undefined }
+        const input: AdminAppUpdateInput = { name: undefined }
 
         return runGraphQLQuery(app, UserUpdateApp, { appId: undefined, input })
           .expect(400)
@@ -454,7 +454,7 @@ describe('App (e2e)', () => {
 
     describe('Unauthenticated Access', () => {
       it('should not create an app', async () => {
-        const input: AppCreateInput = { index: appIndex, name: `App ${appIndex}` }
+        const input: AdminAppCreateInput = { index: appIndex, name: `App ${appIndex}` }
 
         return runGraphQLQuery(app, AdminCreateApp, { input })
           .expect(200)
@@ -466,7 +466,7 @@ describe('App (e2e)', () => {
       })
 
       it('should not update an app', async () => {
-        const input: AppUpdateInput = { name: `App ${appIndex} edited` }
+        const input: AdminAppUpdateInput = { name: `App ${appIndex} edited` }
 
         return runGraphQLQuery(app, UserUpdateApp, { appId, input })
           .expect(200)

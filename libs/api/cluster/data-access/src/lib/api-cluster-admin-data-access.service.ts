@@ -1,16 +1,16 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { MintType, Prisma } from '@prisma/client'
-import { ClusterCreateInput } from './dto/cluster-create.input'
-import { ClusterUpdateInput } from './dto/cluster-update.input'
-import { MintAddInput } from './dto/mint-add.input'
+import { AdminClusterCreateInput } from './dto/admin-cluster-create.input'
+import { AdminClusterUpdateInput } from './dto/admin-cluster-update.input'
+import { AdminMintCreateInput } from './dto/admin-mint-create.input'
 import { ClusterStatus } from './entity/cluster-status.enum'
 
 @Injectable()
 export class ApiClusterAdminDataAccessService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
-  async adminCreateCluster(userId: string, data: ClusterCreateInput) {
+  async adminCreateCluster(userId: string, data: AdminClusterCreateInput) {
     await this.data.ensureAdminUser(userId)
     return this.data.cluster.create({
       data: {
@@ -38,12 +38,12 @@ export class ApiClusterAdminDataAccessService {
     return this.data.cluster.findUnique({ where: { id: clusterId }, include: { mints: { orderBy: { order: 'asc' } } } })
   }
 
-  async adminUpdateCluster(userId: string, clusterId: string, data: ClusterUpdateInput) {
+  async adminUpdateCluster(userId: string, clusterId: string, data: AdminClusterUpdateInput) {
     await this.data.ensureAdminUser(userId)
     return this.data.cluster.update({ where: { id: clusterId }, data })
   }
 
-  async addClusterMint(userId: string, input: MintAddInput) {
+  async adminMintCreate(userId: string, input: AdminMintCreateInput) {
     const cluster = await this.adminCluster(userId, input.clusterId)
     if (!cluster) {
       throw new BadRequestException('Cluster not found')

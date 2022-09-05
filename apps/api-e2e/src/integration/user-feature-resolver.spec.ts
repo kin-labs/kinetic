@@ -5,10 +5,10 @@ import {
   AdminDeleteUser,
   AdminUpdateUser,
   AdminUser,
+  AdminUserCreateInput,
   AdminUsers,
-  UserCreateInput,
+  AdminUserUpdateInput,
   UserRole,
-  UserUpdateInput,
 } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
 import { uniq } from '../helpers/uniq'
@@ -46,7 +46,7 @@ describe('User (e2e)', () => {
     describe('CRUD', () => {
       it('should create a user', async () => {
         const name = uniq('user')
-        const input: UserCreateInput = {
+        const input: AdminUserCreateInput = {
           email: `${name}@example.com`,
           password: 'password',
           username,
@@ -67,7 +67,7 @@ describe('User (e2e)', () => {
       })
 
       it('should update a user', async () => {
-        const input: UserUpdateInput = {
+        const input: AdminUserUpdateInput = {
           name: `User ${username} edited`,
           role: UserRole.Admin,
           avatarUrl: 'test-avatar',
@@ -128,7 +128,7 @@ describe('User (e2e)', () => {
     describe('CRUD Constraints', () => {
       it('should not create a user with existing email', async () => {
         const username = randomUsername()
-        const input: UserCreateInput = {
+        const input: AdminUserCreateInput = {
           username,
           password: 'password',
           email: uniq('email-'),
@@ -149,7 +149,7 @@ describe('User (e2e)', () => {
 
       it('should not create a user with existing username', async () => {
         const username = randomUsername()
-        const input: UserCreateInput = {
+        const input: AdminUserCreateInput = {
           username,
           password: 'password',
           email: uniq('email-'),
@@ -170,7 +170,7 @@ describe('User (e2e)', () => {
 
       it('should not update a user that does not exist', async () => {
         const userId = uniq('user-')
-        const input: UserUpdateInput = { name: `User ${userId}` }
+        const input: AdminUserUpdateInput = { name: `User ${userId}` }
 
         return runGraphQLQueryAdmin(app, token, AdminUpdateUser, { userId, input })
           .expect(200)
@@ -206,7 +206,7 @@ describe('User (e2e)', () => {
 
     describe('Mall-formed Input', () => {
       it('should not create a user', async () => {
-        const input: UserCreateInput = { username: undefined, email: undefined, password: undefined }
+        const input: AdminUserCreateInput = { username: undefined, email: undefined, password: undefined }
 
         return runGraphQLQuery(app, AdminCreateUser, { input })
           .expect(400)
@@ -218,7 +218,7 @@ describe('User (e2e)', () => {
       })
 
       it('should not update a user', async () => {
-        const input: UserUpdateInput = { name: undefined }
+        const input: AdminUserUpdateInput = { name: undefined }
 
         return runGraphQLQuery(app, AdminUpdateUser, { userId: undefined, input })
           .expect(400)
@@ -252,7 +252,7 @@ describe('User (e2e)', () => {
 
     describe('Unauthenticated Access', () => {
       it('should not create a user', async () => {
-        const input: UserCreateInput = { username: username, password: 'password', email: uniq('email-') }
+        const input: AdminUserCreateInput = { username: username, password: 'password', email: uniq('email-') }
 
         return runGraphQLQuery(app, AdminCreateUser, { input })
           .expect(200)
@@ -264,7 +264,7 @@ describe('User (e2e)', () => {
       })
 
       it('should not update a user', async () => {
-        const input: UserUpdateInput = { name: `User ${username} edited` }
+        const input: AdminUserUpdateInput = { name: `User ${username} edited` }
 
         return runGraphQLQuery(app, AdminUpdateUser, { userId, input })
           .expect(200)

@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common'
 import { ASTNode } from 'graphql'
 import { print } from 'graphql/language/printer'
 import * as request from 'supertest'
-import { Login, LoginInput } from '../generated/api-sdk'
+import { Login, UserLoginInput } from '../generated/api-sdk'
 import { ADMIN_PASSWORD } from './api-e2e.constants'
 
 export function runGraphQLQuery(
@@ -27,6 +27,6 @@ export function runGraphQLQueryAdmin(
 }
 
 export function runLoginQuery(app: INestApplication, username: string, password = ADMIN_PASSWORD) {
-  const input: LoginInput = { password, username }
+  const input: UserLoginInput = { password, username }
   return runGraphQLQuery(app, Login, { input }).expect(200)
 }

@@ -3,7 +3,7 @@ import {
   ApiAuthGraphqlGuard,
   AuthToken,
   CtxUser,
-  LoginInput,
+  UserLoginInput,
 } from '@kin-kinetic/api/auth/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
@@ -14,7 +14,7 @@ export class ApiAuthFeatureResolver {
   constructor(private readonly service: ApiAuthDataAccessService) {}
 
   @Mutation(() => AuthToken, { nullable: true })
-  async login(@Context() context, @Args('input') input: LoginInput) {
+  async login(@Context() context, @Args('input') input: UserLoginInput) {
     return this.service.login(context.req, context.res, input)
   }
 

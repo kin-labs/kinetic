@@ -1,7 +1,13 @@
-import { LoginInput, useLoginMutation, useLogoutMutation, useMeQuery, User } from '@kin-kinetic/shared/util/admin-sdk'
+import {
+  UserLoginInput,
+  useLoginMutation,
+  useLogoutMutation,
+  useMeQuery,
+  User,
+} from '@kin-kinetic/shared/util/admin-sdk'
 import React, { ReactNode, useEffect, useState } from 'react'
 
-export type AdminAuthLoginFn = (input: LoginInput) => Promise<boolean>
+export type AdminAuthLoginFn = (input: UserLoginInput) => Promise<boolean>
 export type AdminAuthLogoutFn = () => Promise<boolean>
 
 interface AdminAuthProps {
@@ -21,7 +27,7 @@ const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
   const [, logoutMutation] = useLogoutMutation()
   const [{ data, error }, refreshMe] = useMeQuery({ pause: true })
 
-  const login = async (input: LoginInput) => {
+  const login = async (input: UserLoginInput) => {
     setLoading(true)
     const result = await loginMutation({ input })
     setUser(result?.data?.login?.user)

@@ -4,10 +4,10 @@ import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
 import { AdminUiTabs } from '@kin-kinetic/admin/ui/tabs'
 import {
-  AppUpdateInput,
-  AppUserAddInput,
+  UserAppUpdateInput,
+  UserAppUserAddInput,
   AppUserRole,
-  AppUserUpdateRoleInput,
+  UserAppUserUpdateRoleInput,
   useUserAppQuery,
   useUserAppUserAddMutation,
   useUserAppUserUpdateRoleMutation,
@@ -26,7 +26,7 @@ export default function AdminAppUserFeatureDetail() {
   const [, updateUserAddMutation] = useUserAppUserAddMutation()
   const [, updateRoleMutation] = useUserAppUserUpdateRoleMutation()
 
-  const onSubmit = async (input: AppUpdateInput) => {
+  const onSubmit = async (input: UserAppUpdateInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await updateAppMutation({
       appId: appId!,
@@ -62,11 +62,11 @@ export default function AdminAppUserFeatureDetail() {
       ],
     )
   }
-  const addRole = async ({ role, userId }: AppUserAddInput) => {
+  const addRole = async ({ role, userId }: UserAppUserAddInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await updateUserAddMutation({ appId: appId!, input: { role, userId } })
   }
-  const updateRole = async ({ userId, role }: AppUserUpdateRoleInput) => {
+  const updateRole = async ({ userId, role }: UserAppUserUpdateRoleInput) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await updateRoleMutation({ appId: appId!, input: { role, userId } })
   }
