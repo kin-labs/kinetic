@@ -1,8 +1,12 @@
 import { ApiAppEnvUserDataAccessService, AppEnv, AppEnvStats } from '@kin-kinetic/api/app/data-access'
+import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
+import { User } from '@kin-kinetic/api/user/data-access'
 import { Wallet } from '@kin-kinetic/api/wallet/data-access'
+import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => AppEnv)
+@UseGuards(ApiAuthGraphqlGuard)
 export class ApiAppEnvUserFeatureResolver {
   constructor(private readonly service: ApiAppEnvUserDataAccessService) {}
 
@@ -45,9 +49,15 @@ export class ApiAppEnvUserFeatureResolver {
   userAppEnvRemoveBlockedIp(@Args('appEnvId') appEnvId: string, @Args('ip') ip: string) {
     return this.service.userAppEnvRemoveBlockedIp(appEnvId, ip)
   }
+
   @Mutation(() => AppEnv, { nullable: true })
   userAppEnvRemoveBlockedUa(@Args('appEnvId') appEnvId: string, @Args('ua') ua: string) {
     return this.service.userAppEnvRemoveBlockedUa(appEnvId, ua)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userDeleteAppEnv(@CtxUser() user: User, @Args('appId') appId: string, @Args('appEnvId') appEnvId: string) {
+    return this.service.userDeleteAppEnv(user.id, appId, appEnvId)
   }
 
   @ResolveField(() => String, { nullable: true })

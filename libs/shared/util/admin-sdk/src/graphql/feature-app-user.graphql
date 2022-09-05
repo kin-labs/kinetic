@@ -154,6 +154,12 @@ mutation UserAppEnvWalletRemove($appId: String!, $appEnvId: String!, $walletId: 
   }
 }
 
+mutation UserDeleteAppEnv($appId: String!, $appEnvId: String!) {
+  item: userDeleteAppEnv(appId: $appId, appEnvId: $appEnvId) {
+    ...AppEnvDetails
+  }
+}
+
 query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
   item: userAppTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
     ...AppTransactionDetails

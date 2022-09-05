@@ -14,9 +14,6 @@ export class ApiAppEnvAdminDataAccessService {
   async adminDeleteAppEnv(userId: string, appId: string, appEnvId: string) {
     this.logger.warn(`Admin ${userId} deleted AppEnv ${appEnvId} from App ${appId}`)
     await this.appAdmin.ensureAppById(userId, appId)
-    await this.data.appWebhook.deleteMany({ where: { appEnv: { appId, id: appEnvId } } })
-    await this.data.appTransactionError.deleteMany({ where: { appTransaction: { appEnv: { appId, id: appEnvId } } } })
-    await this.data.appTransaction.deleteMany({ where: { appEnv: { appId, id: appEnvId } } })
-    return this.data.appEnv.delete({ where: { id: appEnvId } })
+    return this.data.deleteAppEnv(appId, appEnvId)
   }
 }

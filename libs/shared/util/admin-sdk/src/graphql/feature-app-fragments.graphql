@@ -3,6 +3,7 @@ fragment AppDetails on App {
   createdAt
   updatedAt
   index
+  logoUrl
   maxEnvs
   name
   defaultEnvUrl

@@ -14,6 +14,8 @@ export class App {
   envs?: AppEnv[]
   @Field(() => Int)
   index: number
+  @Field({ nullable: true })
+  logoUrl: string
   @Field(() => Int)
   maxEnvs: number
   @Field({ nullable: true })

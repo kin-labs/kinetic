@@ -4,12 +4,14 @@
 
 input AdminAppCreateInput {
   index: Int!
+  logoUrl: String
   name: String!
   skipWalletCreation: Boolean
 }
 
 input AdminAppUpdateInput {
   index: Int
+  logoUrl: String
   maxEnvs: Int
   name: String
 }
@@ -62,6 +64,7 @@ type App {
   envs: [AppEnv!]
   id: String!
   index: Int!
+  logoUrl: String
   maxEnvs: Int!
   name: String
   settingsUrl: String
@@ -332,6 +335,7 @@ type Mutation {
   userAppUserRemove(appId: String!, input: UserAppUserRemoveInput!): App
   userAppUserUpdateRole(appId: String!, input: UserAppUserUpdateRoleInput!): App
   userCreateAppEnv(appId: String!, clusterId: String!, input: UserAppEnvCreateInput!): AppEnv
+  userDeleteAppEnv(appEnvId: String!, appId: String!): AppEnv
   userDeleteWallet(appEnvId: String!, walletId: String!): Wallet
   userGenerateWallet(appEnvId: String!): Wallet
   userImportWallet(appEnvId: String!, secretKey: String!): Wallet
@@ -419,6 +423,7 @@ input UserAppTransactionListInput {
 }
 
 input UserAppUpdateInput {
+  logoUrl: String
   name: String
 }
 

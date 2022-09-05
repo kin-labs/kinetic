@@ -8,9 +8,7 @@ import { AppTransactionStatus } from './entity/app-transaction-status.enum'
 export class ApiAppEnvUserDataAccessService {
   private readonly logger = new Logger(ApiAppEnvUserDataAccessService.name)
 
-  constructor(private readonly data: ApiCoreDataAccessService) {
-    this.userAppEnvStats('cl7ny433811487qymnmzqdz2ai')
-  }
+  constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async userAppEnvStats(appEnvId: string): Promise<AppEnvStats> {
     const transactionCount = await this.userAppEnvTransactionCount(appEnvId)
@@ -79,6 +77,12 @@ export class ApiAppEnvUserDataAccessService {
     const appEnv = await this.data.getAppEnvById(appEnvId)
     const uas = appEnv.uasBlocked.filter((userAgent) => userAgent !== ua)
     return this.data.appEnv.update({ where: { id: appEnvId }, data: { uasBlocked: uas } })
+  }
+
+  async userDeleteAppEnv(userId: string, appId: string, appEnvId: string) {
+    this.logger.warn(`User ${userId} deleted AppEnv ${appEnvId} from App ${appId}`)
+    await this.data.ensureAppOwner(userId, appId)
+    return this.data.deleteAppEnv(appId, appEnvId)
   }
 
   getAppKey(name: string, index: number) {

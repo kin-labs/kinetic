@@ -5,6 +5,9 @@ export class AdminAppCreateInput {
   @Field(() => Int)
   index: number
 
+  @Field({ nullable: true })
+  logoUrl?: string
+
   @Field()
   name: string
 
