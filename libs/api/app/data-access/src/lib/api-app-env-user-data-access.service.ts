@@ -1,0 +1,91 @@
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { Injectable, Logger } from '@nestjs/common'
+import { AppEnvStats } from './entity/app-env-stats.entity'
+import { AppEnvTransactionCount } from './entity/app-env-transaction-count.entity'
+import { AppTransactionStatus } from './entity/app-transaction-status.enum'
+
+@Injectable()
+export class ApiAppEnvUserDataAccessService {
+  private readonly logger = new Logger(ApiAppEnvUserDataAccessService.name)
+
+  constructor(private readonly data: ApiCoreDataAccessService) {
+    this.userAppEnvStats('cl7ny433811487qymnmzqdz2ai')
+  }
+
+  async userAppEnvStats(appEnvId: string): Promise<AppEnvStats> {
+    const transactionCount = await this.userAppEnvTransactionCount(appEnvId)
+
+    return { transactionCount }
+  }
+
+  private async userAppEnvTransactionCount(appEnvId: string): Promise<AppEnvTransactionCount> {
+    const data = await this.data.appTransaction.groupBy({
+      by: ['status'],
+      where: { appEnvId },
+      _count: {
+        _all: true,
+      },
+    })
+    return Object.keys(AppTransactionStatus).reduce((acc, curr) => {
+      const found = data.find((item) => item.status === curr)
+
+      return { ...acc, [curr]: found ? found._count._all : 0 }
+    }, {})
+  }
+
+  async userAppEnvAddAllowedIp(appEnvId: string, ip: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const ips = appEnv?.ipsAllowed ? [...appEnv.ipsAllowed, ip] : [ip]
+    return this.data.appEnv.update({ where: { id: appEnvId }, data: { ipsAllowed: ips } })
+  }
+
+  async userAppEnvAddAllowedUa(appEnvId: string, ua: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const uas = appEnv?.uasAllowed ? [...appEnv.uasAllowed, ua] : [ua]
+    return this.data.appEnv.update({ where: { id: appEnvId }, data: { uasAllowed: uas } })
+  }
+
+  async userAppEnvAddBlockedIp(appEnvId: string, ip: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const ips = appEnv?.ipsBlocked ? [...appEnv.ipsBlocked, ip] : [ip]
+    return this.data.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
+  }
+
+  async userAppEnvAddBlockedUa(appEnvId: string, ua: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const uas = appEnv?.uasBlocked ? [...appEnv.uasBlocked, ua] : [ua]
+    return this.data.appEnv.update({ where: { id: appEnvId }, data: { uasBlocked: uas } })
+  }
+
+  async userAppEnvRemoveAllowedIp(appEnvId: string, ip: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const ips = appEnv.ipsAllowed.filter((ipAddress) => ipAddress !== ip)
+    return this.data.appEnv.update({ where: { id: appEnvId }, data: { ipsAllowed: ips } })
+  }
+
+  async userAppEnvRemoveAllowedUa(appEnvId: string, ua: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const uas = appEnv.uasAllowed.filter((userAgent) => userAgent !== ua)
+    return this.data.appEnv.update({ where: { id: appEnvId }, data: { uasAllowed: uas } })
+  }
+
+  async userAppEnvRemoveBlockedIp(appEnvId: string, ip: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const ips = appEnv.ipsBlocked.filter((ipAddress) => ipAddress !== ip)
+    return this.data.appEnv.update({ where: { id: appEnvId }, data: { ipsBlocked: ips } })
+  }
+
+  async userAppEnvRemoveBlockedUa(appEnvId: string, ua: string) {
+    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const uas = appEnv.uasBlocked.filter((userAgent) => userAgent !== ua)
+    return this.data.appEnv.update({ where: { id: appEnvId }, data: { uasBlocked: uas } })
+  }
+
+  getAppKey(name: string, index: number) {
+    return this.data.getAppKey(name, index)
+  }
+
+  getEndpoint() {
+    return this.data.config.apiUrl?.replace('/api', '')
+  }
+}

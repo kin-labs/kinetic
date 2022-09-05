@@ -1,3 +1,9 @@
+query UserAppEnvStats($appEnvId: String!) {
+  stats: userAppEnvStats(appEnvId: $appEnvId) {
+    ...AppEnvStatsDetails
+  }
+}
+
 mutation UserUpdateApp($appId: String!, $input: UserAppUpdateInput!) {
   updated: userUpdateApp(appId: $appId, input: $input) {
     ...AppDetails

@@ -6,7 +6,7 @@ import { AdminUserUpdateInput } from './dto/admin-user-update.input'
 import { UserRole } from './entities/user-role.enum'
 
 @Injectable()
-export class ApiUserDataAccessService {
+export class ApiUserAdminDataAccessService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async adminCreateUser(adminId: string, input: AdminUserCreateInput) {

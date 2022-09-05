@@ -1,10 +1,11 @@
 import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { Module } from '@nestjs/common'
-import { ApiUserDataAccessService } from './api-user-data-access.service'
+import { ApiUserAdminDataAccessService } from './api-user-admin-data-access.service'
+import { ApiUserUserDataAccessService } from './api-user-user-data-access.service'
 
 @Module({
-  providers: [ApiUserDataAccessService],
-  exports: [ApiUserDataAccessService],
+  providers: [ApiUserAdminDataAccessService, ApiUserUserDataAccessService],
+  exports: [ApiUserAdminDataAccessService, ApiUserUserDataAccessService],
   imports: [ApiCoreDataAccessModule],
 })
 export class ApiUserDataAccessModule {}

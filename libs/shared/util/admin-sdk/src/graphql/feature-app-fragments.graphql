@@ -13,6 +13,7 @@ fragment AppEnvDetails on AppEnv {
   id
   createdAt
   updatedAt
+  endpoint
   key
   app {
     id
@@ -42,6 +43,20 @@ fragment AppEnvDetails on AppEnv {
   webhookSecret
   webhookVerifyEnabled
   webhookVerifyUrl
+}
+
+fragment AppEnvStatsDetails on AppEnvStats {
+  transactionCount {
+    ...AppEnvTransactionCountDetails
+  }
+}
+
+fragment AppEnvTransactionCountDetails on AppEnvTransactionCount {
+  Committed
+  Confirmed
+  Failed
+  Finalized
+  Processing
 }
 
 fragment AppMintDetails on AppMint {
