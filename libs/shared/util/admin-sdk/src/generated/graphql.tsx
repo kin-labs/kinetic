@@ -128,6 +128,7 @@ export type AppTransaction = {
   __typename?: 'AppTransaction'
   amount?: Maybe<Scalars['String']>
   createdAt?: Maybe<Scalars['DateTime']>
+  decimals?: Maybe<Scalars['Int']>
   destination?: Maybe<Scalars['String']>
   errors?: Maybe<Array<AppTransactionError>>
   explorerUrl?: Maybe<Scalars['String']>
@@ -1599,6 +1600,7 @@ export type AppTransactionDetailsFragment = {
   createdAt?: any | null
   updatedAt?: any | null
   amount?: string | null
+  decimals?: number | null
   destination?: string | null
   explorerUrl?: string | null
   feePayer?: string | null
@@ -3714,6 +3716,7 @@ export type UserAppTransactionQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     amount?: string | null
+    decimals?: number | null
     destination?: string | null
     explorerUrl?: string | null
     feePayer?: string | null
@@ -3816,6 +3819,7 @@ export type UserAppTransactionsQuery = {
     createdAt?: any | null
     updatedAt?: any | null
     amount?: string | null
+    decimals?: number | null
     destination?: string | null
     explorerUrl?: string | null
     feePayer?: string | null
@@ -5653,6 +5657,7 @@ export const AppTransactionDetailsFragmentDoc = gql`
     createdAt
     updatedAt
     amount
+    decimals
     destination
     errors {
       ...AppTransactionErrorDetails

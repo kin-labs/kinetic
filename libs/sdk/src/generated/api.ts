@@ -365,6 +365,12 @@ export interface AppTransaction {
   amount: string | null
   /**
    *
+   * @type {number}
+   * @memberof AppTransaction
+   */
+  decimals: number | null
+  /**
+   *
    * @type {string}
    * @memberof AppTransaction
    */

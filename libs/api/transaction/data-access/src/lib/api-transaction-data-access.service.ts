@@ -205,6 +205,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       appTransaction,
       blockhash,
       commitment: input?.commitment,
+      decimals: mint?.mint?.decimals,
       destination: destination?.pubkey.toBase58(),
       feePayer,
       headers: req.headers as Record<string, string>,
@@ -227,6 +228,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     appTransaction,
     blockhash,
     commitment,
+    decimals,
     destination,
     feePayer,
     headers,
@@ -241,6 +243,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     amount: number
     blockhash: string
     commitment: Commitment
+    decimals: number
     destination: string
     feePayer: string
     headers?: Record<string, string>
@@ -256,6 +259,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     // Update AppTransaction
     const updatedAppTransaction = await this.updateAppTransaction(appTransaction.id, {
       amount: amount.toString(),
+      decimals,
       destination,
       feePayer,
       mint: mintPublicKey,

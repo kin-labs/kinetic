@@ -90,6 +90,7 @@ model AppTransaction {
   updatedAt               DateTime                  @updatedAt
   amount                  String?
   commitment              AppTransactionCommitment?
+  decimals                Int?
   destination             String?
   errors                  AppTransactionError[]
   feePayer                String?
