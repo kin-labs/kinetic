@@ -87,3 +87,6 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn prisma db push
       - run: yarn nx e2e api-e2e --skip-nx-cache
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
