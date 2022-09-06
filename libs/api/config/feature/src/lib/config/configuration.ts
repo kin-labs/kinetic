@@ -29,10 +29,6 @@ export default () => ({
   jwt: {
     secret: process.env.JWT_SECRET,
   },
-  defaultMintDecimals: Number(process.env.DEFAULT_MINT_DECIMALS),
-  defaultMintPublicKey: process.env.DEFAULT_MINT_PUBLIC_KEY,
-  defaultMintAirdropAmount: process.env.DEFAULT_MINT_AIRDROP_AMOUNT,
-  defaultMintAirdropMax: process.env.DEFAULT_MINT_AIRDROP_MAX,
   host: process.env.HOST,
   metrics: {
     enabled: process.env.METRICS_ENABLED?.toLowerCase() !== 'false',
@@ -40,6 +36,18 @@ export default () => ({
     port: parseInt(process.env.METRICS_PORT, 10),
   },
   port: parseInt(process.env.PORT, 10),
-  solanaDevnetRpcEndpoint: process.env.SOLANA_DEVNET_RPC_ENDPOINT,
-  solanaMainnetRpcEndpoint: process.env.SOLANA_MAINNET_RPC_ENDPOINT,
+  solana: {
+    devnet: {
+      enabled: process.env.SOLANA_DEVNET_ENABLED?.toLowerCase() !== 'false',
+      rpcEndpoint: process.env.SOLANA_DEVNET_RPC_ENDPOINT,
+    },
+    local: {
+      enabled: process.env.SOLANA_LOCAL_ENABLED?.toLowerCase() !== 'false',
+      rpcEndpoint: process.env.SOLANA_LOCAL_RPC_ENDPOINT,
+    },
+    mainnet: {
+      enabled: process.env.SOLANA_MAINNET_ENABLED?.toLowerCase() !== 'false',
+      rpcEndpoint: process.env.SOLANA_MAINNET_RPC_ENDPOINT,
+    },
+  },
 })

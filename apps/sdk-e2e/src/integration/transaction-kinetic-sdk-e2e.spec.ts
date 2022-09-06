@@ -3,10 +3,10 @@ import { KineticSdk } from '@kin-kinetic/sdk'
 import { Destination } from '@kin-kinetic/solana'
 import { TransactionStatus } from '@prisma/client'
 import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair } from './fixtures'
+import { DEFAULT_MINT } from './helpers'
 
 describe('KineticSdk (e2e)', () => {
   let sdk: KineticSdk
-  const defaultMint = process.env.DEFAULT_MINT_PUBLIC_KEY
 
   beforeEach(async () => {
     sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
@@ -15,7 +15,7 @@ describe('KineticSdk (e2e)', () => {
   it('should make a transfer', async () => {
     const tx = await sdk.makeTransfer({ amount: '43', destination: bobKeypair.publicKey, owner: aliceKeypair })
     expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(defaultMint)
+    expect(DEFAULT_MINT).toContain(tx.mint)
     const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
@@ -32,7 +32,7 @@ describe('KineticSdk (e2e)', () => {
 
     const tx = await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })
     expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(defaultMint)
+    expect(DEFAULT_MINT).toContain(tx.mint)
     const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
