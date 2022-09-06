@@ -155,7 +155,6 @@ export class ApiConfigDataAccessService {
   get solanaDevnetEnabled(): boolean {
     return this.config.get('solana.devnet.enabled')
   }
-
   get solanaDevnetRpcEndpoint() {
     return this.config.get('solana.devnet.rpcEndpoint')
   }
