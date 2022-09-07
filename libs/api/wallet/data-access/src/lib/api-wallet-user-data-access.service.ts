@@ -156,8 +156,10 @@ export class ApiWalletUserDataAccessService {
     return wallet
   }
 
-  private async sentBalanceWebhook(appEnv: AppEnv & { app: App }) {
-    this.webhook.sendWebhook(appEnv, { type: WebhookType.Balance })
+  private async sentBalanceWebhook(appEnv: AppEnv & { app: App }, balance: number) {
+    if (appEnv.webhookBalanceTreshold <= balance) {
+      this.webhook.sendWebhook(appEnv, { type: WebhookType.Balance })
+    }
   }
 
   private storeWalletBalance(appEnvId: string, walletId: string, balance: number, change: number) {
@@ -173,7 +175,7 @@ export class ApiWalletUserDataAccessService {
       const change = balance - Number(current)
       await this.storeWalletBalance(appEnvId, wallet.id, balance, change)
       const { appEnv } = await this.data.getAppEnvironment(environment, index)
-      this.sentBalanceWebhook(appEnv)
+      this.sentBalanceWebhook(appEnv, balance)
       this.logger.verbose(
         `${appKey}: Updated Wallet Balance: ${wallet.publicKey} ${current} => ${balance} (${change} SOL)`,
       )
