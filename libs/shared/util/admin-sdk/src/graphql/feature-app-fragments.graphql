@@ -104,20 +104,20 @@ fragment AppTransactionDetails on AppTransaction {
   ua
   webhookEventDuration
   webhookEventIncoming {
-    ...AppWebhookDetails
+    ...WebhookDetails
   }
   webhookEventOutgoing {
-    ...AppWebhookDetails
+    ...WebhookDetails
   }
   webhookEventEnd
   webhookEventStart
   webhookVerifyDuration
   webhookVerifyEnd
   webhookVerifyIncoming {
-    ...AppWebhookDetails
+    ...WebhookDetails
   }
   webhookVerifyOutgoing {
-    ...AppWebhookDetails
+    ...WebhookDetails
   }
   webhookVerifyStart
 }
@@ -143,7 +143,7 @@ fragment AppUserDetails on AppUser {
   }
 }
 
-fragment AppWebhookDetails on AppWebhook {
+fragment WebhookDetails on Webhook {
   id
   createdAt
   updatedAt

@@ -1,0 +1,5 @@
+export * from './lib/api-webhook-data-access.module'
+export * from './lib/api-webhook-data-access.service'
+export * from './lib/entity/webhook-direction.enum'
+export * from './lib/entity/webhook-type.enum'
+export * from './lib/entity/webhook.entity'

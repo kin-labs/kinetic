@@ -1,11 +1,14 @@
-import { ApiAppWebhookDataAccessService, AppEnv, AppWebhookType, parseError } from '@kin-kinetic/api/app/data-access'
+import { parseError } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
+  App,
+  AppEnv,
   AppTransaction,
   AppTransactionError,
   AppTransactionErrorType,
@@ -13,13 +16,13 @@ import {
   Prisma,
 } from '@prisma/client'
 import { Transaction } from '@solana/web3.js'
+import { Request } from 'express'
+import * as requestIp from 'request-ip'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
 import { GetTransactionResponse } from './entities/get-transaction.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
-import { Request } from 'express'
-import * as requestIp from 'request-ip'
 
 type AppTransactionWithErrors = AppTransaction & { errors: AppTransactionError[] }
 
@@ -43,7 +46,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private sendVerifyWebhookErrorCounter: Counter
   private sendVerifyWebhookSuccessCounter: Counter
 
-  constructor(readonly data: ApiCoreDataAccessService, private readonly appWebhook: ApiAppWebhookDataAccessService) {}
+  constructor(readonly data: ApiCoreDataAccessService, private readonly webhook: ApiWebhookDataAccessService) {}
 
   @Cron('* * * * * *')
   async cleanupStaleTransactions() {
@@ -237,7 +240,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     solanaTransaction,
     source,
   }: {
-    appEnv: AppEnv
+    appEnv: AppEnv & { app: App }
     appKey: string
     appTransaction: AppTransaction
     amount: number
@@ -321,7 +324,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     solanaStart,
     transactionStart,
   }: {
-    appEnv: AppEnv
+    appEnv: AppEnv & { app: App }
     appTransactionId: string
     blockhash: string
     headers?: Record<string, string>
@@ -369,13 +372,13 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   private async sendEventWebhook(
     appKey: string,
-    appEnv: AppEnv,
+    appEnv: AppEnv & { app: App },
     transaction: AppTransaction,
     headers?: Record<string, string>,
   ): Promise<AppTransactionWithErrors> {
     const webhookEventStart = new Date()
     try {
-      await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Event, transaction, headers })
+      await this.webhook.sendWebhook(appEnv, { type: WebhookType.Event, transaction, headers })
       const webhookEventEnd = new Date()
       const webhookEventDuration = webhookEventEnd?.getTime() - webhookEventStart.getTime()
       this.sendEventWebhookSuccessCounter.add(1, { appKey })
@@ -394,13 +397,13 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   private async sendVerifyWebhook(
     appKey: string,
-    appEnv: AppEnv,
+    appEnv: AppEnv & { app: App },
     transaction,
     headers: Record<string, string>,
   ): Promise<AppTransactionWithErrors> {
     const webhookVerifyStart = new Date()
     try {
-      await this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Verify, transaction, headers })
+      await this.webhook.sendWebhook(appEnv, { type: WebhookType.Verify, transaction, headers })
       const webhookVerifyEnd = new Date()
       const webhookVerifyDuration = webhookVerifyEnd?.getTime() - webhookVerifyStart.getTime()
       this.sendVerifyWebhookSuccessCounter.add(1, { appKey })

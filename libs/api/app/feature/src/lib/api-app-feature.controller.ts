@@ -1,27 +1,18 @@
-import {
-  ApiAppDataAccessService,
-  ApiAppWebhookDataAccessService,
-  AppConfig,
-  AppHealth,
-} from '@kin-kinetic/api/app/data-access'
-import { Controller, Get, Param, ParseIntPipe, Post, Req, Res } from '@nestjs/common'
-import { ApiExcludeEndpoint, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { Request, Response } from 'express'
+import { ApiAppDataAccessService, AppConfig, AppHealth } from '@kin-kinetic/api/app/data-access'
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common'
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('app')
 @Controller('app')
 export class ApiAppFeatureController {
-  constructor(
-    private readonly appService: ApiAppDataAccessService,
-    private readonly webhookService: ApiAppWebhookDataAccessService,
-  ) {}
+  constructor(private readonly service: ApiAppDataAccessService) {}
 
   @Get(':environment/:index/config')
   @ApiOperation({ operationId: 'getAppConfig' })
   @ApiParam({ name: 'index', type: 'integer' })
   @ApiResponse({ type: AppConfig })
   app(@Param('environment') environment: string, @Param('index', ParseIntPipe) index: number) {
-    return this.appService.getAppConfig(environment, index)
+    return this.service.getAppConfig(environment, index)
   }
 
   @Get(':environment/:index/health')
@@ -29,18 +20,6 @@ export class ApiAppFeatureController {
   @ApiParam({ name: 'index', type: 'integer' })
   @ApiResponse({ type: AppHealth })
   appHealth(@Param('environment') environment: string, @Param('index', ParseIntPipe) index: number) {
-    return this.appService.getAppHealth(environment, index)
-  }
-
-  @Post('/:environment/:index/webhook/:type')
-  @ApiExcludeEndpoint()
-  async appWebhook(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Param('environment') environment: string,
-    @Param('index', ParseIntPipe) index: number,
-    @Param('type') type: string,
-  ) {
-    return this.webhookService.storeIncomingWebhook(environment, index, type, req.headers, req.body, res)
+    return this.service.getAppHealth(environment, index)
   }
 }
