@@ -262,6 +262,9 @@ describe('App (e2e)', () => {
 
         const input: UserAppEnvUpdateInput = {
           webhookSecret: 'WebHookSecret',
+          webhookBalanceEnabled: true,
+          webhookBalanceUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/balance',
+          webhookBalanceTreshold: 10,
           webhookDebugging: true,
           webhookEventEnabled: true,
           webhookEventUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/event',
@@ -274,7 +277,9 @@ describe('App (e2e)', () => {
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.updated
-
+            expect(data.webhookBalanceEnabled).toEqual(input.webhookBalanceEnabled)
+            expect(data.webhookBalanceUrl).toEqual(input.webhookBalanceUrl)
+            expect(data.webhookBalanceTreshold).toEqual(input.webhookBalanceTreshold)
             expect(data.webhookDebugging).toEqual(input.webhookDebugging)
             expect(data.webhookSecret).toEqual(input.webhookSecret)
             expect(data.webhookEventEnabled).toEqual(input.webhookEventEnabled)

@@ -5,6 +5,15 @@ import { IsOptional, IsUrl } from 'class-validator'
 export class UserAppEnvUpdateInput {
   @IsOptional()
   @Field({ nullable: true })
+  webhookBalanceEnabled?: boolean
+  @IsOptional()
+  @Field({ nullable: true })
+  webhookBalanceUrl?: string
+  @IsOptional()
+  @Field({ nullable: true })
+  webhookBalanceTreshold?: number
+  @IsOptional()
+  @Field({ nullable: true })
   webhookDebugging?: boolean
   @IsOptional()
   @Field({ nullable: true })

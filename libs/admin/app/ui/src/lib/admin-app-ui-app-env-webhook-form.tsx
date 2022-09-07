@@ -11,6 +11,9 @@ export interface AdminAppUiAppEnvWebhookFormProps {
 }
 
 const validationSchema = Yup.object({
+  webhookBalanceEnabled: Yup.boolean().optional(),
+  webhookBalanceUrl: Yup.string().optional(),
+  webhookBalanceTreshold: Yup.number().optional(),
   webhookDebugging: Yup.boolean().optional(),
   webhookEventEnabled: Yup.boolean().optional(),
   webhookEventUrl: Yup.string().optional(),
@@ -20,6 +23,15 @@ const validationSchema = Yup.object({
 })
 
 const fields: UiFormField[] = [
+  UiFormField.checkbox('webhookBalanceEnabled', { label: 'Balance webhook enabled' }),
+  UiFormField.input('webhookBalanceUrl', {
+    label: 'Balance webhook url',
+    hideExpression: (d) => !d['webhookBalanceEnabled'],
+  }),
+  UiFormField.input('webhookBalanceTreshold', {
+    label: 'Balance webhook threshold',
+    hideExpression: (d) => !d['webhookBalanceEnabled'],
+  }),
   UiFormField.checkbox('webhookEventEnabled', { label: 'Event webhook enabled' }),
   UiFormField.input('webhookEventUrl', {
     label: 'Event webhook url',
@@ -49,6 +61,9 @@ export function AdminAppUiAppEnvWebhookForm({ appEnv, onSubmit }: AdminAppUiAppE
         </Box>
         <AdminUiForm
           data={{
+            webhookBalanceEnabled: appEnv?.webhookBalanceEnabled,
+            webhookBalanceUrl: appEnv?.webhookBalanceUrl,
+            webhookBalanceTreshold: appEnv?.webhookBalanceTreshold,
             webhookDebugging: appEnv?.webhookDebugging,
             webhookEventEnabled: appEnv?.webhookEventEnabled,
             webhookEventUrl,

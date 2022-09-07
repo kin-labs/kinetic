@@ -374,6 +374,9 @@ input UserAppEnvCreateInput {
 }
 
 input UserAppEnvUpdateInput {
+  webhookBalanceEnabled: Boolean
+  webhookBalanceTreshold: Float
+  webhookBalanceUrl: String
   webhookDebugging: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String
