@@ -277,6 +277,7 @@ describe('App (e2e)', () => {
           .expect((res) => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.updated
+
             expect(data.webhookBalanceEnabled).toEqual(input.webhookBalanceEnabled)
             expect(data.webhookBalanceUrl).toEqual(input.webhookBalanceUrl)
             expect(data.webhookBalanceTreshold).toEqual(input.webhookBalanceTreshold)

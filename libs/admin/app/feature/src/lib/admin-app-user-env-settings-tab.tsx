@@ -35,6 +35,8 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
       appEnvId: appEnvId,
       input: {
         ...input,
+        webhookBalanceUrl: input.webhookBalanceUrl?.trim(),
+        webhookBalanceTreshold: Number(input.webhookBalanceTreshold),
         webhookEventUrl: input.webhookEventUrl?.trim(),
         webhookVerifyUrl: input.webhookVerifyUrl?.trim(),
       },

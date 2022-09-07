@@ -671,7 +671,7 @@ export type UserAppEnvCreateInput = {
 
 export type UserAppEnvUpdateInput = {
   webhookBalanceEnabled?: InputMaybe<Scalars['Boolean']>
-  webhookBalanceTreshold?: InputMaybe<Scalars['Float']>
+  webhookBalanceTreshold?: InputMaybe<Scalars['Int']>
   webhookBalanceUrl?: InputMaybe<Scalars['String']>
   webhookDebugging?: InputMaybe<Scalars['Boolean']>
   webhookEventEnabled?: InputMaybe<Scalars['Boolean']>

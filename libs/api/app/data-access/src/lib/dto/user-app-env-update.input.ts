@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType, Int } from '@nestjs/graphql'
 import { IsOptional, IsUrl } from 'class-validator'
 
 @InputType()
@@ -10,7 +10,7 @@ export class UserAppEnvUpdateInput {
   @Field({ nullable: true })
   webhookBalanceUrl?: string
   @IsOptional()
-  @Field({ nullable: true })
+  @Field(() => Int, { nullable: true })
   webhookBalanceTreshold?: number
   @IsOptional()
   @Field({ nullable: true })
