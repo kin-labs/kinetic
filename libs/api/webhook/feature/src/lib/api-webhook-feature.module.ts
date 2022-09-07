@@ -1,11 +1,11 @@
 import { ApiWebhookDataAccessModule } from '@kin-kinetic/api/webhook/data-access'
 import { Module } from '@nestjs/common'
-import { ApiWebhookAppTransactionFeatureResolver } from './api-webhook-app-transaction-feature.resolver'
+import { ApiWebhookTransactionFeatureResolver } from './api-webhook-transaction-feature.resolver'
 import { ApiWebhookFeatureController } from './api-webhook-feature.controller'
 
 @Module({
   controllers: [ApiWebhookFeatureController],
-  providers: [ApiWebhookAppTransactionFeatureResolver],
+  providers: [ApiWebhookTransactionFeatureResolver],
   imports: [ApiWebhookDataAccessModule],
 })
 export class ApiWebhookFeatureModule {}

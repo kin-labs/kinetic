@@ -1,10 +1,6 @@
-import {
-  ApiAppDataAccessService,
-  AppTransaction,
-  AppTransactionStatus,
-  parseError,
-} from '@kin-kinetic/api/app/data-access'
+import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { parseError, Transaction, TransactionStatus } from '@kin-kinetic/api/transaction/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@kin-kinetic/solana'
 import { Injectable, OnModuleInit } from '@nestjs/common'
@@ -84,12 +80,12 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     return solana.getTokenAccounts(accountId, mint.toString())
   }
 
-  async createAccount(input: CreateAccountRequest): Promise<AppTransaction> {
+  async createAccount(input: CreateAccountRequest): Promise<Transaction> {
     const solana = await this.data.getSolanaConnection(input.environment, input.index)
     const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     this.createAccountRequestCounter.add(1, { appKey })
 
-    const created = await this.data.appTransaction.create({
+    const created = await this.data.transaction.create({
       data: { appEnvId: appEnv.id },
       include: { errors: true },
     })
@@ -106,22 +102,22 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     })
     let errors
 
-    let status: AppTransactionStatus
+    let status: TransactionStatus
     let signature: string
 
     const solanaStart = new Date()
 
     try {
       signature = await solana.sendRawTransaction(transaction)
-      status = AppTransactionStatus.Committed
+      status = TransactionStatus.Committed
       this.createAccountSolanaTransactionSuccessCounter.add(1, { appKey })
     } catch (error) {
-      status = AppTransactionStatus.Failed
+      status = TransactionStatus.Failed
       this.createAccountSolanaTransactionErrorCounter.add(1, { appKey })
       errors = { create: parseError(error) }
     }
 
-    return this.data.appTransaction.update({
+    return this.data.transaction.update({
       where: { id: created.id },
       data: {
         errors,

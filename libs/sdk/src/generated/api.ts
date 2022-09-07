@@ -336,259 +336,6 @@ export interface AppHealth {
 /**
  *
  * @export
- * @interface AppTransaction
- */
-export interface AppTransaction {
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  id: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  createdAt: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  updatedAt: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  amount: string | null
-  /**
-   *
-   * @type {number}
-   * @memberof AppTransaction
-   */
-  decimals: number | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  destination: string | null
-  /**
-   *
-   * @type {Array<AppTransactionError>}
-   * @memberof AppTransaction
-   */
-  errors: Array<AppTransactionError> | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  explorerUrl: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  feePayer: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  ip: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  mint: string | null
-  /**
-   *
-   * @type {number}
-   * @memberof AppTransaction
-   */
-  processingDuration: number | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  referenceId: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  referenceType: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  signature: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  solanaCommitted: string | null
-  /**
-   *
-   * @type {number}
-   * @memberof AppTransaction
-   */
-  solanaCommittedDuration: number | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  solanaFinalized: string | null
-  /**
-   *
-   * @type {number}
-   * @memberof AppTransaction
-   */
-  solanaFinalizedDuration: number | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  solanaStart: string | null
-  /**
-   *
-   * @type {object}
-   * @memberof AppTransaction
-   */
-  solanaTransaction: object | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  source: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  status: AppTransactionStatusEnum
-  /**
-   *
-   * @type {number}
-   * @memberof AppTransaction
-   */
-  totalDuration: number | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  ua: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  webhookEventStart: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  webhookEventEnd: string | null
-  /**
-   *
-   * @type {number}
-   * @memberof AppTransaction
-   */
-  webhookEventDuration: number | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  webhookVerifyStart: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransaction
-   */
-  webhookVerifyEnd: string | null
-  /**
-   *
-   * @type {number}
-   * @memberof AppTransaction
-   */
-  webhookVerifyDuration: number | null
-}
-
-export const AppTransactionStatusEnum = {
-  Committed: 'Committed',
-  Confirmed: 'Confirmed',
-  Failed: 'Failed',
-  Finalized: 'Finalized',
-  Processing: 'Processing',
-} as const
-
-export type AppTransactionStatusEnum = typeof AppTransactionStatusEnum[keyof typeof AppTransactionStatusEnum]
-
-/**
- *
- * @export
- * @interface AppTransactionError
- */
-export interface AppTransactionError {
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransactionError
-   */
-  id: string
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof AppTransactionError
-   */
-  logs: Array<string>
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransactionError
-   */
-  message: string
-  /**
-   *
-   * @type {string}
-   * @memberof AppTransactionError
-   */
-  type: AppTransactionErrorTypeEnum
-  /**
-   *
-   * @type {number}
-   * @memberof AppTransactionError
-   */
-  instruction: number
-}
-
-export const AppTransactionErrorTypeEnum = {
-  BadNonce: 'BadNonce',
-  InvalidAccount: 'InvalidAccount',
-  SomeError: 'SomeError',
-  Timeout: 'Timeout',
-  Unknown: 'Unknown',
-  WebhookFailed: 'WebhookFailed',
-} as const
-
-export type AppTransactionErrorTypeEnum = typeof AppTransactionErrorTypeEnum[keyof typeof AppTransactionErrorTypeEnum]
-
-/**
- *
- * @export
  * @interface BalanceResponse
  */
 export interface BalanceResponse {
@@ -1000,6 +747,210 @@ export interface SignatureStatus {
 /**
  *
  * @export
+ * @interface Transaction
+ */
+export interface Transaction {
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  id: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  createdAt: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  updatedAt: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  amount: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof Transaction
+   */
+  decimals: number | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  destination: string | null
+  /**
+   *
+   * @type {Array<TransactionError>}
+   * @memberof Transaction
+   */
+  errors: Array<TransactionError> | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  explorerUrl: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  feePayer: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  ip: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  mint: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof Transaction
+   */
+  processingDuration: number | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  referenceId: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  referenceType: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  signature: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  solanaCommitted: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof Transaction
+   */
+  solanaCommittedDuration: number | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  solanaFinalized: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof Transaction
+   */
+  solanaFinalizedDuration: number | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  solanaStart: string | null
+  /**
+   *
+   * @type {object}
+   * @memberof Transaction
+   */
+  solanaTransaction: object | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  source: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  status: TransactionStatusEnum
+  /**
+   *
+   * @type {number}
+   * @memberof Transaction
+   */
+  totalDuration: number | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  ua: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  webhookEventStart: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  webhookEventEnd: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof Transaction
+   */
+  webhookEventDuration: number | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  webhookVerifyStart: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
+  webhookVerifyEnd: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof Transaction
+   */
+  webhookVerifyDuration: number | null
+}
+
+export const TransactionStatusEnum = {
+  Committed: 'Committed',
+  Confirmed: 'Confirmed',
+  Failed: 'Failed',
+  Finalized: 'Finalized',
+  Processing: 'Processing',
+} as const
+
+export type TransactionStatusEnum = typeof TransactionStatusEnum[keyof typeof TransactionStatusEnum]
+
+/**
+ *
+ * @export
  * @interface TransactionData
  */
 export interface TransactionData {
@@ -1016,6 +967,55 @@ export interface TransactionData {
    */
   signatures: Array<string>
 }
+/**
+ *
+ * @export
+ * @interface TransactionError
+ */
+export interface TransactionError {
+  /**
+   *
+   * @type {string}
+   * @memberof TransactionError
+   */
+  id: string
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof TransactionError
+   */
+  logs: Array<string>
+  /**
+   *
+   * @type {string}
+   * @memberof TransactionError
+   */
+  message: string
+  /**
+   *
+   * @type {string}
+   * @memberof TransactionError
+   */
+  type: TransactionErrorTypeEnum
+  /**
+   *
+   * @type {number}
+   * @memberof TransactionError
+   */
+  instruction: number
+}
+
+export const TransactionErrorTypeEnum = {
+  BadNonce: 'BadNonce',
+  InvalidAccount: 'InvalidAccount',
+  SomeError: 'SomeError',
+  Timeout: 'Timeout',
+  Unknown: 'Unknown',
+  WebhookFailed: 'WebhookFailed',
+} as const
+
+export type TransactionErrorTypeEnum = typeof TransactionErrorTypeEnum[keyof typeof TransactionErrorTypeEnum]
+
 /**
  *
  * @export
@@ -1295,7 +1295,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     async createAccount(
       createAccountRequest: CreateAccountRequest,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AppTransaction>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Transaction>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createAccount(createAccountRequest, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -1393,7 +1393,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createAccount(createAccountRequest: CreateAccountRequest, options?: any): AxiosPromise<AppTransaction> {
+    createAccount(createAccountRequest: CreateAccountRequest, options?: any): AxiosPromise<Transaction> {
       return localVarFp.createAccount(createAccountRequest, options).then((request) => request(axios, basePath))
     },
     /**
@@ -2156,7 +2156,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     async makeTransfer(
       makeTransferRequest: MakeTransferRequest,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AppTransaction>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Transaction>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.makeTransfer(makeTransferRequest, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -2226,7 +2226,7 @@ export const TransactionApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    makeTransfer(makeTransferRequest: MakeTransferRequest, options?: any): AxiosPromise<AppTransaction> {
+    makeTransfer(makeTransferRequest: MakeTransferRequest, options?: any): AxiosPromise<Transaction> {
       return localVarFp.makeTransfer(makeTransferRequest, options).then((request) => request(axios, basePath))
     },
   }

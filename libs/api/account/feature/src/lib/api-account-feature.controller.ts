@@ -4,11 +4,11 @@ import {
   CreateAccountRequest,
   HistoryResponse,
 } from '@kin-kinetic/api/account/data-access'
-import { AppTransaction } from '@kin-kinetic/api/app/data-access'
 import { PublicKeyPipe } from '@kin-kinetic/api/core/util'
+import { Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Commitment } from '@kin-kinetic/solana'
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UsePipes } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('account')
 @Controller('account')
@@ -30,7 +30,7 @@ export class ApiAccountFeatureController {
   @Post('create')
   @ApiBody({ type: CreateAccountRequest })
   @ApiOperation({ operationId: 'createAccount' })
-  @ApiResponse({ type: AppTransaction })
+  @ApiResponse({ type: Transaction })
   createAccount(@Body() body: CreateAccountRequest) {
     return this.service.createAccount(body)
   }

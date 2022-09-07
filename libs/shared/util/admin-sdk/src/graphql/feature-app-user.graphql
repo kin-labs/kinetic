@@ -160,17 +160,17 @@ mutation UserDeleteAppEnv($appId: String!, $appEnvId: String!) {
   }
 }
 
-query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
-  item: userAppTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
-    ...AppTransactionDetails
+query UserTransaction($appId: String!, $appEnvId: String!, $transactionId: String!) {
+  item: userTransaction(appId: $appId, appEnvId: $appEnvId, transactionId: $transactionId) {
+    ...TransactionDetails
   }
 }
 
-query UserAppTransactions($appId: String!, $appEnvId: String!, $input: UserAppTransactionListInput) {
-  items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
-    ...AppTransactionDetails
+query UserTransactions($appId: String!, $appEnvId: String!, $input: UserTransactionListInput) {
+  items: userTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
+    ...TransactionDetails
   }
-  count: userAppTransactionCounter(appId: $appId, appEnvId: $appEnvId, input: $input) {
+  count: userTransactionCounter(appId: $appId, appEnvId: $appEnvId, input: $input) {
     limit
     page
     pageCount

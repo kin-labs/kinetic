@@ -1,5 +1,5 @@
 import { Solana } from '@kin-kinetic/solana'
-import { AppConfig, AppTransaction, BalanceResponse, GetTransactionResponse, HistoryResponse } from '../generated'
+import { AppConfig, Transaction, BalanceResponse, GetTransactionResponse, HistoryResponse } from '../generated'
 import { NAME, VERSION } from '../version'
 import { getSolanaRpcEndpoint } from './helpers'
 import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
@@ -17,7 +17,7 @@ import {
 } from './interfaces'
 import { KineticSdkInternal } from './kinetic-sdk-internal'
 
-export type { AppConfig, AppTransaction, BalanceResponse, HistoryResponse } from '../generated'
+export type { AppConfig, Transaction, BalanceResponse, HistoryResponse } from '../generated'
 
 export class KineticSdk {
   solana: Solana | undefined
@@ -40,7 +40,7 @@ export class KineticSdk {
     return this.sdkConfig.solanaRpcEndpoint
   }
 
-  createAccount(options: CreateAccountOptions): Promise<AppTransaction> {
+  createAccount(options: CreateAccountOptions): Promise<Transaction> {
     return this.internal.createAccount(options)
   }
 
@@ -64,11 +64,11 @@ export class KineticSdk {
     return this.internal.getTransaction({ signature })
   }
 
-  makeTransfer(options: MakeTransferOptions): Promise<AppTransaction> {
+  makeTransfer(options: MakeTransferOptions): Promise<Transaction> {
     return this.internal.makeTransfer(options)
   }
 
-  makeTransferBatch(options: MakeTransferBatchOptions): Promise<AppTransaction> {
+  makeTransferBatch(options: MakeTransferBatchOptions): Promise<Transaction> {
     return this.internal.makeTransferBatch(options)
   }
 

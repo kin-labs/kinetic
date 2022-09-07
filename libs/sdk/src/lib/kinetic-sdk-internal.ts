@@ -12,7 +12,7 @@ import {
   AirdropApi,
   AppApi,
   AppConfig,
-  AppTransaction,
+  Transaction,
   BalanceResponse,
   Configuration,
   CreateAccountRequest,
@@ -83,7 +83,7 @@ export class KineticSdkInternal {
     return res.data as BalanceResponse
   }
 
-  async createAccount({ owner, mint }: CreateAccountOptions): Promise<AppTransaction> {
+  async createAccount({ owner, mint }: CreateAccountOptions): Promise<Transaction> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }

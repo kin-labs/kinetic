@@ -1,8 +1,8 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { AppTransactionStatus } from '../entity/app-transaction-status.enum'
+import { TransactionStatus } from '../entities/transaction-status.enum'
 
 @InputType()
-export class UserAppTransactionListInput {
+export class UserTransactionListInput {
   @Field({ nullable: true })
   destination?: string
   @Field({ nullable: true })
@@ -19,8 +19,8 @@ export class UserAppTransactionListInput {
   signature?: string
   @Field({ nullable: true })
   source?: string
-  @Field(() => [AppTransactionStatus], { nullable: true })
-  status?: AppTransactionStatus[]
+  @Field(() => [TransactionStatus], { nullable: true })
+  status?: TransactionStatus[]
   @Field({ nullable: true })
   ua?: string
 }

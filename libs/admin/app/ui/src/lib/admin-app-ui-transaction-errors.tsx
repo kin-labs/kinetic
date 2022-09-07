@@ -1,9 +1,9 @@
 import { CheckCircleIcon, CloseIcon } from '@chakra-ui/icons'
 import { List, ListIcon, ListItem } from '@chakra-ui/react'
-import { AppTransaction } from '@kin-kinetic/shared/util/admin-sdk'
+import { Transaction } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
-export function AdminAppUiTransactionErrors({ item }: { item: AppTransaction }) {
+export function AdminAppUiTransactionErrors({ item }: { item: Transaction }) {
   return (
     <List spacing={3}>
       {item.errors?.length ? (

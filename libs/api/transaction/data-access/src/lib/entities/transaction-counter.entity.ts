@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
-export class AppTransactionCounter {
+export class TransactionCounter {
   @Field({ nullable: true })
   limit?: number
   @Field({ nullable: true })

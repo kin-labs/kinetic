@@ -1,8 +1,8 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, Logger } from '@nestjs/common'
+import { TransactionStatus } from '@prisma/client'
 import { AppEnvStats } from './entity/app-env-stats.entity'
 import { AppEnvTransactionCount } from './entity/app-env-transaction-count.entity'
-import { AppTransactionStatus } from './entity/app-transaction-status.enum'
 
 @Injectable()
 export class ApiAppEnvUserDataAccessService {
@@ -17,14 +17,14 @@ export class ApiAppEnvUserDataAccessService {
   }
 
   private async userAppEnvTransactionCount(appEnvId: string): Promise<AppEnvTransactionCount> {
-    const data = await this.data.appTransaction.groupBy({
+    const data = await this.data.transaction.groupBy({
       by: ['status'],
       where: { appEnvId },
       _count: {
         _all: true,
       },
     })
-    return Object.keys(AppTransactionStatus).reduce((acc, curr) => {
+    return Object.keys(TransactionStatus).reduce((acc, curr) => {
       const found = data.find((item) => item.status === curr)
 
       return { ...acc, [curr]: found ? found._count._all : 0 }

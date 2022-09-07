@@ -2,17 +2,14 @@ import {
   ApiAppUserDataAccessService,
   App,
   AppEnv,
+  AppMint,
+  AppUserRole,
   UserAppEnvCreateInput,
   UserAppEnvUpdateInput,
-  AppMint,
   UserAppMintUpdateInput,
-  AppTransaction,
-  AppTransactionCounter,
-  UserAppTransactionListInput,
   UserAppUpdateInput,
   UserAppUserAddInput,
   UserAppUserRemoveInput,
-  AppUserRole,
   UserAppUserUpdateRoleInput,
 } from '@kin-kinetic/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
@@ -38,39 +35,6 @@ export class ApiAppUserFeatureResolver {
   userAppRole(@CtxUser() user: User, @Args('appId') appId: string) {
     return this.service.userAppRole(user.id, appId)
   }
-
-  @Query(() => AppTransaction, { nullable: true })
-  userAppTransaction(
-    @CtxUser() user: User,
-    @Args('appId') appId: string,
-    @Args('appEnvId') appEnvId: string,
-    @Args('appTransactionId') appTransactionId: string,
-  ) {
-    return this.service.userAppTransaction(user.id, appId, appEnvId, appTransactionId)
-  }
-
-  @Query(() => [AppTransaction], { nullable: true })
-  userAppTransactions(
-    @CtxUser() user: User,
-    @Args('appId') appId: string,
-    @Args('appEnvId') appEnvId: string,
-    @Args({ name: 'input', type: () => UserAppTransactionListInput, nullable: true })
-    input: UserAppTransactionListInput,
-  ) {
-    return this.service.userAppTransactions(user.id, appId, appEnvId, input)
-  }
-
-  @Query(() => AppTransactionCounter, { nullable: true })
-  userAppTransactionCounter(
-    @CtxUser() user: User,
-    @Args('appId') appId: string,
-    @Args('appEnvId') appEnvId: string,
-    @Args({ name: 'input', type: () => UserAppTransactionListInput, nullable: true })
-    input: UserAppTransactionListInput,
-  ) {
-    return this.service.userAppTransactionCounter(user.id, appId, appEnvId, input)
-  }
-
   @Query(() => [App], { nullable: true })
   userApps(@CtxUser() user: User) {
     return this.service.userApps(user.id)

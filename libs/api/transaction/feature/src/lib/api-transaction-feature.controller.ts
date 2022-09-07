@@ -1,11 +1,11 @@
-import { AppTransaction } from '@kin-kinetic/api/app/data-access'
 import {
   ApiTransactionDataAccessService,
-  MakeTransferRequest,
   GetTransactionResponse,
+  LatestBlockhashResponse,
+  MakeTransferRequest,
   MinimumRentExemptionBalanceRequest,
   MinimumRentExemptionBalanceResponse,
-  LatestBlockhashResponse,
+  Transaction,
 } from '@kin-kinetic/api/transaction/data-access'
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Req } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -39,7 +39,7 @@ export class ApiTransactionFeatureController {
   @Post('make-transfer')
   @ApiBody({ type: MakeTransferRequest })
   @ApiOperation({ operationId: 'makeTransfer' })
-  @ApiResponse({ type: AppTransaction })
+  @ApiResponse({ type: Transaction })
   makeTransfer(@Req() req: Request, @Body() body: MakeTransferRequest) {
     return this.service.makeTransfer(req, body)
   }

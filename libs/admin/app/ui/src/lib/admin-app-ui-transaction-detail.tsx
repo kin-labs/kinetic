@@ -1,8 +1,8 @@
 import { Code, Table, TableContainer, Tbody, Td, Th, Tr } from '@chakra-ui/react'
-import { AppTransaction } from '@kin-kinetic/shared/util/admin-sdk'
+import { Transaction } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
-export function AdminAppUiTransactionDetail({ item }: { item: AppTransaction }) {
+export function AdminAppUiTransactionDetail({ item }: { item: Transaction }) {
   const fields: { label: string; field: 'feePayer' | 'mint' | 'source' }[] = [
     { label: 'Fee Payer', field: 'feePayer' },
     { label: 'Mint', field: 'mint' },

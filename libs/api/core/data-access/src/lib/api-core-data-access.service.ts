@@ -363,8 +363,8 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   async deleteAppEnv(appId: string, appEnvId: string) {
     await this.webhook.deleteMany({ where: { appEnv: { appId, id: appEnvId } } })
-    await this.appTransactionError.deleteMany({ where: { appTransaction: { appEnv: { appId, id: appEnvId } } } })
-    await this.appTransaction.deleteMany({ where: { appEnv: { appId, id: appEnvId } } })
+    await this.transactionError.deleteMany({ where: { transaction: { appEnv: { appId, id: appEnvId } } } })
+    await this.transaction.deleteMany({ where: { appEnv: { appId, id: appEnvId } } })
     return this.appEnv.delete({ where: { id: appEnvId } })
   }
 }

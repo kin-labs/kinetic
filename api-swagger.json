@@ -60,7 +60,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AppTransaction"
+                  "$ref": "#/components/schemas/Transaction"
                 }
               }
             }
@@ -453,7 +453,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AppTransaction"
+                  "$ref": "#/components/schemas/Transaction"
                 }
               }
             }
@@ -552,7 +552,7 @@
         },
         "required": ["environment", "index", "mint", "tx"]
       },
-      "AppTransactionError": {
+      "TransactionError": {
         "type": "object",
         "properties": {
           "id": {
@@ -577,7 +577,7 @@
         },
         "required": ["id", "logs", "message", "type", "instruction"]
       },
-      "AppTransaction": {
+      "Transaction": {
         "type": "object",
         "properties": {
           "id": {
@@ -610,7 +610,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AppTransactionError"
+              "$ref": "#/components/schemas/TransactionError"
             }
           },
           "explorerUrl": {
