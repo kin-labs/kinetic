@@ -22,6 +22,12 @@ export class AppEnv {
   @Field(() => [String], { nullable: true })
   uasBlocked?: string[]
   @Field({ nullable: true })
+  webhookBalanceEnabled?: boolean
+  @Field({ nullable: true })
+  webhookBalanceUrl?: string
+  @Field({ nullable: true })
+  webhookBalanceTreshold?: number
+  @Field({ nullable: true })
   webhookDebugging?: boolean
   @Field({ nullable: true })
   webhookEventEnabled?: boolean

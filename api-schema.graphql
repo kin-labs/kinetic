@@ -87,6 +87,9 @@ type AppEnv {
   uasBlocked: [String!]
   updatedAt: DateTime!
   wallets: [Wallet!]
+  webhookBalanceEnabled: Boolean
+  webhookBalanceTreshold: Float
+  webhookBalanceUrl: String
   webhookDebugging: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String

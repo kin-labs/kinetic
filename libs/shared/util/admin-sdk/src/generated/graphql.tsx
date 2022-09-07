@@ -109,6 +109,9 @@ export type AppEnv = {
   uasBlocked?: Maybe<Array<Scalars['String']>>
   updatedAt: Scalars['DateTime']
   wallets?: Maybe<Array<Wallet>>
+  webhookBalanceEnabled?: Maybe<Scalars['Boolean']>
+  webhookBalanceTreshold?: Maybe<Scalars['Float']>
+  webhookBalanceUrl?: Maybe<Scalars['String']>
   webhookDebugging?: Maybe<Scalars['Boolean']>
   webhookEventEnabled?: Maybe<Scalars['Boolean']>
   webhookEventUrl?: Maybe<Scalars['String']>
@@ -822,6 +825,9 @@ export type AdminCreateAppMutation = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -978,6 +984,9 @@ export type AdminUpdateAppMutation = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -1143,6 +1152,9 @@ export type AdminDeleteAppEnvMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -1257,6 +1269,9 @@ export type AdminAppsQuery = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -1374,6 +1389,9 @@ export type AdminAppQuery = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -1525,6 +1543,9 @@ export type AppEnvDetailsFragment = {
   name?: string | null
   uasAllowed?: Array<string> | null
   uasBlocked?: Array<string> | null
+  webhookBalanceEnabled?: boolean | null
+  webhookBalanceUrl?: string | null
+  webhookBalanceTreshold?: number | null
   webhookDebugging?: boolean | null
   webhookEventEnabled?: boolean | null
   webhookEventUrl?: string | null
@@ -1866,6 +1887,9 @@ export type UserUpdateAppMutation = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -2012,6 +2036,9 @@ export type UserCreateAppEnvMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2127,6 +2154,9 @@ export type UserUpdateAppEnvMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2440,6 +2470,9 @@ export type UserAppEnvAddAllowedIpMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2546,6 +2579,9 @@ export type UserAppEnvRemoveAllowedIpMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2652,6 +2688,9 @@ export type UserAppEnvAddBlockedIpMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2758,6 +2797,9 @@ export type UserAppEnvRemoveBlockedIpMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2864,6 +2906,9 @@ export type UserAppEnvAddAllowedUaMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -2970,6 +3015,9 @@ export type UserAppEnvRemoveAllowedUaMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3076,6 +3124,9 @@ export type UserAppEnvAddBlockedUaMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3182,6 +3233,9 @@ export type UserAppEnvRemoveBlockedUaMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3289,6 +3343,9 @@ export type UserAppEnvMintDisableMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3396,6 +3453,9 @@ export type UserAppEnvMintEnableMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3504,6 +3564,9 @@ export type UserAppEnvMintSetWalletMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3611,6 +3674,9 @@ export type UserAppEnvWalletAddMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3726,6 +3792,9 @@ export type UserAppEnvWalletRemoveMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -3840,6 +3909,9 @@ export type UserDeleteAppEnvMutation = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -4167,6 +4239,9 @@ export type UserAppsQuery = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -4285,6 +4360,9 @@ export type UserAppQuery = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -4430,6 +4508,9 @@ export type UserAppEnvQuery = {
     name?: string | null
     uasAllowed?: Array<string> | null
     uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceTreshold?: number | null
     webhookDebugging?: boolean | null
     webhookEventEnabled?: boolean | null
     webhookEventUrl?: string | null
@@ -5143,6 +5224,9 @@ export type AdminWalletQuery = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -5289,6 +5373,9 @@ export type AdminWalletsQuery = {
         name?: string | null
         uasAllowed?: Array<string> | null
         uasBlocked?: Array<string> | null
+        webhookBalanceEnabled?: boolean | null
+        webhookBalanceUrl?: string | null
+        webhookBalanceTreshold?: number | null
         webhookDebugging?: boolean | null
         webhookEventEnabled?: boolean | null
         webhookEventUrl?: string | null
@@ -5387,6 +5474,9 @@ export type AdminWalletsQuery = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -5511,6 +5601,9 @@ export type UserGenerateWalletMutation = {
       name?: string | null
       uasAllowed?: Array<string> | null
       uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceTreshold?: number | null
       webhookDebugging?: boolean | null
       webhookEventEnabled?: boolean | null
       webhookEventUrl?: string | null
@@ -5873,6 +5966,9 @@ export const AppEnvDetailsFragmentDoc = gql`
     name
     uasAllowed
     uasBlocked
+    webhookBalanceEnabled
+    webhookBalanceUrl
+    webhookBalanceTreshold
     webhookDebugging
     webhookEventEnabled
     webhookEventUrl
