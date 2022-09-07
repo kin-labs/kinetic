@@ -1,6 +1,6 @@
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import { Box, Button, List, ListIcon, ListItem, Stack } from '@chakra-ui/react'
-import { AppTransaction, AppWebhook, Maybe } from '@kin-kinetic/shared/util/admin-sdk'
+import { AppTransaction, Webhook, Maybe } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useState } from 'react'
 
 export function AdminAppUiTransactionTimeline({ item }: { item: AppTransaction }) {
@@ -46,7 +46,7 @@ export function AdminAppUiTransactionTimeline({ item }: { item: AppTransaction }
   )
 }
 
-function TransactionWebhook({ webhook }: { webhook?: Maybe<AppWebhook> | undefined }) {
+function TransactionWebhook({ webhook }: { webhook?: Maybe<Webhook> | undefined }) {
   const [visible, setVisible] = useState(false)
   return webhook ? (
     <Stack>

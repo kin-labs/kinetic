@@ -58,7 +58,7 @@ model AppEnv {
   webhookSecret        String?
   webhookVerifyEnabled Boolean          @default(false)
   webhookVerifyUrl     String?
-  webhooks             AppWebhook[]
+  webhooks             Webhook[]
   app                  App              @relation(fields: [appId], references: [id])
   appId                String
   cluster              Cluster          @relation(fields: [clusterId], references: [id])
@@ -112,7 +112,7 @@ model AppTransaction {
   status                  AppTransactionStatus      @default(Processing)
   totalDuration           Int?
   ua                      String?
-  webhooks                AppWebhook[]
+  webhooks                Webhook[]
   webhookEventStart       DateTime?
   webhookEventEnd         DateTime?
   webhookEventDuration    Int?
@@ -156,11 +156,11 @@ model AppTransactionError {
   appTransactionId String
 }
 
-model AppWebhook {
-  id               String              @id @default(cuid())
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt
-  direction        AppWebhookDirection
+model Webhook {
+  id               String           @id @default(cuid())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  direction        WebhookDirection
   headers          Json?
   payload          Json?
   referenceId      String?
@@ -168,19 +168,19 @@ model AppWebhook {
   responsePayload  Json?
   responseError    String?
   responseStatus   Int?
-  type             AppWebhookType
-  appEnv           AppEnv?             @relation(fields: [appEnvId], references: [id])
+  type             WebhookType
+  appEnv           AppEnv?          @relation(fields: [appEnvId], references: [id])
   appEnvId         String?
-  appTransaction   AppTransaction      @relation(fields: [appTransactionId], references: [id])
+  appTransaction   AppTransaction   @relation(fields: [appTransactionId], references: [id])
   appTransactionId String
 }
 
-enum AppWebhookDirection {
+enum WebhookDirection {
   Incoming
   Outgoing
 }
 
-enum AppWebhookType {
+enum WebhookType {
   Event
   Verify
 }

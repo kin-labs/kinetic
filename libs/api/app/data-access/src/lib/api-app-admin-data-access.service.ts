@@ -107,7 +107,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
     await this.data.appUser.deleteMany({ where: { appId } })
     await this.data.appTransactionError.deleteMany({ where: { appTransaction: { appEnv: { appId } } } })
     await this.data.appTransaction.deleteMany({ where: { appEnv: { appId } } })
-    await this.data.appWebhook.deleteMany({ where: { appEnv: { appId } } })
+    await this.data.webhook.deleteMany({ where: { appEnv: { appId } } })
     await this.data.appEnv.deleteMany({ where: { appId } })
     return this.data.app.delete({ where: { id: appId } })
   }

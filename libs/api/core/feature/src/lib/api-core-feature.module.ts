@@ -9,6 +9,7 @@ import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { ApiTransactionFeatureModule } from '@kin-kinetic/api/transaction/feature'
 import { ApiUserFeatureModule } from '@kin-kinetic/api/user/feature'
 import { ApiWalletFeatureModule } from '@kin-kinetic/api/wallet/feature'
+import { ApiWebhookFeatureModule } from '@kin-kinetic/api/webhook/feature'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
@@ -25,7 +26,7 @@ import { serveStaticFactory } from './serve-static.factory'
   imports: [
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      imports: [ApiConfigDataAccessModule],
+      imports: [ApiConfigDataAccessModule, ApiWebhookFeatureModule],
       inject: [ApiConfigDataAccessService],
       useFactory: (cfg: ApiConfigDataAccessService) => cfg.graphqlConfig,
     }),
@@ -40,6 +41,7 @@ import { serveStaticFactory } from './serve-static.factory'
     ApiTransactionFeatureModule,
     ApiUserFeatureModule,
     ApiWalletFeatureModule,
+    ApiWebhookFeatureModule,
     OpenTelemetryModule.forRootAsync({
       imports: [ApiConfigDataAccessModule],
       inject: [ApiConfigDataAccessService],

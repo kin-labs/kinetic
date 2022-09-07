@@ -171,13 +171,13 @@ export type AppTransaction = {
   updatedAt?: Maybe<Scalars['DateTime']>
   webhookEventDuration?: Maybe<Scalars['Int']>
   webhookEventEnd?: Maybe<Scalars['DateTime']>
-  webhookEventIncoming?: Maybe<AppWebhook>
-  webhookEventOutgoing?: Maybe<AppWebhook>
+  webhookEventIncoming?: Maybe<Webhook>
+  webhookEventOutgoing?: Maybe<Webhook>
   webhookEventStart?: Maybe<Scalars['DateTime']>
   webhookVerifyDuration?: Maybe<Scalars['Int']>
   webhookVerifyEnd?: Maybe<Scalars['DateTime']>
-  webhookVerifyIncoming?: Maybe<AppWebhook>
-  webhookVerifyOutgoing?: Maybe<AppWebhook>
+  webhookVerifyIncoming?: Maybe<Webhook>
+  webhookVerifyOutgoing?: Maybe<Webhook>
   webhookVerifyStart?: Maybe<Scalars['DateTime']>
 }
 
@@ -228,30 +228,6 @@ export type AppUser = {
 export enum AppUserRole {
   Member = 'Member',
   Owner = 'Owner',
-}
-
-export type AppWebhook = {
-  __typename?: 'AppWebhook'
-  createdAt: Scalars['DateTime']
-  direction: AppWebhookDirection
-  headers?: Maybe<Scalars['JSON']>
-  id: Scalars['String']
-  payload?: Maybe<Scalars['JSON']>
-  responseError?: Maybe<Scalars['String']>
-  responsePayload?: Maybe<Scalars['JSON']>
-  responseStatus?: Maybe<Scalars['Int']>
-  type: AppWebhookType
-  updatedAt: Scalars['DateTime']
-}
-
-export enum AppWebhookDirection {
-  Incoming = 'Incoming',
-  Outgoing = 'Outgoing',
-}
-
-export enum AppWebhookType {
-  Event = 'Event',
-  Verify = 'Verify',
 }
 
 export type AuthToken = {
@@ -791,6 +767,30 @@ export enum WalletType {
   Generated = 'Generated',
   Imported = 'Imported',
   Provisioned = 'Provisioned',
+}
+
+export type Webhook = {
+  __typename?: 'Webhook'
+  createdAt: Scalars['DateTime']
+  direction: WebhookDirection
+  headers?: Maybe<Scalars['JSON']>
+  id: Scalars['String']
+  payload?: Maybe<Scalars['JSON']>
+  responseError?: Maybe<Scalars['String']>
+  responsePayload?: Maybe<Scalars['JSON']>
+  responseStatus?: Maybe<Scalars['Int']>
+  type: WebhookType
+  updatedAt: Scalars['DateTime']
+}
+
+export enum WebhookDirection {
+  Incoming = 'Incoming',
+  Outgoing = 'Outgoing',
+}
+
+export enum WebhookType {
+  Event = 'Event',
+  Verify = 'Verify',
 }
 
 export type AdminCreateAppMutationVariables = Exact<{
@@ -1710,56 +1710,56 @@ export type AppTransactionDetailsFragment = {
     instruction?: number | null
   }> | null
   webhookEventIncoming?: {
-    __typename?: 'AppWebhook'
+    __typename?: 'Webhook'
     id: string
     createdAt: any
     updatedAt: any
-    direction: AppWebhookDirection
+    direction: WebhookDirection
     headers?: any | null
     payload?: any | null
     responseError?: string | null
     responsePayload?: any | null
     responseStatus?: number | null
-    type: AppWebhookType
+    type: WebhookType
   } | null
   webhookEventOutgoing?: {
-    __typename?: 'AppWebhook'
+    __typename?: 'Webhook'
     id: string
     createdAt: any
     updatedAt: any
-    direction: AppWebhookDirection
+    direction: WebhookDirection
     headers?: any | null
     payload?: any | null
     responseError?: string | null
     responsePayload?: any | null
     responseStatus?: number | null
-    type: AppWebhookType
+    type: WebhookType
   } | null
   webhookVerifyIncoming?: {
-    __typename?: 'AppWebhook'
+    __typename?: 'Webhook'
     id: string
     createdAt: any
     updatedAt: any
-    direction: AppWebhookDirection
+    direction: WebhookDirection
     headers?: any | null
     payload?: any | null
     responseError?: string | null
     responsePayload?: any | null
     responseStatus?: number | null
-    type: AppWebhookType
+    type: WebhookType
   } | null
   webhookVerifyOutgoing?: {
-    __typename?: 'AppWebhook'
+    __typename?: 'Webhook'
     id: string
     createdAt: any
     updatedAt: any
-    direction: AppWebhookDirection
+    direction: WebhookDirection
     headers?: any | null
     payload?: any | null
     responseError?: string | null
     responsePayload?: any | null
     responseStatus?: number | null
-    type: AppWebhookType
+    type: WebhookType
   } | null
 }
 
@@ -1803,18 +1803,18 @@ export type AppUserDetailsFragment = {
   } | null
 }
 
-export type AppWebhookDetailsFragment = {
-  __typename?: 'AppWebhook'
+export type WebhookDetailsFragment = {
+  __typename?: 'Webhook'
   id: string
   createdAt: any
   updatedAt: any
-  direction: AppWebhookDirection
+  direction: WebhookDirection
   headers?: any | null
   payload?: any | null
   responseError?: string | null
   responsePayload?: any | null
   responseStatus?: number | null
-  type: AppWebhookType
+  type: WebhookType
 }
 
 export type UserAppEnvStatsQueryVariables = Exact<{
@@ -3976,56 +3976,56 @@ export type UserAppTransactionQuery = {
       instruction?: number | null
     }> | null
     webhookEventIncoming?: {
-      __typename?: 'AppWebhook'
+      __typename?: 'Webhook'
       id: string
       createdAt: any
       updatedAt: any
-      direction: AppWebhookDirection
+      direction: WebhookDirection
       headers?: any | null
       payload?: any | null
       responseError?: string | null
       responsePayload?: any | null
       responseStatus?: number | null
-      type: AppWebhookType
+      type: WebhookType
     } | null
     webhookEventOutgoing?: {
-      __typename?: 'AppWebhook'
+      __typename?: 'Webhook'
       id: string
       createdAt: any
       updatedAt: any
-      direction: AppWebhookDirection
+      direction: WebhookDirection
       headers?: any | null
       payload?: any | null
       responseError?: string | null
       responsePayload?: any | null
       responseStatus?: number | null
-      type: AppWebhookType
+      type: WebhookType
     } | null
     webhookVerifyIncoming?: {
-      __typename?: 'AppWebhook'
+      __typename?: 'Webhook'
       id: string
       createdAt: any
       updatedAt: any
-      direction: AppWebhookDirection
+      direction: WebhookDirection
       headers?: any | null
       payload?: any | null
       responseError?: string | null
       responsePayload?: any | null
       responseStatus?: number | null
-      type: AppWebhookType
+      type: WebhookType
     } | null
     webhookVerifyOutgoing?: {
-      __typename?: 'AppWebhook'
+      __typename?: 'Webhook'
       id: string
       createdAt: any
       updatedAt: any
-      direction: AppWebhookDirection
+      direction: WebhookDirection
       headers?: any | null
       payload?: any | null
       responseError?: string | null
       responsePayload?: any | null
       responseStatus?: number | null
-      type: AppWebhookType
+      type: WebhookType
     } | null
   } | null
 }
@@ -4079,56 +4079,56 @@ export type UserAppTransactionsQuery = {
       instruction?: number | null
     }> | null
     webhookEventIncoming?: {
-      __typename?: 'AppWebhook'
+      __typename?: 'Webhook'
       id: string
       createdAt: any
       updatedAt: any
-      direction: AppWebhookDirection
+      direction: WebhookDirection
       headers?: any | null
       payload?: any | null
       responseError?: string | null
       responsePayload?: any | null
       responseStatus?: number | null
-      type: AppWebhookType
+      type: WebhookType
     } | null
     webhookEventOutgoing?: {
-      __typename?: 'AppWebhook'
+      __typename?: 'Webhook'
       id: string
       createdAt: any
       updatedAt: any
-      direction: AppWebhookDirection
+      direction: WebhookDirection
       headers?: any | null
       payload?: any | null
       responseError?: string | null
       responsePayload?: any | null
       responseStatus?: number | null
-      type: AppWebhookType
+      type: WebhookType
     } | null
     webhookVerifyIncoming?: {
-      __typename?: 'AppWebhook'
+      __typename?: 'Webhook'
       id: string
       createdAt: any
       updatedAt: any
-      direction: AppWebhookDirection
+      direction: WebhookDirection
       headers?: any | null
       payload?: any | null
       responseError?: string | null
       responsePayload?: any | null
       responseStatus?: number | null
-      type: AppWebhookType
+      type: WebhookType
     } | null
     webhookVerifyOutgoing?: {
-      __typename?: 'AppWebhook'
+      __typename?: 'Webhook'
       id: string
       createdAt: any
       updatedAt: any
-      direction: AppWebhookDirection
+      direction: WebhookDirection
       headers?: any | null
       payload?: any | null
       responseError?: string | null
       responsePayload?: any | null
       responseStatus?: number | null
-      type: AppWebhookType
+      type: WebhookType
     } | null
   }> | null
   count?: {
@@ -5910,8 +5910,8 @@ export const AppTransactionErrorDetailsFragmentDoc = gql`
     instruction
   }
 `
-export const AppWebhookDetailsFragmentDoc = gql`
-  fragment AppWebhookDetails on AppWebhook {
+export const WebhookDetailsFragmentDoc = gql`
+  fragment WebhookDetails on Webhook {
     id
     createdAt
     updatedAt
@@ -5955,25 +5955,25 @@ export const AppTransactionDetailsFragmentDoc = gql`
     ua
     webhookEventDuration
     webhookEventIncoming {
-      ...AppWebhookDetails
+      ...WebhookDetails
     }
     webhookEventOutgoing {
-      ...AppWebhookDetails
+      ...WebhookDetails
     }
     webhookEventEnd
     webhookEventStart
     webhookVerifyDuration
     webhookVerifyEnd
     webhookVerifyIncoming {
-      ...AppWebhookDetails
+      ...WebhookDetails
     }
     webhookVerifyOutgoing {
-      ...AppWebhookDetails
+      ...WebhookDetails
     }
     webhookVerifyStart
   }
   ${AppTransactionErrorDetailsFragmentDoc}
-  ${AppWebhookDetailsFragmentDoc}
+  ${WebhookDetailsFragmentDoc}
 `
 export const AppDetailsFragmentDoc = gql`
   fragment AppDetails on App {

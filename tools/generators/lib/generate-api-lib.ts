@@ -9,5 +9,6 @@ export function generateApiLib(tree: Tree, app: string, name: string, type: 'dat
     skipFormat: true,
     controller: type === 'feature',
     service: type === 'data-access',
+    standaloneConfig: true,
   })
 }

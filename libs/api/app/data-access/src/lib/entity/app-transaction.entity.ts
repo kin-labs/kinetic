@@ -4,7 +4,6 @@ import { GraphQLJSON } from 'graphql-type-json'
 import { AppEnv } from './app-env.entity'
 import { AppTransactionError } from './app-transaction-error.entity'
 import { AppTransactionStatus } from './app-transaction-status.enum'
-import { AppWebhook } from './app-webhook.entity'
 
 @ObjectType()
 export class AppTransaction {
@@ -88,7 +87,7 @@ export class AppTransaction {
   @Field({ nullable: true })
   ua?: string
   @HideField()
-  webhooks?: AppWebhook[]
+  webhooks?: unknown[]
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   webhookEventStart?: Date

@@ -51,6 +51,8 @@
     "api-user-feature": "libs/api/user/feature",
     "api-wallet-data-access": "libs/api/wallet/data-access",
     "api-wallet-feature": "libs/api/wallet/feature",
+    "api-webhook-data-access": "libs/api/webhook/data-access",
+    "api-webhook-feature": "libs/api/webhook/feature",
     "demo": "apps/demo",
     "demo-home-feature": "libs/demo/home/feature",
     "demo-keypair-data-access": "libs/demo/keypair/data-access",

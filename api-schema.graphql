@@ -145,13 +145,13 @@ type AppTransaction {
   updatedAt: DateTime
   webhookEventDuration: Int
   webhookEventEnd: DateTime
-  webhookEventIncoming: AppWebhook
-  webhookEventOutgoing: AppWebhook
+  webhookEventIncoming: Webhook
+  webhookEventOutgoing: Webhook
   webhookEventStart: DateTime
   webhookVerifyDuration: Int
   webhookVerifyEnd: DateTime
-  webhookVerifyIncoming: AppWebhook
-  webhookVerifyOutgoing: AppWebhook
+  webhookVerifyIncoming: Webhook
+  webhookVerifyOutgoing: Webhook
   webhookVerifyStart: DateTime
 }
 
@@ -199,29 +199,6 @@ type AppUser {
 enum AppUserRole {
   Member
   Owner
-}
-
-type AppWebhook {
-  createdAt: DateTime!
-  direction: AppWebhookDirection!
-  headers: JSON
-  id: String!
-  payload: JSON
-  responseError: String
-  responsePayload: JSON
-  responseStatus: Int
-  type: AppWebhookType!
-  updatedAt: DateTime!
-}
-
-enum AppWebhookDirection {
-  Incoming
-  Outgoing
-}
-
-enum AppWebhookType {
-  Event
-  Verify
 }
 
 type AuthToken {
@@ -492,4 +469,27 @@ enum WalletType {
   Generated
   Imported
   Provisioned
+}
+
+type Webhook {
+  createdAt: DateTime!
+  direction: WebhookDirection!
+  headers: JSON
+  id: String!
+  payload: JSON
+  responseError: String
+  responsePayload: JSON
+  responseStatus: Int
+  type: WebhookType!
+  updatedAt: DateTime!
+}
+
+enum WebhookDirection {
+  Incoming
+  Outgoing
+}
+
+enum WebhookType {
+  Event
+  Verify
 }
