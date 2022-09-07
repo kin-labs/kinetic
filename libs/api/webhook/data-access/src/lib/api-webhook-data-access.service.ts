@@ -28,6 +28,19 @@ export class ApiWebhookDataAccessService {
     const appKey = this.data.getAppKey(appEnv.name, appEnv.app?.index)
     switch (options.type) {
       case WebhookType.Event:
+      case WebhookType.Balance:
+        if (!appEnv.webhookDebugging) {
+          if (!appEnv.webhookBalanceEnabled) {
+            this.logger.warn(`Skip webhook for app ${appKey}, webhookBalanceEnabled is false`)
+            return
+          }
+          if (!appEnv.webhookBalanceUrl) {
+            this.logger.warn(`Skip webhook for app ${appKey}, webhookBalanceUrl not set`)
+            return
+          }
+        }
+        return this.sendBalanceWebhook(appEnv, options)
+      case WebhookType.Event:
         if (!appEnv.webhookDebugging) {
           if (!appEnv.webhookEventEnabled) {
             this.logger.warn(`Skip webhook for app ${appKey}, webhookEventEnabled is false`)
@@ -109,6 +122,35 @@ export class ApiWebhookDataAccessService {
       return defaultUrl
     }
     return `${this.data.config.apiUrl}/app/${appEnv.name}/${appEnv.app?.index}/webhook/${type.toLowerCase()}`
+  }
+
+  private sendBalanceWebhook(appEnv: AppEnv, options: WebhookOptions) {
+    const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookBalanceUrl)
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(url, options.transaction, {
+          headers: this.getHeaders(appEnv, options),
+        })
+        .pipe(
+          switchMap((res) =>
+            this.data.webhook.create({
+              data: {
+                appEnv: { connect: { id: appEnv.id } },
+                appTransaction: { connect: { id: options.transaction.id } },
+                direction: WebhookDirection.Outgoing,
+                type: options.type,
+                responseError: res.statusText,
+                responseStatus: res.status,
+                responsePayload: res.data,
+              },
+            }),
+          ),
+        )
+        .subscribe({
+          next: (res) => resolve(res),
+          error: (err) => reject(err),
+        })
+    })
   }
 
   private sendEventWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {

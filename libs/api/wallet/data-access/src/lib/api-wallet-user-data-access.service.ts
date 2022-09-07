@@ -1,3 +1,5 @@
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { ApiAppWebhookDataAccessService, AppEnv, AppWebhookType } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
@@ -12,7 +14,10 @@ import { Wallet } from './entity/wallet.entity'
 @Injectable()
 export class ApiWalletUserDataAccessService {
   private readonly logger = new Logger(ApiWalletUserDataAccessService.name)
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  constructor(
+    private readonly data: ApiCoreDataAccessService,
+    private readonly appWebhook: ApiAppWebhookDataAccessService,
+  ) {}
 
   @Cron('25 * * * * *')
   async checkBalance() {
@@ -155,6 +160,10 @@ export class ApiWalletUserDataAccessService {
     return wallet
   }
 
+  private async sentBalanceWebhook(appEnv: AppEnv) {
+    this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Balance })
+  }
+
   private storeWalletBalance(appEnvId: string, walletId: string, balance: number, change: number) {
     return this.data.walletBalance.create({ data: { appEnvId, balance, change, walletId } })
   }
@@ -167,6 +176,8 @@ export class ApiWalletUserDataAccessService {
     if (BigInt(balance) !== current) {
       const change = balance - Number(current)
       await this.storeWalletBalance(appEnvId, wallet.id, balance, change)
+      const { appEnv } = await this.data.getAppEnvironment(environment, index)
+      this.sentBalanceWebhook(appEnv)
       this.logger.verbose(
         `${appKey}: Updated Wallet Balance: ${wallet.publicKey} ${current} => ${balance} (${change} SOL)`,
       )
