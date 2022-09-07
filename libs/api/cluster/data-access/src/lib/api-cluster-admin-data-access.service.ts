@@ -54,7 +54,7 @@ export class ApiClusterAdminDataAccessService {
     }
 
     // Get the order of the last mint and increase by 1
-    const order = cluster.mints[cluster.mints.length - 1].order + 1
+    const order = cluster.mints?.length ? cluster.mints[cluster.mints.length - 1].order + 1 : 1
     const mint: Prisma.MintUncheckedCreateWithoutClusterInput = {
       address: input.address,
       coinGeckoId: input.coinGeckoId,
