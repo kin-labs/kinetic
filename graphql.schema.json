@@ -6659,6 +6659,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "Balance",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "Event",
             "description": null,
             "isDeprecated": false,

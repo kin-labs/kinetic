@@ -1,10 +1,9 @@
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { ApiAppWebhookDataAccessService, AppEnv, AppWebhookType } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiWebhookDataAccessService } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
-import { ClusterStatus } from '@prisma/client'
+import { App, AppEnv, ClusterStatus, WebhookType } from '@prisma/client'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
 import { WalletBalance } from './entity/wallet-balance.entity'
@@ -14,10 +13,7 @@ import { Wallet } from './entity/wallet.entity'
 @Injectable()
 export class ApiWalletUserDataAccessService {
   private readonly logger = new Logger(ApiWalletUserDataAccessService.name)
-  constructor(
-    private readonly data: ApiCoreDataAccessService,
-    private readonly appWebhook: ApiAppWebhookDataAccessService,
-  ) {}
+  constructor(private readonly data: ApiCoreDataAccessService, private readonly webhook: ApiWebhookDataAccessService) {}
 
   @Cron('25 * * * * *')
   async checkBalance() {
@@ -160,8 +156,8 @@ export class ApiWalletUserDataAccessService {
     return wallet
   }
 
-  private async sentBalanceWebhook(appEnv: AppEnv) {
-    this.appWebhook.sendWebhook(appEnv, { type: AppWebhookType.Balance })
+  private async sentBalanceWebhook(appEnv: AppEnv & { app: App }) {
+    this.webhook.sendWebhook(appEnv, { type: WebhookType.Balance })
   }
 
   private storeWalletBalance(appEnvId: string, walletId: string, balance: number, change: number) {

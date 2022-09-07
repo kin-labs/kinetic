@@ -793,6 +793,7 @@ export enum WebhookDirection {
 }
 
 export enum WebhookType {
+  Balance = 'Balance',
   Event = 'Event',
   Verify = 'Verify',
 }

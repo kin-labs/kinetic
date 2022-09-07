@@ -9,7 +9,7 @@ import { switchMap } from 'rxjs'
 
 interface WebhookOptions {
   headers?: AxiosRequestHeaders
-  transaction: Transaction
+  transaction?: Transaction
   type: WebhookType
 }
 
@@ -27,7 +27,6 @@ export class ApiWebhookDataAccessService {
   sendWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
     const appKey = this.data.getAppKey(appEnv.name, appEnv.app?.index)
     switch (options.type) {
-      case WebhookType.Event:
       case WebhookType.Balance:
         if (!appEnv.webhookDebugging) {
           if (!appEnv.webhookBalanceEnabled) {
@@ -124,7 +123,7 @@ export class ApiWebhookDataAccessService {
     return `${this.data.config.apiUrl}/app/${appEnv.name}/${appEnv.app?.index}/webhook/${type.toLowerCase()}`
   }
 
-  private sendBalanceWebhook(appEnv: AppEnv, options: WebhookOptions) {
+  private sendBalanceWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
     const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookBalanceUrl)
     return new Promise((resolve, reject) => {
       this.http
