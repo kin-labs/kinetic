@@ -42,32 +42,32 @@ model App {
 }
 
 model AppEnv {
-  id                     String          @id @default(cuid())
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
-  name                   String
-  ipsAllowed             String[]
-  ipsBlocked             String[]
-  mints                  AppMint[]
-  transaction            Transaction[]
-  uasAllowed             String[]
-  uasBlocked             String[]
-  webhookBalanceEnabled  Boolean         @default(false)
-  webhookBalanceUrl      String?
-  webhookBalanceTreshold Int?
-  webhookDebugging       Boolean         @default(false)
-  webhookEventEnabled    Boolean         @default(false)
-  webhookEventUrl        String?
-  webhookSecret          String?
-  webhookVerifyEnabled   Boolean         @default(false)
-  webhookVerifyUrl       String?
-  webhooks               Webhook[]
-  app                    App             @relation(fields: [appId], references: [id])
-  appId                  String
-  cluster                Cluster         @relation(fields: [clusterId], references: [id])
-  clusterId              String
-  walletBalances         WalletBalance[]
-  wallets                Wallet[]
+  id                      String          @id @default(cuid())
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @updatedAt
+  name                    String
+  ipsAllowed              String[]
+  ipsBlocked              String[]
+  mints                   AppMint[]
+  transaction             Transaction[]
+  uasAllowed              String[]
+  uasBlocked              String[]
+  webhookBalanceEnabled   Boolean         @default(false)
+  webhookBalanceUrl       String?
+  webhookBalanceThreshold String?
+  webhookDebugging        Boolean         @default(false)
+  webhookEventEnabled     Boolean         @default(false)
+  webhookEventUrl         String?
+  webhookSecret           String?
+  webhookVerifyEnabled    Boolean         @default(false)
+  webhookVerifyUrl        String?
+  webhooks                Webhook[]
+  app                     App             @relation(fields: [appId], references: [id])
+  appId                   String
+  cluster                 Cluster         @relation(fields: [clusterId], references: [id])
+  clusterId               String
+  walletBalances          WalletBalance[]
+  wallets                 Wallet[]
 
   @@unique([appId, name])
 }
@@ -323,8 +323,8 @@ model Webhook {
   type            WebhookType
   appEnv          AppEnv?          @relation(fields: [appEnvId], references: [id])
   appEnvId        String?
-  transaction     Transaction      @relation(fields: [transactionId], references: [id])
-  transactionId   String
+  transaction     Transaction?     @relation(fields: [transactionId], references: [id])
+  transactionId   String?
 }
 
 enum WebhookDirection {
@@ -333,6 +333,7 @@ enum WebhookDirection {
 }
 
 enum WebhookType {
+  Balance
   Event
   Verify
 }

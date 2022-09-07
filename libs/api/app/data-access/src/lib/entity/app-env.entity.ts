@@ -26,7 +26,7 @@ export class AppEnv {
   @Field({ nullable: true })
   webhookBalanceUrl?: string
   @Field({ nullable: true })
-  webhookBalanceTreshold?: number
+  webhookBalanceThreshold?: string
   @Field({ nullable: true })
   webhookDebugging?: boolean
   @Field({ nullable: true })

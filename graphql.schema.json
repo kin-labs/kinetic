@@ -982,12 +982,12 @@
             "deprecationReason": null
           },
           {
-            "name": "webhookBalanceTreshold",
+            "name": "webhookBalanceThreshold",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Float",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -5620,11 +5620,11 @@
             "deprecationReason": null
           },
           {
-            "name": "webhookBalanceTreshold",
+            "name": "webhookBalanceThreshold",
             "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null,

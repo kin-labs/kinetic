@@ -10,8 +10,8 @@ export class UserAppEnvUpdateInput {
   @Field({ nullable: true })
   webhookBalanceUrl?: string
   @IsOptional()
-  @Field(() => Int, { nullable: true })
-  webhookBalanceTreshold?: number
+  @Field({ nullable: true })
+  webhookBalanceThreshold?: string
   @IsOptional()
   @Field({ nullable: true })
   webhookDebugging?: boolean

@@ -40,7 +40,7 @@ fragment AppEnvDetails on AppEnv {
   uasBlocked
   webhookBalanceEnabled
   webhookBalanceUrl
-  webhookBalanceTreshold
+  webhookBalanceThreshold
   webhookDebugging
   webhookEventEnabled
   webhookEventUrl
