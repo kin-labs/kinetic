@@ -7,24 +7,24 @@ import {
   AdminAppUiTransactionTimeline,
 } from '@kin-kinetic/admin/app/ui'
 import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
-import { AppTransactionStatus, useUserAppTransactionQuery } from '@kin-kinetic/shared/util/admin-sdk'
+import { TransactionStatus, useUserTransactionQuery } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useEffect } from 'react'
 
 export default function AdminAppUserFeatureTransactionDetail({
   appId,
   appEnvId,
-  appTransactionId,
+  transactionId,
 }: {
   appId: string
   appEnvId: string
-  appTransactionId: string
+  transactionId: string
 }) {
-  const [{ data, fetching }, refresh] = useUserAppTransactionQuery({
-    variables: { appId: appId, appEnvId, appTransactionId: appTransactionId },
+  const [{ data, fetching }, refresh] = useUserTransactionQuery({
+    variables: { appId: appId, appEnvId, transactionId: transactionId },
   })
 
   useEffect(() => {
-    if (!fetching && data?.item?.status !== AppTransactionStatus.Finalized) {
+    if (!fetching && data?.item?.status !== TransactionStatus.Finalized) {
       const id = setTimeout(() => refresh(), 5000)
       return () => clearTimeout(id)
     }

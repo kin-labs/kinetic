@@ -6,7 +6,6 @@ import { ApiAppEnvAdminFeatureResolver } from './api-app-env-admin-feature.resol
 import { ApiAppEnvUserFeatureResolver } from './api-app-env-user-feature.resolver'
 import { ApiAppFeatureController } from './api-app-feature.controller'
 import { ApiAppFeatureResolver } from './api-app-feature.resolver'
-import { ApiAppTransactionFeatureResolver } from './api-app-transaction-feature.resolver'
 import { ApiAppUserFeatureResolver } from './api-app-user-feature.resolver'
 
 @Module({
@@ -17,7 +16,6 @@ import { ApiAppUserFeatureResolver } from './api-app-user-feature.resolver'
     ApiAppEnvUserFeatureResolver,
     ApiAppEnvAdminFeatureResolver,
     ApiAppFeatureResolver,
-    ApiAppTransactionFeatureResolver,
     ApiAppUserFeatureResolver,
   ],
 })

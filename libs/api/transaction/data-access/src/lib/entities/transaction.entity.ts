@@ -1,12 +1,12 @@
+import { AppEnv } from '@kin-kinetic/api/app/data-access'
 import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger'
 import { GraphQLJSON } from 'graphql-type-json'
-import { AppEnv } from './app-env.entity'
-import { AppTransactionError } from './app-transaction-error.entity'
-import { AppTransactionStatus } from './app-transaction-status.enum'
+import { TransactionError } from './transaction-error.entity'
+import { TransactionStatus } from './transaction-status.enum'
 
 @ObjectType()
-export class AppTransaction {
+export class Transaction {
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   id?: string
@@ -26,11 +26,11 @@ export class AppTransaction {
   @Field({ nullable: true })
   destination?: string
   @ApiProperty({
-    type: [AppTransactionError],
+    type: [TransactionError],
     nullable: true,
   })
-  @Field(() => [AppTransactionError], { nullable: true })
-  errors?: AppTransactionError[]
+  @Field(() => [TransactionError], { nullable: true })
+  errors?: TransactionError[]
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   explorerUrl?: string
@@ -77,9 +77,9 @@ export class AppTransaction {
   @ApiProperty({ nullable: true })
   @Field({ nullable: true })
   source?: string
-  @ApiProperty({ nullable: true, enum: AppTransactionStatus })
-  @Field(() => AppTransactionStatus)
-  status: AppTransactionStatus
+  @ApiProperty({ nullable: true, enum: TransactionStatus })
+  @Field(() => TransactionStatus)
+  status: TransactionStatus
   @ApiProperty({ nullable: true })
   @Field(() => Int, { nullable: true })
   totalDuration?: number

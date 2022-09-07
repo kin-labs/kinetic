@@ -42,26 +42,26 @@ model App {
 }
 
 model AppEnv {
-  id                   String           @id @default(cuid())
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @updatedAt
+  id                   String          @id @default(cuid())
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
   name                 String
   ipsAllowed           String[]
   ipsBlocked           String[]
   mints                AppMint[]
-  transaction          AppTransaction[]
+  transaction          Transaction[]
   uasAllowed           String[]
   uasBlocked           String[]
-  webhookDebugging     Boolean          @default(false)
-  webhookEventEnabled  Boolean          @default(false)
+  webhookDebugging     Boolean         @default(false)
+  webhookEventEnabled  Boolean         @default(false)
   webhookEventUrl      String?
   webhookSecret        String?
-  webhookVerifyEnabled Boolean          @default(false)
+  webhookVerifyEnabled Boolean         @default(false)
   webhookVerifyUrl     String?
   webhooks             Webhook[]
-  app                  App              @relation(fields: [appId], references: [id])
+  app                  App             @relation(fields: [appId], references: [id])
   appId                String
-  cluster              Cluster          @relation(fields: [clusterId], references: [id])
+  cluster              Cluster         @relation(fields: [clusterId], references: [id])
   clusterId            String
   walletBalances       WalletBalance[]
   wallets              Wallet[]
@@ -83,106 +83,6 @@ model AppMint {
   walletId  String?
 
   @@unique([order, appEnvId])
-}
-
-model AppTransaction {
-  id                      String                    @id @default(cuid())
-  createdAt               DateTime                  @default(now())
-  updatedAt               DateTime                  @updatedAt
-  amount                  String?
-  commitment              AppTransactionCommitment?
-  decimals                Int?
-  destination             String?
-  errors                  AppTransactionError[]
-  feePayer                String?
-  ip                      String?
-  mint                    String?
-  processingDuration      Int?
-  referenceId             String?
-  referenceType           String?
-  signature               String?
-  solanaCommitted         DateTime?
-  solanaCommittedDuration Int?
-  solanaConfirmed         DateTime?
-  solanaFinalized         DateTime?
-  solanaFinalizedDuration Int?
-  solanaStart             DateTime?
-  solanaTransaction       Json?
-  source                  String?
-  status                  AppTransactionStatus      @default(Processing)
-  totalDuration           Int?
-  ua                      String?
-  webhooks                Webhook[]
-  webhookEventStart       DateTime?
-  webhookEventEnd         DateTime?
-  webhookEventDuration    Int?
-  webhookVerifyStart      DateTime?
-  webhookVerifyEnd        DateTime?
-  webhookVerifyDuration   Int?
-  appEnv                  AppEnv?                   @relation(fields: [appEnvId], references: [id])
-  appEnvId                String?
-}
-
-enum AppTransactionCommitment {
-  Confirmed
-  Finalized
-  Processed
-}
-
-enum AppTransactionStatus {
-  Committed
-  Confirmed
-  Failed
-  Finalized
-  Processing
-}
-
-enum AppTransactionErrorType {
-  BadNonce
-  InvalidAccount
-  SomeError
-  Timeout
-  Unknown
-  WebhookFailed
-}
-
-model AppTransactionError {
-  id               String                  @id @default(cuid())
-  logs             String[]
-  message          String
-  type             AppTransactionErrorType @default(Unknown)
-  instruction      Int?
-  appTransaction   AppTransaction          @relation(fields: [appTransactionId], references: [id])
-  appTransactionId String
-}
-
-model Webhook {
-  id               String           @id @default(cuid())
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  direction        WebhookDirection
-  headers          Json?
-  payload          Json?
-  referenceId      String?
-  referenceType    String?
-  responsePayload  Json?
-  responseError    String?
-  responseStatus   Int?
-  type             WebhookType
-  appEnv           AppEnv?          @relation(fields: [appEnvId], references: [id])
-  appEnvId         String?
-  appTransaction   AppTransaction   @relation(fields: [appTransactionId], references: [id])
-  appTransactionId String
-}
-
-enum WebhookDirection {
-  Incoming
-  Outgoing
-}
-
-enum WebhookType {
-  Event
-  Verify
 }
 
 model AppUser {
@@ -274,6 +174,77 @@ enum MintType {
   SplToken
 }
 
+model Transaction {
+  id                      String                 @id @default(cuid())
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  amount                  String?
+  commitment              TransactionCommitment?
+  decimals                Int?
+  destination             String?
+  errors                  TransactionError[]
+  feePayer                String?
+  ip                      String?
+  mint                    String?
+  processingDuration      Int?
+  referenceId             String?
+  referenceType           String?
+  signature               String?
+  solanaCommitted         DateTime?
+  solanaCommittedDuration Int?
+  solanaConfirmed         DateTime?
+  solanaFinalized         DateTime?
+  solanaFinalizedDuration Int?
+  solanaStart             DateTime?
+  solanaTransaction       Json?
+  source                  String?
+  status                  TransactionStatus      @default(Processing)
+  totalDuration           Int?
+  ua                      String?
+  webhooks                Webhook[]
+  webhookEventStart       DateTime?
+  webhookEventEnd         DateTime?
+  webhookEventDuration    Int?
+  webhookVerifyStart      DateTime?
+  webhookVerifyEnd        DateTime?
+  webhookVerifyDuration   Int?
+  appEnv                  AppEnv?                @relation(fields: [appEnvId], references: [id])
+  appEnvId                String?
+}
+
+enum TransactionCommitment {
+  Confirmed
+  Finalized
+  Processed
+}
+
+enum TransactionStatus {
+  Committed
+  Confirmed
+  Failed
+  Finalized
+  Processing
+}
+
+enum TransactionErrorType {
+  BadNonce
+  InvalidAccount
+  SomeError
+  Timeout
+  Unknown
+  WebhookFailed
+}
+
+model TransactionError {
+  id            String               @id @default(cuid())
+  logs          String[]
+  message       String
+  type          TransactionErrorType @default(Unknown)
+  instruction   Int?
+  transaction   Transaction          @relation(fields: [transactionId], references: [id])
+  transactionId String
+}
+
 model User {
   id        String      @id @default(cuid())
   createdAt DateTime    @default(now())
@@ -332,4 +303,33 @@ model WalletBalance {
   appEnvId  String?
   wallet    Wallet?  @relation(fields: [walletId], references: [id])
   walletId  String?
+}
+
+model Webhook {
+  id              String           @id @default(cuid())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  direction       WebhookDirection
+  headers         Json?
+  payload         Json?
+  referenceId     String?
+  referenceType   String?
+  responsePayload Json?
+  responseError   String?
+  responseStatus  Int?
+  type            WebhookType
+  appEnv          AppEnv?          @relation(fields: [appEnvId], references: [id])
+  appEnvId        String?
+  transaction     Transaction      @relation(fields: [transactionId], references: [id])
+  transactionId   String
+}
+
+enum WebhookDirection {
+  Incoming
+  Outgoing
+}
+
+enum WebhookType {
+  Event
+  Verify
 }

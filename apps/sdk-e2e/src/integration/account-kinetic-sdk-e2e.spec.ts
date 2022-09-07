@@ -1,7 +1,7 @@
-import { KineticSdk } from '@kin-kinetic/sdk'
 import { Keypair } from '@kin-kinetic/keypair'
-import { daveKeypair, aliceKeypair } from './fixtures'
-import { AppTransactionStatus } from '@prisma/client'
+import { KineticSdk } from '@kin-kinetic/sdk'
+import { TransactionStatus } from '@prisma/client'
+import { aliceKeypair, daveKeypair } from './fixtures'
 
 describe('KineticSdk (e2e) - Account', () => {
   let sdk: KineticSdk
@@ -53,7 +53,7 @@ describe('KineticSdk (e2e) - Account', () => {
     expect(res.signature).toBeNull()
     expect(res.amount).toBeNull()
     expect(res.errors.length).toBeGreaterThan(0)
-    expect(res.status).toBe(AppTransactionStatus.Failed)
+    expect(res.status).toBe(TransactionStatus.Failed)
     expect(res.errors[0].message).toContain('Error: Account already exists.')
   })
 })

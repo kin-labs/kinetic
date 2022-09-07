@@ -5,15 +5,15 @@ import AdminAppUserFeatureTransactionDetail from './admin-app-user-feature-trans
 import { AdminAppUserAppEnvDetailLayout } from './admin-app-user-app-env-detail-layout'
 
 export function AdminAppUserAppEnvDetailTransaction() {
-  const { appTransactionId } = useParams<{ appId: string; appTransactionId: string }>()
+  const { transactionId } = useParams<{ appId: string; transactionId: string }>()
   const { appEnv } = useUserAppEnv()
   return (
     <AdminAppUserAppEnvDetailLayout>
-      {appEnv.id && appEnv.app?.id && appTransactionId && (
+      {appEnv.id && appEnv.app?.id && transactionId && (
         <AdminAppUserFeatureTransactionDetail
           appId={appEnv.app.id}
           appEnvId={appEnv.id}
-          appTransactionId={appTransactionId}
+          transactionId={transactionId}
         />
       )}
     </AdminAppUserAppEnvDetailLayout>

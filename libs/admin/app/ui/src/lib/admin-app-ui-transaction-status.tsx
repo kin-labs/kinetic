@@ -1,18 +1,18 @@
 import { Text } from '@chakra-ui/react'
-import { AppTransactionStatus } from '@kin-kinetic/shared/util/admin-sdk'
+import { TransactionStatus } from '@kin-kinetic/shared/util/admin-sdk'
 import React from 'react'
 
-export function AdminAppUiTransactionStatus({ status }: { status?: AppTransactionStatus }) {
+export function AdminAppUiTransactionStatus({ status }: { status?: TransactionStatus }) {
   let bgColor = 'yellow.800'
   let borderColor = 'yellow.500'
   let color = 'yellow.200'
 
-  if (status && status === AppTransactionStatus.Finalized) {
+  if (status && status === TransactionStatus.Finalized) {
     bgColor = 'green.800'
     borderColor = 'green.500'
     color = 'green.200'
   }
-  if (status && status === AppTransactionStatus.Failed) {
+  if (status && status === TransactionStatus.Failed) {
     bgColor = 'red.800'
     borderColor = 'red.500'
     color = 'red.200'

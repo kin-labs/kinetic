@@ -117,76 +117,6 @@ type AppMint {
   wallet: Wallet
 }
 
-type AppTransaction {
-  amount: String
-  createdAt: DateTime
-  decimals: Int
-  destination: String
-  errors: [AppTransactionError!]
-  explorerUrl: String
-  feePayer: String
-  id: String
-  ip: String
-  mint: String
-  processingDuration: Int
-  referenceId: String
-  referenceType: String
-  signature: String
-  solanaCommitted: DateTime
-  solanaCommittedDuration: Int
-  solanaFinalized: DateTime
-  solanaFinalizedDuration: Int
-  solanaStart: DateTime
-  solanaTransaction: JSON
-  source: String
-  status: AppTransactionStatus!
-  totalDuration: Int
-  ua: String
-  updatedAt: DateTime
-  webhookEventDuration: Int
-  webhookEventEnd: DateTime
-  webhookEventIncoming: Webhook
-  webhookEventOutgoing: Webhook
-  webhookEventStart: DateTime
-  webhookVerifyDuration: Int
-  webhookVerifyEnd: DateTime
-  webhookVerifyIncoming: Webhook
-  webhookVerifyOutgoing: Webhook
-  webhookVerifyStart: DateTime
-}
-
-type AppTransactionCounter {
-  limit: Float
-  page: Float
-  pageCount: Float
-  total: Float
-}
-
-type AppTransactionError {
-  id: String
-  instruction: Int
-  logs: [String!]
-  message: String
-  type: AppTransactionErrorType!
-}
-
-enum AppTransactionErrorType {
-  BadNonce
-  InvalidAccount
-  SomeError
-  Timeout
-  Unknown
-  WebhookFailed
-}
-
-enum AppTransactionStatus {
-  Committed
-  Confirmed
-  Failed
-  Finalized
-  Processing
-}
-
 type AppUser {
   app: App
   createdAt: DateTime!
@@ -339,22 +269,88 @@ type Query {
   userAppEnv(appEnvId: String!, appId: String!): AppEnv
   userAppEnvStats(appEnvId: String!): AppEnvStats
   userAppRole(appId: String!): AppUserRole
-  userAppTransaction(appEnvId: String!, appId: String!, appTransactionId: String!): AppTransaction
-  userAppTransactionCounter(
-    appEnvId: String!
-    appId: String!
-    input: UserAppTransactionListInput
-  ): AppTransactionCounter
-  userAppTransactions(appEnvId: String!, appId: String!, input: UserAppTransactionListInput): [AppTransaction!]
   userApps: [App!]
   userCluster(clusterId: String!): Cluster
   userClusters: [Cluster!]
   userSearchUsers(input: UserSearchUserInput!): [User!]
+  userTransaction(appEnvId: String!, appId: String!, transactionId: String!): Transaction
+  userTransactionCounter(appEnvId: String!, appId: String!, input: UserTransactionListInput): TransactionCounter
+  userTransactions(appEnvId: String!, appId: String!, input: UserTransactionListInput): [Transaction!]
   userWallet(appEnvId: String!, walletId: String!): Wallet
   userWalletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
   userWalletBalance(appEnvId: String!, walletId: String!): WalletBalance
   userWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
   userWallets(appEnvId: String!): [Wallet!]
+}
+
+type Transaction {
+  amount: String
+  createdAt: DateTime
+  decimals: Int
+  destination: String
+  errors: [TransactionError!]
+  explorerUrl: String
+  feePayer: String
+  id: String
+  ip: String
+  mint: String
+  processingDuration: Int
+  referenceId: String
+  referenceType: String
+  signature: String
+  solanaCommitted: DateTime
+  solanaCommittedDuration: Int
+  solanaFinalized: DateTime
+  solanaFinalizedDuration: Int
+  solanaStart: DateTime
+  solanaTransaction: JSON
+  source: String
+  status: TransactionStatus!
+  totalDuration: Int
+  ua: String
+  updatedAt: DateTime
+  webhookEventDuration: Int
+  webhookEventEnd: DateTime
+  webhookEventIncoming: Webhook
+  webhookEventOutgoing: Webhook
+  webhookEventStart: DateTime
+  webhookVerifyDuration: Int
+  webhookVerifyEnd: DateTime
+  webhookVerifyIncoming: Webhook
+  webhookVerifyOutgoing: Webhook
+  webhookVerifyStart: DateTime
+}
+
+type TransactionCounter {
+  limit: Float
+  page: Float
+  pageCount: Float
+  total: Float
+}
+
+type TransactionError {
+  id: String
+  instruction: Int
+  logs: [String!]
+  message: String
+  type: TransactionErrorType!
+}
+
+enum TransactionErrorType {
+  BadNonce
+  InvalidAccount
+  SomeError
+  Timeout
+  Unknown
+  WebhookFailed
+}
+
+enum TransactionStatus {
+  Committed
+  Confirmed
+  Failed
+  Finalized
+  Processing
 }
 
 type User {
@@ -385,19 +381,6 @@ input UserAppEnvUpdateInput {
 
 input UserAppMintUpdateInput {
   addMemo: Boolean
-}
-
-input UserAppTransactionListInput {
-  destination: String
-  ip: String
-  limit: Float
-  page: Float
-  referenceId: String
-  referenceType: String
-  signature: String
-  source: String
-  status: [AppTransactionStatus!]
-  ua: String
 }
 
 input UserAppUpdateInput {
@@ -438,6 +421,19 @@ enum UserRole {
 
 input UserSearchUserInput {
   query: String
+}
+
+input UserTransactionListInput {
+  destination: String
+  ip: String
+  limit: Float
+  page: Float
+  referenceId: String
+  referenceType: String
+  signature: String
+  source: String
+  status: [TransactionStatus!]
+  ua: String
 }
 
 type Wallet {

@@ -1,9 +1,9 @@
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import { Box, Button, List, ListIcon, ListItem, Stack } from '@chakra-ui/react'
-import { AppTransaction, Webhook, Maybe } from '@kin-kinetic/shared/util/admin-sdk'
+import { Transaction, Webhook, Maybe } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useState } from 'react'
 
-export function AdminAppUiTransactionTimeline({ item }: { item: AppTransaction }) {
+export function AdminAppUiTransactionTimeline({ item }: { item: Transaction }) {
   return (
     <List spacing={3}>
       <ListItem>

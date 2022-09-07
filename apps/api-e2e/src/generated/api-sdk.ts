@@ -140,79 +140,6 @@ export type AppMint = {
   wallet?: Maybe<Wallet>
 }
 
-export type AppTransaction = {
-  __typename?: 'AppTransaction'
-  amount?: Maybe<Scalars['String']>
-  createdAt?: Maybe<Scalars['DateTime']>
-  decimals?: Maybe<Scalars['Int']>
-  destination?: Maybe<Scalars['String']>
-  errors?: Maybe<Array<AppTransactionError>>
-  explorerUrl?: Maybe<Scalars['String']>
-  feePayer?: Maybe<Scalars['String']>
-  id?: Maybe<Scalars['String']>
-  ip?: Maybe<Scalars['String']>
-  mint?: Maybe<Scalars['String']>
-  processingDuration?: Maybe<Scalars['Int']>
-  referenceId?: Maybe<Scalars['String']>
-  referenceType?: Maybe<Scalars['String']>
-  signature?: Maybe<Scalars['String']>
-  solanaCommitted?: Maybe<Scalars['DateTime']>
-  solanaCommittedDuration?: Maybe<Scalars['Int']>
-  solanaFinalized?: Maybe<Scalars['DateTime']>
-  solanaFinalizedDuration?: Maybe<Scalars['Int']>
-  solanaStart?: Maybe<Scalars['DateTime']>
-  solanaTransaction?: Maybe<Scalars['JSON']>
-  source?: Maybe<Scalars['String']>
-  status: AppTransactionStatus
-  totalDuration?: Maybe<Scalars['Int']>
-  ua?: Maybe<Scalars['String']>
-  updatedAt?: Maybe<Scalars['DateTime']>
-  webhookEventDuration?: Maybe<Scalars['Int']>
-  webhookEventEnd?: Maybe<Scalars['DateTime']>
-  webhookEventIncoming?: Maybe<Webhook>
-  webhookEventOutgoing?: Maybe<Webhook>
-  webhookEventStart?: Maybe<Scalars['DateTime']>
-  webhookVerifyDuration?: Maybe<Scalars['Int']>
-  webhookVerifyEnd?: Maybe<Scalars['DateTime']>
-  webhookVerifyIncoming?: Maybe<Webhook>
-  webhookVerifyOutgoing?: Maybe<Webhook>
-  webhookVerifyStart?: Maybe<Scalars['DateTime']>
-}
-
-export type AppTransactionCounter = {
-  __typename?: 'AppTransactionCounter'
-  limit?: Maybe<Scalars['Float']>
-  page?: Maybe<Scalars['Float']>
-  pageCount?: Maybe<Scalars['Float']>
-  total?: Maybe<Scalars['Float']>
-}
-
-export type AppTransactionError = {
-  __typename?: 'AppTransactionError'
-  id?: Maybe<Scalars['String']>
-  instruction?: Maybe<Scalars['Int']>
-  logs?: Maybe<Array<Scalars['String']>>
-  message?: Maybe<Scalars['String']>
-  type: AppTransactionErrorType
-}
-
-export enum AppTransactionErrorType {
-  BadNonce = 'BadNonce',
-  InvalidAccount = 'InvalidAccount',
-  SomeError = 'SomeError',
-  Timeout = 'Timeout',
-  Unknown = 'Unknown',
-  WebhookFailed = 'WebhookFailed',
-}
-
-export enum AppTransactionStatus {
-  Committed = 'Committed',
-  Confirmed = 'Confirmed',
-  Failed = 'Failed',
-  Finalized = 'Finalized',
-  Processing = 'Processing',
-}
-
 export type AppUser = {
   __typename?: 'AppUser'
   app?: Maybe<App>
@@ -541,13 +468,13 @@ export type Query = {
   userAppEnv?: Maybe<AppEnv>
   userAppEnvStats?: Maybe<AppEnvStats>
   userAppRole?: Maybe<AppUserRole>
-  userAppTransaction?: Maybe<AppTransaction>
-  userAppTransactionCounter?: Maybe<AppTransactionCounter>
-  userAppTransactions?: Maybe<Array<AppTransaction>>
   userApps?: Maybe<Array<App>>
   userCluster?: Maybe<Cluster>
   userClusters?: Maybe<Array<Cluster>>
   userSearchUsers?: Maybe<Array<User>>
+  userTransaction?: Maybe<Transaction>
+  userTransactionCounter?: Maybe<TransactionCounter>
+  userTransactions?: Maybe<Array<Transaction>>
   userWallet?: Maybe<Wallet>
   userWalletAirdrop?: Maybe<WalletAirdropResponse>
   userWalletBalance?: Maybe<WalletBalance>
@@ -597,30 +524,30 @@ export type QueryUserAppRoleArgs = {
   appId: Scalars['String']
 }
 
-export type QueryUserAppTransactionArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  appTransactionId: Scalars['String']
-}
-
-export type QueryUserAppTransactionCounterArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  input?: InputMaybe<UserAppTransactionListInput>
-}
-
-export type QueryUserAppTransactionsArgs = {
-  appEnvId: Scalars['String']
-  appId: Scalars['String']
-  input?: InputMaybe<UserAppTransactionListInput>
-}
-
 export type QueryUserClusterArgs = {
   clusterId: Scalars['String']
 }
 
 export type QueryUserSearchUsersArgs = {
   input: UserSearchUserInput
+}
+
+export type QueryUserTransactionArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  transactionId: Scalars['String']
+}
+
+export type QueryUserTransactionCounterArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  input?: InputMaybe<UserTransactionListInput>
+}
+
+export type QueryUserTransactionsArgs = {
+  appEnvId: Scalars['String']
+  appId: Scalars['String']
+  input?: InputMaybe<UserTransactionListInput>
 }
 
 export type QueryUserWalletArgs = {
@@ -646,6 +573,79 @@ export type QueryUserWalletBalancesArgs = {
 
 export type QueryUserWalletsArgs = {
   appEnvId: Scalars['String']
+}
+
+export type Transaction = {
+  __typename?: 'Transaction'
+  amount?: Maybe<Scalars['String']>
+  createdAt?: Maybe<Scalars['DateTime']>
+  decimals?: Maybe<Scalars['Int']>
+  destination?: Maybe<Scalars['String']>
+  errors?: Maybe<Array<TransactionError>>
+  explorerUrl?: Maybe<Scalars['String']>
+  feePayer?: Maybe<Scalars['String']>
+  id?: Maybe<Scalars['String']>
+  ip?: Maybe<Scalars['String']>
+  mint?: Maybe<Scalars['String']>
+  processingDuration?: Maybe<Scalars['Int']>
+  referenceId?: Maybe<Scalars['String']>
+  referenceType?: Maybe<Scalars['String']>
+  signature?: Maybe<Scalars['String']>
+  solanaCommitted?: Maybe<Scalars['DateTime']>
+  solanaCommittedDuration?: Maybe<Scalars['Int']>
+  solanaFinalized?: Maybe<Scalars['DateTime']>
+  solanaFinalizedDuration?: Maybe<Scalars['Int']>
+  solanaStart?: Maybe<Scalars['DateTime']>
+  solanaTransaction?: Maybe<Scalars['JSON']>
+  source?: Maybe<Scalars['String']>
+  status: TransactionStatus
+  totalDuration?: Maybe<Scalars['Int']>
+  ua?: Maybe<Scalars['String']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  webhookEventDuration?: Maybe<Scalars['Int']>
+  webhookEventEnd?: Maybe<Scalars['DateTime']>
+  webhookEventIncoming?: Maybe<Webhook>
+  webhookEventOutgoing?: Maybe<Webhook>
+  webhookEventStart?: Maybe<Scalars['DateTime']>
+  webhookVerifyDuration?: Maybe<Scalars['Int']>
+  webhookVerifyEnd?: Maybe<Scalars['DateTime']>
+  webhookVerifyIncoming?: Maybe<Webhook>
+  webhookVerifyOutgoing?: Maybe<Webhook>
+  webhookVerifyStart?: Maybe<Scalars['DateTime']>
+}
+
+export type TransactionCounter = {
+  __typename?: 'TransactionCounter'
+  limit?: Maybe<Scalars['Float']>
+  page?: Maybe<Scalars['Float']>
+  pageCount?: Maybe<Scalars['Float']>
+  total?: Maybe<Scalars['Float']>
+}
+
+export type TransactionError = {
+  __typename?: 'TransactionError'
+  id?: Maybe<Scalars['String']>
+  instruction?: Maybe<Scalars['Int']>
+  logs?: Maybe<Array<Scalars['String']>>
+  message?: Maybe<Scalars['String']>
+  type: TransactionErrorType
+}
+
+export enum TransactionErrorType {
+  BadNonce = 'BadNonce',
+  InvalidAccount = 'InvalidAccount',
+  SomeError = 'SomeError',
+  Timeout = 'Timeout',
+  Unknown = 'Unknown',
+  WebhookFailed = 'WebhookFailed',
+}
+
+export enum TransactionStatus {
+  Committed = 'Committed',
+  Confirmed = 'Confirmed',
+  Failed = 'Failed',
+  Finalized = 'Finalized',
+  Processing = 'Processing',
 }
 
 export type User = {
@@ -677,19 +677,6 @@ export type UserAppEnvUpdateInput = {
 
 export type UserAppMintUpdateInput = {
   addMemo?: InputMaybe<Scalars['Boolean']>
-}
-
-export type UserAppTransactionListInput = {
-  destination?: InputMaybe<Scalars['String']>
-  ip?: InputMaybe<Scalars['String']>
-  limit?: InputMaybe<Scalars['Float']>
-  page?: InputMaybe<Scalars['Float']>
-  referenceId?: InputMaybe<Scalars['String']>
-  referenceType?: InputMaybe<Scalars['String']>
-  signature?: InputMaybe<Scalars['String']>
-  source?: InputMaybe<Scalars['String']>
-  status?: InputMaybe<Array<AppTransactionStatus>>
-  ua?: InputMaybe<Scalars['String']>
 }
 
 export type UserAppUpdateInput = {
@@ -731,6 +718,19 @@ export enum UserRole {
 
 export type UserSearchUserInput = {
   query?: InputMaybe<Scalars['String']>
+}
+
+export type UserTransactionListInput = {
+  destination?: InputMaybe<Scalars['String']>
+  ip?: InputMaybe<Scalars['String']>
+  limit?: InputMaybe<Scalars['Float']>
+  page?: InputMaybe<Scalars['Float']>
+  referenceId?: InputMaybe<Scalars['String']>
+  referenceType?: InputMaybe<Scalars['String']>
+  signature?: InputMaybe<Scalars['String']>
+  source?: InputMaybe<Scalars['String']>
+  status?: InputMaybe<Array<TransactionStatus>>
+  ua?: InputMaybe<Scalars['String']>
 }
 
 export type Wallet = {
@@ -909,8 +909,8 @@ export const AppEnvStatsDetails = gql`
   }
   ${AppEnvTransactionCountDetails}
 `
-export const AppTransactionErrorDetails = gql`
-  fragment AppTransactionErrorDetails on AppTransactionError {
+export const TransactionErrorDetails = gql`
+  fragment TransactionErrorDetails on TransactionError {
     id
     logs
     message
@@ -932,8 +932,8 @@ export const WebhookDetails = gql`
     type
   }
 `
-export const AppTransactionDetails = gql`
-  fragment AppTransactionDetails on AppTransaction {
+export const TransactionDetails = gql`
+  fragment TransactionDetails on Transaction {
     id
     createdAt
     updatedAt
@@ -941,7 +941,7 @@ export const AppTransactionDetails = gql`
     decimals
     destination
     errors {
-      ...AppTransactionErrorDetails
+      ...TransactionErrorDetails
     }
     explorerUrl
     feePayer
@@ -980,7 +980,7 @@ export const AppTransactionDetails = gql`
     }
     webhookVerifyStart
   }
-  ${AppTransactionErrorDetails}
+  ${TransactionErrorDetails}
   ${WebhookDetails}
 `
 export const AppDetails = gql`
@@ -1370,27 +1370,27 @@ export const UserDeleteAppEnv = gql`
   }
   ${AppEnvDetails}
 `
-export const UserAppTransaction = gql`
-  query UserAppTransaction($appId: String!, $appEnvId: String!, $appTransactionId: String!) {
-    item: userAppTransaction(appId: $appId, appEnvId: $appEnvId, appTransactionId: $appTransactionId) {
-      ...AppTransactionDetails
+export const UserTransaction = gql`
+  query UserTransaction($appId: String!, $appEnvId: String!, $transactionId: String!) {
+    item: userTransaction(appId: $appId, appEnvId: $appEnvId, transactionId: $transactionId) {
+      ...TransactionDetails
     }
   }
-  ${AppTransactionDetails}
+  ${TransactionDetails}
 `
-export const UserAppTransactions = gql`
-  query UserAppTransactions($appId: String!, $appEnvId: String!, $input: UserAppTransactionListInput) {
-    items: userAppTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
-      ...AppTransactionDetails
+export const UserTransactions = gql`
+  query UserTransactions($appId: String!, $appEnvId: String!, $input: UserTransactionListInput) {
+    items: userTransactions(appId: $appId, appEnvId: $appEnvId, input: $input) {
+      ...TransactionDetails
     }
-    count: userAppTransactionCounter(appId: $appId, appEnvId: $appEnvId, input: $input) {
+    count: userTransactionCounter(appId: $appId, appEnvId: $appEnvId, input: $input) {
       limit
       page
       pageCount
       total
     }
   }
-  ${AppTransactionDetails}
+  ${TransactionDetails}
 `
 export const UserApps = gql`
   query UserApps {
@@ -2618,8 +2618,8 @@ export type AppMintDetailsFragment = {
   } | null
 }
 
-export type AppTransactionDetailsFragment = {
-  __typename?: 'AppTransaction'
+export type TransactionDetailsFragment = {
+  __typename?: 'Transaction'
   id?: string | null
   createdAt?: any | null
   updatedAt?: any | null
@@ -2641,7 +2641,7 @@ export type AppTransactionDetailsFragment = {
   solanaStart?: any | null
   solanaTransaction?: any | null
   source?: string | null
-  status: AppTransactionStatus
+  status: TransactionStatus
   totalDuration?: number | null
   ua?: string | null
   webhookEventDuration?: number | null
@@ -2651,11 +2651,11 @@ export type AppTransactionDetailsFragment = {
   webhookVerifyEnd?: any | null
   webhookVerifyStart?: any | null
   errors?: Array<{
-    __typename?: 'AppTransactionError'
+    __typename?: 'TransactionError'
     id?: string | null
     logs?: Array<string> | null
     message?: string | null
-    type: AppTransactionErrorType
+    type: TransactionErrorType
     instruction?: number | null
   }> | null
   webhookEventIncoming?: {
@@ -2712,12 +2712,12 @@ export type AppTransactionDetailsFragment = {
   } | null
 }
 
-export type AppTransactionErrorDetailsFragment = {
-  __typename?: 'AppTransactionError'
+export type TransactionErrorDetailsFragment = {
+  __typename?: 'TransactionError'
   id?: string | null
   logs?: Array<string> | null
   message?: string | null
-  type: AppTransactionErrorType
+  type: TransactionErrorType
   instruction?: number | null
 }
 
@@ -4876,16 +4876,16 @@ export type UserDeleteAppEnvMutation = {
   } | null
 }
 
-export type UserAppTransactionQueryVariables = Exact<{
+export type UserTransactionQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
-  appTransactionId: Scalars['String']
+  transactionId: Scalars['String']
 }>
 
-export type UserAppTransactionQuery = {
+export type UserTransactionQuery = {
   __typename?: 'Query'
   item?: {
-    __typename?: 'AppTransaction'
+    __typename?: 'Transaction'
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
@@ -4907,7 +4907,7 @@ export type UserAppTransactionQuery = {
     solanaStart?: any | null
     solanaTransaction?: any | null
     source?: string | null
-    status: AppTransactionStatus
+    status: TransactionStatus
     totalDuration?: number | null
     ua?: string | null
     webhookEventDuration?: number | null
@@ -4917,11 +4917,11 @@ export type UserAppTransactionQuery = {
     webhookVerifyEnd?: any | null
     webhookVerifyStart?: any | null
     errors?: Array<{
-      __typename?: 'AppTransactionError'
+      __typename?: 'TransactionError'
       id?: string | null
       logs?: Array<string> | null
       message?: string | null
-      type: AppTransactionErrorType
+      type: TransactionErrorType
       instruction?: number | null
     }> | null
     webhookEventIncoming?: {
@@ -4979,16 +4979,16 @@ export type UserAppTransactionQuery = {
   } | null
 }
 
-export type UserAppTransactionsQueryVariables = Exact<{
+export type UserTransactionsQueryVariables = Exact<{
   appId: Scalars['String']
   appEnvId: Scalars['String']
-  input?: InputMaybe<UserAppTransactionListInput>
+  input?: InputMaybe<UserTransactionListInput>
 }>
 
-export type UserAppTransactionsQuery = {
+export type UserTransactionsQuery = {
   __typename?: 'Query'
   items?: Array<{
-    __typename?: 'AppTransaction'
+    __typename?: 'Transaction'
     id?: string | null
     createdAt?: any | null
     updatedAt?: any | null
@@ -5010,7 +5010,7 @@ export type UserAppTransactionsQuery = {
     solanaStart?: any | null
     solanaTransaction?: any | null
     source?: string | null
-    status: AppTransactionStatus
+    status: TransactionStatus
     totalDuration?: number | null
     ua?: string | null
     webhookEventDuration?: number | null
@@ -5020,11 +5020,11 @@ export type UserAppTransactionsQuery = {
     webhookVerifyEnd?: any | null
     webhookVerifyStart?: any | null
     errors?: Array<{
-      __typename?: 'AppTransactionError'
+      __typename?: 'TransactionError'
       id?: string | null
       logs?: Array<string> | null
       message?: string | null
-      type: AppTransactionErrorType
+      type: TransactionErrorType
       instruction?: number | null
     }> | null
     webhookEventIncoming?: {
@@ -5081,7 +5081,7 @@ export type UserAppTransactionsQuery = {
     } | null
   }> | null
   count?: {
-    __typename?: 'AppTransactionCounter'
+    __typename?: 'TransactionCounter'
     limit?: number | null
     page?: number | null
     pageCount?: number | null

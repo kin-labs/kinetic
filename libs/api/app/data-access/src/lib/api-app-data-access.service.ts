@@ -5,7 +5,6 @@ import { Prisma } from '@prisma/client'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { AppConfig } from './entity/app-config.entity'
 import { AppHealth } from './entity/app-health.entity'
-import { AppTransaction } from './entity/app-transaction.entity'
 
 @Injectable()
 export class ApiAppDataAccessService implements OnModuleInit {
@@ -110,11 +109,5 @@ export class ApiAppDataAccessService implements OnModuleInit {
       isKineticOk,
       time: new Date(),
     }
-  }
-
-  explorerUrl(tx: AppTransaction) {
-    const { explorer } = tx.appEnv.cluster
-
-    return explorer.replace('{path}', `/tx/${tx.signature}`)
   }
 }

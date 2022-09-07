@@ -1,4 +1,4 @@
-import { Connection, PublicKey, Transaction } from '@solana/web3.js'
+import { Connection, PublicKey, Transaction as SolanaTransaction } from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { NAME } from '../version'
@@ -171,13 +171,13 @@ export class Solana {
     return this.connection.requestAirdrop(getPublicKey(account), amount)
   }
 
-  async sendRawTransaction(tx: Transaction) {
+  async sendRawTransaction(tx: SolanaTransaction) {
     await this.simulateTransaction(tx)
     this.config.logger?.log(`Send Raw Transaction`)
     return this.connection.sendRawTransaction(tx.serialize())
   }
 
-  async simulateTransaction(tx: Transaction) {
+  async simulateTransaction(tx: SolanaTransaction) {
     this.config.logger?.log(`Simulate Transaction`)
     const simulation = await this.connection.simulateTransaction(tx)
     return parseTransactionSimulation(simulation.value)

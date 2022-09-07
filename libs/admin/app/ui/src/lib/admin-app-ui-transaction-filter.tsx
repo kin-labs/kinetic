@@ -1,13 +1,13 @@
 import { Box, Button, ButtonGroup, Stack } from '@chakra-ui/react'
 import { AdminUiForm, UiFormField } from '@kin-kinetic/admin/ui/form'
-import { UserAppTransactionListInput } from '@kin-kinetic/shared/util/admin-sdk'
+import { UserTransactionListInput } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { useState } from 'react'
 
 import * as Yup from 'yup'
 
 export interface AdminAppUiTransactionFilterProps {
-  input?: UserAppTransactionListInput | null | undefined
-  onSubmit: (input: UserAppTransactionListInput) => void
+  input?: UserTransactionListInput | null | undefined
+  onSubmit: (input: UserTransactionListInput) => void
 }
 
 const validationSchema = Yup.object({

@@ -1,7 +1,7 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { HttpService } from '@nestjs/axios'
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
-import { App, AppEnv, AppTransaction, WebhookDirection, WebhookType } from '@prisma/client'
+import { App, AppEnv, Transaction, WebhookDirection, WebhookType } from '@prisma/client'
 import { AxiosRequestHeaders } from 'axios'
 import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
@@ -9,7 +9,7 @@ import { switchMap } from 'rxjs'
 
 interface WebhookOptions {
   headers?: AxiosRequestHeaders
-  transaction: AppTransaction
+  transaction: Transaction
   type: WebhookType
 }
 
@@ -82,14 +82,14 @@ export class ApiWebhookDataAccessService {
       if (!headers['kinetic-tx-id']) {
         return res.send(new Error(`Error finding tx-id`))
       }
-      const appTransactionId = headers['kinetic-tx-id'].toString()
+      const transactionId = headers['kinetic-tx-id'].toString()
 
       // Store the incoming webhook
       const created = await this.data.webhook.create({
         data: {
           direction: WebhookDirection.Incoming,
           appEnvId: appEnv.id,
-          appTransactionId,
+          transactionId,
           headers,
           payload,
           type: type === 'event' ? WebhookType.Event : WebhookType.Verify,
@@ -123,7 +123,7 @@ export class ApiWebhookDataAccessService {
             this.data.webhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
-                appTransaction: { connect: { id: options.transaction.id } },
+                transaction: { connect: { id: options.transaction.id } },
                 direction: WebhookDirection.Outgoing,
                 type: options.type,
                 responseError: res.statusText,
@@ -152,7 +152,7 @@ export class ApiWebhookDataAccessService {
             this.data.webhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
-                appTransaction: { connect: { id: options.transaction.id } },
+                transaction: { connect: { id: options.transaction.id } },
                 direction: WebhookDirection.Outgoing,
                 type: options.type,
                 responseError: res.statusText,

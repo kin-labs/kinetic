@@ -1,8 +1,8 @@
-import { KineticSdk } from '@kin-kinetic/sdk'
 import { Keypair } from '@kin-kinetic/keypair'
-import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair } from './fixtures'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import { Destination } from '@kin-kinetic/solana'
-import { AppTransactionStatus } from '@prisma/client'
+import { TransactionStatus } from '@prisma/client'
+import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair } from './fixtures'
 
 describe('KineticSdk (e2e)', () => {
   let sdk: KineticSdk
@@ -85,7 +85,7 @@ describe('KineticSdk (e2e)', () => {
     expect(res.signature).toBeNull()
     expect(res.amount).toEqual('9999999999999900000')
     expect(res.errors.length).toBeGreaterThan(0)
-    expect(res.status).toBe(AppTransactionStatus.Failed)
+    expect(res.status).toBe(TransactionStatus.Failed)
     expect(res.errors[0].message).toContain('Error: Insufficient funds.')
   })
 
@@ -98,7 +98,7 @@ describe('KineticSdk (e2e)', () => {
     expect(Number(res.amount)).toBe(1500000)
     expect(res.signature).toBeNull()
     expect(res.errors.length).toBeGreaterThan(0)
-    expect(res.status).toBe(AppTransactionStatus.Failed)
+    expect(res.status).toBe(TransactionStatus.Failed)
     expect(res.errors[0].message).toContain('Error: Insufficient funds.')
   })
 

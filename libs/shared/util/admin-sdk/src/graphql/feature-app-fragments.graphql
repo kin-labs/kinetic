@@ -74,7 +74,7 @@ fragment AppMintDetails on AppMint {
   }
 }
 
-fragment AppTransactionDetails on AppTransaction {
+fragment TransactionDetails on Transaction {
   id
   createdAt
   updatedAt
@@ -82,7 +82,7 @@ fragment AppTransactionDetails on AppTransaction {
   decimals
   destination
   errors {
-    ...AppTransactionErrorDetails
+    ...TransactionErrorDetails
   }
   explorerUrl
   feePayer
@@ -122,7 +122,7 @@ fragment AppTransactionDetails on AppTransaction {
   webhookVerifyStart
 }
 
-fragment AppTransactionErrorDetails on AppTransactionError {
+fragment TransactionErrorDetails on TransactionError {
   id
   logs
   message

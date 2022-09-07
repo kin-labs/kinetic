@@ -34,7 +34,7 @@ export default function AdminAppUserFeatureEnvDetail() {
             <Route index element={<Navigate to="overview" />} />
             <Route path="overview" element={<AdminAppUserAppEnvDetailOverview />} />
             <Route path="settings" element={<AdminAppUserAppEnvDetailSettings />} />
-            <Route path="transactions/:appTransactionId" element={<AdminAppUserAppEnvDetailTransaction />} />
+            <Route path="transactions/:transactionId" element={<AdminAppUserAppEnvDetailTransaction />} />
             <Route path="transactions" element={<AdminAppUserAppEnvDetailTransactions />} />
             <Route path="wallets/:walletId" element={<AdminAppUserAppEnvDetailWallet />} />
             <Route path="wallets" element={<AdminAppUserAppEnvDetailWallets />} />
