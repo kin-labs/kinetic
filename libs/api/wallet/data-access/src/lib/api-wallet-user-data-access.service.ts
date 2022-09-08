@@ -172,7 +172,7 @@ export class ApiWalletUserDataAccessService {
       const change = balance - Number(current)
       const stored = await this.storeWalletBalance(appEnvId, wallet.id, balance, change)
       const { appEnv } = await this.data.getAppEnvironment(environment, index)
-      if (Number(appEnv.webhookBalanceThreshold) <= balance) {
+      if (Number(appEnv.webhookBalanceThreshold) <= balance && appEnv.webhookBalanceEnabled) {
         this.webhook.sendWebhook(appEnv, { type: WebhookType.Balance, balance: stored })
       }
       this.logger.verbose(
