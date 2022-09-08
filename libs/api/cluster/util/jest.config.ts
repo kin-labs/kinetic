@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'api-cluster-util',
   preset: '../../../../jest.preset.js',

@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'api-airdrop-feature',
   preset: '../../../../jest.preset.js',

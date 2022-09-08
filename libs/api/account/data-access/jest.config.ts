@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'api-account-data-access',
   preset: '../../../../jest.preset.js',

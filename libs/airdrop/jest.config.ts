@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'airdrop',
   preset: '../../jest.preset.js',
