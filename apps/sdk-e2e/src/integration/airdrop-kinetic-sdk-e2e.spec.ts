@@ -1,5 +1,5 @@
 import { KineticSdk } from '@kin-kinetic/sdk'
-import { aliceKeypair, daveKeypair, usdMint } from './fixtures'
+import { aliceKeypair, daveKeypair, solMint } from './fixtures'
 
 describe('KineticSdk (e2e) - Airdrop', () => {
   let sdk: KineticSdk
@@ -15,7 +15,7 @@ describe('KineticSdk (e2e) - Airdrop', () => {
   }, 30000)
 
   it('should request an airdrop using a mint', async () => {
-    const tx = await sdk.requestAirdrop({ account: aliceKeypair.publicKey, amount: '20', mint: usdMint })
+    const tx = await sdk.requestAirdrop({ account: aliceKeypair.publicKey, amount: '20', mint: solMint })
     expect(tx).not.toBeNull()
     expect(typeof tx.signature).toBe('string')
   }, 30000)

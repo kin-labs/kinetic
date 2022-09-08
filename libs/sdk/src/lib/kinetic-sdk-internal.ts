@@ -173,6 +173,7 @@ export class KineticSdkInternal {
       throw new Error(`AppConfig not initialized`)
     }
 
+    console.log(this.appConfig?.mints)
     if (this.appConfig.mints.find((mint) => mint.publicKey === destination)) {
       throw new Error(`Transfers to a mint are not allowed.`)
     }
