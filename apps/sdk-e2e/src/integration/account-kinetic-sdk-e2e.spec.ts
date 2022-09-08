@@ -2,10 +2,10 @@ import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
 import { TransactionStatus } from '@prisma/client'
 import { aliceKeypair, daveKeypair } from './fixtures'
+import { DEFAULT_MINT } from './helpers'
 
 describe('KineticSdk (e2e) - Account', () => {
   let sdk: KineticSdk
-  const defaultMint = process.env.DEFAULT_MINT_PUBLIC_KEY
 
   beforeEach(async () => {
     sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
@@ -22,7 +22,7 @@ describe('KineticSdk (e2e) - Account', () => {
     const owner = Keypair.random()
     const tx = await sdk.createAccount({ owner })
     expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(defaultMint)
+    expect(DEFAULT_MINT).toContain(tx.mint)
     const { signature, errors } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])

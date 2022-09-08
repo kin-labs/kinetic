@@ -12,6 +12,7 @@ import {
   Cluster,
   ClusterStatus,
   Mint,
+  Prisma,
   PrismaClient,
   UserRole,
   Wallet,
@@ -233,7 +234,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   async configureDefaultData() {
     await this.configureDefaultUsers()
     await this.configureDefaultClusters()
-    await this.configureDefaultMints()
   }
 
   private async configureDefaultUsers() {
@@ -315,23 +315,27 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   private async configureDefaultClusters() {
     return Promise.all(
-      this.config.clusters
+      this.config.provisionedClusters
         .filter((cluster) => !!cluster)
-        .map((cluster) =>
-          this.cluster
+        .map((item) => {
+          const { mints, ...cluster } = item
+          return this.cluster
             .upsert({
               where: { id: cluster.id },
               update: { ...omit(cluster, 'status') },
               create: { ...cluster },
             })
-            .then((res) => this.logger.verbose(`Configured cluster ${res.name} (${res.status})`)),
-        ),
+            .then((res) => {
+              this.logger.verbose(`Configured cluster ${res.name} (${res.status})`)
+              return this.configureMints(mints)
+            })
+        }),
     )
   }
 
-  private async configureDefaultMints() {
+  private async configureMints(mints: Prisma.MintCreateInput[]) {
     return Promise.all(
-      this.config.mints.map((mint) =>
+      mints.map((mint) =>
         this.mint
           .upsert({
             where: { id: mint.id },
@@ -342,15 +346,17 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
           .then((res) => {
             if (res.airdropSecretKey) {
               this.airdropConfig.set(mint.id, {
-                airdropAmount: mint.airdropAmount || this.config.defaultMintAirdropAmount,
-                airdropMax: mint.airdropMax || this.config.defaultMintAirdropMax,
+                airdropAmount: mint.airdropAmount || 1000,
+                airdropMax: mint.airdropMax || 50000,
                 decimals: mint.decimals,
                 feePayer: Keypair.fromByteArray(JSON.parse(res.airdropSecretKey)).solana,
                 mint: getPublicKey(mint.address),
               })
             }
-            this.logger.verbose(
-              `Configured mint ${res.name} (${res.decimals} decimals) on ${res.cluster?.name} ${
+            this.logger.log(
+              `[${res.symbol}] Configured mint ${res.name} (${res.decimals} decimals) (${res?.address}) on ${
+                res?.cluster?.name
+              } ${
                 this.airdropConfig.has(mint.id)
                   ? `(Airdrop ${this.airdropConfig.get(mint.id).feePayer.publicKey?.toBase58()})`
                   : ''

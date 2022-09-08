@@ -1,9 +1,8 @@
-import { createMintKin, createMintSol, createMintUsdc } from '@kin-kinetic/api/cluster/util'
+import { getProvisionedClusters, ProvisionedCluster } from '@kin-kinetic/api/cluster/util'
 import { ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import { ClusterStatus, ClusterType, Prisma } from '@prisma/client'
 import { CookieOptions } from 'express-serve-static-core'
 import * as fs from 'fs'
 import { join } from 'path'
@@ -13,50 +12,16 @@ import { getProvisionedApps } from './helpers/get-provisioned-apps'
 @Injectable()
 export class ApiConfigDataAccessService {
   private readonly logger = new Logger(ApiConfigDataAccessService.name)
-  readonly clusters: Prisma.ClusterCreateInput[] = [
-    this.isProduction
-      ? undefined
-      : {
-          id: 'local',
-          name: 'Local',
-          endpointPrivate: 'http://localhost:8899',
-          endpointPublic: 'http://localhost:8899',
-          explorer: 'https://explorer.solana.com/{path}?cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899',
-          type: ClusterType.Custom,
-          status: ClusterStatus.Active,
-        },
-    {
-      id: 'solana-devnet',
-      name: 'Solana Devnet',
-      endpointPrivate: this.solanaDevnetRpcEndpoint,
-      endpointPublic: this.solanaDevnetRpcEndpoint,
-      explorer: 'https://explorer.solana.com/{path}?cluster=devnet',
-      type: ClusterType.SolanaDevnet,
-    },
-    {
-      id: 'solana-mainnet',
-      name: 'Solana Mainnet',
-      endpointPrivate: this.solanaMainnetRpcEndpoint,
-      endpointPublic: this.solanaMainnetRpcEndpoint,
-      explorer: 'https://explorer.solana.com/{path}',
-      type: ClusterType.SolanaMainnet,
-      status: ClusterStatus.Inactive,
-    },
-  ]
-  readonly mints: Prisma.MintCreateInput[] = [
-    ...(!this.isProduction
-      ? [
-          createMintKin('local', 0, 'MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek', 5),
-          createMintSol('local', 1),
-          createMintUsdc('local', 2, 'USDzo281m7rjzeZyxevkzL1vr5Cibb9ek3ynyAjXjUM', 2),
-        ]
-      : []),
-    createMintKin('solana-devnet', 0, this.defaultMintPublicKey, this.defaultMintDecimals),
-    createMintKin('solana-mainnet', 0, 'kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6', 5),
-    createMintSol('solana-devnet', 1),
-    createMintSol('solana-mainnet', 1),
-  ]
   readonly provisionedApps: ProvisionedApp[] = getProvisionedApps(Object.keys(process.env))
+  readonly provisionedClusters: ProvisionedCluster[] = getProvisionedClusters({
+    isProduction: this.isProduction,
+    solanaDevnetEnabled: this.solanaDevnetEnabled,
+    solanaDevnetRpcEndpoint: this.solanaDevnetRpcEndpoint,
+    solanaLocalEnabled: this.solanaLocalEnabled,
+    solanaLocalRpcEndpoint: this.solanaLocalRpcEndpoint,
+    solanaMainnetEnabled: this.solanaMainnetEnabled,
+    solanaMainnetRpcEndpoint: this.solanaMainnetRpcEndpoint,
+  })
 
   constructor(private readonly config: ConfigService) {}
 
@@ -134,22 +99,6 @@ export class ApiConfigDataAccessService {
     return this.config.get('cors.origins')
   }
 
-  get defaultMintAirdropAmount(): number {
-    return this.config.get('defaultMintAirdropAmount')
-  }
-
-  get defaultMintAirdropMax(): number {
-    return this.config.get('defaultMintAirdropMax')
-  }
-
-  get defaultMintDecimals(): number {
-    return this.config.get('defaultMintDecimals')
-  }
-
-  get defaultMintPublicKey(): string {
-    return this.config.get('defaultMintPublicKey')
-  }
-
   get environment() {
     return this.config.get('environment')
   }
@@ -203,12 +152,28 @@ export class ApiConfigDataAccessService {
     return 'api'
   }
 
+  get solanaDevnetEnabled(): boolean {
+    return this.config.get('solana.devnet.enabled')
+  }
+
   get solanaDevnetRpcEndpoint() {
-    return this.config.get('solanaDevnetRpcEndpoint')
+    return this.config.get('solana.devnet.rpcEndpoint')
+  }
+
+  get solanaLocalEnabled(): boolean {
+    return this.config.get('solana.local.enabled')
+  }
+
+  get solanaLocalRpcEndpoint() {
+    return this.config.get('solana.local.rpcEndpoint')
+  }
+
+  get solanaMainnetEnabled(): boolean {
+    return this.config.get('solana.mainnet.enabled')
   }
 
   get solanaMainnetRpcEndpoint() {
-    return this.config.get('solanaMainnetRpcEndpoint')
+    return this.config.get('solana.mainnet.rpcEndpoint')
   }
 
   configSummary() {

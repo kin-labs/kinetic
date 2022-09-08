@@ -1,8 +1,8 @@
 import { KineticSdk } from '@kin-kinetic/sdk'
+import { DEFAULT_MINT } from './helpers'
 
 describe('KineticSdk (e2e)', () => {
   let sdk: KineticSdk
-  const defaultMint = process.env.DEFAULT_MINT_PUBLIC_KEY
 
   beforeEach(async () => {
     sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
@@ -19,10 +19,10 @@ describe('KineticSdk (e2e)', () => {
     expect(res.environment.cluster.type).toEqual('SolanaDevnet')
     expect(res.environment.cluster.endpoint).toEqual('http://localhost:8899')
     expect(res.mint.symbol).toEqual('KIN')
-    expect(res.mint.publicKey).toEqual(defaultMint)
+    expect(DEFAULT_MINT).toContain(res.mint.publicKey)
     expect(res.mints.length).toEqual(1)
     expect(res.mints[0].symbol).toEqual('KIN')
-    expect(res.mints[0].publicKey).toEqual(defaultMint)
+    expect(DEFAULT_MINT).toContain(res.mints[0].publicKey)
   })
 
   it('should use the RPC public endpoint', () => {

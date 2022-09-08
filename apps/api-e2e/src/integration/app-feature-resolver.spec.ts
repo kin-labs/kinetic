@@ -82,7 +82,7 @@ describe('App (e2e)', () => {
             expect(data.envs[0].wallets).toBeDefined()
             expect(data.envs[0].wallets[0].publicKey).toBeDefined()
             expect(data.envs[1].name).toEqual('local')
-            expect(data.envs[1].cluster.name).toEqual('Local')
+            expect(data.envs[1].cluster.name).toEqual('Solana Local')
             expect(data.envs[1].cluster.type).toEqual(ClusterType.Custom)
             expect(data.envs[1].mints[0].mint.symbol).toEqual('KIN')
             expect(data.envs[1].mints[0].wallet.publicKey).toBeDefined()
