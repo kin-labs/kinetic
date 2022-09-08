@@ -1,8 +1,8 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
+import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair, usdMint } from './fixtures'
 import { Destination } from '@kin-kinetic/solana'
 import { TransactionStatus } from '@prisma/client'
-import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair } from './fixtures'
 import { DEFAULT_MINT } from './helpers'
 
 describe('KineticSdk (e2e)', () => {
@@ -157,4 +157,36 @@ describe('KineticSdk (e2e)', () => {
       expect(e.message).toBe(`Transfers to a mint are not allowed.`)
     }
   })
+
+  it('should create an account using a mint', async () => {
+    const account = Keypair.random()
+    const tx = await sdk.createAccount({ owner: account, mint: usdMint })
+    expect(tx).not.toBeNull()
+    expect(tx.mint).toBe(usdMint)
+    const { signature, errors } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+  })
+
+  it('should make a transfer using a mint', async () => {
+    const tx = await sdk.makeTransfer({
+      amount: '1',
+      destination: bobKeypair.publicKey,
+      owner: aliceKeypair,
+      mint: usdMint,
+    })
+    expect(tx).not.toBeNull()
+    expect(tx.mint).toBe(usdMint)
+    const { signature, errors, amount, source } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+    expect(Number(amount)).toBe(1)
+    expect(source).toBe(aliceKeypair.publicKey)
+  })
+
+  it('should request an airdrop using a mint', async () => {
+    const tx = await sdk.requestAirdrop({ account: aliceKeypair.publicKey, amount: '20', mint: usdMint })
+    expect(tx).not.toBeNull()
+    expect(typeof tx.signature).toBe('string')
+  }, 30000)
 })
