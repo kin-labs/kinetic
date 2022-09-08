@@ -12,7 +12,7 @@ describe('parseKineticSdkConfig', () => {
     const parsed = parseKineticSdkConfig(baseConfig)
     expect(parsed.index).toEqual(1)
     expect(parsed.environment).toEqual('devnet')
-    expect(parsed.endpoint).toEqual('devnet')
+    expect(parsed.endpoint).toEqual('http://localhost:3000')
   })
 
   it('should return a default mainnet endpoint', () => {
@@ -25,14 +25,14 @@ describe('parseKineticSdkConfig', () => {
   it('should return a custom endpoint', () => {
     const parsed = parseKineticSdkConfig({ ...baseConfig, endpoint: 'http://localhost:3000' })
     expect(parsed.index).toEqual(1)
-    expect(parsed.environment).toEqual('devnet')
+    expect(parsed.environment).toEqual('http://localhost:3000')
     expect(parsed.endpoint).toEqual('http://localhost:3000')
   })
 
   it('should remove trailing slashes from endpoint', () => {
     const parsed = parseKineticSdkConfig({ ...baseConfig, endpoint: 'http://localhost:3000/////' })
     expect(parsed.index).toEqual(1)
-    expect(parsed.environment).toEqual('devnet')
+    expect(parsed.environment).toEqual('http://localhost:3000')
     expect(parsed.endpoint).toEqual('http://localhost:3000')
   })
 })
