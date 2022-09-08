@@ -3,6 +3,7 @@ import { parseKineticSdkConfig } from './parse-kinetic-sdk-config'
 
 const baseConfig: KineticSdkConfig = {
   environment: 'devnet',
+  endpoint: 'http://localhost:3000',
   index: 1,
 }
 
