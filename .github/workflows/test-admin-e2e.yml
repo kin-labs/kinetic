@@ -49,7 +49,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
-          node-version: '14'
+          node-version: '16'
       - run: yarn install --frozen-lockfile
       - run: yarn cypress install
       - run: yarn prisma db push
@@ -78,7 +78,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
-          node-version: '14'
+          node-version: '16'
       - run: yarn install --frozen-lockfile
       - run: yarn cypress install
       - run: yarn prisma db push

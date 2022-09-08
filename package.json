@@ -36,7 +36,7 @@
   },
   "private": true,
   "resolutions": {
-    "@solana/web3.js": "1.47.3"
+    "@solana/web3.js": "1.54.0"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",
@@ -69,8 +69,8 @@
     "@prisma/client": "^3.14.0",
     "@scure/bip39": "^1.0.0",
     "@solana/buffer-layout": "^4.0.0",
-    "@solana/spl-token": "^0.2.0",
-    "@solana/web3.js": "^1.47.3",
+    "@solana/spl-token": "^0.3.4",
+    "@solana/web3.js": "1.54.0",
     "apollo-server-express": "^3.8.1",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",

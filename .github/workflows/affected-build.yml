@@ -27,7 +27,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
-          node-version: '14'
+          node-version: '16'
       - run: yarn install --frozen-lockfile
       - run: yarn prisma generate
       - run: yarn nx affected --target=build --parallel --max-parallel=3
@@ -48,7 +48,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@v1
         with:
-          node-version: '14'
+          node-version: '16'
       - run: yarn install --frozen-lockfile
       - run: yarn prisma generate
       - run: yarn nx affected --target=build --parallel --max-parallel=3
