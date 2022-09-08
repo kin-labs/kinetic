@@ -218,7 +218,7 @@ describe('App (e2e)', () => {
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.users[1].role).toEqual(AppUserRole.Member)
           })
-      }, 10000)
+      }, 15000)
 
       it('should change a user role in an app', async () => {
         const input: UserAppUserUpdateRoleInput = {
@@ -235,7 +235,7 @@ describe('App (e2e)', () => {
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
             expect(data.users[1].role).toEqual(AppUserRole.Owner)
           })
-      }, 10000)
+      }, 15000)
 
       it('should remove a user fom an app', async () => {
         const input: UserAppUserRemoveInput = { userId }
@@ -247,7 +247,7 @@ describe('App (e2e)', () => {
             expect(data.users.length).toEqual(1)
             expect(data.users[0].role).toEqual(AppUserRole.Owner)
           })
-      }, 10000)
+      }, 15000)
     })
 
     describe('AppEnvs', () => {
@@ -262,6 +262,9 @@ describe('App (e2e)', () => {
 
         const input: UserAppEnvUpdateInput = {
           webhookSecret: 'WebHookSecret',
+          webhookBalanceEnabled: true,
+          webhookBalanceUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/balance',
+          webhookBalanceThreshold: '10',
           webhookDebugging: true,
           webhookEventEnabled: true,
           webhookEventUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/event',
@@ -275,6 +278,9 @@ describe('App (e2e)', () => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.updated
 
+            expect(data.webhookBalanceEnabled).toEqual(input.webhookBalanceEnabled)
+            expect(data.webhookBalanceUrl).toEqual(input.webhookBalanceUrl)
+            expect(data.webhookBalanceThreshold).toEqual(input.webhookBalanceThreshold)
             expect(data.webhookDebugging).toEqual(input.webhookDebugging)
             expect(data.webhookSecret).toEqual(input.webhookSecret)
             expect(data.webhookEventEnabled).toEqual(input.webhookEventEnabled)
@@ -287,7 +293,7 @@ describe('App (e2e)', () => {
             expect(data.wallets).toBeDefined()
             expect(data.wallets[0].publicKey).toBeDefined()
           })
-      }, 10000)
+      }, 15000)
     })
 
     describe('Wallets', () => {

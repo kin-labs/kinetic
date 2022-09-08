@@ -87,6 +87,9 @@ type AppEnv {
   uasBlocked: [String!]
   updatedAt: DateTime!
   wallets: [Wallet!]
+  webhookBalanceEnabled: Boolean
+  webhookBalanceThreshold: String
+  webhookBalanceUrl: String
   webhookDebugging: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String
@@ -371,6 +374,9 @@ input UserAppEnvCreateInput {
 }
 
 input UserAppEnvUpdateInput {
+  webhookBalanceEnabled: Boolean
+  webhookBalanceThreshold: String
+  webhookBalanceUrl: String
   webhookDebugging: Boolean
   webhookEventEnabled: Boolean
   webhookEventUrl: String
@@ -486,6 +492,7 @@ enum WebhookDirection {
 }
 
 enum WebhookType {
+  Balance
   Event
   Verify
 }

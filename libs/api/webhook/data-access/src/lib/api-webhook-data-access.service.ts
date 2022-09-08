@@ -1,7 +1,7 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { HttpService } from '@nestjs/axios'
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
-import { App, AppEnv, Transaction, WebhookDirection, WebhookType } from '@prisma/client'
+import { App, AppEnv, Transaction, WalletBalance, WebhookDirection, WebhookType } from '@prisma/client'
 import { AxiosRequestHeaders } from 'axios'
 import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
@@ -9,7 +9,8 @@ import { switchMap } from 'rxjs'
 
 interface WebhookOptions {
   headers?: AxiosRequestHeaders
-  transaction: Transaction
+  balance?: WalletBalance
+  transaction?: Transaction
   type: WebhookType
 }
 
@@ -27,6 +28,18 @@ export class ApiWebhookDataAccessService {
   sendWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
     const appKey = this.data.getAppKey(appEnv.name, appEnv.app?.index)
     switch (options.type) {
+      case WebhookType.Balance:
+        if (!appEnv.webhookDebugging) {
+          if (!appEnv.webhookBalanceEnabled) {
+            this.logger.warn(`Skip webhook for app ${appKey}, webhookBalanceEnabled is false`)
+            return
+          }
+          if (!appEnv.webhookBalanceUrl) {
+            this.logger.warn(`Skip webhook for app ${appKey}, webhookBalanceUrl not set`)
+            return
+          }
+        }
+        return this.sendBalanceWebhook(appEnv, options)
       case WebhookType.Event:
         if (!appEnv.webhookDebugging) {
           if (!appEnv.webhookEventEnabled) {
@@ -79,10 +92,16 @@ export class ApiWebhookDataAccessService {
         return res.send(new Error(`webhookDebugging is disabled`))
       }
 
-      if (!headers['kinetic-tx-id']) {
-        return res.send(new Error(`Error finding tx-id`))
+      let webhookType: WebhookType
+      if (type.toLowerCase() === WebhookType.Balance.toLowerCase()) {
+        webhookType = WebhookType.Balance
+      } else if (type.toLowerCase() === WebhookType.Event.toLowerCase()) {
+        webhookType = WebhookType.Event
+      } else if (type.toLowerCase() === WebhookType.Verify.toLowerCase()) {
+        webhookType = WebhookType.Verify
       }
-      const transactionId = headers['kinetic-tx-id'].toString()
+
+      const transactionId = headers['kinetic-tx-id']?.toString()
 
       // Store the incoming webhook
       const created = await this.data.webhook.create({
@@ -92,13 +111,14 @@ export class ApiWebhookDataAccessService {
           transactionId,
           headers,
           payload,
-          type: type === 'event' ? WebhookType.Event : WebhookType.Verify,
+          type: webhookType,
         },
       })
       res.statusCode = 200
       return res.send(created)
     } catch (e) {
       res.statusCode = 400
+      console.log(e)
 
       return res.send(new HttpException(`Something went wrong storing incoming webhook`, HttpStatus.BAD_REQUEST))
     }
@@ -111,24 +131,62 @@ export class ApiWebhookDataAccessService {
     return `${this.data.config.apiUrl}/app/${appEnv.name}/${appEnv.app?.index}/webhook/${type.toLowerCase()}`
   }
 
-  private sendEventWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
-    const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookEventUrl)
+  private sendBalanceWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
+    const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookBalanceUrl)
+    const headers = this.getAppEnvHeaders(appEnv, options)
+    const payload = {
+      ...options.balance,
+      balance: options.balance?.change?.toString(),
+      change: options.balance?.change?.toString(),
+    }
     return new Promise((resolve, reject) => {
       this.http
-        .post(url, options.transaction, {
-          headers: this.getHeaders(appEnv, options),
-        })
+        .post(url, payload, { headers })
         .pipe(
           switchMap((res) =>
             this.data.webhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
-                transaction: { connect: { id: options.transaction.id } },
                 direction: WebhookDirection.Outgoing,
-                type: options.type,
+                headers,
+                payload: JSON.parse(JSON.stringify(payload)),
                 responseError: res.statusText,
-                responseStatus: res.status,
                 responsePayload: res.data,
+                responseStatus: res.status,
+                type: options.type,
+              },
+            }),
+          ),
+        )
+        .subscribe({
+          next: (res) => resolve(res),
+          error: (err) => reject(err),
+        })
+    })
+  }
+
+  private sendEventWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
+    const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookEventUrl)
+    const headers = this.getTxHeaders(appEnv, options)
+    const payload = options.transaction
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(url, payload, { headers })
+        .pipe(
+          switchMap((res) =>
+            this.data.webhook.create({
+              data: {
+                appEnv: { connect: { id: appEnv.id } },
+                direction: WebhookDirection.Outgoing,
+                headers,
+                payload: JSON.parse(JSON.stringify(payload)),
+                referenceId: options?.transaction?.referenceId,
+                referenceType: options?.transaction?.referenceType,
+                responseError: res.statusText,
+                responsePayload: res.data,
+                responseStatus: res.status,
+                transaction: { connect: { id: options.transaction.id } },
+                type: options.type,
               },
             }),
           ),
@@ -142,22 +200,26 @@ export class ApiWebhookDataAccessService {
 
   private sendVerifyWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
     const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookVerifyUrl)
+    const headers = this.getTxHeaders(appEnv, options)
+    const payload = options.transaction
     return new Promise((resolve, reject) =>
       this.http
-        .post(url, options.transaction, {
-          headers: this.getHeaders(appEnv, options),
-        })
+        .post(url, payload, { headers })
         .pipe(
           switchMap((res) =>
             this.data.webhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
-                transaction: { connect: { id: options.transaction.id } },
                 direction: WebhookDirection.Outgoing,
-                type: options.type,
+                headers,
+                payload: JSON.parse(JSON.stringify(payload)),
+                referenceId: options?.transaction?.referenceId,
+                referenceType: options?.transaction?.referenceType,
                 responseError: res.statusText,
-                responseStatus: res.status,
                 responsePayload: res.data,
+                responseStatus: res.status,
+                transaction: { connect: { id: options.transaction.id } },
+                type: options.type,
               },
             }),
           ),
@@ -169,18 +231,27 @@ export class ApiWebhookDataAccessService {
     )
   }
 
-  private getHeaders = (appEnv: AppEnv & { app: App }, options: WebhookOptions) => {
+  private getTxHeaders = (appEnv: AppEnv & { app: App }, options: WebhookOptions) => {
     // Pass along any request headers that start with 'kinetic'
-    const headers = Object.keys(options.headers)
+    const headers = Object.keys(options.headers || {})
       .filter((k) => k.startsWith('kinetic-'))
       .reduce((acc, curr) => ({ ...acc, [curr]: options.headers[curr] }), {})
 
+    return this.getAppEnvHeaders(appEnv, {
+      ...options,
+      headers: {
+        ...headers,
+        'kinetic-tx-id': options.transaction?.id ? options.transaction.id : 'N/A',
+      },
+    })
+  }
+
+  private getAppEnvHeaders = (appEnv: AppEnv & { app: App }, options: WebhookOptions) => {
     return {
-      ...headers,
-      'content-type': 'application/json',
+      ...options.headers,
       'kinetic-environment': appEnv.name,
       'kinetic-index': appEnv.app?.index,
-      'kinetic-tx-id': options.transaction.id,
+      'content-type': 'application/json',
       'kinetic-webhook-type': options.type,
     }
   }

@@ -11,6 +11,9 @@ export interface AdminAppUiAppEnvWebhookFormProps {
 }
 
 const validationSchema = Yup.object({
+  webhookBalanceEnabled: Yup.boolean().optional(),
+  webhookBalanceUrl: Yup.string().optional(),
+  webhookBalanceThreshold: Yup.number().optional(),
   webhookDebugging: Yup.boolean().optional(),
   webhookEventEnabled: Yup.boolean().optional(),
   webhookEventUrl: Yup.string().optional(),
@@ -20,6 +23,15 @@ const validationSchema = Yup.object({
 })
 
 const fields: UiFormField[] = [
+  UiFormField.checkbox('webhookBalanceEnabled', { label: 'Balance webhook enabled' }),
+  UiFormField.input('webhookBalanceUrl', {
+    label: 'Balance webhook url',
+    hideExpression: (d) => !d['webhookBalanceEnabled'],
+  }),
+  UiFormField.input('webhookBalanceThreshold', {
+    label: 'Balance webhook threshold',
+    hideExpression: (d) => !d['webhookBalanceEnabled'],
+  }),
   UiFormField.checkbox('webhookEventEnabled', { label: 'Event webhook enabled' }),
   UiFormField.input('webhookEventUrl', {
     label: 'Event webhook url',
@@ -38,7 +50,8 @@ const fields: UiFormField[] = [
 ]
 
 export function AdminAppUiAppEnvWebhookForm({ appEnv, onSubmit }: AdminAppUiAppEnvWebhookFormProps) {
-  const baseUrl = `http://local.kinetic.kin.org:3000/api/app/${appEnv.name}/${appEnv.app?.index}/webhook`
+  const baseUrl = `http://local.kinetic.host:3000/api/app/${appEnv.name}/${appEnv.app?.index}/webhook`
+  const webhookBalanceUrl = appEnv?.webhookBalanceUrl || `${baseUrl}/balance`
   const webhookEventUrl = appEnv?.webhookEventUrl || `${baseUrl}/event`
   const webhookVerifyUrl = appEnv?.webhookVerifyUrl || `${baseUrl}/verify`
   return (
@@ -49,6 +62,9 @@ export function AdminAppUiAppEnvWebhookForm({ appEnv, onSubmit }: AdminAppUiAppE
         </Box>
         <AdminUiForm
           data={{
+            webhookBalanceEnabled: appEnv?.webhookBalanceEnabled,
+            webhookBalanceUrl,
+            webhookBalanceThreshold: appEnv?.webhookBalanceThreshold,
             webhookDebugging: appEnv?.webhookDebugging,
             webhookEventEnabled: appEnv?.webhookEventEnabled,
             webhookEventUrl,

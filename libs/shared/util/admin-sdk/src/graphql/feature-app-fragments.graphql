@@ -38,6 +38,9 @@ fragment AppEnvDetails on AppEnv {
   name
   uasAllowed
   uasBlocked
+  webhookBalanceEnabled
+  webhookBalanceUrl
+  webhookBalanceThreshold
   webhookDebugging
   webhookEventEnabled
   webhookEventUrl

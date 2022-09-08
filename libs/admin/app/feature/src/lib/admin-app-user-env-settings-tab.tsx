@@ -29,12 +29,13 @@ export function AdminAppUserEnvSettingsTab({ appId, appEnvId }: { appId: string;
   const [, enableMintMutation] = useUserAppEnvMintEnableMutation()
   const [, setWalletMutation] = useUserAppEnvMintSetWalletMutation()
   const onSubmit = async (input: UserAppEnvUpdateInput) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await updateAppEnvMutation({
       appId: appId,
       appEnvId: appEnvId,
       input: {
         ...input,
+        webhookBalanceUrl: input.webhookBalanceUrl?.trim(),
+        webhookBalanceThreshold: input.webhookBalanceThreshold?.trim(),
         webhookEventUrl: input.webhookEventUrl?.trim(),
         webhookVerifyUrl: input.webhookVerifyUrl?.trim(),
       },

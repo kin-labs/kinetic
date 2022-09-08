@@ -1,8 +1,17 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType, Int } from '@nestjs/graphql'
 import { IsOptional, IsUrl } from 'class-validator'
 
 @InputType()
 export class UserAppEnvUpdateInput {
+  @IsOptional()
+  @Field({ nullable: true })
+  webhookBalanceEnabled?: boolean
+  @IsOptional()
+  @Field({ nullable: true })
+  webhookBalanceUrl?: string
+  @IsOptional()
+  @Field({ nullable: true })
+  webhookBalanceThreshold?: string
   @IsOptional()
   @Field({ nullable: true })
   webhookDebugging?: boolean
