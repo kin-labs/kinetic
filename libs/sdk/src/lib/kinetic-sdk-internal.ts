@@ -23,7 +23,6 @@ import {
   TransactionApi,
 } from '../generated'
 import { NAME, VERSION } from '../version'
-import { parseKineticSdkEndpoint } from './helpers'
 import {
   CreateAccountOptions,
   GetBalanceOptions,
@@ -60,7 +59,7 @@ export class KineticSdkInternal {
     // Create the API Configuration
     const apiConfig = new Configuration({
       baseOptions: this.requestConfig(this.sdkConfig.headers),
-      basePath: parseKineticSdkEndpoint(sdkConfig.endpoint),
+      basePath: sdkConfig.endpoint,
     })
 
     // Configure the APIs
