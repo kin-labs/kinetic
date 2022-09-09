@@ -1,4 +1,4 @@
-import { Airdrop } from '@kin-kinetic/airdrop'
+import { Airdrop } from '@kin-kinetic/api/airdrop/util'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Commitment } from '@kin-kinetic/solana'
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'

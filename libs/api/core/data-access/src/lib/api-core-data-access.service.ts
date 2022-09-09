@@ -1,4 +1,4 @@
-import { AirdropConfig } from '@kin-kinetic/airdrop'
+import { AirdropConfig } from '@kin-kinetic/api/airdrop/util'
 import { hashPassword } from '@kin-kinetic/api/auth/util'
 import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
