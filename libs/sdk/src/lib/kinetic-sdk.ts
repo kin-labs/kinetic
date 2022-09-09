@@ -2,7 +2,7 @@ import { Solana } from '@kin-kinetic/solana'
 import { AppConfig, Transaction, BalanceResponse, GetTransactionResponse, HistoryResponse } from '../generated'
 import { NAME, VERSION } from '../version'
 import { getSolanaRpcEndpoint } from './helpers'
-import { validateKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
+import { validateKineticSdkConfig } from './helpers/validate-kinetic-sdk-config'
 import {
   CreateAccountOptions,
   GetBalanceOptions,
