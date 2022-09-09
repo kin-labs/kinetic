@@ -400,25 +400,25 @@ export interface ConfirmedSignatureInfo {
    * @type {number}
    * @memberof ConfirmedSignatureInfo
    */
-  slot: number
+  slot?: number
   /**
    *
    * @type {string}
    * @memberof ConfirmedSignatureInfo
    */
-  err: string
+  err?: string
   /**
    *
    * @type {string}
    * @memberof ConfirmedSignatureInfo
    */
-  memo: string
+  memo?: string
   /**
    *
    * @type {number}
    * @memberof ConfirmedSignatureInfo
    */
-  blockTime: number
+  blockTime?: number
 }
 /**
  *
@@ -431,7 +431,7 @@ export interface ConfirmedTransactionMeta {
    * @type {number}
    * @memberof ConfirmedTransactionMeta
    */
-  fee: number
+  fee?: number
   /**
    *
    * @type {Array<string>}
@@ -455,25 +455,25 @@ export interface ConfirmedTransactionMeta {
    * @type {Array<string>}
    * @memberof ConfirmedTransactionMeta
    */
-  logMessages: Array<string>
+  logMessages?: Array<string>
   /**
    *
    * @type {Array<string>}
    * @memberof ConfirmedTransactionMeta
    */
-  preTokenBalances: Array<string>
+  preTokenBalances?: Array<string>
   /**
    *
    * @type {Array<string>}
    * @memberof ConfirmedTransactionMeta
    */
-  postTokenBalances: Array<string>
+  postTokenBalances?: Array<string>
   /**
    *
    * @type {object}
    * @memberof ConfirmedTransactionMeta
    */
-  err: object
+  err?: object
 }
 /**
  *
@@ -758,26 +758,36 @@ export interface SignatureStatus {
    * @type {number}
    * @memberof SignatureStatus
    */
-  slot: number
+  slot?: number
   /**
    *
    * @type {number}
    * @memberof SignatureStatus
    */
-  confirmations: number
+  confirmations?: number
   /**
    *
    * @type {object}
    * @memberof SignatureStatus
    */
-  err: object
+  err?: object
   /**
    *
-   * @type {object}
+   * @type {string}
    * @memberof SignatureStatus
    */
-  confirmationStatus: object
+  confirmationStatus?: SignatureStatusConfirmationStatusEnum
 }
+
+export const SignatureStatusConfirmationStatusEnum = {
+  Processed: 'processed',
+  Confirmed: 'confirmed',
+  Finalized: 'finalized',
+} as const
+
+export type SignatureStatusConfirmationStatusEnum =
+  typeof SignatureStatusConfirmationStatusEnum[keyof typeof SignatureStatusConfirmationStatusEnum]
+
 /**
  *
  * @export
@@ -789,187 +799,187 @@ export interface Transaction {
    * @type {string}
    * @memberof Transaction
    */
-  id: string | null
+  id?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  createdAt: string | null
+  createdAt?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  updatedAt: string | null
+  updatedAt?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  amount: string | null
+  amount?: string | null
   /**
    *
    * @type {number}
    * @memberof Transaction
    */
-  decimals: number | null
+  decimals?: number | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  destination: string | null
+  destination?: string | null
   /**
    *
    * @type {Array<TransactionError>}
    * @memberof Transaction
    */
-  errors: Array<TransactionError> | null
+  errors?: Array<TransactionError> | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  explorerUrl: string | null
+  explorerUrl?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  feePayer: string | null
+  feePayer?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  ip: string | null
+  ip?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  mint: string | null
+  mint?: string | null
   /**
    *
    * @type {number}
    * @memberof Transaction
    */
-  processingDuration: number | null
+  processingDuration?: number | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  referenceId: string | null
+  referenceId?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  referenceType: string | null
+  referenceType?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  signature: string | null
+  signature?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  solanaCommitted: string | null
+  solanaCommitted?: string | null
   /**
    *
    * @type {number}
    * @memberof Transaction
    */
-  solanaCommittedDuration: number | null
+  solanaCommittedDuration?: number | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  solanaFinalized: string | null
+  solanaFinalized?: string | null
   /**
    *
    * @type {number}
    * @memberof Transaction
    */
-  solanaFinalizedDuration: number | null
+  solanaFinalizedDuration?: number | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  solanaStart: string | null
+  solanaStart?: string | null
   /**
    *
    * @type {object}
    * @memberof Transaction
    */
-  solanaTransaction: object | null
+  solanaTransaction?: object | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  source: string | null
+  source?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  status: TransactionStatusEnum
+  status?: TransactionStatusEnum
   /**
    *
    * @type {number}
    * @memberof Transaction
    */
-  totalDuration: number | null
+  totalDuration?: number | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  ua: string | null
+  ua?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  webhookEventStart: string | null
+  webhookEventStart?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  webhookEventEnd: string | null
+  webhookEventEnd?: string | null
   /**
    *
    * @type {number}
    * @memberof Transaction
    */
-  webhookEventDuration: number | null
+  webhookEventDuration?: number | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  webhookVerifyStart: string | null
+  webhookVerifyStart?: string | null
   /**
    *
    * @type {string}
    * @memberof Transaction
    */
-  webhookVerifyEnd: string | null
+  webhookVerifyEnd?: string | null
   /**
    *
    * @type {number}
    * @memberof Transaction
    */
-  webhookVerifyDuration: number | null
+  webhookVerifyDuration?: number | null
 }
 
 export const TransactionStatusEnum = {
@@ -1061,7 +1071,7 @@ export interface TransactionResponse {
    * @type {number}
    * @memberof TransactionResponse
    */
-  slot: number
+  slot?: number
   /**
    *
    * @type {TransactionData}
@@ -1079,7 +1089,7 @@ export interface TransactionResponse {
    * @type {number}
    * @memberof TransactionResponse
    */
-  blockTime: number
+  blockTime?: number
 }
 
 /**

@@ -11,7 +11,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
-import { HistoryResponse } from './entities/history.entity'
+import { HistoryResponse } from './entities/history-response.entity'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {

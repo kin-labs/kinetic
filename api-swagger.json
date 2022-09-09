@@ -741,40 +741,7 @@
             "type": "number",
             "nullable": true
           }
-        },
-        "required": [
-          "id",
-          "createdAt",
-          "updatedAt",
-          "amount",
-          "decimals",
-          "destination",
-          "errors",
-          "explorerUrl",
-          "feePayer",
-          "ip",
-          "mint",
-          "processingDuration",
-          "referenceId",
-          "referenceType",
-          "signature",
-          "solanaCommitted",
-          "solanaCommittedDuration",
-          "solanaFinalized",
-          "solanaFinalizedDuration",
-          "solanaStart",
-          "solanaTransaction",
-          "source",
-          "status",
-          "totalDuration",
-          "ua",
-          "webhookEventStart",
-          "webhookEventEnd",
-          "webhookEventDuration",
-          "webhookVerifyStart",
-          "webhookVerifyEnd",
-          "webhookVerifyDuration"
-        ]
+        }
       },
       "BalanceToken": {
         "type": "object",
@@ -828,7 +795,7 @@
             "type": "number"
           }
         },
-        "required": ["signature", "slot", "err", "memo", "blockTime"]
+        "required": ["signature"]
       },
       "HistoryResponse": {
         "type": "object",
@@ -1145,10 +1112,10 @@
             "type": "object"
           },
           "confirmationStatus": {
-            "type": "object"
+            "type": "string",
+            "enum": ["processed", "confirmed", "finalized"]
           }
-        },
-        "required": ["slot", "confirmations", "err", "confirmationStatus"]
+        }
       },
       "Message": {
         "type": "object",
@@ -1215,16 +1182,7 @@
             "type": "object"
           }
         },
-        "required": [
-          "fee",
-          "innerInstructions",
-          "preBalances",
-          "postBalances",
-          "logMessages",
-          "preTokenBalances",
-          "postTokenBalances",
-          "err"
-        ]
+        "required": ["innerInstructions", "preBalances", "postBalances"]
       },
       "TransactionResponse": {
         "type": "object",
@@ -1242,7 +1200,7 @@
             "type": "number"
           }
         },
-        "required": ["slot", "transaction", "meta", "blockTime"]
+        "required": ["transaction", "meta"]
       },
       "GetTransactionResponse": {
         "type": "object",
