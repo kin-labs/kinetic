@@ -159,10 +159,6 @@ describe('KineticSdk (e2e)', () => {
   })
 
   it('should make a transfer using a mint', async () => {
-    await sdk.createAccount({
-      mint: solMint,
-      owner: bobKeypair,
-    })
     const tx = await sdk.makeTransfer({
       amount: '1',
       destination: bobKeypair.publicKey,
