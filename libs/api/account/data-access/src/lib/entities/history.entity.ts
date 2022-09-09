@@ -10,12 +10,12 @@ export class HistoryResponse {
 export class ConfirmedSignatureInfo {
   @ApiProperty()
   signature: string
-  @ApiProperty()
-  slot: number
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  slot: number | null
+  @ApiProperty({ required: false })
   err: string | null
-  @ApiProperty()
+  @ApiProperty({ required: false })
   memo: string | null
-  @ApiProperty()
+  @ApiProperty({ required: false })
   blockTime?: number | null
 }

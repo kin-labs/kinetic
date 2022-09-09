@@ -8,9 +8,9 @@ import {
 } from '@solana/web3.js'
 
 export class SignatureStatus {
-  @ApiProperty()
-  slot: number
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  slot: number | null
+  @ApiProperty({ required: false })
   confirmations: number | null
   @ApiProperty()
   err: TransactionError | null
@@ -35,15 +35,15 @@ export class CompiledInnerInstruction {
 }
 
 export class ConfirmedTransactionMeta {
-  @ApiProperty()
-  fee: number
+  @ApiProperty({ required: false })
+  fee: number | null
   @ApiProperty()
   innerInstructions?: CompiledInnerInstruction[] | null
   @ApiProperty()
   preBalances: number[]
   @ApiProperty()
   postBalances: number[]
-  @ApiProperty()
+  @ApiProperty({ required: false })
   logMessages?: string[] | null
   @ApiProperty()
   preTokenBalances?: TokenBalance[] | null
@@ -61,13 +61,13 @@ export class TransactionData {
 }
 
 export class TransactionResponse {
-  @ApiProperty()
-  slot: number
+  @ApiProperty({ required: false })
+  slot: number | null
   @ApiProperty()
   transaction: TransactionData
   @ApiProperty()
   meta: ConfirmedTransactionMeta | null
-  @ApiProperty()
+  @ApiProperty({ required: false })
   blockTime?: number | null
 }
 

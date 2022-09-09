@@ -804,7 +804,7 @@
             "type": "number"
           }
         },
-        "required": ["signature", "slot", "err", "memo", "blockTime"]
+        "required": ["signature"]
       },
       "HistoryResponse": {
         "type": "object",
@@ -1124,7 +1124,7 @@
             "type": "object"
           }
         },
-        "required": ["slot", "confirmations", "err", "confirmationStatus"]
+        "required": ["err", "confirmationStatus"]
       },
       "Message": {
         "type": "object",
@@ -1191,16 +1191,7 @@
             "type": "object"
           }
         },
-        "required": [
-          "fee",
-          "innerInstructions",
-          "preBalances",
-          "postBalances",
-          "logMessages",
-          "preTokenBalances",
-          "postTokenBalances",
-          "err"
-        ]
+        "required": ["innerInstructions", "preBalances", "postBalances", "preTokenBalances", "postTokenBalances", "err"]
       },
       "TransactionResponse": {
         "type": "object",
@@ -1218,7 +1209,7 @@
             "type": "number"
           }
         },
-        "required": ["slot", "transaction", "meta", "blockTime"]
+        "required": ["transaction", "meta"]
       },
       "GetTransactionResponse": {
         "type": "object",
