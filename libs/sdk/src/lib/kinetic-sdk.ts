@@ -10,7 +10,6 @@ import {
   GetTokenAccountsOptions,
   GetTransactionOptions,
   KineticSdkConfig,
-  KineticSdkConfigParsed,
   MakeTransferBatchOptions,
   MakeTransferOptions,
   RequestAirdropOptions,
@@ -24,7 +23,7 @@ export class KineticSdk {
 
   private readonly internal: KineticSdkInternal
 
-  constructor(readonly sdkConfig: KineticSdkConfigParsed) {
+  constructor(readonly sdkConfig: KineticSdkConfig) {
     this.internal = new KineticSdkInternal(sdkConfig)
   }
 

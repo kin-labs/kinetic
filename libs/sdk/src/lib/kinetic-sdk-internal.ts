@@ -29,7 +29,7 @@ import {
   GetHistoryOptions,
   GetTokenAccountsOptions,
   GetTransactionOptions,
-  KineticSdkConfigParsed,
+  KineticSdkConfig,
   KineticSdkEnvironment,
   MakeTransferBatchOptions,
   MakeTransferOptions,
@@ -55,7 +55,7 @@ export class KineticSdkInternal {
     }
   }
 
-  constructor(readonly sdkConfig: KineticSdkConfigParsed) {
+  constructor(readonly sdkConfig: KineticSdkConfig) {
     // Create the API Configuration
     const apiConfig = new Configuration({
       baseOptions: this.requestConfig(this.sdkConfig.headers),

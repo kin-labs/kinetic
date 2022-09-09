@@ -1,5 +1,4 @@
 import { KineticSdkConfig } from '../interfaces'
-import { KineticSdkConfigParsed } from '../interfaces/kinetic-sdk-config-parsed'
 
 function removeTrailingSlash(str: string) {
   return str.replace(/\/+$/, '')
@@ -10,7 +9,7 @@ function removeTrailingSlash(str: string) {
  * @param {KineticSdkConfig} config
  * @returns {string}
  */
-export function parseKineticSdkConfig(config: KineticSdkConfig): KineticSdkConfigParsed {
+export function parseKineticSdkConfig(config: KineticSdkConfig): KineticSdkConfig {
   if (!config.environment) {
     throw new Error(`parseKineticSdkConfig: no environment configured.`)
   }
