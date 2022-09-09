@@ -2,7 +2,7 @@ import { Solana } from '@kin-kinetic/solana'
 import { AppConfig, Transaction, BalanceResponse, GetTransactionResponse, HistoryResponse } from '../generated'
 import { NAME, VERSION } from '../version'
 import { getSolanaRpcEndpoint } from './helpers'
-import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
+import { validateKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
 import {
   CreateAccountOptions,
   GetBalanceOptions,
@@ -95,7 +95,7 @@ export class KineticSdk {
   }
 
   static async setup(config: KineticSdkConfig): Promise<KineticSdk> {
-    const sdk = new KineticSdk(parseKineticSdkConfig(config))
+    const sdk = new KineticSdk(validateKineticSdkConfig(config))
     try {
       await sdk.init().then(() => config.logger?.log(`${NAME}: Setup done.`))
       return sdk
