@@ -21,7 +21,7 @@ import {
 import { omit } from 'lodash'
 import { MetricService } from 'nestjs-otel'
 
-type AppEnvironment = AppEnv & {
+export type AppEnvironment = AppEnv & {
   app: App
   cluster: Cluster
   mints: { addMemo: boolean; mint: Mint; wallet: Wallet }[]

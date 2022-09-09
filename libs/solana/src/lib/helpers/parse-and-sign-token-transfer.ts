@@ -10,7 +10,7 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
   source: string
   transaction: Transaction
 } {
-  const { feePayer, source, transaction } = parseAndSignTransaction({ tx, signer })
+  const { blockhash, feePayer, source, transaction } = parseAndSignTransaction({ tx, signer })
 
   // Get the first token account transfer
   const instruction = transaction.instructions.find(
@@ -20,9 +20,6 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
     throw new Error(`parseAndSignTokenTransfer: Can't find token transfer instruction`)
   }
 
-  if (!transaction.recentBlockhash) {
-    throw new Error(`parseAndSignTokenTransfer: Can't find recentBlockhash`)
-  }
   // Get the amount and destination from the instruction
   const {
     data: { amount },
@@ -31,7 +28,7 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
 
   return {
     amount: Number(amount),
-    blockhash: transaction.recentBlockhash.toString(),
+    blockhash,
     destination,
     feePayer,
     source,

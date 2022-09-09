@@ -6244,7 +6244,7 @@ export const AdminAppsDocument = gql`
 `
 
 export function useAdminAppsQuery(options?: Omit<Urql.UseQueryArgs<AdminAppsQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminAppsQuery>({ query: AdminAppsDocument, ...options })
+  return Urql.useQuery<AdminAppsQuery, AdminAppsQueryVariables>({ query: AdminAppsDocument, ...options })
 }
 export const AdminAppDocument = gql`
   query AdminApp($appId: String!) {
@@ -6268,7 +6268,7 @@ export const AdminAppDocument = gql`
 `
 
 export function useAdminAppQuery(options: Omit<Urql.UseQueryArgs<AdminAppQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminAppQuery>({ query: AdminAppDocument, ...options })
+  return Urql.useQuery<AdminAppQuery, AdminAppQueryVariables>({ query: AdminAppDocument, ...options })
 }
 export const UserAppEnvStatsDocument = gql`
   query UserAppEnvStats($appEnvId: String!) {
@@ -6280,7 +6280,10 @@ export const UserAppEnvStatsDocument = gql`
 `
 
 export function useUserAppEnvStatsQuery(options: Omit<Urql.UseQueryArgs<UserAppEnvStatsQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserAppEnvStatsQuery>({ query: UserAppEnvStatsDocument, ...options })
+  return Urql.useQuery<UserAppEnvStatsQuery, UserAppEnvStatsQueryVariables>({
+    query: UserAppEnvStatsDocument,
+    ...options,
+  })
 }
 export const UserUpdateAppDocument = gql`
   mutation UserUpdateApp($appId: String!, $input: UserAppUpdateInput!) {
@@ -6612,7 +6615,10 @@ export const UserTransactionDocument = gql`
 `
 
 export function useUserTransactionQuery(options: Omit<Urql.UseQueryArgs<UserTransactionQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserTransactionQuery>({ query: UserTransactionDocument, ...options })
+  return Urql.useQuery<UserTransactionQuery, UserTransactionQueryVariables>({
+    query: UserTransactionDocument,
+    ...options,
+  })
 }
 export const UserTransactionsDocument = gql`
   query UserTransactions($appId: String!, $appEnvId: String!, $input: UserTransactionListInput) {
@@ -6630,7 +6636,10 @@ export const UserTransactionsDocument = gql`
 `
 
 export function useUserTransactionsQuery(options: Omit<Urql.UseQueryArgs<UserTransactionsQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserTransactionsQuery>({ query: UserTransactionsDocument, ...options })
+  return Urql.useQuery<UserTransactionsQuery, UserTransactionsQueryVariables>({
+    query: UserTransactionsDocument,
+    ...options,
+  })
 }
 export const UserAppsDocument = gql`
   query UserApps {
@@ -6646,7 +6655,7 @@ export const UserAppsDocument = gql`
 `
 
 export function useUserAppsQuery(options?: Omit<Urql.UseQueryArgs<UserAppsQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserAppsQuery>({ query: UserAppsDocument, ...options })
+  return Urql.useQuery<UserAppsQuery, UserAppsQueryVariables>({ query: UserAppsDocument, ...options })
 }
 export const UserAppDocument = gql`
   query UserApp($appId: String!) {
@@ -6671,7 +6680,7 @@ export const UserAppDocument = gql`
 `
 
 export function useUserAppQuery(options: Omit<Urql.UseQueryArgs<UserAppQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserAppQuery>({ query: UserAppDocument, ...options })
+  return Urql.useQuery<UserAppQuery, UserAppQueryVariables>({ query: UserAppDocument, ...options })
 }
 export const UserAppEnvDocument = gql`
   query UserAppEnv($appId: String!, $appEnvId: String!) {
@@ -6687,7 +6696,7 @@ export const UserAppEnvDocument = gql`
 `
 
 export function useUserAppEnvQuery(options: Omit<Urql.UseQueryArgs<UserAppEnvQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserAppEnvQuery>({ query: UserAppEnvDocument, ...options })
+  return Urql.useQuery<UserAppEnvQuery, UserAppEnvQueryVariables>({ query: UserAppEnvDocument, ...options })
 }
 export const LoginDocument = gql`
   mutation Login($input: UserLoginInput!) {
@@ -6720,7 +6729,7 @@ export const MeDocument = gql`
 `
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
-  return Urql.useQuery<MeQuery>({ query: MeDocument, ...options })
+  return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options })
 }
 export const AdminMintCreateDocument = gql`
   mutation AdminMintCreate($input: AdminMintCreateInput!) {
@@ -6788,7 +6797,7 @@ export const AdminClusterDocument = gql`
 `
 
 export function useAdminClusterQuery(options: Omit<Urql.UseQueryArgs<AdminClusterQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminClusterQuery>({ query: AdminClusterDocument, ...options })
+  return Urql.useQuery<AdminClusterQuery, AdminClusterQueryVariables>({ query: AdminClusterDocument, ...options })
 }
 export const AdminClustersDocument = gql`
   query AdminClusters {
@@ -6804,7 +6813,7 @@ export const AdminClustersDocument = gql`
 `
 
 export function useAdminClustersQuery(options?: Omit<Urql.UseQueryArgs<AdminClustersQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminClustersQuery>({ query: AdminClustersDocument, ...options })
+  return Urql.useQuery<AdminClustersQuery, AdminClustersQueryVariables>({ query: AdminClustersDocument, ...options })
 }
 export const ClusterStatsDocument = gql`
   query ClusterStats($clusterId: String!) {
@@ -6816,7 +6825,7 @@ export const ClusterStatsDocument = gql`
 `
 
 export function useClusterStatsQuery(options: Omit<Urql.UseQueryArgs<ClusterStatsQueryVariables>, 'query'>) {
-  return Urql.useQuery<ClusterStatsQuery>({ query: ClusterStatsDocument, ...options })
+  return Urql.useQuery<ClusterStatsQuery, ClusterStatsQueryVariables>({ query: ClusterStatsDocument, ...options })
 }
 export const UserClusterDocument = gql`
   query UserCluster($clusterId: String!) {
@@ -6832,7 +6841,7 @@ export const UserClusterDocument = gql`
 `
 
 export function useUserClusterQuery(options: Omit<Urql.UseQueryArgs<UserClusterQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserClusterQuery>({ query: UserClusterDocument, ...options })
+  return Urql.useQuery<UserClusterQuery, UserClusterQueryVariables>({ query: UserClusterDocument, ...options })
 }
 export const UserClustersDocument = gql`
   query UserClusters {
@@ -6848,7 +6857,7 @@ export const UserClustersDocument = gql`
 `
 
 export function useUserClustersQuery(options?: Omit<Urql.UseQueryArgs<UserClustersQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserClustersQuery>({ query: UserClustersDocument, ...options })
+  return Urql.useQuery<UserClustersQuery, UserClustersQueryVariables>({ query: UserClustersDocument, ...options })
 }
 export const UptimeDocument = gql`
   query Uptime {
@@ -6857,7 +6866,7 @@ export const UptimeDocument = gql`
 `
 
 export function useUptimeQuery(options?: Omit<Urql.UseQueryArgs<UptimeQueryVariables>, 'query'>) {
-  return Urql.useQuery<UptimeQuery>({ query: UptimeDocument, ...options })
+  return Urql.useQuery<UptimeQuery, UptimeQueryVariables>({ query: UptimeDocument, ...options })
 }
 export const AdminCreateUserDocument = gql`
   mutation AdminCreateUser($input: AdminUserCreateInput!) {
@@ -6913,7 +6922,7 @@ export const AdminUserDocument = gql`
 `
 
 export function useAdminUserQuery(options: Omit<Urql.UseQueryArgs<AdminUserQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminUserQuery>({ query: AdminUserDocument, ...options })
+  return Urql.useQuery<AdminUserQuery, AdminUserQueryVariables>({ query: AdminUserDocument, ...options })
 }
 export const AdminUsersDocument = gql`
   query AdminUsers {
@@ -6925,7 +6934,7 @@ export const AdminUsersDocument = gql`
 `
 
 export function useAdminUsersQuery(options?: Omit<Urql.UseQueryArgs<AdminUsersQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminUsersQuery>({ query: AdminUsersDocument, ...options })
+  return Urql.useQuery<AdminUsersQuery, AdminUsersQueryVariables>({ query: AdminUsersDocument, ...options })
 }
 export const UserSearchUsersDocument = gql`
   query UserSearchUsers($input: UserSearchUserInput!) {
@@ -6937,7 +6946,10 @@ export const UserSearchUsersDocument = gql`
 `
 
 export function useUserSearchUsersQuery(options: Omit<Urql.UseQueryArgs<UserSearchUsersQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserSearchUsersQuery>({ query: UserSearchUsersDocument, ...options })
+  return Urql.useQuery<UserSearchUsersQuery, UserSearchUsersQueryVariables>({
+    query: UserSearchUsersDocument,
+    ...options,
+  })
 }
 export const AdminDeleteWalletDocument = gql`
   mutation AdminDeleteWallet($walletId: String!) {
@@ -6969,7 +6981,7 @@ export const AdminWalletDocument = gql`
 `
 
 export function useAdminWalletQuery(options: Omit<Urql.UseQueryArgs<AdminWalletQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminWalletQuery>({ query: AdminWalletDocument, ...options })
+  return Urql.useQuery<AdminWalletQuery, AdminWalletQueryVariables>({ query: AdminWalletDocument, ...options })
 }
 export const AdminWalletBalancesDocument = gql`
   query AdminWalletBalances($appEnvId: String!, $walletId: String!) {
@@ -6983,7 +6995,10 @@ export const AdminWalletBalancesDocument = gql`
 export function useAdminWalletBalancesQuery(
   options: Omit<Urql.UseQueryArgs<AdminWalletBalancesQueryVariables>, 'query'>,
 ) {
-  return Urql.useQuery<AdminWalletBalancesQuery>({ query: AdminWalletBalancesDocument, ...options })
+  return Urql.useQuery<AdminWalletBalancesQuery, AdminWalletBalancesQueryVariables>({
+    query: AdminWalletBalancesDocument,
+    ...options,
+  })
 }
 export const AdminWalletsDocument = gql`
   query AdminWallets {
@@ -7010,7 +7025,7 @@ export const AdminWalletsDocument = gql`
 `
 
 export function useAdminWalletsQuery(options?: Omit<Urql.UseQueryArgs<AdminWalletsQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminWalletsQuery>({ query: AdminWalletsDocument, ...options })
+  return Urql.useQuery<AdminWalletsQuery, AdminWalletsQueryVariables>({ query: AdminWalletsDocument, ...options })
 }
 export const UserGenerateWalletDocument = gql`
   mutation UserGenerateWallet($appEnvId: String!) {
@@ -7066,7 +7081,7 @@ export const UserWalletDocument = gql`
 `
 
 export function useUserWalletQuery(options: Omit<Urql.UseQueryArgs<UserWalletQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserWalletQuery>({ query: UserWalletDocument, ...options })
+  return Urql.useQuery<UserWalletQuery, UserWalletQueryVariables>({ query: UserWalletDocument, ...options })
 }
 export const UserWalletAirdropDocument = gql`
   query UserWalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!) {
@@ -7078,7 +7093,10 @@ export const UserWalletAirdropDocument = gql`
 `
 
 export function useUserWalletAirdropQuery(options: Omit<Urql.UseQueryArgs<UserWalletAirdropQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserWalletAirdropQuery>({ query: UserWalletAirdropDocument, ...options })
+  return Urql.useQuery<UserWalletAirdropQuery, UserWalletAirdropQueryVariables>({
+    query: UserWalletAirdropDocument,
+    ...options,
+  })
 }
 export const UserWalletBalanceDocument = gql`
   query UserWalletBalance($appEnvId: String!, $walletId: String!) {
@@ -7090,7 +7108,10 @@ export const UserWalletBalanceDocument = gql`
 `
 
 export function useUserWalletBalanceQuery(options: Omit<Urql.UseQueryArgs<UserWalletBalanceQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserWalletBalanceQuery>({ query: UserWalletBalanceDocument, ...options })
+  return Urql.useQuery<UserWalletBalanceQuery, UserWalletBalanceQueryVariables>({
+    query: UserWalletBalanceDocument,
+    ...options,
+  })
 }
 export const UserWalletBalancesDocument = gql`
   query UserWalletBalances($appEnvId: String!, $walletId: String!) {
@@ -7104,7 +7125,10 @@ export const UserWalletBalancesDocument = gql`
 export function useUserWalletBalancesQuery(
   options: Omit<Urql.UseQueryArgs<UserWalletBalancesQueryVariables>, 'query'>,
 ) {
-  return Urql.useQuery<UserWalletBalancesQuery>({ query: UserWalletBalancesDocument, ...options })
+  return Urql.useQuery<UserWalletBalancesQuery, UserWalletBalancesQueryVariables>({
+    query: UserWalletBalancesDocument,
+    ...options,
+  })
 }
 export const UserWalletsDocument = gql`
   query UserWallets($appEnvId: String!) {
@@ -7120,5 +7144,5 @@ export const UserWalletsDocument = gql`
 `
 
 export function useUserWalletsQuery(options: Omit<Urql.UseQueryArgs<UserWalletsQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserWalletsQuery>({ query: UserWalletsDocument, ...options })
+  return Urql.useQuery<UserWalletsQuery, UserWalletsQueryVariables>({ query: UserWalletsDocument, ...options })
 }

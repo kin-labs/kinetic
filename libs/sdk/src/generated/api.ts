@@ -486,6 +486,12 @@ export interface CreateAccountRequest {
    * @type {string}
    * @memberof CreateAccountRequest
    */
+  commitment: CreateAccountRequestCommitmentEnum
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountRequest
+   */
   environment: string
   /**
    *
@@ -493,6 +499,12 @@ export interface CreateAccountRequest {
    * @memberof CreateAccountRequest
    */
   index: number
+  /**
+   *
+   * @type {number}
+   * @memberof CreateAccountRequest
+   */
+  lastValidBlockHeight: number
   /**
    *
    * @type {string}
@@ -504,8 +516,30 @@ export interface CreateAccountRequest {
    * @type {string}
    * @memberof CreateAccountRequest
    */
+  referenceId: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountRequest
+   */
+  referenceType: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountRequest
+   */
   tx: string
 }
+
+export const CreateAccountRequestCommitmentEnum = {
+  Confirmed: 'Confirmed',
+  Finalized: 'Finalized',
+  Processed: 'Processed',
+} as const
+
+export type CreateAccountRequestCommitmentEnum =
+  typeof CreateAccountRequestCommitmentEnum[keyof typeof CreateAccountRequestCommitmentEnum]
+
 /**
  *
  * @export

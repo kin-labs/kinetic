@@ -83,7 +83,13 @@ export class KineticSdkInternal {
     return res.data as BalanceResponse
   }
 
-  async createAccount({ owner, mint }: CreateAccountOptions): Promise<Transaction> {
+  async createAccount({
+    commitment,
+    mint,
+    owner,
+    referenceId,
+    referenceType,
+  }: CreateAccountOptions): Promise<Transaction> {
     if (!this.appConfig) {
       throw new Error(`AppConfig not initialized`)
     }
@@ -103,9 +109,13 @@ export class KineticSdkInternal {
     })
 
     const request: CreateAccountRequest = {
+      commitment: commitment || Commitment.Confirmed,
       environment: this.appConfig.environment.name,
       index: this.appConfig.app.index,
+      lastValidBlockHeight,
       mint: mint.toString(),
+      referenceId: referenceId || null,
+      referenceType: referenceType || null,
       tx: serializeTransaction(tx),
     }
 

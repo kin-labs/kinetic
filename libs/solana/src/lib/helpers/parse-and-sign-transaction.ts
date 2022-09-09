@@ -1,6 +1,7 @@
 import { Keypair, Transaction } from '@solana/web3.js'
 
 export function parseAndSignTransaction({ tx, signer }: { tx: Buffer; signer: Keypair }): {
+  blockhash: string
   feePayer: string
   source: string
   transaction: Transaction
@@ -17,6 +18,10 @@ export function parseAndSignTransaction({ tx, signer }: { tx: Buffer; signer: Ke
     throw new Error(`parseAndSignTransaction: Can't find token feePayer`)
   }
 
+  if (!transaction.recentBlockhash) {
+    throw new Error(`parseAndSignTransaction: Can't find recentBlockhash`)
+  }
+
   // Get the source
   const source = transaction.signatures
     .find((signature) => signature.publicKey.toBase58() !== feePayer)
@@ -25,5 +30,5 @@ export function parseAndSignTransaction({ tx, signer }: { tx: Buffer; signer: Ke
     throw new Error(`parseAndSignTransaction: Can't find transaction source`)
   }
 
-  return { feePayer, source, transaction }
+  return { feePayer, blockhash: transaction.recentBlockhash.toString(), source, transaction }
 }
