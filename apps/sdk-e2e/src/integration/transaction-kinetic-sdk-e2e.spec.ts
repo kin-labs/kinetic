@@ -1,6 +1,6 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
-import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair, solMint } from './fixtures'
+import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair, usdcMint } from './fixtures'
 import { Destination } from '@kin-kinetic/solana'
 import { TransactionStatus } from '@prisma/client'
 import { DEFAULT_MINT } from './helpers'
@@ -159,18 +159,14 @@ describe('KineticSdk (e2e)', () => {
   })
 
   it('should make a transfer using a mint', async () => {
-    await sdk.createAccount({
-      mint: solMint,
-      owner: bobKeypair,
-    })
     const tx = await sdk.makeTransfer({
       amount: '1',
       destination: bobKeypair.publicKey,
       owner: aliceKeypair,
-      mint: solMint,
+      mint: usdcMint,
     })
     expect(tx).not.toBeNull()
-    expect(tx.mint).toBe(solMint)
+    expect(tx.mint).toBe(usdcMint)
     const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
