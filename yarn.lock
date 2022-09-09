@@ -3394,6 +3394,13 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@golevelup/nestjs-modules@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@golevelup/nestjs-modules/-/nestjs-modules-0.6.1.tgz#0b755d2406fed8acb8e61ee3ab52b39994ddf313"
+  integrity sha512-E0STg8In8fhIivnGDJAA70+XLPHzK5bMTkCnif9FbZ8waTYDQ3T/QQL0h73k+CUFeznn1hmuEW14sNaE+8cd7w==
+  dependencies:
+    lodash "^4.17.21"
+
 "@graphql-codegen/add@^3.2.1":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/add/-/add-3.2.1.tgz#f1109f36f194f88a6abcc51703abee43ebbb50a2"
@@ -4942,6 +4949,36 @@
     chalk "^4.1.0"
     consola "^2.15.0"
     node-fetch "^2.6.1"
+
+"@ogma/common@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ogma/common/-/common-1.0.0.tgz#0940cf85cf44579bdc7e8c3e07b592dc35db12b8"
+  integrity sha512-IXvSnXbXccpxJR+UbN2fxp30R/44VFpx/T0ungb1PMwLa9BLmtbeQIXqc9TR11gRaDNY0e78tqVckau8oyXK0A==
+
+"@ogma/common@1.1.0", "@ogma/common@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@ogma/common/-/common-1.1.0.tgz#f9c9d092e4f95abf6be90b3a150eba8c7d5cb7bf"
+  integrity sha512-GJkPfMAMoVbWclFrGzbNFKHzf7669nlpsbLyw+XMPtES/YALJ54WDm47S1kpRhveaYuHK41vc1A8Tl3RT7SM5A==
+
+"@ogma/logger@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@ogma/logger/-/logger-2.3.0.tgz#d09154bc95372d3ffa736ef1fea9217bf596d0e7"
+  integrity sha512-kmeIzSaaEoFjGzj+Nag82rgzPfP4e6f8qBLapRAVFtZhD2aCEWPiaiT2ZycWmu6YDNDOeQQMJUQPAfjj3elH3w==
+  dependencies:
+    "@ogma/common" "1.1.0"
+    "@ogma/styler" "1.0.0"
+
+"@ogma/nestjs-module@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@ogma/nestjs-module/-/nestjs-module-4.0.1.tgz#3086dc9dddb0ab518c713b9848af678d404ef54a"
+  integrity sha512-iYTL/k5DqoYlHkL9atk3o4dAMtMkgIFDEvaTfJnS5Ty/qNOEBQRQIxicOIHyQ7BAvBOz/kyZoqTKmgZIp3sdsw==
+
+"@ogma/styler@1.0.0", "@ogma/styler@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@ogma/styler/-/styler-1.0.0.tgz#7d4c7c2833f1b5559f64851110cef46529245bc7"
+  integrity sha512-Twtijg2eUS4HEPyic0FEpkdJgRtLSvVow/3gmLsMkyU+GhSm80PnRlc6q1N1rmf1EQhuwGZLKhS30sYIuFV38A==
+  dependencies:
+    "@ogma/common" "1.0.0"
 
 "@openapitools/openapi-generator-cli@^2.5.2":
   version "2.5.2"

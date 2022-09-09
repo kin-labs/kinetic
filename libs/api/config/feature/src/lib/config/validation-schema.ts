@@ -9,6 +9,10 @@ export const validationSchema = Joi.object({
   DATABASE_URL: Joi.string().required(),
   HOST: Joi.string().default('127.0.0.1'),
   JWT_SECRET: Joi.string().required(),
+  LOG_COLOR: Joi.boolean().default('true'),
+  LOG_LEVEL: Joi.string()
+    .equal('ALL', 'SILLY', 'FINE', 'VERBOSE', 'DEBUG', 'INFO', 'LOG', 'WARN', 'ERROR', 'FATAL', 'OFF')
+    .default('INFO'),
   METRICS_ENABLED: Joi.boolean().default(false),
   METRICS_ENDPOINT_ENABLED: Joi.boolean().default(false),
   METRICS_PORT: Joi.number().default(0),

@@ -33,6 +33,14 @@ export class ApiConfigDataAccessService {
     return this.config.get('admin.password')
   }
 
+  get apiLogColor() {
+    return this.config.get('api.log.color')
+  }
+
+  get apiLogLevel() {
+    return this.config.get('api.log.level')
+  }
+
   get apiName(): string {
     return this.config.get('api.name')
   }

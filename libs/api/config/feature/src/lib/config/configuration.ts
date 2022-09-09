@@ -16,8 +16,12 @@ export default () => ({
     password: process.env.ADMIN_PASSWORD,
   },
   api: {
-    url: process.env.API_URL,
+    log: {
+      color: process.env.LOG_COLOR?.toLowerCase() !== 'false',
+      level: process.env.LOG_LEVEL,
+    },
     name: NAME,
+    url: process.env.API_URL,
     version: VERSION,
   },
   cors: { origins },

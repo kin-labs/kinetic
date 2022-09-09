@@ -326,7 +326,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
               create: { ...cluster },
             })
             .then((res) => {
-              this.logger.verbose(`Configured cluster ${res.name} (${res.status})`)
+              this.logger.log(`Configured cluster ${res.name} (${res.status})`)
               return this.configureMints(mints)
             })
         }),
