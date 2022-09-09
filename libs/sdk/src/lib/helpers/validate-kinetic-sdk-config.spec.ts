@@ -12,7 +12,7 @@ describe('validateKineticSdkConfig', () => {
     try {
       validateKineticSdkConfig({ ...baseConfig, endpoint: 'x' })
     } catch (error) {
-      expect(error).toBe(`validateKineticSdkConfig: the endpoint should start with http or https.`)
+      expect(error.toString()).toBe('Error: validateKineticSdkConfig: the endpoint should start with http or https.')
     }
   })
 })
