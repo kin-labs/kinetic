@@ -2,7 +2,7 @@ import * as bip39 from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english'
 import { Keypair as SolanaKeypair, PublicKey as SolanaPublicKey } from '@solana/web3.js'
 import * as bs58 from 'bs58'
-import { derivePath } from './vendor/hd-key'
+import { derivePath } from 'ed25519-hd-key'
 
 export { SolanaKeypair, SolanaPublicKey }
 
