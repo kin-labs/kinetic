@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'api-core-feature',
   preset: '../../../../jest.preset.js',

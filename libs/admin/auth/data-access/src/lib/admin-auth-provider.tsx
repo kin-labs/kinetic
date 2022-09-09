@@ -37,7 +37,7 @@ const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     setUser(undefined)
-    const result = await logoutMutation()
+    const result = await logoutMutation({})
     return !!result.data?.logout
   }
 

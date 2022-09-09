@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'api-account-feature',
   preset: '../../../../jest.preset.js',

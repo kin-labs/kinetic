@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'api-airdrop-data-access',
   preset: '../../../../jest.preset.js',

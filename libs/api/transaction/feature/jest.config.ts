@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'api-transaction-feature',
   preset: '../../../../jest.preset.js',

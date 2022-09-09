@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   displayName: 'api-wallet-data-access',
   preset: '../../../../jest.preset.js',

@@ -24,8 +24,7 @@ export class OpenTelemetrySdk {
     })
 
     this.sdk = new NodeSDK({
-      metricExporter: this.metricExporter,
-      metricInterval: 1000,
+      metricReader: this.metricExporter,
     })
 
     return this.sdk.start()
