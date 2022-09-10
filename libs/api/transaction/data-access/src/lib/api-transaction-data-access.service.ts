@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
 import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
@@ -24,7 +24,7 @@ import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { parseError } from './helpers/parse-error'
 
-type TransactionWithErrors = Transaction & { errors: TransactionError[] }
+export type TransactionWithErrors = Transaction & { errors: TransactionError[] }
 
 function getExpiredTime(minutes: number) {
   return new Date(new Date().getTime() - minutes * 60_000)
@@ -154,10 +154,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     return { lamports } as MinimumRentExemptionBalanceResponse
   }
 
-  async makeTransfer(req: Request, input: MakeTransferRequest): Promise<TransactionWithErrors> {
-    const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
-    this.makeTransferRequestCounter.add(1, { appKey })
-
+  validateRequest(appEnv: AppEnv, req: Request): { ip: string; ua: string } {
     const ip = requestIp.getClientIp(req)
     const ua = `${req.headers['kinetic-user-agent'] || req.headers['user-agent']}`
 
@@ -176,12 +173,25 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     if (appEnv?.uasBlocked.length > 0 && appEnv?.uasBlocked.includes(ua)) {
       throw new UnauthorizedException('Request not allowed')
     }
+    return { ip, ua }
+  }
 
-    const mint = appEnv.mints.find(({ mint }) => mint.address === input.mint)
-    if (!mint) {
-      this.makeTransferMintNotFoundErrorCounter.add(1, { appKey, mint: input.mint.toString() })
-      throw new Error(`${appKey}: Can't find mint ${input.mint}`)
+  validateMint(appEnv: AppEnvironment, appKey: string, inputMint: string) {
+    const found = appEnv.mints.find(({ mint }) => mint.address === inputMint)
+    if (!found) {
+      this.makeTransferMintNotFoundErrorCounter.add(1, { appKey, mint: inputMint.toString() })
+      throw new Error(`${appKey}: Can't find mint ${inputMint}`)
     }
+    return found
+  }
+
+  async makeTransfer(req: Request, input: MakeTransferRequest): Promise<TransactionWithErrors> {
+    const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
+    this.makeTransferRequestCounter.add(1, { appKey })
+
+    const { ip, ua } = this.validateRequest(appEnv, req)
+
+    const mint = this.validateMint(appEnv, appKey, input.mint)
 
     // Create the Transaction
     const transaction: TransactionWithErrors = await this.createTransaction({
@@ -250,11 +260,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     appEnv: AppEnv & { app: App }
     appKey: string
     transaction: Transaction
-    amount: number
+    amount?: number
     blockhash: string
     commitment: Commitment
     decimals: number
-    destination: string
+    destination?: string
     feePayer: string
     headers?: Record<string, string>
     lastValidBlockHeight: number
@@ -268,7 +278,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
     // Update Transaction
     const updatedTransaction = await this.updateTransaction(transaction.id, {
-      amount: amount.toString(),
+      amount: amount?.toString(),
       decimals,
       destination,
       feePayer,
@@ -503,7 +513,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     return this.updateTransaction(transaction.id, { status, solanaConfirmed })
   }
 
-  private createTransaction({
+  createTransaction({
     appEnvId,
     commitment,
     ip,

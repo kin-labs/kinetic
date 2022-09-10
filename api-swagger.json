@@ -536,21 +536,45 @@
       "CreateAccountRequest": {
         "type": "object",
         "properties": {
+          "commitment": {
+            "type": "string",
+            "enum": ["Confirmed", "Finalized", "Processed"]
+          },
           "environment": {
             "type": "string"
           },
           "index": {
             "type": "integer"
           },
+          "lastValidBlockHeight": {
+            "type": "integer"
+          },
           "mint": {
             "type": "string"
+          },
+          "referenceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceType": {
+            "type": "string",
+            "nullable": true
           },
           "tx": {
             "type": "string",
             "format": "byte"
           }
         },
-        "required": ["environment", "index", "mint", "tx"]
+        "required": [
+          "commitment",
+          "environment",
+          "index",
+          "lastValidBlockHeight",
+          "mint",
+          "referenceId",
+          "referenceType",
+          "tx"
+        ]
       },
       "TransactionError": {
         "type": "object",

@@ -7,8 +7,9 @@ import {
 import { PublicKeyPipe } from '@kin-kinetic/api/core/util'
 import { Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Commitment } from '@kin-kinetic/solana'
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Request } from 'express'
 
 @ApiTags('account')
 @Controller('account')
@@ -31,8 +32,8 @@ export class ApiAccountFeatureController {
   @ApiBody({ type: CreateAccountRequest })
   @ApiOperation({ operationId: 'createAccount' })
   @ApiResponse({ type: Transaction })
-  createAccount(@Body() body: CreateAccountRequest) {
-    return this.service.createAccount(body)
+  createAccount(@Req() req: Request, @Body() body: CreateAccountRequest) {
+    return this.service.createAccount(req, body)
   }
 
   @Get('balance/:environment/:index/:accountId')
