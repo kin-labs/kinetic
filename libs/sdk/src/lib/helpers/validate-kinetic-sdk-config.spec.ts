@@ -18,7 +18,7 @@ describe('validateKineticSdkConfig', () => {
 
   it('should throw an error when endpoint is not configured', () => {
     try {
-      validateKineticSdkConfig({ environment: 'devnet', index: 1 } as any)
+      validateKineticSdkConfig(JSON.parse(JSON.stringify({ environment: 'devnet', index: 1 })))
     } catch (error) {
       expect(error.toString()).toBe('Error: validateKineticSdkConfig: no endpoint configured.')
     }
@@ -26,7 +26,7 @@ describe('validateKineticSdkConfig', () => {
 
   it('should throw an error when index is not configured', () => {
     try {
-      validateKineticSdkConfig({ environment: 'devnet', endpoint: 'http://localhost:3000' } as any)
+      validateKineticSdkConfig(JSON.parse(JSON.stringify({ environment: 'devnet', endpoint: 'http://localhost:3000' })))
     } catch (error) {
       expect(error.toString()).toBe('Error: validateKineticSdkConfig: no index configured.')
     }
@@ -34,7 +34,7 @@ describe('validateKineticSdkConfig', () => {
 
   it('should throw an error when environment is not configured', () => {
     try {
-      validateKineticSdkConfig({ endpoint: 'http://localhost:3000', index: 1 } as any)
+      validateKineticSdkConfig(JSON.parse(JSON.stringify({ endpoint: 'http://localhost:3000', index: 1 })))
     } catch (error) {
       expect(error.toString()).toBe('Error: validateKineticSdkConfig: no environment configured.')
     }
@@ -42,7 +42,7 @@ describe('validateKineticSdkConfig', () => {
 
   it('should throw an error when index is not valid', () => {
     try {
-      validateKineticSdkConfig({ ...baseConfig, index: '1' } as any)
+      validateKineticSdkConfig(JSON.parse(JSON.stringify({ ...baseConfig, index: '1' })))
     } catch (error) {
       expect(error.toString()).toBe('Error: validateKineticSdkConfig: index should be an integer.')
     }

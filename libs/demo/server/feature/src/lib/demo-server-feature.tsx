@@ -19,8 +19,7 @@ export function DemoServerFeature() {
   }
 
   const createServer = (endpoint: string, environment: string) => {
-    const url = endpoint
-    const { host } = new URL(url)
+    const { host } = new URL(endpoint)
     demoServerDb.server.add({ id: `${host}-${environment}`, name: `${host} / ${environment}`, endpoint, environment })
     setServerCreateVisible(false)
   }

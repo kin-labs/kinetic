@@ -1,7 +1,7 @@
 import { Cluster } from '@solana/web3.js'
 
 /**
- * This method accepts one of the existing Kinetic APIs (mainnet | devnet ) or the URL of a Solana RPC Node.
+ * This method accepts one of the existing clusterApiUrls of the URL of a Solana RPC Node.
  * @param {string} endpoint
  * @returns {string}
  */
