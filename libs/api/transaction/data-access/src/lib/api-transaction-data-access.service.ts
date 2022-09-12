@@ -19,7 +19,7 @@ import { Request } from 'express'
 import * as requestIp from 'request-ip'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 import { MinimumRentExemptionBalanceRequest } from './dto/minimum-rent-exemption-balance-request.dto'
-import { GetTransactionResponse } from './entities/get-transaction.entity'
+import { GetTransactionResponse } from './entities/get-transaction-response.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash.entity'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { parseError } from './helpers/parse-error'
@@ -238,6 +238,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   async getTransaction(environment: string, index: number, signature: string): Promise<GetTransactionResponse> {
     const solana = await this.data.getSolanaConnection(environment, index)
+
     return solana.getTransaction(signature)
   }
 
