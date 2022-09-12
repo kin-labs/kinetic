@@ -1,7 +1,7 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment } from '@kin-kinetic/solana'
 import { clusterApiUrl } from '@solana/web3.js'
-import { parseKineticSdkConfig } from './helpers/parse-kinetic-sdk-config'
+import { validateKineticSdkConfig } from './helpers/validate-kinetic-sdk-config'
 import { KineticSdkConfig } from './interfaces'
 import { KineticSdk } from './kinetic-sdk'
 
@@ -37,7 +37,7 @@ describe('sdk', () => {
           index: TEST_APP_INDEX,
           logger: console,
         }
-        sdk = new KineticSdk(parseKineticSdkConfig(config))
+        sdk = new KineticSdk(validateKineticSdkConfig(config))
         expect(sdk.sdkConfig.logger).toBeDefined()
       })
 
@@ -49,7 +49,7 @@ describe('sdk', () => {
           logger: console,
           solanaRpcEndpoint: clusterApiUrl(TEST_SOLANA_RPC_NAME),
         }
-        sdk = new KineticSdk(parseKineticSdkConfig(config))
+        sdk = new KineticSdk(validateKineticSdkConfig(config))
         expect(sdk.sdkConfig.solanaRpcEndpoint).toEqual(TEST_SOLANA_RPC_ENDPOINT)
         expect(sdk.sdkConfig.logger).toBeDefined()
       })
@@ -62,7 +62,7 @@ describe('sdk', () => {
           logger: console,
           solanaRpcEndpoint: 'http://localhost:8899',
         }
-        sdk = new KineticSdk(parseKineticSdkConfig(config))
+        sdk = new KineticSdk(validateKineticSdkConfig(config))
         expect(sdk.sdkConfig.solanaRpcEndpoint).toEqual('http://localhost:8899')
         expect(sdk.sdkConfig.logger).toBeDefined()
       })
