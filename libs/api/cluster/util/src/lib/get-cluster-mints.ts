@@ -4,8 +4,6 @@ import { getProvisionedMints, ProvisionedClusterIds } from './get-provisioned-mi
 export function getClusterMints(clusterId: ProvisionedClusterIds): Prisma.MintCreateInput[] {
   // Get provisioned mints
   const provisioned = getProvisionedMints(clusterId, Object.keys(process.env))
-  console.log(' -- provisioned mints --')
-  console.log(provisioned)
   // Define default mints
   const clusterMints: Record<ProvisionedClusterIds, Prisma.MintCreateInput[]> = {
     'solana-devnet': [],

@@ -164,6 +164,7 @@ describe('KineticSdk (e2e)', () => {
       destination: bobKeypair.publicKey,
       owner: aliceKeypair,
       mint: usdcMint,
+      senderCreate: true,
     })
     expect(tx).not.toBeNull()
     expect(tx.mint).toBe(usdcMint)

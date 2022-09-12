@@ -20,9 +20,7 @@ export function getProvisionedMints(id: ProvisionedClusterIds, envVars: string[]
   const prefix = `${id.toUpperCase().replace('-', '_')}_MINT_`
 
   // Filter env vars that start with the prefix
-  const filtered = envVars.filter((item) => item.startsWith(prefix))
-  console.log('-- filtered env vars --')
-  console.log(filtered)
+  const filtered = envVars.sort().filter((item) => item.startsWith(prefix))
 
   const symbols = filtered
     // Get the 'USD' part from `MINT_SOLANA_DEVNET_USD_xyz
