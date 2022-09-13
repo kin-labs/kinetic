@@ -11,12 +11,12 @@ export class ApiCronDataAccessService {
   ) {}
 
   @Cron('25 * * * * *')
-  async checkBalances() {
-    this.wallet.checkBalance()
+  checkBalance() {
+    return this.wallet.checkBalance()
   }
 
-  @Cron('* * * * * *')
-  async checkStaleTransactions() {
-    this.transaction.cleanupStaleTransactions()
+  @Cron('55 * * * * *')
+  checkStaleTransactions() {
+    return this.transaction.cleanupStaleTransactions()
   }
 }
