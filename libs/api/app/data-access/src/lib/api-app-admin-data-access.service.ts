@@ -142,7 +142,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
         const found = await this.data.getAppByIndex(app.index)
         if (found) {
           const { publicKey } = Keypair.fromByteArray(app.feePayerByteArray)
-          this.logger.verbose(
+          this.logger.log(
             `Provisioned app ${app.index} (${app.name}) found: ${publicKey} ${found.envs
               .map((env) => `=> ${env.name}: ${env.mints.map((mint) => mint.mint.symbol).join(', ')}`)
               .join(', ')}`,
