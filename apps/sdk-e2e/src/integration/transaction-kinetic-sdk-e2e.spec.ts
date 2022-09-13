@@ -5,7 +5,7 @@ import { Destination } from '@kin-kinetic/solana'
 import { TransactionStatus } from '@prisma/client'
 import { DEFAULT_MINT } from './helpers'
 
-xdescribe('KineticSdk (e2e)', () => {
+describe('KineticSdk (e2e)', () => {
   let sdk: KineticSdk
 
   beforeEach(async () => {
