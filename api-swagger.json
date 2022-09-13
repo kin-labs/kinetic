@@ -509,9 +509,9 @@
     }
   },
   "info": {
-    "title": "Kinetic",
+    "title": "@kin-kinetic/api",
     "description": "The OpenAPI definition of the Kinetic API",
-    "version": "1.0",
+    "version": "1.0.0-rc.0",
     "contact": {}
   },
   "tags": [
@@ -522,13 +522,10 @@
   ],
   "servers": [
     {
-      "url": "https://devnet.kinetic.kin.org"
-    },
-    {
-      "url": "https://mainnet.kinetic.kin.org"
-    },
-    {
       "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://sandbox.kinetic.host"
     }
   ],
   "components": {
