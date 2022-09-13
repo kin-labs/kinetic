@@ -1,6 +1,7 @@
 import { AirdropConfig } from '@kin-kinetic/api/airdrop/util'
 import { hashPassword } from '@kin-kinetic/api/auth/util'
 import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
+import { getVerboseLogger } from '@kin-kinetic/api/core/util'
 import { Keypair } from '@kin-kinetic/keypair'
 import { getPublicKey, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
@@ -212,7 +213,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       this.connections.set(
         appKey,
         new Solana(env.cluster.endpointPrivate, {
-          logger: new Logger(`@kin-kinetic/solana:${appKey}`),
+          logger: getVerboseLogger(`@kin-kinetic/solana:${appKey}`),
         }),
       )
     }
