@@ -10,6 +10,7 @@ export const validationSchema = Joi.object({
   HOST: Joi.string().default('127.0.0.1'),
   JWT_SECRET: Joi.string().required(),
   LOG_COLOR: Joi.boolean().default('true'),
+  LOG_JSON: Joi.boolean().default('false'),
   LOG_LEVEL: Joi.string()
     .equal('ALL', 'SILLY', 'FINE', 'VERBOSE', 'DEBUG', 'INFO', 'LOG', 'WARN', 'ERROR', 'FATAL', 'OFF')
     .default('INFO'),

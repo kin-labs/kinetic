@@ -13,7 +13,8 @@ export class ApiClusterStatDataAccessService {
     const activeClusters = await this.data.getActiveClusters()
     for (const { id, endpointPublic } of activeClusters.filter((item) => item.enableStats)) {
       if (!this.solana.has(id)) {
-        this.solana.set(id, new Solana(endpointPublic, { logger: new Logger(`@kin-kinetic/solana:cluster-${id}`) }))
+        const logger = new Logger(`@kin-kinetic/solana:cluster-${id}`)
+        this.solana.set(id, new Solana(endpointPublic, { logger: { log: logger.verbose, error: logger.error } }))
       }
       const performanceSamples = await this.solana.get(id).getRecentPerformanceSamples(10)
       if (performanceSamples?.length) {

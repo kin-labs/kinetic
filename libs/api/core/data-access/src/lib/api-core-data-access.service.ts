@@ -307,10 +307,10 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
           },
         },
       })
-      this.logger.verbose(`Created new ${role} with username ${username} and password ${password}`)
+      this.logger.log(`Created new ${role} with username ${username} and password ${password}`)
       return
     }
-    this.logger.verbose(`Log in as ${role} with username ${username} and password ${password}`)
+    this.logger.log(`Log in as ${role} with username ${username} and password ${password}`)
   }
 
   private async configureDefaultClusters() {

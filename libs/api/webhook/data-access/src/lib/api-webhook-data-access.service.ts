@@ -118,9 +118,9 @@ export class ApiWebhookDataAccessService {
       return res.send(created)
     } catch (e) {
       res.statusCode = 400
-      console.log(e)
+      this.logger.error(`Error storing incoming webhook: ${e}`)
 
-      return res.send(new HttpException(`Something went wrong storing incoming webhook`, HttpStatus.BAD_REQUEST))
+      return res.send(new HttpException(`Error storing incoming webhook`, HttpStatus.BAD_REQUEST))
     }
   }
 

@@ -18,6 +18,7 @@ export default () => ({
   api: {
     log: {
       color: process.env.LOG_COLOR?.toLowerCase() !== 'false',
+      json: process.env.LOG_JSON?.toLowerCase() !== 'false',
       level: process.env.LOG_LEVEL,
     },
     name: NAME,

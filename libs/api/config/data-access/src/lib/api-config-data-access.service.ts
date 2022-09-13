@@ -37,6 +37,10 @@ export class ApiConfigDataAccessService {
     return this.config.get('api.log.color')
   }
 
+  get apiLogJson() {
+    return this.config.get('api.log.json')
+  }
+
   get apiLogLevel() {
     return this.config.get('api.log.level')
   }
