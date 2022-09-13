@@ -17,12 +17,18 @@ export class ApiAirdropDataAccessService {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
 
+    console.log(' -- airdrop config --')
+    console.log(this.data.airdropConfig.keys())
+
     // Make sure the requested mint is enabled for this app
     const appMint = appEnv.mints.find((mint) => mint.mint.address === request.mint)
     if (!appMint) {
       throw new Error(`Can't find mint ${request.mint} in environment ${environment} for index ${index}`)
     }
     const mint = appMint.mint
+
+    console.log(' -- mint -- ')
+    console.log(mint)
 
     // Make sure there is an airdrop config for this mint
     const airdropConfig = this.data.airdropConfig.get(mint.id)

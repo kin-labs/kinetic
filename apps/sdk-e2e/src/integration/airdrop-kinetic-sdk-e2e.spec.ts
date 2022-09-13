@@ -8,19 +8,19 @@ describe('KineticSdk (e2e) - Airdrop', () => {
     sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'devnet' })
   })
 
-  it('should request for an airdrop', async () => {
+  xit('should request for an airdrop', async () => {
     const airdrop = await sdk.requestAirdrop({ account: daveKeypair.publicKey, amount: '1000' })
     expect(airdrop.signature).not.toBeNull()
     expect(typeof airdrop.signature).toBe('string')
   }, 30000)
 
   it('should request an airdrop using a mint', async () => {
-    const tx = await sdk.requestAirdrop({ account: aliceKeypair.publicKey, amount: '20', mint: usdcMint })
+    const tx = await sdk.requestAirdrop({ account: aliceKeypair.publicKey, amount: '1', mint: usdcMint })
     expect(tx).not.toBeNull()
     expect(typeof tx.signature).toBe('string')
   }, 30000)
 
-  it('should fail when airdrop request exceeds maximum allowed', async () => {
+  xit('should fail when airdrop request exceeds maximum allowed', async () => {
     try {
       await sdk.requestAirdrop({ account: daveKeypair.publicKey, amount: '50001' })
     } catch (error) {

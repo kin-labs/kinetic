@@ -183,8 +183,6 @@ export class KineticSdkInternal {
         mint,
       })
 
-    console.log({ destination, mint })
-
     const account = await this.getTokenAccounts({ account: destination, mint })
 
     if (!account?.length && !senderCreate) {
@@ -284,6 +282,7 @@ export class KineticSdkInternal {
     }
     mint = mint || this.appConfig.mint.publicKey
     commitment = commitment || Commitment.Finalized
+    console.log({ account, amount, commitment, mint })
     return this.airdropApi
       .requestAirdrop({
         account: account?.toString(),

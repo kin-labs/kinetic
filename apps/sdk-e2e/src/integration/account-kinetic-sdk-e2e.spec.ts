@@ -4,7 +4,7 @@ import { TransactionStatus } from '@prisma/client'
 import { DEFAULT_MINT } from './helpers'
 import { daveKeypair, aliceKeypair, usdcMint } from './fixtures'
 
-describe('KineticSdk (e2e) - Account', () => {
+xdescribe('KineticSdk (e2e) - Account', () => {
   let sdk: KineticSdk
 
   beforeEach(async () => {
