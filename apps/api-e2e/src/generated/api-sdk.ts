@@ -50,6 +50,12 @@ export type AdminClusterUpdateInput = {
   status?: InputMaybe<ClusterStatus>
 }
 
+export type AdminConfig = {
+  __typename?: 'AdminConfig'
+  githubEnabled: Scalars['Boolean']
+  passwordEnabled: Scalars['Boolean']
+}
+
 export type AdminMintCreateInput = {
   address: Scalars['String']
   clusterId: Scalars['String']
@@ -446,6 +452,7 @@ export type Query = {
   adminApps?: Maybe<Array<App>>
   adminCluster?: Maybe<Cluster>
   adminClusters?: Maybe<Array<Cluster>>
+  adminConfig: AdminConfig
   adminUser?: Maybe<User>
   adminUsers?: Maybe<Array<User>>
   adminWallet?: Maybe<Wallet>
@@ -641,6 +648,7 @@ export type User = {
   email?: Maybe<Scalars['String']>
   emails?: Maybe<Array<UserEmail>>
   id: Scalars['String']
+  identities?: Maybe<Array<UserIdentity>>
   name?: Maybe<Scalars['String']>
   role?: Maybe<UserRole>
   updatedAt: Scalars['DateTime']
@@ -692,6 +700,20 @@ export type UserEmail = {
   email: Scalars['String']
   id: Scalars['String']
   updatedAt: Scalars['DateTime']
+}
+
+export type UserIdentity = {
+  __typename?: 'UserIdentity'
+  createdAt: Scalars['DateTime']
+  externalId: Scalars['String']
+  id: Scalars['String']
+  profile: Scalars['JSON']
+  type?: Maybe<UserIdentityType>
+  updatedAt: Scalars['DateTime']
+}
+
+export enum UserIdentityType {
+  GitHub = 'GitHub',
 }
 
 export type UserLoginInput = {
@@ -1521,6 +1543,14 @@ export const UserClusters = gql`
   }
   ${ClusterDetails}
   ${MintDetails}
+`
+export const AdminConfig = gql`
+  query AdminConfig {
+    adminConfig {
+      githubEnabled
+      passwordEnabled
+    }
+  }
 `
 export const Uptime = gql`
   query Uptime {
@@ -5847,6 +5877,13 @@ export type UserClustersQuery = {
       type?: MintType | null
     }> | null
   }> | null
+}
+
+export type AdminConfigQueryVariables = Exact<{ [key: string]: never }>
+
+export type AdminConfigQuery = {
+  __typename?: 'Query'
+  adminConfig: { __typename?: 'AdminConfig'; githubEnabled: boolean; passwordEnabled: boolean }
 }
 
 export type UptimeQueryVariables = Exact<{ [key: string]: never }>

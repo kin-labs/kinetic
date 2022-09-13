@@ -1,4 +1,4 @@
-import { ProvisionedApp } from '../entities/provisioned-app.entity'
+import { ProvisionedApp } from '../entity/provisioned-app.entity'
 
 export function getProvisionedApps(envVars: string[]): ProvisionedApp[] {
   const appInfo = envVars.filter((item) => item.startsWith('APP_'))

@@ -1,11 +1,14 @@
 import * as Joi from 'joi'
 
 export const validationSchema = Joi.object({
-  AUTH_USERS: Joi.string().default(''),
+  ADMIN_URL: Joi.string().required().error(new Error(`ADMIN_URL is required.`)),
   API_URL: Joi.string().required().error(new Error(`API_URL is required.`)),
+  AUTH_PASSWORD_ENABLED: Joi.boolean().default('false'),
+  AUTH_USERS: Joi.string().default(''),
   COOKIE_DOMAINS: Joi.string().required().error(new Error(`COOKIE_DOMAINS is required.`)),
   COOKIE_NAME: Joi.string().default('__session'),
   DATABASE_URL: Joi.string().required(),
+  GITHUB_ENABLED: Joi.boolean().default('false'),
   HOST: Joi.string().default('127.0.0.1'),
   JWT_SECRET: Joi.string().required(),
   LOG_COLOR: Joi.boolean().default('true'),

@@ -4,11 +4,19 @@ import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { ApiAuthDataAccessService } from './api-auth-data-access.service'
+import { ApiAuthGithubGuard } from './guards/api-auth-github.guard'
 import { ApiAuthGraphqlGuard } from './guards/api-auth-graphql.guard'
+import { ApiAuthGithubStrategy } from './strategies/api-auth-github.strategy'
 import { ApiAuthJwtStrategy } from './strategies/api-auth-jwt.strategy'
 
 @Module({
-  providers: [ApiAuthDataAccessService, ApiAuthGraphqlGuard, ApiAuthJwtStrategy],
+  providers: [
+    ApiAuthDataAccessService,
+    ApiAuthGithubGuard,
+    ApiAuthGraphqlGuard,
+    ApiAuthGithubStrategy,
+    ApiAuthJwtStrategy,
+  ],
   exports: [ApiAuthDataAccessService],
   imports: [
     ApiAppDataAccessModule,

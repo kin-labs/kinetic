@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
-import GraphQLJSON from 'graphql-type-json'
+import { GraphQLJSON } from 'graphql-scalars'
 
 import { WebhookDirection } from './webhook-direction.enum'
 import { WebhookType } from './webhook-type.enum'

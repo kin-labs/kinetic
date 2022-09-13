@@ -213,17 +213,18 @@ model TransactionError {
 }
 
 model User {
-  id        String      @id @default(cuid())
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @default(now()) @updatedAt
-  avatarUrl String?
-  name      String?
-  password  String?
-  role      UserRole
-  username  String      @unique
-  apps      AppUser[]   @relation()
-  emails    UserEmail[] @relation()
-  Wallet    Wallet[]
+  id         String         @id @default(cuid())
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @default(now()) @updatedAt
+  avatarUrl  String?
+  name       String?
+  password   String?
+  role       UserRole
+  username   String         @unique
+  apps       AppUser[]      @relation()
+  emails     UserEmail[]    @relation()
+  identities UserIdentity[]
+  wallets    Wallet[]
 }
 
 model UserEmail {
@@ -233,6 +234,21 @@ model UserEmail {
   email     String   @unique
   owner     User     @relation(fields: [ownerId], references: [id])
   ownerId   String
+}
+
+model UserIdentity {
+  id         String           @id @default(cuid())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @default(now()) @updatedAt
+  type       UserIdentityType
+  externalId String
+  profile    Json?
+  owner      User             @relation(fields: [ownerId], references: [id])
+  ownerId    String
+}
+
+enum UserIdentityType {
+  GitHub
 }
 
 enum UserRole {

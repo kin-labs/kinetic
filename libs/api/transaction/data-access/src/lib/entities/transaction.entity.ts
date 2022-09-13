@@ -1,7 +1,7 @@
 import { AppEnv } from '@kin-kinetic/api/app/data-access'
 import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { ApiProperty } from '@nestjs/swagger'
-import { GraphQLJSON } from 'graphql-type-json'
+import { GraphQLJSON } from 'graphql-scalars'
 import { TransactionError } from './transaction-error.entity'
 import { TransactionStatus } from './transaction-status.enum'
 
