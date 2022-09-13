@@ -263,13 +263,13 @@ describe('App (e2e)', () => {
         const input: UserAppEnvUpdateInput = {
           webhookSecret: 'WebHookSecret',
           webhookBalanceEnabled: true,
-          webhookBalanceUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/balance',
+          webhookBalanceUrl: 'http://local.kinetic.host/api/app/devnet/1/hooks/balance',
           webhookBalanceThreshold: '10',
           webhookDebugging: true,
           webhookEventEnabled: true,
-          webhookEventUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/event',
+          webhookEventUrl: 'http://local.kinetic.host/api/app/devnet/1/hooks/event',
           webhookVerifyEnabled: true,
-          webhookVerifyUrl: 'http://local.kinetic.kin.org/api/app/devnet/1/hooks/verify',
+          webhookVerifyUrl: 'http://local.kinetic.host/api/app/devnet/1/hooks/verify',
         }
 
         return runGraphQLQueryAdmin(app, token, UserUpdateAppEnv, { appId, appEnvId, input })

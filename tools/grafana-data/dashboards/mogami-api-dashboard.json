@@ -41,22 +41,10 @@
       "keepTime": false,
       "tags": [],
       "targetBlank": false,
-      "title": "Kinetic Devnet",
-      "tooltip": "Kinetic Devnet",
+      "title": "Kinetic Sandbox",
+      "tooltip": "Kinetic Sandbox",
       "type": "link",
-      "url": "https://devnet.kinetic.kin.org"
-    },
-    {
-      "asDropdown": false,
-      "icon": "external link",
-      "includeVars": false,
-      "keepTime": false,
-      "tags": [],
-      "targetBlank": false,
-      "title": "Kinetic Mainnet",
-      "tooltip": "Kinetic Mainnet",
-      "type": "link",
-      "url": "https://mainnet.kinetic.kin.org"
+      "url": "https://sandbox.kinetic.host"
     }
   ],
   "panels": [

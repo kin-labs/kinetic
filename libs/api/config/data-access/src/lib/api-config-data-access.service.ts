@@ -197,13 +197,12 @@ export class ApiConfigDataAccessService {
 
   configureSwagger(app: INestApplication) {
     const config = new DocumentBuilder()
-      .setTitle('Kinetic')
-      .setDescription('The OpenAPI definition of the Kinetic API')
-      .setVersion('1.0')
-      .addTag('kinetic')
-      .addServer('https://devnet.kinetic.kin.org')
-      .addServer('https://mainnet.kinetic.kin.org')
       .addServer('http://localhost:3000')
+      .addServer('https://sandbox.kinetic.host')
+      .addTag('kinetic')
+      .setDescription('The OpenAPI definition of the Kinetic API')
+      .setTitle(this.apiName)
+      .setVersion(this.apiVersion)
       .build()
     const document = SwaggerModule.createDocument(app, config)
     if (this.isDevelopment) {
