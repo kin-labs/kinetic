@@ -3,7 +3,6 @@ import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webho
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common'
-import { Cron } from '@nestjs/schedule'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
   App,
@@ -48,7 +47,6 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   constructor(readonly data: ApiCoreDataAccessService, private readonly webhook: ApiWebhookDataAccessService) {}
 
-  @Cron('* * * * * *')
   async cleanupStaleTransactions() {
     const stale = await this.getExpiredTransactions()
     if (!stale.length) return

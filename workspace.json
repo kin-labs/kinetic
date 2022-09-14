@@ -44,6 +44,7 @@
     "api-core-data-access": "libs/api/core/data-access",
     "api-core-feature": "libs/api/core/feature",
     "api-core-util": "libs/api/core/util",
+    "api-cron-data-access": "libs/api/cron/data-access",
     "api-e2e": "apps/api-e2e",
     "api-transaction-data-access": "libs/api/transaction/data-access",
     "api-transaction-feature": "libs/api/transaction/feature",

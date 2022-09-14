@@ -57,6 +57,7 @@
       "@kin-kinetic/api/core/data-access": ["libs/api/core/data-access/src/index.ts"],
       "@kin-kinetic/api/core/feature": ["libs/api/core/feature/src/index.ts"],
       "@kin-kinetic/api/core/util": ["libs/api/core/util/src/index.ts"],
+      "@kin-kinetic/api/cron/data-access": ["libs/api/cron/data-access/src/index.ts"],
       "@kin-kinetic/api/transaction/data-access": ["libs/api/transaction/data-access/src/index.ts"],
       "@kin-kinetic/api/transaction/feature": ["libs/api/transaction/feature/src/index.ts"],
       "@kin-kinetic/api/user/data-access": ["libs/api/user/data-access/src/index.ts"],
