@@ -2,23 +2,12 @@ fragment ClusterDetails on Cluster {
   id
   createdAt
   updatedAt
-  enableStats
   endpointPrivate
   endpointPublic
   explorer
   name
   status
   type
-}
-
-fragment ClusterStatDetails on ClusterStat {
-  id
-  createdAt
-  updatedAt
-  numSlots
-  numTransactions
-  samplePeriodSecs
-  slot
 }
 
 fragment MintDetails on Mint {
@@ -83,12 +72,6 @@ query AdminClusters {
     mints {
       ...MintDetails
     }
-  }
-}
-
-query ClusterStats($clusterId: String!) {
-  items: clusterStats(clusterId: $clusterId) {
-    ...ClusterStatDetails
   }
 }
 

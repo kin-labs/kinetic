@@ -12,8 +12,6 @@ export class Cluster {
   @Field({ nullable: true })
   updatedAt?: Date
   @Field({ nullable: true })
-  enableStats?: boolean
-  @Field({ nullable: true })
   endpointPrivate?: string
   @Field({ nullable: true })
   endpointPublic?: string

@@ -25,7 +25,6 @@ input AdminClusterCreateInput {
 }
 
 input AdminClusterUpdateInput {
-  enableStats: Boolean
   endpointPrivate: String
   endpointPublic: String
   explorer: String
@@ -146,7 +145,6 @@ scalar BigInt
 
 type Cluster {
   createdAt: DateTime
-  enableStats: Boolean
   endpointPrivate: String
   endpointPublic: String
   explorer: String
@@ -156,16 +154,6 @@ type Cluster {
   status: ClusterStatus
   type: ClusterType
   updatedAt: DateTime
-}
-
-type ClusterStat {
-  createdAt: DateTime!
-  id: String!
-  numSlots: Float
-  numTransactions: Float!
-  samplePeriodSecs: Float!
-  slot: Float!
-  updatedAt: DateTime!
 }
 
 enum ClusterStatus {
@@ -265,7 +253,6 @@ type Query {
   adminWallet(walletId: String!): Wallet
   adminWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
   adminWallets: [Wallet!]
-  clusterStats(clusterId: String!): [ClusterStat!]
   me: User
   uptime: Float!
   userApp(appId: String!): App

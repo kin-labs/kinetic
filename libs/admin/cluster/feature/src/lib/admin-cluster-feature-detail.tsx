@@ -6,7 +6,6 @@ import React from 'react'
 import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { AdminClusterFeatureMintsTab } from './admin-cluster-feature-mints-tab'
 import { AdminClusterFeatureSettingsTab } from './admin-cluster-feature-settings-tab'
-import { AdminClusterFeatureStatsTab } from './admin-cluster-feature-stats-tab'
 
 export default function AdminClusterFeatureDetail() {
   const { clusterId } = useParams<{ clusterId: string }>()
@@ -18,7 +17,6 @@ export default function AdminClusterFeatureDetail() {
   }
   const tabs = [
     { path: `../mints`, label: 'Mints' },
-    { path: `../stats`, label: 'Stats' },
     { path: `../settings`, label: 'Settings' },
   ]
   return (
@@ -39,12 +37,6 @@ export default function AdminClusterFeatureDetail() {
           path="mints"
           element={
             <AdminUiTabs tabs={tabs}>{clusterId && <AdminClusterFeatureMintsTab clusterId={clusterId} />}</AdminUiTabs>
-          }
-        />
-        <Route
-          path="stats"
-          element={
-            <AdminUiTabs tabs={tabs}>{clusterId && <AdminClusterFeatureStatsTab clusterId={clusterId} />}</AdminUiTabs>
           }
         />
         <Route
