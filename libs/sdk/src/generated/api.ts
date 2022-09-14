@@ -1100,6 +1100,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
   return {
     /**
      *
+     * @summary
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1136,6 +1137,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1180,6 +1182,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1224,6 +1227,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1273,6 +1277,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1332,6 +1337,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1345,6 +1351,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1362,6 +1369,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1379,6 +1387,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1398,6 +1407,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1433,6 +1443,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
   return {
     /**
      *
+     * @summary
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1442,6 +1453,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1455,6 +1467,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1466,6 +1479,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1486,6 +1500,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
@@ -1516,6 +1531,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
 export class AccountApi extends BaseAPI {
   /**
    *
+   * @summary
    * @param {CreateAccountRequest} createAccountRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1529,6 +1545,7 @@ export class AccountApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
@@ -1544,6 +1561,7 @@ export class AccountApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
@@ -1559,6 +1577,7 @@ export class AccountApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
@@ -1575,6 +1594,7 @@ export class AccountApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
@@ -1604,6 +1624,7 @@ export const AirdropApiAxiosParamCreator = function (configuration?: Configurati
   return {
     /**
      *
+     * @summary
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1631,6 +1652,7 @@ export const AirdropApiAxiosParamCreator = function (configuration?: Configurati
     },
     /**
      *
+     * @summary
      * @param {RequestAirdropRequest} requestAirdropRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1677,6 +1699,7 @@ export const AirdropApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1688,6 +1711,7 @@ export const AirdropApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {RequestAirdropRequest} requestAirdropRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1711,6 +1735,7 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
   return {
     /**
      *
+     * @summary
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1719,6 +1744,7 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
     },
     /**
      *
+     * @summary
      * @param {RequestAirdropRequest} requestAirdropRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1738,6 +1764,7 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
 export class AirdropApi extends BaseAPI {
   /**
    *
+   * @summary
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AirdropApi
@@ -1750,6 +1777,7 @@ export class AirdropApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {RequestAirdropRequest} requestAirdropRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1770,6 +1798,7 @@ export const AppApiAxiosParamCreator = function (configuration?: Configuration) 
   return {
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -1809,6 +1838,7 @@ export const AppApiAxiosParamCreator = function (configuration?: Configuration) 
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -1858,6 +1888,7 @@ export const AppApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -1873,6 +1904,7 @@ export const AppApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -1898,6 +1930,7 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
   return {
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -1908,6 +1941,7 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -1928,6 +1962,7 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
 export class AppApi extends BaseAPI {
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {*} [options] Override http request option.
@@ -1942,6 +1977,7 @@ export class AppApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {*} [options] Override http request option.
@@ -1963,6 +1999,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
   return {
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -2002,6 +2039,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {number} dataLength
@@ -2049,6 +2087,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} signature
@@ -2093,6 +2132,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     },
     /**
      *
+     * @summary
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2139,6 +2179,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -2154,6 +2195,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {number} dataLength
@@ -2176,6 +2218,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} signature
@@ -2193,6 +2236,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2220,6 +2264,7 @@ export const TransactionApiFactory = function (
   return {
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {*} [options] Override http request option.
@@ -2230,6 +2275,7 @@ export const TransactionApiFactory = function (
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {number} dataLength
@@ -2248,6 +2294,7 @@ export const TransactionApiFactory = function (
     },
     /**
      *
+     * @summary
      * @param {string} environment
      * @param {number} index
      * @param {string} signature
@@ -2266,6 +2313,7 @@ export const TransactionApiFactory = function (
     },
     /**
      *
+     * @summary
      * @param {MakeTransferRequest} makeTransferRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2285,6 +2333,7 @@ export const TransactionApiFactory = function (
 export class TransactionApi extends BaseAPI {
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {*} [options] Override http request option.
@@ -2299,6 +2348,7 @@ export class TransactionApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {number} dataLength
@@ -2319,6 +2369,7 @@ export class TransactionApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {string} environment
    * @param {number} index
    * @param {string} signature
@@ -2334,6 +2385,7 @@ export class TransactionApi extends BaseAPI {
 
   /**
    *
+   * @summary
    * @param {MakeTransferRequest} makeTransferRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
