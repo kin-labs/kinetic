@@ -256,26 +256,6 @@
         "tags": ["airdrop"]
       }
     },
-    "/api/airdrop/stats": {
-      "get": {
-        "operationId": "airdropStats",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AirdropStats"
-                }
-              }
-            }
-          }
-        },
-        "tags": ["airdrop"]
-      }
-    },
     "/api/app/{environment}/{index}/config": {
       "get": {
         "operationId": "getAppConfig",
@@ -842,48 +822,6 @@
           }
         },
         "required": ["signature"]
-      },
-      "AirdropStatsCounts": {
-        "type": "object",
-        "properties": {
-          "averageValue": {
-            "type": "integer"
-          },
-          "total": {
-            "type": "integer"
-          },
-          "totalValue": {
-            "type": "integer"
-          }
-        },
-        "required": ["averageValue", "total", "totalValue"]
-      },
-      "AirdropStatsDate": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string"
-          },
-          "count": {
-            "type": "integer"
-          }
-        },
-        "required": ["date", "count"]
-      },
-      "AirdropStats": {
-        "type": "object",
-        "properties": {
-          "counts": {
-            "$ref": "#/components/schemas/AirdropStatsCounts"
-          },
-          "dates": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AirdropStatsDate"
-            }
-          }
-        },
-        "required": ["counts", "dates"]
       },
       "AppConfigApp": {
         "type": "object",
