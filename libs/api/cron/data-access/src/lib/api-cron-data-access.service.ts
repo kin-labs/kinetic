@@ -12,15 +12,11 @@ export class ApiCronDataAccessService {
 
   @Cron('25 * * * * *')
   checkBalance() {
-    if (process.env.API_FEATURE_CRON) {
-      return this.wallet.checkBalance()
-    }
+    return this.wallet.checkBalance()
   }
 
   @Cron('55 * * * * *')
   checkStaleTransactions() {
-    if (process.env.API_FEATURE_CRON) {
-      return this.transaction.cleanupStaleTransactions()
-    }
+    return this.transaction.cleanupStaleTransactions()
   }
 }
