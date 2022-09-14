@@ -11,7 +11,6 @@ export interface AdminClusterUiProps {
 }
 
 const validationSchema = Yup.object({
-  enableStats: Yup.boolean(),
   endpoint: Yup.string(),
   explorer: Yup.string(),
   name: Yup.string(),
@@ -28,7 +27,6 @@ const fields: UiFormField[] = [
     label: 'Status',
     options: [...Object.keys(ClusterStatus).map((status) => ({ value: status, label: status }))],
   }),
-  UiFormField.checkbox('enableStats', { label: 'Enable cluster stats' }),
 ]
 
 export function AdminClusterUiForm({ cluster, onSubmit }: AdminClusterUiProps) {
@@ -41,7 +39,6 @@ export function AdminClusterUiForm({ cluster, onSubmit }: AdminClusterUiProps) {
         <AdminUiForm
           data={{
             name: cluster?.name,
-            enableStats: cluster?.enableStats,
             endpointPrivate: cluster?.endpointPrivate,
             endpointPublic: cluster?.endpointPublic,
             explorer: cluster?.explorer,

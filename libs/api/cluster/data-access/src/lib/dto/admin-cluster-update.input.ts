@@ -4,8 +4,6 @@ import { ClusterStatus } from '../entity/cluster-status.enum'
 @InputType()
 export class AdminClusterUpdateInput {
   @Field({ nullable: true })
-  enableStats?: boolean
-  @Field({ nullable: true })
   endpointPrivate?: string
   @Field({ nullable: true })
   endpointPublic?: string

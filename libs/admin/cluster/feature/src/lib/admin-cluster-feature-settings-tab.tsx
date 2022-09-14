@@ -17,7 +17,6 @@ export function AdminClusterFeatureSettingsTab({ clusterId }: { clusterId: strin
       await updateCluster({
         clusterId,
         input: {
-          enableStats: input?.enableStats,
           name: input.name,
           endpointPublic: input?.endpointPublic,
           endpointPrivate: input?.endpointPrivate,

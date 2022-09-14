@@ -110,7 +110,6 @@ model Cluster {
   id              String        @id @default(cuid())
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @default(now()) @updatedAt
-  enableStats     Boolean       @default(false)
   endpointPrivate String
   endpointPublic  String
   explorer        String
@@ -119,19 +118,6 @@ model Cluster {
   name            String
   status          ClusterStatus @default(Active)
   type            ClusterType
-  stats           ClusterStat[]
-}
-
-model ClusterStat {
-  id               String   @id @default(cuid())
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now()) @updatedAt
-  numSlots         Int
-  numTransactions  Int
-  samplePeriodSecs Int
-  slot             Int
-  cluster          Cluster  @relation(fields: [clusterId], references: [id])
-  clusterId        String
 }
 
 enum ClusterStatus {
