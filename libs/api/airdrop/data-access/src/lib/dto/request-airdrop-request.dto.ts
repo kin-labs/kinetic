@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger'
 export class RequestAirdropRequest {
   @ApiProperty({ required: true })
   account: string
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, nullable: true })
   amount?: string
   @ApiProperty({ enum: Commitment })
   commitment: Commitment

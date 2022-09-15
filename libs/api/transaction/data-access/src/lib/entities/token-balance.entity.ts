@@ -6,7 +6,7 @@ export class TokenBalance {
   accountIndex: number
   @ApiProperty()
   mint: string
-  @ApiProperty({ required: false })
+  @ApiProperty({ nullable: true, required: false })
   owner?: string
   @ApiProperty()
   uiTokenAmount: TokenAmount

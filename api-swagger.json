@@ -542,16 +542,7 @@
             "format": "byte"
           }
         },
-        "required": [
-          "commitment",
-          "environment",
-          "index",
-          "lastValidBlockHeight",
-          "mint",
-          "referenceId",
-          "referenceType",
-          "tx"
-        ]
+        "required": ["commitment", "environment", "index", "lastValidBlockHeight", "mint", "tx"]
       },
       "TransactionError": {
         "type": "object",
@@ -760,16 +751,20 @@
             "type": "string"
           },
           "slot": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           },
           "err": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "memo": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "blockTime": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           }
         },
         "required": ["signature"]
@@ -796,7 +791,8 @@
             "type": "string"
           },
           "amount": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "commitment": {
             "type": "string",
@@ -891,10 +887,12 @@
             "type": "boolean"
           },
           "airdropAmount": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "airdropMax": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "decimals": {
             "type": "integer"
@@ -1023,32 +1021,27 @@
             "format": "byte"
           }
         },
-        "required": [
-          "commitment",
-          "environment",
-          "index",
-          "mint",
-          "lastValidBlockHeight",
-          "referenceId",
-          "referenceType",
-          "tx"
-        ]
+        "required": ["commitment", "environment", "index", "mint", "lastValidBlockHeight", "tx"]
       },
       "SignatureStatus": {
         "type": "object",
         "properties": {
           "slot": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           },
           "confirmations": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           },
           "err": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "confirmationStatus": {
             "type": "string",
-            "enum": ["processed", "confirmed", "finalized"]
+            "enum": ["processed", "confirmed", "finalized"],
+            "nullable": true
           }
         }
       },
@@ -1075,7 +1068,8 @@
         "type": "object",
         "properties": {
           "fee": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           },
           "innerInstructions": {
             "type": "array",
@@ -1096,25 +1090,29 @@
             }
           },
           "logMessages": {
+            "nullable": true,
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "preTokenBalances": {
+            "nullable": true,
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "postTokenBalances": {
+            "nullable": true,
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "err": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           }
         },
         "required": ["innerInstructions", "preBalances", "postBalances"]
@@ -1123,7 +1121,8 @@
         "type": "object",
         "properties": {
           "slot": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           },
           "transaction": {
             "$ref": "#/components/schemas/TransactionData"
@@ -1132,7 +1131,8 @@
             "$ref": "#/components/schemas/ConfirmedTransactionMeta"
           },
           "blockTime": {
-            "type": "number"
+            "type": "number",
+            "nullable": true
           }
         },
         "required": ["transaction", "meta"]
