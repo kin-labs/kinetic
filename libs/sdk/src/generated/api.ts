@@ -1460,12 +1460,101 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
 }
 
 /**
+ * AccountApi - interface
+ * @export
+ * @interface AccountApi
+ */
+export interface AccountApiInterface {
+  /**
+   *
+   * @summary
+   * @param {CreateAccountRequest} createAccountRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApiInterface
+   */
+  createAccount(createAccountRequest: CreateAccountRequest, options?: AxiosRequestConfig): AxiosPromise<Transaction>
+
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {string} accountId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApiInterface
+   */
+  getAccountInfo(
+    environment: string,
+    index: number,
+    accountId: string,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<void>
+
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {string} accountId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApiInterface
+   */
+  getBalance(
+    environment: string,
+    index: number,
+    accountId: string,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<BalanceResponse>
+
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {string} accountId
+   * @param {string} mint
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApiInterface
+   */
+  getHistory(
+    environment: string,
+    index: number,
+    accountId: string,
+    mint: string,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<Array<HistoryResponse>>
+
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {string} accountId
+   * @param {string} mint
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApiInterface
+   */
+  getTokenAccounts(
+    environment: string,
+    index: number,
+    accountId: string,
+    mint: string,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<Array<string>>
+}
+
+/**
  * AccountApi - object-oriented interface
  * @export
  * @class AccountApi
  * @extends {BaseAPI}
  */
-export class AccountApi extends BaseAPI {
+export class AccountApi extends BaseAPI implements AccountApiInterface {
   /**
    *
    * @summary
@@ -1644,12 +1733,32 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
 }
 
 /**
+ * AirdropApi - interface
+ * @export
+ * @interface AirdropApi
+ */
+export interface AirdropApiInterface {
+  /**
+   *
+   * @summary
+   * @param {RequestAirdropRequest} requestAirdropRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AirdropApiInterface
+   */
+  requestAirdrop(
+    requestAirdropRequest: RequestAirdropRequest,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<RequestAirdropResponse>
+}
+
+/**
  * AirdropApi - object-oriented interface
  * @export
  * @class AirdropApi
  * @extends {BaseAPI}
  */
-export class AirdropApi extends BaseAPI {
+export class AirdropApi extends BaseAPI implements AirdropApiInterface {
   /**
    *
    * @summary
@@ -1829,12 +1938,41 @@ export const AppApiFactory = function (configuration?: Configuration, basePath?:
 }
 
 /**
+ * AppApi - interface
+ * @export
+ * @interface AppApi
+ */
+export interface AppApiInterface {
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AppApiInterface
+   */
+  getAppConfig(environment: string, index: number, options?: AxiosRequestConfig): AxiosPromise<AppConfig>
+
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AppApiInterface
+   */
+  getAppHealth(environment: string, index: number, options?: AxiosRequestConfig): AxiosPromise<AppHealth>
+}
+
+/**
  * AppApi - object-oriented interface
  * @export
  * @class AppApi
  * @extends {BaseAPI}
  */
-export class AppApi extends BaseAPI {
+export class AppApi extends BaseAPI implements AppApiInterface {
   /**
    *
    * @summary
@@ -2200,12 +2338,78 @@ export const TransactionApiFactory = function (
 }
 
 /**
+ * TransactionApi - interface
+ * @export
+ * @interface TransactionApi
+ */
+export interface TransactionApiInterface {
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApiInterface
+   */
+  getLatestBlockhash(
+    environment: string,
+    index: number,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<LatestBlockhashResponse>
+
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {number} dataLength
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApiInterface
+   */
+  getMinimumRentExemptionBalance(
+    environment: string,
+    index: number,
+    dataLength: number,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<MinimumRentExemptionBalanceResponse>
+
+  /**
+   *
+   * @summary
+   * @param {string} environment
+   * @param {number} index
+   * @param {string} signature
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApiInterface
+   */
+  getTransaction(
+    environment: string,
+    index: number,
+    signature: string,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<GetTransactionResponse>
+
+  /**
+   *
+   * @summary
+   * @param {MakeTransferRequest} makeTransferRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TransactionApiInterface
+   */
+  makeTransfer(makeTransferRequest: MakeTransferRequest, options?: AxiosRequestConfig): AxiosPromise<Transaction>
+}
+
+/**
  * TransactionApi - object-oriented interface
  * @export
  * @class TransactionApi
  * @extends {BaseAPI}
  */
-export class TransactionApi extends BaseAPI {
+export class TransactionApi extends BaseAPI implements TransactionApiInterface {
   /**
    *
    * @summary
