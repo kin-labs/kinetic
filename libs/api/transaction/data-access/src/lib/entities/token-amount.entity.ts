@@ -5,8 +5,8 @@ export class TokenAmount {
   amount: string
   @ApiProperty()
   decimals: number
-  @ApiProperty({ required: false })
+  @ApiProperty({ nullable: true, required: false })
   uiAmount: number | null
-  @ApiProperty({ required: false })
+  @ApiProperty({ nullable: true, required: false })
   uiAmountString?: string
 }

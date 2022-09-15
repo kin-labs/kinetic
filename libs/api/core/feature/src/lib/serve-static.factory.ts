@@ -17,7 +17,7 @@ export function serveStaticFactory() {
     return [
       {
         rootPath,
-        exclude: ['/api/*', '/graphql'],
+        exclude: ['/api/*', '/api-docs', '/graphql'],
       },
     ]
   }

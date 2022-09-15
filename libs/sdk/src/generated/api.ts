@@ -195,13 +195,13 @@ export interface AppConfigMint {
    * @type {number}
    * @memberof AppConfigMint
    */
-  airdropAmount?: number
+  airdropAmount?: number | null
   /**
    *
    * @type {number}
    * @memberof AppConfigMint
    */
-  airdropMax?: number
+  airdropMax?: number | null
   /**
    *
    * @type {number}
@@ -337,25 +337,25 @@ export interface ConfirmedSignatureInfo {
    * @type {number}
    * @memberof ConfirmedSignatureInfo
    */
-  slot?: number
+  slot?: number | null
   /**
    *
    * @type {string}
    * @memberof ConfirmedSignatureInfo
    */
-  err?: string
+  err?: string | null
   /**
    *
    * @type {string}
    * @memberof ConfirmedSignatureInfo
    */
-  memo?: string
+  memo?: string | null
   /**
    *
    * @type {number}
    * @memberof ConfirmedSignatureInfo
    */
-  blockTime?: number
+  blockTime?: number | null
 }
 /**
  *
@@ -368,7 +368,7 @@ export interface ConfirmedTransactionMeta {
    * @type {number}
    * @memberof ConfirmedTransactionMeta
    */
-  fee?: number
+  fee?: number | null
   /**
    *
    * @type {Array<string>}
@@ -392,25 +392,25 @@ export interface ConfirmedTransactionMeta {
    * @type {Array<string>}
    * @memberof ConfirmedTransactionMeta
    */
-  logMessages?: Array<string>
+  logMessages?: Array<string> | null
   /**
    *
    * @type {Array<string>}
    * @memberof ConfirmedTransactionMeta
    */
-  preTokenBalances?: Array<string>
+  preTokenBalances?: Array<string> | null
   /**
    *
    * @type {Array<string>}
    * @memberof ConfirmedTransactionMeta
    */
-  postTokenBalances?: Array<string>
+  postTokenBalances?: Array<string> | null
   /**
    *
    * @type {object}
    * @memberof ConfirmedTransactionMeta
    */
-  err?: object
+  err?: object | null
 }
 /**
  *
@@ -453,13 +453,13 @@ export interface CreateAccountRequest {
    * @type {string}
    * @memberof CreateAccountRequest
    */
-  referenceId: string | null
+  referenceId?: string | null
   /**
    *
    * @type {string}
    * @memberof CreateAccountRequest
    */
-  referenceType: string | null
+  referenceType?: string | null
   /**
    *
    * @type {string}
@@ -581,13 +581,13 @@ export interface MakeTransferRequest {
    * @type {string}
    * @memberof MakeTransferRequest
    */
-  referenceId: string | null
+  referenceId?: string | null
   /**
    *
    * @type {string}
    * @memberof MakeTransferRequest
    */
-  referenceType: string | null
+  referenceType?: string | null
   /**
    *
    * @type {string}
@@ -635,7 +635,7 @@ export interface RequestAirdropRequest {
    * @type {string}
    * @memberof RequestAirdropRequest
    */
-  amount?: string
+  amount?: string | null
   /**
    *
    * @type {string}
@@ -695,19 +695,19 @@ export interface SignatureStatus {
    * @type {number}
    * @memberof SignatureStatus
    */
-  slot?: number
+  slot?: number | null
   /**
    *
    * @type {number}
    * @memberof SignatureStatus
    */
-  confirmations?: number
+  confirmations?: number | null
   /**
    *
    * @type {object}
    * @memberof SignatureStatus
    */
-  err?: object
+  err?: object | null
   /**
    *
    * @type {string}
@@ -1008,7 +1008,7 @@ export interface TransactionResponse {
    * @type {number}
    * @memberof TransactionResponse
    */
-  slot?: number
+  slot?: number | null
   /**
    *
    * @type {TransactionData}
@@ -1026,7 +1026,7 @@ export interface TransactionResponse {
    * @type {number}
    * @memberof TransactionResponse
    */
-  blockTime?: number
+  blockTime?: number | null
 }
 
 /**

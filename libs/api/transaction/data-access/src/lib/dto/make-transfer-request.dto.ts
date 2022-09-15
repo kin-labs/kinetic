@@ -12,9 +12,9 @@ export class MakeTransferRequest {
   mint: string
   @ApiProperty({ type: 'integer' })
   lastValidBlockHeight: number
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, required: false })
   referenceId?: string
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, required: false })
   referenceType?: string
   @ApiProperty({ type: 'string', format: 'byte' })
   tx: string

@@ -12,9 +12,9 @@ export class CreateAccountRequest {
   lastValidBlockHeight: number
   @ApiProperty()
   mint: string
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ required: false, nullable: true })
   referenceId?: string
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ required: false, nullable: true })
   referenceType?: string
   @ApiProperty({ type: 'string', format: 'byte' })
   tx: string
