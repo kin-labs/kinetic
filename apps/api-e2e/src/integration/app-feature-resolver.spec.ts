@@ -540,6 +540,30 @@ describe('App (e2e)', () => {
             expect(ipsAllowed.includes(ip)).toBeFalsy()
           })
       })
+
+      it('should fail to allow an IP when admin is not logged in', async () => {
+        const ip = '23.56.89.15'
+        await runGraphQLQuery(app, UserAppEnvAddAllowedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+          .expect(200)
+          .expect((res) => expectUnauthorized(res))
+      })
+
+      it('should fail to remove an IP from the allowed list when admin is not logged in', async () => {
+        const ip = '23.56.89.16'
+        await runGraphQLQueryAdmin(app, token, UserAppEnvAddAllowedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+        await runGraphQLQuery(app, UserAppEnvRemoveAllowedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+          .expect(200)
+          .expect((res) => expectUnauthorized(res))
+      })
     })
 
     describe('IP Blocking', () => {
@@ -553,6 +577,7 @@ describe('App (e2e)', () => {
         })
         appEnv = createdApp.body.data.created.envs[0]
       })
+
       it('should block an IP', async () => {
         const ip = '23.56.89.15'
         await runGraphQLQueryAdmin(app, token, UserAppEnvAddBlockedIp, {
@@ -584,6 +609,30 @@ describe('App (e2e)', () => {
             expect(ipsBlocked.includes(ip)).toBeFalsy()
           })
       })
+
+      it('should fail to block an IP when admin is not logged in', async () => {
+        const ip = '23.56.89.15'
+        await runGraphQLQuery(app, UserAppEnvAddBlockedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+          .expect(200)
+          .expect((res) => expectUnauthorized(res))
+      })
+
+      it('should fail to unblock an IP when admin is not logged in', async () => {
+        const ip = '23.56.89.16'
+        await runGraphQLQueryAdmin(app, token, UserAppEnvAddBlockedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+        await runGraphQLQuery(app, UserAppEnvRemoveBlockedIp, {
+          appEnvId: appEnv.id,
+          ip,
+        })
+          .expect(200)
+          .expect((res) => expectUnauthorized(res))
+      })
     })
   })
 
@@ -598,6 +647,7 @@ describe('App (e2e)', () => {
       })
       appEnv = createdApp.body.data.created.envs[0]
     })
+
     it('should allow an User Agent', async () => {
       const ua = 'node/1.0.0'
       await runGraphQLQueryAdmin(app, token, UserAppEnvAddAllowedUa, {
@@ -628,6 +678,30 @@ describe('App (e2e)', () => {
           const uasAllowed: string[] = res.body.data?.item?.ipsAllowed
           expect(uasAllowed.includes(ua)).toBeFalsy()
         })
+    })
+
+    it('should fail to allow an User Agent when admin is not logged in', async () => {
+      const ua = 'node/1.0.0'
+      await runGraphQLQuery(app, UserAppEnvAddAllowedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+        .expect(200)
+        .expect((res) => expectUnauthorized(res))
+    })
+
+    it('should fail to remove an User Agent from the allowed list when admin is not logged in', async () => {
+      const ua = 'node/1.0.1'
+      await runGraphQLQueryAdmin(app, token, UserAppEnvAddAllowedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+      await runGraphQLQuery(app, UserAppEnvRemoveAllowedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+        .expect(200)
+        .expect((res) => expectUnauthorized(res))
     })
   })
 
@@ -672,6 +746,30 @@ describe('App (e2e)', () => {
           const uasBlocked: string[] = res.body.data?.item?.uasBlocked
           expect(uasBlocked.includes(ua)).toBeFalsy()
         })
+    })
+
+    it('should fail to block an User Agent when admin is not logged in', async () => {
+      const ua = 'node/1.0.1'
+      await runGraphQLQuery(app, UserAppEnvAddBlockedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+        .expect(200)
+        .expect((res) => expectUnauthorized(res))
+    })
+
+    it('should fail to unblock an User Agent when admin is not logged in', async () => {
+      const ua = 'node/1.0.1'
+      await runGraphQLQueryAdmin(app, token, UserAppEnvAddBlockedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+      await runGraphQLQuery(app, UserAppEnvRemoveBlockedUa, {
+        appEnvId: appEnv.id,
+        ua,
+      })
+        .expect(200)
+        .expect((res) => expectUnauthorized(res))
     })
   })
 })
