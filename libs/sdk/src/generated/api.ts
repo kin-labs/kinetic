@@ -34,69 +34,6 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  *
  * @export
- * @interface AirdropStats
- */
-export interface AirdropStats {
-  /**
-   *
-   * @type {AirdropStatsCounts}
-   * @memberof AirdropStats
-   */
-  counts: AirdropStatsCounts
-  /**
-   *
-   * @type {Array<AirdropStatsDate>}
-   * @memberof AirdropStats
-   */
-  dates: Array<AirdropStatsDate>
-}
-/**
- *
- * @export
- * @interface AirdropStatsCounts
- */
-export interface AirdropStatsCounts {
-  /**
-   *
-   * @type {number}
-   * @memberof AirdropStatsCounts
-   */
-  averageValue: number
-  /**
-   *
-   * @type {number}
-   * @memberof AirdropStatsCounts
-   */
-  total: number
-  /**
-   *
-   * @type {number}
-   * @memberof AirdropStatsCounts
-   */
-  totalValue: number
-}
-/**
- *
- * @export
- * @interface AirdropStatsDate
- */
-export interface AirdropStatsDate {
-  /**
-   *
-   * @type {string}
-   * @memberof AirdropStatsDate
-   */
-  date: string
-  /**
-   *
-   * @type {number}
-   * @memberof AirdropStatsDate
-   */
-  count: number
-}
-/**
- *
- * @export
  * @interface AppConfig
  */
 export interface AppConfig {
@@ -1625,34 +1562,6 @@ export const AirdropApiAxiosParamCreator = function (configuration?: Configurati
     /**
      *
      * @summary
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    airdropStats: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-      const localVarPath = `/api/airdrop/stats`
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
-      let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
-
-      const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
-      const localVarHeaderParameter = {} as any
-      const localVarQueryParameter = {} as any
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter)
-      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
-      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      }
-    },
-    /**
-     *
-     * @summary
      * @param {RequestAirdropRequest} requestAirdropRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1700,18 +1609,6 @@ export const AirdropApiFp = function (configuration?: Configuration) {
     /**
      *
      * @summary
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async airdropStats(
-      options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AirdropStats>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.airdropStats(options)
-      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
-    },
-    /**
-     *
-     * @summary
      * @param {RequestAirdropRequest} requestAirdropRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1736,15 +1633,6 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
     /**
      *
      * @summary
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    airdropStats(options?: any): AxiosPromise<AirdropStats> {
-      return localVarFp.airdropStats(options).then((request) => request(axios, basePath))
-    },
-    /**
-     *
-     * @summary
      * @param {RequestAirdropRequest} requestAirdropRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1762,19 +1650,6 @@ export const AirdropApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class AirdropApi extends BaseAPI {
-  /**
-   *
-   * @summary
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof AirdropApi
-   */
-  public airdropStats(options?: AxiosRequestConfig) {
-    return AirdropApiFp(this.configuration)
-      .airdropStats(options)
-      .then((request) => request(this.axios, this.basePath))
-  }
-
   /**
    *
    * @summary

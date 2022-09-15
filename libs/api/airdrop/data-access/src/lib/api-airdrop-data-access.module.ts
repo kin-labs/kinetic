@@ -3,7 +3,6 @@ import { ApiAirdropDataAccessService } from './api-airdrop-data-access.service'
 import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 
 @Module({
-  controllers: [],
   providers: [ApiAirdropDataAccessService],
   exports: [ApiAirdropDataAccessService],
   imports: [ApiCoreDataAccessModule],
