@@ -16,8 +16,6 @@ import {
 } from './interfaces'
 import { KineticSdkInternal } from './kinetic-sdk-internal'
 
-export type { AppConfig, Transaction, BalanceResponse, HistoryResponse } from '../generated'
-
 export class KineticSdk {
   solana: Solana | undefined
 

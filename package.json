@@ -7,7 +7,7 @@
     "build:admin": "nx build admin --prod",
     "build:admin-sdk": "graphql-codegen --config libs/shared/util/admin-sdk/src/codegen.yml",
     "build:api": "nx build api --prod",
-    "build:sdk": "yarn openapi-generator-cli generate -i ./api-swagger.json -g typescript-axios -o libs/sdk/src/generated && nx format:write --uncommitted",
+    "build:sdk": "yarn openapi-generator-cli generate -i ./api-swagger.json -g typescript-axios -o libs/sdk/src/generated --additional-properties=withInterfaces=true && nx format:write --uncommitted",
     "dev:admin": "nx serve admin",
     "dev:admin-sdk": "yarn build:admin-sdk --watch",
     "dev:api": "nx serve api",
