@@ -1,7 +1,7 @@
 import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import {
   createAssociatedTokenAccountInstruction,
-  createTransferInstruction,
+  createTransferCheckedInstruction,
   getAssociatedTokenAddress,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
@@ -53,11 +53,13 @@ export async function generateMakeTransferTransaction({
   }
 
   instructions.push(
-    createTransferInstruction(
+    createTransferCheckedInstruction(
       ownerTokenAccount,
+      mintKey,
       destinationTokenAccount,
       signer.publicKey,
       addDecimals(amount, mintDecimals).toNumber(),
+      mintDecimals,
       [],
       TOKEN_PROGRAM_ID,
     ),
