@@ -6,7 +6,8 @@
     "build": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["nx run sdk:update-version", "nx run sdk:build-lib"]
+        "commands": ["nx run sdk:update-version", "nx run sdk:build-lib"],
+        "outputPath": "dist/libs/sdk"
       }
     },
     "update-version": {

@@ -6,7 +6,8 @@
     "build": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["nx run solana:update-version", "nx run solana:build-lib"]
+        "commands": ["nx run solana:update-version", "nx run solana:build-lib"],
+        "outputPath": "dist/libs/solana"
       }
     },
     "update-version": {
