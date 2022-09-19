@@ -1,4 +1,4 @@
-import { decodeTransferInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { decodeTransferCheckedInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { AccountMeta, Keypair, Transaction } from '@solana/web3.js'
 import { parseAndSignTransaction } from './parse-and-sign-transaction'
 
@@ -24,7 +24,7 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
   const {
     data: { amount },
     keys: { destination },
-  } = decodeTransferInstruction(instruction, TOKEN_PROGRAM_ID)
+  } = decodeTransferCheckedInstruction(instruction, TOKEN_PROGRAM_ID)
 
   return {
     amount: Number(amount),
