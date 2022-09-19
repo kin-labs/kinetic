@@ -1,7 +1,7 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
 import { TransactionStatus } from '@prisma/client'
-import { aliceKeypair, daveKeypair } from './fixtures'
+import { aliceKeypair, daveKeypair, usdcMint } from './fixtures'
 import { DEFAULT_MINT } from './helpers'
 
 describe('KineticSdk (e2e) - Account', () => {
@@ -23,6 +23,16 @@ describe('KineticSdk (e2e) - Account', () => {
     const tx = await sdk.createAccount({ owner })
     expect(tx).not.toBeNull()
     expect(DEFAULT_MINT).toContain(tx.mint)
+    const { signature, errors } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+  })
+
+  it('should create an account using a mint', async () => {
+    const account = Keypair.random()
+    const tx = await sdk.createAccount({ owner: account, mint: usdcMint })
+    expect(tx).not.toBeNull()
+    expect(tx.mint).toBe(usdcMint)
     const { signature, errors } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
@@ -55,5 +65,16 @@ describe('KineticSdk (e2e) - Account', () => {
     expect(res.errors.length).toBeGreaterThan(0)
     expect(res.status).toBe(TransactionStatus.Failed)
     expect(res.errors[0].message).toContain('Error: Account already exists.')
+  })
+
+  it('should get the account history with a provided mint', async () => {
+    const accountHistory = await sdk.getHistory({ account: aliceKeypair.publicKey, mint: usdcMint })
+    expect(accountHistory.length).toBeGreaterThan(0)
+    expect(accountHistory[0].account).toBe('JBdTmhBdwP5Hs4cYg123mn849FmVEHb1u1KGx998hMN7')
+  })
+
+  it('should get the token account with a provided mint', async () => {
+    const tokenAccounts = await sdk.getTokenAccounts({ account: aliceKeypair.publicKey, mint: usdcMint })
+    expect(tokenAccounts[0]).toBe('JBdTmhBdwP5Hs4cYg123mn849FmVEHb1u1KGx998hMN7')
   })
 })

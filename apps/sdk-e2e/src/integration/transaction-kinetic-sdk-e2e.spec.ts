@@ -1,8 +1,8 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
-import { Destination } from '@kin-kinetic/solana'
+import { Commitment, Destination } from '@kin-kinetic/solana'
 import { TransactionStatus } from '@prisma/client'
-import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair } from './fixtures'
+import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair, usdcMint } from './fixtures'
 import { DEFAULT_MINT } from './helpers'
 
 describe('KineticSdk (e2e)', () => {
@@ -157,4 +157,35 @@ describe('KineticSdk (e2e)', () => {
       expect(e.message).toBe(`Transfers to a mint are not allowed.`)
     }
   })
+
+  it('should make a transfer with a provided mint', async () => {
+    const tx = await sdk.makeTransfer({
+      amount: '1',
+      destination: bobKeypair.publicKey,
+      owner: aliceKeypair,
+      mint: usdcMint,
+      senderCreate: true,
+    })
+    expect(tx).not.toBeNull()
+    expect(tx.mint).toBe(usdcMint)
+    const { signature, errors, amount, source } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+    expect(Number(amount)).toBe(100)
+    expect(source).toBe(aliceKeypair.publicKey)
+  })
+
+  it('should make a batch transfer with a provided mint', async () => {
+    await sdk.createAccount({ commitment: Commitment.Finalized, owner: bobKeypair, mint: usdcMint })
+    const destinations: Destination[] = [{ destination: bobKeypair.publicKey, amount: '2' }]
+
+    const tx = await sdk.makeTransferBatch({ destinations, owner: aliceKeypair, mint: usdcMint })
+    expect(tx).not.toBeNull()
+    expect(usdcMint).toContain(tx.mint)
+    const { signature, errors, amount, source } = tx
+    expect(typeof signature).toBe('string')
+    expect(errors).toEqual([])
+    expect(Number(amount)).toBe(200)
+    expect(source).toBe(aliceKeypair.publicKey)
+  }, 60000)
 })

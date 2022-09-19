@@ -1,5 +1,5 @@
 import { KineticSdk } from '@kin-kinetic/sdk'
-import { daveKeypair } from './fixtures'
+import { aliceKeypair, daveKeypair, usdcMint } from './fixtures'
 
 describe('KineticSdk (e2e) - Airdrop', () => {
   let sdk: KineticSdk
@@ -12,6 +12,12 @@ describe('KineticSdk (e2e) - Airdrop', () => {
     const airdrop = await sdk.requestAirdrop({ account: daveKeypair.publicKey, amount: '1000' })
     expect(airdrop.signature).not.toBeNull()
     expect(typeof airdrop.signature).toBe('string')
+  }, 30000)
+
+  it('should request an airdrop using a mint', async () => {
+    const tx = await sdk.requestAirdrop({ account: aliceKeypair.publicKey, amount: '1', mint: usdcMint })
+    expect(tx).not.toBeNull()
+    expect(typeof tx.signature).toBe('string')
   }, 30000)
 
   it('should fail when airdrop request exceeds maximum allowed', async () => {
