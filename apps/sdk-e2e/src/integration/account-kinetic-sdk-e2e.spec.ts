@@ -1,8 +1,8 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
 import { TransactionStatus } from '@prisma/client'
+import { aliceKeypair, daveKeypair, usdcMint } from './fixtures'
 import { DEFAULT_MINT } from './helpers'
-import { daveKeypair, aliceKeypair, usdcMint, bobKeypair } from './fixtures'
 
 describe('KineticSdk (e2e) - Account', () => {
   let sdk: KineticSdk
