@@ -18,6 +18,13 @@
         "passWithNoTests": true
       }
     },
+    "e2e-local": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/sdk-e2e/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
