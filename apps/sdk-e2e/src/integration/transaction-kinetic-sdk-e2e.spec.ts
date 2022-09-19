@@ -175,13 +175,17 @@ describe('KineticSdk (e2e)', () => {
     expect(source).toBe(aliceKeypair.publicKey)
   })
 
-  it('should make a batch transfer with a provided mint', async () => {
-    setTimeout(async () => {
-      await sdk.createAccount({ owner: bobKeypair, mint: usdcMint })
+  describe('Batch Transfer with Mint', () => {
+    beforeAll(() => {
+      setTimeout(async () => {
+        await sdk.createAccount({ owner: bobKeypair, mint: usdcMint })
+      }, 17000)
+    })
+
+    it('should make a batch transfer with a provided mint', async () => {
       const destinations: Destination[] = [{ destination: bobKeypair.publicKey, amount: '2' }]
 
       const tx = await sdk.makeTransferBatch({ destinations, owner: aliceKeypair, mint: usdcMint })
-      console.dir(tx, { depth: null })
       expect(tx).not.toBeNull()
       expect(usdcMint).toContain(tx.mint)
       const { signature, errors, amount, source } = tx
@@ -189,6 +193,6 @@ describe('KineticSdk (e2e)', () => {
       expect(errors).toEqual([])
       expect(Number(amount)).toBe(200)
       expect(source).toBe(aliceKeypair.publicKey)
-    }, 18000)
-  }, 60000)
+    }, 60000)
+  })
 })
