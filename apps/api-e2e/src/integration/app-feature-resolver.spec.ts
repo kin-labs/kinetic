@@ -716,6 +716,7 @@ describe('App (e2e)', () => {
       })
       appEnv = createdApp.body.data.created.envs[0]
     })
+
     it('should block an User Agent', async () => {
       const ua = 'node/1.0.0'
       await runGraphQLQueryAdmin(app, token, UserAppEnvAddBlockedUa, {
