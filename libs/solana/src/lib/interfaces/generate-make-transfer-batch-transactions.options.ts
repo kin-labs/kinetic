@@ -5,13 +5,13 @@ import { PublicKeyString } from './public-key-string'
 
 export interface GenerateMakeTransferBatchTransactionsOptions {
   addMemo: boolean
-  appIndex: number
+  blockhash: string
   destinations: Destination[]
+  index: number
   lastValidBlockHeight: number
-  latestBlockhash: string
   mintDecimals: number
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
-  signer: Keypair
+  owner: Keypair
   type: TransactionType
 }

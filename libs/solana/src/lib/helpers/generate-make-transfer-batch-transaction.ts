@@ -7,22 +7,23 @@ import { getPublicKey } from './get-public-key'
 
 export async function generateMakeTransferBatchTransaction({
   addMemo,
-  appIndex,
+  blockhash,
   destinations,
+  index,
   lastValidBlockHeight,
-  latestBlockhash,
   mintDecimals,
   mintFeePayer,
   mintPublicKey,
-  signer,
+  owner,
   type,
 }: GenerateMakeTransferBatchTransactionsOptions): Promise<Transaction> {
   // Create objects from Response
   const mintKey = getPublicKey(mintPublicKey)
   const feePayerKey = getPublicKey(mintFeePayer)
+  const ownerPublicKey = owner.publicKey
 
   // Get TokenAccount from Owner
-  const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, signer.publicKey)
+  const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, ownerPublicKey)
 
   // Get TokenAccount from Destination
   const destinationInfo: { amount: number; destination: PublicKey }[] = await Promise.all(
@@ -38,7 +39,7 @@ export async function generateMakeTransferBatchTransaction({
   if (addMemo) {
     instructions.push(
       generateKinMemoInstruction({
-        appIndex,
+        appIndex: index,
         type,
       }),
     )
@@ -50,7 +51,7 @@ export async function generateMakeTransferBatchTransaction({
         ownerTokenAccount,
         mintKey,
         destination,
-        signer.publicKey,
+        ownerPublicKey,
         amount,
         mintDecimals,
         [],
@@ -60,14 +61,14 @@ export async function generateMakeTransferBatchTransaction({
   )
 
   const transaction = new Transaction({
-    blockhash: latestBlockhash,
+    blockhash,
     feePayer: feePayerKey,
     lastValidBlockHeight,
-    signatures: [{ publicKey: signer.publicKey, signature: null }],
+    signatures: [{ publicKey: ownerPublicKey, signature: null }],
   }).add(...instructions)
 
   // Partially sign the transaction
-  transaction.partialSign(signer)
+  transaction.partialSign(owner)
 
   return transaction
 }
