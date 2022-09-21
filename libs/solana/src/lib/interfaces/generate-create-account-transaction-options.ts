@@ -3,10 +3,10 @@ import { PublicKeyString } from '../interfaces'
 
 export interface GenerateCreateAccountTransactionOptions {
   addMemo: boolean
-  appIndex: number
+  blockhash: string
+  index: number
   lastValidBlockHeight: number
-  latestBlockhash: string
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
-  signer: Keypair
+  owner: Keypair
 }
