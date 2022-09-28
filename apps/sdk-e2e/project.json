@@ -4,7 +4,7 @@
   "projectType": "application",
   "targets": {
     "serve-api": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "commands": ["nx run api:serve"],
         "readyWhen": "API is running"
