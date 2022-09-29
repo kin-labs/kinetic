@@ -238,80 +238,44 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   private async configureDefaultUsers() {
-    const users = [
-      {
-        role: UserRole.Admin,
-        avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/aliceal.svg',
-        id: 'alice',
-        name: 'Alice',
-        username: this.config.adminUsername,
-        password: this.config.adminPassword,
-      },
-      {
-        role: UserRole.User,
-        avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/bob42.svg',
-        id: 'bob',
-        name: 'Bob',
-        username: 'bob',
-        password: this.config.adminPassword.replace('alice', 'bob'),
-      },
-      {
-        role: UserRole.User,
-        avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/charlie42222.svg',
-        id: 'charlie',
-        name: 'Charlie',
-        username: 'charlie',
-        password: this.config.adminPassword.replace('alice', 'charlie'),
-      },
-      {
-        role: UserRole.User,
-        avatarUrl: 'https://avatars.dicebear.com/api/open-peeps/dave42.svg',
-        id: 'dave',
-        name: 'Dave',
-        username: 'dave',
-        password: this.config.adminPassword.replace('alice', 'dave'),
-      },
-    ]
-    for (const user of users) {
+    for (const user of this.config.authUsers) {
       await this.configureDefaultUser(user)
     }
   }
 
   private async configureDefaultUser({
-    id,
     avatarUrl,
-    name,
+    email,
     username,
     password,
     role,
   }: {
-    id: string
-    avatarUrl: string
-    name: string
+    avatarUrl?: string
+    email?: string
     username: string
     password: string
     role: UserRole
   }) {
-    const existing = await this.user.count({ where: { id } })
+    const existing = await this.user.count({ where: { username } })
     if (existing < 1) {
-      const email = `${username}@example.com`
       await this.user.create({
         data: {
-          id,
           avatarUrl,
-          name,
-          password: hashPassword(password),
+          name: username,
+          password: password ? hashPassword(password) : undefined,
           role,
-          username: id,
-          emails: {
-            create: { email },
-          },
+          username: username,
+          emails: email
+            ? {
+                create: { email },
+              }
+            : undefined,
         },
       })
-      this.logger.log(`Created new ${role} with username ${username} and password ${password}`)
+      this.logger.log(`Provisioned ${role} ${username} ${password ? 'and password' : 'an external provider'}`)
       return
     }
-    this.logger.log(`Log in as ${role} with username ${username} and password ${password}`)
+    this.logger.log(`Log in with ${role} ${username} ${password ? 'and password' : 'an external provider'}`)
   }
 
   private async configureDefaultClusters() {

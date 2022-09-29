@@ -36,6 +36,10 @@ export class ApiAuthDataAccessService {
       throw new UnauthorizedException(`User not found.`)
     }
 
+    if (!user.password) {
+      throw new UnauthorizedException(`Login with username and password is not allowed.`)
+    }
+
     if (!validatePassword(password, user.password)) {
       throw new UnauthorizedException(`Password incorrect.`)
     }
@@ -45,6 +49,9 @@ export class ApiAuthDataAccessService {
   }
 
   async login(req: Request, res: Response, input: UserLoginInput): Promise<AuthToken> {
+    if (input?.password.length < 8) {
+      throw new UnauthorizedException(`Password must be at least 8 characters.`)
+    }
     const user = await this.validateUser(input)
     const token = this.sign({ username: user.username, id: user.id })
     this.setCookie(req, res, token)
