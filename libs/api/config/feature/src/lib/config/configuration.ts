@@ -11,10 +11,6 @@ const domains: string[] = process.env.COOKIE_DOMAINS?.includes(',')
   : [process.env.COOKIE_DOMAINS]
 
 export default () => ({
-  admin: {
-    username: process.env.ADMIN_USERNAME,
-    password: process.env.ADMIN_PASSWORD,
-  },
   api: {
     log: {
       color: process.env.LOG_COLOR?.toLowerCase() !== 'false',
@@ -24,6 +20,9 @@ export default () => ({
     name: NAME,
     url: process.env.API_URL,
     version: VERSION,
+  },
+  auth: {
+    users: process.env.AUTH_USERS || '',
   },
   cors: { origins },
   cookie: {

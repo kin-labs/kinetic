@@ -33,7 +33,7 @@ describe('Auth (e2e)', () => {
           expect(data).toHaveProperty('me.id')
 
           expect(data.me.role).toEqual(UserRole.Admin)
-          expect(data.me.name).toEqual('Alice')
+          expect(data.me.name).toEqual('alice')
           expect(data.me.username).toEqual('alice')
         })
     })

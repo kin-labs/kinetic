@@ -3,10 +3,12 @@ import { ApolloDriverConfig } from '@nestjs/apollo'
 import { INestApplication, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { UserRole } from '@prisma/client'
 import { CookieOptions } from 'express-serve-static-core'
 import * as fs from 'fs'
 import { join } from 'path'
 import { ProvisionedApp } from './entities/provisioned-app.entity'
+import { getAuthUsers } from './helpers/get-auth-users'
 import { getProvisionedApps } from './helpers/get-provisioned-apps'
 
 @Injectable()
@@ -25,12 +27,15 @@ export class ApiConfigDataAccessService {
 
   constructor(private readonly config: ConfigService) {}
 
-  get adminUsername(): string {
-    return this.config.get('admin.username')
-  }
+  get authUsers(): { username: string; password: string; role: UserRole; email?: string; avatarUrl?: string }[] {
+    const users = this.config.get('auth.users')
 
-  get adminPassword(): string {
-    return this.config.get('admin.password')
+    if (users.length < 1) {
+      this.logger.warn('No users configured for auth')
+      return []
+    }
+
+    return getAuthUsers(users)
   }
 
   get apiLogColor() {

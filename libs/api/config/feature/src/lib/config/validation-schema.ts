@@ -1,8 +1,7 @@
 import * as Joi from 'joi'
 
 export const validationSchema = Joi.object({
-  ADMIN_PASSWORD: Joi.string().required().error(new Error(`ADMIN_PASSWORD is required.`)),
-  ADMIN_USERNAME: Joi.string().required().error(new Error(`ADMIN_USERNAME is required.`)),
+  AUTH_USERS: Joi.string().default(''),
   API_URL: Joi.string().required().error(new Error(`API_URL is required.`)),
   COOKIE_DOMAINS: Joi.string().required().error(new Error(`COOKIE_DOMAINS is required.`)),
   COOKIE_NAME: Joi.string().default('__session'),
