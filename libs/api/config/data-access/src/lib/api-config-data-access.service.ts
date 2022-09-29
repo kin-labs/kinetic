@@ -86,29 +86,7 @@ export class ApiConfigDataAccessService {
   get cors() {
     return {
       credentials: true,
-      origin: (origin: string, cb) => {
-        if (
-          this.corsOrigins.find((allowed) => {
-            if (allowed === '*') {
-              return true
-            }
-            if (allowed?.includes('*')) {
-              const [start, end] = allowed.split('*')
-              try {
-                const { hostname } = new URL(origin)
-
-                return origin.startsWith(start) && hostname.endsWith(end)
-              } catch (e) {
-                return false
-              }
-            }
-            return false
-          })
-        ) {
-          return cb(null, origin)
-        }
-        return cb(new Error(`The CORS policy does not allow access from ${origin}.`), false)
-      },
+      origin: this.corsOrigins,
     }
   }
 

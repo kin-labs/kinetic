@@ -14,7 +14,6 @@ env:
   APP_1_NAME: 'App 1'
   COOKIE_DOMAINS: 'localhost'
   COOKIE_NAME: '__session'
-  CORS_ORIGINS: '*'
   DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=kinetic'
   MINT_LOCAL_USDC: '*USDzo281m7rjzeZyxevkzL1vr5Cibb9ek3ynyAjXjUM,2,USDC'
   JWT_SECRET: 'KineticJwtSecret!'
