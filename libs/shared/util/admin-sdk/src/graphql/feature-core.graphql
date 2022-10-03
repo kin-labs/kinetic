@@ -1,5 +1,6 @@
 query AdminConfig {
   adminConfig {
+    discordEnabled
     githubEnabled
     passwordEnabled
   }

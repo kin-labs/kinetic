@@ -30,6 +30,7 @@ export class ApiConfigDataAccessService {
 
   adminConfig(): AdminConfig {
     return {
+      discordEnabled: this.discordEnabled,
       githubEnabled: this.githubEnabled,
       passwordEnabled: this.authPasswordEnabled,
     }
@@ -108,6 +109,22 @@ export class ApiConfigDataAccessService {
 
   get corsOrigins(): string[] {
     return this.config.get('cors.origins')
+  }
+
+  get discordCallbackUrl() {
+    return this.apiUrl + '/auth/discord/callback'
+  }
+
+  get discordClientId(): string {
+    return this.config.get('discord.clientId')
+  }
+
+  get discordClientSecret(): string {
+    return this.config.get('discord.clientSecret')
+  }
+
+  get discordEnabled(): boolean {
+    return this.config.get('discord.enabled') && !!this.discordClientId && !!this.discordClientSecret
   }
 
   get environment() {

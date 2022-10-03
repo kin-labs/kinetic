@@ -21,6 +21,7 @@ export function AdminAuthFeature() {
     <Flex h="full" justifyContent={'center'} alignItems={'center'}>
       {data && (
         <AdminAuthLoginForm
+          discordEnabled={data?.adminConfig.discordEnabled}
           githubEnabled={data?.adminConfig.githubEnabled}
           passwordEnabled={data?.adminConfig.passwordEnabled}
           login={login}

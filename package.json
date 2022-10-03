@@ -102,6 +102,7 @@
     "nestjs-otel": "^4.0.1",
     "opentelemetry-node-metrics": "^2.0.0",
     "passport": "^0.6.0",
+    "passport-discord": "^0.1.4",
     "passport-github": "^1.1.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
