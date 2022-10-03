@@ -1,5 +1,6 @@
 import { Field, HideField, ObjectType } from '@nestjs/graphql'
 import { UserEmail } from './user-email.entity'
+import { UserIdentity } from './user-identity.entity'
 import { UserRole } from './user-role.enum'
 
 @ObjectType()
@@ -17,9 +18,10 @@ export class User {
   avatarUrl?: string
   @Field(() => [UserEmail], { nullable: true })
   emails: UserEmail[]
+  @Field(() => [UserIdentity], { nullable: true })
+  identities: UserIdentity[]
   @Field(() => UserRole, { nullable: true })
   role: UserRole
   @HideField()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  apps?: any
+  apps?: unknown
 }

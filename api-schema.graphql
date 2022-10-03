@@ -32,6 +32,11 @@ input AdminClusterUpdateInput {
   status: ClusterStatus
 }
 
+type AdminConfig {
+  githubEnabled: Boolean!
+  passwordEnabled: Boolean!
+}
+
 input AdminMintCreateInput {
   address: String!
   clusterId: String!
@@ -176,7 +181,7 @@ scalar DateTime
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
-scalar JSON
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 type Mint {
   addMemo: Boolean
@@ -248,6 +253,7 @@ type Query {
   adminApps: [App!]
   adminCluster(clusterId: String!): Cluster
   adminClusters: [Cluster!]
+  adminConfig: AdminConfig!
   adminUser(userId: String!): User
   adminUsers: [User!]
   adminWallet(walletId: String!): Wallet
@@ -350,6 +356,7 @@ type User {
   email: String
   emails: [UserEmail!]
   id: String!
+  identities: [UserIdentity!]
   name: String
   role: UserRole
   updatedAt: DateTime!
@@ -400,6 +407,19 @@ type UserEmail {
   email: String!
   id: String!
   updatedAt: DateTime!
+}
+
+type UserIdentity {
+  createdAt: DateTime!
+  externalId: String!
+  id: String!
+  profile: JSON!
+  type: UserIdentityType
+  updatedAt: DateTime!
+}
+
+enum UserIdentityType {
+  GitHub
 }
 
 input UserLoginInput {

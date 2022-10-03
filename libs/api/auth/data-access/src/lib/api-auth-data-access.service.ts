@@ -3,6 +3,7 @@ import { validatePassword } from '@kin-kinetic/api/auth/util'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService, JwtSignOptions } from '@nestjs/jwt'
+import { UserIdentityType, UserRole } from '@prisma/client'
 import { Request, Response } from 'express'
 import { UserLoginInput } from './dto/user-login.input'
 import { AuthToken } from './entities/auth-token.entity'
@@ -13,7 +14,7 @@ export class ApiAuthDataAccessService {
 
   constructor(
     private readonly apps: ApiAppDataAccessService,
-    private readonly data: ApiCoreDataAccessService,
+    readonly data: ApiCoreDataAccessService,
     private readonly jwt: JwtService,
   ) {}
 
@@ -27,6 +28,73 @@ export class ApiAuthDataAccessService {
 
   sign(payload: { id: string; username: string }): string {
     return this.jwt.sign(payload, this.jwtOptions)
+  }
+
+  async findOrCreateByIdentity(
+    type: UserIdentityType,
+    profile: {
+      externalId?: string
+      email?: string
+      username?: string
+      name?: string
+      avatarUrl?: string
+    },
+  ) {
+    const foundIdentity = await this.data.getUserByIdentity(type, profile.externalId)
+
+    if (foundIdentity) {
+      return foundIdentity
+    }
+
+    const foundEmail = await this.data.getUserByEmail(profile.email)
+
+    if (foundEmail) {
+      // Add this identity to the user
+      return this.data.user.update({
+        where: { id: foundEmail.id },
+        data: {
+          avatarUrl: foundEmail.avatarUrl || profile.avatarUrl,
+          name: foundEmail.name || profile.name,
+          identities: {
+            create: {
+              type,
+              externalId: profile.externalId,
+              profile,
+            },
+          },
+        },
+      })
+    }
+
+    let username = profile.username
+    const foundUsername = await this.data.getUserByUsername(profile.username)
+    if (foundUsername) {
+      // suffix username with random number
+      username = `${profile.username}-${Math.floor(Math.random() * 1000)}`
+    }
+
+    // Create new user
+    return this.data.user.create({
+      data: {
+        avatarUrl: profile.avatarUrl,
+        name: profile.name,
+        username,
+        role: UserRole.User,
+        emails: {
+          create: {
+            email: profile.email,
+          },
+        },
+        identities: {
+          create: {
+            type,
+            externalId: profile.externalId,
+            profile,
+          },
+        },
+      },
+      include: { emails: true, identities: true },
+    })
   }
 
   async validateUser({ username, password }: { password: string; username: string }) {
@@ -49,6 +117,9 @@ export class ApiAuthDataAccessService {
   }
 
   async login(req: Request, res: Response, input: UserLoginInput): Promise<AuthToken> {
+    if (!this.data.config.authPasswordEnabled) {
+      throw new UnauthorizedException(`Login with username and password is not allowed.`)
+    }
     if (input?.password.length < 8) {
       throw new UnauthorizedException(`Password must be at least 8 characters.`)
     }

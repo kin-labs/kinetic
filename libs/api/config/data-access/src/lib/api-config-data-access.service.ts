@@ -7,7 +7,8 @@ import { UserRole } from '@prisma/client'
 import { CookieOptions } from 'express-serve-static-core'
 import * as fs from 'fs'
 import { join } from 'path'
-import { ProvisionedApp } from './entities/provisioned-app.entity'
+import { AdminConfig } from './entity/admin-config.entity'
+import { ProvisionedApp } from './entity/provisioned-app.entity'
 import { getAuthUsers } from './helpers/get-auth-users'
 import { getProvisionedApps } from './helpers/get-provisioned-apps'
 
@@ -26,6 +27,21 @@ export class ApiConfigDataAccessService {
   })
 
   constructor(private readonly config: ConfigService) {}
+
+  adminConfig(): AdminConfig {
+    return {
+      githubEnabled: this.githubEnabled,
+      passwordEnabled: this.authPasswordEnabled,
+    }
+  }
+
+  get adminUrl(): string {
+    return this.config.get('admin.url')
+  }
+
+  get authPasswordEnabled(): boolean {
+    return this.config.get('auth.passwordEnabled')
+  }
 
   get authUsers(): { username: string; password: string; role: UserRole; email?: string; avatarUrl?: string }[] {
     const users = this.config.get('auth.users')
@@ -96,6 +112,22 @@ export class ApiConfigDataAccessService {
 
   get environment() {
     return this.config.get('environment')
+  }
+
+  get githubCallbackUrl() {
+    return this.apiUrl + '/auth/github/callback'
+  }
+
+  get githubClientId(): string {
+    return this.config.get('github.clientId')
+  }
+
+  get githubClientSecret(): string {
+    return this.config.get('github.clientSecret')
+  }
+
+  get githubEnabled(): boolean {
+    return this.config.get('github.enabled') && !!this.githubClientId && !!this.githubClientSecret
   }
 
   get graphqlConfig(): ApolloDriverConfig {

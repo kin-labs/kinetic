@@ -6,6 +6,7 @@ import {
   User,
 } from '@kin-kinetic/shared/util/admin-sdk'
 import React, { ReactNode, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export type AdminAuthLoginFn = (input: UserLoginInput) => Promise<boolean>
 export type AdminAuthLogoutFn = () => Promise<boolean>
@@ -22,6 +23,7 @@ const AdminAuthContext = React.createContext<AdminAuthProps>({} as AdminAuthProp
 const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [user, setUser] = useState<User | undefined>()
+  const navigate = useNavigate()
 
   const [, loginMutation] = useLoginMutation()
   const [, logoutMutation] = useLogoutMutation()
@@ -38,6 +40,7 @@ const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setUser(undefined)
     const result = await logoutMutation({})
+    navigate('/')
     return !!result.data?.logout
   }
 

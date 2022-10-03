@@ -11,6 +11,9 @@ const domains: string[] = process.env.COOKIE_DOMAINS?.includes(',')
   : [process.env.COOKIE_DOMAINS]
 
 export default () => ({
+  admin: {
+    url: process.env.ADMIN_URL,
+  },
   api: {
     log: {
       color: process.env.LOG_COLOR?.toLowerCase() !== 'false',
@@ -22,6 +25,7 @@ export default () => ({
     version: VERSION,
   },
   auth: {
+    passwordEnabled: process.env.AUTH_PASSWORD_ENABLED?.toLowerCase() !== 'false',
     users: process.env.AUTH_USERS || '',
   },
   cors: { origins },
@@ -30,6 +34,11 @@ export default () => ({
     name: process.env.COOKIE_NAME,
   },
   environment: process.env.NODE_ENV,
+  github: {
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    enabled: process.env.GITHUB_ENABLED?.toLowerCase() !== 'false',
+  },
   jwt: {
     secret: process.env.JWT_SECRET,
   },
