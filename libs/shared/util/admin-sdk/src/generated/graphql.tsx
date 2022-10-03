@@ -54,6 +54,7 @@ export type AdminClusterUpdateInput = {
 
 export type AdminConfig = {
   __typename?: 'AdminConfig'
+  discordEnabled: Scalars['Boolean']
   githubEnabled: Scalars['Boolean']
   passwordEnabled: Scalars['Boolean']
 }
@@ -715,6 +716,7 @@ export type UserIdentity = {
 }
 
 export enum UserIdentityType {
+  Discord = 'Discord',
   GitHub = 'GitHub',
 }
 
@@ -4943,7 +4945,7 @@ export type AdminConfigQueryVariables = Exact<{ [key: string]: never }>
 
 export type AdminConfigQuery = {
   __typename?: 'Query'
-  adminConfig: { __typename?: 'AdminConfig'; githubEnabled: boolean; passwordEnabled: boolean }
+  adminConfig: { __typename?: 'AdminConfig'; discordEnabled: boolean; githubEnabled: boolean; passwordEnabled: boolean }
 }
 
 export type UptimeQueryVariables = Exact<{ [key: string]: never }>
@@ -6781,6 +6783,7 @@ export function useUserClustersQuery(options?: Omit<Urql.UseQueryArgs<UserCluste
 export const AdminConfigDocument = gql`
   query AdminConfig {
     adminConfig {
+      discordEnabled
       githubEnabled
       passwordEnabled
     }

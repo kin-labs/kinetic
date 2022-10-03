@@ -248,6 +248,7 @@ model UserIdentity {
 }
 
 enum UserIdentityType {
+  Discord
   GitHub
 }
 

@@ -33,6 +33,11 @@ export default () => ({
     domains,
     name: process.env.COOKIE_NAME,
   },
+  discord: {
+    clientId: process.env.DISCORD_CLIENT_ID,
+    clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    enabled: process.env.DISCORD_ENABLED?.toLowerCase() !== 'false',
+  },
   environment: process.env.NODE_ENV,
   github: {
     clientId: process.env.GITHUB_CLIENT_ID,

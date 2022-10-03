@@ -33,6 +33,7 @@ input AdminClusterUpdateInput {
 }
 
 type AdminConfig {
+  discordEnabled: Boolean!
   githubEnabled: Boolean!
   passwordEnabled: Boolean!
 }
@@ -419,6 +420,7 @@ type UserIdentity {
 }
 
 enum UserIdentityType {
+  Discord
   GitHub
 }
 

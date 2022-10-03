@@ -37,6 +37,11 @@ async function bootstrap() {
 
     Logger.log(`🔐 Password Authentication ${config.authPasswordEnabled ? `ENABLED` : `DISABLED`}`)
     Logger.log(
+      `🔐 Discord Authentication ${
+        config.discordEnabled ? `ENABLED. Callback ${config.discordCallbackUrl}` : 'DISABLED'
+      }`,
+    )
+    Logger.log(
       `🔐 GitHub Authentication ${config.githubEnabled ? `ENABLED. Callback ${config.githubCallbackUrl}` : 'DISABLED'}`,
     )
 

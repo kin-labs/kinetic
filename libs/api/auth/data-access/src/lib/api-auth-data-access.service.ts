@@ -4,7 +4,8 @@ import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService, JwtSignOptions } from '@nestjs/jwt'
 import { UserIdentityType, UserRole } from '@prisma/client'
-import { Request, Response } from 'express'
+import { Response } from 'express'
+import { AuthRequest } from './entities/auth-request.entity'
 import { UserLoginInput } from './dto/user-login.input'
 import { AuthToken } from './entities/auth-token.entity'
 
@@ -14,15 +15,15 @@ export class ApiAuthDataAccessService {
 
   constructor(
     private readonly apps: ApiAppDataAccessService,
-    readonly data: ApiCoreDataAccessService,
+    private readonly data: ApiCoreDataAccessService,
     private readonly jwt: JwtService,
   ) {}
 
-  resetCookie(req: Request, res: Response) {
+  resetCookie(req: AuthRequest, res: Response) {
     return res.clearCookie(this.data.config.cookieName, this.data.config.cookieOptions(req.hostname))
   }
 
-  setCookie(req: Request, res: Response, token: string) {
+  setCookie(req: AuthRequest, res: Response, token: string) {
     return res?.cookie(this.data.config.cookieName, token, this.data.config.cookieOptions(req.hostname))
   }
 
@@ -97,6 +98,16 @@ export class ApiAuthDataAccessService {
     })
   }
 
+  signOauthUser(req: AuthRequest, res: Response) {
+    const user = req?.user as unknown as { id: string; username: string; password?: string }
+    delete user.password
+
+    const token = this.sign({ username: user.username, id: user.id })
+    this.setCookie(req, res, token)
+
+    return res.redirect(this.data.config.adminUrl)
+  }
+
   async validateUser({ username, password }: { password: string; username: string }) {
     const user = await this.data.getUserByUsername(username)
 
@@ -116,7 +127,7 @@ export class ApiAuthDataAccessService {
     return user
   }
 
-  async login(req: Request, res: Response, input: UserLoginInput): Promise<AuthToken> {
+  async login(req: AuthRequest, res: Response, input: UserLoginInput): Promise<AuthToken> {
     if (!this.data.config.authPasswordEnabled) {
       throw new UnauthorizedException(`Login with username and password is not allowed.`)
     }
