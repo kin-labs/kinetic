@@ -23,6 +23,7 @@ export function AdminAuthFeature() {
         <AdminAuthLoginForm
           discordEnabled={data?.adminConfig.discordEnabled}
           githubEnabled={data?.adminConfig.githubEnabled}
+          googleEnabled={data?.adminConfig.googleEnabled}
           passwordEnabled={data?.adminConfig.passwordEnabled}
           login={login}
         />

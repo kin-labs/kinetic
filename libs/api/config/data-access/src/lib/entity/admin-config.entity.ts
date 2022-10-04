@@ -7,5 +7,7 @@ export class AdminConfig {
   @Field()
   githubEnabled: boolean
   @Field()
+  googleEnabled: boolean
+  @Field()
   passwordEnabled: boolean
 }

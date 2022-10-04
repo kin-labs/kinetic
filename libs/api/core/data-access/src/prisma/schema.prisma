@@ -250,6 +250,7 @@ model UserIdentity {
 enum UserIdentityType {
   Discord
   GitHub
+  Google
 }
 
 enum UserRole {

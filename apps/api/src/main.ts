@@ -44,6 +44,9 @@ async function bootstrap() {
     Logger.log(
       `🔐 GitHub Authentication ${config.githubEnabled ? `ENABLED. Callback ${config.githubCallbackUrl}` : 'DISABLED'}`,
     )
+    Logger.log(
+      `🔐 Google Authentication ${config.googleEnabled ? `ENABLED. Callback ${config.googleCallbackUrl}` : 'DISABLED'}`,
+    )
 
     if (config.isDevelopment) {
       exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })

@@ -32,6 +32,7 @@ export class ApiConfigDataAccessService {
     return {
       discordEnabled: this.discordEnabled,
       githubEnabled: this.githubEnabled,
+      googleEnabled: this.googleEnabled,
       passwordEnabled: this.authPasswordEnabled,
     }
   }
@@ -145,6 +146,22 @@ export class ApiConfigDataAccessService {
 
   get githubEnabled(): boolean {
     return this.config.get('github.enabled') && !!this.githubClientId && !!this.githubClientSecret
+  }
+
+  get googleCallbackUrl() {
+    return this.apiUrl + '/auth/google/callback'
+  }
+
+  get googleClientId(): string {
+    return this.config.get('google.clientId')
+  }
+
+  get googleClientSecret(): string {
+    return this.config.get('google.clientSecret')
+  }
+
+  get googleEnabled(): boolean {
+    return this.config.get('google.enabled') && !!this.googleClientId && !!this.googleClientSecret
   }
 
   get graphqlConfig(): ApolloDriverConfig {

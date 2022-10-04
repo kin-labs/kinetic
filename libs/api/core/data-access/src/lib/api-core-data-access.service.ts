@@ -221,8 +221,12 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     return this.connections.get(appKey)
   }
 
-  getUserByEmail(email: string) {
-    return this.user.findFirst({ where: { emails: { some: { email } } }, include: { emails: true, identities: true } })
+  async getUserByEmail(email: string) {
+    const found = await this.userEmail.findUnique({ where: { email } })
+
+    if (found) {
+      return this.getUserById(found.ownerId)
+    }
   }
 
   getUserById(userId: string) {
