@@ -1,7 +1,4 @@
-import * as encoding from 'text-encoding'
-
-if (typeof TextEncoder === 'undefined') {
-  window['global'] = window
+if (typeof TextEncoder === 'undefined' || typeof window === 'undefined') {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  global.TextEncoder = encoding.TextEncoder
+  global.TextEncoder = require('util').TextEncoder
 }
