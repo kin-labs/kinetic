@@ -330,6 +330,22 @@
             "deprecationReason": null
           },
           {
+            "name": "googleEnabled",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "passwordEnabled",
             "description": null,
             "args": [],
@@ -6000,6 +6016,12 @@
           },
           {
             "name": "GitHub",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Google",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

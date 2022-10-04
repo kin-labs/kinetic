@@ -2,6 +2,7 @@ query AdminConfig {
   adminConfig {
     discordEnabled
     githubEnabled
+    googleEnabled
     passwordEnabled
   }
 }

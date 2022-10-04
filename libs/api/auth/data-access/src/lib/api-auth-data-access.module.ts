@@ -10,6 +10,7 @@ import { ApiAuthGraphqlGuard } from './guards/api-auth-graphql.guard'
 import { ApiAuthDiscordStrategy } from './strategies/api-auth-discord.strategy'
 import { ApiAuthGithubStrategy } from './strategies/api-auth-github.strategy'
 import { ApiAuthJwtStrategy } from './strategies/api-auth-jwt.strategy'
+import { ApiAuthGoogleStrategy } from './strategies/api-auth-google.strategy'
 
 @Module({
   providers: [
@@ -18,6 +19,7 @@ import { ApiAuthJwtStrategy } from './strategies/api-auth-jwt.strategy'
     ApiAuthDiscordStrategy,
     ApiAuthGithubGuard,
     ApiAuthGithubStrategy,
+    ApiAuthGoogleStrategy,
     ApiAuthGraphqlGuard,
     ApiAuthJwtStrategy,
   ],
