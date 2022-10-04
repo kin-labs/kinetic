@@ -15,6 +15,7 @@ import {
   RequestAirdropOptions,
 } from './interfaces'
 import { KineticSdkInternal } from './kinetic-sdk-internal'
+import './kinetic-sdk-polyfills'
 
 export class KineticSdk {
   solana: Solana | undefined

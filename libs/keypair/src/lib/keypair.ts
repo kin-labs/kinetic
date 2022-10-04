@@ -1,8 +1,8 @@
+import { HDKey } from 'micro-ed25519-hdkey'
 import * as bip39 from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english'
 import { Keypair as SolanaKeypair, PublicKey as SolanaPublicKey } from '@solana/web3.js'
 import * as bs58 from 'bs58'
-import { derivePath } from 'ed25519-hd-key'
 
 export { SolanaKeypair, SolanaPublicKey }
 
@@ -63,7 +63,8 @@ export class Keypair {
   }
 
   static derive(seed: Buffer, path: string) {
-    return Keypair.fromSeed(derivePath(path, seed.toString('hex')).key)
+    const hd = HDKey.fromMasterSeed(seed.toString('hex'))
+    return Keypair.fromSeed(Buffer.from(hd.derive(path).privateKey))
   }
 
   static fromSeed(seed: Buffer): Keypair {
