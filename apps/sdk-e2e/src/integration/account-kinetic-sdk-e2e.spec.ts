@@ -1,6 +1,5 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
-import { TransactionStatus } from '@prisma/client'
 import { aliceKeypair, daveKeypair, usdcMint } from './fixtures'
 import { DEFAULT_MINT } from './helpers'
 
@@ -22,7 +21,7 @@ describe('KineticSdk (e2e) - Account', () => {
     const owner = Keypair.random()
     const tx = await sdk.createAccount({ owner })
     expect(tx).not.toBeNull()
-    expect(DEFAULT_MINT).toContain(tx.mint)
+    expect(tx.mint).toEqual(DEFAULT_MINT)
     const { signature, errors } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
@@ -59,12 +58,11 @@ describe('KineticSdk (e2e) - Account', () => {
   })
 
   it('should throw when try to create an account that already exists', async () => {
-    const res = await sdk.createAccount({ owner: daveKeypair })
-    expect(res.signature).toBeNull()
-    expect(res.amount).toBeNull()
-    expect(res.errors.length).toBeGreaterThan(0)
-    expect(res.status).toBe(TransactionStatus.Failed)
-    expect(res.errors[0].message).toContain('Error: Account already exists.')
+    try {
+      await sdk.createAccount({ owner: daveKeypair })
+    } catch (e) {
+      expect(e.message).toEqual(`Owner ${daveKeypair.publicKey} already has an account for mint ${DEFAULT_MINT}.`)
+    }
   })
 
   it('should get the account history with a provided mint', async () => {

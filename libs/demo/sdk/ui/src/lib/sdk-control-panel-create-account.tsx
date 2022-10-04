@@ -20,9 +20,12 @@ export function SdkControlPanelCreateAccount({ keypair, sdk }: { keypair: DemoKe
   const kp: Keypair = Keypair.fromSecretKey(keypair.secretKey)
 
   const getResult = () => {
-    sdk.createAccount({ mint: mint.publicKey, owner: kp }).then((res) => {
-      setResult(res)
-    })
+    sdk
+      .createAccount({ mint: mint.publicKey, owner: kp })
+      .then((res) => {
+        setResult(res)
+      })
+      .catch((err) => setResult(`${err.message}`))
   }
 
   return (

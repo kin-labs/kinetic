@@ -19,10 +19,10 @@ describe('KineticSdk (e2e)', () => {
     expect(res.environment.cluster.type).toEqual('SolanaDevnet')
     expect(res.environment.cluster.endpoint).toEqual('http://localhost:8899')
     expect(res.mint.symbol).toEqual('KIN')
-    expect(DEFAULT_MINT).toContain(res.mint.publicKey)
+    expect(res.mint.publicKey).toEqual(DEFAULT_MINT)
     expect(res.mints.length).toEqual(2)
     expect(res.mints[0].symbol).toEqual('KIN')
-    expect(DEFAULT_MINT).toContain(res.mints[0].publicKey)
+    expect(res.mints[0].publicKey).toEqual(DEFAULT_MINT)
   })
 
   it('should use the RPC public endpoint', () => {
