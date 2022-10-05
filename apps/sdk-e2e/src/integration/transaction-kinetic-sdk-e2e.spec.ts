@@ -15,7 +15,7 @@ describe('KineticSdk (e2e)', () => {
   it('should make a transfer', async () => {
     const tx = await sdk.makeTransfer({ amount: '43', destination: bobKeypair.publicKey, owner: aliceKeypair })
     expect(tx).not.toBeNull()
-    expect(DEFAULT_MINT).toContain(tx.mint)
+    expect(tx.mint).toEqual(DEFAULT_MINT)
     const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
@@ -32,7 +32,7 @@ describe('KineticSdk (e2e)', () => {
 
     const tx = await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })
     expect(tx).not.toBeNull()
-    expect(DEFAULT_MINT).toContain(tx.mint)
+    expect(tx.mint).toEqual(DEFAULT_MINT)
     const { signature, errors, amount, source } = tx
     expect(typeof signature).toBe('string')
     expect(errors).toEqual([])
@@ -176,8 +176,9 @@ describe('KineticSdk (e2e)', () => {
   })
 
   it('should make a batch transfer with a provided mint', async () => {
-    await sdk.createAccount({ commitment: Commitment.Finalized, owner: bobKeypair, mint: usdcMint })
-    const destinations: Destination[] = [{ destination: bobKeypair.publicKey, amount: '2' }]
+    const owner = Keypair.random()
+    await sdk.createAccount({ commitment: Commitment.Finalized, owner: owner, mint: usdcMint })
+    const destinations: Destination[] = [{ destination: owner.publicKey, amount: '2' }]
 
     const tx = await sdk.makeTransferBatch({ destinations, owner: aliceKeypair, mint: usdcMint })
     expect(tx).not.toBeNull()

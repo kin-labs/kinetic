@@ -63,6 +63,11 @@ export class KineticSdkInternal {
     const appConfig = this.ensureAppConfig()
     const mint = this.getAppMint(appConfig, options.mint?.toString())
 
+    const account = await this.getTokenAccounts({ account: options.owner.publicKey, mint: mint.publicKey })
+    if (account?.length) {
+      throw new Error(`Owner ${options.owner.publicKey} already has an account for mint ${mint.publicKey}.`)
+    }
+
     const commitment = options.commitment || Commitment.Confirmed
 
     const { blockhash, lastValidBlockHeight } = await this.getBlockhash()
