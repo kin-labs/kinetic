@@ -16,6 +16,6 @@ export class MakeTransferRequest {
   referenceId?: string
   @ApiProperty({ nullable: true, required: false })
   referenceType?: string
-  @ApiProperty({ type: 'string', format: 'byte' })
+  @ApiProperty()
   tx: string
 }
