@@ -16,6 +16,6 @@ export class CreateAccountRequest {
   referenceId?: string
   @ApiProperty({ required: false, nullable: true })
   referenceType?: string
-  @ApiProperty({ type: 'string', format: 'byte' })
+  @ApiProperty()
   tx: string
 }

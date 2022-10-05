@@ -538,8 +538,7 @@
             "nullable": true
           },
           "tx": {
-            "type": "string",
-            "format": "byte"
+            "type": "string"
           }
         },
         "required": ["commitment", "environment", "index", "lastValidBlockHeight", "mint", "tx"]
@@ -1017,8 +1016,7 @@
             "nullable": true
           },
           "tx": {
-            "type": "string",
-            "format": "byte"
+            "type": "string"
           }
         },
         "required": ["commitment", "environment", "index", "mint", "lastValidBlockHeight", "tx"]
