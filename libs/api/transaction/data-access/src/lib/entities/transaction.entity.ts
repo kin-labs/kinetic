@@ -74,7 +74,7 @@ export class Transaction {
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
   source?: string
-  @ApiProperty({ nullable: true, required: false, enum: TransactionStatus })
+  @ApiProperty({ nullable: true, required: false, enum: TransactionStatus, enumName: 'TransactionStatus' })
   @Field(() => TransactionStatus)
   status: TransactionStatus
   @ApiProperty({ nullable: true, required: false })

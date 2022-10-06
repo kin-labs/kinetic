@@ -2,7 +2,7 @@ import { Commitment } from '@kin-kinetic/solana'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class CreateAccountRequest {
-  @ApiProperty({ enum: Commitment })
+  @ApiProperty({ enum: Commitment, enumName: 'Commitment' })
   commitment: Commitment
   @ApiProperty()
   environment: string

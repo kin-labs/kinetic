@@ -13,7 +13,7 @@ export class TransactionError {
   @ApiProperty()
   @Field({ nullable: true })
   message?: string
-  @ApiProperty({ enum: TransactionErrorType })
+  @ApiProperty({ enum: TransactionErrorType, enumName: 'TransactionErrorType' })
   @Field(() => TransactionErrorType)
   type: TransactionErrorType
   @ApiProperty({ type: 'integer' })

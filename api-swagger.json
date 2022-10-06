@@ -510,12 +510,15 @@
   ],
   "components": {
     "schemas": {
+      "Commitment": {
+        "type": "string",
+        "enum": ["Confirmed", "Finalized", "Processed"]
+      },
       "CreateAccountRequest": {
         "type": "object",
         "properties": {
           "commitment": {
-            "type": "string",
-            "enum": ["Confirmed", "Finalized", "Processed"]
+            "$ref": "#/components/schemas/Commitment"
           },
           "environment": {
             "type": "string"
@@ -543,6 +546,10 @@
         },
         "required": ["commitment", "environment", "index", "lastValidBlockHeight", "mint", "tx"]
       },
+      "TransactionErrorType": {
+        "type": "string",
+        "enum": ["BadNonce", "InvalidAccount", "SomeError", "Timeout", "Unknown", "WebhookFailed"]
+      },
       "TransactionError": {
         "type": "object",
         "properties": {
@@ -559,14 +566,17 @@
             "type": "string"
           },
           "type": {
-            "type": "string",
-            "enum": ["BadNonce", "InvalidAccount", "SomeError", "Timeout", "Unknown", "WebhookFailed"]
+            "$ref": "#/components/schemas/TransactionErrorType"
           },
           "instruction": {
             "type": "integer"
           }
         },
         "required": ["id", "logs", "message", "type", "instruction"]
+      },
+      "TransactionStatus": {
+        "type": "string",
+        "enum": ["Committed", "Confirmed", "Failed", "Finalized", "Processing"]
       },
       "Transaction": {
         "type": "object",
@@ -668,9 +678,8 @@
             "nullable": true
           },
           "status": {
-            "type": "string",
             "nullable": true,
-            "enum": ["Committed", "Confirmed", "Failed", "Finalized", "Processing"]
+            "$ref": "#/components/schemas/TransactionStatus"
           },
           "totalDuration": {
             "type": "number",
@@ -794,8 +803,7 @@
             "nullable": true
           },
           "commitment": {
-            "type": "string",
-            "enum": ["Confirmed", "Finalized", "Processed"]
+            "$ref": "#/components/schemas/Commitment"
           },
           "environment": {
             "type": "string"
@@ -842,6 +850,10 @@
         },
         "required": ["name", "version"]
       },
+      "ClusterType": {
+        "type": "string",
+        "enum": ["Custom", "SolanaDevnet", "SolanaMainnet", "SolanaTestnet"]
+      },
       "AppConfigCluster": {
         "type": "object",
         "properties": {
@@ -855,8 +867,7 @@
             "type": "string"
           },
           "type": {
-            "type": "string",
-            "enum": ["Custom", "SolanaDevnet", "SolanaMainnet", "SolanaTestnet"]
+            "$ref": "#/components/schemas/ClusterType"
           }
         },
         "required": ["endpoint", "id", "name", "type"]
@@ -992,8 +1003,7 @@
         "type": "object",
         "properties": {
           "commitment": {
-            "type": "string",
-            "enum": ["Confirmed", "Finalized", "Processed"]
+            "$ref": "#/components/schemas/Commitment"
           },
           "environment": {
             "type": "string"
