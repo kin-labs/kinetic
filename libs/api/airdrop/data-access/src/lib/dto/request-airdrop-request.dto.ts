@@ -6,7 +6,7 @@ export class RequestAirdropRequest {
   account: string
   @ApiProperty({ required: false, nullable: true })
   amount?: string
-  @ApiProperty({ enum: Commitment })
+  @ApiProperty({ enum: Commitment, enumName: 'Commitment' })
   commitment: Commitment
   @ApiProperty({ required: true })
   environment: string

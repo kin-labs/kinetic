@@ -132,21 +132,11 @@ export interface AppConfigCluster {
   name: string
   /**
    *
-   * @type {string}
+   * @type {ClusterType}
    * @memberof AppConfigCluster
    */
-  type: AppConfigClusterTypeEnum
+  type: ClusterType
 }
-
-export const AppConfigClusterTypeEnum = {
-  Custom: 'Custom',
-  SolanaDevnet: 'SolanaDevnet',
-  SolanaMainnet: 'SolanaMainnet',
-  SolanaTestnet: 'SolanaTestnet',
-} as const
-
-export type AppConfigClusterTypeEnum = typeof AppConfigClusterTypeEnum[keyof typeof AppConfigClusterTypeEnum]
-
 /**
  *
  * @export
@@ -323,6 +313,35 @@ export interface BalanceToken {
 /**
  *
  * @export
+ * @enum {string}
+ */
+
+export const ClusterType = {
+  Custom: 'Custom',
+  SolanaDevnet: 'SolanaDevnet',
+  SolanaMainnet: 'SolanaMainnet',
+  SolanaTestnet: 'SolanaTestnet',
+} as const
+
+export type ClusterType = typeof ClusterType[keyof typeof ClusterType]
+
+/**
+ *
+ * @export
+ * @enum {string}
+ */
+
+export const Commitment = {
+  Confirmed: 'Confirmed',
+  Finalized: 'Finalized',
+  Processed: 'Processed',
+} as const
+
+export type Commitment = typeof Commitment[keyof typeof Commitment]
+
+/**
+ *
+ * @export
  * @interface ConfirmedSignatureInfo
  */
 export interface ConfirmedSignatureInfo {
@@ -420,10 +439,10 @@ export interface ConfirmedTransactionMeta {
 export interface CreateAccountRequest {
   /**
    *
-   * @type {string}
+   * @type {Commitment}
    * @memberof CreateAccountRequest
    */
-  commitment: CreateAccountRequestCommitmentEnum
+  commitment: Commitment
   /**
    *
    * @type {string}
@@ -467,16 +486,6 @@ export interface CreateAccountRequest {
    */
   tx: string
 }
-
-export const CreateAccountRequestCommitmentEnum = {
-  Confirmed: 'Confirmed',
-  Finalized: 'Finalized',
-  Processed: 'Processed',
-} as const
-
-export type CreateAccountRequestCommitmentEnum =
-  typeof CreateAccountRequestCommitmentEnum[keyof typeof CreateAccountRequestCommitmentEnum]
-
 /**
  *
  * @export
@@ -548,10 +557,10 @@ export interface LatestBlockhashResponse {
 export interface MakeTransferRequest {
   /**
    *
-   * @type {string}
+   * @type {Commitment}
    * @memberof MakeTransferRequest
    */
-  commitment: MakeTransferRequestCommitmentEnum
+  commitment: Commitment
   /**
    *
    * @type {string}
@@ -595,16 +604,6 @@ export interface MakeTransferRequest {
    */
   tx: string
 }
-
-export const MakeTransferRequestCommitmentEnum = {
-  Confirmed: 'Confirmed',
-  Finalized: 'Finalized',
-  Processed: 'Processed',
-} as const
-
-export type MakeTransferRequestCommitmentEnum =
-  typeof MakeTransferRequestCommitmentEnum[keyof typeof MakeTransferRequestCommitmentEnum]
-
 /**
  *
  * @export
@@ -638,10 +637,10 @@ export interface RequestAirdropRequest {
   amount?: string | null
   /**
    *
-   * @type {string}
+   * @type {Commitment}
    * @memberof RequestAirdropRequest
    */
-  commitment: RequestAirdropRequestCommitmentEnum
+  commitment: Commitment
   /**
    *
    * @type {string}
@@ -661,16 +660,6 @@ export interface RequestAirdropRequest {
    */
   mint: string
 }
-
-export const RequestAirdropRequestCommitmentEnum = {
-  Confirmed: 'Confirmed',
-  Finalized: 'Finalized',
-  Processed: 'Processed',
-} as const
-
-export type RequestAirdropRequestCommitmentEnum =
-  typeof RequestAirdropRequestCommitmentEnum[keyof typeof RequestAirdropRequestCommitmentEnum]
-
 /**
  *
  * @export
@@ -865,10 +854,10 @@ export interface Transaction {
   source?: string | null
   /**
    *
-   * @type {string}
+   * @type {TransactionStatus}
    * @memberof Transaction
    */
-  status?: TransactionStatusEnum
+  status?: TransactionStatus
   /**
    *
    * @type {number}
@@ -918,17 +907,6 @@ export interface Transaction {
    */
   webhookVerifyDuration?: number | null
 }
-
-export const TransactionStatusEnum = {
-  Committed: 'Committed',
-  Confirmed: 'Confirmed',
-  Failed: 'Failed',
-  Finalized: 'Finalized',
-  Processing: 'Processing',
-} as const
-
-export type TransactionStatusEnum = typeof TransactionStatusEnum[keyof typeof TransactionStatusEnum]
-
 /**
  *
  * @export
@@ -974,10 +952,10 @@ export interface TransactionError {
   message: string
   /**
    *
-   * @type {string}
+   * @type {TransactionErrorType}
    * @memberof TransactionError
    */
-  type: TransactionErrorTypeEnum
+  type: TransactionErrorType
   /**
    *
    * @type {number}
@@ -985,8 +963,13 @@ export interface TransactionError {
    */
   instruction: number
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 
-export const TransactionErrorTypeEnum = {
+export const TransactionErrorType = {
   BadNonce: 'BadNonce',
   InvalidAccount: 'InvalidAccount',
   SomeError: 'SomeError',
@@ -995,7 +978,7 @@ export const TransactionErrorTypeEnum = {
   WebhookFailed: 'WebhookFailed',
 } as const
 
-export type TransactionErrorTypeEnum = typeof TransactionErrorTypeEnum[keyof typeof TransactionErrorTypeEnum]
+export type TransactionErrorType = typeof TransactionErrorType[keyof typeof TransactionErrorType]
 
 /**
  *
@@ -1028,6 +1011,21 @@ export interface TransactionResponse {
    */
   blockTime?: number | null
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
+
+export const TransactionStatus = {
+  Committed: 'Committed',
+  Confirmed: 'Confirmed',
+  Failed: 'Failed',
+  Finalized: 'Finalized',
+  Processing: 'Processing',
+} as const
+
+export type TransactionStatus = typeof TransactionStatus[keyof typeof TransactionStatus]
 
 /**
  * AccountApi - axios parameter creator
