@@ -62,8 +62,8 @@ export class KineticSdkInternal {
     const appConfig = this.ensureAppConfig()
     const mint = this.getAppMint(appConfig, options.mint?.toString())
 
-    const account = await this.getTokenAccounts({ account: options.owner.publicKey, mint: mint.publicKey })
-    if (account?.length) {
+    const accounts = await this.getTokenAccounts({ account: options.owner.publicKey, mint: mint.publicKey })
+    if (accounts?.length) {
       throw new Error(`Owner ${options.owner.publicKey} already has an account for mint ${mint.publicKey}.`)
     }
 
@@ -141,9 +141,9 @@ export class KineticSdkInternal {
 
     this.validateDestination(appConfig, destination)
 
-    const account = await this.getTokenAccounts({ account: destination, mint: mint.publicKey })
+    const accounts = await this.getTokenAccounts({ account: destination, mint: mint.publicKey })
 
-    if (!account?.length && !senderCreate) {
+    if (!accounts?.length && !senderCreate) {
       throw new Error(`Destination account doesn't exist.`)
     }
 
@@ -160,7 +160,7 @@ export class KineticSdkInternal {
       mintFeePayer: mint.feePayer,
       mintPublicKey: mint.publicKey,
       owner: options.owner.solana,
-      senderCreate: !account?.length && senderCreate,
+      senderCreate: !accounts?.length && senderCreate,
       type: options.type || TransactionType.None,
     })
 

@@ -48,7 +48,7 @@ export class Keypair {
     // Always start with zero as minimum
     from = from < 0 ? 0 : from
     // Always generate at least 1
-    to = to <= from ? 1 : to
+    to = to <= from ? from + 1 : to
 
     const seed = bip39.mnemonicToSeedSync(mnemonic, '')
     const keys: Keypair[] = []
@@ -62,7 +62,7 @@ export class Keypair {
     return keys
   }
 
-  static derive(seed: Buffer, path: string) {
+  static derive(seed: Buffer, path: string): Keypair {
     const hd = HDKey.fromMasterSeed(seed.toString('hex'))
     return Keypair.fromSeed(Buffer.from(hd.derive(path).privateKey))
   }
@@ -77,9 +77,8 @@ export class Keypair {
 
   static random(): Keypair {
     const mnemonic = this.generateMnemonic()
-    const [kp] = this.fromMnemonicSet(mnemonic)
 
-    return kp
+    return this.fromMnemonic(mnemonic)
   }
 
   static generateMnemonic(strength: 128 | 256 = 128): string {
