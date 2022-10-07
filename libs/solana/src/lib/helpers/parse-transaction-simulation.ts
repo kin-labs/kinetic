@@ -3,11 +3,6 @@ import { TransactionError } from './transaction-error'
 
 function errorMessageMap(index: number | string | undefined) {
   switch (index) {
-    case 0:
-      return {
-        type: 'CUSTOM_ZERO',
-        message: 'Account already exists.',
-      }
     case 1:
       return {
         type: 'InsufficientFunds',
