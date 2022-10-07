@@ -30,7 +30,6 @@ import {
   GetTokenAccountsOptions,
   GetTransactionOptions,
   KineticSdkConfig,
-  KineticSdkEnvironment,
   MakeTransferBatchOptions,
   MakeTransferOptions,
   RequestAirdropOptions,
@@ -96,7 +95,7 @@ export class KineticSdkInternal {
     return this.accountApi.createAccount(request).then((res) => res.data)
   }
 
-  async getAppConfig(environment: KineticSdkEnvironment, index: number) {
+  async getAppConfig(environment: string, index: number) {
     const res = await this.appApi.getAppConfig(environment, index)
     this.appConfig = res.data
     return this.appConfig
