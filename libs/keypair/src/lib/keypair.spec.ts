@@ -76,6 +76,11 @@ describe('Keypair', () => {
     expect(keypair.publicKey).toEqual(TEST_MNEMONIC_24_PUBLIC_KEY)
   })
 
+  it(`should create at least one keypair, even if the 'from' and 'to' params are not properly used`, () => {
+    const res = Keypair.fromMnemonicSet(TEST_MNEMONIC_12, 10, 1)
+    expect(res.length).toBe(1)
+  })
+
   it('should import multiple from a mnemonic (12 chars)', () => {
     const set = Keypair.fromMnemonicSet(TEST_MNEMONIC_12)
     const keys = set.map(({ mnemonic, secretKey, publicKey }) => ({
@@ -100,5 +105,10 @@ describe('Keypair', () => {
     expect(keys.map(({ mnemonic, publicKey, secretKey }) => ({ mnemonic, publicKey, secretKey }))).toEqual(
       TEST_MNEMONIC_24_SET,
     )
+  })
+
+  it('should throw an error when we put in unexpected values', () => {
+    expect(() => new Keypair('123')).toThrow()
+    expect(() => Keypair.fromMnemonicSeed('')).toThrow()
   })
 })
