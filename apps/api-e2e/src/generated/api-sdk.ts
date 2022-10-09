@@ -594,6 +594,7 @@ export type Transaction = {
   source?: Maybe<Scalars['String']>
   status: TransactionStatus
   totalDuration?: Maybe<Scalars['Int']>
+  tx?: Maybe<Scalars['String']>
   ua?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
   webhookEventDuration?: Maybe<Scalars['Int']>

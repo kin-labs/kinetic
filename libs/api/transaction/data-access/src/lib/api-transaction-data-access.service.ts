@@ -198,6 +198,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       ip,
       referenceId: input.referenceId,
       referenceType: input.referenceType,
+      tx: input.tx,
       ua,
     })
 
@@ -518,6 +519,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     ip,
     referenceId,
     referenceType,
+    tx,
     ua,
   }: {
     appEnvId: string
@@ -525,6 +527,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     ip: string
     referenceId?: string
     referenceType?: string
+    tx?: string
     ua: string
   }): Promise<TransactionWithErrors> {
     return this.data.transaction.create({
@@ -534,6 +537,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
         ip,
         referenceId,
         referenceType,
+        tx,
         ua,
       },
       include: { errors: true },

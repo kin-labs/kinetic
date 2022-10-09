@@ -869,6 +869,12 @@ export interface Transaction {
    * @type {string}
    * @memberof Transaction
    */
+  tx?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof Transaction
+   */
   ua?: string | null
   /**
    *
