@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { kinToQuarks, quarksToKin } from './kin-to-quarks'
 
 describe('kinToQuarks and quarksToKin', () => {
@@ -6,14 +5,14 @@ describe('kinToQuarks and quarksToKin', () => {
     const validCases = new Map<string, string>([
       ['0.00001', '1'],
       ['0.00002', '2'],
-      ['1', '1e5'],
-      ['2', '2e5'],
-      // 10 trillion, more than what's in cicrulation
-      ['10000000000000', '1e18'],
+      ['1', '100000'],
+      ['2', '200000'],
+      // 10 trillion, more than what's in circulation
+      ['10000000000000', '1000000000000000000'],
     ])
     validCases.forEach((expected, input) => {
-      expect(kinToQuarks(input)).toStrictEqual(new BigNumber(expected))
-      expect(quarksToKin(expected)).toStrictEqual(new BigNumber(input).toString())
+      expect(kinToQuarks(input)).toStrictEqual(expected)
+      expect(quarksToKin(expected)).toStrictEqual(input)
     })
 
     const roundedCases = new Map<string, string>([
@@ -22,7 +21,7 @@ describe('kinToQuarks and quarksToKin', () => {
       ['0.000018', '1'],
     ])
     roundedCases.forEach((expected, input) => {
-      expect(kinToQuarks(input)).toStrictEqual(new BigNumber(expected))
+      expect(kinToQuarks(input)).toStrictEqual(expected)
     })
   })
 })

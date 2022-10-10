@@ -1,3 +1,1 @@
-import BigNumber from 'bignumber.js'
-
-export type BalanceMintMap = Record<string, BigNumber>
+export type BalanceMintMap = Record<string, string>

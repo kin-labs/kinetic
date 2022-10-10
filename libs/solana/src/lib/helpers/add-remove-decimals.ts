@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js'
+import { Big } from 'big.js'
 
-export function addDecimals(amount: string, decimals: number): BigNumber {
-  const b = new BigNumber(amount).decimalPlaces(decimals, BigNumber.ROUND_DOWN)
-  return b.multipliedBy(Math.pow(10, decimals))
+export function addDecimals(amount: string, decimals: number): string {
+  Big.RM = 0
+  return new Big(amount).mul(Math.pow(10, decimals)).round().toPrecision()
 }
 
-export function removeDecimals(amount: BigNumber | string, decimals: number): string {
-  return new BigNumber(amount).dividedBy(Math.pow(10, decimals)).toString()
+export function removeDecimals(amount: string, decimals: number): string {
+  return new Big(amount).div(Math.pow(10, decimals)).toString()
 }

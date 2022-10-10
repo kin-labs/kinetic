@@ -59,7 +59,7 @@ export async function generateMakeTransferTransaction({
       mintKey,
       destinationTokenAccount,
       ownerPublicKey,
-      addDecimals(amount, mintDecimals).toNumber(),
+      Number(addDecimals(amount, mintDecimals)),
       mintDecimals,
       [],
       TOKEN_PROGRAM_ID,

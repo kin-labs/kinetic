@@ -1,6 +1,5 @@
 import { Connection, PublicKey, Transaction as SolanaTransaction } from '@solana/web3.js'
 import axios from 'axios'
-import BigNumber from 'bignumber.js'
 import { NAME } from '../version'
 import { convertCommitment, getPublicKey, parseEndpoint, parseTransactionSimulation } from './helpers'
 import {
@@ -95,13 +94,13 @@ export class Solana {
       }
 
       const mintBalance: BalanceMintMap = tokens.reduce<BalanceMintMap>((acc, { mint, balance }) => {
-        const current = acc[mint] ? acc[mint] : new BigNumber(0)
+        const current = acc[mint] ? acc[mint] : 0
 
-        return { ...acc, [mint]: current.plus(balance) }
+        return { ...acc, [mint]: (Number(current) + Number(balance)).toString() }
       }, {})
 
       return {
-        balance: mintBalance[defaultMint] ? mintBalance[defaultMint] : new BigNumber(0),
+        balance: mintBalance[defaultMint] ? mintBalance[defaultMint] : '0',
         mintMap,
         mints: mintBalance,
         tokens,
@@ -144,7 +143,7 @@ export class Solana {
     const res = await this.connection.getTokenAccountBalance(getPublicKey(account))
     return {
       account,
-      balance: new BigNumber(res.value.amount),
+      balance: res.value.amount,
     }
   }
 

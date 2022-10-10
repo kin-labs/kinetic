@@ -28,7 +28,7 @@ export async function generateMakeTransferBatchTransaction({
   // Get TokenAccount from Destination
   const destinationInfo: { amount: number; destination: PublicKey }[] = await Promise.all(
     destinations.map(async ({ amount, destination }) => ({
-      amount: addDecimals(amount, mintDecimals).toNumber(),
+      amount: Number(addDecimals(amount, mintDecimals)),
       destination: await getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
     })),
   )

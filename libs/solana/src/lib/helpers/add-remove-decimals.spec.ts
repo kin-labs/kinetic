@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { addDecimals, removeDecimals } from './add-remove-decimals'
 
 describe('addDecimals and removeDecimals', () => {
@@ -7,14 +6,14 @@ describe('addDecimals and removeDecimals', () => {
     const validCases = new Map<string, string>([
       ['0.00001', '1'],
       ['0.00002', '2'],
-      ['1', '1e5'],
-      ['2', '2e5'],
+      ['1', '100000'],
+      ['2', '200000'],
       // 10 trillion, more than what's in circulation
-      ['10000000000000', '1e18'],
+      ['10000000000000', '1000000000000000000'],
     ])
     validCases.forEach((expected, input) => {
-      expect(addDecimals(input, decimals)).toStrictEqual(new BigNumber(expected))
-      expect(removeDecimals(expected, decimals)).toStrictEqual(new BigNumber(input).toString())
+      expect(addDecimals(input, decimals)).toStrictEqual(expected)
+      expect(removeDecimals(expected, decimals)).toStrictEqual(input)
     })
 
     const roundedCases = new Map<string, string>([
@@ -23,7 +22,7 @@ describe('addDecimals and removeDecimals', () => {
       ['0.000018', '1'],
     ])
     roundedCases.forEach((expected, input) => {
-      expect(addDecimals(input, decimals)).toStrictEqual(new BigNumber(expected))
+      expect(addDecimals(input, decimals)).toStrictEqual(expected)
     })
   })
 
@@ -32,13 +31,13 @@ describe('addDecimals and removeDecimals', () => {
     const validCases = new Map<string, string>([
       ['0.01', '1'],
       ['0.02', '2'],
-      ['1', '1e2'],
-      ['2', '2e2'],
-      ['10000000000000', '1e15'],
+      ['1', '100'],
+      ['2', '200'],
+      ['10000000000000', '1000000000000000'],
     ])
     validCases.forEach((expected, input) => {
-      expect(addDecimals(input, decimals)).toStrictEqual(new BigNumber(expected))
-      expect(removeDecimals(expected, decimals)).toStrictEqual(new BigNumber(input).toString())
+      expect(addDecimals(input, decimals)).toStrictEqual(expected)
+      expect(removeDecimals(expected, decimals)).toStrictEqual(input)
     })
 
     const roundedCases = new Map<string, string>([
@@ -47,7 +46,7 @@ describe('addDecimals and removeDecimals', () => {
       ['0.018', '1'],
     ])
     roundedCases.forEach((expected, input) => {
-      expect(addDecimals(input, decimals)).toStrictEqual(new BigNumber(expected))
+      expect(addDecimals(input, decimals)).toStrictEqual(expected)
     })
   })
 })
