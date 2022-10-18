@@ -685,6 +685,10 @@
             "type": "number",
             "nullable": true
           },
+          "tx": {
+            "type": "string",
+            "nullable": true
+          },
           "ua": {
             "type": "string",
             "nullable": true

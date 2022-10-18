@@ -82,6 +82,9 @@ export class Transaction {
   totalDuration?: number
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
+  tx?: string
+  @ApiProperty({ nullable: true, required: false })
+  @Field({ nullable: true })
   ua?: string
   @HideField()
   webhooks?: unknown[]
