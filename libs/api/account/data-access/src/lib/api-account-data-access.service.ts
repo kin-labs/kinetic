@@ -104,6 +104,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
       ip,
       referenceId: input.referenceId,
       referenceType: input.referenceType,
+      tx: input.tx,
       ua,
     })
 

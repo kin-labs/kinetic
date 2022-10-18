@@ -167,6 +167,7 @@ model Transaction {
   source                  String?
   status                  TransactionStatus      @default(Processing)
   totalDuration           Int?
+  tx                      String?
   ua                      String?
   webhooks                Webhook[]
   webhookEventStart       DateTime?

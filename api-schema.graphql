@@ -305,6 +305,7 @@ type Transaction {
   source: String
   status: TransactionStatus!
   totalDuration: Int
+  tx: String
   ua: String
   updatedAt: DateTime
   webhookEventDuration: Int
