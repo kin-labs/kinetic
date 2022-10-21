@@ -136,7 +136,7 @@ export class ApiWebhookDataAccessService {
     const headers = this.getAppEnvHeaders(appEnv, options)
     const payload = {
       ...options.balance,
-      balance: options.balance?.change?.toString(),
+      balance: options.balance?.balance?.toString(),
       change: options.balance?.change?.toString(),
     }
     return new Promise((resolve, reject) => {
