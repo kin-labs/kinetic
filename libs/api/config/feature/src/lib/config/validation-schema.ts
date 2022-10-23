@@ -7,6 +7,7 @@ export const validationSchema = Joi.object({
   AUTH_USERS: Joi.string().default(''),
   COOKIE_DOMAINS: Joi.string().required().error(new Error(`COOKIE_DOMAINS is required.`)),
   COOKIE_NAME: Joi.string().default('__session'),
+  COOKIE_SECURE: Joi.boolean().default('true'),
   DATABASE_URL: Joi.string().required(),
   GITHUB_ENABLED: Joi.boolean().default('false'),
   GOOGLE_ENABLED: Joi.boolean().default('false'),

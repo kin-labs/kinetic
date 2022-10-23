@@ -1,6 +1,7 @@
 name: build-publish-docker
 
 on:
+  pull_request:
   push:
     branches:
       - dev
@@ -36,7 +37,6 @@ jobs:
 
       - name: Build and push Docker (dev)
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        if: github.ref == 'refs/heads/dev'
         with:
           context: .
           push: true

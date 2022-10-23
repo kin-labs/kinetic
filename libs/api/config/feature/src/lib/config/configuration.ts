@@ -32,6 +32,7 @@ export default () => ({
   cookie: {
     domains,
     name: process.env.COOKIE_NAME,
+    secure: process.env.COOKIE_SECURE?.toLowerCase() !== 'false',
   },
   discord: {
     clientId: process.env.DISCORD_CLIENT_ID,

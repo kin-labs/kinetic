@@ -88,6 +88,10 @@ export class ApiConfigDataAccessService {
     return this.config.get('cookie.name')
   }
 
+  get cookieSecure(): boolean {
+    return this.config.get('cookie.secure')
+  }
+
   cookieOptions(hostname: string): CookieOptions {
     const found = this.cookieDomains.find((domain) => hostname.endsWith(domain))
     if (!found) {
@@ -95,7 +99,7 @@ export class ApiConfigDataAccessService {
     }
     return {
       httpOnly: true,
-      secure: true,
+      secure: this.cookieSecure,
       domain: found || this.cookieDomains[0],
       sameSite: this.cookieDomains?.length > 1 ? 'none' : 'strict',
     }
