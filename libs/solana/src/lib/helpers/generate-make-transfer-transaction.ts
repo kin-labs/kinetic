@@ -1,4 +1,3 @@
-import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import {
   createAssociatedTokenAccountInstruction,
   createTransferCheckedInstruction,
@@ -8,6 +7,7 @@ import {
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateMakeTransferOptions } from '../interfaces'
 import { addDecimals } from './add-remove-decimals'
+import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
 import { getPublicKey } from './get-public-key'
 
 export async function generateMakeTransferTransaction({
@@ -41,7 +41,7 @@ export async function generateMakeTransferTransaction({
   if (addMemo) {
     instructions.push(
       generateKinMemoInstruction({
-        appIndex: index,
+        index,
         type,
       }),
     )

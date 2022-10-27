@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import { AdminCreateApp, UserDeleteWallet, UserGenerateWallet, UserWallet, UserWallets } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
-import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
+import { randomIndex, uniq, uniqInt } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {
   expect(res).toHaveProperty('text')
@@ -36,7 +36,7 @@ describe('Wallet (e2e)', () => {
 
         // Create App - but skip automatic wallet generation
         const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
-          input: { index: randomAppIndex(), name, skipWalletCreation: true },
+          input: { index: randomIndex(), name, skipWalletCreation: true },
         })
         appEnvId = createdApp.body.data.created.envs[0].id
 

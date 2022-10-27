@@ -1,5 +1,5 @@
-import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@solana/web3.js'
+import { TransactionType } from '../kin'
 import { Destination } from './destination'
 import { PublicKeyString } from './public-key-string'
 

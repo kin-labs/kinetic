@@ -1,6 +1,5 @@
-import { TransactionType } from '@kin-tools/kin-memo'
 import { Keypair } from '@kin-kinetic/keypair'
-import { Commitment } from '@kin-kinetic/solana'
+import { Commitment, TransactionType } from '@kin-kinetic/solana'
 import { TransferDestination } from './transfer-destination'
 
 export interface MakeTransferOptions extends TransferDestination {
