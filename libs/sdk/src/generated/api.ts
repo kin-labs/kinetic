@@ -305,6 +305,12 @@ export interface BalanceToken {
   balance: string
   /**
    *
+   * @type {number}
+   * @memberof BalanceToken
+   */
+  decimals: number
+  /**
+   *
    * @type {string}
    * @memberof BalanceToken
    */

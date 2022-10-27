@@ -11,10 +11,10 @@ describe('solana', () => {
     const endpoint = 'http://localhost:8899'
     const solana = new Solana(endpoint)
     try {
-      await solana.getBalance(
-        'ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA',
-        '4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa',
-      )
+      await solana.getBalance('ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA', {
+        publicKey: '4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa',
+        decimals: 5,
+      })
     } catch (error) {
       expect(error.message).toBe(`No token accounts found for mint 4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa`)
     }
@@ -25,8 +25,8 @@ describe('solana', () => {
     const solana = new Solana(endpoint)
     try {
       await solana.getBalance('ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA', [
-        '4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa',
-        '4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPB',
+        { publicKey: '4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa', decimals: 5 },
+        { publicKey: '4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPB', decimals: 5 },
       ])
     } catch (error) {
       expect(error.message).toBe(

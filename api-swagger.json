@@ -732,11 +732,14 @@
           "balance": {
             "type": "string"
           },
+          "decimals": {
+            "type": "number"
+          },
           "mint": {
             "type": "string"
           }
         },
-        "required": ["account", "balance", "mint"]
+        "required": ["account", "balance", "decimals", "mint"]
       },
       "BalanceResponse": {
         "type": "object",

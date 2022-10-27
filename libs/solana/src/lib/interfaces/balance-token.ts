@@ -1,7 +1,6 @@
-import BigNumber from 'bignumber.js'
-
 export interface BalanceToken {
   account: string
-  balance: BigNumber
+  balance: string
+  decimals: number
   mint: string
 }
