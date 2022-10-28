@@ -16,5 +16,7 @@ export class BalanceToken {
   @ApiProperty()
   balance: string
   @ApiProperty()
+  decimals: number
+  @ApiProperty()
   mint: string
 }

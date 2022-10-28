@@ -6,7 +6,7 @@ import {
   TransactionWithErrors,
 } from '@kin-kinetic/api/transaction/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
-import { BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@kin-kinetic/solana'
+import { BalanceMint, BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@kin-kinetic/solana'
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
@@ -58,7 +58,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
 
-    const mints = appEnv.mints.map(({ publicKey }) => publicKey)
+    const mints: BalanceMint[] = appEnv.mints.map(({ decimals, publicKey }) => ({ decimals, publicKey }))
 
     return solana.getBalance(accountId, mints)
   }
