@@ -1,7 +1,7 @@
-import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import { createTransferCheckedInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateMakeTransferBatchTransactionsOptions } from '../interfaces'
+import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
 import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
@@ -39,7 +39,7 @@ export async function generateMakeTransferBatchTransaction({
   if (addMemo) {
     instructions.push(
       generateKinMemoInstruction({
-        appIndex: index,
+        index,
         type,
       }),
     )

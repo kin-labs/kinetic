@@ -4,8 +4,8 @@ import {
   generateMakeTransferBatchTransaction,
   generateMakeTransferTransaction,
   serializeTransaction,
+  TransactionType,
 } from '@kin-kinetic/solana'
-import { TransactionType } from '@kin-tools/kin-memo'
 import { AxiosRequestConfig } from 'axios'
 import {
   AccountApi,

@@ -3,7 +3,7 @@ import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
 import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
-import { TransactionType } from '@kin-tools/kin-memo'
+import { TransactionType } from '@kin-kinetic/solana'
 import React, { ChangeEvent, useState } from 'react'
 import { MintSwitcher } from './mint-switcher'
 

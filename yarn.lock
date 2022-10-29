@@ -4351,16 +4351,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@kin-tools/kin-memo@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@kin-tools/kin-memo/-/kin-memo-1.8.1.tgz#f079b768848275280e632d82aa88d1d028ee4850"
-  integrity sha512-adEs7djBcqv2w+Nl0tN4PCVgHwX1lP51cfKSRPGNmW0uJqPSdObob9T/mx0pvgxkV+LOruvUr1tO8UKq1SSN6g==
-
-"@kin-tools/kin-transaction@^1.8.1":
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/@kin-tools/kin-transaction/-/kin-transaction-1.8.1.tgz#39414a8eb62c8c45426c05e8794fe5e293a5309b"
-  integrity sha512-bGU4Teu2gEc2nENZCkgzYSJFy/x9FpWzkidEn9wZbep6xaDoGG8BO3VYbf2h/k5/WJ7go3d//f/YKsgtWMZ0xA==
-
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"

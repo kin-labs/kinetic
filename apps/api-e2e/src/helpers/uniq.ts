@@ -6,6 +6,6 @@ export function uniq(prefix: string) {
 export function uniqInt(): number {
   return Math.floor(Math.random() * 10000000)
 }
-export function randomAppIndex(): number {
+export function randomIndex(): number {
   return getRandomInt(1_000, 1_000_000)
 }
