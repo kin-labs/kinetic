@@ -1,7 +1,17 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import { Box, Button, ButtonGroup, Flex, Link, Stack, Text, useColorModeValue } from '@chakra-ui/react'
-import { AdminUiAddress } from '@kin-kinetic/admin/ui/address'
-import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Box,
+  Button,
+  Flex,
+  Link,
+  Stack,
+  Text,
+  Tooltip,
+  useColorModeValue,
+} from '@chakra-ui/react'
 import { demoKeypairDb, DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { KeypairDropdown } from '@kin-kinetic/demo/keypair/ui'
 import { SdkControlPanel } from '@kin-kinetic/demo/sdk/ui'
@@ -73,16 +83,28 @@ export function DemoSdkFeature() {
 
   if (!keypairs || !keypairs?.length || !keypair) {
     return (
-      <AdminUiAlert status="warning" title="No Keypairs configured." message="Add a new one on the Keypair page." />
+      <Alert status="warning">
+        <AlertTitle>No Keypairs configured.</AlertTitle>
+        <AlertDescription>Add a new one on the Keypair page.</AlertDescription>
+      </Alert>
     )
   }
 
   if (!servers || !servers?.length) {
-    return <AdminUiAlert status="warning" title="No Servers configured." message="Add a new one on the Servers page." />
+    return (
+      <Alert status="warning">
+        <AlertTitle>No Servers configured.</AlertTitle>
+        <AlertDescription>Add a new one on the Servers page.</AlertDescription>
+      </Alert>
+    )
   }
 
   if (!sdk) {
-    return <AdminUiAlert status="error" message={'No SDK configured.'} />
+    return (
+      <Alert status="error">
+        <AlertTitle>No SDK configured</AlertTitle>
+      </Alert>
+    )
   }
   const link = sdk.getExplorerUrl('/address/' + keypair.publicKey)
 
@@ -100,7 +122,7 @@ export function DemoSdkFeature() {
           <Link target="_blank" href={link}>
             <Button>
               <Text mr={2}>View in Explorer</Text>
-              <AdminUiAddress address={keypair.publicKey} />
+              <DemoUiAddress address={keypair.publicKey} />
               <ExternalLinkIcon ml={2} />
             </Button>
           </Link>
@@ -115,4 +137,20 @@ export function DemoSdkFeature() {
       <SdkControlPanel keypair={keypair} sdk={sdk} />
     </Stack>
   )
+}
+
+export interface DemoUiAddressProps {
+  address: string
+  length?: number
+}
+
+export function elipsify(str = '', len = 4) {
+  if (str.length > 30) {
+    return str.substr(0, len) + '...' + str.substr(str.length - len, str.length)
+  }
+  return str
+}
+
+export function DemoUiAddress({ address, length }: DemoUiAddressProps) {
+  return <Tooltip title={address || ''}>{elipsify(address || '', length)}</Tooltip>
 }

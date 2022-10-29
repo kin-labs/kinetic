@@ -1,5 +1,4 @@
-import { Button, Stack } from '@chakra-ui/react'
-import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { Alert, AlertTitle, Button, Stack } from '@chakra-ui/react'
 import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
@@ -20,7 +19,11 @@ export function SdkControlPanelMakePaymentBatch({ keypair, sdk }: { keypair: Dem
   ]
 
   if (!keypair.secretKey) {
-    return <AdminUiAlert message="Invalid keypair found in DemoKeypairEntity" />
+    return (
+      <Alert>
+        <AlertTitle>Invalid keypair found in DemoKeypairEntity.</AlertTitle>
+      </Alert>
+    )
   }
 
   const kp: Keypair = Keypair.fromSecretKey(keypair.secretKey)

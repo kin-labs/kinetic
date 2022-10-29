@@ -15,14 +15,11 @@ export class Webhook {
   @Field(() => WebhookDirection)
   direction: WebhookDirection
   @Field(() => GraphQLJSON, { nullable: true })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  headers?: any
+  headers?: unknown
   @Field(() => GraphQLJSON, { nullable: true })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload?: any
+  payload?: unknown
   @Field(() => GraphQLJSON, { nullable: true })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  responsePayload: any
+  responsePayload: unknown
   @Field({ nullable: true })
   responseError: string
   @Field(() => Int, { nullable: true })

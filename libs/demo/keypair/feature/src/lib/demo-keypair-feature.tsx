@@ -1,8 +1,18 @@
 import { DeleteIcon, ViewIcon } from '@chakra-ui/icons'
-import { Box, Button, ButtonGroup, Code, Flex, SimpleGrid, Stack } from '@chakra-ui/react'
-import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Box,
+  Button,
+  ButtonGroup,
+  Code,
+  Flex,
+  SimpleGrid,
+  Stack,
+} from '@chakra-ui/react'
 import { demoKeypairDb, DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
-import { ImportMnemonicModal, KeypairDetailsModal, ImportByteArrayModal } from '@kin-kinetic/demo/keypair/ui'
+import { ImportByteArrayModal, ImportMnemonicModal, KeypairDetailsModal } from '@kin-kinetic/demo/keypair/ui'
 import { Keypair } from '@kin-kinetic/keypair'
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useState } from 'react'
@@ -85,11 +95,10 @@ export function DemoKeypairFeature() {
         </SimpleGrid>
       ) : (
         <div>
-          <AdminUiAlert
-            status="info"
-            title="No Keypairs found."
-            message="Generate or import one to use the Kinetic demo."
-          />
+          <Alert status="info">
+            <AlertTitle>No Keypairs found.</AlertTitle>
+            <AlertDescription>Generate or import one to use the Kinetic demo.</AlertDescription>
+          </Alert>
         </div>
       )}
 

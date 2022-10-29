@@ -1,5 +1,5 @@
 import { DeleteIcon, ViewIcon } from '@chakra-ui/icons'
-import { Button, ButtonGroup, Code, Flex, SimpleGrid, Stack, Text, useColorModeValue } from '@chakra-ui/react'
+import { Button, ButtonGroup, Code, Flex, SimpleGrid, Stack, useColorModeValue } from '@chakra-ui/react'
 import { DemoServerEntity } from '@kin-kinetic/demo/server/data-access'
 import React from 'react'
 

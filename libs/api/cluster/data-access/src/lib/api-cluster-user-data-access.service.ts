@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common'
 export class ApiClusterUserDataAccessService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
-  async userClusters(userId: string) {
+  async userClusters() {
     return this.data.cluster.findMany({
       include: { mints: { orderBy: { order: 'asc' } } },
       orderBy: { name: 'asc' },

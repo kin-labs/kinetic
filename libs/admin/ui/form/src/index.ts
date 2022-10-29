@@ -1,5 +1,0 @@
-export * from './lib/admin-ui-form'
-export * from './lib/interfaces/admin-ui-form-props'
-export * from './lib/interfaces/ui-form-field'
-export * from './lib/interfaces/ui-form-field-options'
-export * from './lib/interfaces/ui-form-field-type'

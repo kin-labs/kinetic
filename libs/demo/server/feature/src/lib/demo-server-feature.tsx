@@ -1,5 +1,4 @@
-import { Button, Stack, Text } from '@chakra-ui/react'
-import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { Alert, AlertDescription, AlertTitle, Button, Stack, Text } from '@chakra-ui/react'
 import { demoServerDb, DemoServerEntity } from '@kin-kinetic/demo/server/data-access'
 import { ServerCreateModal, ServerDetailsModal, ServerGrid } from '@kin-kinetic/demo/server/ui'
 import { useLiveQuery } from 'dexie-react-hooks'
@@ -35,7 +34,10 @@ export function DemoServerFeature() {
       {result?.length ? (
         <ServerGrid servers={result} showServer={showServer} deleteServer={deleteServer} />
       ) : (
-        <AdminUiAlert status="info" title="No Servers found." message="Add a new one to use the Kinetic demo." />
+        <Alert status="info">
+          <AlertTitle>No Servers found.</AlertTitle>
+          <AlertDescription>Add a new one to use the Kinetic demo.</AlertDescription>
+        </Alert>
       )}
       <ServerCreateModal
         visible={serverCreateVisible}

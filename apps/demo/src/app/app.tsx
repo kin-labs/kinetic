@@ -1,12 +1,11 @@
-import { ChakraProvider } from '@chakra-ui/react'
-import { AdminUiLoader } from '@kin-kinetic/admin/ui/loader'
+import { ChakraProvider, Text } from '@chakra-ui/react'
 import { DemoShellFeature } from '@kin-kinetic/demo/shell/feature'
 import { Suspense } from 'react'
 
 export function App() {
   return (
     <ChakraProvider>
-      <Suspense fallback={<AdminUiLoader />}>
+      <Suspense fallback={<Text>Loading...</Text>}>
         <DemoShellFeature />
       </Suspense>
     </ChakraProvider>

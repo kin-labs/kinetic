@@ -1,5 +1,4 @@
-import { Stack } from '@chakra-ui/react'
-import { AdminUiAlert } from '@kin-kinetic/admin/ui/alert'
+import { Alert, AlertDescription, AlertTitle, Stack } from '@chakra-ui/react'
 import { DemoKeypairEntity } from '@kin-kinetic/demo/keypair/data-access'
 import { KineticSdk, NAME, VERSION } from '@kin-kinetic/sdk'
 import React from 'react'
@@ -17,11 +16,12 @@ import { SdkControlPanelTokenAccounts } from './sdk-control-panel-token-accounts
 export function SdkControlPanel({ keypair, sdk }: { keypair: DemoKeypairEntity; sdk: KineticSdk }) {
   return (
     <Stack spacing={6}>
-      <AdminUiAlert
-        status="success"
-        title={`SDK: ${NAME}@${VERSION}`}
-        message={`Connected to ${sdk.endpoint}, app ${sdk?.config?.app?.index}, environment ${sdk?.config?.environment?.name}`}
-      />
+      <Alert status="success">
+        <AlertTitle>{`SDK: ${NAME}@${VERSION}`}</AlertTitle>
+        <AlertDescription>
+          {`Connected to ${sdk.endpoint}, app ${sdk?.config?.app?.index}, environment ${sdk?.config?.environment?.name}`}
+        </AlertDescription>
+      </Alert>
       <SdkControlPanelAppConfig sdk={sdk} />
       <SdkControlPanelAccountBalance keypair={keypair} sdk={sdk} />
       <SdkControlPanelTokenAccounts keypair={keypair} sdk={sdk} />

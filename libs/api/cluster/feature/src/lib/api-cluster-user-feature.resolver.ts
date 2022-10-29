@@ -10,8 +10,8 @@ export class ApiClusterUserFeatureResolver {
   constructor(private readonly service: ApiClusterUserDataAccessService) {}
 
   @Query(() => [Cluster], { nullable: true })
-  userClusters(@CtxUser() user: User) {
-    return this.service.userClusters(user.id)
+  userClusters() {
+    return this.service.userClusters()
   }
 
   @Query(() => Cluster, { nullable: true })
