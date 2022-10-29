@@ -1,5 +1,5 @@
 import { useToast } from '@chakra-ui/react'
-import { AdminConfig, useAdminConfigQuery } from '@kin-kinetic/web/util/admin-sdk'
+import { AdminConfig, useAdminConfigQuery } from '@kin-kinetic/web/util/sdk'
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 
 export interface WebAdminConfigProviderContext {

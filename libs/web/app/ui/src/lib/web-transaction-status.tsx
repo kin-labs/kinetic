@@ -1,6 +1,6 @@
 import { Tag } from '@chakra-ui/react'
 import { ThemeTypings } from '@chakra-ui/styled-system'
-import { TransactionStatus } from '@kin-kinetic/web/util/admin-sdk'
+import { TransactionStatus } from '@kin-kinetic/web/util/sdk'
 
 export function webTransactionStatusColor(status: TransactionStatus): ThemeTypings['colorSchemes'] {
   switch (status) {

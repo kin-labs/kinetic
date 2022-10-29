@@ -1,5 +1,5 @@
 import { Heading, SimpleGrid, Stack, useColorModeValue } from '@chakra-ui/react'
-import { App } from '@kin-kinetic/web/util/admin-sdk'
+import { App } from '@kin-kinetic/web/util/sdk'
 import { Link } from 'react-router-dom'
 
 export function WebAppUiEnvGrid({ app }: { app: App }) {

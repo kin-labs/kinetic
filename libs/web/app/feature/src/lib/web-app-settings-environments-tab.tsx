@@ -1,7 +1,7 @@
 import { Button, Stack, useToast } from '@chakra-ui/react'
 import { WebAppUiAppEnvList } from '@kin-kinetic/web/app/ui'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
-import { App, AppEnv, useUserDeleteAppEnvMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv, useUserDeleteAppEnvMutation } from '@kin-kinetic/web/util/sdk'
 import { CardHeader, CardTitle } from '@saas-ui/react'
 import React from 'react'
 import { Link } from 'react-router-dom'

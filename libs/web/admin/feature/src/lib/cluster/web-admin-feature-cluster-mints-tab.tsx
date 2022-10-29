@@ -1,7 +1,7 @@
 import { useToast } from '@chakra-ui/react'
 import { WebAdminUiMintAddForm, WebAdminUiMints } from '@kin-kinetic/web/admin/ui'
 import { WebUiPage } from '@kin-kinetic/web/ui/page'
-import { Cluster, Mint, AdminMintCreateInput, useAdminMintCreateMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { Cluster, Mint, AdminMintCreateInput, useAdminMintCreateMutation } from '@kin-kinetic/web/util/sdk'
 import { Maybe } from 'graphql/jsutils/Maybe'
 
 export function WebAdminFeatureClusterMintsTab({ cluster, mints }: { cluster: Cluster; mints: Maybe<Mint[]> }) {

@@ -11,7 +11,7 @@ import {
   UserAppEnvCreateInput,
   useUserClustersQuery,
   useUserCreateAppEnvMutation,
-} from '@kin-kinetic/web/util/admin-sdk'
+} from '@kin-kinetic/web/util/sdk'
 import { Button, ButtonGroup, Field, Form, Stepper, StepperCompleted, StepperStep } from '@saas-ui/react'
 import { FocusEvent, useState } from 'react'
 import { GoPrimitiveDot } from 'react-icons/go'

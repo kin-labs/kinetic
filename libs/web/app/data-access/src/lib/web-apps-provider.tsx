@@ -1,6 +1,6 @@
 import { useToast } from '@chakra-ui/react'
 import { useWebUiLayout } from '@kin-kinetic/web/ui/layout'
-import { App, useUserAppsQuery } from '@kin-kinetic/web/util/admin-sdk'
+import { App, useUserAppsQuery } from '@kin-kinetic/web/util/sdk'
 import { createContext, ReactNode, useContext, useEffect } from 'react'
 
 export interface WebAppsProviderContext {

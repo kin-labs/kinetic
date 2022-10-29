@@ -1,5 +1,5 @@
 import { Box, Stack, Text } from '@chakra-ui/react'
-import { App } from '@kin-kinetic/web/util/admin-sdk'
+import { App } from '@kin-kinetic/web/util/sdk'
 import { Divider, Field, Form, FormLayout, SubmitButton } from '@saas-ui/react'
 
 export function WebAppUiAppForm({ app, onSubmit }: { app: App; onSubmit: (value: App) => void }) {

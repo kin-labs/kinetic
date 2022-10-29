@@ -1,6 +1,6 @@
 import { Avatar, Badge, Flex, Stack, Tag, TagLabel, TagLeftIcon, Text, Tooltip } from '@chakra-ui/react'
 import { WebUiAddress } from '@kin-kinetic/web/ui/address'
-import { Mint } from '@kin-kinetic/web/util/admin-sdk'
+import { Mint } from '@kin-kinetic/web/util/sdk'
 import { GoPrimitiveDot } from 'react-icons/go'
 
 export function WebAdminUiMintDetails({ mint }: { mint: Mint }) {

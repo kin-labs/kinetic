@@ -1,5 +1,5 @@
 import { Stack, Text, useColorModeValue } from '@chakra-ui/react'
-import { AppEnv } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv } from '@kin-kinetic/web/util/sdk'
 import { Divider, Property, PropertyList } from '@saas-ui/react'
 
 export function WebAdminUiAppEnvSummary({ appEnv }: { appEnv: AppEnv }) {

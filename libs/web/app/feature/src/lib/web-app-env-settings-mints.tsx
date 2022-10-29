@@ -11,7 +11,7 @@ import {
   useUserAppEnvMintSetWalletMutation,
   useUserAppEnvQuery,
   useUserUpdateAppMintMutation,
-} from '@kin-kinetic/web/util/admin-sdk'
+} from '@kin-kinetic/web/util/sdk'
 
 export function WebAppEnvSettingsMints({ app, env }: { app: App; env: AppEnv }) {
   const toast = useToast()

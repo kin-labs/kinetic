@@ -4,7 +4,7 @@ import { WebAppUiSettingsLayout } from '@kin-kinetic/web/app/ui'
 import { WebDevOnboardingProvider } from '@kin-kinetic/web/dev/data-access'
 import { WebUiLinks } from '@kin-kinetic/web/ui/link'
 import { WebUiPage } from '@kin-kinetic/web/ui/page'
-import { useUptimeQuery } from '@kin-kinetic/web/util/admin-sdk'
+import { useUptimeQuery } from '@kin-kinetic/web/util/sdk'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { WebDevFeatureOnboarding } from './web-dev-feature-onboarding'
 

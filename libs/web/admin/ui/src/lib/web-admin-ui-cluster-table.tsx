@@ -1,5 +1,5 @@
 import { WebUiDataTable, WebUiDataTableLink } from '@kin-kinetic/web/ui/table'
-import { Cluster } from '@kin-kinetic/web/util/admin-sdk'
+import { Cluster } from '@kin-kinetic/web/util/sdk'
 import { CellProps } from 'react-table'
 
 export function WebAdminUiClusterTable({ clusters }: { clusters: Cluster[] }) {

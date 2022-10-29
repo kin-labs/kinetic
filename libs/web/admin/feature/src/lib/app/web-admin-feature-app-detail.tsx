@@ -6,7 +6,7 @@ import { WebUiAppAvatar } from '@kin-kinetic/web/ui/app-avatar'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiLoaderPage } from '@kin-kinetic/web/ui/loader'
 import { WebUiPage, WebUiPageBackButton } from '@kin-kinetic/web/ui/page'
-import { AppEnv, useAdminAppQuery, useAdminDeleteAppEnvMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv, useAdminAppQuery, useAdminDeleteAppEnvMutation } from '@kin-kinetic/web/util/sdk'
 import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { WebAdminFeatureAppUpdate } from './web-admin-feature-app-update'
 

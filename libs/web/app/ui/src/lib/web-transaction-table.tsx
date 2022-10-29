@@ -3,7 +3,7 @@ import { CircularProgress, Code, Flex, Stack, Text, useColorModeValue } from '@c
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiLoader } from '@kin-kinetic/web/ui/loader'
 import { tableColumn, WebUiTable, WebUiTableColumn, WebUiTablePaginator } from '@kin-kinetic/web/ui/table'
-import { Transaction, TransactionStatus } from '@kin-kinetic/web/util/admin-sdk'
+import { Transaction, TransactionStatus } from '@kin-kinetic/web/util/sdk'
 import { formatDistance, millisecondsToSeconds } from 'date-fns'
 import { TransactionFilterIp } from './transaction-filter.ip'
 import { TransactionFilterUa } from './transaction-filter.ua'

@@ -1,5 +1,5 @@
 import { Avatar, Flex, Tag } from '@chakra-ui/react'
-import { AppUser, UserEmail } from '@kin-kinetic/web/util/admin-sdk'
+import { AppUser, UserEmail } from '@kin-kinetic/web/util/sdk'
 import { ListItemButton, ListItemIcon, ListItemLabel, ListItemTertiary } from '@saas-ui/react'
 import { Link } from 'react-router-dom'
 

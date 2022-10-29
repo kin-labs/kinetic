@@ -3,7 +3,7 @@ import { WebAdminUiAppTable } from '@kin-kinetic/web/admin/ui'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiLoader } from '@kin-kinetic/web/ui/loader'
 import { WebUiPage } from '@kin-kinetic/web/ui/page'
-import { useAdminAppsQuery, useAdminDeleteAppMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { useAdminAppsQuery, useAdminDeleteAppMutation } from '@kin-kinetic/web/util/sdk'
 import { Link } from 'react-router-dom'
 
 export function WebAdminFeatureAppList() {

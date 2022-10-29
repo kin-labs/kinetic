@@ -1,6 +1,6 @@
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { useWebTransaction } from '@kin-kinetic/web/app/data-access'
-import { TransactionStatus } from '@kin-kinetic/web/util/admin-sdk'
+import { TransactionStatus } from '@kin-kinetic/web/util/sdk'
 import { useState } from 'react'
 import { MdLightbulbOutline } from 'react-icons/md'
 import { WebTransactionFilterPopover } from './web-transaction-filter-popover'

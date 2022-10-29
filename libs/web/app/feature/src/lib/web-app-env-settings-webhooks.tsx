@@ -6,7 +6,7 @@ import {
   WebWebhookUiVerifyForm,
 } from '@kin-kinetic/web/app/ui'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
-import { App, AppEnv, UserAppEnvUpdateInput, useUserUpdateAppEnvMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv, UserAppEnvUpdateInput, useUserUpdateAppEnvMutation } from '@kin-kinetic/web/util/sdk'
 
 export function WebAppEnvSettingsWebhooks({ app, env }: { app: App; env: AppEnv }) {
   const toast = useToast()

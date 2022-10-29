@@ -1,7 +1,7 @@
 import { SettingsIcon } from '@chakra-ui/icons'
 import { Avatar, Code, Flex, FormControl, FormLabel, Stack, Switch, Text } from '@chakra-ui/react'
 import { WebUiAddress } from '@kin-kinetic/web/ui/address'
-import { AppMint, UserAppMintUpdateInput, Wallet } from '@kin-kinetic/web/util/admin-sdk'
+import { AppMint, UserAppMintUpdateInput, Wallet } from '@kin-kinetic/web/util/sdk'
 import { Button } from '@saas-ui/react'
 import { useState } from 'react'
 import { WebClusterUiMintDetails } from './web-cluster-ui-mint-details'

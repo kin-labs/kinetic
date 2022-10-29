@@ -24,7 +24,7 @@ import {
   UserAppUserAddInput,
   UserAppUserUpdateRoleInput,
   useUserSearchUsersQuery,
-} from '@kin-kinetic/web/util/admin-sdk'
+} from '@kin-kinetic/web/util/sdk'
 import { FieldValues } from '@saas-ui/forms'
 import { Field, Form, List, SubmitHandler } from '@saas-ui/react'
 import React, { FocusEvent, useState } from 'react'

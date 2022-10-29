@@ -1,7 +1,7 @@
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiLoader } from '@kin-kinetic/web/ui/loader'
 import { WebUiPageFull } from '@kin-kinetic/web/ui/page'
-import { App, AppEnv, TransactionStatus, useUserTransactionQuery } from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv, TransactionStatus, useUserTransactionQuery } from '@kin-kinetic/web/util/sdk'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { WebTransactionDetail } from './web-transaction-detail'

@@ -1,4 +1,4 @@
-import { App } from '@kin-kinetic/web/util/admin-sdk'
+import { App } from '@kin-kinetic/web/util/sdk'
 import { createContext, ReactNode, useContext, useState } from 'react'
 
 export interface WebUiLayoutProviderContext {

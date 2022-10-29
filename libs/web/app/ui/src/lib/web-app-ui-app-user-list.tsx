@@ -1,6 +1,6 @@
 import { Avatar, Box, IconButton, Tag } from '@chakra-ui/react'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
-import { AppUser, UserAppUserRemoveInput, UserAppUserUpdateRoleInput } from '@kin-kinetic/web/util/admin-sdk'
+import { AppUser, UserAppUserRemoveInput, UserAppUserUpdateRoleInput } from '@kin-kinetic/web/util/sdk'
 import { List } from '@saas-ui/react'
 import React from 'react'
 import { MdDelete } from 'react-icons/md'

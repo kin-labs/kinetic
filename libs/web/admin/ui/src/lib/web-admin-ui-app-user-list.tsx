@@ -1,4 +1,4 @@
-import { AppUser } from '@kin-kinetic/web/util/admin-sdk'
+import { AppUser } from '@kin-kinetic/web/util/sdk'
 import { List } from '@saas-ui/react'
 import { WebAdminUiAppUserListItem } from './web-admin-ui-app-user-list-item'
 

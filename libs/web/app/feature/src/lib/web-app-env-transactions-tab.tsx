@@ -3,7 +3,7 @@ import { WebTransactionTable } from '@kin-kinetic/web/app/ui'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiPage } from '@kin-kinetic/web/ui/page'
-import { App, AppEnv, useUserTransactionsQuery } from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv, useUserTransactionsQuery } from '@kin-kinetic/web/util/sdk'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 

@@ -1,6 +1,6 @@
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiDataTable } from '@kin-kinetic/web/ui/table'
-import { UserEmail, UserEmailDetailsFragment } from '@kin-kinetic/web/util/admin-sdk'
+import { UserEmail, UserEmailDetailsFragment } from '@kin-kinetic/web/util/sdk'
 import { CellProps } from 'react-table'
 
 export function WebAdminUiUserEmailTable({ emails }: { emails: UserEmail[] }) {

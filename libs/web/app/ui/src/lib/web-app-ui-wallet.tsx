@@ -6,7 +6,7 @@ import {
   useUserWalletAirdropQuery,
   useUserWalletBalanceQuery,
   Wallet,
-} from '@kin-kinetic/web/util/admin-sdk'
+} from '@kin-kinetic/web/util/sdk'
 import { Button, ButtonGroup } from '@saas-ui/react'
 import { ChangeEvent, useState } from 'react'
 import { Link } from 'react-router-dom'

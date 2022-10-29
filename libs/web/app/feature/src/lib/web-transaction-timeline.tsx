@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, Icon, Progress, Stack, Text } from '@chakra-ui/react'
-import { AppEnv, Transaction, TransactionStatus } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv, Transaction, TransactionStatus } from '@kin-kinetic/web/util/sdk'
 import { useMemo } from 'react'
 import { IconType } from 'react-icons'
 import { IoMdCloseCircleOutline } from 'react-icons/io'

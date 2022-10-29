@@ -2,7 +2,7 @@ import { WebAdminUiWalletTable } from '@kin-kinetic/web/admin/ui'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiLoader } from '@kin-kinetic/web/ui/loader'
 import { WebUiPage } from '@kin-kinetic/web/ui/page'
-import { useAdminWalletsQuery } from '@kin-kinetic/web/util/admin-sdk'
+import { useAdminWalletsQuery } from '@kin-kinetic/web/util/sdk'
 
 export function WebAdminFeatureWalletList() {
   const [{ data, fetching }] = useAdminWalletsQuery()

@@ -1,5 +1,5 @@
 import { WebUiFormModal } from '@kin-kinetic/web/ui/form'
-import { AdminMintCreateInput } from '@kin-kinetic/web/util/admin-sdk'
+import { AdminMintCreateInput } from '@kin-kinetic/web/util/sdk'
 import { FieldValues } from '@saas-ui/react'
 import * as Yup from 'yup'
 

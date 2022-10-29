@@ -1,5 +1,5 @@
 import { Box, Collapse, Flex, Heading, Stack, Tag } from '@chakra-ui/react'
-import { AppEnv, AppMint } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv, AppMint } from '@kin-kinetic/web/util/sdk'
 import {
   IconButton,
   ListItemAction,

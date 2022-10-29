@@ -2,7 +2,7 @@ import { Alert, Box, Stack, useToast } from '@chakra-ui/react'
 import { WebAppUiWallet } from '@kin-kinetic/web/app/ui'
 import { WebUiLoader } from '@kin-kinetic/web/ui/loader'
 import { WebUiPageFull } from '@kin-kinetic/web/ui/page'
-import { App, AppEnv, useUserWalletQuery } from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv, useUserWalletQuery } from '@kin-kinetic/web/util/sdk'
 import { useParams } from 'react-router-dom'
 
 export function WebAppEnvWalletTab({ app, env }: { app: App; env: AppEnv }) {

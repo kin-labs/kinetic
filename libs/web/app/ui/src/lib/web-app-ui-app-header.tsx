@@ -1,6 +1,6 @@
 import { Stack } from '@chakra-ui/react'
 import { WebUiSettingsLink } from '@kin-kinetic/web/ui/link'
-import { App } from '@kin-kinetic/web/util/admin-sdk'
+import { App } from '@kin-kinetic/web/util/sdk'
 import { WebAppUiAppItem } from './web-app-ui-app-item'
 
 export function WebAppUiAppHeader({ app }: { app: App }) {

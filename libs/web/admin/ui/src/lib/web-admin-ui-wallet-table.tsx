@@ -1,7 +1,7 @@
 import { Box, Flex, Tag, TagLabel } from '@chakra-ui/react'
 import { ShowSolBalance } from '@kin-kinetic/web/app/ui'
 import { WebUiDataTable, WebUiDataTableLink } from '@kin-kinetic/web/ui/table'
-import { AppEnv, Wallet } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv, Wallet } from '@kin-kinetic/web/util/sdk'
 import { CellProps } from 'react-table'
 
 export function WebAdminUiWalletTable({ wallets }: { wallets: Wallet[] }) {

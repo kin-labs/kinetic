@@ -5,7 +5,7 @@ import { WebToolboxUi } from '@kin-kinetic/web/toolbox/ui'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiContainer } from '@kin-kinetic/web/ui/container'
 import { WebUiLoader } from '@kin-kinetic/web/ui/loader'
-import { App, AppEnv } from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv } from '@kin-kinetic/web/util/sdk'
 import { useEffect, useState } from 'react'
 
 export function WebAppEnvToolbox({ app, env }: { app: App; env: AppEnv }) {

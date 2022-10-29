@@ -1,7 +1,7 @@
 import { useToast } from '@chakra-ui/react'
 import { WebAdminUiUserUpdateForm } from '@kin-kinetic/web/admin/ui'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
-import { useAdminUpdateUserMutation, User, AdminUserUpdateInput } from '@kin-kinetic/web/util/admin-sdk'
+import { useAdminUpdateUserMutation, User, AdminUserUpdateInput } from '@kin-kinetic/web/util/sdk'
 
 export function WebAdminFeatureUserSettings({ user }: { user: User }) {
   const toast = useToast()

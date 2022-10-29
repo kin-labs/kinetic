@@ -1,9 +1,9 @@
 overwrite: true
 schema: 'http://localhost:3000/graphql'
 documents:
-  - 'libs/web/util/admin-sdk/src/graphql/**/*.graphql'
+  - 'libs/web/util/sdk/src/graphql/**/*.graphql'
 generates:
-  libs/web/util/admin-sdk/src/generated/graphql.tsx:
+  libs/web/util/sdk/src/generated/graphql.tsx:
     plugins:
       - add:
           content: '/* eslint-disable */'

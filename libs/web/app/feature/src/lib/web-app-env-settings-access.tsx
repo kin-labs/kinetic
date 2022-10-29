@@ -12,7 +12,7 @@ import {
   useUserAppEnvRemoveAllowedUaMutation,
   useUserAppEnvRemoveBlockedIpMutation,
   useUserAppEnvRemoveBlockedUaMutation,
-} from '@kin-kinetic/web/util/admin-sdk'
+} from '@kin-kinetic/web/util/sdk'
 
 export function WebAppEnvSettingsAccess({ app, env }: { app: App; env: AppEnv }) {
   const toast = useToast()

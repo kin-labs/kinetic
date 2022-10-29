@@ -1,5 +1,5 @@
 import { Box, Stack } from '@chakra-ui/react'
-import { AdminAppUpdateInput, App } from '@kin-kinetic/web/util/admin-sdk'
+import { AdminAppUpdateInput, App } from '@kin-kinetic/web/util/sdk'
 import { yupResolver } from '@saas-ui/forms/yup'
 import { Field, Form, FormLayout, SubmitButton } from '@saas-ui/react'
 import * as Yup from 'yup'

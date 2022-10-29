@@ -9,7 +9,7 @@ import {
   useUserImportWalletMutation,
   useUserWalletsQuery,
   Wallet,
-} from '@kin-kinetic/web/util/admin-sdk'
+} from '@kin-kinetic/web/util/sdk'
 import { Button } from '@saas-ui/react'
 
 export function WebAppEnvWalletsTab({ app, env }: { app: App; env: AppEnv }) {

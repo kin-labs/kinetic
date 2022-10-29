@@ -1,7 +1,7 @@
 import { Flex, HStack } from '@chakra-ui/react'
 import { WebUiAppAvatar } from '@kin-kinetic/web/ui/app-avatar'
 import { WebUiDataTable, WebUiDataTableLink } from '@kin-kinetic/web/ui/table'
-import { App } from '@kin-kinetic/web/util/admin-sdk'
+import { App } from '@kin-kinetic/web/util/sdk'
 import { IconButton } from '@saas-ui/react'
 import { MdDelete } from 'react-icons/md'
 import { CellProps } from 'react-table'

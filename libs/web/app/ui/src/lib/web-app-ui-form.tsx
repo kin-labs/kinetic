@@ -1,5 +1,5 @@
 import { Stack } from '@chakra-ui/react'
-import { AdminAppCreateInput } from '@kin-kinetic/web/util/admin-sdk'
+import { AdminAppCreateInput } from '@kin-kinetic/web/util/sdk'
 import { Field, Form, FormLayout, SubmitButton } from '@saas-ui/react'
 
 export function WebAppUiForm({

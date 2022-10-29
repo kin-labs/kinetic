@@ -1,4 +1,4 @@
-import { AppEnv, UserAppEnvUpdateInput } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv, UserAppEnvUpdateInput } from '@kin-kinetic/web/util/sdk'
 import { DisplayIf, Field, SwitchField } from '@saas-ui/react'
 import * as Yup from 'yup'
 import { WebWebhookUiForm } from './web-webhook-ui-form'

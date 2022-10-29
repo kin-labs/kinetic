@@ -10,7 +10,7 @@ import {
   useUserAppUserRemoveMutation,
   useUserAppUserUpdateRoleMutation,
   useUserUpdateAppMutation,
-} from '@kin-kinetic/web/util/admin-sdk'
+} from '@kin-kinetic/web/util/sdk'
 import { CardHeader, CardTitle } from '@saas-ui/react'
 
 export function WebAppSettingsUsersTab({ app }: { app: App }) {

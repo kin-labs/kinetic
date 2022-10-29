@@ -1,6 +1,6 @@
 import { useToast } from '@chakra-ui/react'
 import { WebAdminUiAppUpdateForm } from '@kin-kinetic/web/admin/ui'
-import { AdminAppUpdateInput, App, useAdminUpdateAppMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { AdminAppUpdateInput, App, useAdminUpdateAppMutation } from '@kin-kinetic/web/util/sdk'
 
 export function WebAdminFeatureAppUpdate({ app }: { app: App }) {
   const toast = useToast()

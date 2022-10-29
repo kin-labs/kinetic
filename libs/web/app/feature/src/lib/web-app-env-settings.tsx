@@ -1,7 +1,7 @@
 import { WebAppUiSettingsLayout } from '@kin-kinetic/web/app/ui'
 import { WebUiContainer } from '@kin-kinetic/web/ui/container'
 import { WebUiLinks } from '@kin-kinetic/web/ui/link'
-import { App, AppEnv } from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv } from '@kin-kinetic/web/util/sdk'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { WebAppEnvSettingsAccess } from './web-app-env-settings-access'
 import { WebAppEnvSettingsMints } from './web-app-env-settings-mints'

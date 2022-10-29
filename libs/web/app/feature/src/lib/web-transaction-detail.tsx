@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Icon, Stack, useDisclosure } from '@chakra-ui/react'
 import { WebUiPropertyList } from '@kin-kinetic/web/app/ui'
-import { AppEnv, Transaction } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv, Transaction } from '@kin-kinetic/web/util/sdk'
 import { ButtonGroup } from '@saas-ui/react'
 import { MdError } from 'react-icons/md'
 import { WebTransactionTimeline } from './web-transaction-timeline'

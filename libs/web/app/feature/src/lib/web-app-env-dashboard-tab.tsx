@@ -4,13 +4,7 @@ import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiLoaderPage } from '@kin-kinetic/web/ui/loader'
 import { WebUiPage } from '@kin-kinetic/web/ui/page'
-import {
-  App,
-  AppEnv,
-  TransactionStatus,
-  useUserAppEnvStatsQuery,
-  useUserWalletsQuery,
-} from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv, TransactionStatus, useUserAppEnvStatsQuery, useUserWalletsQuery } from '@kin-kinetic/web/util/sdk'
 import { Button, List, ListItem, ListItemLabel, ListItemTertiary } from '@saas-ui/react'
 import { Link } from 'react-router-dom'
 

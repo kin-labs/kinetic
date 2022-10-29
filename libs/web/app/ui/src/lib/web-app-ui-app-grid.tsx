@@ -1,6 +1,6 @@
 import { SimpleGrid, Stack, useColorModeValue } from '@chakra-ui/react'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
-import { App } from '@kin-kinetic/web/util/admin-sdk'
+import { App } from '@kin-kinetic/web/util/sdk'
 import { WebAppUiAppGridItem } from './web-app-ui-app-grid-item'
 
 export function WebAppUiAppGrid({ apps }: { apps: App[] }) {

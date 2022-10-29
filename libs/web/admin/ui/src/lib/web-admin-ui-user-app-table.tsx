@@ -2,7 +2,7 @@ import { HStack } from '@chakra-ui/react'
 import { WebUiAppAvatar } from '@kin-kinetic/web/ui/app-avatar'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiDataTable, WebUiDataTableLink } from '@kin-kinetic/web/ui/table'
-import { AppUser } from '@kin-kinetic/web/util/admin-sdk'
+import { AppUser } from '@kin-kinetic/web/util/sdk'
 import { CellProps } from 'react-table'
 
 export function WebAdminUiUserAppTable({ apps }: { apps: AppUser[] }) {

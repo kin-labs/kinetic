@@ -1,7 +1,7 @@
 import { Heading, SimpleGrid, Stack } from '@chakra-ui/react'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
-import { AppEnv, UserAppMintUpdateInput } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv, UserAppMintUpdateInput } from '@kin-kinetic/web/util/sdk'
 import { WebAppUiMintDisabledPanel } from './web-app-ui-mint-disabled-panel'
 import { WebAppUiMintEnabledPanel } from './web-app-ui-mint-enabled-panel'
 

@@ -1,5 +1,5 @@
 import { Alert, Box, SimpleGrid } from '@chakra-ui/react'
-import { Mint } from '@kin-kinetic/web/util/admin-sdk'
+import { Mint } from '@kin-kinetic/web/util/sdk'
 import { WebAdminUiMintDetails } from './web-admin-ui-mint-details'
 
 export interface WebAdminUiMintsProps {

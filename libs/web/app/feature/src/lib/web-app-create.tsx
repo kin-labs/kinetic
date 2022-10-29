@@ -2,7 +2,7 @@ import { useToast } from '@chakra-ui/react'
 import { WebAppUiForm } from '@kin-kinetic/web/app/ui'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiPageFull } from '@kin-kinetic/web/ui/page'
-import { AdminAppCreateInput, useAdminCreateAppMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { AdminAppCreateInput, useAdminCreateAppMutation } from '@kin-kinetic/web/util/sdk'
 import { useNavigate } from 'react-router-dom'
 
 export function WebAppCreate() {

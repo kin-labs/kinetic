@@ -1,4 +1,4 @@
-import { useLoginMutation, useLogoutMutation, useMeQuery, User, UserLoginInput } from '@kin-kinetic/web/util/admin-sdk'
+import { useLoginMutation, useLogoutMutation, useMeQuery, User, UserLoginInput } from '@kin-kinetic/web/util/sdk'
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 

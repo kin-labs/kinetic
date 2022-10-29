@@ -1,7 +1,7 @@
 import { Stack, useToast } from '@chakra-ui/react'
 import { WebAppUiAppForm } from '@kin-kinetic/web/app/ui'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
-import { App, UserAppUpdateInput, useUserUpdateAppMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { App, UserAppUpdateInput, useUserUpdateAppMutation } from '@kin-kinetic/web/util/sdk'
 import { CardHeader, CardTitle } from '@saas-ui/react'
 
 export function WebAppSettingsGeneralTab({ app }: { app: App }) {

@@ -1,6 +1,6 @@
 import { Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Stack, Text } from '@chakra-ui/react'
 import { ThemeTypings } from '@chakra-ui/styled-system'
-import { App } from '@kin-kinetic/web/util/admin-sdk'
+import { App } from '@kin-kinetic/web/util/sdk'
 import { ReactNode } from 'react'
 import { MdAdd, MdOutlineDns } from 'react-icons/md'
 import { TbChevronDown } from 'react-icons/tb'

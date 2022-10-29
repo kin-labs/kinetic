@@ -1,5 +1,5 @@
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
-import { AppEnv } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv } from '@kin-kinetic/web/util/sdk'
 import { List } from '@saas-ui/react'
 import React from 'react'
 import { WebAppUiAppEnvListItem } from './web-app-ui-app-env-list-item'

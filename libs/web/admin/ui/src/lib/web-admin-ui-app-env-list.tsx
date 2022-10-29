@@ -1,4 +1,4 @@
-import { AppEnv } from '@kin-kinetic/web/util/admin-sdk'
+import { AppEnv } from '@kin-kinetic/web/util/sdk'
 import { List } from '@saas-ui/react'
 import { WebAdminUiAppEnvListItem } from './web-admin-ui-app-env-list-item'
 

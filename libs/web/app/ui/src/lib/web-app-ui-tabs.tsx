@@ -1,6 +1,6 @@
 import { Box, Button, ButtonGroup, chakra, Flex, Stack, Text, useColorModeValue } from '@chakra-ui/react'
 import { WebUiLinks } from '@kin-kinetic/web/ui/link'
-import { App, AppEnv } from '@kin-kinetic/web/util/admin-sdk'
+import { App, AppEnv } from '@kin-kinetic/web/util/sdk'
 import { PropsWithChildren } from 'react'
 import { NavLink } from 'react-router-dom'
 import { WebAppUiEnvDropdown } from './web-app-ui-env-dropdown'

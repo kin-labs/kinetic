@@ -2,7 +2,7 @@ import { useToast } from '@chakra-ui/react'
 import { WebAdminUiClusterCreateForm } from '@kin-kinetic/web/admin/ui'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiPage, WebUiPageBackButton } from '@kin-kinetic/web/ui/page'
-import { AdminClusterCreateInput, useAdminCreateClusterMutation } from '@kin-kinetic/web/util/admin-sdk'
+import { AdminClusterCreateInput, useAdminCreateClusterMutation } from '@kin-kinetic/web/util/sdk'
 import { useNavigate } from 'react-router-dom'
 
 export function WebAdminFeatureClusterAdd() {

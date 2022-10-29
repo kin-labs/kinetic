@@ -13,7 +13,7 @@ import {
 import { WebUiAppAvatar } from '@kin-kinetic/web/ui/app-avatar'
 import { useWebAuth } from '@kin-kinetic/web/auth/data-access'
 import { WebUiSettingsLink } from '@kin-kinetic/web/ui/link'
-import { App } from '@kin-kinetic/web/util/admin-sdk'
+import { App } from '@kin-kinetic/web/util/sdk'
 import { MdApps, MdOutlineDashboard } from 'react-icons/md'
 import { Link, Link as RouterLink } from 'react-router-dom'
 import { useWebUiLayout } from './web-ui-layout-provider'

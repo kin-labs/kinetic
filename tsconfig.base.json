@@ -44,19 +44,8 @@
       "@kin-kinetic/api/wallet/feature": ["libs/api/wallet/feature/src/index.ts"],
       "@kin-kinetic/api/webhook/data-access": ["libs/api/webhook/data-access/src/index.ts"],
       "@kin-kinetic/api/webhook/feature": ["libs/api/webhook/feature/src/index.ts"],
-      "@kin-kinetic/demo/home/feature": ["libs/demo/home/feature/src/index.ts"],
-      "@kin-kinetic/demo/keypair/data-access": ["libs/demo/keypair/data-access/src/index.ts"],
-      "@kin-kinetic/demo/keypair/feature": ["libs/demo/keypair/feature/src/index.ts"],
-      "@kin-kinetic/demo/keypair/ui": ["libs/demo/keypair/ui/src/index.ts"],
-      "@kin-kinetic/demo/sdk/feature": ["libs/demo/sdk/feature/src/index.ts"],
-      "@kin-kinetic/demo/sdk/ui": ["libs/demo/sdk/ui/src/index.ts"],
-      "@kin-kinetic/demo/server/data-access": ["libs/demo/server/data-access/src/index.ts"],
-      "@kin-kinetic/demo/server/feature": ["libs/demo/server/feature/src/index.ts"],
-      "@kin-kinetic/demo/server/ui": ["libs/demo/server/ui/src/index.ts"],
-      "@kin-kinetic/demo/shell/feature": ["libs/demo/shell/feature/src/index.ts"],
       "@kin-kinetic/keypair": ["libs/keypair/src/index.ts"],
       "@kin-kinetic/sdk": ["libs/sdk/src/index.ts"],
-      "@kin-kinetic/shared/util/admin-sdk": ["libs/shared/util/admin-sdk/src/index.ts"],
       "@kin-kinetic/solana": ["libs/solana/src/index.ts"],
       "@kin-kinetic/web/admin/feature": ["libs/web/admin/feature/src/index.ts"],
       "@kin-kinetic/web/admin/ui": ["libs/web/admin/ui/src/index.ts"],
@@ -93,7 +82,7 @@
       "@kin-kinetic/web/ui/page": ["libs/web/ui/page/src/index.ts"],
       "@kin-kinetic/web/ui/table": ["libs/web/ui/table/src/index.ts"],
       "@kin-kinetic/web/ui/tooltip": ["libs/web/ui/tooltip/src/index.ts"],
-      "@kin-kinetic/web/util/admin-sdk": ["libs/web/util/admin-sdk/src/index.ts"]
+      "@kin-kinetic/web/util/sdk": ["libs/web/util/sdk/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
