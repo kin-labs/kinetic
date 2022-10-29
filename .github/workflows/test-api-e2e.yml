@@ -17,7 +17,6 @@ env:
   COOKIE_DOMAINS: 'localhost'
   COOKIE_NAME: '__session'
   DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=kinetic'
-  MINT_LOCAL_USDC: '*USDzo281m7rjzeZyxevkzL1vr5Cibb9ek3ynyAjXjUM,2,USDC'
   JWT_SECRET: 'KineticJwtSecret!'
   NX_CLOUD_DISTRIBUTED_EXECUTION: false
   SOLANA_LOCAL_ENABLED: true
