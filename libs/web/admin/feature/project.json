@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/admin/feature/src",
+  "projectType": "library",
+  "tags": ["scope:web", "type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/admin/feature/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/admin/feature"],
+      "options": {
+        "jestConfig": "libs/web/admin/feature/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

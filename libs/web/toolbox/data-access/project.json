@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/toolbox/data-access/src",
+  "projectType": "library",
+  "tags": ["scope:web", "type:data-access"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/toolbox/data-access/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/toolbox/data-access"],
+      "options": {
+        "jestConfig": "libs/web/toolbox/data-access/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

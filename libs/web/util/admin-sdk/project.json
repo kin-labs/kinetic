@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/util/admin-sdk/src",
+  "projectType": "library",
+  "tags": ["type:util", "scope:web"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/util/admin-sdk/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/util/admin-sdk"],
+      "options": {
+        "jestConfig": "libs/web/util/admin-sdk/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

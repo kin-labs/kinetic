@@ -9,4 +9,5 @@ export type {
   Transaction,
   BalanceResponse,
   HistoryResponse,
+  RequestAirdropResponse,
 } from './generated'

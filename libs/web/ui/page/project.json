@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/ui/page/src",
+  "projectType": "library",
+  "tags": ["type:ui", "scope:web"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/ui/page/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/web/ui/page"],
+      "options": {
+        "jestConfig": "libs/web/ui/page/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

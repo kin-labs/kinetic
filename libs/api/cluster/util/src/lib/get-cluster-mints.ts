@@ -13,7 +13,7 @@ export function getClusterMints(clusterId: ProvisionedClusterIds): Prisma.MintCr
   }
 
   // Add any provisioned mints to the cluster mints
-  provisioned.forEach(
+  provisioned?.forEach(
     ({
       addMemo,
       airdropAmount,

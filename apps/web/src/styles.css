@@ -1,0 +1,6 @@
+body,
+html,
+#root {
+  height: 100vh;
+  --chakra-colors-chakra-body-bg: var(--chakra-colors-gray-900);
+}

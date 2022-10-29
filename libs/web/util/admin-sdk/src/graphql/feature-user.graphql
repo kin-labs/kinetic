@@ -1,0 +1,59 @@
+fragment UserDetails on User {
+  id
+  createdAt
+  updatedAt
+  avatarUrl
+  email
+  name
+  username
+  role
+}
+
+fragment UserEmailDetails on UserEmail {
+  id
+  createdAt
+  updatedAt
+  email
+}
+
+mutation AdminCreateUser($input: AdminUserCreateInput!) {
+  created: adminCreateUser(input: $input) {
+    ...UserDetails
+  }
+}
+
+mutation AdminDeleteUser($userId: String!) {
+  deleted: adminDeleteUser(userId: $userId) {
+    ...UserDetails
+  }
+}
+
+mutation AdminUpdateUser($userId: String!, $input: AdminUserUpdateInput!) {
+  updated: adminUpdateUser(userId: $userId, input: $input) {
+    ...UserDetails
+  }
+}
+
+query AdminUser($userId: String!) {
+  item: adminUser(userId: $userId) {
+    ...UserDetails
+    apps {
+      ...AppUserDetails
+    }
+    emails {
+      ...UserEmailDetails
+    }
+  }
+}
+
+query AdminUsers {
+  items: adminUsers {
+    ...UserDetails
+  }
+}
+
+query UserSearchUsers($input: UserSearchUserInput!) {
+  items: userSearchUsers(input: $input) {
+    ...UserDetails
+  }
+}

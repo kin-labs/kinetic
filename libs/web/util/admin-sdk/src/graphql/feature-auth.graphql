@@ -1,0 +1,22 @@
+fragment AuthTokenDetails on AuthToken {
+  token
+  user {
+    ...UserDetails
+  }
+}
+
+mutation Login($input: UserLoginInput!) {
+  login(input: $input) {
+    ...AuthTokenDetails
+  }
+}
+
+mutation Logout {
+  logout
+}
+
+query Me {
+  me {
+    ...UserDetails
+  }
+}

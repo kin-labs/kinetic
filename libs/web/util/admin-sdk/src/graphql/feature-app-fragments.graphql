@@ -1,0 +1,161 @@
+fragment AppDetails on App {
+  id
+  createdAt
+  updatedAt
+  index
+  logoUrl
+  maxEnvs
+  name
+  defaultEnvUrl
+  settingsUrl
+}
+
+fragment AppEnvDetails on AppEnv {
+  id
+  createdAt
+  updatedAt
+  endpoint
+  key
+  app {
+    id
+    createdAt
+    updatedAt
+    index
+    maxEnvs
+    name
+  }
+  cluster {
+    ...ClusterDetails
+    mints {
+      ...MintDetails
+    }
+  }
+  ipsAllowed
+  ipsBlocked
+  mints {
+    ...AppMintDetails
+  }
+  name
+  uasAllowed
+  uasBlocked
+  webhookBalanceEnabled
+  webhookBalanceUrl
+  webhookBalanceThreshold
+  webhookDebugging
+  webhookEventEnabled
+  webhookEventUrl
+  webhookSecret
+  webhookVerifyEnabled
+  webhookVerifyUrl
+}
+
+fragment AppEnvStatsDetails on AppEnvStats {
+  transactionCount {
+    ...AppEnvTransactionCountDetails
+  }
+}
+
+fragment AppEnvTransactionCountDetails on AppEnvTransactionCount {
+  Committed
+  Confirmed
+  Failed
+  Finalized
+  Processing
+}
+
+fragment AppMintDetails on AppMint {
+  id
+  createdAt
+  updatedAt
+  addMemo
+  order
+  mint {
+    ...MintDetails
+  }
+  wallet {
+    ...WalletDetails
+  }
+}
+
+fragment TransactionDetails on Transaction {
+  id
+  createdAt
+  updatedAt
+  amount
+  decimals
+  destination
+  errors {
+    ...TransactionErrorDetails
+  }
+  explorerUrl
+  feePayer
+  ip
+  mint
+  processingDuration
+  referenceId
+  referenceType
+  signature
+  solanaCommittedDuration
+  solanaFinalized
+  solanaFinalizedDuration
+  solanaCommitted
+  solanaStart
+  solanaTransaction
+  source
+  status
+  totalDuration
+  tx
+  ua
+  webhookEventDuration
+  webhookEventIncoming {
+    ...WebhookDetails
+  }
+  webhookEventOutgoing {
+    ...WebhookDetails
+  }
+  webhookEventEnd
+  webhookEventStart
+  webhookVerifyDuration
+  webhookVerifyEnd
+  webhookVerifyIncoming {
+    ...WebhookDetails
+  }
+  webhookVerifyOutgoing {
+    ...WebhookDetails
+  }
+  webhookVerifyStart
+}
+
+fragment TransactionErrorDetails on TransactionError {
+  id
+  logs
+  message
+  type
+  instruction
+}
+
+fragment AppUserDetails on AppUser {
+  id
+  createdAt
+  updatedAt
+  role
+  app {
+    ...AppDetails
+  }
+  user {
+    ...UserDetails
+  }
+}
+
+fragment WebhookDetails on Webhook {
+  id
+  createdAt
+  updatedAt
+  direction
+  headers
+  payload
+  responseError
+  responsePayload
+  responseStatus
+  type
+}

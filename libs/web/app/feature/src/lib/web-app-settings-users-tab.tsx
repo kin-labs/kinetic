@@ -1,0 +1,98 @@
+import { Stack, useToast } from '@chakra-ui/react'
+import { WebAppUiAppUserList, WebAppUiAppUserModal } from '@kin-kinetic/web/app/ui'
+import { WebUiCard } from '@kin-kinetic/web/ui/card'
+import {
+  App,
+  UserAppUserAddInput,
+  UserAppUserRemoveInput,
+  UserAppUserUpdateRoleInput,
+  useUserAppUserAddMutation,
+  useUserAppUserRemoveMutation,
+  useUserAppUserUpdateRoleMutation,
+  useUserUpdateAppMutation,
+} from '@kin-kinetic/web/util/admin-sdk'
+import { CardHeader, CardTitle } from '@saas-ui/react'
+
+export function WebAppSettingsUsersTab({ app }: { app: App }) {
+  const toast = useToast()
+  // const [{ data }] = useUserApp
+  const [, updateApp] = useUserUpdateAppMutation()
+  const [, addAppUser] = useUserAppUserAddMutation()
+  const [, removeAppUser] = useUserAppUserRemoveMutation()
+  const [, updateAppUserRole] = useUserAppUserUpdateRoleMutation()
+
+  const submit = (data: App) => {
+    updateApp({ appId: app.id, input: { name: data.name } })
+      .then(() => {
+        toast({ status: 'success', title: 'App saved' })
+      })
+      .catch((error) => {
+        toast({
+          status: 'error',
+          title: 'Something went wrong',
+          description: `${error}`,
+        })
+      })
+  }
+
+  const handleAddAppUser = (input: UserAppUserAddInput) => {
+    addAppUser({ appId: app.id, input })
+      .then(() => {
+        toast({ status: 'success', title: 'App user added' })
+      })
+      .catch((error) => {
+        toast({
+          status: 'error',
+          title: 'Something went wrong',
+          description: `${error}`,
+        })
+      })
+  }
+
+  const handleRemoveAppUser = (input: UserAppUserRemoveInput) => {
+    if (!window.confirm('Are you sure?')) return
+    removeAppUser({ appId: app.id, input })
+      .then(() => {
+        toast({ status: 'success', title: 'App user removed' })
+      })
+      .catch((error) => {
+        toast({
+          status: 'error',
+          title: 'Something went wrong',
+          description: `${error}`,
+        })
+      })
+  }
+
+  const handleUpdateAppUserRole = (input: UserAppUserUpdateRoleInput) => {
+    updateAppUserRole({ appId: app.id, input })
+      .then(() => {
+        toast({ status: 'success', title: 'App user role saved' })
+      })
+      .catch((error) => {
+        toast({
+          status: 'error',
+          title: 'Something went wrong',
+          description: `${error}`,
+        })
+      })
+  }
+
+  return (
+    <Stack spacing={{ base: 2, md: 6 }}>
+      <WebUiCard>
+        <CardHeader>
+          <CardTitle fontSize="xl" mr={'2'}>
+            Users
+          </CardTitle>
+          <WebAppUiAppUserModal addRole={handleAddAppUser} />
+        </CardHeader>
+      </WebUiCard>
+      <WebAppUiAppUserList
+        deleteAppUser={handleRemoveAppUser}
+        users={app?.users}
+        updateRole={handleUpdateAppUserRole}
+      />
+    </Stack>
+  )
+}
