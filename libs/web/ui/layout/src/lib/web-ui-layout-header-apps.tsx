@@ -36,7 +36,7 @@ export function WebUiLayoutHeaderApps() {
           ml="-8px"
         >
           {app && <WebUiAppAvatar mr={1} logoUrl={app.logoUrl} size={'xs'} />}
-          <Text fontSize="xl">{app ? app.name : 'Kinetic'}</Text>
+          <Text fontSize="xl">{app ? app.name : 'Select app'}</Text>
         </Stack>
       </MenuButton>
       <MenuList>

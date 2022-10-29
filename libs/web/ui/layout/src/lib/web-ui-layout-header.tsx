@@ -29,15 +29,14 @@ export function WebUiLayoutHeader() {
       <Stack h={16} direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
         <Stack direction="row" w="full" alignItems={'center'} spacing={4}>
           <RouterLink replace to="/">
-            <Avatar src={'/assets/kin-logo.svg'} bg="inherit" size="sm" />
+            <Stack direction="row" alignItems={'center'} spacing={4}>
+              <Avatar src={'/assets/kin-logo.svg'} bg="inherit" size="sm" />
+              <Text fontSize="lg" fontWeight="semibold" className="cy-header">
+                Kinetic Manager
+              </Text>
+            </Stack>
           </RouterLink>
-          {user ? (
-            <WebUiLayoutHeaderApps />
-          ) : (
-            <Text fontSize="lg" fontWeight="semibold" className="cy-header">
-              Kinetic Manager
-            </Text>
-          )}
+          {user ? <WebUiLayoutHeaderApps /> : null}
         </Stack>
         <Flex w="full" alignItems="center" justifyContent="end">
           <Stack direction={'row'} spacing={4}>
@@ -85,16 +84,6 @@ export function WebUiLayoutHeader() {
                         </MenuItem>
                         <MenuItem as={NavLink} to={'/admin/wallets'}>
                           Wallets
-                        </MenuItem>
-                      </MenuGroup>
-                    </>
-                  )}
-                  {user?.role === 'Admin' && (
-                    <>
-                      <MenuDivider />
-                      <MenuGroup title="Development">
-                        <MenuItem as={NavLink} to={'/dev'}>
-                          Development Dashboard
                         </MenuItem>
                       </MenuGroup>
                     </>
