@@ -37,7 +37,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/solana"],
+      "outputs": ["{workspaceRoot}/coverage/libs/solana"],
       "options": {
         "jestConfig": "libs/solana/jest.config.ts",
         "passWithNoTests": true

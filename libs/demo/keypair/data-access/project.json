@@ -13,7 +13,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/demo/keypair/data-access"],
+      "outputs": ["{workspaceRoot}/coverage/libs/demo/keypair/data-access"],
       "options": {
         "jestConfig": "libs/demo/keypair/data-access/jest.config.ts",
         "passWithNoTests": true

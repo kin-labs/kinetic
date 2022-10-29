@@ -44,7 +44,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/dev/jest"],
+      "outputs": ["{workspaceRoot}/coverage/libs/dev/jest"],
       "options": {
         "jestConfig": "libs/dev/jest/jest.config.ts",
         "passWithNoTests": true

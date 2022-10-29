@@ -13,7 +13,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/demo/keypair/ui"],
+      "outputs": ["{workspaceRoot}/coverage/libs/demo/keypair/ui"],
       "options": {
         "jestConfig": "libs/demo/keypair/ui/jest.config.ts",
         "passWithNoTests": true

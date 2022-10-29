@@ -13,7 +13,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/util/admin-sdk"],
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/util/admin-sdk"],
       "options": {
         "jestConfig": "libs/shared/util/admin-sdk/jest.config.ts",
         "passWithNoTests": true

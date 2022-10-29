@@ -13,7 +13,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/admin/wallet/ui"],
+      "outputs": ["{workspaceRoot}/coverage/libs/admin/wallet/ui"],
       "options": {
         "jestConfig": "libs/admin/wallet/ui/jest.config.ts",
         "passWithNoTests": true

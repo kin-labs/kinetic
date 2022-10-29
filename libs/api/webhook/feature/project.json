@@ -11,7 +11,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/webhook/feature"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/webhook/feature"],
       "options": {
         "jestConfig": "libs/api/webhook/feature/jest.config.ts",
         "passWithNoTests": true
