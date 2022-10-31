@@ -11,7 +11,7 @@ import { MdDelete } from 'react-icons/md'
 
 export function WebKeypairUiItem({ keypair }: { keypair?: WebKeypairEntity }) {
   const toast = useToast()
-  const { deleteKeypair, selected, updateKeypair } = useWebKeypair()
+  const { deleteKeypair, selected, selectKeypair, updateKeypair } = useWebKeypair()
   const [details, showDetails] = useState<boolean>(false)
 
   const confirm = (keypair: WebKeypairEntity) => {
@@ -48,32 +48,43 @@ export function WebKeypairUiItem({ keypair }: { keypair?: WebKeypairEntity }) {
     <Stack p={4} borderWidth="1px" borderRadius="lg">
       <Stack direction="row" justify="space-between" align="top">
         <Stack>
-          <Text fontWeight="bold" fontSize="md">
-            {keypair.name}
-          </Text>
+          <ButtonGroup>
+            <Button
+              onClick={() => selectKeypair(keypair.id ?? 0)}
+              variant={keypair.id === selected?.id ? 'primary' : 'outline'}
+            >
+              <Text fontWeight="bold" fontSize="md">
+                {keypair.name}
+              </Text>
+            </Button>
+            <Button onClick={() => selectKeypair(keypair.id ?? 0)}>Select</Button>
+            <Button onClick={rename}>Rename</Button>
+          </ButtonGroup>
           <Code fontSize="xs" color="gray.200">
             {keypair?.publicKey}
           </Code>
         </Stack>
-        <ButtonGroup>
-          <Button onClick={() => showDetails(!details)}>
-            {details ? <IconEyeOff /> : <IconEye />}
-            <Text ml={2}>Secrets</Text>
-          </Button>
-          <Button onClick={rename}>Rename</Button>
-          <Button onClick={() => confirm(keypair)} alignItems="center" disabled={selected?.id === keypair.id}>
-            <MdDelete />
-            <Text ml={2}>Delete</Text>
-          </Button>
-        </ButtonGroup>
+        <Stack align={'end'}>
+          <ButtonGroup>
+            <Button onClick={() => showDetails(!details)}>
+              {details ? <IconEyeOff /> : <IconEye />}
+              <Text ml={2}>Secrets</Text>
+            </Button>
+
+            <Button onClick={() => confirm(keypair)} alignItems="center" disabled={selected?.id === keypair.id}>
+              <MdDelete />
+              <Text ml={2}>Delete</Text>
+            </Button>
+          </ButtonGroup>
+          {details ? (
+            <ButtonGroup>
+              <Copy disabled={!secrets.mnemonic} label={'Copy Mnemonic'} text={secrets.mnemonic ?? ''} />
+              <Copy disabled={!secrets.secretKey} label={'Copy Secret Key'} text={secrets.secretKey ?? ''} />
+              <Copy disabled={!secrets.byteArray} label={'Copy Byte Array'} text={secrets.byteArray ?? ''} />
+            </ButtonGroup>
+          ) : null}
+        </Stack>
       </Stack>
-      {details ? (
-        <ButtonGroup>
-          <Copy disabled={!secrets.mnemonic} label={'Copy Mnemonic'} text={secrets.mnemonic ?? ''} />
-          <Copy disabled={!secrets.secretKey} label={'Copy Secret Key'} text={secrets.secretKey ?? ''} />
-          <Copy disabled={!secrets.byteArray} label={'Copy Byte Array'} text={secrets.byteArray ?? ''} />
-        </ButtonGroup>
-      ) : null}
     </Stack>
   )
 }
