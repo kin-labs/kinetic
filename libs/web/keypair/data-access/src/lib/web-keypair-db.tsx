@@ -1,7 +1,7 @@
+import { Keypair } from '@kin-kinetic/keypair'
+import { ellipsify } from '@kin-kinetic/web/app/ui'
 import { Dexie, Table } from 'dexie'
 import { WebKeypairEntity } from './web-keypair.entity'
-
-const INITIAL_SERVERS: WebKeypairEntity[] = []
 
 class WebKeypairDb extends Dexie {
   keypair!: Table<WebKeypairEntity>
@@ -12,12 +12,9 @@ class WebKeypairDb extends Dexie {
       keypair: `++id, name, publicKey, isDefault`,
     })
     this.on('populate', function (transaction) {
-      transaction.db.table('keypair').bulkAdd(INITIAL_SERVERS)
+      const { mnemonic, publicKey, secretKey } = Keypair.random()
+      transaction.db.table('keypair').bulkAdd([{ mnemonic, name: ellipsify(publicKey), publicKey, secretKey }])
     })
-  }
-
-  loadInitialData() {
-    return this.keypair.bulkAdd(INITIAL_SERVERS)
   }
 }
 
