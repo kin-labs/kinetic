@@ -6,7 +6,7 @@ import { WebAppUiAppGridItem } from './web-app-ui-app-grid-item'
 export function WebAppUiAppGrid({ apps }: { apps: App[] }) {
   const bg = useColorModeValue('gray.100', 'gray.700')
   if (!apps.length) {
-    return <WebUiAlert message={'No Apps Found'} />
+    return <WebUiAlert message={'No apps Found'} />
   }
   return (
     <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} gap={{ base: 2, md: 4, xl: 6 }}>

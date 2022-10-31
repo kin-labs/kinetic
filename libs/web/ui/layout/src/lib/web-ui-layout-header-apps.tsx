@@ -10,8 +10,8 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { WebUiAppAvatar } from '@kin-kinetic/web/ui/app-avatar'
 import { useWebAuth } from '@kin-kinetic/web/auth/data-access'
+import { WebUiAppAvatar } from '@kin-kinetic/web/ui/app-avatar'
 import { WebUiSettingsLink } from '@kin-kinetic/web/ui/link'
 import { App } from '@kin-kinetic/web/util/sdk'
 import { MdApps, MdOutlineDashboard } from 'react-icons/md'
@@ -32,28 +32,35 @@ export function WebUiLayoutHeaderApps() {
           alignItems="center"
           as={RouterLink}
           to={`/apps/${app?.id}`}
+          pt={1}
           px={2}
           ml="-8px"
         >
           {app && <WebUiAppAvatar mr={1} logoUrl={app.logoUrl} size={'xs'} />}
-          <Text fontSize="xl">{app ? app.name : 'Select app'}</Text>
+          <Text fontSize="lg">{app ? app.name : 'Select app'}</Text>
         </Stack>
       </MenuButton>
       <MenuList>
-        <Stack alignItems="center" direction="row" mb={2} px={3} py={1} spacing={2} w="full">
-          <Text color={'gray.500'}>
-            <MdApps size={24} color={''} />
-          </Text>
-          <Text fontSize="lg" fontWeight="bold">
-            My apps
-          </Text>
-        </Stack>
-        <MenuDivider my={0} />
-        {apps?.map((item) => (
-          <MenuItem key={item.id} px={0} py={0} minWidth={350}>
-            <WebLayoutUiAppItem app={item} selected={item.id === app?.id} />
-          </MenuItem>
-        ))}
+        {apps?.length ? (
+          <>
+            <Stack alignItems="center" direction="row" mb={2} px={3} py={1} spacing={2} w="full">
+              <Text color={'gray.500'}>
+                <MdApps size={24} color={''} />
+              </Text>
+              <Text fontSize="lg" fontWeight="bold">
+                My apps
+              </Text>
+            </Stack>
+            <MenuDivider my={0} />
+            {apps?.map((item) => (
+              <MenuItem key={item.id} px={0} py={0} minWidth={350}>
+                <WebLayoutUiAppItem app={item} selected={item.id === app?.id} />
+              </MenuItem>
+            ))}
+          </>
+        ) : (
+          <MenuItem minWidth={350}>No apps found</MenuItem>
+        )}
         {user?.role === 'Admin' && (
           <>
             <MenuDivider my={0} />

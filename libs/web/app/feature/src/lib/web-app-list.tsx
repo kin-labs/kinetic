@@ -19,7 +19,7 @@ export function WebAppList() {
       Create app
     </Button>
   )
-  const title = `My apps ${apps?.length ? ` (${apps.length}) ` : null}`
+  const title = `My apps ${apps?.length ? ` (${apps.length}) ` : ''}`
 
   return (
     <WebUiPage title={title} actionRight={user?.role === 'Admin' ? action : undefined}>
