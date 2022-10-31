@@ -24,7 +24,7 @@ export function WebUiLayoutHeaderApps() {
 
   return (
     <Menu autoSelect={false}>
-      <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="ghost" size="lg" px={2}>
+      <MenuButton as={Button} rightIcon={<ChevronDownIcon />} variant="outline" size="lg" px={2}>
         <Stack
           flexGrow={1}
           fontWeight={'bold'}
@@ -32,12 +32,12 @@ export function WebUiLayoutHeaderApps() {
           alignItems="center"
           as={RouterLink}
           to={`/apps/${app?.id}`}
-          pt={1}
           px={2}
-          ml="-8px"
         >
-          {app && <WebUiAppAvatar mr={1} logoUrl={app.logoUrl} size={'xs'} />}
-          <Text fontSize="lg">{app ? app.name : 'Select app'}</Text>
+          {app && <WebUiAppAvatar logoUrl={app.logoUrl} size={'sm'} />}
+          <Text ml={2} fontSize="lg">
+            {app ? app.name : 'Select app'}
+          </Text>
         </Stack>
       </MenuButton>
       <MenuList>
