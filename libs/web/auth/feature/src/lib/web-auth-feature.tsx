@@ -1,6 +1,7 @@
-import { Flex, Stack, useToast } from '@chakra-ui/react'
+import { Flex, Stack, Text, useToast } from '@chakra-ui/react'
 import { WebAuthDiscordButton, WebAuthGitHubButton, WebAuthGoogleButton } from '@kin-kinetic/web/auth/ui'
 import { useWebAdminConfig } from '@kin-kinetic/web/shell/data-access'
+import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { useNavigate } from 'react-router-dom'
 import { AuthForm } from './auth-form'
@@ -22,16 +23,32 @@ export function WebAuthFeature() {
     navigate('/apps', { replace: true })
   }
 
+  const noneAvailable =
+    !config?.discordEnabled && !config?.githubEnabled && !config?.googleEnabled && !config?.passwordEnabled
+
   return (
     <Flex alignItems="center" h="full" justifyContent="center">
-      <WebUiCard w={400}>
+      {noneAvailable ? (
+        <WebUiAlert status={'warning'}>
+          <Stack>
+            <Text fontSize={'xl'} fontWeight={'black'}>
+              No authentication providers available.
+            </Text>
+            <Text>Check your configuration.</Text>
+          </Stack>
+        </WebUiAlert>
+      ) : (
         <Stack spacing={{ base: 2, md: 6 }}>
           {config?.discordEnabled && <WebAuthDiscordButton />}
           {config?.githubEnabled && <WebAuthGitHubButton />}
           {config?.googleEnabled && <WebAuthGoogleButton />}
-          {config?.passwordEnabled && <AuthForm onError={onError} onSuccess={onSuccess} />}
+          {config?.passwordEnabled && (
+            <WebUiCard w={400}>
+              <AuthForm onError={onError} onSuccess={onSuccess} />
+            </WebUiCard>
+          )}
         </Stack>
-      </WebUiCard>
+      )}
     </Flex>
   )
 }
