@@ -63,9 +63,6 @@ export function WebUiLayoutHeader() {
                   <MenuItem as={NavLink} to={'/apps'}>
                     Your Apps
                   </MenuItem>
-                  <MenuItem as={NavLink} to={'/about'}>
-                    About Kinetic
-                  </MenuItem>
                   {user?.role === 'Admin' && (
                     <>
                       <MenuDivider />
