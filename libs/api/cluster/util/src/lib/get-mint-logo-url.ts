@@ -1,11 +1,11 @@
 export function getMintLogoUrl(mint: string) {
   switch (mint.trim().toUpperCase()) {
     case 'KIN':
-      return 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6/logo.png'
+      return 'https://assets.coingecko.com/coins/images/959/large/kin-logo-social.png'
     case 'SOL':
-      return 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png'
+      return 'https://assets.coingecko.com/coins/images/4128/large/solana.png'
     case 'USDC':
-      return 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png'
+      return 'https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png'
     default:
       return ''
   }
