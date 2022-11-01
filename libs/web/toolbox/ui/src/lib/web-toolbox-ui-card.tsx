@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, Text } from '@chakra-ui/react'
+import { Box, Flex, Stack, Text, useColorModeValue } from '@chakra-ui/react'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { Button, ButtonGroup } from '@saas-ui/react'
 import { IconEye, IconEyeOff } from '@tabler/icons'
@@ -20,8 +20,10 @@ export function WebToolboxUiCard({
   const [details, showDetails] = useState<boolean>(false)
   const [errorDetails, showErrorDetails] = useState<boolean>(false)
 
+  const bg = useColorModeValue('gray.100', 'gray.800')
+  const color = useColorModeValue('gray.900', 'gray.300')
   return (
-    <Stack p="6" backgroundColor={'gray.800'} borderWidth="1px" borderRadius="lg" spacing={{ base: 2, md: 6 }}>
+    <Stack p="6" bg={bg} color={color} borderWidth="1px" borderRadius="lg" spacing={{ base: 2, md: 6 }}>
       <Flex justify="space-between" align="start">
         {children}
         <ButtonGroup>

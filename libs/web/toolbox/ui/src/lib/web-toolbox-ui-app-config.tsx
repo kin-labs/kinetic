@@ -1,4 +1,4 @@
-import { Avatar, Badge, Box, Flex, HStack, Stack, Text } from '@chakra-ui/react'
+import { Avatar, Badge, Box, Flex, HStack, Stack, Text, useColorModeValue } from '@chakra-ui/react'
 import { AppConfig, AppConfigMint } from '@kin-kinetic/sdk'
 
 export function WebToolboxUiAppConfig({
@@ -10,9 +10,11 @@ export function WebToolboxUiAppConfig({
   selectedMint: AppConfigMint | undefined
   setSelectedMint: (mint: AppConfigMint) => void
 }) {
+  const bg = useColorModeValue('gray.100', 'gray.800')
+  const color = useColorModeValue('gray.900', 'gray.300')
   return (
     <Stack borderWidth="1px" borderRadius="lg">
-      <Flex justify={'space-between'} bg="gray.700" p={4} align="center">
+      <Flex justify={'space-between'} bg={bg} color={color} p={4} align="center">
         <Text fontSize={'xl'}>
           {config.api.name}@{config.api.version}
         </Text>
@@ -31,8 +33,8 @@ export function WebToolboxUiAppConfig({
               key={mint.name}
               align="center"
               _hover={{ bg: 'gray.700' }}
-              bg={selectedMint?.symbol === mint.symbol ? 'var(--chakra-colors-gray-800)' : ''}
-              border={selectedMint?.symbol === mint.symbol ? '1px solid var(--chakra-colors-gray-500)' : ''}
+              bg={selectedMint?.symbol === mint.symbol ? bg : ''}
+              border={selectedMint?.symbol === mint.symbol ? color : ''}
             >
               <Avatar src={mint.logoUrl} />
               <Box mx={2}>

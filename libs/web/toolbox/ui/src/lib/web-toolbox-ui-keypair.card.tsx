@@ -1,4 +1,14 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Flex, Stack, Text, useToast } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Flex,
+  Stack,
+  Text,
+  useColorModeValue,
+  useToast,
+} from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { useWebKeypair } from '@kin-kinetic/web/keypair/data-access'
 import { WebKeypairUiImport, WebKeypairUiItem } from '@kin-kinetic/web/keypair/ui'
@@ -11,6 +21,8 @@ export function WebToolboxUiKeypairCard({ keypair, explorer }: { keypair?: Keypa
   const [details, showDetails] = useState<boolean>(false)
   const [importForm, showImportForm] = useState<boolean>(false)
   const { addKeypair, generateKeypair, keypairs, selected } = useWebKeypair()
+  const bg = useColorModeValue('gray.100', 'gray.800')
+  const color = useColorModeValue('gray.900', 'gray.300')
 
   const importKeypair = ({ secret }: { secret: string }) => {
     if (!secret) {
@@ -67,7 +79,7 @@ export function WebToolboxUiKeypairCard({ keypair, explorer }: { keypair?: Keypa
   }
 
   return (
-    <Stack p="6" backgroundColor={'gray.800'} borderWidth="1px" borderRadius="lg" spacing={{ base: 2, md: 6 }}>
+    <Stack p="6" bg={bg} color={color} borderWidth="1px" borderRadius="lg" spacing={{ base: 2, md: 6 }}>
       <Alert
         status="warning"
         variant="solid"
