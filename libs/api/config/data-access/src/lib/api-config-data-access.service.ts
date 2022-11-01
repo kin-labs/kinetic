@@ -4,6 +4,7 @@ import { INestApplication, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
+import { Request } from 'express'
 import { CookieOptions } from 'express-serve-static-core'
 import * as fs from 'fs'
 import { join } from 'path'
@@ -104,8 +105,15 @@ export class ApiConfigDataAccessService {
   get cors() {
     return {
       credentials: true,
-      origin: this.corsOrigins,
+      origin: (origin, callback) => {
+        this.logger.verbose(`CORS request from origin ${origin}, enabled bypass: ${this.corsBypass}`)
+        return callback(null, this.corsBypass ? origin : this.corsOrigins)
+      },
     }
+  }
+
+  get corsBypass(): string[] {
+    return this.config.get('cors.bypass')
   }
 
   get corsOrigins(): string[] {
