@@ -16,6 +16,7 @@ env:
   AUTH_PASSWORD_ENABLED: true
   COOKIE_DOMAINS: 'localhost'
   COOKIE_NAME: '__session'
+  CORS_BYPASS: 'true'
   DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=kinetic'
   JWT_SECRET: 'KineticJwtSecret!'
   NX_CLOUD_DISTRIBUTED_EXECUTION: false

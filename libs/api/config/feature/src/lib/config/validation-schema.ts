@@ -11,7 +11,7 @@ export const validationSchema = Joi.object({
   DATABASE_URL: Joi.string().required(),
   GITHUB_ENABLED: Joi.boolean().default('false'),
   GOOGLE_ENABLED: Joi.boolean().default('false'),
-  HOST: Joi.string().default('127.0.0.1'),
+  HOST: Joi.string().default('0.0.0.0'),
   JWT_SECRET: Joi.string().required(),
   LOG_COLOR: Joi.boolean().default('true'),
   LOG_JSON: Joi.boolean().default('false'),

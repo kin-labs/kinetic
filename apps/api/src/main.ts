@@ -20,10 +20,11 @@ async function bootstrap() {
   app.use(redirectSSL.create({ enabled: config.isProduction }))
   config.configureSwagger(app)
   app.use(cookieParser())
+  const host = `http://${config.host}:${config.port}`
   try {
     await app.listen(config.port, config.host)
-    Logger.log(`🚀 API is listening on http://${config.host}:${config.port}/${config.prefix}.`)
-    Logger.log(`🚀 Admin API is listening on http://localhost:${config.port}/graphql.`)
+    Logger.log(`🚀 API is listening on ${host}/${config.prefix}.`)
+    Logger.log(`🚀 Admin API is listening on ${host}/graphql.`)
     Logger.log(`🔋 ADMIN_URL: ${config.adminUrl}`)
     Logger.log(`🔋 API_URL: ${config.apiUrl}`)
     Logger.log(`🔋 COOKIE_DOMAINS: ${config.cookieDomains.join(', ')}`)
