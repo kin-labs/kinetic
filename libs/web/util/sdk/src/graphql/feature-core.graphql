@@ -1,5 +1,5 @@
-query AdminConfig {
-  adminConfig {
+query WebConfig {
+  config: webConfig {
     discordEnabled
     githubEnabled
     googleEnabled

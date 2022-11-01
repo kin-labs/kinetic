@@ -11,9 +11,6 @@ const domains: string[] = process.env.COOKIE_DOMAINS?.includes(',')
   : [process.env.COOKIE_DOMAINS]
 
 export default () => ({
-  admin: {
-    url: process.env.ADMIN_URL,
-  },
   api: {
     log: {
       color: process.env.LOG_COLOR?.toLowerCase() !== 'false',
@@ -75,5 +72,8 @@ export default () => ({
       enabled: process.env.SOLANA_MAINNET_ENABLED?.toLowerCase() !== 'false',
       rpcEndpoint: process.env.SOLANA_MAINNET_RPC_ENDPOINT,
     },
+  },
+  web: {
+    url: process.env.WEB_URL,
   },
 })

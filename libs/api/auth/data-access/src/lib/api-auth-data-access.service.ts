@@ -105,7 +105,7 @@ export class ApiAuthDataAccessService {
     const token = this.sign({ username: user.username, id: user.id })
     this.setCookie(req, res, token)
 
-    return res.redirect(this.data.config.adminUrl)
+    return res.redirect(this.data.config.webUrl)
   }
 
   async validateUser({ username, password }: { password: string; username: string }) {

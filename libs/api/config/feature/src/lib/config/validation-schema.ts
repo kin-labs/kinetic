@@ -1,7 +1,6 @@
 import * as Joi from 'joi'
 
 export const validationSchema = Joi.object({
-  ADMIN_URL: Joi.string().required().error(new Error(`ADMIN_URL is required.`)),
   API_URL: Joi.string().required().error(new Error(`API_URL is required.`)),
   AUTH_PASSWORD_ENABLED: Joi.boolean().default('false'),
   AUTH_USERS: Joi.string().default(''),
@@ -32,4 +31,5 @@ export const validationSchema = Joi.object({
   SOLANA_MAINNET_ENABLED: Joi.boolean().default(false),
   SOLANA_MAINNET_MINT_KIN: Joi.string().default('*kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6,5,Kin'),
   SOLANA_MAINNET_RPC_ENDPOINT: Joi.string().default('mainnet-beta'),
+  WEB_URL: Joi.string().required().error(new Error(`WEB_URL is required.`)),
 })

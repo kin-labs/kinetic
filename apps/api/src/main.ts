@@ -25,8 +25,8 @@ async function bootstrap() {
     await app.listen(config.port, config.host)
     Logger.log(`🚀 API is listening on ${host}/${config.prefix}.`)
     Logger.log(`🚀 Admin API is listening on ${host}/graphql.`)
-    Logger.log(`🔋 ADMIN_URL: ${config.adminUrl}`)
     Logger.log(`🔋 API_URL: ${config.apiUrl}`)
+    Logger.log(`🔋 WEB_URL: ${config.webUrl}`)
     Logger.log(`🔋 COOKIE_DOMAINS: ${config.cookieDomains.join(', ')}`)
     Logger.log(
       `🔋 CORS: ${

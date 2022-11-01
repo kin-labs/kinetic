@@ -32,13 +32,6 @@ input AdminClusterUpdateInput {
   status: ClusterStatus
 }
 
-type AdminConfig {
-  discordEnabled: Boolean!
-  githubEnabled: Boolean!
-  googleEnabled: Boolean!
-  passwordEnabled: Boolean!
-}
-
 input AdminMintCreateInput {
   address: String!
   clusterId: String!
@@ -255,7 +248,6 @@ type Query {
   adminApps: [App!]
   adminCluster(clusterId: String!): Cluster
   adminClusters: [Cluster!]
-  adminConfig: AdminConfig!
   adminUser(userId: String!): User
   adminUsers: [User!]
   adminWallet(walletId: String!): Wallet
@@ -279,6 +271,7 @@ type Query {
   userWalletBalance(appEnvId: String!, walletId: String!): WalletBalance
   userWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
   userWallets(appEnvId: String!): [Wallet!]
+  webConfig: WebConfig!
 }
 
 type Transaction {
@@ -483,6 +476,13 @@ enum WalletType {
   Generated
   Imported
   Provisioned
+}
+
+type WebConfig {
+  discordEnabled: Boolean!
+  githubEnabled: Boolean!
+  googleEnabled: Boolean!
+  passwordEnabled: Boolean!
 }
 
 type Webhook {

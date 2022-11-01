@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
-export class AdminConfig {
+export class WebConfig {
   @Field()
   discordEnabled: boolean
   @Field()

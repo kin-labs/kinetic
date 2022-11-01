@@ -49,14 +49,6 @@ export type AdminClusterUpdateInput = {
   status?: InputMaybe<ClusterStatus>
 }
 
-export type AdminConfig = {
-  __typename?: 'AdminConfig'
-  discordEnabled: Scalars['Boolean']
-  githubEnabled: Scalars['Boolean']
-  googleEnabled: Scalars['Boolean']
-  passwordEnabled: Scalars['Boolean']
-}
-
 export type AdminMintCreateInput = {
   address: Scalars['String']
   clusterId: Scalars['String']
@@ -453,7 +445,6 @@ export type Query = {
   adminApps?: Maybe<Array<App>>
   adminCluster?: Maybe<Cluster>
   adminClusters?: Maybe<Array<Cluster>>
-  adminConfig: AdminConfig
   adminUser?: Maybe<User>
   adminUsers?: Maybe<Array<User>>
   adminWallet?: Maybe<Wallet>
@@ -477,6 +468,7 @@ export type Query = {
   userWalletBalance?: Maybe<WalletBalance>
   userWalletBalances?: Maybe<Array<WalletBalance>>
   userWallets?: Maybe<Array<Wallet>>
+  webConfig: WebConfig
 }
 
 export type QueryAdminAppArgs = {
@@ -779,6 +771,14 @@ export enum WalletType {
   Generated = 'Generated',
   Imported = 'Imported',
   Provisioned = 'Provisioned',
+}
+
+export type WebConfig = {
+  __typename?: 'WebConfig'
+  discordEnabled: Scalars['Boolean']
+  githubEnabled: Scalars['Boolean']
+  googleEnabled: Scalars['Boolean']
+  passwordEnabled: Scalars['Boolean']
 }
 
 export type Webhook = {
@@ -4944,12 +4944,12 @@ export type UserClustersQuery = {
   }> | null
 }
 
-export type AdminConfigQueryVariables = Exact<{ [key: string]: never }>
+export type WebConfigQueryVariables = Exact<{ [key: string]: never }>
 
-export type AdminConfigQuery = {
+export type WebConfigQuery = {
   __typename?: 'Query'
-  adminConfig: {
-    __typename?: 'AdminConfig'
+  config: {
+    __typename?: 'WebConfig'
     discordEnabled: boolean
     githubEnabled: boolean
     googleEnabled: boolean
@@ -6790,9 +6790,9 @@ export const UserClustersDocument = gql`
 export function useUserClustersQuery(options?: Omit<Urql.UseQueryArgs<UserClustersQueryVariables>, 'query'>) {
   return Urql.useQuery<UserClustersQuery, UserClustersQueryVariables>({ query: UserClustersDocument, ...options })
 }
-export const AdminConfigDocument = gql`
-  query AdminConfig {
-    adminConfig {
+export const WebConfigDocument = gql`
+  query WebConfig {
+    config: webConfig {
       discordEnabled
       githubEnabled
       googleEnabled
@@ -6801,8 +6801,8 @@ export const AdminConfigDocument = gql`
   }
 `
 
-export function useAdminConfigQuery(options?: Omit<Urql.UseQueryArgs<AdminConfigQueryVariables>, 'query'>) {
-  return Urql.useQuery<AdminConfigQuery, AdminConfigQueryVariables>({ query: AdminConfigDocument, ...options })
+export function useWebConfigQuery(options?: Omit<Urql.UseQueryArgs<WebConfigQueryVariables>, 'query'>) {
+  return Urql.useQuery<WebConfigQuery, WebConfigQueryVariables>({ query: WebConfigDocument, ...options })
 }
 export const UptimeDocument = gql`
   query Uptime {

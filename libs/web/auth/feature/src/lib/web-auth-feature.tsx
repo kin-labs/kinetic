@@ -1,13 +1,13 @@
 import { Flex, Stack, Text, useToast } from '@chakra-ui/react'
 import { WebAuthDiscordButton, WebAuthGitHubButton, WebAuthGoogleButton } from '@kin-kinetic/web/auth/ui'
-import { useWebAdminConfig } from '@kin-kinetic/web/shell/data-access'
+import { useWebConfig } from '@kin-kinetic/web/shell/data-access'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { useNavigate } from 'react-router-dom'
 import { AuthForm } from './auth-form'
 
 export function WebAuthFeature() {
-  const { config } = useWebAdminConfig()
+  const { config } = useWebConfig()
   const navigate = useNavigate()
   const toast = useToast()
 

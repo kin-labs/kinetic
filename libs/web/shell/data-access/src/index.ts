@@ -1,1 +1,1 @@
-export * from './lib/web-admin-config-provider'
+export * from './lib/web-config-provider'

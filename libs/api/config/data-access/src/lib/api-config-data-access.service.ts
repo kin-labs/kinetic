@@ -7,8 +7,8 @@ import { UserRole } from '@prisma/client'
 import { CookieOptions } from 'express-serve-static-core'
 import * as fs from 'fs'
 import { join } from 'path'
-import { AdminConfig } from './entity/admin-config.entity'
 import { ProvisionedApp } from './entity/provisioned-app.entity'
+import { WebConfig } from './entity/web-config.entity'
 import { getAuthUsers } from './helpers/get-auth-users'
 import { getProvisionedApps } from './helpers/get-provisioned-apps'
 
@@ -27,19 +27,6 @@ export class ApiConfigDataAccessService {
   })
 
   constructor(private readonly config: ConfigService) {}
-
-  adminConfig(): AdminConfig {
-    return {
-      discordEnabled: this.discordEnabled,
-      githubEnabled: this.githubEnabled,
-      googleEnabled: this.googleEnabled,
-      passwordEnabled: this.authPasswordEnabled,
-    }
-  }
-
-  get adminUrl(): string {
-    return this.config.get('admin.url')
-  }
 
   get authPasswordEnabled(): boolean {
     return this.config.get('auth.passwordEnabled')
@@ -241,6 +228,19 @@ export class ApiConfigDataAccessService {
 
   get solanaMainnetRpcEndpoint() {
     return this.config.get('solana.mainnet.rpcEndpoint')
+  }
+
+  webConfig(): WebConfig {
+    return {
+      discordEnabled: this.discordEnabled,
+      githubEnabled: this.githubEnabled,
+      googleEnabled: this.googleEnabled,
+      passwordEnabled: this.authPasswordEnabled,
+    }
+  }
+
+  get webUrl(): string {
+    return this.config.get('web.url')
   }
 
   configSummary() {
