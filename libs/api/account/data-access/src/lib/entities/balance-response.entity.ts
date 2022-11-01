@@ -15,7 +15,7 @@ export class BalanceToken {
   account: string
   @ApiProperty()
   balance: string
-  @ApiProperty()
+  @ApiProperty({ default: '0', type: 'integer' })
   decimals: number
   @ApiProperty()
   mint: string

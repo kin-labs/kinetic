@@ -733,7 +733,8 @@
             "type": "string"
           },
           "decimals": {
-            "type": "number"
+            "type": "integer",
+            "default": "0"
           },
           "mint": {
             "type": "string"
