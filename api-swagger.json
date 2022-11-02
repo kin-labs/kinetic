@@ -491,7 +491,7 @@
   "info": {
     "title": "@kin-kinetic/api",
     "description": "The OpenAPI definition of the Kinetic API",
-    "version": "1.0.0-rc.6",
+    "version": "1.0.0-rc.7",
     "contact": {}
   },
   "tags": [
