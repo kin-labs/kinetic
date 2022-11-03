@@ -2,6 +2,8 @@ import { useLoginMutation, useLogoutMutation, useMeQuery, User, UserLoginInput }
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(() => resolve(true), ms))
+
 export interface WebAuthProviderContext {
   loading: boolean
   loggedIn: boolean
@@ -33,6 +35,9 @@ function WebAuthProvider({ children }: { children: ReactNode }) {
         return Promise.reject(res.error)
       }
       await refresh()
+      // FIXME: It looks like the cookie delays a few ms in being set.
+      // Having this timeout here makes sure the user does not stay on the login screen
+      await sleep(250)
       return res.data?.login?.user
     })
   }
