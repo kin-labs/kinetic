@@ -1,25 +1,32 @@
 import { Box, Flex, Stack, Text, useColorModeValue } from '@chakra-ui/react'
+import { KineticSdk } from '@kin-kinetic/sdk'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { Button, ButtonGroup } from '@saas-ui/react'
 import { IconEye, IconEyeOff } from '@tabler/icons'
 import { ReactNode, useState } from 'react'
 import { WebToolboxUiDebug } from './web-toolbox-ui-debug'
 import { WebToolboxUiExplorerLink } from './web-toolbox-ui-explorer-link'
+import { WebToolboxUiTransactionProgress } from './web-toolbox-ui-transaction-progress'
 
 export function WebToolboxUiCard({
   children,
-  response,
   error,
   explorer,
+  finished,
+  response,
+  sdk,
+  signature,
 }: {
   children: ReactNode
-  response?: any
-  error?: any
+  error?: unknown
   explorer?: string
+  finished?: () => void
+  response?: unknown
+  sdk?: KineticSdk
+  signature?: string | undefined
 }) {
   const [details, showDetails] = useState<boolean>(false)
   const [errorDetails, showErrorDetails] = useState<boolean>(false)
-
   const bg = useColorModeValue('gray.100', 'gray.800')
   const color = useColorModeValue('gray.900', 'gray.300')
   return (
@@ -40,6 +47,9 @@ export function WebToolboxUiCard({
           </Button>
         </ButtonGroup>
       </Flex>
+      {sdk && signature ? (
+        <WebToolboxUiTransactionProgress finished={finished} sdk={sdk} signature={signature} />
+      ) : null}
       {details && <WebToolboxUiDebug data={response} />}
       {errorDetails && (
         <Stack>

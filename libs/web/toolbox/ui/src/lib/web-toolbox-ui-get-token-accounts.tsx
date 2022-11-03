@@ -42,11 +42,9 @@ export function WebToolboxUiGetTokenAccounts({
         <Button variant="primary" isLoading={loading} size="lg" onClick={click}>
           Get Token Accounts
         </Button>
-        {response?.length && (
-          <Button size="lg" disabled={true}>
-            Token accounts for mint: {response?.length}
-          </Button>
-        )}
+        <Button size="lg" disabled={true}>
+          {(response?.length ?? 0) > 0 ? `Token accounts for mint: ${response?.length}` : 'No token accounts for mint'}
+        </Button>
       </ButtonGroup>
     </WebToolboxUiCard>
   )

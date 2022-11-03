@@ -32,6 +32,11 @@ export function WebToolboxUiGetBalance({ keypair, sdk }: { keypair: Keypair; sdk
     getBalance()
   }, [])
 
+  useEffect(() => {
+    console.log(`getBalance: Public key updated ${keypair.publicKey}`)
+    getBalance()
+  }, [keypair.publicKey])
+
   return (
     <WebToolboxUiCard response={response} error={error} explorer={sdk?.getExplorerUrl(`address/${keypair?.publicKey}`)}>
       <ButtonGroup>
