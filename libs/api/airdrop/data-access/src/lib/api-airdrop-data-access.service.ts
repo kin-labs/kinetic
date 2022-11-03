@@ -43,7 +43,7 @@ export class ApiAirdropDataAccessService {
     }
 
     try {
-      const commitment = request.commitment || Commitment.Finalized
+      const commitment = request.commitment || Commitment.Confirmed
       const account = request.account
       const amount = request.amount ? request.amount : 1
       this.logger.verbose(`Requesting airdrop: ${account} ${amount} ${mint.symbol} (${mint.address}) on ${environment}`)
