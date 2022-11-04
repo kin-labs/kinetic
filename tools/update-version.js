@@ -10,14 +10,13 @@ if (!pkg || !packages.includes(pkg)) {
   console.log(`WRONG PACKAGE... ${pkg}`)
   return
 }
-// Check if package.json can be found in the package
-const workspaceJson = join(process.cwd(), 'workspace.json')
-if (!existsSync(workspaceJson)) {
-  console.log(`FILE NOT FOUND: ${workspaceJson}`)
-  return
-}
 
-const { projects } = require(workspaceJson)
+const projects = {
+  'api-core-data-access': 'libs/api/core/data-access',
+  keypair: 'libs/keypair',
+  sdk: 'libs/sdk',
+  solana: 'libs/solana',
+}
 
 if (!projects[pkg]) {
   console.log(`CAN'T FIND PACKAGE IN WORKSPACE... ${pkg}`)

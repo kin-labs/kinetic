@@ -5,7 +5,7 @@ import { join } from 'path'
 
 export function serveStaticFactory() {
   return function (): ServeStaticModuleOptions[] {
-    const rootPath = join(__dirname, '..', 'admin')
+    const rootPath = join(__dirname, '..', 'web')
     const rootExists = existsSync(rootPath)
 
     if (!rootExists) {

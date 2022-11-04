@@ -1,5 +1,3 @@
-import { TransactionType } from '@kin-tools/kin-memo'
-import { generateKinMemoInstruction } from '@kin-tools/kin-transaction'
 import {
   AuthorityType,
   createAssociatedTokenAccountInstruction,
@@ -8,6 +6,8 @@ import {
 } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateCreateAccountTransactionOptions } from '../interfaces'
+import { TransactionType } from '../kin'
+import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
 import { getPublicKey } from './get-public-key'
 
 export async function generateCreateAccountTransaction({
@@ -34,7 +34,7 @@ export async function generateCreateAccountTransaction({
   if (addMemo) {
     instructions.push(
       generateKinMemoInstruction({
-        appIndex: index,
+        index,
         type: TransactionType.None,
       }),
     )

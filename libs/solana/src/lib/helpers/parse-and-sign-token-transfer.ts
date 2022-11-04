@@ -3,7 +3,7 @@ import { AccountMeta, Keypair, Transaction } from '@solana/web3.js'
 import { parseAndSignTransaction } from './parse-and-sign-transaction'
 
 export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: Keypair }): {
-  amount: number
+  amount: bigint
   blockhash: string
   destination: AccountMeta
   feePayer: string
@@ -27,7 +27,7 @@ export function parseAndSignTokenTransfer({ tx, signer }: { tx: Buffer; signer: 
   } = decodeTransferCheckedInstruction(instruction, TOKEN_PROGRAM_ID)
 
   return {
-    amount: Number(amount),
+    amount,
     blockhash,
     destination,
     feePayer,

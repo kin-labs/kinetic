@@ -491,7 +491,7 @@
   "info": {
     "title": "@kin-kinetic/api",
     "description": "The OpenAPI definition of the Kinetic API",
-    "version": "1.0.0-rc.3",
+    "version": "1.0.0-rc.7",
     "contact": {}
   },
   "tags": [
@@ -732,11 +732,15 @@
           "balance": {
             "type": "string"
           },
+          "decimals": {
+            "type": "integer",
+            "default": "0"
+          },
           "mint": {
             "type": "string"
           }
         },
-        "required": ["account", "balance", "mint"]
+        "required": ["account", "balance", "decimals", "mint"]
       },
       "BalanceResponse": {
         "type": "object",

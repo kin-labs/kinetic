@@ -1,0 +1,27 @@
+overwrite: true
+schema: 'http://localhost:3000/graphql'
+documents:
+  - 'libs/web/util/sdk/src/graphql/**/*.graphql'
+generates:
+  apps/api-e2e/src/generated/api-sdk.ts:
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript
+      - typescript-document-nodes
+      - typescript-operations
+      - fragment-matcher
+  libs/web/util/sdk/src/generated/graphql.tsx:
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-urql'
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'
+
+hooks:
+  afterAllFileWrite:
+    - prettier --write

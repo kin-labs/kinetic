@@ -12,11 +12,8 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
-  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
   BigInt: any
-  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any
-  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any
 }
 
@@ -48,14 +45,6 @@ export type AdminClusterUpdateInput = {
   explorer?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
   status?: InputMaybe<ClusterStatus>
-}
-
-export type AdminConfig = {
-  __typename?: 'AdminConfig'
-  discordEnabled: Scalars['Boolean']
-  githubEnabled: Scalars['Boolean']
-  googleEnabled: Scalars['Boolean']
-  passwordEnabled: Scalars['Boolean']
 }
 
 export type AdminMintCreateInput = {
@@ -454,7 +443,6 @@ export type Query = {
   adminApps?: Maybe<Array<App>>
   adminCluster?: Maybe<Cluster>
   adminClusters?: Maybe<Array<Cluster>>
-  adminConfig: AdminConfig
   adminUser?: Maybe<User>
   adminUsers?: Maybe<Array<User>>
   adminWallet?: Maybe<Wallet>
@@ -478,6 +466,7 @@ export type Query = {
   userWalletBalance?: Maybe<WalletBalance>
   userWalletBalances?: Maybe<Array<WalletBalance>>
   userWallets?: Maybe<Array<Wallet>>
+  webConfig: WebConfig
 }
 
 export type QueryAdminAppArgs = {
@@ -782,6 +771,14 @@ export enum WalletType {
   Provisioned = 'Provisioned',
 }
 
+export type WebConfig = {
+  __typename?: 'WebConfig'
+  discordEnabled: Scalars['Boolean']
+  githubEnabled: Scalars['Boolean']
+  googleEnabled: Scalars['Boolean']
+  passwordEnabled: Scalars['Boolean']
+}
+
 export type Webhook = {
   __typename?: 'Webhook'
   createdAt: Scalars['DateTime']
@@ -978,6 +975,7 @@ export const TransactionDetails = gql`
     source
     status
     totalDuration
+    tx
     ua
     webhookEventDuration
     webhookEventIncoming {
@@ -1549,9 +1547,9 @@ export const UserClusters = gql`
   ${ClusterDetails}
   ${MintDetails}
 `
-export const AdminConfig = gql`
-  query AdminConfig {
-    adminConfig {
+export const WebConfig = gql`
+  query WebConfig {
+    config: webConfig {
       discordEnabled
       githubEnabled
       googleEnabled
@@ -2664,6 +2662,7 @@ export type TransactionDetailsFragment = {
   source?: string | null
   status: TransactionStatus
   totalDuration?: number | null
+  tx?: string | null
   ua?: string | null
   webhookEventDuration?: number | null
   webhookEventEnd?: any | null
@@ -4964,6 +4963,7 @@ export type UserTransactionQuery = {
     source?: string | null
     status: TransactionStatus
     totalDuration?: number | null
+    tx?: string | null
     ua?: string | null
     webhookEventDuration?: number | null
     webhookEventEnd?: any | null
@@ -5067,6 +5067,7 @@ export type UserTransactionsQuery = {
     source?: string | null
     status: TransactionStatus
     totalDuration?: number | null
+    tx?: string | null
     ua?: string | null
     webhookEventDuration?: number | null
     webhookEventEnd?: any | null
@@ -5886,12 +5887,12 @@ export type UserClustersQuery = {
   }> | null
 }
 
-export type AdminConfigQueryVariables = Exact<{ [key: string]: never }>
+export type WebConfigQueryVariables = Exact<{ [key: string]: never }>
 
-export type AdminConfigQuery = {
+export type WebConfigQuery = {
   __typename?: 'Query'
-  adminConfig: {
-    __typename?: 'AdminConfig'
+  config: {
+    __typename?: 'WebConfig'
     discordEnabled: boolean
     githubEnabled: boolean
     googleEnabled: boolean

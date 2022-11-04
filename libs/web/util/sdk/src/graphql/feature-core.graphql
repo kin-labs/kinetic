@@ -1,0 +1,12 @@
+query WebConfig {
+  config: webConfig {
+    discordEnabled
+    githubEnabled
+    googleEnabled
+    passwordEnabled
+  }
+}
+
+query Uptime {
+  uptime
+}

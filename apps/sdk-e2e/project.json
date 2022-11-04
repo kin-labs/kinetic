@@ -7,7 +7,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": ["nx run api:serve"],
-        "readyWhen": "API is running"
+        "readyWhen": "API is listening"
       }
     },
     "e2e": {

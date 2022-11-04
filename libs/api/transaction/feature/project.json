@@ -12,7 +12,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/transaction/feature"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/transaction/feature"],
       "options": {
         "jestConfig": "libs/api/transaction/feature/jest.config.ts",
         "passWithNoTests": true

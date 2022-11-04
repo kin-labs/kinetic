@@ -28,28 +28,30 @@ export function getProvisionedMints(id: ProvisionedClusterIds, envVars: string[]
     // Show distinct values
     .filter((v, i, a) => a.indexOf(v) === i)
 
-  return symbols.map((symbol) => {
-    const key = `${prefix}${symbol}`
-    const val = process.env[key]
-    if (!val) return undefined
-    const [publicKey, decimals, name] = val.split(',')
-    if (!publicKey || !decimals || !name) return undefined
+  return symbols
+    .map((symbol) => {
+      const key = `${prefix}${symbol}`
+      const val = process.env[key]
+      if (!val) return undefined
+      const [publicKey, decimals, name] = val.split(',')
+      if (!publicKey || !decimals || !name) return undefined
 
-    const airdropSecretKey = process.env[key + '_AIRDROP_SECRET_KEY']
-    const airdropAmount = Number(process.env[key + '_AIRDROP_AMOUNT']) || 1000
-    const airdropMax = Number(process.env[key + '_AIRDROP_MAX']) || 50000
+      const airdropSecretKey = process.env[key + '_AIRDROP_SECRET_KEY']
+      const airdropAmount = Number(process.env[key + '_AIRDROP_AMOUNT']) || 1000
+      const airdropMax = Number(process.env[key + '_AIRDROP_MAX']) || 50000
 
-    return {
-      addMemo: symbol.trim().toUpperCase() === 'KIN',
-      airdropAmount: airdropSecretKey ? airdropAmount : undefined,
-      airdropMax: airdropSecretKey ? airdropMax : undefined,
-      airdropSecretKey,
-      decimals: Number(decimals.trim()),
-      defaultMint: publicKey.trim().startsWith('*'),
-      logoUrl: getMintLogoUrl(symbol),
-      name: name.trim(),
-      publicKey: publicKey.trim().replace('*', ''),
-      symbol: symbol.trim(),
-    }
-  })
+      return {
+        addMemo: symbol.trim().toUpperCase() === 'KIN',
+        airdropAmount: airdropSecretKey ? airdropAmount : undefined,
+        airdropMax: airdropSecretKey ? airdropMax : undefined,
+        airdropSecretKey,
+        decimals: Number(decimals.trim()),
+        defaultMint: publicKey.trim().startsWith('*'),
+        logoUrl: getMintLogoUrl(symbol),
+        name: name.trim(),
+        publicKey: publicKey.trim().replace('*', ''),
+        symbol: symbol.trim(),
+      }
+    })
+    .filter((item) => !!item) as ProvisionedMint[]
 }

@@ -1,7 +1,7 @@
 import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
 import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
-import { Commitment, parseAndSignTokenTransfer, Solana } from '@kin-kinetic/solana'
+import { Commitment, parseAndSignTokenTransfer, removeDecimals, Solana } from '@kin-kinetic/solana'
 import { Injectable, Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
@@ -260,7 +260,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     appEnv: AppEnv & { app: App }
     appKey: string
     transaction: Transaction
-    amount?: number
+    amount?: bigint
     blockhash: string
     commitment: Commitment
     decimals: number
@@ -278,7 +278,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
     // Update Transaction
     const updatedTransaction = await this.updateTransaction(transaction.id, {
-      amount: amount?.toString(),
+      amount: amount ? removeDecimals(amount.toString(), decimals)?.toString() : undefined,
       decimals,
       destination,
       feePayer,

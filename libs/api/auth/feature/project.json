@@ -11,7 +11,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/auth/feature"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/auth/feature"],
       "options": {
         "jestConfig": "libs/api/auth/feature/jest.config.ts",
         "passWithNoTests": true

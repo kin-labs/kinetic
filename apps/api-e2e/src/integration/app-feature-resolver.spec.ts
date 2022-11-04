@@ -32,7 +32,7 @@ import {
   UserUpdateAppEnv,
 } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
-import { randomAppIndex, uniq, uniqInt } from '../helpers/uniq'
+import { randomIndex, uniq, uniqInt } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {
   expect(res).toHaveProperty('text')
@@ -43,26 +43,26 @@ function expectUnauthorized(res: Response) {
 describe('App (e2e)', () => {
   let app: INestApplication
   let appId: string | undefined
-  let appIndex: number | undefined
+  let index: number | undefined
   let token: string | undefined
 
   beforeAll(async () => {
     app = await initializeE2eApp()
     const res = await runLoginQuery(app, ADMIN_USERNAME)
     token = res.body.data.login.token
-    appIndex = randomAppIndex()
+    index = randomIndex()
   })
 
   afterAll(async () => {
     appId = undefined
-    appIndex = undefined
+    index = undefined
     return app.close()
   })
 
   describe('Expected usage', () => {
     describe('CRUD', () => {
       it('should create an app', async () => {
-        const input: AdminAppCreateInput = { index: appIndex, name: `App ${appIndex}` }
+        const input: AdminAppCreateInput = { index, name: `App ${index}` }
 
         return runGraphQLQueryAdmin(app, token, AdminCreateApp, { input })
           .expect(200)
@@ -95,7 +95,7 @@ describe('App (e2e)', () => {
 
       it('should update an app', async () => {
         const input: AdminAppUpdateInput = {
-          name: `App ${appIndex} edited`,
+          name: `App ${index} edited`,
         }
 
         return runGraphQLQueryAdmin(app, token, UserUpdateApp, { appId, input })
@@ -104,7 +104,7 @@ describe('App (e2e)', () => {
             expect(res).toHaveProperty('body.data')
             const data = res.body.data?.updated
 
-            expect(data.index).toEqual(appIndex)
+            expect(data.index).toEqual(index)
             expect(data.name).toEqual(input.name)
             expect(data.envs.length).toEqual(2)
             expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
@@ -128,7 +128,7 @@ describe('App (e2e)', () => {
             const data = res.body.data?.item
 
             expect(data.id).toEqual(appId)
-            expect(data.index).toEqual(appIndex)
+            expect(data.index).toEqual(index)
             expect(data.envs.length).toEqual(2)
             expect(data.envs[0].cluster.type).toEqual(ClusterType.SolanaDevnet)
             expect(data.envs[1].cluster.type).toEqual(ClusterType.Custom)
@@ -151,7 +151,7 @@ describe('App (e2e)', () => {
             const data = res.body.data?.items
 
             expect(data.length).toBeGreaterThan(0)
-            expect(data.find((app) => app.index === appIndex)).toBeDefined()
+            expect(data.find((app) => app.index === index)).toBeDefined()
           })
       }, 10_000)
 
@@ -163,12 +163,12 @@ describe('App (e2e)', () => {
             const data = res.body.data?.deleted
 
             expect(data.id).toEqual(appId)
-            expect(data.index).toEqual(appIndex)
+            expect(data.index).toEqual(index)
           })
       })
 
       it('should create and delete the same app multiple times', async () => {
-        const index = randomAppIndex()
+        const index = randomIndex()
         const input: AdminAppCreateInput = { index, name: `App ${index}` }
 
         // Create First
@@ -194,7 +194,7 @@ describe('App (e2e)', () => {
 
         // Create App
         const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
-          input: { index: randomAppIndex(), name: `test-${email}` },
+          input: { index: randomIndex(), name: `test-${email}` },
         })
         appId = createdApp.body.data.created.id
 
@@ -306,7 +306,7 @@ describe('App (e2e)', () => {
 
         // Create App - but skip automatic wallet generation
         const createdApp = await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
-          input: { index: randomAppIndex(), name, skipWalletCreation: true },
+          input: { index: randomIndex(), name, skipWalletCreation: true },
         })
         appId = createdApp.body.data.created.id
         appEnvId = createdApp.body.data.created.envs[0].id
@@ -338,7 +338,7 @@ describe('App (e2e)', () => {
   describe('Unexpected usage', () => {
     describe('CRUD Constraints', () => {
       it('should not create an app with existing index', async () => {
-        const index = randomAppIndex()
+        const index = randomIndex()
         const input: AdminAppCreateInput = { index, name: `App ${index}` }
 
         // Run once
@@ -460,7 +460,7 @@ describe('App (e2e)', () => {
 
     describe('Unauthenticated Access', () => {
       it('should not create an app', async () => {
-        const input: AdminAppCreateInput = { index: appIndex, name: `App ${appIndex}` }
+        const input: AdminAppCreateInput = { index, name: `App ${index}` }
 
         return runGraphQLQuery(app, AdminCreateApp, { input })
           .expect(200)
@@ -472,7 +472,7 @@ describe('App (e2e)', () => {
       })
 
       it('should not update an app', async () => {
-        const input: AdminAppUpdateInput = { name: `App ${appIndex} edited` }
+        const input: AdminAppUpdateInput = { name: `App ${index} edited` }
 
         return runGraphQLQuery(app, UserUpdateApp, { appId, input })
           .expect(200)
