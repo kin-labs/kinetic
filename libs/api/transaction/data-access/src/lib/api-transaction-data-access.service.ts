@@ -445,7 +445,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   ): Promise<TransactionWithErrors> {
     const solanaStart = new Date()
     try {
-      const signature = await solana.sendRawTransaction(solanaTransaction)
+      const signature = await solana.sendRawTransaction(solanaTransaction, { skipPreflight: true })
       const status = TransactionStatus.Committed
       const solanaCommitted = new Date()
       const solanaCommittedDuration = solanaCommitted.getTime() - solanaStart.getTime()
