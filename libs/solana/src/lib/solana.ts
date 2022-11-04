@@ -185,7 +185,7 @@ export class Solana {
   async sendRawTransaction(tx: SolanaTransaction) {
     await this.simulateTransaction(tx)
     this.config.logger?.log(`Send Raw Transaction`)
-    return this.connection.sendRawTransaction(tx.serialize())
+    return this.connection.sendRawTransaction(tx.serialize(), { skipPreflight: false })
   }
 
   async simulateTransaction(tx: SolanaTransaction) {
