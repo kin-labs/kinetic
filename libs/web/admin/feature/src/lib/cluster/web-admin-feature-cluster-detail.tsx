@@ -22,15 +22,15 @@ export function WebAdminFeatureClusterDetail() {
   }
 
   const tabs = [
-    { label: 'Mints', path: 'mints' },
     { label: 'Settings', path: 'settings' },
+    { label: 'Mints', path: 'mints' },
   ]
 
   return (
     <WebUiPage title={data.item.name || ''} actionLeft={<WebUiPageBackButton />}>
       <WebAdminUiTabs tabs={tabs}>
         <Routes>
-          <Route index element={<Navigate to="mints" replace />} />
+          <Route index element={<Navigate to="settings" replace />} />
           <Route
             path="mints"
             element={<WebAdminFeatureClusterMintsTab cluster={data?.item} mints={data?.item.mints} />}
