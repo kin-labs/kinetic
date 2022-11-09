@@ -1,5 +1,4 @@
 import { Box, Flex, HStack, Spacer, Stack, Tag, TagLabel, TagLeftIcon, Text, useToast } from '@chakra-ui/react'
-import { useColorModeValue } from '@chakra-ui/system'
 import { useWebApp } from '@kin-kinetic/web/app/data-access'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
@@ -12,8 +11,8 @@ import {
   useUserClustersQuery,
   useUserCreateAppEnvMutation,
 } from '@kin-kinetic/web/util/sdk'
-import { Button, ButtonGroup, Field, Form, Stepper, StepperCompleted, StepperStep } from '@saas-ui/react'
-import { FocusEvent, useState } from 'react'
+import { Button, ButtonGroup, Field, Form } from '@saas-ui/react'
+import { FocusEvent, useEffect, useState } from 'react'
 import { GoPrimitiveDot } from 'react-icons/go'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,98 +20,41 @@ export function WebAppEnvCreate() {
   const toast = useToast()
   const navigate = useNavigate()
   const [selectedCluster, setSelectedCluster] = useState<Cluster | undefined>()
-  const [input, setInput] = useState<UserAppEnvCreateInput>()
+  const [input, setInput] = useState<UserAppEnvCreateInput>({ name: '' })
   const [, createAppEnv] = useUserCreateAppEnvMutation()
   const [{ data: clusterData, fetching, error }] = useUserClustersQuery()
   const { app } = useWebApp()
 
-  const borderColor = useColorModeValue('gray.300', 'gray.700')
+  useEffect(() => {
+    if (selectedCluster || !clusterData?.items?.length) return
+    setSelectedCluster(clusterData?.items[0])
+  }, [clusterData?.items, selectedCluster])
 
-  const [step, setStep] = useState(0)
-
-  const back = () => {
-    setStep(step - 1)
-  }
-
-  const next = () => {
-    if (step === 2) {
-      if (!app?.id || !selectedCluster?.id || !input) return
-      createAppEnv({ appId: app.id, clusterId: selectedCluster.id, input })
-        .then((res) => {
-          if (res.data?.created) {
-            toast({ status: 'success', title: 'Environment Created' })
-            setTimeout(() => {
-              navigate(`/apps/${app.id}/environments/${res?.data?.created?.id}`)
-            }, 300)
-          } else {
-            toast({
-              status: 'error',
-              title: 'Something went wrong',
-              description: `${res.error}`,
-            })
-          }
-        })
-        .catch((error) =>
+  const submit = () => {
+    if (!app?.id || !selectedCluster?.id || !input?.name) return
+    createAppEnv({ appId: app.id, clusterId: selectedCluster.id, input })
+      .then((res) => {
+        if (res.data?.created) {
+          toast({ status: 'success', title: 'Environment Created' })
+          setTimeout(() => {
+            navigate(`/apps/${app.id}/environments/${res?.data?.created?.id}`)
+          }, 300)
+        } else {
           toast({
             status: 'error',
             title: 'Something went wrong',
-            description: `${error}`,
-          }),
-        )
-    } else {
-      setStep(step + 1)
-    }
+            description: `${res.error}`,
+          })
+        }
+      })
+      .catch((error) =>
+        toast({
+          status: 'error',
+          title: 'Something went wrong',
+          description: `${error}`,
+        }),
+      )
   }
-
-  const steps = [
-    {
-      title: 'Select Cluster',
-      children: (
-        <Stack my={4} py="4" spacing={{ base: 2, md: 6 }}>
-          {clusterData?.items?.map((cluster) => (
-            <ClusterItem
-              key={cluster.id}
-              cluster={cluster}
-              selectedCluster={selectedCluster}
-              setSelectedCluster={(selected: Cluster) => {
-                setSelectedCluster(selected)
-              }}
-            />
-          ))}
-        </Stack>
-      ),
-    },
-    {
-      title: 'Configure Environment',
-      children: (
-        <Stack my={4} py="4" spacing={{ base: 2, md: 6 }}>
-          {selectedCluster && (
-            <ClusterItem
-              cluster={selectedCluster}
-              selectedCluster={selectedCluster}
-              setSelectedCluster={setSelectedCluster}
-            />
-          )}
-          <EnvironmentNameForm onBlur={(input) => setInput(input)} />
-        </Stack>
-      ),
-    },
-    {
-      title: 'Summary',
-      children: (
-        <Stack my={4} py="4" spacing={{ base: 2, md: 6 }}>
-          {selectedCluster && (
-            <ClusterItem
-              cluster={selectedCluster}
-              selectedCluster={selectedCluster}
-              setSelectedCluster={setSelectedCluster}
-            />
-          )}
-          <EnvironmentNameForm isDisabled onBlur={(input) => setInput(input)} />
-        </Stack>
-      ),
-    },
-  ]
 
   if (!app) {
     return <WebUiAlert status="error" message="App not found :(" />
@@ -132,22 +74,30 @@ export function WebAppEnvCreate() {
   return (
     <WebUiPageFull title="Create Environment">
       <WebUiCard>
-        <Stepper step={step} mb="2">
-          {steps.map((args, i) => (
-            <StepperStep key={i} {...args} />
-          ))}
-          <StepperCompleted py="4">Completed</StepperCompleted>
-        </Stepper>
-        <ButtonGroup width="100%">
-          <Button label="Back" onClick={back} isDisabled={step === 0} />
-          <Spacer />
-          <Button
-            label={step !== 2 ? 'Next' : 'Create'}
-            onClick={next}
-            isDisabled={step >= 3 || !selectedCluster || (step === 1 && !input?.name)}
-            colorScheme="primary"
-          />
-        </ButtonGroup>
+        <Stack spacing={{ base: 2, md: 6 }}>
+          {clusterData?.items
+            ?.filter((cluster) => cluster.status === ClusterStatus.Active)
+            .map((cluster) => (
+              <ClusterItem
+                key={cluster.id}
+                cluster={cluster}
+                selectedCluster={selectedCluster}
+                setSelectedCluster={(selected: Cluster) => {
+                  setSelectedCluster(selected)
+                }}
+              />
+            ))}
+          <EnvironmentNameForm onBlur={(input) => setInput(input)} />
+          <ButtonGroup width="100%">
+            <Spacer />
+            <Button
+              label="Create"
+              onClick={submit}
+              isDisabled={!selectedCluster || !input.name}
+              colorScheme="primary"
+            />
+          </ButtonGroup>
+        </Stack>
       </WebUiCard>
     </WebUiPageFull>
   )
