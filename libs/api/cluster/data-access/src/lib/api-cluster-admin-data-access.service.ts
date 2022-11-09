@@ -1,5 +1,5 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { MintType, Prisma } from '@prisma/client'
 import { AdminClusterCreateInput } from './dto/admin-cluster-create.input'
 import { AdminClusterUpdateInput } from './dto/admin-cluster-update.input'
@@ -8,6 +8,7 @@ import { ClusterStatus } from './entity/cluster-status.enum'
 
 @Injectable()
 export class ApiClusterAdminDataAccessService {
+  private readonly logger = new Logger(ApiClusterAdminDataAccessService.name)
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async adminCreateCluster(userId: string, data: AdminClusterCreateInput) {
@@ -40,7 +41,17 @@ export class ApiClusterAdminDataAccessService {
 
   async adminUpdateCluster(userId: string, clusterId: string, data: AdminClusterUpdateInput) {
     await this.data.ensureAdminUser(userId)
-    return this.data.cluster.update({ where: { id: clusterId }, data })
+    const updated = await this.data.cluster.update({ where: { id: clusterId }, data })
+    const envs = await this.data.appEnv.findMany({
+      where: { clusterId: updated.id },
+      include: { app: true },
+    })
+    for (const env of envs) {
+      const appKey = this.data.getAppKey(env.name, env.app.index)
+      this.data.connections.delete(appKey)
+      this.logger.log('Deleting cached connection for env', appKey)
+    }
+    return updated
   }
 
   async adminMintCreate(userId: string, input: AdminMintCreateInput) {

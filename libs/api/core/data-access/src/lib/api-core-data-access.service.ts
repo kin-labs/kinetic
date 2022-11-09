@@ -217,6 +217,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
           logger: getVerboseLogger(`@kin-kinetic/solana:${appKey}`),
         }),
       )
+      this.logger.log(`Created new connection for ${appKey}`)
     }
     return this.connections.get(appKey)
   }
