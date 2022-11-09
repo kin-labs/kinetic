@@ -106,7 +106,7 @@ export function WebToolboxUiKeypairCard({ keypair, explorer }: { keypair?: Keypa
           <WebToolboxUiExplorerLink href={explorer} />
         </ButtonGroup>
         <ButtonGroup>
-          <Button size="lg" variant="outline" disabled={!keypair?.mnemonic} onClick={() => showDetails(!details)}>
+          <Button size="lg" variant="outline" onClick={() => showDetails(!details)}>
             <Text>Manage Keypairs</Text>
           </Button>
         </ButtonGroup>
