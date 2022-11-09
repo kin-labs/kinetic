@@ -1,5 +1,6 @@
 import { AirdropConfig } from '@kin-kinetic/api/airdrop/util'
 import { hashPassword } from '@kin-kinetic/api/auth/util'
+import { ProvisionedCluster } from '@kin-kinetic/api/cluster/util'
 import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
 import { getVerboseLogger } from '@kin-kinetic/api/core/util'
 import { Keypair } from '@kin-kinetic/keypair'
@@ -292,22 +293,23 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   private async configureDefaultClusters() {
     return Promise.all(
-      this.config.provisionedClusters
-        .filter((cluster) => !!cluster)
-        .map((item) => {
-          const { mints, ...cluster } = item
-          return this.cluster
-            .upsert({
-              where: { id: cluster.id },
-              update: { ...omit(cluster, 'status') },
-              create: { ...cluster },
-            })
-            .then((res) => {
-              this.logger.log(`Configured cluster ${res.name} (${res.status})`)
-              return this.configureMints(mints)
-            })
-        }),
+      this.config.provisionedClusters.filter((cluster) => !!cluster).map((item) => this.configureDefaultCluster(item)),
     )
+  }
+
+  private async configureDefaultCluster(item: ProvisionedCluster) {
+    const { mints, ...cluster } = item
+    const existing = await this.cluster.findUnique({ where: { id: cluster.id } })
+
+    if (existing) {
+      this.logger.log(`Cluster ${existing.name} already configured: (${existing.status})`)
+      return
+    }
+
+    return this.cluster.create({ data: cluster }).then((res) => {
+      this.logger.log(`Configured cluster ${res.name} (${res.status})`)
+      return this.configureMints(mints)
+    })
   }
 
   private async configureMints(mints: Prisma.MintCreateInput[]) {
