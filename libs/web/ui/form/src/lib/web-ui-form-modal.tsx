@@ -30,7 +30,7 @@ export function WebUiFormModal<T>({
   title = title || submitLabel
   return (
     <>
-      {button && <Button onClick={() => disclosure?.onOpen()}>{submitLabel}</Button>}
+      {button && <Button onClick={() => disclosure?.onOpen()}>{title}</Button>}
       <FormDialog
         ref={ref}
         title={title}
@@ -42,7 +42,7 @@ export function WebUiFormModal<T>({
           ref?.current?.reset()
           disclosure?.onClose()
         }}
-        {...yupForm(schema)}
+        {...yupForm(schema, { stripUnknown: true })}
       />
     </>
   )
