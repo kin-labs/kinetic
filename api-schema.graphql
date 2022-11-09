@@ -42,6 +42,22 @@ input AdminMintCreateInput {
   symbol: String!
 }
 
+input AdminMintUpdateInput {
+  addMemo: Boolean
+  address: String
+  airdropAmount: Int
+  airdropMax: Int
+  airdropSecretKey: String
+  coinGeckoId: String
+  decimals: Int
+  default: Boolean
+  enabled: Boolean
+  logoUrl: String
+  name: String
+  order: Int
+  symbol: String
+}
+
 input AdminUserCreateInput {
   avatarUrl: String
   email: String!
@@ -212,6 +228,7 @@ type Mutation {
   adminDeleteUser(userId: String!): User
   adminDeleteWallet(walletId: String!): Wallet
   adminMintCreate(input: AdminMintCreateInput!): Cluster
+  adminMintUpdate(input: AdminMintUpdateInput!, mintId: String!): Cluster
   adminUpdateApp(appId: String!, input: AdminAppUpdateInput!): App
   adminUpdateCluster(clusterId: String!, input: AdminClusterUpdateInput!): Cluster
   adminUpdateUser(input: AdminUserUpdateInput!, userId: String!): User

@@ -5,6 +5,7 @@ import {
   AdminClusterCreateInput,
   AdminClusterUpdateInput,
   AdminMintCreateInput,
+  AdminMintUpdateInput,
 } from '@kin-kinetic/api/cluster/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
@@ -18,6 +19,11 @@ export class ApiClusterAdminFeatureResolver {
   @Mutation(() => Cluster, { nullable: true })
   adminMintCreate(@CtxUser() user: User, @Args('input') input: AdminMintCreateInput) {
     return this.service.adminMintCreate(user.id, input)
+  }
+
+  @Mutation(() => Cluster, { nullable: true })
+  adminMintUpdate(@CtxUser() user: User, @Args('mintId') mintId: string, @Args('input') input: AdminMintUpdateInput) {
+    return this.service.adminMintUpdate(user.id, mintId, input)
   }
 
   @Mutation(() => Cluster, { nullable: true })

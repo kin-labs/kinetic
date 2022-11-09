@@ -4,6 +4,7 @@ import { MintType, Prisma } from '@prisma/client'
 import { AdminClusterCreateInput } from './dto/admin-cluster-create.input'
 import { AdminClusterUpdateInput } from './dto/admin-cluster-update.input'
 import { AdminMintCreateInput } from './dto/admin-mint-create.input'
+import { AdminMintUpdateInput } from './dto/admin-mint-update.input'
 import { ClusterStatus } from './entity/cluster-status.enum'
 
 @Injectable()
@@ -55,6 +56,7 @@ export class ApiClusterAdminDataAccessService {
   }
 
   async adminMintCreate(userId: string, input: AdminMintCreateInput) {
+    await this.data.ensureAdminUser(userId)
     const cluster = await this.adminCluster(userId, input.clusterId)
     if (!cluster) {
       throw new BadRequestException('Cluster not found')
@@ -81,6 +83,14 @@ export class ApiClusterAdminDataAccessService {
       data: { mints: { create: mint } },
       where: { id: cluster.id },
       include: { mints: true },
+    })
+  }
+
+  async adminMintUpdate(userId: string, mintId: string, input: AdminMintUpdateInput) {
+    await this.data.ensureAdminUser(userId)
+    return this.data.mint.update({
+      where: { id: mintId },
+      data: { ...input },
     })
   }
 }

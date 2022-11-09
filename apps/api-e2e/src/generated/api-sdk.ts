@@ -57,6 +57,16 @@ export type AdminMintCreateInput = {
   symbol: Scalars['String']
 }
 
+export type AdminMintUpdateInput = {
+  address?: InputMaybe<Scalars['String']>
+  coinGeckoId?: InputMaybe<Scalars['String']>
+  decimals?: InputMaybe<Scalars['Int']>
+  logoUrl?: InputMaybe<Scalars['String']>
+  name?: InputMaybe<Scalars['String']>
+  symbol?: InputMaybe<Scalars['String']>
+  type?: InputMaybe<MintType>
+}
+
 export type AdminUserCreateInput = {
   avatarUrl?: InputMaybe<Scalars['String']>
   email: Scalars['String']
@@ -222,6 +232,7 @@ export type Mutation = {
   adminDeleteUser?: Maybe<User>
   adminDeleteWallet?: Maybe<Wallet>
   adminMintCreate?: Maybe<Cluster>
+  adminMintUpdate?: Maybe<Cluster>
   adminUpdateApp?: Maybe<App>
   adminUpdateCluster?: Maybe<Cluster>
   adminUpdateUser?: Maybe<User>
@@ -288,6 +299,11 @@ export type MutationAdminDeleteWalletArgs = {
 
 export type MutationAdminMintCreateArgs = {
   input: AdminMintCreateInput
+}
+
+export type MutationAdminMintUpdateArgs = {
+  input: AdminMintUpdateInput
+  mintId: Scalars['String']
 }
 
 export type MutationAdminUpdateAppArgs = {
