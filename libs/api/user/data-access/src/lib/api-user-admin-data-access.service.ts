@@ -10,6 +10,9 @@ export class ApiUserAdminDataAccessService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   async adminCreateUser(adminId: string, input: AdminUserCreateInput) {
+    if (!this.data.config.authPasswordEnabled) {
+      throw new BadRequestException(`Password login is disabled.`)
+    }
     await this.data.ensureAdminUser(adminId)
     const { email: inputEmail, ...data } = input
     const email = inputEmail.trim()
