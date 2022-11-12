@@ -1,4 +1,4 @@
-import { Flex, Stack, Text, useToast } from '@chakra-ui/react'
+import { Box, Flex, Stack, Text, useToast } from '@chakra-ui/react'
 import { WebAuthDiscordButton, WebAuthGitHubButton, WebAuthGoogleButton } from '@kin-kinetic/web/auth/ui'
 import { useWebConfig } from '@kin-kinetic/web/shell/data-access'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
@@ -42,6 +42,20 @@ export function WebAuthFeature() {
           {config?.discordEnabled && <WebAuthDiscordButton />}
           {config?.githubEnabled && <WebAuthGitHubButton />}
           {config?.googleEnabled && <WebAuthGoogleButton />}
+          {config?.passwordEnabled && (
+            <WebUiCard w={400} p={0}>
+              <WebUiAlert status={'error'}>
+                <Stack>
+                  <Box textAlign="center">
+                    Authentication using username and password is <strong>NOT SUPPORTED</strong> for production usage.
+                  </Box>
+                  <Box textAlign="center">
+                    Please configure Kinetic to use one of the oAuth providers and disable password login.
+                  </Box>
+                </Stack>
+              </WebUiAlert>
+            </WebUiCard>
+          )}
           {config?.passwordEnabled && (
             <WebUiCard w={400}>
               <AuthForm onError={onError} onSuccess={onSuccess} />

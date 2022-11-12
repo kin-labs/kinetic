@@ -39,6 +39,10 @@ async function bootstrap() {
     )
 
     Logger.log(`🔐 Password Authentication ${config.authPasswordEnabled ? `ENABLED` : `DISABLED`}`)
+    if (config.authPasswordEnabled) {
+      Logger.warn(`⛔️ Authentication using username and password is NOT SUPPORTED for production usage.`)
+      Logger.warn(`⛔️ Please configure Kinetic to use one of the oAuth providers and disable password login.`)
+    }
     Logger.log(
       `🔐 Discord Authentication ${
         config.discordEnabled ? `ENABLED. Callback ${config.discordCallbackUrl}` : 'DISABLED'
