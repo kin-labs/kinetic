@@ -91,10 +91,7 @@ export class ApiConfigDataAccessService {
   get cors() {
     return {
       credentials: true,
-      origin: (origin, callback) => {
-        this.logger.verbose(`CORS request from origin ${origin}, enabled bypass: ${this.corsBypass}`)
-        return callback(null, this.corsBypass ? origin : this.corsOrigins)
-      },
+      origin: (origin, callback) => callback(null, this.corsBypass ? origin : this.corsOrigins),
     }
   }
 
