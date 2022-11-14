@@ -1088,21 +1088,23 @@
             "nullable": true
           },
           "innerInstructions": {
+            "nullable": true,
             "type": "array",
             "items": {
               "type": "string"
             }
           },
           "preBalances": {
+            "nullable": true,
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "number"
             }
           },
           "postBalances": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "number"
             }
           },
           "logMessages": {
@@ -1131,7 +1133,7 @@
             "nullable": true
           }
         },
-        "required": ["innerInstructions", "preBalances", "postBalances"]
+        "required": ["postBalances"]
       },
       "TransactionResponse": {
         "type": "object",
