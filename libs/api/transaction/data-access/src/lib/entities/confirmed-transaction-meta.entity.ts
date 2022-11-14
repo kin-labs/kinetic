@@ -7,9 +7,9 @@ import { TokenBalance } from './token-balance.entity'
 export class ConfirmedTransactionMeta {
   @ApiProperty({ nullable: true, required: false })
   fee: number | null
-  @ApiProperty()
+  @ApiProperty({ nullable: true, required: false })
   innerInstructions?: CompiledInnerInstruction[] | null
-  @ApiProperty()
+  @ApiProperty({ nullable: true, required: false })
   preBalances: number[]
   @ApiProperty()
   postBalances: number[]

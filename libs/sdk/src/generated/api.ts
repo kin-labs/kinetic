@@ -399,19 +399,19 @@ export interface ConfirmedTransactionMeta {
    * @type {Array<string>}
    * @memberof ConfirmedTransactionMeta
    */
-  innerInstructions: Array<string>
+  innerInstructions?: Array<string> | null
   /**
    *
-   * @type {Array<string>}
+   * @type {Array<number>}
    * @memberof ConfirmedTransactionMeta
    */
-  preBalances: Array<string>
+  preBalances?: Array<number> | null
   /**
    *
-   * @type {Array<string>}
+   * @type {Array<number>}
    * @memberof ConfirmedTransactionMeta
    */
-  postBalances: Array<string>
+  postBalances: Array<number>
   /**
    *
    * @type {Array<string>}
