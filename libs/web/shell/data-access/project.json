@@ -1,4 +1,5 @@
 {
+  "name": "web-shell-data-access",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/shell/data-access/src",
   "projectType": "library",

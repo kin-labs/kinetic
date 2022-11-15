@@ -1,4 +1,5 @@
 {
+  "name": "web-toolbox-feature",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/toolbox/feature/src",
   "projectType": "library",

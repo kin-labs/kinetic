@@ -1,4 +1,5 @@
 {
+  "name": "web-ui-container",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/ui/container/src",
   "projectType": "library",

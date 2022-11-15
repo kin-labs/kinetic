@@ -1,4 +1,5 @@
 {
+  "name": "web-ui-page",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/ui/page/src",
   "projectType": "library",

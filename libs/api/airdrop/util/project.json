@@ -1,4 +1,5 @@
 {
+  "name": "api-airdrop-util",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/api/airdrop/util/src",
   "projectType": "library",

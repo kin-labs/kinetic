@@ -1,4 +1,5 @@
 {
+  "name": "web-ui-loader",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/ui/loader/src",
   "projectType": "library",

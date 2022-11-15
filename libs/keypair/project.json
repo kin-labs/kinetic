@@ -1,4 +1,5 @@
 {
+  "name": "keypair",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/keypair/src",
   "projectType": "library",

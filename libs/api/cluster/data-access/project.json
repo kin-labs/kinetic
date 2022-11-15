@@ -1,4 +1,5 @@
 {
+  "name": "api-cluster-data-access",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/api/cluster/data-access/src",
   "targets": {

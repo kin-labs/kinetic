@@ -1,4 +1,5 @@
 {
+  "name": "web-shell-feature",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/shell/feature/src",
   "projectType": "library",

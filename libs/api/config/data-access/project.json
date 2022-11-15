@@ -1,4 +1,5 @@
 {
+  "name": "api-config-data-access",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/api/config/data-access/src",
   "projectType": "library",

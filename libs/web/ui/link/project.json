@@ -1,4 +1,5 @@
 {
+  "name": "web-ui-link",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/ui/link/src",
   "projectType": "library",

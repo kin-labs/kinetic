@@ -1,4 +1,5 @@
 {
+  "name": "web-keypair-ui",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/keypair/ui/src",
   "projectType": "library",

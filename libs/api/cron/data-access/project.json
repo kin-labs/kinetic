@@ -1,4 +1,5 @@
 {
+  "name": "api-cron-data-access",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/api/cron/data-access/src",
   "projectType": "library",

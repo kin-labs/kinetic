@@ -1,4 +1,5 @@
 {
+  "name": "api-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/api-e2e/src",
   "projectType": "application",

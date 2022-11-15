@@ -1,4 +1,5 @@
 {
+  "name": "web-dev-feature",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/dev/feature/src",
   "projectType": "library",

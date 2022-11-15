@@ -1,4 +1,5 @@
 {
+  "name": "api-wallet-data-access",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/api/wallet/data-access/src",
   "targets": {

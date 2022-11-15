@@ -1,4 +1,5 @@
 {
+  "name": "web-toolbox-ui",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/web/toolbox/ui/src",
   "projectType": "library",
