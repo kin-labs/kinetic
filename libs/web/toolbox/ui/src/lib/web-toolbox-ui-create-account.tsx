@@ -4,10 +4,17 @@ import { Button, ButtonGroup } from '@saas-ui/react'
 import { useState } from 'react'
 import { WebToolboxUiCard } from './web-toolbox-ui-card'
 
-export function WebToolboxUiCreateAccount({ keypair, sdk }: { keypair: Keypair; sdk: KineticSdk }) {
+export function WebToolboxUiCreateAccount({
+  finished,
+  keypair,
+  sdk,
+}: {
+  finished: () => void
+  keypair: Keypair
+  sdk: KineticSdk
+}) {
   const [error, setError] = useState<unknown | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
-
   const [response, setResponse] = useState<Transaction | undefined>()
 
   function createAccount() {
@@ -16,7 +23,7 @@ export function WebToolboxUiCreateAccount({ keypair, sdk }: { keypair: Keypair; 
     setLoading(true)
 
     sdk
-      .createAccount({ owner: keypair })
+      .createAccount({ owner: keypair, referenceType: 'Toolbox Create', referenceId: Date.now().toString() })
       .then((res) => {
         setResponse(res)
         if (res.errors?.length) {
@@ -31,7 +38,13 @@ export function WebToolboxUiCreateAccount({ keypair, sdk }: { keypair: Keypair; 
   }
 
   return (
-    <WebToolboxUiCard response={response} error={error}>
+    <WebToolboxUiCard
+      response={response}
+      error={error}
+      finished={finished}
+      sdk={sdk}
+      signature={response?.signature ? response?.signature : undefined}
+    >
       <ButtonGroup>
         <Button variant="primary" isLoading={loading} size="lg" onClick={createAccount}>
           Create Account

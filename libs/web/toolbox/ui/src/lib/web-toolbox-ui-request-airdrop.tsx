@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk, RequestAirdropResponse } from '@kin-kinetic/sdk'
+import { Commitment } from '@kin-kinetic/solana'
 
 import { ButtonGroup, Field, Form, SubmitButton } from '@saas-ui/react'
 import { useState } from 'react'
@@ -28,6 +29,7 @@ export function WebToolboxUiRequestAirdrop({
       .requestAirdrop({
         account: keypair.publicKey,
         amount: amount,
+        commitment: Commitment.Confirmed,
         mint: selectedMint?.publicKey,
       })
       .then((res) => {
@@ -45,6 +47,8 @@ export function WebToolboxUiRequestAirdrop({
       response={response}
       error={error}
       explorer={response?.signature && sdk?.getExplorerUrl(`tx/${response?.signature}`)}
+      sdk={sdk}
+      signature={response?.signature}
     >
       <Form
         defaultValues={{

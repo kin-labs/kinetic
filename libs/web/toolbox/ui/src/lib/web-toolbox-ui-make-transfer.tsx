@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
-import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
+import { AppConfigMint, KineticSdk, Transaction } from '@kin-kinetic/sdk'
 import { Button, ButtonGroup, Field, Form, SubmitButton } from '@saas-ui/react'
 import { useState } from 'react'
 import { WebToolboxUiCard } from './web-toolbox-ui-card'
@@ -16,7 +16,7 @@ export function WebToolboxUiMakeTransfer({
 }) {
   const [error, setError] = useState<unknown | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [response, setResponse] = useState<any | undefined>()
+  const [response, setResponse] = useState<Transaction | undefined>()
 
   const onSubmit = ({ amount, destination }: { amount: string; destination: string }) => {
     setResponse(undefined)
@@ -44,7 +44,9 @@ export function WebToolboxUiMakeTransfer({
     <WebToolboxUiCard
       response={response}
       error={error}
-      explorer={response?.signature && sdk?.getExplorerUrl(`tx/${response?.signature}`)}
+      explorer={response?.signature ? sdk?.getExplorerUrl(`tx/${response?.signature}`) : undefined}
+      sdk={sdk}
+      signature={response?.signature ? response?.signature : undefined}
     >
       <Form defaultValues={{ amount: '1000', destination: '' }} onSubmit={onSubmit}>
         <ButtonGroup>

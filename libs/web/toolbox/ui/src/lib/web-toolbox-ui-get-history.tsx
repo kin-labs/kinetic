@@ -48,11 +48,11 @@ export function WebToolboxUiGetHistory({
           <Button variant="primary" size="lg" isLoading={loading} onClick={click}>
             Get History
           </Button>
-          {response?.length && (
-            <Button size="lg" disabled={true}>
-              History for {response?.length} {selectedMint?.symbol} account(s)
-            </Button>
-          )}
+          <Button size="lg" disabled={true}>
+            {(response?.length ?? 0) > 0
+              ? `History for ${response?.length} ${selectedMint?.symbol} account(s)`
+              : `No history for account`}
+          </Button>
         </ButtonGroup>
         {response?.length && (
           <Box py={4}>

@@ -1,7 +1,7 @@
 import { Stack } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { WebToolboxUiAppConfig } from './web-toolbox-ui-app-config'
 import { WebToolboxUiCreateAccount } from './web-toolbox-ui-create-account'
 import { WebToolboxUiGetBalance } from './web-toolbox-ui-get-balance'
@@ -14,6 +14,16 @@ import { WebToolboxUiRequestAirdrop } from './web-toolbox-ui-request-airdrop'
 
 export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticSdk }) {
   const [selectedMint, setSelectedMint] = useState<AppConfigMint | undefined>(sdk?.config?.mint)
+  const [activeAccount, setActiveAccount] = useState<boolean>(false)
+  const [refresh, setRefresh] = useState<boolean>(false)
+
+  useEffect(() => {
+    console.log(`WebToolboxUi: Public key updated ${keypair.publicKey} or refreshed ${refresh}`)
+    sdk.getBalance({ account: keypair.publicKey }).then((res) => {
+      setActiveAccount(res.tokens.length > 0)
+    })
+  }, [keypair.publicKey, refresh])
+
   return (
     <Stack spacing={{ base: 2, md: 6 }}>
       {sdk.config && (
@@ -22,18 +32,23 @@ export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticS
       {keypair && (
         <WebToolboxUiKeypairCard keypair={keypair} explorer={sdk.getExplorerUrl(`address/${keypair.publicKey}`)} />
       )}
-      <WebToolboxUiGetBalance keypair={keypair} sdk={sdk} />
-      <WebToolboxUiCreateAccount keypair={keypair} sdk={sdk} />
-      <WebToolboxUiGetHistory keypair={keypair} sdk={sdk} selectedMint={selectedMint} />
-      <WebToolboxUiGetTokenAccounts selectedMint={selectedMint} keypair={keypair} sdk={sdk} />
-      <WebToolboxUiGetTransaction sdk={sdk} />
-      <WebToolboxUiRequestAirdrop selectedMint={selectedMint} keypair={keypair} sdk={sdk} />
-      <WebToolboxUiMakeTransfer keypair={keypair} sdk={sdk} selectedMint={selectedMint} />
-      {/*<WebToolboxUiMakeTransferBatch*/}
-      {/*  keypair={keypair}*/}
-      {/*  sdk={sdk}*/}
-      {/*  selectedMint={selectedMint}*/}
-      {/*/>*/}
+      {activeAccount ? (
+        <Stack spacing={{ base: 2, md: 6 }}>
+          <WebToolboxUiGetBalance keypair={keypair} sdk={sdk} />
+          <WebToolboxUiMakeTransfer keypair={keypair} sdk={sdk} selectedMint={selectedMint} />
+          {/*<WebToolboxUiMakeTransferBatch*/}
+          {/*  keypair={keypair}*/}
+          {/*  sdk={sdk}*/}
+          {/*  selectedMint={selectedMint}*/}
+          {/*/>*/}
+          <WebToolboxUiRequestAirdrop selectedMint={selectedMint} keypair={keypair} sdk={sdk} />
+          <WebToolboxUiGetTransaction sdk={sdk} />
+          <WebToolboxUiGetHistory keypair={keypair} sdk={sdk} selectedMint={selectedMint} />
+          <WebToolboxUiGetTokenAccounts selectedMint={selectedMint} keypair={keypair} sdk={sdk} />
+        </Stack>
+      ) : (
+        <WebToolboxUiCreateAccount keypair={keypair} sdk={sdk} finished={() => setRefresh(!refresh)} />
+      )}
     </Stack>
   )
 }
