@@ -31,5 +31,5 @@ export const validationSchema = Joi.object({
   SOLANA_MAINNET_ENABLED: Joi.boolean().default(false),
   SOLANA_MAINNET_MINT_KIN: Joi.string().default('*kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6,5,Kin'),
   SOLANA_MAINNET_RPC_ENDPOINT: Joi.string().default('mainnet-beta'),
-  WEB_URL: Joi.string().required().error(new Error(`WEB_URL is required.`)),
+  WEB_URL: Joi.string(),
 })

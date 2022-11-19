@@ -1,5 +1,10 @@
 import { NAME, VERSION } from '@kin-kinetic/api/core/data-access'
 
+// Remove trailing slashes from the URLs to avoid double slashes
+const API_URL = process.env.API_URL?.replace(/\/$/, '')
+// Infer the WEB URL from the API_URL if it's not set
+const WEB_URL = process.env.WEB_URL?.replace(/\/$/, '') ?? API_URL?.replace('/api', '')
+
 // Get the origins from the ENV
 const origins: string[] = process.env.CORS_ORIGINS?.includes(',')
   ? process.env.CORS_ORIGINS?.split(',')
@@ -18,7 +23,7 @@ export default () => ({
       level: process.env.LOG_LEVEL,
     },
     name: NAME,
-    url: process.env.API_URL,
+    url: API_URL,
     version: VERSION,
   },
   auth: {
@@ -74,6 +79,6 @@ export default () => ({
     },
   },
   web: {
-    url: process.env.WEB_URL,
+    url: WEB_URL,
   },
 })
