@@ -1098,13 +1098,13 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "type": "number"
+              "type": "integer"
             }
           },
           "postBalances": {
             "type": "array",
             "items": {
-              "type": "number"
+              "type": "integer"
             }
           },
           "logMessages": {

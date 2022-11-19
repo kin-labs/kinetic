@@ -9,9 +9,9 @@ export class ConfirmedTransactionMeta {
   fee: number | null
   @ApiProperty({ nullable: true, required: false })
   innerInstructions?: CompiledInnerInstruction[] | null
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ isArray: true, nullable: true, required: false, type: 'integer' })
   preBalances: number[]
-  @ApiProperty()
+  @ApiProperty({ isArray: true, type: 'integer' })
   postBalances: number[]
   @ApiProperty({ nullable: true, required: false })
   logMessages?: string[] | null
