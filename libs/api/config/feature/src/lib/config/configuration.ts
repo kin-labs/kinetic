@@ -5,15 +5,15 @@ const API_URL = process.env.API_URL?.replace(/\/$/, '')
 // Infer the WEB URL from the API_URL if it's not set
 const WEB_URL = process.env.WEB_URL?.replace(/\/$/, '') ?? API_URL?.replace('/api', '')
 
-// Get the origins from the ENV
-const origins: string[] = process.env.CORS_ORIGINS?.includes(',')
-  ? process.env.CORS_ORIGINS?.split(',')
-  : [process.env.CORS_ORIGINS]
+const domains: string[] = getCookieDomains()
 
-// Get the cookie domains from the ENV
-const domains: string[] = process.env.COOKIE_DOMAINS?.includes(',')
-  ? process.env.COOKIE_DOMAINS?.split(',')
-  : [process.env.COOKIE_DOMAINS]
+// Infer the cookie domain from the API_URL if it's not set
+if (!domains.length) {
+  const { hostname } = new URL(API_URL)
+  domains.push(hostname)
+}
+
+const origins: string[] = getCorsOrigins()
 
 export default () => ({
   api: {
@@ -82,3 +82,18 @@ export default () => ({
     url: WEB_URL,
   },
 })
+
+// Get the cookie domains from the ENV
+function getCookieDomains() {
+  return getFromEnvironment('COOKIE_DOMAINS').filter(Boolean)
+}
+
+// Get the origins from the ENV
+function getCorsOrigins() {
+  return getFromEnvironment('CORS_ORIGINS').filter(Boolean)
+}
+
+// Get the values from the ENV
+function getFromEnvironment(key: string) {
+  return process.env[key]?.includes(',') ? process.env[key]?.split(',') : [process.env[key]]
+}

@@ -4,7 +4,7 @@ export const validationSchema = Joi.object({
   API_URL: Joi.string().required().error(new Error(`API_URL is required.`)),
   AUTH_PASSWORD_ENABLED: Joi.boolean().default('false'),
   AUTH_USERS: Joi.string().default(''),
-  COOKIE_DOMAINS: Joi.string().required().error(new Error(`COOKIE_DOMAINS is required.`)),
+  COOKIE_DOMAINS: Joi.string(),
   COOKIE_NAME: Joi.string().default('__session'),
   CORS_BYPASS: Joi.boolean().default('false'),
   DATABASE_URL: Joi.string().required(),
