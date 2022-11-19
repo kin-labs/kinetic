@@ -1,9 +1,9 @@
 import { NAME, VERSION } from '@kin-kinetic/api/core/data-access'
 
 // Remove trailing slashes from the URLs to avoid double slashes
-const API_URL = process.env.API_URL?.replace(/\/$/, '')
+const API_URL = getUrl('API_URL')
 // Infer the WEB URL from the API_URL if it's not set
-const WEB_URL = process.env.WEB_URL?.replace(/\/$/, '') ?? API_URL?.replace('/api', '')
+const WEB_URL = getUrl('WEB_URL') ?? API_URL?.replace('/api', '')
 
 const domains: string[] = getCookieDomains()
 
@@ -31,7 +31,7 @@ export default () => ({
     users: process.env.AUTH_USERS || '',
   },
   cors: {
-    bypass: process.env.CORS_BYPASS?.toLowerCase() !== 'false',
+    bypass: !origins.length,
     origins,
   },
   cookie: {
@@ -96,4 +96,8 @@ function getCorsOrigins() {
 // Get the values from the ENV
 function getFromEnvironment(key: string) {
   return process.env[key]?.includes(',') ? process.env[key]?.split(',') : [process.env[key]]
+}
+
+function getUrl(key: string) {
+  return process.env[key]?.replace(/\/$/, '')
 }

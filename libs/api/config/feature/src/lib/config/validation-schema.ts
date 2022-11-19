@@ -4,9 +4,7 @@ export const validationSchema = Joi.object({
   API_URL: Joi.string().required().error(new Error(`API_URL is required.`)),
   AUTH_PASSWORD_ENABLED: Joi.boolean().default('false'),
   AUTH_USERS: Joi.string().default(''),
-  COOKIE_DOMAINS: Joi.string(),
   COOKIE_NAME: Joi.string().default('__session'),
-  CORS_BYPASS: Joi.boolean().default('false'),
   DATABASE_URL: Joi.string().required(),
   GITHUB_ENABLED: Joi.boolean().default('false'),
   GOOGLE_ENABLED: Joi.boolean().default('false'),
@@ -31,5 +29,4 @@ export const validationSchema = Joi.object({
   SOLANA_MAINNET_ENABLED: Joi.boolean().default(false),
   SOLANA_MAINNET_MINT_KIN: Joi.string().default('*kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6,5,Kin'),
   SOLANA_MAINNET_RPC_ENDPOINT: Joi.string().default('mainnet-beta'),
-  WEB_URL: Joi.string(),
 })
