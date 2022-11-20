@@ -34,17 +34,11 @@ export class Keypair {
     return this.fromSecretKey(bs58.encode(Uint8Array.from(byteArray)))
   }
 
-  static fromMnemonicSeed(mnemonic: string): Keypair {
-    const seed = bip39.mnemonicToSeedSync(mnemonic, '')
-
-    return this.fromSeed(Buffer.from(seed).slice(0, 32))
-  }
-
   static fromMnemonic(mnemonic: string): Keypair {
     return this.fromMnemonicSet(mnemonic)[0]
   }
 
-  static fromMnemonicSet(mnemonic: string, from = 0, to = 10): Keypair[] {
+  static fromMnemonicSet(mnemonic: string, from = 0, to = 1): Keypair[] {
     // Always start with zero as minimum
     from = from < 0 ? 0 : from
     // Always generate at least 1
@@ -64,6 +58,7 @@ export class Keypair {
 
   static derive(seed: Buffer, path: string): Keypair {
     const hd = HDKey.fromMasterSeed(seed.toString('hex'))
+
     return Keypair.fromSeed(Buffer.from(hd.derive(path).privateKey))
   }
 
