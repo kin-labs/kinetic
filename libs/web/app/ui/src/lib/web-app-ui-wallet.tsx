@@ -77,9 +77,13 @@ export function WebAppUiWallet({ appEnvId, appId, wallet }: WebAppUiWalletProps)
           </Button>
           {wallet?.appMints?.length ? (
             <AvatarGroup size="sm">
-              {wallet?.appMints?.map((appMint) => (
-                <Avatar key={appMint.id} name={appMint?.mint?.symbol || ''} src={appMint?.mint?.logoUrl || ''} />
-              ))}
+              {wallet?.appMints?.map((appMint) =>
+                appMint?.mint?.logoUrl ? (
+                  <Avatar key={appMint.id} name={appMint?.mint?.symbol || ''} src={appMint?.mint?.logoUrl || ''} />
+                ) : (
+                  <WebUiIdenticon key={appMint.id} name={appMint?.mint?.symbol || ''} />
+                ),
+              )}
             </AvatarGroup>
           ) : (
             <Flex>

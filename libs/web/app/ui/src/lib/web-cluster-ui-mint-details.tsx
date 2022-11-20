@@ -1,5 +1,6 @@
 import { Avatar, Flex, Text } from '@chakra-ui/react'
 import { WebUiAddress } from '@kin-kinetic/web/ui/address'
+import { WebUiIdenticon } from '@kin-kinetic/web/ui/identicon'
 import { Mint } from '@kin-kinetic/web/util/sdk'
 
 export function WebClusterUiMintDetails({ mint }: { mint: Mint }) {
@@ -7,7 +8,13 @@ export function WebClusterUiMintDetails({ mint }: { mint: Mint }) {
     <Flex direction="column">
       <Flex justifyContent="space-between" alignItems="center">
         <Flex alignItems="center">
-          {mint?.logoUrl && <Avatar mr={4} size="lg" src={mint?.logoUrl} />}
+          <Flex mr={4}>
+            {mint?.logoUrl ? (
+              <Avatar size="lg" src={mint?.logoUrl} />
+            ) : (
+              <WebUiIdenticon size="lg" name={mint?.symbol} />
+            )}
+          </Flex>
           <Flex direction="column">
             <Text fontSize="2xl">{mint?.name}</Text>
             <Text color="gray.500">{mint?.symbol}</Text>

@@ -25,6 +25,7 @@ import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiPageHeader } from '@kin-kinetic/web/ui/page'
 import { App, AppEnv, UserAppEnvUpdateInput, useUserUpdateAppEnvMutation } from '@kin-kinetic/web/util/sdk'
+import { ReactNode } from 'react'
 import { GoPrimitiveDot } from 'react-icons/go'
 
 export function WebAppEnvSettingsWebhooks({ app, env }: { app: App; env: AppEnv }) {
@@ -117,7 +118,7 @@ export function WebAppEnvSettingsWebhooks({ app, env }: { app: App; env: AppEnv 
   )
 }
 
-export function WebhookLabel({ enabled, title }: { enabled: boolean; title: string }) {
+export function WebhookLabel({ enabled, title }: { enabled: boolean; title: ReactNode }) {
   return (
     <Flex flex="1" alignItems="center">
       <Tag size={'sm'} variant="subtle" colorScheme="primary">
