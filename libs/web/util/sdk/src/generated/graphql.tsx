@@ -419,7 +419,7 @@ export type MutationUserGenerateWalletArgs = {
 
 export type MutationUserImportWalletArgs = {
   appEnvId: Scalars['String']
-  secretKey: Scalars['String']
+  secret: Scalars['String']
 }
 
 export type MutationUserUpdateAppArgs = {
@@ -5652,7 +5652,7 @@ export type UserGenerateWalletMutation = {
 
 export type UserImportWalletMutationVariables = Exact<{
   appEnvId: Scalars['String']
-  secretKey: Scalars['String']
+  secret: Scalars['String']
 }>
 
 export type UserImportWalletMutation = {
@@ -6989,8 +6989,8 @@ export function useUserGenerateWalletMutation() {
   return Urql.useMutation<UserGenerateWalletMutation, UserGenerateWalletMutationVariables>(UserGenerateWalletDocument)
 }
 export const UserImportWalletDocument = gql`
-  mutation UserImportWallet($appEnvId: String!, $secretKey: String!) {
-    generated: userImportWallet(appEnvId: $appEnvId, secretKey: $secretKey) {
+  mutation UserImportWallet($appEnvId: String!, $secret: String!) {
+    generated: userImportWallet(appEnvId: $appEnvId, secret: $secret) {
       ...WalletDetails
     }
   }

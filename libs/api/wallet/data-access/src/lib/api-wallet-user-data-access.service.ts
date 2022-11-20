@@ -64,7 +64,7 @@ export class ApiWalletUserDataAccessService {
     await this.data.ensureAppOwner(userId, appEnv.app.id)
 
     try {
-      const { publicKey, secretKey } = Keypair.fromByteArray(JSON.parse(secret))
+      const { publicKey, secretKey } = Keypair.fromSecret(secret.trim())
 
       return this.data.wallet.create({
         data: {

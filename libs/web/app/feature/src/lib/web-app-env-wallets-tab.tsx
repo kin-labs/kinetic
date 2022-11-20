@@ -27,9 +27,9 @@ export function WebAppEnvWalletsTab({ app, env }: { app: App; env: AppEnv }) {
   }
 
   const importWallet = () => {
-    const secretKey = prompt('Enter secretKey')
-    if (!secretKey) return
-    importWalletMutation({ appEnvId: env.id, secretKey }).then(() => {
+    const secret = prompt('Enter mnemonic, secret key or byte array')
+    if (!secret) return
+    importWalletMutation({ appEnvId: env.id, secret }).then(() => {
       toast({ status: 'success', title: 'Wallet imported' })
     })
   }

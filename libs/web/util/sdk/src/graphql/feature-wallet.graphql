@@ -69,8 +69,8 @@ mutation UserGenerateWallet($appEnvId: String!) {
   }
 }
 
-mutation UserImportWallet($appEnvId: String!, $secretKey: String!) {
-  generated: userImportWallet(appEnvId: $appEnvId, secretKey: $secretKey) {
+mutation UserImportWallet($appEnvId: String!, $secret: String!) {
+  generated: userImportWallet(appEnvId: $appEnvId, secret: $secret) {
     ...WalletDetails
   }
 }

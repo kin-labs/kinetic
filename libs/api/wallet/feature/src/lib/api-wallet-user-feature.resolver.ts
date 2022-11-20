@@ -20,8 +20,8 @@ export class ApiWalletUserFeatureResolver {
   }
 
   @Mutation(() => Wallet, { nullable: true })
-  userImportWallet(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('secretKey') secretKey: string) {
-    return this.service.userImportWallet(user.id, appEnvId, secretKey)
+  userImportWallet(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('secret') secret: string) {
+    return this.service.userImportWallet(user.id, appEnvId, secret)
   }
 
   @Mutation(() => Wallet, { nullable: true })

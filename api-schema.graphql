@@ -237,7 +237,7 @@ type Mutation {
   userDeleteAppEnv(appEnvId: String!, appId: String!): AppEnv
   userDeleteWallet(appEnvId: String!, walletId: String!): Wallet
   userGenerateWallet(appEnvId: String!): Wallet
-  userImportWallet(appEnvId: String!, secretKey: String!): Wallet
+  userImportWallet(appEnvId: String!, secret: String!): Wallet
   userUpdateApp(appId: String!, input: UserAppUpdateInput!): App
   userUpdateAppEnv(appEnvId: String!, appId: String!, input: UserAppEnvUpdateInput!): AppEnv
   userUpdateAppMint(appId: String!, appMintId: String!, input: UserAppMintUpdateInput!): AppMint

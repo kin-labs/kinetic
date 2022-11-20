@@ -3401,7 +3401,7 @@
                 "deprecationReason": null
               },
               {
-                "name": "secretKey",
+                "name": "secret",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
