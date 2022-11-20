@@ -1,48 +1,44 @@
-import { Box, chakra, Stack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
 import { WebUiLinks } from '@kin-kinetic/web/ui/link'
-import { Card } from '@saas-ui/react'
+import { AppShell } from '@saas-ui/app-shell'
+import { NavGroup, NavItem, Sidebar, SidebarSection } from '@saas-ui/sidebar'
 import { ReactNode } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
-const WebAppUiSettingsLink = chakra(NavLink, {
-  baseStyle: { p: { base: 2 } },
-})
-
-export function WebAppUiSettingsLayout({ children, links }: { children: ReactNode; links: WebUiLinks }) {
-  const activeBg = useColorModeValue('primary.100', 'gray.900')
-  const activeColor = useColorModeValue('primary.600', 'primary.400')
-  const bg = useColorModeValue('gray.50', 'gray.800')
-  const activeBorderLeftColor = useColorModeValue('primary.600', 'primary.400')
-  const hoverBg = useColorModeValue('primary.100', 'gray.700')
-  const hoverColor = useColorModeValue('primary.600', 'primary.200')
+export function WebAppUiSettingsLayout({
+  children,
+  links,
+  title,
+}: {
+  children: ReactNode
+  links: WebUiLinks
+  title: string
+}) {
+  const location = useLocation()
 
   return (
-    <Stack direction={{ base: 'column', md: 'row' }} spacing={{ base: 2, md: 6 }} h={'full'} m={4}>
-      <Box width="100%" maxW={{ base: 'full', md: '220px' }} minW={{ base: 'full', md: '220px' }}>
-        <Card border={0} width="100%" maxW={{ base: 'full', md: '220px' }} bg={bg}>
-          <Box as="nav" p={1}>
-            <Stack spacing={0}>
-              {links.map(({ label, path }) => (
-                <WebAppUiSettingsLink
-                  key={path}
-                  to={path}
-                  borderLeft="4px"
-                  borderLeftColor={bg}
-                  _activeLink={{
-                    borderLeftColor: activeBorderLeftColor,
-                    color: activeColor,
-                    bg: activeBg,
-                  }}
-                  _hover={{ color: hoverColor, bg: hoverBg }}
-                >
+    <AppShell
+      variant={'static'}
+      position={'relative'}
+      height={'100%'}
+      width={'100%'}
+      sidebar={
+        <Sidebar>
+          <SidebarSection aria-label="Main">
+            <NavGroup title={title}>
+              {links.map(({ icon, label, path }) => (
+                <NavItem as={NavLink} to={path} key={path} icon={icon} isActive={location.pathname.startsWith(path)}>
                   {label}
-                </WebAppUiSettingsLink>
+                </NavItem>
               ))}
-            </Stack>
-          </Box>
-        </Card>
-      </Box>
-      <Box width="100%">{children}</Box>
-    </Stack>
+            </NavGroup>
+          </SidebarSection>
+        </Sidebar>
+      }
+    >
+      <Stack direction={{ base: 'column', md: 'row' }} spacing={{ base: 2, md: 6 }} h={'100%'} m={0} overflow={'auto'}>
+        <Box w="100%">{children}</Box>
+      </Stack>
+    </AppShell>
   )
 }

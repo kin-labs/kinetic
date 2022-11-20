@@ -1,4 +1,5 @@
 import { chakra } from '@chakra-ui/react'
+import { ReactElement } from 'react'
 import { NavLink } from 'react-router-dom'
 
 export const WebUiNavLink = chakra(NavLink, {
@@ -8,6 +9,7 @@ export const WebUiNavLink = chakra(NavLink, {
 export type WebUiLinks = WebUiLinkProps[]
 
 export interface WebUiLinkProps {
+  icon?: ReactElement
   label: string
   path: string
 }

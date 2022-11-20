@@ -30,7 +30,7 @@ export function WebAppUiTabs({
   const hoverColor = useColorModeValue('primary.600', 'primary.200')
 
   return (
-    <Box>
+    <Box h={'100%'}>
       <Box px={4} borderBottom={'1px'} borderBottomColor={borderColor}>
         <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
           <Flex justifyContent="space-between" alignItems="top" w={'full'}>

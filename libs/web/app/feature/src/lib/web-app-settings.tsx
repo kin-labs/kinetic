@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
 import { useColorModeValue } from '@chakra-ui/system'
 import { useWebApp } from '@kin-kinetic/web/app/data-access'
 import { WebAppUiSettingsLayout } from '@kin-kinetic/web/app/ui'
@@ -24,9 +24,12 @@ export function WebAppSettings() {
     { label: 'Users', path: 'users' },
   ]
   return (
-    <WebUiPageFull title="App settings" to={`/apps/${app.defaultEnvUrl}`}>
-      <WebAppUiSettingsLayout links={links}>
-        <WebUiContainer py={0}>
+    <Box h="100%">
+      <Box p={4} borderBottom={'1px'} borderColor={borderColor}>
+        <WebUiPageHeader actionLeft={<WebUiPageBackButton to={`/apps/${app.defaultEnvUrl}`} />} title="App settings" />
+      </Box>
+      <WebAppUiSettingsLayout links={links} title="App Settings">
+        <WebUiContainer py={4}>
           <Routes>
             <Route index element={<Navigate to="general" replace />} />
             <Route path="environments" element={<WebAppSettingsEnvironmentsTab app={app} />} />
@@ -35,6 +38,6 @@ export function WebAppSettings() {
           </Routes>
         </WebUiContainer>
       </WebAppUiSettingsLayout>
-    </WebUiPageFull>
+    </Box>
   )
 }

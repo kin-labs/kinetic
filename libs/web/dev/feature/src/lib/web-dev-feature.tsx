@@ -10,7 +10,7 @@ export function WebDevFeature() {
   const [{ data }] = useUptimeQuery()
   const links: WebUiLinks = [{ label: 'Development', path: '/dev' }]
   return (
-    <WebAppUiSettingsLayout links={links}>
+    <WebAppUiSettingsLayout links={links} title="Development">
       <Routes>
         <Route index element={<Navigate to={'dashboard'} replace />} />
         <Route

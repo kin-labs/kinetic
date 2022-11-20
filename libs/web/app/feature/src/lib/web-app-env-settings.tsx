@@ -14,7 +14,7 @@ export function WebAppEnvSettings({ app, env }: { app: App; env: AppEnv }) {
     { label: 'Webhooks', path: 'webhooks' },
   ]
   return (
-    <WebAppUiSettingsLayout links={links}>
+    <WebAppUiSettingsLayout links={links} title={`Environment Settings`}>
       <WebUiContainer>
         <Routes>
           <Route index element={<Navigate to="mints" replace />} />
