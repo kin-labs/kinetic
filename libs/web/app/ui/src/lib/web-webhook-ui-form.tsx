@@ -7,16 +7,18 @@ import { ObjectSchema } from 'yup'
 
 export function WebWebhookUiForm({
   children,
+  disabled,
   env,
   onSubmit,
   schema,
   title,
 }: {
   children: ReactNode
+  disabled: boolean
   env: AppEnv
   onSubmit: (input: UserAppEnvUpdateInput) => Promise<unknown>
   schema: ObjectSchema<FieldValues>
-  title: string
+  title?: string
 }) {
   return (
     <Form
@@ -26,10 +28,10 @@ export function WebWebhookUiForm({
     >
       <FormLayout>
         <Stack spacing={{ base: 2, md: 6 }}>
-          <Heading size="md">{title}</Heading>
+          {title ? <Heading size="md">{title}</Heading> : null}
           {children}
           <Box>
-            <SubmitButton>Save</SubmitButton>
+            <SubmitButton disabled={disabled}>Save</SubmitButton>
           </Box>
         </Stack>
       </FormLayout>

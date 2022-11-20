@@ -1,5 +1,6 @@
 import { AppEnv, UserAppEnvUpdateInput } from '@kin-kinetic/web/util/sdk'
-import { DisplayIf, Field } from '@saas-ui/react'
+import { Field } from '@saas-ui/react'
+import { ChangeEvent } from 'react'
 import * as Yup from 'yup'
 import { WebWebhookUiForm } from './web-webhook-ui-form'
 
@@ -16,23 +17,24 @@ export function WebWebhookUiEventForm({
   })
 
   return (
-    <WebWebhookUiForm env={env} onSubmit={onSubmit} schema={schema} title="Event webhook">
+    <WebWebhookUiForm env={env} onSubmit={onSubmit} schema={schema} disabled={!env.webhookEventEnabled}>
       <Field
         type="switch"
         name="webhookEventEnabled"
         defaultChecked={env.webhookEventEnabled ?? false}
         label="Enable event webhook"
         help="When enabled, a webhook will be sent to the url specified below after a transaction finalized."
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onSubmit({ webhookEventEnabled: e.target.checked })}
       />
-      <DisplayIf name="webhookEventEnabled" condition={(enabled) => !!enabled}>
-        <Field
-          name="webhookEventUrl"
-          label="Event webhook url"
-          type="text"
-          help="Url for receiving the event webhook."
-          rules={{ required: false }}
-        />
-      </DisplayIf>
+
+      <Field
+        isDisabled={!env.webhookEventEnabled}
+        name="webhookEventUrl"
+        label="Event webhook url"
+        type="text"
+        help="Url for receiving the event webhook."
+        rules={{ required: false }}
+      />
     </WebWebhookUiForm>
   )
 }

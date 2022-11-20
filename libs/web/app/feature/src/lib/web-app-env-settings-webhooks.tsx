@@ -1,12 +1,31 @@
-import { Stack, useToast } from '@chakra-ui/react'
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  AlertIcon,
+  Box,
+  Flex,
+  Heading,
+  Stack,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
+  Text,
+  useToast,
+} from '@chakra-ui/react'
 import {
   WebWebhookUiBalanceForm,
+  WebWebhookUiDebuggingForm,
   WebWebhookUiEventForm,
-  WebWebhookUiGeneralForm,
   WebWebhookUiVerifyForm,
 } from '@kin-kinetic/web/app/ui'
+import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
+import { WebUiPageHeader } from '@kin-kinetic/web/ui/page'
 import { App, AppEnv, UserAppEnvUpdateInput, useUserUpdateAppEnvMutation } from '@kin-kinetic/web/util/sdk'
+import { GoPrimitiveDot } from 'react-icons/go'
 
 export function WebAppEnvSettingsWebhooks({ app, env }: { app: App; env: AppEnv }) {
   const toast = useToast()
@@ -35,18 +54,79 @@ export function WebAppEnvSettingsWebhooks({ app, env }: { app: App; env: AppEnv 
   }
   return (
     <Stack spacing={{ base: 2, md: 6 }}>
-      <WebUiCard>
-        <WebWebhookUiGeneralForm env={env} onSubmit={onSubmit} />
-      </WebUiCard>
-      <WebUiCard>
-        <WebWebhookUiBalanceForm env={env} onSubmit={onSubmit} />
-      </WebUiCard>
-      <WebUiCard>
-        <WebWebhookUiEventForm env={env} onSubmit={onSubmit} />
-      </WebUiCard>
-      <WebUiCard>
-        <WebWebhookUiVerifyForm env={env} onSubmit={onSubmit} />
+      <Flex justify="space-between" align="start">
+        <Box>
+          <WebUiPageHeader title="Webhooks" />
+          <Text ml={2} mt={2} color="gray.500">
+            Webhooks allow Kinetic to send information to your server when certain events happen. When the specified
+            events happen, your app will send a POST request to the URLs you provide below.
+          </Text>
+        </Box>
+        <Box mt={2}>
+          <WebWebhookUiDebuggingForm env={env} onSubmit={onSubmit} />
+        </Box>
+      </Flex>
+      {env.webhookDebugging ? (
+        <WebUiAlert status="warning">
+          <AlertIcon />
+          Debugging enabled, webhooks will not be sent to your server. Inspect the transactions to see the webhook
+          payloads.
+        </WebUiAlert>
+      ) : null}
+      <WebUiCard px={2}>
+        <Accordion
+          defaultIndex={[
+            env?.webhookBalanceEnabled ? 0 : -1,
+            env.webhookEventEnabled ? 1 : -1,
+            env.webhookVerifyEnabled ? 2 : -1,
+          ]}
+          allowMultiple
+        >
+          <AccordionItem>
+            <AccordionButton alignItems="center">
+              <WebhookLabel title="Balance webhook" enabled={!!env.webhookBalanceEnabled} />
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <WebWebhookUiBalanceForm env={env} onSubmit={onSubmit} />
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem>
+            <AccordionButton alignItems="center">
+              <WebhookLabel title="Event webhook" enabled={!!env.webhookEventEnabled} />
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <WebWebhookUiEventForm env={env} onSubmit={onSubmit} />
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem>
+            <AccordionButton alignItems="center">
+              <WebhookLabel title="Verify webhook" enabled={!!env.webhookVerifyEnabled} />
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <WebWebhookUiVerifyForm env={env} onSubmit={onSubmit} />
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </WebUiCard>
     </Stack>
+  )
+}
+
+export function WebhookLabel({ enabled, title }: { enabled: boolean; title: string }) {
+  return (
+    <Flex flex="1" alignItems="center">
+      <Tag size={'sm'} variant="subtle" colorScheme="primary">
+        <TagLeftIcon boxSize="12px" as={GoPrimitiveDot} color={enabled ? 'green.500' : 'gray.500'} />
+        <TagLabel>{enabled ? 'Enabled' : 'Disabled'}</TagLabel>
+      </Tag>
+      <Heading ml={2} size="md" mt={1}>
+        {title}
+      </Heading>
+    </Flex>
   )
 }

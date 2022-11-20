@@ -8,9 +8,5 @@ export interface WebUiAlertProps {
 }
 
 export function WebUiAlert({ children, message, status }: PropsWithChildren<WebUiAlertProps>) {
-  return (
-    <Alert status={status} variant="solid">
-      {message || children}
-    </Alert>
-  )
+  return <Alert status={status}>{message || children}</Alert>
 }
