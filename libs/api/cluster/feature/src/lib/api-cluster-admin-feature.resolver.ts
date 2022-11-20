@@ -1,10 +1,11 @@
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import {
-  ApiClusterAdminDataAccessService,
-  Cluster,
   AdminClusterCreateInput,
   AdminClusterUpdateInput,
   AdminMintCreateInput,
+  ApiClusterAdminDataAccessService,
+  Cluster,
+  Mint,
 } from '@kin-kinetic/api/cluster/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
 import { UseGuards } from '@nestjs/common'
@@ -18,6 +19,11 @@ export class ApiClusterAdminFeatureResolver {
   @Mutation(() => Cluster, { nullable: true })
   adminMintCreate(@CtxUser() user: User, @Args('input') input: AdminMintCreateInput) {
     return this.service.adminMintCreate(user.id, input)
+  }
+
+  @Mutation(() => Mint, { nullable: true })
+  adminMintImportWallet(@CtxUser() user: User, @Args('mintId') mintId: string, @Args('secret') secret: string) {
+    return this.service.adminMintImportWallet(user.id, mintId, secret)
   }
 
   @Mutation(() => Cluster, { nullable: true })

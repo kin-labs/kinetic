@@ -23,7 +23,7 @@ export function WebAdminUiMintDetails({ mint }: { mint: Mint }) {
             {mint?.decimals} decimals
           </Text>
           {mint.airdropPublicKey && (
-            <Tooltip label={`Airdrop public key: ${mint.airdropPublicKey}`} bg={'gray.800'}>
+            <Tooltip label={`Airdrop public key: ${mint.airdropPublicKey}`}>
               <Tag size={'sm'} variant="subtle" colorScheme="primary">
                 <TagLeftIcon boxSize="12px" as={GoPrimitiveDot} color={'green.300'} />
                 <TagLabel>Airdrop Enabled</TagLabel>

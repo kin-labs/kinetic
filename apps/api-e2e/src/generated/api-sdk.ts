@@ -222,6 +222,7 @@ export type Mutation = {
   adminDeleteUser?: Maybe<User>
   adminDeleteWallet?: Maybe<Wallet>
   adminMintCreate?: Maybe<Cluster>
+  adminMintImportWallet?: Maybe<Mint>
   adminUpdateApp?: Maybe<App>
   adminUpdateCluster?: Maybe<Cluster>
   adminUpdateUser?: Maybe<User>
@@ -288,6 +289,11 @@ export type MutationAdminDeleteWalletArgs = {
 
 export type MutationAdminMintCreateArgs = {
   input: AdminMintCreateInput
+}
+
+export type MutationAdminMintImportWalletArgs = {
+  mintId: Scalars['String']
+  secret: Scalars['String']
 }
 
 export type MutationAdminUpdateAppArgs = {
@@ -1473,6 +1479,14 @@ export const AdminMintCreate = gql`
     }
   }
   ${ClusterDetails}
+  ${MintDetails}
+`
+export const AdminMintImportWallet = gql`
+  mutation AdminMintImportWallet($mintId: String!, $secret: String!) {
+    adminMintImportWallet(mintId: $mintId, secret: $secret) {
+      ...MintDetails
+    }
+  }
   ${MintDetails}
 `
 export const AdminCreateCluster = gql`
@@ -5667,6 +5681,35 @@ export type AdminMintCreateMutation = {
       symbol?: string | null
       type?: MintType | null
     }> | null
+  } | null
+}
+
+export type AdminMintImportWalletMutationVariables = Exact<{
+  mintId: Scalars['String']
+  secret: Scalars['String']
+}>
+
+export type AdminMintImportWalletMutation = {
+  __typename?: 'Mutation'
+  adminMintImportWallet?: {
+    __typename?: 'Mint'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    addMemo?: boolean | null
+    address?: string | null
+    airdropAmount?: number | null
+    airdropMax?: number | null
+    airdropPublicKey?: string | null
+    coinGeckoId?: string | null
+    decimals?: number | null
+    default?: boolean | null
+    enabled?: boolean | null
+    logoUrl?: string | null
+    name?: string | null
+    order?: number | null
+    symbol?: string | null
+    type?: MintType | null
   } | null
 }
 

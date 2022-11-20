@@ -8,7 +8,7 @@ export class ApiClusterMintFeatureResolver {
   airdropPublicKey(@Parent() mint: Mint) {
     if (!mint.airdropSecretKey) return null
     try {
-      const kp = Keypair.fromByteArray(JSON.parse(mint.airdropSecretKey))
+      const kp = Keypair.fromSecret(mint.airdropSecretKey)
       return kp?.publicKey
     } catch (e) {
       return null

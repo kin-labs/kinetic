@@ -39,6 +39,12 @@ mutation AdminMintCreate($input: AdminMintCreateInput!) {
   }
 }
 
+mutation AdminMintImportWallet($mintId: String!, $secret: String!) {
+  adminMintImportWallet(mintId: $mintId, secret: $secret) {
+    ...MintDetails
+  }
+}
+
 mutation AdminCreateCluster($input: AdminClusterCreateInput!) {
   created: adminCreateCluster(input: $input) {
     ...ClusterDetails

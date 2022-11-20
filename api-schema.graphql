@@ -212,6 +212,7 @@ type Mutation {
   adminDeleteUser(userId: String!): User
   adminDeleteWallet(walletId: String!): Wallet
   adminMintCreate(input: AdminMintCreateInput!): Cluster
+  adminMintImportWallet(mintId: String!, secret: String!): Mint
   adminUpdateApp(appId: String!, input: AdminAppUpdateInput!): App
   adminUpdateCluster(clusterId: String!, input: AdminClusterUpdateInput!): Cluster
   adminUpdateUser(input: AdminUserUpdateInput!, userId: String!): User

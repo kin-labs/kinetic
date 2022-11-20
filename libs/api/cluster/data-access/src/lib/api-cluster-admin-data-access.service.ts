@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { MintType, Prisma } from '@prisma/client'
 import { AdminClusterCreateInput } from './dto/admin-cluster-create.input'
@@ -82,5 +83,22 @@ export class ApiClusterAdminDataAccessService {
       where: { id: cluster.id },
       include: { mints: true },
     })
+  }
+
+  async adminMintImportWallet(userId: string, mintId: string, secret: string) {
+    await this.data.ensureAdminUser(userId)
+
+    try {
+      const { secretKey } = Keypair.fromSecret(secret.trim())
+
+      return this.data.mint.update({
+        where: { id: mintId },
+        data: {
+          airdropSecretKey: secretKey,
+        },
+      })
+    } catch (e) {
+      throw new BadRequestException(`Error importing wallet`)
+    }
   }
 }
