@@ -1,8 +1,8 @@
-import { HDKey } from 'micro-ed25519-hdkey'
 import * as bip39 from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english'
 import { Keypair as SolanaKeypair, PublicKey as SolanaPublicKey } from '@solana/web3.js'
 import * as bs58 from 'bs58'
+import { HDKey } from 'micro-ed25519-hdkey'
 
 export { SolanaKeypair, SolanaPublicKey }
 
@@ -71,6 +71,22 @@ export class Keypair {
     return this.fromSecretKey(bs58.encode(SolanaKeypair.fromSeed(seed).secretKey))
   }
 
+  static fromSecret(secret: string): Keypair {
+    let keypair: Keypair
+
+    if (this.isMnemonic(secret)) {
+      keypair = Keypair.fromMnemonic(secret)
+    } else if (this.isByteArray(secret)) {
+      keypair = this.parseByteArray(secret)
+    } else {
+      keypair = Keypair.fromSecretKey(secret)
+    }
+    if (!keypair) {
+      throw new Error('Invalid secret')
+    }
+    return keypair
+  }
+
   static fromSecretKey(secretKey: string): Keypair {
     return new Keypair(secretKey)
   }
@@ -83,5 +99,22 @@ export class Keypair {
 
   static generateMnemonic(strength: 128 | 256 = 128): string {
     return bip39.generateMnemonic(wordlist, strength)
+  }
+
+  private static isMnemonic(secret: string) {
+    return secret.split(' ').length === 12 || secret.split(' ').length === 24
+  }
+  private static isByteArray(secret: string) {
+    return secret.startsWith('[') && secret.endsWith(']')
+  }
+
+  private static parseByteArray(secret: string): Keypair {
+    try {
+      const parsed: number[] = JSON.parse(secret)
+
+      return Keypair.fromByteArray(parsed)
+    } catch (e) {
+      throw new Error('Error parsing byte array')
+    }
   }
 }

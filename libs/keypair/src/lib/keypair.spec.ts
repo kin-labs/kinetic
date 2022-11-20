@@ -42,6 +42,26 @@ describe('Keypair', () => {
     expect(mnemonic.split(' ').length).toEqual(24)
   })
 
+  it('should create and import keypair fromSecret (byte array, mnemonic, secretKey)', () => {
+    const kp1 = Keypair.random()
+
+    const fromByteArray = Keypair.fromSecret(`[${kp1.solanaSecretKey.join(',')}]`)
+
+    expect(fromByteArray.publicKey).toEqual(kp1.publicKey)
+    expect(fromByteArray.secretKey).toEqual(kp1.secretKey)
+    expect(fromByteArray.mnemonic).toEqual(undefined)
+
+    const fromMnemonic = Keypair.fromSecret(kp1.mnemonic)
+    expect(fromMnemonic.publicKey).toEqual(kp1.publicKey)
+    expect(fromMnemonic.secretKey).toEqual(kp1.secretKey)
+    expect(fromMnemonic.mnemonic).toEqual(kp1.mnemonic)
+
+    const fromSecretKey = Keypair.fromSecret(kp1.secretKey)
+    expect(fromSecretKey.publicKey).toEqual(kp1.publicKey)
+    expect(fromSecretKey.secretKey).toEqual(kp1.secretKey)
+    expect(fromSecretKey.mnemonic).toEqual(undefined)
+  })
+
   it('should create and import keypair', () => {
     const kp1 = Keypair.random()
     const kp2 = Keypair.fromSecretKey(kp1.secretKey)
