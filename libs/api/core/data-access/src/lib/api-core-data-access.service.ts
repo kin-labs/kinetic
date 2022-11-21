@@ -105,7 +105,7 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
       if (!mint.airdropSecretKey) {
         throw new Error(`Airdrop secret key not set for mint ${mint.id}.`)
       }
-      const feePayer = Keypair.fromByteArray(JSON.parse(mint.airdropSecretKey)).solana
+      const feePayer = Keypair.fromSecret(mint.airdropSecretKey).solana
       this.airdropConfig.set(mint.id, {
         airdropAmount: mint.airdropAmount || 1000,
         airdropMax: mint.airdropMax || 50000,
@@ -123,10 +123,10 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   }
 
   private getAppKeypair(index: number): Keypair {
-    const envVar = process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]
+    const envVar = process.env[`APP_${index}_FEE_PAYER_SECRET`] || process.env[`APP_${index}_FEE_PAYER_BYTE_ARRAY`]
     if (envVar) {
       this.logger.verbose(`getAppKeypair app ${index}: read from env var`)
-      return Keypair.fromByteArray(JSON.parse(envVar))
+      return Keypair.fromSecret(envVar)
     }
     this.logger.verbose(`getAppKeypair app ${index}: generated new keypair`)
     return Keypair.random()

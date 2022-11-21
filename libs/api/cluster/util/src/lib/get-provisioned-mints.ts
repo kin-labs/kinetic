@@ -36,7 +36,7 @@ export function getProvisionedMints(id: ProvisionedClusterIds, envVars: string[]
       const [publicKey, decimals, name] = val.split(',')
       if (!publicKey || !decimals || !name) return undefined
 
-      const airdropSecretKey = process.env[key + '_AIRDROP_SECRET_KEY']
+      const airdropSecretKey = process.env[key + '_AIRDROP_SECRET'] || process.env[key + '_AIRDROP_SECRET_KEY']
       const airdropAmount = Number(process.env[key + '_AIRDROP_AMOUNT']) || 1000
       const airdropMax = Number(process.env[key + '_AIRDROP_MAX']) || 50000
 

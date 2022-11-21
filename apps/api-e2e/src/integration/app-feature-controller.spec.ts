@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { Keypair } from '@solana/web3.js'
+import { Keypair } from '@kin-kinetic/keypair'
 import { getEndpoint, initializeE2eApp, postEndpoint } from '../helpers'
 
 describe('AppFeatureController (e2e)', () => {
@@ -15,13 +15,13 @@ describe('AppFeatureController (e2e)', () => {
   })
 
   it('/api/app/devnet/1/config (GET)', () => {
-    const feePayer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.APP_1_FEE_PAYER_BYTE_ARRAY)))
+    const feePayer = Keypair.fromSecret(process.env.APP_1_FEE_PAYER_SECRET)
     return getEndpoint(app, '/api/app/devnet/1/config')
       .expect(200)
       .then((res) => {
         expect(res.body.app.index).toEqual(1)
         expect(res.body.app.name).toEqual('App 1')
-        expect(res.body.mint.feePayer).toEqual(feePayer.publicKey.toBase58())
+        expect(res.body.mint.feePayer).toEqual(feePayer.publicKey)
         expect(res.body.mint.programId).toEqual(TOKEN_PROGRAM_ID?.toBase58())
         expect(process.env.SOLANA_DEVNET_MINT_KIN).toContain(res.body.mint.publicKey)
       })

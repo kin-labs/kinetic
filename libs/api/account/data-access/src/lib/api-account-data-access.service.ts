@@ -109,7 +109,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     })
 
     // Process the Solana transaction
-    const signer = Keypair.fromSecretKey(mint.wallet?.secretKey)
+    const signer = Keypair.fromSecret(mint.wallet?.secretKey)
 
     const {
       blockhash,

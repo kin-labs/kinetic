@@ -1,5 +1,5 @@
 export interface ProvisionedApp {
-  feePayerByteArray: number[]
+  secret: string
   index: number
   logoUrl?: string
   name: string

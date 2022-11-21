@@ -67,6 +67,7 @@ export class Keypair {
   }
 
   static fromSecret(secret: string): Keypair {
+    secret = secret.trim()
     let keypair: Keypair
 
     if (this.isMnemonic(secret)) {

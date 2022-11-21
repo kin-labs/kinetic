@@ -89,7 +89,7 @@ export class ApiClusterAdminDataAccessService {
     await this.data.ensureAdminUser(userId)
 
     try {
-      const { secretKey } = Keypair.fromSecret(secret.trim())
+      const { secretKey } = Keypair.fromSecret(secret)
 
       return this.data.mint.update({
         where: { id: mintId },
