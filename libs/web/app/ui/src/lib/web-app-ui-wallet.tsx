@@ -76,7 +76,7 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
       <Flex justifyContent="space-between" alignItems="center">
         <Flex alignItems="center">
           <Button mr={2} size="sm" as={'a'} href={getExplorerUrl(`account/${wallet?.publicKey}`)} target={'_blank'}>
-            View on Solana Explorer
+            View on Explorer
           </Button>
           <Button mr={2} size="sm" as={Link} to={`/apps/${appId}/environments/${appEnvId}/settings`}>
             Mints
@@ -101,7 +101,7 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
         </Flex>
         <ButtonGroup>
           <Button size="sm" onClick={requestAirdrop} disabled={airdropFetching}>
-            Airdrop
+            Airdrop SOL
           </Button>
           <Input
             size="sm"

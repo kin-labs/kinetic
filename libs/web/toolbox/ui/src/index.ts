@@ -1,4 +1,5 @@
 export * from './lib/web-toolbox-ui'
+export * from './lib/web-toolbox-ui-card'
 export { WebToolboxUiAppConfig } from './lib/web-toolbox-ui-app-config'
 export { WebToolboxUiGetTokenAccounts } from './lib/web-toolbox-ui-get-token-accounts'
 export { WebToolboxUiGetHistory } from './lib/web-toolbox-ui-get-history'
