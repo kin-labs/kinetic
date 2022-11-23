@@ -56,12 +56,6 @@ export class Keypair {
     return keys
   }
 
-  static derive(seed: Buffer, path: string): Keypair {
-    const hd = HDKey.fromMasterSeed(seed.toString('hex'))
-
-    return Keypair.fromSeed(Buffer.from(hd.derive(path).privateKey))
-  }
-
   static fromSeed(seed: Buffer): Keypair {
     return this.fromSecretKey(bs58.encode(SolanaKeypair.fromSeed(seed).secretKey))
   }
@@ -87,21 +81,28 @@ export class Keypair {
     return new Keypair(secretKey)
   }
 
+  static generateMnemonic(strength: 128 | 256 = 128): string {
+    return bip39.generateMnemonic(wordlist, strength)
+  }
+
   static random(): Keypair {
     const mnemonic = this.generateMnemonic()
 
     return this.fromMnemonic(mnemonic)
   }
 
-  static generateMnemonic(strength: 128 | 256 = 128): string {
-    return bip39.generateMnemonic(wordlist, strength)
+  private static derive(seed: Buffer, path: string): Keypair {
+    const hd = HDKey.fromMasterSeed(seed.toString('hex'))
+
+    return Keypair.fromSeed(Buffer.from(hd.derive(path).privateKey))
+  }
+
+  private static isByteArray(secret: string) {
+    return secret.startsWith('[') && secret.endsWith(']')
   }
 
   private static isMnemonic(secret: string) {
     return secret.split(' ').length === 12 || secret.split(' ').length === 24
-  }
-  private static isByteArray(secret: string) {
-    return secret.startsWith('[') && secret.endsWith(']')
   }
 
   private static parseByteArray(secret: string): Keypair {
