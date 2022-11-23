@@ -57,7 +57,13 @@ export function WebAppEnvWalletsTab({ app, env }: { app: App; env: AppEnv }) {
         <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
           {wallets?.length ? (
             wallets.map((wallet: Wallet) => (
-              <WebAppUiWallet key={wallet.id} appId={app.id} appEnvId={env.id} wallet={wallet} />
+              <WebAppUiWallet
+                key={wallet.id}
+                appId={app.id}
+                appEnvId={env.id}
+                wallet={wallet}
+                explorerUrl={env?.cluster?.explorer ?? ''}
+              />
             ))
           ) : (
             <Alert>No Wallets Found</Alert>

@@ -14,10 +14,11 @@ import { Link } from 'react-router-dom'
 export interface WebAppUiWalletProps {
   appEnvId: string
   appId: string
+  explorerUrl: string
   wallet: Wallet
 }
 
-export function WebAppUiWallet({ appEnvId, appId, wallet }: WebAppUiWalletProps) {
+export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppUiWalletProps) {
   const toast = useToast()
   const [amount, setAmount] = useState<number>(1)
   const [_, removeWalletMutation] = useUserAppEnvWalletRemoveMutation()
@@ -52,6 +53,8 @@ export function WebAppUiWallet({ appEnvId, appId, wallet }: WebAppUiWalletProps)
     toast({ status: 'success', title: 'Wallet refreshed' })
   }
 
+  const getExplorerUrl = (path: string) => explorerUrl?.replace(`{path}`, path)
+
   return (
     <Stack borderWidth="1px" rounded="lg" p={6} spacing={6}>
       <Flex justifyContent="space-between" alignItems="center">
@@ -72,7 +75,10 @@ export function WebAppUiWallet({ appEnvId, appId, wallet }: WebAppUiWalletProps)
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Flex alignItems="center">
-          <Button as={Link} to={`/apps/${appId}/environments/${appEnvId}/settings`} mr={2} size="sm">
+          <Button mr={2} size="sm" as={'a'} href={getExplorerUrl(`account/${wallet?.publicKey}`)} target={'_blank'}>
+            View on Solana Explorer
+          </Button>
+          <Button mr={2} size="sm" as={Link} to={`/apps/${appId}/environments/${appEnvId}/settings`}>
             Mints
           </Button>
           {wallet?.appMints?.length ? (
@@ -113,9 +119,14 @@ export function WebAppUiWallet({ appEnvId, appId, wallet }: WebAppUiWalletProps)
       </Flex>
       {(airdropData?.response || airdropError) && (
         <Stack direction="column" spacing={6}>
-          {airdropData?.response && (
+          {airdropData?.response?.signature ? (
+            <Box>
+              <Button as={'a'} href={getExplorerUrl(`tx/${airdropData?.response?.signature}`)} target={'_blank'}>
+                View Airdrop transaction on Solana Explorer
+              </Button>
+            </Box>
+          ) : (
             <Box as="pre" marginY={10}>
-              Airdrop Signature
               {JSON.stringify(airdropData?.response, null, 2)}
             </Box>
           )}

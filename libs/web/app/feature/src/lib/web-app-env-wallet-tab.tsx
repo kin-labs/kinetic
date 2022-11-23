@@ -32,7 +32,12 @@ export function WebAppEnvWalletTab({ app, env }: { app: App; env: AppEnv }) {
           <Box key={wallet.id}>
             {wallet?.id ? (
               <Stack direction="column" spacing={6}>
-                <WebAppUiWallet appEnvId={env.id} appId={app.id} wallet={wallet} />
+                <WebAppUiWallet
+                  appEnvId={env.id}
+                  appId={app.id}
+                  wallet={wallet}
+                  explorerUrl={env.cluster?.explorer ?? ''}
+                />
               </Stack>
             ) : null}
           </Box>
