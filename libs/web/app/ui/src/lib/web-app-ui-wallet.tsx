@@ -38,8 +38,8 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
       pause: true,
     })
 
-  const deleteWallet = () => {
-    if (!window.confirm('Are you sure?')) return
+  const removeWallet = () => {
+    if (!window.confirm('Are you sure you want to remove this wallet from this environment?')) return
     removeWalletMutation({ appId, walletId: wallet.id, appEnvId }).then(() => {
       toast({ status: 'success', title: 'Wallet removed' })
     })
@@ -58,17 +58,17 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
   return (
     <Stack borderWidth="1px" rounded="lg" p={6} spacing={6}>
       <Flex justifyContent="space-between" alignItems="center">
-        <Link to={`/apps/${appId}/environments/${appEnvId}/wallets/${wallet?.id}`}>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <WebUiIdenticon name={wallet.publicKey} />
-            <Stack spacing={0}>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <WebUiIdenticon name={wallet.publicKey} />
+          <Stack spacing={0}>
+            <Link to={`/apps/${appId}/environments/${appEnvId}/wallets/${wallet?.id}`}>
               <Code colorScheme="teal">{wallet?.publicKey}</Code>
-              <Box fontWeight="semibold" fontSize="lg" lineHeight="tight" noOfLines={1}>
-                <ShowSolBalance balance={data?.balance?.balance} />
-              </Box>
-            </Stack>
+            </Link>
+            <Box fontWeight="semibold" fontSize="lg" lineHeight="tight" noOfLines={1}>
+              <ShowSolBalance balance={data?.balance?.balance} />
+            </Box>
           </Stack>
-        </Link>
+        </Stack>
         <Button variant="ghost" onClick={() => refresh()}>
           <RepeatIcon boxSize={6} color="gray.500" />
         </Button>
@@ -93,13 +93,8 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
             </AvatarGroup>
           ) : (
             <Flex>
-              <Button
-                onClick={deleteWallet}
-                disabled={data?.balance?.balance && data?.balance?.balance !== '0'}
-                mr={2}
-                size="sm"
-              >
-                Delete Wallet
+              <Button onClick={removeWallet} mr={2} size="sm">
+                Remove Wallet
               </Button>
             </Flex>
           )}
