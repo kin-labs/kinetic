@@ -1,6 +1,7 @@
 import { Stack, Text, useColorModeValue } from '@chakra-ui/react'
 import { AppEnv } from '@kin-kinetic/web/util/sdk'
 import { Divider, Property, PropertyList } from '@saas-ui/react'
+import { ReactNode } from 'react'
 
 export function WebAppUiAppEnvSummary({ appEnv }: { appEnv: AppEnv }) {
   return (
@@ -77,7 +78,7 @@ export function WebAppUiAppEnvSummary({ appEnv }: { appEnv: AppEnv }) {
   )
 }
 
-export function WebUiPropertyList({ items, title }: { items: { label: string; value: string }[]; title?: string }) {
+export function WebUiPropertyList({ items, title }: { items: { label: string; value: ReactNode }[]; title?: string }) {
   return (
     <PropertyList py={0} my={0}>
       {title && <WebUiPropertyHeader label={title} />}
