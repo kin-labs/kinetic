@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger'
 import { CompiledInstruction } from './compiled-instruction.entity'
 
 export class CompiledInnerInstruction {
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   index: number
-  @ApiProperty()
+  @ApiProperty({ type: [CompiledInstruction] })
   instructions: CompiledInstruction[]
 }

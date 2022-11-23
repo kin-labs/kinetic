@@ -348,6 +348,64 @@ export type Commitment = typeof Commitment[keyof typeof Commitment]
 /**
  *
  * @export
+ * @interface CompiledInnerInstruction
+ */
+export interface CompiledInnerInstruction {
+  /**
+   *
+   * @type {number}
+   * @memberof CompiledInnerInstruction
+   */
+  index: number
+  /**
+   *
+   * @type {Array<CompiledInstruction>}
+   * @memberof CompiledInnerInstruction
+   */
+  instructions: Array<CompiledInstruction>
+}
+/**
+ *
+ * @export
+ * @interface CompiledInstruction
+ */
+export interface CompiledInstruction {
+  /**
+   *
+   * @type {number}
+   * @memberof CompiledInstruction
+   */
+  programIdIndex: number
+  /**
+   *
+   * @type {Array<number>}
+   * @memberof CompiledInstruction
+   */
+  accounts: Array<number>
+  /**
+   *
+   * @type {string}
+   * @memberof CompiledInstruction
+   */
+  data: string
+}
+/**
+ *
+ * @export
+ * @enum {string}
+ */
+
+export const ConfirmationStatus = {
+  Processed: 'processed',
+  Confirmed: 'confirmed',
+  Finalized: 'finalized',
+} as const
+
+export type ConfirmationStatus = typeof ConfirmationStatus[keyof typeof ConfirmationStatus]
+
+/**
+ *
+ * @export
  * @interface ConfirmedSignatureInfo
  */
 export interface ConfirmedSignatureInfo {
@@ -396,10 +454,10 @@ export interface ConfirmedTransactionMeta {
   fee?: number | null
   /**
    *
-   * @type {Array<string>}
+   * @type {Array<CompiledInnerInstruction>}
    * @memberof ConfirmedTransactionMeta
    */
-  innerInstructions?: Array<string> | null
+  innerInstructions?: Array<CompiledInnerInstruction> | null
   /**
    *
    * @type {Array<number>}
@@ -420,16 +478,16 @@ export interface ConfirmedTransactionMeta {
   logMessages?: Array<string> | null
   /**
    *
-   * @type {Array<string>}
+   * @type {Array<TokenBalance>}
    * @memberof ConfirmedTransactionMeta
    */
-  preTokenBalances?: Array<string> | null
+  preTokenBalances?: Array<TokenBalance> | null
   /**
    *
-   * @type {Array<string>}
+   * @type {Array<TokenBalance>}
    * @memberof ConfirmedTransactionMeta
    */
-  postTokenBalances?: Array<string> | null
+  postTokenBalances?: Array<TokenBalance> | null
   /**
    *
    * @type {object}
@@ -705,21 +763,73 @@ export interface SignatureStatus {
   err?: object | null
   /**
    *
-   * @type {string}
+   * @type {ConfirmationStatus}
    * @memberof SignatureStatus
    */
-  confirmationStatus?: SignatureStatusConfirmationStatusEnum
+  confirmationStatus?: ConfirmationStatus
 }
-
-export const SignatureStatusConfirmationStatusEnum = {
-  Processed: 'processed',
-  Confirmed: 'confirmed',
-  Finalized: 'finalized',
-} as const
-
-export type SignatureStatusConfirmationStatusEnum =
-  typeof SignatureStatusConfirmationStatusEnum[keyof typeof SignatureStatusConfirmationStatusEnum]
-
+/**
+ *
+ * @export
+ * @interface TokenAmount
+ */
+export interface TokenAmount {
+  /**
+   *
+   * @type {string}
+   * @memberof TokenAmount
+   */
+  amount: string
+  /**
+   *
+   * @type {number}
+   * @memberof TokenAmount
+   */
+  decimals: number
+  /**
+   *
+   * @type {number}
+   * @memberof TokenAmount
+   */
+  uiAmount?: number | null
+  /**
+   *
+   * @type {string}
+   * @memberof TokenAmount
+   */
+  uiAmountString?: string | null
+}
+/**
+ *
+ * @export
+ * @interface TokenBalance
+ */
+export interface TokenBalance {
+  /**
+   *
+   * @type {number}
+   * @memberof TokenBalance
+   */
+  accountIndex: number
+  /**
+   *
+   * @type {string}
+   * @memberof TokenBalance
+   */
+  mint: string
+  /**
+   *
+   * @type {string}
+   * @memberof TokenBalance
+   */
+  owner?: string | null
+  /**
+   *
+   * @type {TokenAmount}
+   * @memberof TokenBalance
+   */
+  uiTokenAmount: TokenAmount
+}
 /**
  *
  * @export

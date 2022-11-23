@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 export class CompiledInstruction {
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   programIdIndex: number
-  @ApiProperty()
+  @ApiProperty({ type: 'integer', isArray: true })
   accounts: number[]
   @ApiProperty()
   data: string

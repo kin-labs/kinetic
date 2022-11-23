@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 export class MinimumRentExemptionBalanceResponse {
-  @ApiProperty({ type: 'float' })
+  @ApiProperty({ type: 'integer' })
   lamports: number
 }

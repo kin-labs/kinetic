@@ -5,9 +5,9 @@ import { TransactionErrorStr } from './signature-status.entity'
 import { TokenBalance } from './token-balance.entity'
 
 export class ConfirmedTransactionMeta {
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   fee: number | null
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: [CompiledInnerInstruction], nullable: true, required: false })
   innerInstructions?: CompiledInnerInstruction[] | null
   @ApiProperty({ isArray: true, nullable: true, required: false, type: 'integer' })
   preBalances: number[]
@@ -15,9 +15,9 @@ export class ConfirmedTransactionMeta {
   postBalances: number[]
   @ApiProperty({ nullable: true, required: false })
   logMessages?: string[] | null
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: [TokenBalance], nullable: true, required: false })
   preTokenBalances?: TokenBalance[] | null
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: [TokenBalance], nullable: true, required: false })
   postTokenBalances?: TokenBalance[] | null
   @ApiProperty({ nullable: true, required: false })
   err: TransactionErrorStr | null

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 export class Context {
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   slot: number
 }

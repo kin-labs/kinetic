@@ -3,9 +3,9 @@ import { ApiProperty } from '@nestjs/swagger'
 export class TokenAmount {
   @ApiProperty()
   amount: string
-  @ApiProperty()
+  @ApiProperty({ type: 'integer' })
   decimals: number
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   uiAmount: number | null
   @ApiProperty({ nullable: true, required: false })
   uiAmountString?: string

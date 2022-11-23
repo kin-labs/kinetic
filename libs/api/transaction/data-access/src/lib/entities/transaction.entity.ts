@@ -19,7 +19,7 @@ export class Transaction {
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
   amount?: string
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   @Field(() => Int, { nullable: true })
   decimals?: number
   @ApiProperty({ nullable: true, required: false })
@@ -40,7 +40,7 @@ export class Transaction {
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
   mint?: string
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   @Field(() => Int, { nullable: true })
   processingDuration?: number
   @ApiProperty({ nullable: true, required: false })
@@ -55,13 +55,13 @@ export class Transaction {
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
   solanaCommitted?: Date
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   @Field(() => Int, { nullable: true })
   solanaCommittedDuration?: number
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
   solanaFinalized?: Date
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   @Field(() => Int, { nullable: true })
   solanaFinalizedDuration?: number
   @ApiProperty({ nullable: true, required: false })
@@ -76,7 +76,7 @@ export class Transaction {
   @ApiProperty({ nullable: true, required: false, enum: TransactionStatus, enumName: 'TransactionStatus' })
   @Field(() => TransactionStatus)
   status: TransactionStatus
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   @Field(() => Int, { nullable: true })
   totalDuration?: number
   @ApiProperty({ nullable: true, required: false })
@@ -93,7 +93,7 @@ export class Transaction {
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
   webhookEventEnd?: Date
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   @Field(() => Int, { nullable: true })
   webhookEventDuration?: number
   @ApiProperty({ nullable: true, required: false })
@@ -102,7 +102,7 @@ export class Transaction {
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
   webhookVerifyEnd?: Date
-  @ApiProperty({ nullable: true, required: false })
+  @ApiProperty({ type: 'integer', nullable: true, required: false })
   @Field(() => Int, { nullable: true })
   webhookVerifyDuration?: number
   @HideField()

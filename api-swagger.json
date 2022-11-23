@@ -600,7 +600,7 @@
             "nullable": true
           },
           "decimals": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "destination": {
@@ -631,7 +631,7 @@
             "nullable": true
           },
           "processingDuration": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "referenceId": {
@@ -652,7 +652,7 @@
             "nullable": true
           },
           "solanaCommittedDuration": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "solanaFinalized": {
@@ -661,7 +661,7 @@
             "nullable": true
           },
           "solanaFinalizedDuration": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "solanaStart": {
@@ -682,7 +682,7 @@
             "$ref": "#/components/schemas/TransactionStatus"
           },
           "totalDuration": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "tx": {
@@ -704,7 +704,7 @@
             "nullable": true
           },
           "webhookEventDuration": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "webhookVerifyStart": {
@@ -718,7 +718,7 @@
             "nullable": true
           },
           "webhookVerifyDuration": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           }
         }
@@ -767,7 +767,7 @@
             "type": "string"
           },
           "slot": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "err": {
@@ -779,7 +779,7 @@
             "nullable": true
           },
           "blockTime": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           }
         },
@@ -1002,7 +1002,7 @@
         "type": "object",
         "properties": {
           "lamports": {
-            "type": "float"
+            "type": "integer"
           }
         },
         "required": ["lamports"]
@@ -1039,15 +1039,19 @@
         },
         "required": ["commitment", "environment", "index", "mint", "lastValidBlockHeight", "tx"]
       },
+      "ConfirmationStatus": {
+        "type": "string",
+        "enum": ["processed", "confirmed", "finalized"]
+      },
       "SignatureStatus": {
         "type": "object",
         "properties": {
           "slot": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "confirmations": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "err": {
@@ -1055,9 +1059,8 @@
             "nullable": true
           },
           "confirmationStatus": {
-            "type": "string",
-            "enum": ["processed", "confirmed", "finalized"],
-            "nullable": true
+            "nullable": true,
+            "$ref": "#/components/schemas/ConfirmationStatus"
           }
         }
       },
@@ -1080,18 +1083,90 @@
         },
         "required": ["message", "signatures"]
       },
+      "CompiledInstruction": {
+        "type": "object",
+        "properties": {
+          "programIdIndex": {
+            "type": "integer"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "data": {
+            "type": "string"
+          }
+        },
+        "required": ["programIdIndex", "accounts", "data"]
+      },
+      "CompiledInnerInstruction": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "instructions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompiledInstruction"
+            }
+          }
+        },
+        "required": ["index", "instructions"]
+      },
+      "TokenAmount": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "decimals": {
+            "type": "integer"
+          },
+          "uiAmount": {
+            "type": "integer",
+            "nullable": true
+          },
+          "uiAmountString": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["amount", "decimals"]
+      },
+      "TokenBalance": {
+        "type": "object",
+        "properties": {
+          "accountIndex": {
+            "type": "integer"
+          },
+          "mint": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true
+          },
+          "uiTokenAmount": {
+            "$ref": "#/components/schemas/TokenAmount"
+          }
+        },
+        "required": ["accountIndex", "mint", "uiTokenAmount"]
+      },
       "ConfirmedTransactionMeta": {
         "type": "object",
         "properties": {
           "fee": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "innerInstructions": {
             "nullable": true,
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/CompiledInnerInstruction"
             }
           },
           "preBalances": {
@@ -1118,14 +1193,14 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/TokenBalance"
             }
           },
           "postTokenBalances": {
             "nullable": true,
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/TokenBalance"
             }
           },
           "err": {
@@ -1139,7 +1214,7 @@
         "type": "object",
         "properties": {
           "slot": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           },
           "transaction": {
@@ -1149,7 +1224,7 @@
             "$ref": "#/components/schemas/ConfirmedTransactionMeta"
           },
           "blockTime": {
-            "type": "number",
+            "type": "integer",
             "nullable": true
           }
         },
