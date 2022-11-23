@@ -23,21 +23,49 @@ export class ApiClusterAdminDataAccessService {
   }
 
   async adminDeleteCluster(userId: string, clusterId: string) {
-    await this.data.ensureAdminUser(userId)
-    return this.data.cluster.delete({ where: { id: clusterId } })
+    const cluster = await this.adminCluster(userId, clusterId)
+
+    if (cluster.envs.length > 0) {
+      throw new BadRequestException('Cluster has apps deployed')
+    }
+    if (cluster.mints.length > 0) {
+      await this.data.mint
+        .deleteMany({
+          where: {
+            clusterId: cluster.id,
+          },
+        })
+        .then(() => {
+          this.logger.log(`Deleted ${cluster.mints.length} mints for cluster ${cluster.id}`)
+        })
+    }
+
+    return this.data.cluster.delete({ where: { id: clusterId } }).then((res) => {
+      this.logger.log(`Deleted cluster ${clusterId}`)
+      return res
+    })
   }
 
   async adminClusters(userId: string) {
     await this.data.ensureAdminUser(userId)
     return this.data.cluster.findMany({
-      include: { mints: true },
+      include: {
+        envs: { include: { app: true } },
+        mints: true,
+      },
       orderBy: { name: 'asc' },
     })
   }
 
   async adminCluster(userId: string, clusterId: string) {
     await this.data.ensureAdminUser(userId)
-    return this.data.cluster.findUnique({ where: { id: clusterId }, include: { mints: { orderBy: { order: 'asc' } } } })
+    return this.data.cluster.findUnique({
+      where: { id: clusterId },
+      include: {
+        envs: { include: { app: true } },
+        mints: { orderBy: { order: 'asc' } },
+      },
+    })
   }
 
   async adminUpdateCluster(userId: string, clusterId: string, data: AdminClusterUpdateInput) {

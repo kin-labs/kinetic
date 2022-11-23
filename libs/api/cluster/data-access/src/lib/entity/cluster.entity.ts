@@ -25,4 +25,5 @@ export class Cluster {
   type?: ClusterType
   @Field(() => [Mint], { nullable: true })
   mints?: Mint[]
+  envs?: unknown[]
 }

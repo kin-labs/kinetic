@@ -75,6 +75,9 @@ query AdminCluster($clusterId: String!) {
 query AdminClusters {
   items: adminClusters {
     ...ClusterDetails
+    envs {
+      ...AppEnvDetails
+    }
     mints {
       ...MintDetails
     }

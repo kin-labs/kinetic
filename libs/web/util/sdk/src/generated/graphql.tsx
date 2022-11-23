@@ -167,6 +167,7 @@ export type Cluster = {
   createdAt?: Maybe<Scalars['DateTime']>
   endpointPrivate?: Maybe<Scalars['String']>
   endpointPublic?: Maybe<Scalars['String']>
+  envs?: Maybe<Array<AppEnv>>
   explorer?: Maybe<Scalars['String']>
   id?: Maybe<Scalars['String']>
   mints?: Maybe<Array<Mint>>
@@ -4878,6 +4879,105 @@ export type AdminClustersQuery = {
     name?: string | null
     status?: ClusterStatus | null
     type?: ClusterType | null
+    envs?: Array<{
+      __typename?: 'AppEnv'
+      id: string
+      createdAt: any
+      updatedAt: any
+      endpoint?: string | null
+      key?: string | null
+      ipsAllowed?: Array<string> | null
+      ipsBlocked?: Array<string> | null
+      name?: string | null
+      uasAllowed?: Array<string> | null
+      uasBlocked?: Array<string> | null
+      webhookBalanceEnabled?: boolean | null
+      webhookBalanceUrl?: string | null
+      webhookBalanceThreshold?: string | null
+      webhookDebugging?: boolean | null
+      webhookEventEnabled?: boolean | null
+      webhookEventUrl?: string | null
+      webhookSecret?: string | null
+      webhookVerifyEnabled?: boolean | null
+      webhookVerifyUrl?: string | null
+      app?: {
+        __typename?: 'App'
+        id: string
+        createdAt: any
+        updatedAt: any
+        index: number
+        maxEnvs: number
+        name?: string | null
+      } | null
+      cluster?: {
+        __typename?: 'Cluster'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        endpointPrivate?: string | null
+        endpointPublic?: string | null
+        explorer?: string | null
+        name?: string | null
+        status?: ClusterStatus | null
+        type?: ClusterType | null
+        mints?: Array<{
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          addMemo?: boolean | null
+          address?: string | null
+          airdropAmount?: number | null
+          airdropMax?: number | null
+          airdropPublicKey?: string | null
+          coinGeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        }> | null
+      } | null
+      mints?: Array<{
+        __typename?: 'AppMint'
+        id: string
+        createdAt: any
+        updatedAt: any
+        addMemo?: boolean | null
+        order?: number | null
+        mint?: {
+          __typename?: 'Mint'
+          id?: string | null
+          createdAt?: any | null
+          updatedAt?: any | null
+          addMemo?: boolean | null
+          address?: string | null
+          airdropAmount?: number | null
+          airdropMax?: number | null
+          airdropPublicKey?: string | null
+          coinGeckoId?: string | null
+          decimals?: number | null
+          default?: boolean | null
+          enabled?: boolean | null
+          logoUrl?: string | null
+          name?: string | null
+          order?: number | null
+          symbol?: string | null
+          type?: MintType | null
+        } | null
+        wallet?: {
+          __typename?: 'Wallet'
+          id: string
+          createdAt?: any | null
+          updatedAt?: any | null
+          publicKey?: string | null
+          type?: WalletType | null
+        } | null
+      }> | null
+    }> | null
     mints?: Array<{
       __typename?: 'Mint'
       id?: string | null
@@ -6795,12 +6895,16 @@ export const AdminClustersDocument = gql`
   query AdminClusters {
     items: adminClusters {
       ...ClusterDetails
+      envs {
+        ...AppEnvDetails
+      }
       mints {
         ...MintDetails
       }
     }
   }
   ${ClusterDetailsFragmentDoc}
+  ${AppEnvDetailsFragmentDoc}
   ${MintDetailsFragmentDoc}
 `
 
