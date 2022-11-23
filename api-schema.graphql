@@ -210,6 +210,7 @@ type Mutation {
   adminDeleteApp(appId: String!): App
   adminDeleteAppEnv(appEnvId: String!, appId: String!): AppEnv
   adminDeleteCluster(clusterId: String!): Cluster
+  adminDeleteMint(mintId: String!): Mint
   adminDeleteUser(userId: String!): User
   adminDeleteWallet(walletId: String!): Wallet
   adminMintCreate(input: AdminMintCreateInput!): Cluster

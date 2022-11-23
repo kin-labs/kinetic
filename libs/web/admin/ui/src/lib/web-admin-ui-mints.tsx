@@ -1,15 +1,16 @@
-import { Alert, Box, Flex, SimpleGrid, useToast } from '@chakra-ui/react'
+import { Alert, Box, Flex, SimpleGrid, Stack, useToast } from '@chakra-ui/react'
 import { Mint } from '@kin-kinetic/web/util/sdk'
 import { Button } from '@saas-ui/react'
 import { WebAdminUiMintDetails } from './web-admin-ui-mint-details'
 
 export interface WebAdminUiMintsProps {
   clusterId: string
+  deleteMint: (mintId: string) => Promise<void>
   importMintWallet: (mintId: string, secret: string) => Promise<void>
   mints: Mint[] | null | undefined
 }
 
-export function WebAdminUiMints({ mints, importMintWallet }: WebAdminUiMintsProps) {
+export function WebAdminUiMints({ mints, deleteMint, importMintWallet }: WebAdminUiMintsProps) {
   const toast = useToast()
   if (!mints?.length) {
     return <Alert>No mints found.</Alert>
@@ -29,9 +30,14 @@ export function WebAdminUiMints({ mints, importMintWallet }: WebAdminUiMintsProp
           <WebAdminUiMintDetails key={mint?.id} mint={mint} />
           <Flex justify={'end'} w={'full'} mt={4}>
             {mint?.id ? (
-              <Button size={'xs'} onClick={() => importWallet(mint.id!)}>
-                Import Airdrop Wallet
-              </Button>
+              <Stack direction={'row'}>
+                <Button size={'xs'} onClick={() => deleteMint(mint.id!)}>
+                  Delete Mint
+                </Button>
+                <Button size={'xs'} onClick={() => importWallet(mint.id!)}>
+                  Import Airdrop Wallet
+                </Button>
+              </Stack>
             ) : null}
           </Flex>
         </Box>

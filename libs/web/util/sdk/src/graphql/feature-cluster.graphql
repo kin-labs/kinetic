@@ -39,6 +39,11 @@ mutation AdminMintCreate($input: AdminMintCreateInput!) {
   }
 }
 
+mutation AdminDeleteMint($mintId: String!) {
+  deleted: adminDeleteMint(mintId: $mintId) {
+    ...MintDetails
+  }
+}
 mutation AdminMintImportWallet($mintId: String!, $secret: String!) {
   adminMintImportWallet(mintId: $mintId, secret: $secret) {
     ...MintDetails

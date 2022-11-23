@@ -114,6 +114,24 @@ export class ApiClusterAdminDataAccessService {
     })
   }
 
+  async adminDeleteMint(userId: string, mintId: string) {
+    await this.data.ensureAdminUser(userId)
+    const found = await this.data.mint.findUnique({ where: { id: mintId }, include: { cluster: true, appMints: true } })
+
+    if (!found) {
+      throw new BadRequestException('Mint not found')
+    }
+
+    if (found.appMints?.length) {
+      throw new BadRequestException('Mint is in use by an app')
+    }
+
+    return this.data.mint.delete({ where: { id: mintId } }).then((res) => {
+      this.logger.log(`Deleted mint ${mintId}`)
+      return res
+    })
+  }
+
   async adminMintImportWallet(userId: string, mintId: string, secret: string) {
     await this.data.ensureAdminUser(userId)
 

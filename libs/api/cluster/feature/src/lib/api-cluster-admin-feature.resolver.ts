@@ -22,6 +22,11 @@ export class ApiClusterAdminFeatureResolver {
   }
 
   @Mutation(() => Mint, { nullable: true })
+  adminDeleteMint(@CtxUser() user: User, @Args('mintId') mintId: string) {
+    return this.service.adminDeleteMint(user.id, mintId)
+  }
+
+  @Mutation(() => Mint, { nullable: true })
   adminMintImportWallet(@CtxUser() user: User, @Args('mintId') mintId: string, @Args('secret') secret: string) {
     return this.service.adminMintImportWallet(user.id, mintId, secret)
   }

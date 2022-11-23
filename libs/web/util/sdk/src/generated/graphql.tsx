@@ -222,6 +222,7 @@ export type Mutation = {
   adminDeleteApp?: Maybe<App>
   adminDeleteAppEnv?: Maybe<AppEnv>
   adminDeleteCluster?: Maybe<Cluster>
+  adminDeleteMint?: Maybe<Mint>
   adminDeleteUser?: Maybe<User>
   adminDeleteWallet?: Maybe<Wallet>
   adminMintCreate?: Maybe<Cluster>
@@ -280,6 +281,10 @@ export type MutationAdminDeleteAppEnvArgs = {
 
 export type MutationAdminDeleteClusterArgs = {
   clusterId: Scalars['String']
+}
+
+export type MutationAdminDeleteMintArgs = {
+  mintId: Scalars['String']
 }
 
 export type MutationAdminDeleteUserArgs = {
@@ -4734,6 +4739,34 @@ export type AdminMintCreateMutation = {
   } | null
 }
 
+export type AdminDeleteMintMutationVariables = Exact<{
+  mintId: Scalars['String']
+}>
+
+export type AdminDeleteMintMutation = {
+  __typename?: 'Mutation'
+  deleted?: {
+    __typename?: 'Mint'
+    id?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    addMemo?: boolean | null
+    address?: string | null
+    airdropAmount?: number | null
+    airdropMax?: number | null
+    airdropPublicKey?: string | null
+    coinGeckoId?: string | null
+    decimals?: number | null
+    default?: boolean | null
+    enabled?: boolean | null
+    logoUrl?: string | null
+    name?: string | null
+    order?: number | null
+    symbol?: string | null
+    type?: MintType | null
+  } | null
+}
+
 export type AdminMintImportWalletMutationVariables = Exact<{
   mintId: Scalars['String']
   secret: Scalars['String']
@@ -6824,6 +6857,18 @@ export const AdminMintCreateDocument = gql`
 
 export function useAdminMintCreateMutation() {
   return Urql.useMutation<AdminMintCreateMutation, AdminMintCreateMutationVariables>(AdminMintCreateDocument)
+}
+export const AdminDeleteMintDocument = gql`
+  mutation AdminDeleteMint($mintId: String!) {
+    deleted: adminDeleteMint(mintId: $mintId) {
+      ...MintDetails
+    }
+  }
+  ${MintDetailsFragmentDoc}
+`
+
+export function useAdminDeleteMintMutation() {
+  return Urql.useMutation<AdminDeleteMintMutation, AdminDeleteMintMutationVariables>(AdminDeleteMintDocument)
 }
 export const AdminMintImportWalletDocument = gql`
   mutation AdminMintImportWallet($mintId: String!, $secret: String!) {
