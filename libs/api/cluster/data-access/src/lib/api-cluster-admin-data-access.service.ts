@@ -71,6 +71,7 @@ export class ApiClusterAdminDataAccessService {
       address: input.address,
       coinGeckoId: input.coinGeckoId,
       decimals: input.decimals,
+      default: cluster.mints?.length === 0,
       logoUrl: input.logoUrl,
       name: input.name,
       order,
