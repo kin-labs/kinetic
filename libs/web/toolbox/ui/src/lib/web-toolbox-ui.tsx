@@ -1,9 +1,10 @@
-import { Stack } from '@chakra-ui/react'
+import { Stack, Text } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
 import { useEffect, useState } from 'react'
 import { WebToolboxUiAppConfig } from './web-toolbox-ui-app-config'
 import { WebToolboxUiCreateAccount } from './web-toolbox-ui-create-account'
+import { WebToolboxUiDebug } from './web-toolbox-ui-debug'
 import { WebToolboxUiGetBalance } from './web-toolbox-ui-get-balance'
 import { WebToolboxUiGetHistory } from './web-toolbox-ui-get-history'
 import { WebToolboxUiGetTokenAccounts } from './web-toolbox-ui-get-token-accounts'
@@ -49,6 +50,13 @@ export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticS
       ) : (
         <WebToolboxUiCreateAccount keypair={keypair} sdk={sdk} finished={() => setRefresh(!refresh)} />
       )}
+      <Stack borderWidth="1px" rounded="lg" p={6} spacing={6}>
+        <Text fontWeight="semibold" fontSize="lg" lineHeight="tight" noOfLines={1}>
+          SDK Config
+        </Text>
+
+        <WebToolboxUiDebug data={sdk.config} />
+      </Stack>
     </Stack>
   )
 }
