@@ -96,9 +96,13 @@ export class KineticSdkInternal {
   }
 
   async getAppConfig(environment: string, index: number) {
-    const res = await this.appApi.getAppConfig(environment, index)
-    this.appConfig = res.data
-    return this.appConfig
+    return this.appApi
+      .getAppConfig(environment, index)
+      .then((res) => res.data)
+      .then((appConfig) => {
+        this.appConfig = appConfig
+        return this.appConfig
+      })
   }
 
   async getBalance(options: GetBalanceOptions): Promise<BalanceResponse> {

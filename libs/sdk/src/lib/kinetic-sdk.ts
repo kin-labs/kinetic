@@ -88,7 +88,8 @@ export class KineticSdk {
       )
       return config
     } catch (e) {
-      this.sdkConfig?.logger?.error(`Error initializing Server.`)
+      console.error(`${NAME}: Error initializing SDK: ${e}`)
+      this.sdkConfig?.logger?.error(`Error initializing Server: ${e}`)
       throw new Error(`Error initializing Server.`)
     }
   }
@@ -96,9 +97,12 @@ export class KineticSdk {
   static async setup(config: KineticSdkConfig): Promise<KineticSdk> {
     const sdk = new KineticSdk(validateKineticSdkConfig(config))
     try {
-      await sdk.init().then(() => config.logger?.log(`${NAME}: Setup done.`))
-      return sdk
+      return sdk.init().then(() => {
+        config.logger?.log(`${NAME}: Setup done.`)
+        return sdk
+      })
     } catch (e) {
+      console.error(`${NAME}: Error setting up Kinetic SDK: ${e}`)
       config.logger?.error(`${NAME}: Error setting up SDK.`, e)
       throw new Error(`${NAME}: Error setting up SDK.`)
     }
