@@ -1,4 +1,4 @@
-import { Badge, Box } from '@chakra-ui/react'
+import { Badge, Box, useToast } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AccountInfo, KineticSdk } from '@kin-kinetic/sdk'
 import { ButtonGroup, Field, Form, SubmitButton } from '@saas-ui/react'
@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { WebToolboxUiCard } from './web-toolbox-ui-card'
 
 export function WebToolboxUiGetAccountInfo({ keypair, sdk }: { keypair: Keypair; sdk: KineticSdk }) {
+  const toast = useToast()
   const [error, setError] = useState<unknown | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<AccountInfo | undefined>()
@@ -24,6 +25,11 @@ export function WebToolboxUiGetAccountInfo({ keypair, sdk }: { keypair: Keypair;
       .catch((err) => {
         setError(err)
         setLoading(false)
+        toast({
+          title: 'Error',
+          description: err.message,
+          status: 'error',
+        })
       })
   }
 

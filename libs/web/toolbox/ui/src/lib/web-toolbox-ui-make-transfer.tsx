@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk, Transaction } from '@kin-kinetic/sdk'
 import { Button, ButtonGroup, Field, Form, SubmitButton } from '@saas-ui/react'
@@ -14,6 +14,7 @@ export function WebToolboxUiMakeTransfer({
   sdk: KineticSdk
   selectedMint: AppConfigMint | undefined
 }) {
+  const toast = useToast()
   const [error, setError] = useState<unknown | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<Transaction | undefined>()
@@ -38,6 +39,11 @@ export function WebToolboxUiMakeTransfer({
       .catch((err) => {
         setError(err)
         setLoading(false)
+        toast({
+          title: 'Error',
+          description: err.message,
+          status: 'error',
+        })
       })
   }
 

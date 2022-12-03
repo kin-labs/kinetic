@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BalanceResponse, KineticSdk, removeDecimals } from '@kin-kinetic/sdk'
 import { Button, ButtonGroup } from '@saas-ui/react'
@@ -6,6 +7,7 @@ import { WebToolboxUiBalanceAmount } from './web-toolbox-ui-balance-amount'
 import { WebToolboxUiCard } from './web-toolbox-ui-card'
 
 export function WebToolboxUiGetBalance({ keypair, sdk }: { keypair: Keypair; sdk: KineticSdk }) {
+  const toast = useToast()
   const [error, setError] = useState<unknown | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<BalanceResponse | undefined>()
@@ -24,6 +26,11 @@ export function WebToolboxUiGetBalance({ keypair, sdk }: { keypair: Keypair; sdk
       .catch((err) => {
         setError(err)
         setLoading(false)
+        toast({
+          title: 'Error',
+          description: err.message,
+          status: 'error',
+        })
       })
   }
 

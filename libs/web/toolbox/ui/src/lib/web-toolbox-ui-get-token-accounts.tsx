@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
 import { Button, ButtonGroup } from '@saas-ui/react'
@@ -13,6 +14,7 @@ export function WebToolboxUiGetTokenAccounts({
   sdk: KineticSdk
   selectedMint: AppConfigMint | undefined
 }) {
+  const toast = useToast()
   const [error, setError] = useState<unknown | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<string[] | undefined>()
@@ -34,6 +36,11 @@ export function WebToolboxUiGetTokenAccounts({
       .catch((err) => {
         setError(err)
         setLoading(false)
+        toast({
+          title: 'Error',
+          description: err.message,
+          status: 'error',
+        })
       })
   }
   return (

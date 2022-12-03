@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react'
+import { Box, useToast } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk, RequestAirdropResponse } from '@kin-kinetic/sdk'
 import { Commitment } from '@kin-kinetic/solana'
@@ -16,6 +16,7 @@ export function WebToolboxUiRequestAirdrop({
   sdk: KineticSdk
   selectedMint: AppConfigMint | undefined
 }) {
+  const toast = useToast()
   const [error, setError] = useState<unknown | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<RequestAirdropResponse | undefined>()
@@ -39,6 +40,11 @@ export function WebToolboxUiRequestAirdrop({
       .catch((err) => {
         setError(err)
         setLoading(false)
+        toast({
+          title: 'Error',
+          description: err.message,
+          status: 'error',
+        })
       })
   }
 

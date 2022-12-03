@@ -18,6 +18,7 @@ export function WebToolboxUiGetHistory({
   sdk: KineticSdk
   selectedMint: AppConfigMint | undefined
 }) {
+  const toast = useToast()
   const [loading, setLoading] = useState<boolean>(false)
   const [response, setResponse] = useState<HistoryResponse[] | undefined>()
   const [error, setError] = useState<unknown | undefined>()
@@ -38,6 +39,11 @@ export function WebToolboxUiGetHistory({
       .catch((err) => {
         setError(err)
         setLoading(false)
+        toast({
+          title: 'Error',
+          description: err.message,
+          status: 'error',
+        })
       })
   }
 
