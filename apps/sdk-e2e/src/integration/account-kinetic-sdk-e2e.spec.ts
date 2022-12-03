@@ -101,21 +101,16 @@ describe('KineticSdk (e2e) - Account', () => {
     expect(tokenAccounts[0]).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
   })
 
-  it('should throw an error when publicKey does not exits or is incorrect', async () => {
-    try {
-      await sdk.getBalance({ account: 'xx' })
-    } catch (error) {
-      expect(error.response.data.statusCode).toBe(400)
-      expect(error.response.data.message).toBe('Error: accountId must be a valid PublicKey')
-    }
+  it('should throw an error when publicKey does not exit or is incorrect', async () => {
+    await expect(async () => await sdk.getBalance({ account: 'xx' })).rejects.toThrow(
+      'accountId must be a valid PublicKey',
+    )
   })
 
   it('should throw when try to create an account that already exists', async () => {
-    try {
-      await sdk.createAccount({ owner: daveKeypair })
-    } catch (e) {
-      expect(e.message).toEqual(`Owner ${daveKeypair.publicKey} already has an account for mint ${DEFAULT_MINT}.`)
-    }
+    await expect(async () => await sdk.createAccount({ owner: daveKeypair })).rejects.toThrow(
+      `Owner ${daveKeypair.publicKey} already has an account for mint ${DEFAULT_MINT}.`,
+    )
   })
 
   it('should get the account history with a provided mint', async () => {

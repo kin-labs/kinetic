@@ -21,10 +21,8 @@ describe('KineticSdk (e2e) - Airdrop', () => {
   }, 30000)
 
   it('should fail when airdrop request exceeds maximum allowed', async () => {
-    try {
-      await sdk.requestAirdrop({ account: daveKeypair.publicKey, amount: '50001' })
-    } catch (error) {
-      expect(error.response.data.message).toBe('Error: Try requesting 50000 or less.')
-    }
+    await expect(
+      async () => await sdk.requestAirdrop({ account: daveKeypair.publicKey, amount: '50001' }),
+    ).rejects.toThrow('Try requesting 50000 or less.')
   })
 })

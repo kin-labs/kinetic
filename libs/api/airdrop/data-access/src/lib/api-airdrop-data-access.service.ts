@@ -1,7 +1,7 @@
 import { Airdrop } from '@kin-kinetic/api/airdrop/util'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { Commitment } from '@kin-kinetic/solana'
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { RequestAirdropRequest } from './dto/request-airdrop-request.dto'
 import { RequestAirdropResponse } from './entity/request-airdrop-response.entity'
 
@@ -20,14 +20,14 @@ export class ApiAirdropDataAccessService {
     // Make sure the requested mint is enabled for this app
     const appMint = appEnv.mints.find((mint) => mint.mint.address === request.mint)
     if (!appMint) {
-      throw new Error(`Can't find mint ${request.mint} in environment ${environment} for index ${index}`)
+      throw new BadRequestException(`Can't find mint ${request.mint} in environment ${environment} for index ${index}`)
     }
     const mint = appMint.mint
 
     // Make sure there is an airdrop config for this mint
     const airdropConfig = this.data.getAirdropConfig(mint, appEnv.cluster)
     if (!airdropConfig) {
-      throw new HttpException(`Airdrop configuration not found.`, HttpStatus.BAD_REQUEST)
+      throw new BadRequestException(`Airdrop configuration not found.`)
     }
 
     // Make sure there is an Airdrop configured with a Solana connection
@@ -54,7 +54,7 @@ export class ApiAirdropDataAccessService {
       }
     } catch (error) {
       this.logger.error(error)
-      throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+      throw error
     }
   }
 }

@@ -2,7 +2,7 @@ import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/
 import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, removeDecimals, Solana } from '@kin-kinetic/solana'
-import { Injectable, Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
   App,
@@ -178,7 +178,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const found = appEnv.mints.find(({ mint }) => mint.address === inputMint)
     if (!found) {
       this.makeTransferMintNotFoundErrorCounter.add(1, { appKey, mint: inputMint.toString() })
-      throw new Error(`${appKey}: Can't find mint ${inputMint}`)
+      throw new BadRequestException(`${appKey}: Can't find mint ${inputMint}`)
     }
     return found
   }

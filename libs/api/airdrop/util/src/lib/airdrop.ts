@@ -1,4 +1,5 @@
 import { Commitment, convertCommitment, getPublicKey, PublicKeyString } from '@kin-kinetic/solana'
+import { BadRequestException } from '@nestjs/common'
 import { createAssociatedTokenAccount, transferChecked } from '@solana/spl-token'
 import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 import { AirdropConfig } from './airdrop-config'
@@ -18,7 +19,7 @@ export class Airdrop {
   async airdrop(account: PublicKeyString, amount?: number | string, commitment?: Commitment): Promise<AirdropResponse> {
     amount = amount && amount?.toString()?.length && Number(amount) > 0 ? Number(amount) : this.config.airdropAmount
     if (Number(amount) > this.config.airdropMax) {
-      throw new Error(`Try requesting ${this.config.airdropMax} or less.`)
+      throw new BadRequestException(`Try requesting ${this.config.airdropMax} or less.`)
     }
     // Get Fee Payer Accounts
     const fromOwner = this.feePayer.publicKey.toBase58()
