@@ -23,7 +23,7 @@ export function WebToolboxUiCreateAccount({
     setLoading(true)
 
     sdk
-      .createAccount({ owner: keypair, referenceType: 'Toolbox Create', referenceId: Date.now().toString() })
+      .createAccount({ owner: keypair, referenceType: 'Toolbox Create' })
       .then((res) => {
         setResponse(res)
         if (res.errors?.length) {
@@ -47,7 +47,7 @@ export function WebToolboxUiCreateAccount({
     >
       <ButtonGroup>
         <Button variant="primary" isLoading={loading} size="lg" onClick={createAccount}>
-          Create Account
+          Create Token Account
         </Button>
         {response?.status && (
           <Button size="lg" disabled={true}>

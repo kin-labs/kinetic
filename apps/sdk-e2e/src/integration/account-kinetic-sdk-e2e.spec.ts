@@ -1,5 +1,6 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
+import { Commitment } from '@kin-kinetic/solana'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { aliceKeypair, aliceTokenAccount, daveKeypair, usdcMint } from './fixtures'
 import { DEFAULT_MINT } from './helpers'
@@ -126,5 +127,82 @@ describe('KineticSdk (e2e) - Account', () => {
   it('should get the token account with a provided mint', async () => {
     const tokenAccounts = await sdk.getTokenAccounts({ account: aliceKeypair.publicKey, mint: usdcMint })
     expect(tokenAccounts[0]).toBe('JBdTmhBdwP5Hs4cYg123mn849FmVEHb1u1KGx998hMN7')
+  })
+
+  describe('closeAccount', () => {
+    it('should close an account', async () => {
+      // Create new account
+      const keypair = Keypair.random()
+      const tx = await sdk.createAccount({ owner: keypair, commitment: Commitment.Finalized })
+      expect(tx).not.toBeNull()
+      expect(tx.mint).toEqual(DEFAULT_MINT)
+      const { signature, errors } = tx
+      expect(typeof signature).toBe('string')
+      expect(errors).toEqual([])
+      // Close account
+      const closeTx = await sdk.closeAccount({ account: keypair.publicKey })
+      expect(closeTx).not.toBeNull()
+      const { signature: closeSignature, errors: closeErrors } = closeTx
+      expect(typeof closeSignature).toBe('string')
+      expect(closeErrors).toEqual([])
+    }, 30000)
+
+    it('should not close a token account', async () => {
+      await expect(async () => await sdk.closeAccount({ account: aliceTokenAccount })).rejects.toThrow(
+        'Cannot close a token account',
+      )
+    })
+
+    it('should not close a mint', async () => {
+      await expect(async () => await sdk.closeAccount({ account: DEFAULT_MINT })).rejects.toThrow('Cannot close a mint')
+    })
+
+    it('should not close a non-existing account', async () => {
+      await expect(async () => await sdk.closeAccount({ account: Keypair.random().publicKey })).rejects.toThrow(
+        'Account has no tokens',
+      )
+    })
+
+    it('should not close a non-existing mint', async () => {
+      await expect(
+        async () => await sdk.closeAccount({ account: aliceKeypair.publicKey, mint: Keypair.random().publicKey }),
+      ).rejects.toThrow('Mint not found')
+    })
+
+    it('should not close with non-existing tokens for a mint', async () => {
+      await expect(
+        async () => await sdk.closeAccount({ account: daveKeypair.publicKey, mint: usdcMint }),
+      ).rejects.toThrow('Account has no tokens for the specified mint')
+    })
+
+    it('should not close when close authority is not set', async () => {
+      await expect(async () => await sdk.closeAccount({ account: aliceKeypair.publicKey })).rejects.toThrow(
+        'Token account has no close authority',
+      )
+    })
+
+    it('should not close an account with a balance', async () => {
+      // Create new account
+      const keypair = Keypair.random()
+      const tx = await sdk.createAccount({ owner: keypair, commitment: Commitment.Finalized })
+      expect(tx).not.toBeNull()
+      expect(tx.mint).toEqual(DEFAULT_MINT)
+      const { signature, errors } = tx
+      expect(typeof signature).toBe('string')
+      expect(errors).toEqual([])
+
+      const airdrop = await sdk.requestAirdrop({
+        account: keypair.publicKey,
+        amount: '1',
+        commitment: Commitment.Finalized,
+      })
+      expect(airdrop).not.toBeNull()
+      const { signature: airdropSignature } = airdrop
+      expect(typeof airdropSignature).toBe('string')
+
+      await expect(async () => await sdk.closeAccount({ account: keypair.publicKey })).rejects.toThrow(
+        'Cannot close an account with a balance',
+      )
+    }, 45000)
   })
 })

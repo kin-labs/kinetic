@@ -2,6 +2,7 @@ import {
   AccountInfo,
   ApiAccountDataAccessService,
   BalanceResponse,
+  CloseAccountRequest,
   CreateAccountRequest,
   HistoryResponse,
 } from '@kin-kinetic/api/account/data-access'
@@ -16,6 +17,14 @@ import { Request } from 'express'
 @Controller('account')
 export class ApiAccountFeatureController {
   constructor(private readonly service: ApiAccountDataAccessService) {}
+
+  @Post('close')
+  @ApiBody({ type: CloseAccountRequest })
+  @ApiOperation({ operationId: 'closeAccount' })
+  @ApiResponse({ type: Transaction })
+  closeAccount(@Req() req: Request, @Body() body: CloseAccountRequest) {
+    return this.service.closeAccount(req, body)
+  }
 
   @Get('info/:environment/:index/:accountId')
   @ApiOperation({ operationId: 'getAccountInfo' })

@@ -11,6 +11,7 @@ import { NAME, VERSION } from '../version'
 import { getSolanaRpcEndpoint } from './helpers'
 import { validateKineticSdkConfig } from './helpers/validate-kinetic-sdk-config'
 import {
+  CloseAccountOptions,
   CreateAccountOptions,
   GetAccountInfoOptions,
   GetBalanceOptions,
@@ -44,6 +45,10 @@ export class KineticSdk {
 
   get solanaRpcEndpoint(): string | undefined {
     return this.sdkConfig.solanaRpcEndpoint
+  }
+
+  closeAccount(options: CloseAccountOptions): Promise<Transaction> {
+    return this.internal.closeAccount(options)
   }
 
   createAccount(options: CreateAccountOptions): Promise<Transaction> {

@@ -14,6 +14,7 @@ import {
   AppConfig,
   AppConfigMint,
   BalanceResponse,
+  CloseAccountRequest,
   Configuration,
   CreateAccountRequest,
   HistoryResponse,
@@ -24,6 +25,7 @@ import {
 } from '../generated'
 import { NAME, VERSION } from '../version'
 import {
+  CloseAccountOptions,
   CreateAccountOptions,
   GetAccountInfoOptions,
   GetBalanceOptions,
@@ -57,6 +59,30 @@ export class KineticSdkInternal {
     this.airdropApi = new AirdropApi(apiConfig)
     this.appApi = new AppApi(apiConfig)
     this.transactionApi = new TransactionApi(apiConfig)
+  }
+
+  async closeAccount(options: CloseAccountOptions): Promise<Transaction> {
+    const appConfig = this.ensureAppConfig()
+    const mint = this.getAppMint(appConfig, options.mint?.toString())
+
+    const commitment = options.commitment || Commitment.Confirmed
+
+    const request: CloseAccountRequest = {
+      account: options.account.toString(),
+      commitment,
+      environment: this.sdkConfig.environment,
+      index: this.sdkConfig.index,
+      mint: mint.publicKey,
+      referenceId: options.referenceId,
+      referenceType: options.referenceType,
+    }
+
+    return this.accountApi
+      .closeAccount(request)
+      .then((res) => res.data)
+      .catch((err) => {
+        throw new Error(err?.response?.data?.message ?? 'Unknown error')
+      })
   }
 
   async createAccount(options: CreateAccountOptions): Promise<Transaction> {

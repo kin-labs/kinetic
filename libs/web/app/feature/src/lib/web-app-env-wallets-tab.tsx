@@ -111,9 +111,9 @@ export function AirdropToolbox({ app, env }: { app: App; env: AppEnv }) {
   }
 
   return (
-    <Stack>
+    <Stack spacing={8}>
       {airdrops?.length ? (
-        airdrops.map((mint: AppMint) => <AirdropRequestForm sdk={sdk} selectedMint={mint} />)
+        airdrops.map((mint: AppMint) => <AirdropRequestForm key={mint.id} sdk={sdk} selectedMint={mint} />)
       ) : (
         <Alert>No mints with Airdrop configured.</Alert>
       )}

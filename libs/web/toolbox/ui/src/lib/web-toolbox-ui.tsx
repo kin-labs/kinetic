@@ -1,9 +1,10 @@
-import { Box, Stack, Text } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
 import { Button } from '@saas-ui/react'
 import { useEffect, useState } from 'react'
 import { WebToolboxUiAppConfig } from './web-toolbox-ui-app-config'
+import { WebToolboxUiCloseAccount } from './web-toolbox-ui-close-account'
 import { WebToolboxUiCreateAccount } from './web-toolbox-ui-create-account'
 import { WebToolboxUiDebug } from './web-toolbox-ui-debug'
 import { WebToolboxUiGetAccountInfo } from './web-toolbox-ui-get-account-info'
@@ -36,9 +37,9 @@ export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticS
       {keypair && (
         <WebToolboxUiKeypairCard keypair={keypair} explorer={sdk.getExplorerUrl(`address/${keypair.publicKey}`)} />
       )}
+      <WebToolboxUiGetAccountInfo keypair={keypair} sdk={sdk} />
       {activeAccount ? (
         <Stack spacing={{ base: 2, md: 6 }}>
-          <WebToolboxUiGetAccountInfo keypair={keypair} sdk={sdk} />
           <WebToolboxUiGetBalance keypair={keypair} sdk={sdk} />
           <WebToolboxUiMakeTransfer keypair={keypair} sdk={sdk} selectedMint={selectedMint} />
           {/*<WebToolboxUiMakeTransferBatch*/}
@@ -50,6 +51,7 @@ export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticS
           <WebToolboxUiGetTransaction sdk={sdk} />
           <WebToolboxUiGetHistory keypair={keypair} sdk={sdk} selectedMint={selectedMint} />
           <WebToolboxUiGetTokenAccounts selectedMint={selectedMint} keypair={keypair} sdk={sdk} />
+          <WebToolboxUiCloseAccount finished={() => setRefresh(!refresh)} keypair={keypair} sdk={sdk} />
         </Stack>
       ) : (
         <WebToolboxUiCreateAccount keypair={keypair} sdk={sdk} finished={() => setRefresh(!refresh)} />

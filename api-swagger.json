@@ -1,6 +1,36 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/api/account/close": {
+      "post": {
+        "operationId": "closeAccount",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloseAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transaction"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["account"]
+      }
+    },
     "/api/account/info/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "getAccountInfo",
@@ -517,84 +547,23 @@
   ],
   "components": {
     "schemas": {
-      "TokenInfo": {
-        "type": "object",
-        "properties": {
-          "account": {
-            "type": "string"
-          },
-          "balance": {
-            "type": "string",
-            "nullable": true
-          },
-          "closeAuthority": {
-            "type": "string",
-            "nullable": true
-          },
-          "decimals": {
-            "type": "integer",
-            "default": "0"
-          },
-          "mint": {
-            "type": "string"
-          },
-          "owner": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "required": ["account", "decimals", "mint"]
-      },
-      "AccountInfo": {
-        "type": "object",
-        "properties": {
-          "account": {
-            "type": "string"
-          },
-          "isMint": {
-            "type": "boolean"
-          },
-          "isOwner": {
-            "type": "boolean"
-          },
-          "isTokenAccount": {
-            "type": "boolean"
-          },
-          "owner": {
-            "type": "string",
-            "nullable": true
-          },
-          "program": {
-            "type": "string",
-            "nullable": true
-          },
-          "tokens": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TokenInfo"
-            }
-          }
-        },
-        "required": ["account", "isMint", "isOwner", "isTokenAccount"]
-      },
       "Commitment": {
         "type": "string",
         "enum": ["Confirmed", "Finalized", "Processed"]
       },
-      "CreateAccountRequest": {
+      "CloseAccountRequest": {
         "type": "object",
         "properties": {
           "commitment": {
             "$ref": "#/components/schemas/Commitment"
           },
+          "account": {
+            "type": "string"
+          },
           "environment": {
             "type": "string"
           },
           "index": {
-            "type": "integer"
-          },
-          "lastValidBlockHeight": {
             "type": "integer"
           },
           "mint": {
@@ -607,12 +576,9 @@
           "referenceType": {
             "type": "string",
             "nullable": true
-          },
-          "tx": {
-            "type": "string"
           }
         },
-        "required": ["commitment", "environment", "index", "lastValidBlockHeight", "mint", "tx"]
+        "required": ["commitment", "account", "environment", "index", "mint"]
       },
       "TransactionErrorType": {
         "type": "string",
@@ -790,6 +756,99 @@
             "nullable": true
           }
         }
+      },
+      "TokenInfo": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "balance": {
+            "type": "string",
+            "nullable": true
+          },
+          "closeAuthority": {
+            "type": "string",
+            "nullable": true
+          },
+          "decimals": {
+            "type": "integer",
+            "default": "0"
+          },
+          "mint": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["account", "decimals", "mint"]
+      },
+      "AccountInfo": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "isMint": {
+            "type": "boolean"
+          },
+          "isOwner": {
+            "type": "boolean"
+          },
+          "isTokenAccount": {
+            "type": "boolean"
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true
+          },
+          "program": {
+            "type": "string",
+            "nullable": true
+          },
+          "tokens": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TokenInfo"
+            }
+          }
+        },
+        "required": ["account", "isMint", "isOwner", "isTokenAccount"]
+      },
+      "CreateAccountRequest": {
+        "type": "object",
+        "properties": {
+          "commitment": {
+            "$ref": "#/components/schemas/Commitment"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          },
+          "lastValidBlockHeight": {
+            "type": "integer"
+          },
+          "mint": {
+            "type": "string"
+          },
+          "referenceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceType": {
+            "type": "string",
+            "nullable": true
+          },
+          "tx": {
+            "type": "string"
+          }
+        },
+        "required": ["commitment", "environment", "index", "lastValidBlockHeight", "mint", "tx"]
       },
       "BalanceToken": {
         "type": "object",

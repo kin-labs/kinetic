@@ -368,6 +368,55 @@ export interface BalanceToken {
 /**
  *
  * @export
+ * @interface CloseAccountRequest
+ */
+export interface CloseAccountRequest {
+  /**
+   *
+   * @type {Commitment}
+   * @memberof CloseAccountRequest
+   */
+  commitment: Commitment
+  /**
+   *
+   * @type {string}
+   * @memberof CloseAccountRequest
+   */
+  account: string
+  /**
+   *
+   * @type {string}
+   * @memberof CloseAccountRequest
+   */
+  environment: string
+  /**
+   *
+   * @type {number}
+   * @memberof CloseAccountRequest
+   */
+  index: number
+  /**
+   *
+   * @type {string}
+   * @memberof CloseAccountRequest
+   */
+  mint: string
+  /**
+   *
+   * @type {string}
+   * @memberof CloseAccountRequest
+   */
+  referenceId?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof CloseAccountRequest
+   */
+  referenceType?: string | null
+}
+/**
+ *
+ * @export
  * @enum {string}
  */
 
@@ -1250,6 +1299,43 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
     /**
      *
      * @summary
+     * @param {CloseAccountRequest} closeAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    closeAccount: async (
+      closeAccountRequest: CloseAccountRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'closeAccountRequest' is not null or undefined
+      assertParamExists('closeAccount', 'closeAccountRequest', closeAccountRequest)
+      const localVarPath = `/api/account/close`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+
+      const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      localVarHeaderParameter['Content-Type'] = 'application/json'
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter)
+      let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = { ...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers }
+      localVarRequestOptions.data = serializeDataIfNeeded(closeAccountRequest, localVarRequestOptions, configuration)
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     *
+     * @summary
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1487,6 +1573,20 @@ export const AccountApiFp = function (configuration?: Configuration) {
     /**
      *
      * @summary
+     * @param {CloseAccountRequest} closeAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async closeAccount(
+      closeAccountRequest: CloseAccountRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Transaction>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.closeAccount(closeAccountRequest, options)
+      return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
+    },
+    /**
+     *
+     * @summary
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1593,6 +1693,16 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
     /**
      *
      * @summary
+     * @param {CloseAccountRequest} closeAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    closeAccount(closeAccountRequest: CloseAccountRequest, options?: any): AxiosPromise<Transaction> {
+      return localVarFp.closeAccount(closeAccountRequest, options).then((request) => request(axios, basePath))
+    },
+    /**
+     *
+     * @summary
      * @param {CreateAccountRequest} createAccountRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1677,6 +1787,16 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
  * @interface AccountApi
  */
 export interface AccountApiInterface {
+  /**
+   *
+   * @summary
+   * @param {CloseAccountRequest} closeAccountRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApiInterface
+   */
+  closeAccount(closeAccountRequest: CloseAccountRequest, options?: AxiosRequestConfig): AxiosPromise<Transaction>
+
   /**
    *
    * @summary
@@ -1767,6 +1887,20 @@ export interface AccountApiInterface {
  * @extends {BaseAPI}
  */
 export class AccountApi extends BaseAPI implements AccountApiInterface {
+  /**
+   *
+   * @summary
+   * @param {CloseAccountRequest} closeAccountRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountApi
+   */
+  public closeAccount(closeAccountRequest: CloseAccountRequest, options?: AxiosRequestConfig) {
+    return AccountApiFp(this.configuration)
+      .closeAccount(closeAccountRequest, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
   /**
    *
    * @summary

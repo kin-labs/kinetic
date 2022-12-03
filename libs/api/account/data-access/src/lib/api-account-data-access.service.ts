@@ -10,14 +10,16 @@ import {
   BalanceMint,
   BalanceSummary,
   Commitment,
+  generateCloseAccountTransaction,
   getPublicKey,
   parseAndSignTransaction,
   PublicKeyString,
   removeDecimals,
 } from '@kin-kinetic/solana'
-import { Injectable, OnModuleInit } from '@nestjs/common'
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
+import { CloseAccountRequest } from './dto/close-account-request.dto'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 import { HistoryResponse } from './entities/history-response.entity'
 
@@ -54,6 +56,101 @@ export class ApiAccountDataAccessService implements OnModuleInit {
         description: 'Number of createAccount Solana transaction errors',
       },
     )
+  }
+
+  async closeAccount(req: Request, input: CloseAccountRequest): Promise<Transaction> {
+    const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
+    const { ip, ua } = this.transaction.validateRequest(appEnv, req)
+
+    const accountInfo = await this.getAccountInfo(input.environment, input.index, input.account)
+
+    if (accountInfo.isMint) {
+      throw new BadRequestException('Cannot close a mint')
+    }
+
+    if (accountInfo.isTokenAccount) {
+      // FIXME: Allow closing token accounts directly
+      throw new BadRequestException('Cannot close a token account')
+    }
+
+    if (!accountInfo.tokens?.length) {
+      throw new BadRequestException('Account has no tokens')
+    }
+
+    const mint = this.transaction.validateMint(appEnv, appKey, input.mint)
+
+    if (!mint) {
+      throw new BadRequestException('Mint not found')
+    }
+
+    const mintTokens = accountInfo.tokens.filter((t) => t.mint === mint.mint.address)
+
+    if (!mintTokens.length) {
+      throw new BadRequestException('Account has no tokens for the specified mint')
+    }
+
+    if (mintTokens?.length > 1) {
+      // FIXME: Add support for closing multiple accounts
+      // Ideally, we can look at closing multiple token accounts from the same owner in a single transactions
+      throw new BadRequestException(`Can't close account with multiple tokens`)
+    }
+
+    const tokenAccount = mintTokens[0]
+
+    if (!tokenAccount.closeAuthority) {
+      throw new BadRequestException('Token account has no close authority')
+    }
+
+    if (Number(tokenAccount.balance) > 0) {
+      throw new BadRequestException('Cannot close an account with a balance')
+    }
+
+    const feePayerWallet = await appEnv.wallets.find((w) => w.publicKey === tokenAccount.closeAuthority)
+
+    if (!feePayerWallet) {
+      throw new BadRequestException('Token account close authority is not a known wallet')
+    }
+
+    // Create the Transaction
+    const transaction: TransactionWithErrors = await this.transaction.createTransaction({
+      appEnvId: appEnv.id,
+      commitment: input.commitment,
+      ip,
+      referenceId: input.referenceId,
+      referenceType: input.referenceType,
+      ua,
+    })
+
+    const { blockhash, lastValidBlockHeight } = await this.transaction.getLatestBlockhash(
+      input.environment,
+      input.index,
+    )
+
+    const signer = Keypair.fromSecret(mint.wallet?.secretKey)
+
+    const { transaction: solanaTransaction } = generateCloseAccountTransaction({
+      addMemo: mint.addMemo,
+      blockhash,
+      index: input.index,
+      lastValidBlockHeight,
+      signer: signer.solana,
+      tokenAccount: tokenAccount.account,
+    })
+
+    return this.transaction.handleTransaction({
+      appEnv,
+      appKey,
+      blockhash,
+      commitment: input.commitment,
+      transaction,
+      decimals: mint?.mint?.decimals,
+      feePayer: tokenAccount.closeAuthority,
+      headers: req.headers as Record<string, string>,
+      lastValidBlockHeight,
+      mintPublicKey: mint?.mint?.address,
+      solanaTransaction,
+      source: input.account,
+    })
   }
 
   async getAccountInfo(environment: string, index: number, accountId: PublicKeyString) {

@@ -1,3 +1,4 @@
+export * from './close-account-options'
 export * from './create-account-options'
 export * from './get-account-info-options'
 export * from './get-balance-options'
