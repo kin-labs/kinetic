@@ -1,10 +1,18 @@
 import { Solana } from '@kin-kinetic/solana'
-import { AppConfig, Transaction, BalanceResponse, GetTransactionResponse, HistoryResponse } from '../generated'
+import {
+  AccountInfo,
+  AppConfig,
+  BalanceResponse,
+  GetTransactionResponse,
+  HistoryResponse,
+  Transaction,
+} from '../generated'
 import { NAME, VERSION } from '../version'
 import { getSolanaRpcEndpoint } from './helpers'
 import { validateKineticSdkConfig } from './helpers/validate-kinetic-sdk-config'
 import {
   CreateAccountOptions,
+  GetAccountInfoOptions,
   GetBalanceOptions,
   GetHistoryOptions,
   GetTokenAccountsOptions,
@@ -40,6 +48,10 @@ export class KineticSdk {
 
   createAccount(options: CreateAccountOptions): Promise<Transaction> {
     return this.internal.createAccount(options)
+  }
+
+  getAccountInfo(option: GetAccountInfoOptions): Promise<AccountInfo> {
+    return this.internal.getAccountInfo(option)
   }
 
   getBalance(option: GetBalanceOptions): Promise<BalanceResponse> {

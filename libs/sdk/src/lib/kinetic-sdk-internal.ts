@@ -25,6 +25,7 @@ import {
 import { NAME, VERSION } from '../version'
 import {
   CreateAccountOptions,
+  GetAccountInfoOptions,
   GetBalanceOptions,
   GetHistoryOptions,
   GetTokenAccountsOptions,
@@ -93,6 +94,12 @@ export class KineticSdkInternal {
     }
 
     return this.accountApi.createAccount(request).then((res) => res.data)
+  }
+
+  getAccountInfo(options: GetAccountInfoOptions) {
+    return this.accountApi
+      .getAccountInfo(this.sdkConfig.environment, this.sdkConfig.index, options.account.toString())
+      .then((res) => res.data)
   }
 
   async getAppConfig(environment: string, index: number) {

@@ -1,5 +1,6 @@
 import { BalanceMintMap } from '@kin-kinetic/solana'
 import { ApiProperty } from '@nestjs/swagger'
+import { BalanceToken } from './balance-token.entity'
 
 export class BalanceResponse {
   @ApiProperty()
@@ -8,15 +9,4 @@ export class BalanceResponse {
   mints: BalanceMintMap
   @ApiProperty({ type: () => BalanceToken, isArray: true })
   tokens: BalanceToken[]
-}
-
-export class BalanceToken {
-  @ApiProperty()
-  account: string
-  @ApiProperty()
-  balance: string
-  @ApiProperty({ default: '0', type: 'integer' })
-  decimals: number
-  @ApiProperty()
-  mint: string
 }

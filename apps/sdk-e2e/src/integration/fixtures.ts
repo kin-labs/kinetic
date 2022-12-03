@@ -28,12 +28,22 @@ export const DAVE_KEY = [
   238, 237, 212, 159, 220, 81, 103, 142, 111, 199, 18, 74, 168,
 ]
 
+// oWNEYV3aMze3CppdgyFAiEj9xUJXkn85es1KscRHt8m
+export const OWNER_KEY = [
+  24, 20, 238, 188, 26, 234, 120, 209, 88, 63, 170, 46, 66, 98, 21, 113, 194, 120, 143, 228, 231, 37, 91, 0, 242, 32,
+  180, 99, 243, 179, 57, 144, 11, 233, 235, 235, 203, 20, 105, 33, 47, 140, 152, 253, 12, 148, 72, 175, 141, 253, 242,
+  110, 225, 110, 21, 211, 118, 87, 111, 206, 208, 166, 190, 78,
+]
+
 export const aliceKeypair = Keypair.fromByteArray(ALICE_KEY)
+export const aliceTokenAccount = 'Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD'
 
 export const bobKeypair = Keypair.fromByteArray(BOB_KEY)
 
 export const charlieKeypair = Keypair.fromByteArray(CHARLIE_KEY)
 
 export const daveKeypair = Keypair.fromByteArray(DAVE_KEY)
+
+export const ownerKeypair = Keypair.fromByteArray(OWNER_KEY)
 
 export const usdcMint = 'USDzo281m7rjzeZyxevkzL1vr5Cibb9ek3ynyAjXjUM'

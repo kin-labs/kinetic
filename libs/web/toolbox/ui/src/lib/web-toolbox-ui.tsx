@@ -1,10 +1,12 @@
-import { Stack, Text } from '@chakra-ui/react'
+import { Box, Stack, Text } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
+import { Button } from '@saas-ui/react'
 import { useEffect, useState } from 'react'
 import { WebToolboxUiAppConfig } from './web-toolbox-ui-app-config'
 import { WebToolboxUiCreateAccount } from './web-toolbox-ui-create-account'
 import { WebToolboxUiDebug } from './web-toolbox-ui-debug'
+import { WebToolboxUiGetAccountInfo } from './web-toolbox-ui-get-account-info'
 import { WebToolboxUiGetBalance } from './web-toolbox-ui-get-balance'
 import { WebToolboxUiGetHistory } from './web-toolbox-ui-get-history'
 import { WebToolboxUiGetTokenAccounts } from './web-toolbox-ui-get-token-accounts'
@@ -17,6 +19,7 @@ export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticS
   const [selectedMint, setSelectedMint] = useState<AppConfigMint | undefined>(sdk?.config?.mint)
   const [activeAccount, setActiveAccount] = useState<boolean>(false)
   const [refresh, setRefresh] = useState<boolean>(false)
+  const [showConfig, setShowConfig] = useState<boolean>(false)
 
   useEffect(() => {
     console.log(`WebToolboxUi: Public key updated ${keypair.publicKey} or refreshed ${refresh}`)
@@ -35,6 +38,7 @@ export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticS
       )}
       {activeAccount ? (
         <Stack spacing={{ base: 2, md: 6 }}>
+          <WebToolboxUiGetAccountInfo keypair={keypair} sdk={sdk} />
           <WebToolboxUiGetBalance keypair={keypair} sdk={sdk} />
           <WebToolboxUiMakeTransfer keypair={keypair} sdk={sdk} selectedMint={selectedMint} />
           {/*<WebToolboxUiMakeTransferBatch*/}
@@ -51,11 +55,13 @@ export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticS
         <WebToolboxUiCreateAccount keypair={keypair} sdk={sdk} finished={() => setRefresh(!refresh)} />
       )}
       <Stack borderWidth="1px" rounded="lg" p={6} spacing={6}>
-        <Text fontWeight="semibold" fontSize="lg" lineHeight="tight" noOfLines={1}>
-          SDK Config
-        </Text>
+        <Box>
+          <Button variant="primary" size="lg" onClick={() => setShowConfig(!showConfig)}>
+            {showConfig ? 'Hide' : 'Show'} App Config
+          </Button>
+        </Box>
 
-        <WebToolboxUiDebug data={sdk.config} />
+        {showConfig ? <WebToolboxUiDebug data={sdk.config} /> : null}
       </Stack>
     </Stack>
   )

@@ -1,6 +1,7 @@
 import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
-import { aliceKeypair, daveKeypair, usdcMint } from './fixtures'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { aliceKeypair, aliceTokenAccount, daveKeypair, usdcMint } from './fixtures'
 import { DEFAULT_MINT } from './helpers'
 
 describe('KineticSdk (e2e) - Account', () => {
@@ -15,6 +16,57 @@ describe('KineticSdk (e2e) - Account', () => {
     const balance = Number(res.balance)
     expect(isNaN(balance)).toBeFalsy()
     expect(balance).toBeGreaterThan(0)
+  })
+
+  describe('getAccountInfo', () => {
+    it('should get account info', async () => {
+      const res = await sdk.getAccountInfo({ account: aliceKeypair.publicKey })
+
+      expect(res.account).toEqual(aliceKeypair.publicKey)
+      expect(res.isMint).toBeFalsy()
+      expect(res.isOwner).toBeTruthy()
+      expect(res.isTokenAccount).toBeFalsy()
+      expect(res.tokens.length).toEqual(1)
+      expect(res.tokens[0].account).toEqual(aliceTokenAccount)
+      expect(res.tokens[0].mint).toEqual(DEFAULT_MINT)
+      expect(res.tokens[0].decimals).toEqual(5)
+      expect(res.tokens[0].owner).toEqual(aliceKeypair.publicKey)
+    })
+
+    it('should get account info of a token account', async () => {
+      const res = await sdk.getAccountInfo({ account: aliceTokenAccount })
+
+      expect(res.account).toEqual(aliceTokenAccount)
+      expect(res.isMint).toBeFalsy()
+      expect(res.isOwner).toBeFalsy()
+      expect(res.isTokenAccount).toBeTruthy()
+      expect(res.owner).toEqual(aliceKeypair.publicKey)
+      expect(res.program).toEqual(TOKEN_PROGRAM_ID.toString())
+      expect(res.tokens).toBeNull()
+    })
+
+    it('should get account info of a mint', async () => {
+      const res = await sdk.getAccountInfo({ account: DEFAULT_MINT })
+
+      expect(res.account).toEqual(DEFAULT_MINT)
+      expect(res.isMint).toBeTruthy()
+      expect(res.isOwner).toBeFalsy()
+      expect(res.isTokenAccount).toBeFalsy()
+      expect(res.owner).toBeNull()
+      expect(res.program).toEqual(TOKEN_PROGRAM_ID.toString())
+      expect(res.tokens).toBeNull()
+    })
+
+    it('should get account info of a non-existing account', async () => {
+      const keypair = Keypair.random()
+      const res = await sdk.getAccountInfo({ account: keypair.publicKey })
+
+      expect(res.account).toEqual(keypair.publicKey)
+      expect(res.isMint).toBeFalsy()
+      expect(res.isOwner).toBeFalsy()
+      expect(res.isTokenAccount).toBeFalsy()
+      expect(res.tokens.length).toEqual(0)
+    })
   })
 
   it('should create an account', async () => {

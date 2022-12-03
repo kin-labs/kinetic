@@ -34,6 +34,55 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  *
  * @export
+ * @interface AccountInfo
+ */
+export interface AccountInfo {
+  /**
+   *
+   * @type {string}
+   * @memberof AccountInfo
+   */
+  account: string
+  /**
+   *
+   * @type {boolean}
+   * @memberof AccountInfo
+   */
+  isMint: boolean
+  /**
+   *
+   * @type {boolean}
+   * @memberof AccountInfo
+   */
+  isOwner: boolean
+  /**
+   *
+   * @type {boolean}
+   * @memberof AccountInfo
+   */
+  isTokenAccount: boolean
+  /**
+   *
+   * @type {string}
+   * @memberof AccountInfo
+   */
+  owner?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof AccountInfo
+   */
+  program?: string | null
+  /**
+   *
+   * @type {Array<TokenInfo>}
+   * @memberof AccountInfo
+   */
+  tokens?: Array<TokenInfo> | null
+}
+/**
+ *
+ * @export
  * @interface AppConfig
  */
 export interface AppConfig {
@@ -833,6 +882,49 @@ export interface TokenBalance {
 /**
  *
  * @export
+ * @interface TokenInfo
+ */
+export interface TokenInfo {
+  /**
+   *
+   * @type {string}
+   * @memberof TokenInfo
+   */
+  account: string
+  /**
+   *
+   * @type {string}
+   * @memberof TokenInfo
+   */
+  balance?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof TokenInfo
+   */
+  closeAuthority?: string | null
+  /**
+   *
+   * @type {number}
+   * @memberof TokenInfo
+   */
+  decimals: number
+  /**
+   *
+   * @type {string}
+   * @memberof TokenInfo
+   */
+  mint: string
+  /**
+   *
+   * @type {string}
+   * @memberof TokenInfo
+   */
+  owner?: string | null
+}
+/**
+ *
+ * @export
  * @interface Transaction
  */
 export interface Transaction {
@@ -1420,7 +1512,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
       index: number,
       accountId: string,
       options?: AxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountInfo>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountInfo(environment, index, accountId, options)
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
@@ -1517,7 +1609,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getAccountInfo(environment: string, index: number, accountId: string, options?: any): AxiosPromise<void> {
+    getAccountInfo(environment: string, index: number, accountId: string, options?: any): AxiosPromise<AccountInfo> {
       return localVarFp
         .getAccountInfo(environment, index, accountId, options)
         .then((request) => request(axios, basePath))
@@ -1610,7 +1702,7 @@ export interface AccountApiInterface {
     index: number,
     accountId: string,
     options?: AxiosRequestConfig,
-  ): AxiosPromise<void>
+  ): AxiosPromise<AccountInfo>
 
   /**
    *

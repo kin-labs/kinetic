@@ -1,4 +1,5 @@
 import {
+  AccountInfo,
   ApiAccountDataAccessService,
   BalanceResponse,
   CreateAccountRequest,
@@ -19,13 +20,13 @@ export class ApiAccountFeatureController {
   @Get('info/:environment/:index/:accountId')
   @ApiOperation({ operationId: 'getAccountInfo' })
   @ApiParam({ name: 'index', type: 'integer' })
+  @ApiResponse({ type: AccountInfo })
   getAccountInfo(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
     @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
-    @Query('commitment') commitment?: Commitment,
   ) {
-    return this.service.getAccountInfo(environment, index, accountId, commitment)
+    return this.service.getAccountInfo(environment, index, accountId)
   }
 
   @Post('create')

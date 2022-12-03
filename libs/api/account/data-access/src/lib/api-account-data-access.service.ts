@@ -6,7 +6,15 @@ import {
   TransactionWithErrors,
 } from '@kin-kinetic/api/transaction/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
-import { BalanceMint, BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@kin-kinetic/solana'
+import {
+  BalanceMint,
+  BalanceSummary,
+  Commitment,
+  getPublicKey,
+  parseAndSignTransaction,
+  PublicKeyString,
+  removeDecimals,
+} from '@kin-kinetic/solana'
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
@@ -48,10 +56,59 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     )
   }
 
-  async getAccountInfo(environment: string, index: number, accountId: PublicKeyString, commitment?: Commitment) {
+  async getAccountInfo(environment: string, index: number, accountId: PublicKeyString) {
     const solana = await this.data.getSolanaConnection(environment, index)
 
-    return solana.getAccountInfo(accountId, { commitment })
+    const accountInfo = await solana.connection.getParsedAccountInfo(getPublicKey(accountId))
+
+    if (!accountInfo) {
+      return null
+    }
+
+    const parsed = (accountInfo.value as any)?.data?.parsed
+
+    const isMint = parsed?.type === 'mint'
+    const isTokenAccount = parsed?.type === 'account'
+
+    const owner = isTokenAccount ? parsed.info.owner : null
+
+    const result = {
+      account: accountId,
+      isMint,
+      isOwner: false,
+      isTokenAccount,
+      owner,
+      program: accountInfo?.value?.owner ?? null,
+      tokens: !isMint && !isTokenAccount ? [] : null,
+    }
+
+    // We only want to get the token accounts if the account is not a mint or token account
+    if (isMint || isTokenAccount) {
+      return result
+    }
+
+    const appEnv = await this.app.getAppConfig(environment, index)
+    const mint = appEnv.mint
+
+    const tokenAccounts = await solana.getTokenAccounts(accountId, mint.publicKey)
+    for (const tokenAccount of tokenAccounts) {
+      const info = await solana.connection.getParsedAccountInfo(getPublicKey(tokenAccount))
+      const parsed = (info.value as any)?.data?.parsed?.info
+
+      result.tokens.push({
+        account: tokenAccount,
+        balance: parsed?.tokenAmount?.amount ? removeDecimals(parsed.tokenAmount.amount, mint.decimals) : null,
+        closeAuthority: parsed?.closeAuthority ?? null,
+        decimals: mint.decimals ?? 0,
+        mint: mint.publicKey,
+        owner: parsed?.owner ?? null,
+      })
+    }
+
+    return {
+      ...result,
+      isOwner: result.tokens.length > 0,
+    }
   }
 
   async getBalance(environment: string, index: number, accountId: PublicKeyString): Promise<BalanceSummary> {

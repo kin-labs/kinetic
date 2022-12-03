@@ -32,8 +32,15 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountInfo"
+                }
+              }
+            }
           }
         },
         "tags": ["account"]
@@ -510,6 +517,67 @@
   ],
   "components": {
     "schemas": {
+      "TokenInfo": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "balance": {
+            "type": "string",
+            "nullable": true
+          },
+          "closeAuthority": {
+            "type": "string",
+            "nullable": true
+          },
+          "decimals": {
+            "type": "integer",
+            "default": "0"
+          },
+          "mint": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["account", "decimals", "mint"]
+      },
+      "AccountInfo": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "isMint": {
+            "type": "boolean"
+          },
+          "isOwner": {
+            "type": "boolean"
+          },
+          "isTokenAccount": {
+            "type": "boolean"
+          },
+          "owner": {
+            "type": "string",
+            "nullable": true
+          },
+          "program": {
+            "type": "string",
+            "nullable": true
+          },
+          "tokens": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TokenInfo"
+            }
+          }
+        },
+        "required": ["account", "isMint", "isOwner", "isTokenAccount"]
+      },
       "Commitment": {
         "type": "string",
         "enum": ["Confirmed", "Finalized", "Processed"]
