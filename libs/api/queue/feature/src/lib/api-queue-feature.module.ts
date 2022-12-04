@@ -1,11 +1,9 @@
-import { Module } from '@nestjs/common'
-import { ApiQueueFeatureController } from './api-queue-feature.controller'
 import { ApiQueueDataAccessModule } from '@kin-kinetic/api/queue/data-access'
+import { Module } from '@nestjs/common'
+import { ApiQueueAdminFeatureResolver } from './api-queue-admin-feature.resolver'
 
 @Module({
-  controllers: [ApiQueueFeatureController],
-  providers: [],
-  exports: [],
+  providers: [ApiQueueAdminFeatureResolver],
   imports: [ApiQueueDataAccessModule],
 })
 export class ApiQueueFeatureModule {}

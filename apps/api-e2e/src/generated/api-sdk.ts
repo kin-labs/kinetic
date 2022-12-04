@@ -57,6 +57,13 @@ export type AdminMintCreateInput = {
   symbol: Scalars['String']
 }
 
+export type AdminQueueLoadInput = {
+  environment: Scalars['String']
+  index: Scalars['Int']
+  payload: Scalars['JSON']
+  type: QueueType
+}
+
 export type AdminUserCreateInput = {
   avatarUrl?: InputMaybe<Scalars['String']>
   email: Scalars['String']
@@ -187,6 +194,30 @@ export enum ClusterType {
   SolanaTestnet = 'SolanaTestnet',
 }
 
+export type Job = {
+  __typename?: 'Job'
+  attemptsMade?: Maybe<Scalars['Int']>
+  data?: Maybe<Scalars['JSON']>
+  failedReason?: Maybe<Scalars['String']>
+  finishedOn?: Maybe<Scalars['Int']>
+  id?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+  opts?: Maybe<Scalars['JSON']>
+  processedOn?: Maybe<Scalars['Int']>
+  returnvalue?: Maybe<Scalars['JSON']>
+  stacktrace?: Maybe<Array<Scalars['String']>>
+  timestamp?: Maybe<Scalars['Int']>
+}
+
+export enum JobStatus {
+  Active = 'active',
+  Completed = 'completed',
+  Delayed = 'delayed',
+  Failed = 'failed',
+  Paused = 'paused',
+  Waiting = 'waiting',
+}
+
 export type Mint = {
   __typename?: 'Mint'
   addMemo?: Maybe<Scalars['Boolean']>
@@ -225,6 +256,11 @@ export type Mutation = {
   adminDeleteWallet?: Maybe<Wallet>
   adminMintCreate?: Maybe<Cluster>
   adminMintImportWallet?: Maybe<Mint>
+  adminQueueClean?: Maybe<Scalars['Boolean']>
+  adminQueueDeleteJob?: Maybe<Scalars['Boolean']>
+  adminQueueLoad?: Maybe<Queue>
+  adminQueuePause?: Maybe<Scalars['Boolean']>
+  adminQueueResume?: Maybe<Scalars['Boolean']>
   adminUpdateApp?: Maybe<App>
   adminUpdateCluster?: Maybe<Cluster>
   adminUpdateUser?: Maybe<User>
@@ -300,6 +336,27 @@ export type MutationAdminMintCreateArgs = {
 export type MutationAdminMintImportWalletArgs = {
   mintId: Scalars['String']
   secret: Scalars['String']
+}
+
+export type MutationAdminQueueCleanArgs = {
+  type: QueueType
+}
+
+export type MutationAdminQueueDeleteJobArgs = {
+  jobId: Scalars['String']
+  type: QueueType
+}
+
+export type MutationAdminQueueLoadArgs = {
+  input: AdminQueueLoadInput
+}
+
+export type MutationAdminQueuePauseArgs = {
+  type: QueueType
+}
+
+export type MutationAdminQueueResumeArgs = {
+  type: QueueType
 }
 
 export type MutationAdminUpdateAppArgs = {
@@ -455,6 +512,9 @@ export type Query = {
   adminApps?: Maybe<Array<App>>
   adminCluster?: Maybe<Cluster>
   adminClusters?: Maybe<Array<Cluster>>
+  adminQueue?: Maybe<Queue>
+  adminQueueJobs?: Maybe<Array<Job>>
+  adminQueues?: Maybe<Array<Queue>>
   adminUser?: Maybe<User>
   adminUsers?: Maybe<Array<User>>
   adminWallet?: Maybe<Wallet>
@@ -487,6 +547,15 @@ export type QueryAdminAppArgs = {
 
 export type QueryAdminClusterArgs = {
   clusterId: Scalars['String']
+}
+
+export type QueryAdminQueueArgs = {
+  type: QueueType
+}
+
+export type QueryAdminQueueJobsArgs = {
+  statuses: Array<JobStatus>
+  type: QueueType
 }
 
 export type QueryAdminUserArgs = {
@@ -568,6 +637,29 @@ export type QueryUserWalletBalancesArgs = {
 
 export type QueryUserWalletsArgs = {
   appEnvId: Scalars['String']
+}
+
+export type Queue = {
+  __typename?: 'Queue'
+  count?: Maybe<QueueCount>
+  info?: Maybe<Scalars['JSON']>
+  isPaused?: Maybe<Scalars['Boolean']>
+  name: Scalars['String']
+  type: QueueType
+}
+
+export type QueueCount = {
+  __typename?: 'QueueCount'
+  active?: Maybe<Scalars['Int']>
+  completed?: Maybe<Scalars['Int']>
+  delayed?: Maybe<Scalars['Int']>
+  failed?: Maybe<Scalars['Int']>
+  paused?: Maybe<Scalars['Int']>
+  waiting?: Maybe<Scalars['Int']>
+}
+
+export enum QueueType {
+  CloseAccount = 'CloseAccount',
 }
 
 export type Transaction = {
@@ -1060,6 +1152,43 @@ export const AuthTokenDetails = gql`
     }
   }
   ${UserDetails}
+`
+export const QueueCountDetails = gql`
+  fragment QueueCountDetails on QueueCount {
+    active
+    completed
+    delayed
+    failed
+    paused
+    waiting
+  }
+`
+export const QueueDetails = gql`
+  fragment QueueDetails on Queue {
+    type
+    name
+    count {
+      ...QueueCountDetails
+    }
+    info
+    isPaused
+  }
+  ${QueueCountDetails}
+`
+export const JobDetails = gql`
+  fragment JobDetails on Job {
+    id
+    data
+    opts
+    attemptsMade
+    processedOn
+    finishedOn
+    timestamp
+    name
+    stacktrace
+    returnvalue
+    failedReason
+  }
 `
 export const UserEmailDetails = gql`
   fragment UserEmailDetails on UserEmail {
@@ -1592,6 +1721,58 @@ export const WebConfig = gql`
 export const Uptime = gql`
   query Uptime {
     uptime
+  }
+`
+export const AdminQueues = gql`
+  query AdminQueues {
+    items: adminQueues {
+      ...QueueDetails
+    }
+  }
+  ${QueueDetails}
+`
+export const AdminQueue = gql`
+  query AdminQueue($type: QueueType!) {
+    item: adminQueue(type: $type) {
+      ...QueueDetails
+    }
+  }
+  ${QueueDetails}
+`
+export const AdminQueueJobs = gql`
+  query AdminQueueJobs($type: QueueType!, $statuses: [JobStatus!]!) {
+    items: adminQueueJobs(type: $type, statuses: $statuses) {
+      ...JobDetails
+    }
+  }
+  ${JobDetails}
+`
+export const AdminQueueLoad = gql`
+  mutation AdminQueueLoad($input: AdminQueueLoadInput!) {
+    loaded: adminQueueLoad(input: $input) {
+      ...QueueDetails
+    }
+  }
+  ${QueueDetails}
+`
+export const AdminQueueClean = gql`
+  mutation AdminQueueClean($type: QueueType!) {
+    paused: adminQueueClean(type: $type)
+  }
+`
+export const AdminQueueDeleteJob = gql`
+  mutation AdminQueueDeleteJob($type: QueueType!, $jobId: String!) {
+    paused: adminQueueDeleteJob(type: $type, jobId: $jobId)
+  }
+`
+export const AdminQueuePause = gql`
+  mutation AdminQueuePause($type: QueueType!) {
+    paused: adminQueuePause(type: $type)
+  }
+`
+export const AdminQueueResume = gql`
+  mutation adminQueueResume($type: QueueType!) {
+    resumed: adminQueueResume(type: $type)
   }
 `
 export const AdminCreateUser = gql`
@@ -6091,6 +6272,166 @@ export type WebConfigQuery = {
 export type UptimeQueryVariables = Exact<{ [key: string]: never }>
 
 export type UptimeQuery = { __typename?: 'Query'; uptime: number }
+
+export type QueueDetailsFragment = {
+  __typename?: 'Queue'
+  type: QueueType
+  name: string
+  info?: any | null
+  isPaused?: boolean | null
+  count?: {
+    __typename?: 'QueueCount'
+    active?: number | null
+    completed?: number | null
+    delayed?: number | null
+    failed?: number | null
+    paused?: number | null
+    waiting?: number | null
+  } | null
+}
+
+export type QueueCountDetailsFragment = {
+  __typename?: 'QueueCount'
+  active?: number | null
+  completed?: number | null
+  delayed?: number | null
+  failed?: number | null
+  paused?: number | null
+  waiting?: number | null
+}
+
+export type JobDetailsFragment = {
+  __typename?: 'Job'
+  id?: string | null
+  data?: any | null
+  opts?: any | null
+  attemptsMade?: number | null
+  processedOn?: number | null
+  finishedOn?: number | null
+  timestamp?: number | null
+  name?: string | null
+  stacktrace?: Array<string> | null
+  returnvalue?: any | null
+  failedReason?: string | null
+}
+
+export type AdminQueuesQueryVariables = Exact<{ [key: string]: never }>
+
+export type AdminQueuesQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'Queue'
+    type: QueueType
+    name: string
+    info?: any | null
+    isPaused?: boolean | null
+    count?: {
+      __typename?: 'QueueCount'
+      active?: number | null
+      completed?: number | null
+      delayed?: number | null
+      failed?: number | null
+      paused?: number | null
+      waiting?: number | null
+    } | null
+  }> | null
+}
+
+export type AdminQueueQueryVariables = Exact<{
+  type: QueueType
+}>
+
+export type AdminQueueQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Queue'
+    type: QueueType
+    name: string
+    info?: any | null
+    isPaused?: boolean | null
+    count?: {
+      __typename?: 'QueueCount'
+      active?: number | null
+      completed?: number | null
+      delayed?: number | null
+      failed?: number | null
+      paused?: number | null
+      waiting?: number | null
+    } | null
+  } | null
+}
+
+export type AdminQueueJobsQueryVariables = Exact<{
+  type: QueueType
+  statuses: Array<JobStatus> | JobStatus
+}>
+
+export type AdminQueueJobsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'Job'
+    id?: string | null
+    data?: any | null
+    opts?: any | null
+    attemptsMade?: number | null
+    processedOn?: number | null
+    finishedOn?: number | null
+    timestamp?: number | null
+    name?: string | null
+    stacktrace?: Array<string> | null
+    returnvalue?: any | null
+    failedReason?: string | null
+  }> | null
+}
+
+export type AdminQueueLoadMutationVariables = Exact<{
+  input: AdminQueueLoadInput
+}>
+
+export type AdminQueueLoadMutation = {
+  __typename?: 'Mutation'
+  loaded?: {
+    __typename?: 'Queue'
+    type: QueueType
+    name: string
+    info?: any | null
+    isPaused?: boolean | null
+    count?: {
+      __typename?: 'QueueCount'
+      active?: number | null
+      completed?: number | null
+      delayed?: number | null
+      failed?: number | null
+      paused?: number | null
+      waiting?: number | null
+    } | null
+  } | null
+}
+
+export type AdminQueueCleanMutationVariables = Exact<{
+  type: QueueType
+}>
+
+export type AdminQueueCleanMutation = { __typename?: 'Mutation'; paused?: boolean | null }
+
+export type AdminQueueDeleteJobMutationVariables = Exact<{
+  type: QueueType
+  jobId: Scalars['String']
+}>
+
+export type AdminQueueDeleteJobMutation = { __typename?: 'Mutation'; paused?: boolean | null }
+
+export type AdminQueuePauseMutationVariables = Exact<{
+  type: QueueType
+}>
+
+export type AdminQueuePauseMutation = { __typename?: 'Mutation'; paused?: boolean | null }
+
+export type AdminQueueResumeMutationVariables = Exact<{
+  type: QueueType
+}>
+
+export type AdminQueueResumeMutation = { __typename?: 'Mutation'; resumed?: boolean | null }
 
 export type UserDetailsFragment = {
   __typename?: 'User'

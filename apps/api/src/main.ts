@@ -6,6 +6,7 @@ import { OgmaService } from '@ogma/nestjs-module'
 import { exec } from 'child_process'
 import cookieParser from 'cookie-parser'
 import redirectSSL from 'redirect-ssl'
+import { json } from 'express'
 import { AppModule } from './app/app.module'
 
 async function bootstrap() {
@@ -20,6 +21,8 @@ async function bootstrap() {
   app.use(redirectSSL.create({ enabled: config.isProduction }))
   config.configureSwagger(app)
   app.use(cookieParser())
+  // TODO: Make this limit configurable
+  app.use(json({ limit: '10mb' }))
   const host = `http://${config.host}:${config.port}`
   try {
     await app.listen(config.port, config.host)
