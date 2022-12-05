@@ -5,7 +5,7 @@ import { JobStatus } from './entity/job-status.enum'
 import { Job } from './entity/job.entity'
 import { QueueType } from './entity/queue-type.enum'
 import { Queue } from './entity/queue.entity'
-import { ApiQueueCloseAccountService } from './queue/account/api-queue-close-account.service'
+import { ApiQueueCloseAccountService } from './queue/close-account/api-queue-close-account.service'
 
 @Injectable()
 export class ApiQueueDataAccessService {
