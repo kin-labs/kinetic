@@ -275,6 +275,7 @@ export type Mutation = {
   userAppEnvMintDisable?: Maybe<AppEnv>
   userAppEnvMintEnable?: Maybe<AppEnv>
   userAppEnvMintSetWallet?: Maybe<AppEnv>
+  userAppEnvPurgeTransactions?: Maybe<AppEnv>
   userAppEnvRemoveAllowedIp?: Maybe<AppEnv>
   userAppEnvRemoveAllowedUa?: Maybe<AppEnv>
   userAppEnvRemoveBlockedIp?: Maybe<AppEnv>
@@ -417,6 +418,11 @@ export type MutationUserAppEnvMintSetWalletArgs = {
   appId: Scalars['String']
   mintId: Scalars['String']
   walletId: Scalars['String']
+}
+
+export type MutationUserAppEnvPurgeTransactionsArgs = {
+  appEnvId: Scalars['String']
+  status?: InputMaybe<TransactionStatus>
 }
 
 export type MutationUserAppEnvRemoveAllowedIpArgs = {
@@ -3319,6 +3325,114 @@ export type UserAppEnvRemoveBlockedUaMutationVariables = Exact<{
 }>
 
 export type UserAppEnvRemoveBlockedUaMutation = {
+  __typename?: 'Mutation'
+  item?: {
+    __typename?: 'AppEnv'
+    id: string
+    createdAt: any
+    updatedAt: any
+    endpoint?: string | null
+    key?: string | null
+    ipsAllowed?: Array<string> | null
+    ipsBlocked?: Array<string> | null
+    name?: string | null
+    uasAllowed?: Array<string> | null
+    uasBlocked?: Array<string> | null
+    webhookBalanceEnabled?: boolean | null
+    webhookBalanceUrl?: string | null
+    webhookBalanceThreshold?: string | null
+    webhookDebugging?: boolean | null
+    webhookEventEnabled?: boolean | null
+    webhookEventUrl?: string | null
+    webhookSecret?: string | null
+    webhookVerifyEnabled?: boolean | null
+    webhookVerifyUrl?: string | null
+    app?: {
+      __typename?: 'App'
+      id: string
+      createdAt: any
+      updatedAt: any
+      index: number
+      maxEnvs: number
+      name?: string | null
+    } | null
+    cluster?: {
+      __typename?: 'Cluster'
+      id?: string | null
+      createdAt?: any | null
+      updatedAt?: any | null
+      endpointPrivate?: string | null
+      endpointPublic?: string | null
+      explorer?: string | null
+      name?: string | null
+      status?: ClusterStatus | null
+      type?: ClusterType | null
+      mints?: Array<{
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      }> | null
+    } | null
+    mints?: Array<{
+      __typename?: 'AppMint'
+      id: string
+      createdAt: any
+      updatedAt: any
+      addMemo?: boolean | null
+      order?: number | null
+      mint?: {
+        __typename?: 'Mint'
+        id?: string | null
+        createdAt?: any | null
+        updatedAt?: any | null
+        addMemo?: boolean | null
+        address?: string | null
+        airdropAmount?: number | null
+        airdropMax?: number | null
+        airdropPublicKey?: string | null
+        coinGeckoId?: string | null
+        decimals?: number | null
+        default?: boolean | null
+        enabled?: boolean | null
+        logoUrl?: string | null
+        name?: string | null
+        order?: number | null
+        symbol?: string | null
+        type?: MintType | null
+      } | null
+      wallet?: {
+        __typename?: 'Wallet'
+        id: string
+        createdAt?: any | null
+        updatedAt?: any | null
+        publicKey?: string | null
+        type?: WalletType | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type UserAppEnvPurgeTransactionsMutationVariables = Exact<{
+  appEnvId: Scalars['String']
+  status?: InputMaybe<TransactionStatus>
+}>
+
+export type UserAppEnvPurgeTransactionsMutation = {
   __typename?: 'Mutation'
   item?: {
     __typename?: 'AppEnv'
@@ -6804,7 +6918,7 @@ export function useUserAppUserUpdateRoleMutation() {
   )
 }
 export const UserAppEnvAddAllowedIpDocument = gql`
-  mutation userAppEnvAddAllowedIp($appEnvId: String!, $ip: String!) {
+  mutation UserAppEnvAddAllowedIp($appEnvId: String!, $ip: String!) {
     item: userAppEnvAddAllowedIp(appEnvId: $appEnvId, ip: $ip) {
       ...AppEnvDetails
     }
@@ -6818,7 +6932,7 @@ export function useUserAppEnvAddAllowedIpMutation() {
   )
 }
 export const UserAppEnvRemoveAllowedIpDocument = gql`
-  mutation userAppEnvRemoveAllowedIp($appEnvId: String!, $ip: String!) {
+  mutation UserAppEnvRemoveAllowedIp($appEnvId: String!, $ip: String!) {
     item: userAppEnvRemoveAllowedIp(appEnvId: $appEnvId, ip: $ip) {
       ...AppEnvDetails
     }
@@ -6832,7 +6946,7 @@ export function useUserAppEnvRemoveAllowedIpMutation() {
   )
 }
 export const UserAppEnvAddBlockedIpDocument = gql`
-  mutation userAppEnvAddBlockedIp($appEnvId: String!, $ip: String!) {
+  mutation UserAppEnvAddBlockedIp($appEnvId: String!, $ip: String!) {
     item: userAppEnvAddBlockedIp(appEnvId: $appEnvId, ip: $ip) {
       ...AppEnvDetails
     }
@@ -6846,7 +6960,7 @@ export function useUserAppEnvAddBlockedIpMutation() {
   )
 }
 export const UserAppEnvRemoveBlockedIpDocument = gql`
-  mutation userAppEnvRemoveBlockedIp($appEnvId: String!, $ip: String!) {
+  mutation UserAppEnvRemoveBlockedIp($appEnvId: String!, $ip: String!) {
     item: userAppEnvRemoveBlockedIp(appEnvId: $appEnvId, ip: $ip) {
       ...AppEnvDetails
     }
@@ -6860,7 +6974,7 @@ export function useUserAppEnvRemoveBlockedIpMutation() {
   )
 }
 export const UserAppEnvAddAllowedUaDocument = gql`
-  mutation userAppEnvAddAllowedUa($appEnvId: String!, $ua: String!) {
+  mutation UserAppEnvAddAllowedUa($appEnvId: String!, $ua: String!) {
     item: userAppEnvAddAllowedUa(appEnvId: $appEnvId, ua: $ua) {
       ...AppEnvDetails
     }
@@ -6874,7 +6988,7 @@ export function useUserAppEnvAddAllowedUaMutation() {
   )
 }
 export const UserAppEnvRemoveAllowedUaDocument = gql`
-  mutation userAppEnvRemoveAllowedUa($appEnvId: String!, $ua: String!) {
+  mutation UserAppEnvRemoveAllowedUa($appEnvId: String!, $ua: String!) {
     item: userAppEnvRemoveAllowedUa(appEnvId: $appEnvId, ua: $ua) {
       ...AppEnvDetails
     }
@@ -6888,7 +7002,7 @@ export function useUserAppEnvRemoveAllowedUaMutation() {
   )
 }
 export const UserAppEnvAddBlockedUaDocument = gql`
-  mutation userAppEnvAddBlockedUa($appEnvId: String!, $ua: String!) {
+  mutation UserAppEnvAddBlockedUa($appEnvId: String!, $ua: String!) {
     item: userAppEnvAddBlockedUa(appEnvId: $appEnvId, ua: $ua) {
       ...AppEnvDetails
     }
@@ -6902,7 +7016,7 @@ export function useUserAppEnvAddBlockedUaMutation() {
   )
 }
 export const UserAppEnvRemoveBlockedUaDocument = gql`
-  mutation userAppEnvRemoveBlockedUa($appEnvId: String!, $ua: String!) {
+  mutation UserAppEnvRemoveBlockedUa($appEnvId: String!, $ua: String!) {
     item: userAppEnvRemoveBlockedUa(appEnvId: $appEnvId, ua: $ua) {
       ...AppEnvDetails
     }
@@ -6913,6 +7027,20 @@ export const UserAppEnvRemoveBlockedUaDocument = gql`
 export function useUserAppEnvRemoveBlockedUaMutation() {
   return Urql.useMutation<UserAppEnvRemoveBlockedUaMutation, UserAppEnvRemoveBlockedUaMutationVariables>(
     UserAppEnvRemoveBlockedUaDocument,
+  )
+}
+export const UserAppEnvPurgeTransactionsDocument = gql`
+  mutation UserAppEnvPurgeTransactions($appEnvId: String!, $status: TransactionStatus) {
+    item: userAppEnvPurgeTransactions(appEnvId: $appEnvId, status: $status) {
+      ...AppEnvDetails
+    }
+  }
+  ${AppEnvDetailsFragmentDoc}
+`
+
+export function useUserAppEnvPurgeTransactionsMutation() {
+  return Urql.useMutation<UserAppEnvPurgeTransactionsMutation, UserAppEnvPurgeTransactionsMutationVariables>(
+    UserAppEnvPurgeTransactionsDocument,
   )
 }
 export const UserAppEnvMintDisableDocument = gql`
@@ -6944,7 +7072,7 @@ export function useUserAppEnvMintEnableMutation() {
   )
 }
 export const UserAppEnvMintSetWalletDocument = gql`
-  mutation userAppEnvMintSetWallet($appId: String!, $appEnvId: String!, $mintId: String!, $walletId: String!) {
+  mutation UserAppEnvMintSetWallet($appId: String!, $appEnvId: String!, $mintId: String!, $walletId: String!) {
     item: userAppEnvMintSetWallet(appId: $appId, appEnvId: $appEnvId, mintId: $mintId, walletId: $walletId) {
       ...AppEnvDetails
     }

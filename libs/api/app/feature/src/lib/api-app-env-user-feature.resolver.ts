@@ -2,6 +2,7 @@ import { ApiAppEnvUserDataAccessService, AppEnv, AppEnvStats } from '@kin-kineti
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
 import { Wallet } from '@kin-kinetic/api/wallet/data-access'
+import { TransactionStatus } from '@kin-kinetic/api/transaction/data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 
@@ -53,6 +54,14 @@ export class ApiAppEnvUserFeatureResolver {
   @Mutation(() => AppEnv, { nullable: true })
   userAppEnvRemoveBlockedUa(@Args('appEnvId') appEnvId: string, @Args('ua') ua: string) {
     return this.service.userAppEnvRemoveBlockedUa(appEnvId, ua)
+  }
+
+  @Mutation(() => AppEnv, { nullable: true })
+  userAppEnvPurgeTransactions(
+    @Args('appEnvId') appEnvId: string,
+    @Args('status', { type: () => TransactionStatus, nullable: true }) status: TransactionStatus,
+  ) {
+    return this.service.userAppEnvPurgeTransactions(appEnvId, status)
   }
 
   @Mutation(() => AppEnv, { nullable: true })

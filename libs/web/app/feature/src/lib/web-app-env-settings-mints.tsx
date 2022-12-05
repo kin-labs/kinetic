@@ -88,6 +88,11 @@ export function WebAppEnvSettingsMints({ app, env }: { app: App; env: AppEnv }) 
           <Text ml={2} mt={2} color="gray.500">
             Here you can control the mints that are available to your app.
           </Text>
+          <Text ml={2} mt={2} color="gray.500" fontWeight="bold">
+            Be cautious when changing the mint settings. If you disable an existing mint, users will no longer be able
+            to interact with that mint through your app. After changing the fee payer, users will need to restart their
+            apps so that the SDK can pick up the app config with new fee payer.
+          </Text>
         </Box>
         <Box mt={2} />
       </Flex>

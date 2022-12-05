@@ -70,50 +70,56 @@ mutation UserAppUserUpdateRole($appId: String!, $input: UserAppUserUpdateRoleInp
   }
 }
 
-mutation userAppEnvAddAllowedIp($appEnvId: String!, $ip: String!) {
+mutation UserAppEnvAddAllowedIp($appEnvId: String!, $ip: String!) {
   item: userAppEnvAddAllowedIp(appEnvId: $appEnvId, ip: $ip) {
     ...AppEnvDetails
   }
 }
 
-mutation userAppEnvRemoveAllowedIp($appEnvId: String!, $ip: String!) {
+mutation UserAppEnvRemoveAllowedIp($appEnvId: String!, $ip: String!) {
   item: userAppEnvRemoveAllowedIp(appEnvId: $appEnvId, ip: $ip) {
     ...AppEnvDetails
   }
 }
 
-mutation userAppEnvAddBlockedIp($appEnvId: String!, $ip: String!) {
+mutation UserAppEnvAddBlockedIp($appEnvId: String!, $ip: String!) {
   item: userAppEnvAddBlockedIp(appEnvId: $appEnvId, ip: $ip) {
     ...AppEnvDetails
   }
 }
 
-mutation userAppEnvRemoveBlockedIp($appEnvId: String!, $ip: String!) {
+mutation UserAppEnvRemoveBlockedIp($appEnvId: String!, $ip: String!) {
   item: userAppEnvRemoveBlockedIp(appEnvId: $appEnvId, ip: $ip) {
     ...AppEnvDetails
   }
 }
 
-mutation userAppEnvAddAllowedUa($appEnvId: String!, $ua: String!) {
+mutation UserAppEnvAddAllowedUa($appEnvId: String!, $ua: String!) {
   item: userAppEnvAddAllowedUa(appEnvId: $appEnvId, ua: $ua) {
     ...AppEnvDetails
   }
 }
 
-mutation userAppEnvRemoveAllowedUa($appEnvId: String!, $ua: String!) {
+mutation UserAppEnvRemoveAllowedUa($appEnvId: String!, $ua: String!) {
   item: userAppEnvRemoveAllowedUa(appEnvId: $appEnvId, ua: $ua) {
     ...AppEnvDetails
   }
 }
 
-mutation userAppEnvAddBlockedUa($appEnvId: String!, $ua: String!) {
+mutation UserAppEnvAddBlockedUa($appEnvId: String!, $ua: String!) {
   item: userAppEnvAddBlockedUa(appEnvId: $appEnvId, ua: $ua) {
     ...AppEnvDetails
   }
 }
 
-mutation userAppEnvRemoveBlockedUa($appEnvId: String!, $ua: String!) {
+mutation UserAppEnvRemoveBlockedUa($appEnvId: String!, $ua: String!) {
   item: userAppEnvRemoveBlockedUa(appEnvId: $appEnvId, ua: $ua) {
+    ...AppEnvDetails
+  }
+}
+
+mutation UserAppEnvPurgeTransactions($appEnvId: String!, $status: TransactionStatus) {
+  item: userAppEnvPurgeTransactions(appEnvId: $appEnvId, status: $status) {
     ...AppEnvDetails
   }
 }
@@ -130,7 +136,7 @@ mutation UserAppEnvMintEnable($appId: String!, $appEnvId: String!, $mintId: Stri
   }
 }
 
-mutation userAppEnvMintSetWallet($appId: String!, $appEnvId: String!, $mintId: String!, $walletId: String!) {
+mutation UserAppEnvMintSetWallet($appId: String!, $appEnvId: String!, $mintId: String!, $walletId: String!) {
   item: userAppEnvMintSetWallet(appId: $appId, appEnvId: $appEnvId, mintId: $mintId, walletId: $walletId) {
     ...AppEnvDetails
   }

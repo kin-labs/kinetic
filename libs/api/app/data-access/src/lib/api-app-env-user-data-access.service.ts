@@ -79,6 +79,24 @@ export class ApiAppEnvUserDataAccessService {
     return this.data.appEnv.update({ where: { id: appEnvId }, data: { uasBlocked: uas } })
   }
 
+  async userAppEnvPurgeTransactions(appEnvId: string, status: TransactionStatus) {
+    const deletedTransactionErrors = await this.data.transactionError.deleteMany({
+      where: { transaction: { appEnvId: appEnvId, status: status ? status : undefined } },
+    })
+    const deletedWebhooks = await this.data.webhook.deleteMany({
+      where: { transaction: { appEnvId: appEnvId, status: status ? status : undefined } },
+    })
+    const deletedTransactions = await this.data.transaction.deleteMany({
+      where: { appEnvId: appEnvId, status: status ? status : undefined },
+    })
+
+    this.logger.verbose(`Deleted ${deletedTransactionErrors.count} transaction errors for appEnv ${appEnvId}`)
+    this.logger.verbose(`Deleted ${deletedWebhooks.count} webhooks for appEnv ${appEnvId}`)
+    this.logger.verbose(`Deleted ${deletedTransactions.count} transactions for appEnv ${appEnvId}`)
+
+    return this.data.getAppEnvById(appEnvId)
+  }
+
   async userDeleteAppEnv(userId: string, appId: string, appEnvId: string) {
     this.logger.warn(`User ${userId} deleted AppEnv ${appEnvId} from App ${appId}`)
     await this.data.ensureAppOwner(userId, appId)

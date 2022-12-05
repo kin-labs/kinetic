@@ -262,6 +262,7 @@ type Mutation {
   userAppEnvMintDisable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
   userAppEnvMintEnable(appEnvId: String!, appId: String!, mintId: String!): AppEnv
   userAppEnvMintSetWallet(appEnvId: String!, appId: String!, mintId: String!, walletId: String!): AppEnv
+  userAppEnvPurgeTransactions(appEnvId: String!, status: TransactionStatus): AppEnv
   userAppEnvRemoveAllowedIp(appEnvId: String!, ip: String!): AppEnv
   userAppEnvRemoveAllowedUa(appEnvId: String!, ua: String!): AppEnv
   userAppEnvRemoveBlockedIp(appEnvId: String!, ip: String!): AppEnv

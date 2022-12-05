@@ -6,19 +6,12 @@ import {
   AccordionPanel,
   Box,
   Flex,
-  Heading,
   SimpleGrid,
   Stack,
   Text,
   useToast,
 } from '@chakra-ui/react'
-import {
-  WebAppUiAppEnvAccessForm,
-  WebWebhookUiBalanceForm,
-  WebWebhookUiDebuggingForm,
-  WebWebhookUiEventForm,
-  WebWebhookUiVerifyForm,
-} from '@kin-kinetic/web/app/ui'
+import { WebAppUiAppEnvAccessForm } from '@kin-kinetic/web/app/ui'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiPageHeader } from '@kin-kinetic/web/ui/page'
 import {
@@ -35,7 +28,7 @@ import {
 } from '@kin-kinetic/web/util/sdk'
 import { WebhookLabel } from './web-app-env-settings-webhooks'
 
-export function WebAppEnvSettingsAccess({ app, env }: { app: App; env: AppEnv }) {
+export function WebAppEnvSettingsAccess({ env }: { app: App; env: AppEnv }) {
   const toast = useToast()
   const [, addAllowedIpMutation] = useUserAppEnvAddAllowedIpMutation()
   const [, addAllowedUaMutation] = useUserAppEnvAddAllowedUaMutation()

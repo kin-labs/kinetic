@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, Stack, Tag, Text, useColorModeValue } from '@chakra-ui/react'
+import { SimpleGrid, Stack, Tag, Text, useColorModeValue } from '@chakra-ui/react'
 import { ellipsify, WebUiPropertyList } from '@kin-kinetic/web/app/ui'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
@@ -8,7 +8,7 @@ import { App, AppEnv, TransactionStatus, useUserAppEnvStatsQuery, useUserWallets
 import { Button, List, ListItem, ListItemLabel, ListItemTertiary } from '@saas-ui/react'
 import { Link } from 'react-router-dom'
 
-export function WebAppEnvDashboardTab({ app, env }: { app: App; env: AppEnv }) {
+export function WebAppEnvDashboardTab({ env }: { app: App; env: AppEnv }) {
   const headerColor = useColorModeValue('gray.600', 'gray.300')
   const [{ data, error, fetching }] = useUserAppEnvStatsQuery({
     variables: { appEnvId: env.id },
@@ -34,11 +34,7 @@ export function WebAppEnvDashboardTab({ app, env }: { app: App; env: AppEnv }) {
     TransactionStatus.Confirmed,
     TransactionStatus.Processing,
   ]
-  const config = {
-    endpoint: env.endpoint,
-    environment: env.name,
-    index: app.index,
-  }
+
   return (
     <WebUiPage>
       <Stack spacing={{ base: 2, md: 6, lg: 12 }}>
