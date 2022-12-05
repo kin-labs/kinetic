@@ -24,12 +24,17 @@ export function WebAdminFeatureQueueList() {
                 key={name}
                 as={Link}
                 to={type}
-                // direction="row"
                 justifyContent="center"
-                // alignItems="center"
                 spacing={6}
               >
-                <Heading size={{ base: 'base', md: 'md', lg: 'lg' }}>{name}</Heading>
+                <Heading
+                  as={Link}
+                  to={type}
+                  size={{ base: 'base', md: 'md', lg: 'lg' }}
+                  sx={{ textDecoration: 'underline' }}
+                >
+                  {name}
+                </Heading>
                 {count ? <QueueCountStats count={count} /> : null}
               </Stack>
             ))}

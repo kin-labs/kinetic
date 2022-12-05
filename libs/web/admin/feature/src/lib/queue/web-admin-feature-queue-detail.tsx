@@ -1,5 +1,4 @@
-import { Badge, Box, Button, Stack, Tooltip, useToast } from '@chakra-ui/react'
-import { PlayIcon } from '@heroicons/react/20/solid'
+import { Badge, Box, Button, Stack, Text, Tooltip, useToast } from '@chakra-ui/react'
 import { WebUiAlert } from '@kin-kinetic/web/ui/alert'
 import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiLoaderPage } from '@kin-kinetic/web/ui/loader'
@@ -176,23 +175,31 @@ export function WebAdminFeatureQueueDetail() {
         </WebUiCard>
       ) : null}
       <WebUiCard>
-        <Form
-          defaultValues={{
-            environment: 'local',
-            index: 1,
-            payload: '',
-          }}
-          onSubmit={({ environment, index, payload }) => submit({ environment, index, payload })}
-        >
+        <Stack spacing={4}>
           <Stack>
-            <Field name="environment" label="Environment" />
-            <Field type="number" name="index" label="Index" />
-            <Field type="textarea" name="payload" label="Payload" />
-            <Box>
-              <SubmitButton>Load Queue</SubmitButton>
-            </Box>
+            <Text fontSize="2xl">{type}</Text>
+            {type === QueueType.CloseAccount ? (
+              <Text>The payload for the CloseAccount queue is a newline-separated list of accounts to close.</Text>
+            ) : null}
           </Stack>
-        </Form>
+          <Form
+            defaultValues={{
+              environment: 'local',
+              index: 1,
+              payload: '',
+            }}
+            onSubmit={({ environment, index, payload }) => submit({ environment, index, payload })}
+          >
+            <Stack>
+              <Field name="environment" label="Environment" />
+              <Field type="number" name="index" label="Index" />
+              <Field type="textarea" name="payload" label="Payload" />
+              <Box>
+                <SubmitButton>Load Queue</SubmitButton>
+              </Box>
+            </Stack>
+          </Form>
+        </Stack>
       </WebUiCard>
       <WebUiCard>
         {data.item.type ? <QueueJobListFeature type={data.item.type} /> : null}
