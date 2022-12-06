@@ -66,13 +66,17 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     services:
       postgres:
-        image: postgres:12
+        image: postgres:15-alpine
         env:
           POSTGRES_DB: prisma
           POSTGRES_USER: prisma
           POSTGRES_PASSWORD: prisma
         ports: ['5432:5432']
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
       solana:
         image: ghcr.io/kin-labs/kinetic-solana-network:latest
         ports: ['8899:8899', '8900:8900']
