@@ -64,6 +64,10 @@ export default () => ({
     port: parseInt(process.env.METRICS_PORT, 10),
   },
   port: parseInt(process.env.PORT, 10),
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT, 10),
+  },
   solana: {
     devnet: {
       enabled: process.env.SOLANA_DEVNET_ENABLED?.toLowerCase() !== 'false',

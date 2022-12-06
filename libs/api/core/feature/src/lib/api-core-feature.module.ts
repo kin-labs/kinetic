@@ -7,6 +7,7 @@ import { ApiConfigDataAccessModule, ApiConfigDataAccessService } from '@kin-kine
 import { ApiConfigFeatureModule } from '@kin-kinetic/api/config/feature'
 import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { ApiCronDataAccessModule } from '@kin-kinetic/api/cron/data-access'
+import { ApiQueueFeatureModule } from '@kin-kinetic/api/queue/feature'
 import { ApiTransactionFeatureModule } from '@kin-kinetic/api/transaction/feature'
 import { ApiUserFeatureModule } from '@kin-kinetic/api/user/feature'
 import { ApiWalletFeatureModule } from '@kin-kinetic/api/wallet/feature'
@@ -47,6 +48,7 @@ import { serveStaticFactory } from './serve-static.factory'
     ApiConfigFeatureModule,
     ApiCoreDataAccessModule,
     ApiCronDataAccessModule,
+    ApiQueueFeatureModule,
     ApiTransactionFeatureModule,
     ApiUserFeatureModule,
     ApiWalletFeatureModule,

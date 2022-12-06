@@ -1,5 +1,5 @@
 import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
 import {
   ApiTransactionDataAccessService,
   Transaction,
@@ -9,22 +9,25 @@ import { Keypair } from '@kin-kinetic/keypair'
 import {
   BalanceMint,
   BalanceSummary,
-  Commitment,
   generateCloseAccountTransaction,
   getPublicKey,
   parseAndSignTransaction,
   PublicKeyString,
   removeDecimals,
 } from '@kin-kinetic/solana'
-import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common'
+import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
 import { CloseAccountRequest } from './dto/close-account-request.dto'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
 import { HistoryResponse } from './entities/history-response.entity'
+import { validateCloseAccount } from './helpers/validate-close.account'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {
+  private closeAccountRequestCounter: Counter
+  private closeAccountRequestInvalidCounter: Counter
+  private closeAccountRequestValidCounter: Counter
   private createAccountRequestCounter: Counter
   private createAccountErrorMintNotFoundCounter: Counter
   private createAccountSolanaTransactionSuccessCounter: Counter
@@ -37,21 +40,31 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
-    const prefix = 'api_account_create_account'
-    this.createAccountRequestCounter = this.data.metrics.getCounter(`${prefix}_request`, {
+    const closePrefix = 'api_account_close_account'
+    const createPrefix = 'api_account_create_account'
+    this.closeAccountRequestCounter = this.data.metrics.getCounter(`${closePrefix}_request`, {
+      description: 'Number of closeAccount requests',
+    })
+    this.closeAccountRequestInvalidCounter = this.data.metrics.getCounter(`${closePrefix}_invalid_request`, {
+      description: 'Number of invalid closeAccount requests',
+    })
+    this.closeAccountRequestValidCounter = this.data.metrics.getCounter(`${closePrefix}_valid_request`, {
+      description: 'Number of valid closeAccount requests',
+    })
+    this.createAccountRequestCounter = this.data.metrics.getCounter(`${createPrefix}_request`, {
       description: 'Number of createAccount requests',
     })
-    this.createAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(`${prefix}_error_mint_not_found`, {
+    this.createAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(`${createPrefix}_error_mint_not_found`, {
       description: 'Number of createAccount mint not found errors',
     })
     this.createAccountSolanaTransactionSuccessCounter = this.data.metrics.getCounter(
-      `${prefix}_send_solana_transaction_success`,
+      `${createPrefix}_send_solana_transaction_success`,
       {
         description: 'Number of createAccount Solana transaction success',
       },
     )
     this.createAccountSolanaTransactionErrorCounter = this.data.metrics.getCounter(
-      `${prefix}_send_solana_transaction_error`,
+      `${createPrefix}_send_solana_transaction_error`,
       {
         description: 'Number of createAccount Solana transaction errors',
       },
@@ -62,101 +75,84 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
     const { ip, ua } = this.transaction.validateRequest(appEnv, req)
 
-    const accountInfo = await this.getAccountInfo(input.environment, input.index, input.account)
+    return this.handleCloseAccount(input, { appEnv, appKey, ip, ua })
+  }
 
-    if (accountInfo.isMint) {
-      throw new BadRequestException('Cannot close a mint')
-    }
-
-    if (accountInfo.isTokenAccount) {
-      // FIXME: Allow closing token accounts directly
-      throw new BadRequestException('Cannot close a token account')
-    }
-
-    if (!accountInfo.tokens?.length) {
-      throw new BadRequestException('Account has no tokens')
-    }
-
-    const mint = this.transaction.validateMint(appEnv, appKey, input.mint)
-
-    if (!mint) {
-      throw new BadRequestException('Mint not found')
-    }
-
-    const mintTokens = accountInfo.tokens.filter((t) => t.mint === mint.mint.address)
-
-    if (!mintTokens.length) {
-      throw new BadRequestException('Account has no tokens for the specified mint')
-    }
-
-    if (mintTokens?.length > 1) {
-      // FIXME: Add support for closing multiple accounts
-      // Ideally, we can look at closing multiple token accounts from the same owner in a single transactions
-      throw new BadRequestException(`Can't close account with multiple tokens`)
-    }
-
-    const tokenAccount = mintTokens[0]
-
-    if (!tokenAccount.closeAuthority) {
-      throw new BadRequestException('Token account has no close authority')
-    }
-
-    if (Number(tokenAccount.balance) > 0) {
-      throw new BadRequestException('Cannot close an account with a balance')
-    }
-
-    const feePayerWallet = await appEnv.wallets.find((w) => w.publicKey === tokenAccount.closeAuthority)
-
-    if (!feePayerWallet) {
-      throw new BadRequestException('Token account close authority is not a known wallet')
-    }
-
-    // Create the Transaction
-    const transaction: TransactionWithErrors = await this.transaction.createTransaction({
-      appEnvId: appEnv.id,
-      commitment: input.commitment,
-      ip,
-      referenceId: input.referenceId,
-      referenceType: input.referenceType,
-      ua,
-    })
-
-    const { blockhash, lastValidBlockHeight } = await this.transaction.getLatestBlockhash(
-      input.environment,
-      input.index,
-    )
-
-    const signer = Keypair.fromSecret(mint.wallet?.secretKey)
-
-    const { transaction: solanaTransaction } = generateCloseAccountTransaction({
-      addMemo: mint.addMemo,
-      blockhash,
-      index: input.index,
-      lastValidBlockHeight,
-      signer: signer.solana,
-      tokenAccount: tokenAccount.account,
-    })
-
-    return this.transaction.handleTransaction({
+  async handleCloseAccount(
+    input: CloseAccountRequest,
+    {
       appEnv,
       appKey,
-      blockhash,
-      commitment: input.commitment,
-      transaction,
-      decimals: mint?.mint?.decimals,
-      feePayer: tokenAccount.closeAuthority,
-      headers: req.headers as Record<string, string>,
-      lastValidBlockHeight,
-      mintPublicKey: mint?.mint?.address,
-      solanaTransaction,
-      source: input.account,
-    })
+      headers,
+      ip,
+      ua,
+    }: { appKey: string; appEnv: AppEnvironment; headers?: Record<string, string>; ip?: string; ua?: string },
+  ): Promise<Transaction> {
+    this.closeAccountRequestCounter.add(1, { appKey })
+    const accountInfo = await this.getAccountInfo(input.environment, input.index, input.account)
+
+    try {
+      const tokenAccount = validateCloseAccount({
+        info: accountInfo,
+        mint: input.mint,
+        mints: appEnv.mints.map((m) => m.mint?.address),
+        wallets: appEnv.wallets.map((w) => w.publicKey),
+      })
+
+      this.closeAccountRequestValidCounter.add(1, { appKey })
+
+      const mint = this.transaction.validateMint(appEnv, appKey, input.mint)
+
+      // Create the Transaction
+      const transaction: TransactionWithErrors = await this.transaction.createTransaction({
+        appEnvId: appEnv.id,
+        commitment: input.commitment,
+        ip,
+        referenceId: input.referenceId,
+        referenceType: input.referenceType,
+        ua,
+      })
+
+      const { blockhash, lastValidBlockHeight } = await this.transaction.getLatestBlockhash(
+        input.environment,
+        input.index,
+      )
+
+      const signer = Keypair.fromSecret(mint.wallet?.secretKey)
+
+      const { transaction: solanaTransaction } = generateCloseAccountTransaction({
+        addMemo: mint.addMemo,
+        blockhash,
+        index: input.index,
+        lastValidBlockHeight,
+        signer: signer.solana,
+        tokenAccount: tokenAccount.account,
+      })
+
+      return this.transaction.handleTransaction({
+        appEnv,
+        appKey,
+        blockhash,
+        commitment: input.commitment,
+        transaction,
+        decimals: mint?.mint?.decimals,
+        feePayer: tokenAccount.closeAuthority,
+        headers,
+        lastValidBlockHeight,
+        mintPublicKey: mint?.mint?.address,
+        solanaTransaction,
+        source: input.account,
+      })
+    } catch (error) {
+      this.closeAccountRequestInvalidCounter.add(1, { appKey })
+      throw error
+    }
   }
 
   async getAccountInfo(environment: string, index: number, accountId: PublicKeyString) {
     const solana = await this.data.getSolanaConnection(environment, index)
-
-    const accountInfo = await solana.connection.getParsedAccountInfo(getPublicKey(accountId))
+    const account = getPublicKey(accountId)
+    const accountInfo = await solana.connection.getParsedAccountInfo(account)
 
     if (!accountInfo) {
       return null
@@ -170,12 +166,12 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const owner = isTokenAccount ? parsed.info.owner : null
 
     const result = {
-      account: accountId,
+      account: account.toString(),
       isMint,
       isOwner: false,
       isTokenAccount,
       owner,
-      program: accountInfo?.value?.owner ?? null,
+      program: accountInfo?.value?.owner?.toString() ?? null,
       tokens: !isMint && !isTokenAccount ? [] : null,
     }
 
@@ -187,7 +183,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const appEnv = await this.app.getAppConfig(environment, index)
     const mint = appEnv.mint
 
-    const tokenAccounts = await solana.getTokenAccounts(accountId, mint.publicKey)
+    const tokenAccounts = await solana.getTokenAccounts(account, mint.publicKey)
     for (const tokenAccount of tokenAccounts) {
       const info = await solana.connection.getParsedAccountInfo(getPublicKey(tokenAccount))
       const parsed = (info.value as any)?.data?.parsed?.info

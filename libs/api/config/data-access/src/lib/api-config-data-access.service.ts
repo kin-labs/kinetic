@@ -205,6 +205,13 @@ export class ApiConfigDataAccessService {
     return 'api'
   }
 
+  get redisConfig() {
+    return {
+      host: this.config.get('redis.host'),
+      port: this.config.get('redis.port'),
+    }
+  }
+
   get solanaDevnetEnabled(): boolean {
     return this.config.get('solana.devnet.enabled')
   }
