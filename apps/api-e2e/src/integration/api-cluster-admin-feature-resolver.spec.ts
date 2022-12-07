@@ -1,3 +1,4 @@
+import { Keypair } from '@kin-kinetic/keypair'
 import { INestApplication } from '@nestjs/common'
 import { Response } from 'supertest'
 import { AdminClusters, AdminCreateApp, AdminMintCreate, AdminMintCreateInput } from '../generated/api-sdk'
@@ -10,26 +11,17 @@ function expectUnauthorized(res: Response) {
   expect(errors[0].message).toEqual('Unauthorized')
 }
 
-function randomUsername(): string {
-  return uniq('user-')
-}
-
 describe('Cluster Admin (e2e)', () => {
   let app: INestApplication
-  let userId: string | undefined
-  let username: string | undefined
   let token: string | undefined
 
   beforeAll(async () => {
     app = await initializeE2eApp()
     const res = await runLoginQuery(app, ADMIN_USERNAME)
     token = res.body.data.login.token
-    username = randomUsername()
   })
 
   afterAll(async () => {
-    userId = undefined
-    username = undefined
     return app.close()
   })
 
@@ -52,9 +44,10 @@ describe('Cluster Admin (e2e)', () => {
         await runGraphQLQueryAdmin(app, token, AdminCreateApp, {
           input: { index, name },
         })
+        const keypair = Keypair.random()
         const clusterId = 'solana-devnet'
         const input: AdminMintCreateInput = {
-          address: '3SaUThdYFoUX2FYUi9ZPf2TKTu3UYKhNHhXb2Y6najRg',
+          address: keypair.publicKey,
           clusterId,
           decimals: 9,
           name: 'Hello Token',

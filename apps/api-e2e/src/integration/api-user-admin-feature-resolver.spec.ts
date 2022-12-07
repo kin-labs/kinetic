@@ -11,7 +11,7 @@ import {
   UserRole,
 } from '../generated/api-sdk'
 import { ADMIN_USERNAME, initializeE2eApp, runGraphQLQuery, runGraphQLQueryAdmin, runLoginQuery } from '../helpers'
-import { uniq, uniqInt } from '../helpers/uniq'
+import { uniq } from '../helpers/uniq'
 
 function expectUnauthorized(res: Response) {
   expect(res).toHaveProperty('text')

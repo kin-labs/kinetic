@@ -17,26 +17,17 @@ function expectUnauthorized(res: Response) {
   expect(errors[0].message).toEqual('Unauthorized')
 }
 
-function randomUsername(): string {
-  return uniq('user-')
-}
-
 describe('App User (e2e)', () => {
   let app: INestApplication
-  let userId: string | undefined
-  let username: string | undefined
   let token: string | undefined
 
   beforeAll(async () => {
     app = await initializeE2eApp()
     const res = await runLoginQuery(app, ADMIN_USERNAME)
     token = res.body.data.login.token
-    username = randomUsername()
   })
 
   afterAll(async () => {
-    userId = undefined
-    username = undefined
     return app.close()
   })
 
