@@ -29,7 +29,7 @@ export const validationSchema = Joi.object({
   SOLANA_DEVNET_RPC_ENDPOINT: Joi.string().default('devnet'),
   SOLANA_LOCAL_ENABLED: Joi.boolean().default(false),
   SOLANA_LOCAL_MINT_KIN: Joi.string().default(`*MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek,5,Kin`),
-  SOLANA_LOCAL_RPC_ENDPOINT: Joi.string().default('http://localhost:8899'),
+  SOLANA_LOCAL_RPC_ENDPOINT: Joi.string().default('http://127.0.0.1:8899'),
   SOLANA_MAINNET_ENABLED: Joi.boolean().default(false),
   SOLANA_MAINNET_MINT_KIN: Joi.string().default('*kinXdEcpDQeHPEuQnqmUgtYykqKGVFq6CeVX5iAHJq6,5,Kin'),
   SOLANA_MAINNET_RPC_ENDPOINT: Joi.string().default('mainnet-beta'),

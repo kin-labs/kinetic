@@ -9,7 +9,7 @@ describe('KineticSdk (e2e) - Account', () => {
   let sdk: KineticSdk
 
   beforeEach(async () => {
-    sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://localhost:3000', environment: 'local' })
+    sdk = await KineticSdk.setup({ index: 1, endpoint: 'http://127.0.0.1:3000', environment: 'local' })
   })
 
   it('should get account balance', async () => {

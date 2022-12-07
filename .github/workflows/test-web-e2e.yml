@@ -17,7 +17,7 @@ env:
   DATABASE_URL: 'postgresql://prisma:prisma@localhost:5432/prisma?schema=kinetic'
   JWT_SECRET: 'KineticJwtSecret!'
   NX_CLOUD_DISTRIBUTED_EXECUTION: false
-  SOLANA_DEVNET_RPC_ENDPOINT: 'http://localhost:8899'
+  SOLANA_DEVNET_RPC_ENDPOINT: 'http://127.0.0.1:8899'
   SOLANA_DEVNET_MINT_KIN: '*MoGaMuJnB3k8zXjBYBnHxHG47vWcW3nyb7bFYvdVzek,5,Kin'
   SOLANA_DEVNET_MINT_KIN_AIRDROP_SECRET: 'UvfuF3FPqLyvS8xGjSu4AUfdsY5QvLdnin8SKBLAi3UqgbmEWCDshPY3UcxvBgRAqHLzh5Ni1eypLVZArsis6FF'
 
