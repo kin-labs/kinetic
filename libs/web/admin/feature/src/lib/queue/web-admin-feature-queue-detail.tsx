@@ -113,7 +113,7 @@ export function WebAdminFeatureQueueDetail() {
       .catch((error) => toastError(error.message))
   }
   const submit = ({ environment, index, payload }: { environment: string; index: number; payload: unknown }) => {
-    loadQueue({ input: { type: type as QueueType, environment, index, payload } })
+    loadQueue({ input: { type: type as QueueType, environment, index: Number(index), payload } })
       .then((res) => {
         if (res.error) {
           return toastError(res.error.message)
