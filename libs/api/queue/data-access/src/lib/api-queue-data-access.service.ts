@@ -33,7 +33,11 @@ export class ApiQueueDataAccessService {
 
   async adminQueueJobs(type: QueueType, statuses: JobStatus[]): Promise<Job[]> {
     if (type === QueueType.CloseAccount) {
-      const jobs = await this.accountQueue.queue.getJobs(statuses.map((status) => status.toLowerCase() as any))
+      const jobs = await this.accountQueue.queue.getJobs(
+        statuses.map((status) => status.toLowerCase() as any),
+        0,
+        1000,
+      )
 
       return jobs.map((job) => job.toJSON() as Job)
     }
