@@ -245,7 +245,7 @@ type Mutation {
   adminDeleteWallet(walletId: String!): Wallet
   adminMintCreate(input: AdminMintCreateInput!): Cluster
   adminMintImportWallet(mintId: String!, secret: String!): Mint
-  adminQueueClean(type: QueueType!): Boolean
+  adminQueueClean(status: JobStatus, type: QueueType!): Boolean
   adminQueueDeleteJob(jobId: String!, type: QueueType!): Boolean
   adminQueueLoad(input: AdminQueueLoadInput!): Queue
   adminQueuePause(type: QueueType!): Boolean

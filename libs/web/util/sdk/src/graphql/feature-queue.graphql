@@ -55,8 +55,8 @@ mutation AdminQueueLoad($input: AdminQueueLoadInput!) {
   }
 }
 
-mutation AdminQueueClean($type: QueueType!) {
-  paused: adminQueueClean(type: $type)
+mutation AdminQueueClean($type: QueueType!, $status: JobStatus) {
+  paused: adminQueueClean(type: $type, status: $status)
 }
 
 mutation AdminQueueDeleteJob($type: QueueType!, $jobId: String!) {

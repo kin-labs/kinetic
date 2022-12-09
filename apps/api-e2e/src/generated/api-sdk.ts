@@ -340,6 +340,7 @@ export type MutationAdminMintImportWalletArgs = {
 }
 
 export type MutationAdminQueueCleanArgs = {
+  status?: InputMaybe<JobStatus>
   type: QueueType
 }
 
@@ -1770,8 +1771,8 @@ export const AdminQueueLoad = gql`
   ${QueueDetails}
 `
 export const AdminQueueClean = gql`
-  mutation AdminQueueClean($type: QueueType!) {
-    paused: adminQueueClean(type: $type)
+  mutation AdminQueueClean($type: QueueType!, $status: JobStatus) {
+    paused: adminQueueClean(type: $type, status: $status)
   }
 `
 export const AdminQueueDeleteJob = gql`
@@ -6532,6 +6533,7 @@ export type AdminQueueLoadMutation = {
 
 export type AdminQueueCleanMutationVariables = Exact<{
   type: QueueType
+  status?: InputMaybe<JobStatus>
 }>
 
 export type AdminQueueCleanMutation = { __typename?: 'Mutation'; paused?: boolean | null }

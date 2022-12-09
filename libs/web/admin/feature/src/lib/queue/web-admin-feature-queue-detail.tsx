@@ -4,6 +4,7 @@ import { WebUiCard } from '@kin-kinetic/web/ui/card'
 import { WebUiLoaderPage } from '@kin-kinetic/web/ui/loader'
 import { WebUiPage, WebUiPageBackButton } from '@kin-kinetic/web/ui/page'
 import {
+  JobStatus,
   QueueType,
   useAdminQueueCleanMutation,
   useAdminQueueLoadMutation,
@@ -78,8 +79,8 @@ export function WebAdminFeatureQueueDetail() {
     })
   }
 
-  const clean = () => {
-    cleanQueue({ type: type as QueueType })
+  const clearQueue = (status?: JobStatus) => {
+    cleanQueue({ type: type as QueueType, status: status as JobStatus })
       .then((res) => {
         if (res.error) {
           return toastError(res.error.message)
@@ -155,8 +156,8 @@ export function WebAdminFeatureQueueDetail() {
             </Button>
           </Tooltip>
           <Tooltip label={`This will remove all the jobs from the queue.`}>
-            <Button onClick={() => clean()} leftIcon={<MdDelete />}>
-              Clean
+            <Button onClick={() => clearQueue()} leftIcon={<MdDelete />}>
+              Clear queue
             </Button>
           </Tooltip>
         </ButtonGroup>
@@ -164,7 +165,7 @@ export function WebAdminFeatureQueueDetail() {
     >
       {data?.item?.count ? (
         <WebUiCard>
-          <QueueCountStats count={data.item.count} />
+          <QueueCountStats count={data.item.count} clearQueue={clearQueue} />
         </WebUiCard>
       ) : null}
       {data?.item?.info ? (
