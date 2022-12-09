@@ -16,8 +16,6 @@ export class ApiQueueCloseAccountProcessor {
   async handleProcess(job: Job, cb: DoneCallback) {
     const { account, environment, index, mint, mints, wallets } = job.data
 
-    this.logger.debug(`${job.id} Waiting 1 seconds...`)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
     this.logger.debug(`${job.id} Start processing...`)
 
     try {
