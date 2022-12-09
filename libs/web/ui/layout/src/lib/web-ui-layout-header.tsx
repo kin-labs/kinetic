@@ -76,6 +76,9 @@ export function WebUiLayoutHeader() {
                         <MenuItem as={NavLink} to={'/admin/clusters'}>
                           Clusters
                         </MenuItem>
+                        <MenuItem as={NavLink} to={'/admin/queues'}>
+                          Queues
+                        </MenuItem>
                         <MenuItem as={NavLink} to={'/admin/users'}>
                           Users
                         </MenuItem>

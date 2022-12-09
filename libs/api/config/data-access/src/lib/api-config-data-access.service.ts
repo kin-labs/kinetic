@@ -205,6 +205,10 @@ export class ApiConfigDataAccessService {
     return 'api'
   }
 
+  get queueCloseAccountStart() {
+    return this.config.get('queue.closeAccount.start')
+  }
+
   get redisConfig() {
     return {
       host: this.config.get('redis.host'),

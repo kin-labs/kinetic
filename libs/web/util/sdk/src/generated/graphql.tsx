@@ -342,6 +342,7 @@ export type MutationAdminMintImportWalletArgs = {
 }
 
 export type MutationAdminQueueCleanArgs = {
+  status?: InputMaybe<JobStatus>
   type: QueueType
 }
 
@@ -5472,6 +5473,7 @@ export type AdminQueueLoadMutation = {
 
 export type AdminQueueCleanMutationVariables = Exact<{
   type: QueueType
+  status?: InputMaybe<JobStatus>
 }>
 
 export type AdminQueueCleanMutation = { __typename?: 'Mutation'; paused?: boolean | null }
@@ -7477,8 +7479,8 @@ export function useAdminQueueLoadMutation() {
   return Urql.useMutation<AdminQueueLoadMutation, AdminQueueLoadMutationVariables>(AdminQueueLoadDocument)
 }
 export const AdminQueueCleanDocument = gql`
-  mutation AdminQueueClean($type: QueueType!) {
-    paused: adminQueueClean(type: $type)
+  mutation AdminQueueClean($type: QueueType!, $status: JobStatus) {
+    paused: adminQueueClean(type: $type, status: $status)
   }
 `
 

@@ -2,8 +2,8 @@ import { Heading, SimpleGrid, Stack, useColorModeValue } from '@chakra-ui/react'
 import { WebUiLoader } from '@kin-kinetic/web/ui/loader'
 import { WebUiPage } from '@kin-kinetic/web/ui/page'
 import { useAdminQueuesQuery } from '@kin-kinetic/web/util/sdk'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { QueueCountStats } from './queue-count.stats'
 
 export function WebAdminFeatureQueueList() {
   const [{ data, fetching }] = useAdminQueuesQuery()
@@ -22,20 +22,13 @@ export function WebAdminFeatureQueueList() {
                 p={{ base: 6, lg: 12 }}
                 bg={bg}
                 key={name}
-                as={Link}
-                to={type}
+                alignItems="center"
                 justifyContent="center"
                 spacing={6}
               >
-                <Heading
-                  as={Link}
-                  to={type}
-                  size={{ base: 'base', md: 'md', lg: 'lg' }}
-                  sx={{ textDecoration: 'underline' }}
-                >
+                <Heading as={Link} to={type} size={{ base: 'base', md: 'md', lg: 'lg' }}>
                   {name}
                 </Heading>
-                {count ? <QueueCountStats count={count} /> : null}
               </Stack>
             ))}
           </SimpleGrid>

@@ -64,6 +64,12 @@ export default () => ({
     port: parseInt(process.env.METRICS_PORT, 10),
   },
   port: parseInt(process.env.PORT, 10),
+  queue: {
+    closeAccount: {
+      concurrency: Number(process.env.QUEUE_CLOSE_ACCOUNT_CONCURRENCY ?? '1'),
+      start: process.env.QUEUE_CLOSE_ACCOUNT_START?.toLowerCase() !== 'false',
+    },
+  },
   redis: {
     host: process.env.REDIS_HOST,
     port: parseInt(process.env.REDIS_PORT, 10),

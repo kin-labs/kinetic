@@ -33,7 +33,11 @@ export class ApiQueueDataAccessService {
 
   async adminQueueJobs(type: QueueType, statuses: JobStatus[]): Promise<Job[]> {
     if (type === QueueType.CloseAccount) {
-      const jobs = await this.accountQueue.queue.getJobs(statuses.map((status) => status.toLowerCase() as any))
+      const jobs = await this.accountQueue.queue.getJobs(
+        statuses.map((status) => status.toLowerCase() as any),
+        0,
+        1000,
+      )
 
       return jobs.map((job) => job.toJSON() as Job)
     }
@@ -49,9 +53,13 @@ export class ApiQueueDataAccessService {
     throw new NotFoundException(`Queue ${input.type} not found`)
   }
 
-  async adminQueueClean(type: QueueType): Promise<boolean> {
+  async adminQueueClean(type: QueueType, status?: JobStatus): Promise<boolean> {
     if (type === QueueType.CloseAccount) {
-      await this.accountQueue.queue.obliterate()
+      if (!status) {
+        await this.accountQueue.queue.obliterate()
+      } else {
+        await this.accountQueue.queue.clean(1000, status.toLowerCase() as any)
+      }
       return true
     }
 

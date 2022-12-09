@@ -4,7 +4,7 @@ import { InjectQueue } from '@nestjs/bull'
 import { Injectable, Logger } from '@nestjs/common'
 import { Queue } from 'bull'
 import { QueueCount } from '../../entity/queue-count.entity'
-import { QueueType } from '../../entity/queue-type.enum'
+import { QueueSettings, QueueType } from '../../entity/queue-type.enum'
 
 @Injectable()
 export class ApiQueueCloseAccountService {
@@ -14,7 +14,11 @@ export class ApiQueueCloseAccountService {
     readonly account: ApiAccountDataAccessService,
     readonly data: ApiCoreDataAccessService,
   ) {
-    this.queue.pause().then((res) => this.logger.debug(`Paused ${QueueType.CloseAccount} queue`))
+    if (!this.data.config.queueCloseAccountStart) {
+      this.queue.pause().then((res) => this.logger.debug(`Queue ${QueueType.CloseAccount} is paused`))
+    } else {
+      this.logger.debug(`Queue ${QueueType.CloseAccount} is started`)
+    }
   }
 
   async getQueueInfo() {
@@ -46,7 +50,7 @@ export class ApiQueueCloseAccountService {
     await this.queue.addBulk(
       accounts.map((account) => {
         return {
-          name: 'process',
+          name: QueueSettings[QueueType.CloseAccount].name,
           data: {
             account,
             environment,
