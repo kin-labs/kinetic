@@ -4,7 +4,7 @@ import { InjectQueue } from '@nestjs/bull'
 import { Injectable, Logger } from '@nestjs/common'
 import { Queue } from 'bull'
 import { QueueCount } from '../../entity/queue-count.entity'
-import { QueueType } from '../../entity/queue-type.enum'
+import { QueueSettings, QueueType } from '../../entity/queue-type.enum'
 
 @Injectable()
 export class ApiQueueCloseAccountService {
@@ -50,7 +50,7 @@ export class ApiQueueCloseAccountService {
     await this.queue.addBulk(
       accounts.map((account) => {
         return {
-          name: 'process',
+          name: QueueSettings[QueueType.CloseAccount].name,
           data: {
             account,
             environment,
