@@ -3,7 +3,7 @@ import { Commitment } from '@kin-kinetic/solana'
 import { Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
 import { DoneCallback, Job } from 'bull'
-import { QueueType } from '../../entity/queue-type.enum'
+import { QueueSettings, QueueType } from '../../entity/queue-type.enum'
 import { ApiQueueCloseAccountService } from './api-queue-close-account.service'
 
 @Processor(QueueType.CloseAccount)
@@ -12,7 +12,7 @@ export class ApiQueueCloseAccountProcessor {
 
   constructor(private readonly service: ApiQueueCloseAccountService) {}
 
-  @Process({ name: 'process' })
+  @Process(QueueSettings[QueueType.CloseAccount])
   async handleProcess(job: Job, cb: DoneCallback) {
     const { account, environment, index, mint, mints, wallets } = job.data
 

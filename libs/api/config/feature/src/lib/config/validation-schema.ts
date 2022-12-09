@@ -20,6 +20,8 @@ export const validationSchema = Joi.object({
   METRICS_PORT: Joi.number().default(0),
   NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
   PORT: Joi.number().default(3000),
+  QUEUE_CLOSE_ACCOUNT_CONCURRENCY: Joi.number().default(1),
+  QUEUE_CLOSE_ACCOUNT_START: Joi.boolean().default(false),
   REDIS_HOST: Joi.string().required(),
   REDIS_PORT: Joi.number().default(6379),
   SOLANA_DEVNET_ENABLED: Joi.boolean().default(true),

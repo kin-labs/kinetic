@@ -14,7 +14,11 @@ export class ApiQueueCloseAccountService {
     readonly account: ApiAccountDataAccessService,
     readonly data: ApiCoreDataAccessService,
   ) {
-    this.queue.pause().then((res) => this.logger.debug(`Paused ${QueueType.CloseAccount} queue`))
+    if (!this.data.config.queueCloseAccountStart) {
+      this.queue.pause().then((res) => this.logger.debug(`Queue ${QueueType.CloseAccount} is paused`))
+    } else {
+      this.logger.debug(`Queue ${QueueType.CloseAccount} is started`)
+    }
   }
 
   async getQueueInfo() {
