@@ -1,23 +1,25 @@
 import { ApiAccountDataAccessService } from '@kin-kinetic/api/account/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { InjectQueue } from '@nestjs/bull'
-import { Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { Queue } from 'bull'
 import { QueueCount } from '../../entity/queue-count.entity'
-import { QueueSettings, QueueType } from '../../entity/queue-type.enum'
+import { QueueOptions, QueueType } from '../../entity/queue-type.enum'
 
 @Injectable()
-export class ApiQueueCloseAccountService {
+export class ApiQueueCloseAccountService implements OnModuleInit {
   private readonly logger = new Logger(ApiQueueCloseAccountService.name)
   constructor(
     @InjectQueue(QueueType.CloseAccount) readonly queue: Queue,
     readonly account: ApiAccountDataAccessService,
     readonly data: ApiCoreDataAccessService,
-  ) {
-    if (!this.data.config.queueCloseAccountStart) {
-      this.queue.pause().then((res) => this.logger.debug(`Queue ${QueueType.CloseAccount} is paused`))
-    } else {
+  ) {}
+
+  async onModuleInit(): Promise<void> {
+    if (this.data.config.queueCloseAccountStart) {
       this.logger.debug(`Queue ${QueueType.CloseAccount} is started`)
+    } else {
+      this.queue.pause().then(() => this.logger.debug(`Queue ${QueueType.CloseAccount} is paused`))
     }
   }
 
@@ -47,10 +49,11 @@ export class ApiQueueCloseAccountService {
     mints: string[]
     wallets: string[]
   }) {
+    const { name } = QueueOptions[QueueType.CloseAccount]
     await this.queue.addBulk(
       accounts.map((account) => {
         return {
-          name: QueueSettings[QueueType.CloseAccount].name,
+          name,
           data: {
             account,
             environment,
@@ -60,7 +63,7 @@ export class ApiQueueCloseAccountService {
             wallets,
           },
           opts: {
-            jobId: `process-${index}-${environment}-${account}`,
+            jobId: `${name}-${index}-${environment}-${account}`,
           },
         }
       }),

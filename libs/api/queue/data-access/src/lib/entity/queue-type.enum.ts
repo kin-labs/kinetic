@@ -1,3 +1,4 @@
+import { ProcessOptions } from '@nestjs/bull'
 import { registerEnumType } from '@nestjs/graphql'
 
 export enum QueueType {
@@ -6,9 +7,9 @@ export enum QueueType {
 
 registerEnumType(QueueType, { name: 'QueueType' })
 
-export const QueueSettings = {
+export const QueueOptions: Record<QueueType, ProcessOptions> = {
   [QueueType.CloseAccount]: {
-    name: 'process',
+    name: QueueType.CloseAccount,
     concurrency: Number(process.env['QUEUE_CLOSE_ACCOUNT_CONCURRENCY'] || 1),
   },
 }
