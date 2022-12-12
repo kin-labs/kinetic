@@ -213,6 +213,8 @@ export class ApiConfigDataAccessService {
     return {
       host: this.config.get('redis.host'),
       port: this.config.get('redis.port'),
+      username: this.config.get('redis.username'),
+      password: this.config.get('redis.password'),
     }
   }
 
