@@ -6,6 +6,7 @@ export const validationSchema = Joi.object({
   AUTH_USERS: Joi.string().default(''),
   COOKIE_NAME: Joi.string().default('__session'),
   DATABASE_URL: Joi.string().required(),
+  DISCORD_ENABLED: Joi.boolean().default('false'),
   GITHUB_ENABLED: Joi.boolean().default('false'),
   GOOGLE_ENABLED: Joi.boolean().default('false'),
   HOST: Joi.string().default('0.0.0.0'),
