@@ -31,6 +31,36 @@
         "tags": ["account"]
       }
     },
+    "/api/account/create": {
+      "post": {
+        "operationId": "createAccount",
+        "summary": "",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transaction"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["account"]
+      }
+    },
     "/api/account/info/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "getAccountInfo",
@@ -76,36 +106,6 @@
         "tags": ["account"]
       }
     },
-    "/api/account/create": {
-      "post": {
-        "operationId": "createAccount",
-        "summary": "",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateAccountRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Transaction"
-                }
-              }
-            }
-          }
-        },
-        "tags": ["account"]
-      }
-    },
     "/api/account/balance/{environment}/{index}/{accountId}": {
       "get": {
         "operationId": "getBalance",
@@ -133,6 +133,14 @@
             "in": "path",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "commitment",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Commitment"
             }
           }
         ],
@@ -757,6 +765,38 @@
           }
         }
       },
+      "CreateAccountRequest": {
+        "type": "object",
+        "properties": {
+          "commitment": {
+            "$ref": "#/components/schemas/Commitment"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          },
+          "lastValidBlockHeight": {
+            "type": "integer"
+          },
+          "mint": {
+            "type": "string"
+          },
+          "referenceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "referenceType": {
+            "type": "string",
+            "nullable": true
+          },
+          "tx": {
+            "type": "string"
+          }
+        },
+        "required": ["commitment", "environment", "index", "lastValidBlockHeight", "mint", "tx"]
+      },
       "TokenInfo": {
         "type": "object",
         "properties": {
@@ -817,38 +857,6 @@
           }
         },
         "required": ["account", "isMint", "isOwner", "isTokenAccount"]
-      },
-      "CreateAccountRequest": {
-        "type": "object",
-        "properties": {
-          "commitment": {
-            "$ref": "#/components/schemas/Commitment"
-          },
-          "environment": {
-            "type": "string"
-          },
-          "index": {
-            "type": "integer"
-          },
-          "lastValidBlockHeight": {
-            "type": "integer"
-          },
-          "mint": {
-            "type": "string"
-          },
-          "referenceId": {
-            "type": "string",
-            "nullable": true
-          },
-          "referenceType": {
-            "type": "string",
-            "nullable": true
-          },
-          "tx": {
-            "type": "string"
-          }
-        },
-        "required": ["commitment", "environment", "index", "lastValidBlockHeight", "mint", "tx"]
       },
       "BalanceToken": {
         "type": "object",

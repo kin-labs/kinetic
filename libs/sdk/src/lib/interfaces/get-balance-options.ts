@@ -1,5 +1,6 @@
-import { PublicKeyString } from '@kin-kinetic/solana'
+import { Commitment, PublicKeyString } from '@kin-kinetic/solana'
 
 export interface GetBalanceOptions {
   account: PublicKeyString
+  commitment?: Commitment
 }

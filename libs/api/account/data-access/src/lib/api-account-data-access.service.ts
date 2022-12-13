@@ -9,6 +9,7 @@ import { Keypair } from '@kin-kinetic/keypair'
 import {
   BalanceMint,
   BalanceSummary,
+  Commitment,
   generateCloseAccountTransaction,
   getPublicKey,
   parseAndSignTransaction,
@@ -204,13 +205,18 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     }
   }
 
-  async getBalance(environment: string, index: number, accountId: PublicKeyString): Promise<BalanceSummary> {
+  async getBalance(
+    environment: string,
+    index: number,
+    accountId: PublicKeyString,
+    commitment: Commitment,
+  ): Promise<BalanceSummary> {
     const solana = await this.data.getSolanaConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
 
     const mints: BalanceMint[] = appEnv.mints.map(({ decimals, publicKey }) => ({ decimals, publicKey }))
 
-    return solana.getBalance(accountId, mints)
+    return solana.getBalance(accountId, mints, commitment)
   }
 
   async getHistory(

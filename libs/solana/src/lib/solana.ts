@@ -61,7 +61,11 @@ export class Solana {
     return this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
   }
 
-  async getBalance(accountId: PublicKeyString, mints: BalanceMint | BalanceMint[]): Promise<BalanceSummary> {
+  async getBalance(
+    accountId: PublicKeyString,
+    mints: BalanceMint | BalanceMint[],
+    commitment: Commitment = Commitment.Finalized,
+  ): Promise<BalanceSummary> {
     mints = Array.isArray(mints) ? mints : [mints]
     this.config.logger?.log(
       `Getting account balance summary: ${accountId} for mints ${mints.map((mint) => mint.publicKey).join(', ')}`,
@@ -95,7 +99,7 @@ export class Solana {
 
       for (const { mint, accounts } of tokenAccounts) {
         for (const account of accounts) {
-          const { balance } = await this.getTokenBalance(account)
+          const { balance } = await this.getTokenBalance(account, commitment)
           tokens.push({
             account,
             balance: removeDecimals(balance, mint.decimals).toString(),
@@ -150,19 +154,16 @@ export class Solana {
     return Promise.all(accounts.map((account) => this.getAccountHistory(account)))
   }
 
-  async getTokenBalance(account: PublicKeyString): Promise<TokenBalance> {
-    this.config.logger?.log(`Getting token balance: ${getPublicKey(account)}`)
-    const res = await this.connection.getTokenAccountBalance(getPublicKey(account))
+  async getTokenBalance(
+    account: PublicKeyString,
+    commitment: Commitment = Commitment.Finalized,
+  ): Promise<TokenBalance> {
+    this.config.logger?.log(`Getting token balance: ${getPublicKey(account)} with commitment: ${commitment}`)
+    const res = await this.connection.getTokenAccountBalance(getPublicKey(account), convertCommitment(commitment))
     return {
       account,
       balance: new BigNumber(res.value.amount),
     }
-  }
-
-  async getTokenBalances(account: PublicKeyString, mint: PublicKeyString): Promise<TokenBalance[]> {
-    this.config.logger?.log(`Getting token balances: ${getPublicKey(account)}`)
-    const tokens = await this.getTokenAccounts(account, mint)
-    return Promise.all(tokens.map(async (account) => this.getTokenBalance(account)))
   }
 
   async getTokenHistory(account: PublicKeyString, mint: PublicKeyString) {
@@ -173,7 +174,7 @@ export class Solana {
   async getTransaction(signature: string) {
     this.config.logger?.log(`Getting transaction: ${signature} `)
     const status = await this.connection.getSignatureStatus(signature, { searchTransactionHistory: true })
-    const transaction = await this.connection.getTransaction(signature)
+    const transaction = await this.connection.getTransaction(signature, { maxSupportedTransactionVersion: 0 })
     return { signature, status, transaction }
   }
 
