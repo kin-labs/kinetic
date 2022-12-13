@@ -42,6 +42,7 @@ export function WebToolboxUi({ keypair, sdk }: { keypair: Keypair; sdk: KineticS
         <Stack spacing={{ base: 2, md: 6 }}>
           <WebToolboxUiGetBalance keypair={keypair} sdk={sdk} />
           <WebToolboxUiMakeTransfer keypair={keypair} sdk={sdk} selectedMint={selectedMint} />
+          {/* FIXME: Implement UI for makeTransferBatch */}
           {/*<WebToolboxUiMakeTransferBatch*/}
           {/*  keypair={keypair}*/}
           {/*  sdk={sdk}*/}
