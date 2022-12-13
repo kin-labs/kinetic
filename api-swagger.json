@@ -1191,15 +1191,11 @@
           }
         }
       },
-      "Message": {
-        "type": "object",
-        "properties": {}
-      },
       "TransactionData": {
         "type": "object",
         "properties": {
           "message": {
-            "$ref": "#/components/schemas/Message"
+            "type": "object"
           },
           "signatures": {
             "type": "array",
