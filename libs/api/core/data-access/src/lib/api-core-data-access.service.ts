@@ -2,9 +2,8 @@ import { AirdropConfig } from '@kin-kinetic/api/airdrop/util'
 import { hashPassword } from '@kin-kinetic/api/auth/util'
 import { ProvisionedCluster } from '@kin-kinetic/api/cluster/util'
 import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
-import { getVerboseLogger } from '@kin-kinetic/api/core/util'
 import { Keypair } from '@kin-kinetic/keypair'
-import { getPublicKey, Solana } from '@kin-kinetic/solana'
+import { getPublicKey } from '@kin-kinetic/solana'
 import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import {
@@ -34,7 +33,6 @@ export type AppEnvironment = AppEnv & {
 export class ApiCoreDataAccessService extends PrismaClient implements OnModuleInit {
   private readonly logger = new Logger(ApiCoreDataAccessService.name)
   readonly airdropConfig = new Map<string, Omit<AirdropConfig, 'connection'>>()
-  readonly connections = new Map<string, Solana>()
 
   private getAppByEnvironmentIndexCounter: Counter
   private getAppByIndexCounter: Counter
@@ -227,21 +225,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   getAppKey(environment: string, index: number): string {
     return `app-${index}-${environment}`
-  }
-
-  async getSolanaConnection(environment: string, index: number): Promise<Solana> {
-    const appKey = this.getAppKey(environment, index)
-    if (!this.connections.has(appKey)) {
-      const env = await this.getAppByEnvironmentIndex(environment, index)
-      this.connections.set(
-        appKey,
-        new Solana(env.cluster.endpointPrivate, {
-          logger: getVerboseLogger(`@kin-kinetic/solana:${appKey}`),
-        }),
-      )
-      this.logger.log(`Created new connection for ${appKey}`)
-    }
-    return this.connections.get(appKey)
   }
 
   async getUserByEmail(email: string) {

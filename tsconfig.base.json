@@ -38,6 +38,7 @@
       "@kin-kinetic/api/cron/data-access": ["libs/api/cron/data-access/src/index.ts"],
       "@kin-kinetic/api/queue/data-access": ["libs/api/queue/data-access/src/index.ts"],
       "@kin-kinetic/api/queue/feature": ["libs/api/queue/feature/src/index.ts"],
+      "@kin-kinetic/api/solana/data-access": ["libs/api/solana/data-access/src/index.ts"],
       "@kin-kinetic/api/transaction/data-access": ["libs/api/transaction/data-access/src/index.ts"],
       "@kin-kinetic/api/transaction/feature": ["libs/api/transaction/feature/src/index.ts"],
       "@kin-kinetic/api/user/data-access": ["libs/api/user/data-access/src/index.ts"],

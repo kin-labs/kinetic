@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
+import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { Commitment, parseAndSignTokenTransfer, removeDecimals, Solana } from '@kin-kinetic/solana'
@@ -45,7 +46,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private sendVerifyWebhookErrorCounter: Counter
   private sendVerifyWebhookSuccessCounter: Counter
 
-  constructor(readonly data: ApiCoreDataAccessService, private readonly webhook: ApiWebhookDataAccessService) {}
+  constructor(
+    readonly data: ApiCoreDataAccessService,
+    private readonly solana: ApiSolanaDataAccessService,
+    private readonly webhook: ApiWebhookDataAccessService,
+  ) {}
 
   async cleanupStaleTransactions() {
     const stale = await this.getExpiredTransactions()
@@ -136,7 +141,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   async getLatestBlockhash(environment: string, index: number): Promise<LatestBlockhashResponse> {
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
 
     return solana.getLatestBlockhash()
   }
@@ -146,7 +151,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     index: number,
     { dataLength }: MinimumRentExemptionBalanceRequest,
   ): Promise<MinimumRentExemptionBalanceResponse> {
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
     const lamports = await solana.getMinimumBalanceForRentExemption(dataLength)
 
     return { lamports } as MinimumRentExemptionBalanceResponse
@@ -236,7 +241,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   async getTransaction(environment: string, index: number, signature: string): Promise<GetTransactionResponse> {
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
 
     return solana.getTransaction(signature)
   }
@@ -274,7 +279,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }): Promise<TransactionWithErrors> {
     const environment = appEnv.name
     const index = appEnv.app.index
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
 
     // Update Transaction
     const updatedTransaction = await this.updateTransaction(transaction.id, {
@@ -353,7 +358,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const environment = appEnv.name
     const index = appEnv.app.index
     const appKey = this.data.getAppKey(environment, index)
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
     this.logger.verbose(`${appKey}: confirmSignature: confirming ${signature}`)
 
     const finalized = await solana.confirmTransaction(

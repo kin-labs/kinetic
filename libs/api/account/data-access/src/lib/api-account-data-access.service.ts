@@ -1,5 +1,6 @@
 import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
+import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import {
   ApiTransactionDataAccessService,
   Transaction,
@@ -37,6 +38,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   constructor(
     readonly data: ApiCoreDataAccessService,
     private readonly app: ApiAppDataAccessService,
+    private readonly solana: ApiSolanaDataAccessService,
     private readonly transaction: ApiTransactionDataAccessService,
   ) {}
 
@@ -151,7 +153,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   }
 
   async getAccountInfo(environment: string, index: number, accountId: PublicKeyString) {
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
     const account = getPublicKey(accountId)
     const accountInfo = await solana.connection.getParsedAccountInfo(account)
 
@@ -211,7 +213,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     accountId: PublicKeyString,
     commitment: Commitment,
   ): Promise<BalanceSummary> {
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
 
     const mints: BalanceMint[] = appEnv.mints.map(({ decimals, publicKey }) => ({ decimals, publicKey }))
@@ -225,7 +227,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     accountId: PublicKeyString,
     mint?: PublicKeyString,
   ): Promise<HistoryResponse[]> {
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
     mint = mint || appEnv.mint.publicKey
 
@@ -238,7 +240,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     accountId: PublicKeyString,
     mint?: PublicKeyString,
   ): Promise<string[]> {
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
     const appEnv = await this.app.getAppConfig(environment, index)
     mint = mint || appEnv.mint.publicKey
 

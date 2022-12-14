@@ -1,5 +1,6 @@
 import { Airdrop } from '@kin-kinetic/api/airdrop/util'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { Commitment } from '@kin-kinetic/solana'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { RequestAirdropRequest } from './dto/request-airdrop-request.dto'
@@ -10,11 +11,11 @@ export class ApiAirdropDataAccessService {
   private readonly airdrop = new Map<string, Airdrop>()
   private readonly logger = new Logger(ApiAirdropDataAccessService.name)
 
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly data: ApiCoreDataAccessService, private readonly solana: ApiSolanaDataAccessService) {}
 
   async requestAirdrop(request: RequestAirdropRequest): Promise<RequestAirdropResponse> {
     const { environment, index } = request
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
     const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
 
     // Make sure the requested mint is enabled for this app

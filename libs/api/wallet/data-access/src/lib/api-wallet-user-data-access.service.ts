@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { ApiWebhookDataAccessService } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
@@ -12,7 +13,11 @@ import { Wallet } from './entity/wallet.entity'
 @Injectable()
 export class ApiWalletUserDataAccessService {
   private readonly logger = new Logger(ApiWalletUserDataAccessService.name)
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly webhook: ApiWebhookDataAccessService) {}
+  constructor(
+    private readonly data: ApiCoreDataAccessService,
+    private readonly solana: ApiSolanaDataAccessService,
+    private readonly webhook: ApiWebhookDataAccessService,
+  ) {}
 
   async checkBalance() {
     const appEnvs = await this.data.appEnv.findMany({
@@ -100,7 +105,7 @@ export class ApiWalletUserDataAccessService {
   ): Promise<WalletAirdropResponse> {
     const wallet = await this.userWallet(userId, appEnvId, walletId)
     const appEnv = await this.data.getAppEnvById(appEnvId)
-    const solana = await this.data.getSolanaConnection(appEnv.name, appEnv.app.index)
+    const solana = await this.solana.getConnection(appEnv.name, appEnv.app.index)
     const floatAmount = parseFloat(amount?.toString())
     const signature = await solana.requestAirdrop(wallet.publicKey, floatAmount * LAMPORTS_PER_SOL)
 
@@ -113,7 +118,7 @@ export class ApiWalletUserDataAccessService {
     const wallet = await this.userWallet(userId, appEnvId, walletId)
     const appEnv = await this.data.getAppEnvById(appEnvId)
     await this.data.ensureAppUser(userId, appEnv.app.id)
-    const solana = await this.data.getSolanaConnection(appEnv.name, appEnv.app.index)
+    const solana = await this.solana.getConnection(appEnv.name, appEnv.app.index)
 
     const balance = await solana.getBalanceSol(wallet.publicKey)
 
@@ -163,7 +168,7 @@ export class ApiWalletUserDataAccessService {
 
   private async updateWalletBalance(appEnvId: string, environment: string, index: number, wallet: Wallet) {
     const appKey = this.data.getAppKey(environment, index)
-    const solana = await this.data.getSolanaConnection(environment, index)
+    const solana = await this.solana.getConnection(environment, index)
     const current = wallet.balances?.length ? wallet.balances[0].balance : 0
     const balance = await solana.getBalanceSol(wallet.publicKey)
     if (BigInt(balance) !== current) {

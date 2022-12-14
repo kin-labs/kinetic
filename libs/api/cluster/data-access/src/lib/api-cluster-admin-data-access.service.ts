@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { MintType, Prisma } from '@prisma/client'
@@ -10,7 +11,7 @@ import { ClusterStatus } from './entity/cluster-status.enum'
 @Injectable()
 export class ApiClusterAdminDataAccessService {
   private readonly logger = new Logger(ApiClusterAdminDataAccessService.name)
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly data: ApiCoreDataAccessService, private readonly solana: ApiSolanaDataAccessService) {}
 
   async adminCreateCluster(userId: string, data: AdminClusterCreateInput) {
     await this.data.ensureAdminUser(userId)
@@ -76,9 +77,7 @@ export class ApiClusterAdminDataAccessService {
       include: { app: true },
     })
     for (const env of envs) {
-      const appKey = this.data.getAppKey(env.name, env.app.index)
-      this.data.connections.delete(appKey)
-      this.logger.log('Deleting cached connection for env', appKey)
+      this.solana.deleteConnection(env.name, env.app.index)
     }
     return updated
   }
