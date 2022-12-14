@@ -1,4 +1,11 @@
-import { Connection, PublicKey, Transaction as SolanaTransaction } from '@solana/web3.js'
+import {
+  AccountInfo,
+  Connection,
+  ParsedAccountData,
+  PublicKey,
+  RpcResponseAndContext,
+  Transaction as SolanaTransaction,
+} from '@solana/web3.js'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { NAME } from '../version'
@@ -55,10 +62,14 @@ export class Solana {
       return error
     }
   }
-
-  getAccountInfo(accountId: PublicKeyString, { commitment = Commitment.Confirmed }: { commitment?: Commitment }) {
+  async getAccountInfo(
+    accountId: PublicKeyString,
+    commitment = Commitment.Confirmed,
+  ): Promise<RpcResponseAndContext<AccountInfo<ParsedAccountData>>> {
     this.config.logger?.log(`Getting account info: ${accountId}`)
-    return this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
+    const info = await this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
+
+    return info as RpcResponseAndContext<AccountInfo<ParsedAccountData>>
   }
 
   async getBalance(

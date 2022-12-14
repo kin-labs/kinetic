@@ -1174,6 +1174,15 @@
         },
         "required": ["commitment", "environment", "index", "mint", "lastValidBlockHeight", "tx"]
       },
+      "Context": {
+        "type": "object",
+        "properties": {
+          "slot": {
+            "type": "integer",
+            "nullable": true
+          }
+        }
+      },
       "ConfirmationStatus": {
         "type": "string",
         "enum": ["processed", "confirmed", "finalized"]
@@ -1198,6 +1207,18 @@
             "$ref": "#/components/schemas/ConfirmationStatus"
           }
         }
+      },
+      "RpcResponseAndContext": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "$ref": "#/components/schemas/Context"
+          },
+          "value": {
+            "$ref": "#/components/schemas/SignatureStatus"
+          }
+        },
+        "required": ["context", "value"]
       },
       "TransactionData": {
         "type": "object",
@@ -1368,7 +1389,7 @@
             "type": "string"
           },
           "status": {
-            "$ref": "#/components/schemas/SignatureStatus"
+            "$ref": "#/components/schemas/RpcResponseAndContext"
           },
           "transaction": {
             "$ref": "#/components/schemas/TransactionResponse"
