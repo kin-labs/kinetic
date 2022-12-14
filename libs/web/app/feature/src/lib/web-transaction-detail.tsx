@@ -1,4 +1,4 @@
-import { Box, Button, Code, Flex, Icon, Stack, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, Code, Flex, Icon, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
 import { WebUiPropertyList } from '@kin-kinetic/web/app/ui'
 import { AppEnv, Transaction } from '@kin-kinetic/web/util/sdk'
 import { ButtonGroup } from '@saas-ui/react'
@@ -6,6 +6,7 @@ import { IconCopy } from '@tabler/icons'
 import { ReactNode } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { MdError } from 'react-icons/md'
+import Timeago from 'react-timeago'
 import { WebTransactionTimeline } from './web-transaction-timeline'
 
 function Copy({ value, label }: { value: string; label?: ReactNode }) {
@@ -45,6 +46,8 @@ export function WebTransactionDetail({ env, transaction }: { env: AppEnv; transa
       <Box p="6" borderWidth="1px" borderRadius="lg">
         <WebUiPropertyList
           items={[
+            { label: 'Created', value: <Timestamp timestamp={transaction.createdAt} /> },
+            { label: 'Updated', value: <Timestamp timestamp={transaction.updatedAt} /> },
             { label: 'Status', value: transaction.status ? transaction.status : 'N/A' },
             { label: 'IP', value: `${transaction?.ip}` },
             { label: 'User Agent', value: `${transaction?.ua}` },
@@ -107,5 +110,14 @@ export function WebTransactionDetail({ env, transaction }: { env: AppEnv; transa
         )}
       </Box>
     </Stack>
+  )
+}
+
+export function Timestamp({ timestamp }: { timestamp: string }) {
+  return (
+    <Flex>
+      <Text mr={2}> {new Date(timestamp).toLocaleString()}</Text>
+      <Timeago date={timestamp} />
+    </Flex>
   )
 }

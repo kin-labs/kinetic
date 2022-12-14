@@ -4,6 +4,7 @@ export const validationSchema = Joi.object({
   API_URL: Joi.string().required().error(new Error(`API_URL is required.`)),
   AUTH_PASSWORD_ENABLED: Joi.boolean().default('false'),
   AUTH_USERS: Joi.string().default(''),
+  CACHE_SOLANA_GET_LATEST_BLOCKHASH_TTL: Joi.number().default(5),
   COOKIE_NAME: Joi.string().default('__session'),
   DATABASE_URL: Joi.string().required(),
   DISCORD_ENABLED: Joi.boolean().default('false'),

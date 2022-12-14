@@ -142,9 +142,12 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   async getLatestBlockhash(appKey: string): Promise<LatestBlockhashResponse> {
-    const solana = await this.solana.getConnection(appKey)
-
-    return solana.getLatestBlockhash()
+    return this.data.cache.wrap<LatestBlockhashResponse>(
+      'solana',
+      `${appKey}:getLatestBlockhash`,
+      () => this.solana.getConnection(appKey).then((solana) => solana.getLatestBlockhash()),
+      this.data.config.cache.solana.getLatestBlockhash.ttl,
+    )
   }
 
   async getMinimumRentExemptionBalance(

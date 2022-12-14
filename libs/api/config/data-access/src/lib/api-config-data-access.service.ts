@@ -67,6 +67,16 @@ export class ApiConfigDataAccessService {
     return this.config.get('api.version')
   }
 
+  get cache(): { [key: string]: { [key: string]: { ttl: number } } } {
+    return {
+      solana: {
+        getLatestBlockhash: {
+          ttl: this.config.get('cache.solana.getLatestBlockhash.ttl'),
+        },
+      },
+    }
+  }
+
   get cookieDomains(): string[] {
     return this.config.get('cookie.domains')
   }

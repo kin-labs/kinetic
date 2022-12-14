@@ -30,6 +30,13 @@ export default () => ({
     passwordEnabled: process.env.AUTH_PASSWORD_ENABLED?.toLowerCase() !== 'false',
     users: process.env.AUTH_USERS || '',
   },
+  cache: {
+    solana: {
+      getLatestBlockhash: {
+        ttl: process.env.CACHE_SOLANA_GET_LATEST_BLOCKHASH_TTL,
+      },
+    },
+  },
   cors: {
     bypass: !origins.length,
     origins,
