@@ -1,8 +1,9 @@
 import { ApiAppEnvUserDataAccessService, AppEnv, AppEnvStats } from '@kin-kinetic/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
+import { getAppKey } from '@kin-kinetic/api/core/util'
+import { TransactionStatus } from '@kin-kinetic/api/transaction/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
 import { Wallet } from '@kin-kinetic/api/wallet/data-access'
-import { TransactionStatus } from '@kin-kinetic/api/transaction/data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 
@@ -76,7 +77,7 @@ export class ApiAppEnvUserFeatureResolver {
 
   @ResolveField(() => String, { nullable: true })
   key(@Parent() appEnv: AppEnv) {
-    return this.service.getAppKey(appEnv?.name, appEnv?.app?.index)
+    return getAppKey(appEnv?.name, appEnv?.app?.index)
   }
 
   @ResolveField(() => [Wallet], { nullable: true })

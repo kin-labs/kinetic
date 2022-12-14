@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { getAppKey } from '@kin-kinetic/api/core/util'
 import { HttpService } from '@nestjs/axios'
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
 import { App, AppEnv, Transaction, WalletBalance, WebhookDirection, WebhookType } from '@prisma/client'
@@ -26,7 +27,7 @@ export class ApiWebhookDataAccessService {
   constructor(private readonly data: ApiCoreDataAccessService, private readonly http: HttpService) {}
 
   sendWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
-    const appKey = this.data.getAppKey(appEnv.name, appEnv.app?.index)
+    const appKey = getAppKey(appEnv.name, appEnv.app?.index)
     switch (options.type) {
       case WebhookType.Balance:
         if (!appEnv.webhookDebugging) {
@@ -70,8 +71,7 @@ export class ApiWebhookDataAccessService {
   }
 
   async storeIncomingWebhook(
-    environment: string,
-    index: number,
+    appKey: string,
     type: string,
     headers: IncomingHttpHeaders,
     payload: object,
@@ -85,7 +85,7 @@ export class ApiWebhookDataAccessService {
 
     try {
       // Get the app by Index
-      const appEnv = await this.data.getAppByEnvironmentIndex(environment, index)
+      const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
       if (!appEnv.webhookDebugging) {
         this.logger.warn(`storeIncomingWebhook ignoring request, webhookDebugging is disabled`)
         res.statusCode = 400

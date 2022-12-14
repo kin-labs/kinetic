@@ -49,8 +49,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
     })
   }
 
-  async getAppConfig(environment: string, index: number): Promise<AppConfig> {
-    const { appEnv, appKey } = await this.data.getAppEnvironment(environment, index)
+  async getAppConfig(appKey: string): Promise<AppConfig> {
+    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
     if (!appEnv) {
       this.getAppConfigErrorCounter.add(1, { appKey })
       throw new NotFoundException(`App not found :(`)
@@ -99,9 +99,9 @@ export class ApiAppDataAccessService implements OnModuleInit {
     }
   }
 
-  async getAppHealth(environment: string, index: number): Promise<AppHealth> {
+  async getAppHealth(appKey: string): Promise<AppHealth> {
     const isKineticOk = true
-    const solana = await this.solana.getConnection(environment, index)
+    const solana = await this.solana.getConnection(appKey)
 
     const isSolanaOk = await solana.healthCheck()
 

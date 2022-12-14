@@ -103,10 +103,6 @@ export class ApiAppEnvUserDataAccessService {
     return this.data.deleteAppEnv(appId, appEnvId)
   }
 
-  getAppKey(name: string, index: number) {
-    return this.data.getAppKey(name, index)
-  }
-
   getEndpoint() {
     return this.data.config.apiUrl?.replace('/api', '')
   }

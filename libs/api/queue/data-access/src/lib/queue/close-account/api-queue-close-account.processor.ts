@@ -1,4 +1,5 @@
 import { validateCloseAccount } from '@kin-kinetic/api/account/data-access'
+import { getAppKey } from '@kin-kinetic/api/core/util'
 import { Commitment } from '@kin-kinetic/solana'
 import { Process, Processor } from '@nestjs/bull'
 import { Logger } from '@nestjs/common'
@@ -19,7 +20,8 @@ export class ApiQueueCloseAccountProcessor {
     this.logger.debug(`${job.id} Start processing...`)
 
     try {
-      const accountInfo = await this.service.account.getAccountInfo(environment, index, account)
+      const appKey = getAppKey(environment, index)
+      const accountInfo = await this.service.account.getAccountInfo(appKey, account)
 
       try {
         validateCloseAccount({ info: accountInfo, mint, mints, wallets })
@@ -28,7 +30,7 @@ export class ApiQueueCloseAccountProcessor {
           `${job.id} Account can close! ${JSON.stringify({ info: accountInfo, mint, mints, wallets }, null, 2)}`,
         )
 
-        const { appEnv, appKey } = await this.service.data.getAppEnvironment(environment, index)
+        const appEnv = await this.service.data.getAppEnvironmentByAppKey(appKey)
 
         const transaction = await this.service.account.handleCloseAccount(
           {

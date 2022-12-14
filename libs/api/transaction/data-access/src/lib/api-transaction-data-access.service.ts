@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
+import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
@@ -140,18 +141,17 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     )
   }
 
-  async getLatestBlockhash(environment: string, index: number): Promise<LatestBlockhashResponse> {
-    const solana = await this.solana.getConnection(environment, index)
+  async getLatestBlockhash(appKey: string): Promise<LatestBlockhashResponse> {
+    const solana = await this.solana.getConnection(appKey)
 
     return solana.getLatestBlockhash()
   }
 
   async getMinimumRentExemptionBalance(
-    environment: string,
-    index: number,
+    appKey: string,
     { dataLength }: MinimumRentExemptionBalanceRequest,
   ): Promise<MinimumRentExemptionBalanceResponse> {
-    const solana = await this.solana.getConnection(environment, index)
+    const solana = await this.solana.getConnection(appKey)
     const lamports = await solana.getMinimumBalanceForRentExemption(dataLength)
 
     return { lamports } as MinimumRentExemptionBalanceResponse
@@ -189,7 +189,8 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   async makeTransfer(req: Request, input: MakeTransferRequest): Promise<TransactionWithErrors> {
-    const { appEnv, appKey } = await this.data.getAppEnvironment(input.environment, input.index)
+    const appKey = getAppKey(input.environment, input.index)
+    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
     this.makeTransferRequestCounter.add(1, { appKey })
 
     const { ip, ua } = this.validateRequest(appEnv, req)
@@ -240,8 +241,8 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     })
   }
 
-  async getTransaction(environment: string, index: number, signature: string): Promise<GetTransactionResponse> {
-    const solana = await this.solana.getConnection(environment, index)
+  async getTransaction(appKey: string, signature: string): Promise<GetTransactionResponse> {
+    const solana = await this.solana.getConnection(appKey)
 
     return solana.getTransaction(signature)
   }
@@ -277,9 +278,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     source: string
     solanaTransaction: SolanaTransaction
   }): Promise<TransactionWithErrors> {
-    const environment = appEnv.name
-    const index = appEnv.app.index
-    const solana = await this.solana.getConnection(environment, index)
+    const solana = await this.solana.getConnection(appKey)
 
     // Update Transaction
     const updatedTransaction = await this.updateTransaction(transaction.id, {
@@ -319,6 +318,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
       this.confirmSignature({
         appEnv,
+        appKey,
         transactionId: transaction.id,
         blockhash,
         headers,
@@ -338,6 +338,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   private async confirmSignature({
     appEnv,
+    appKey,
     transactionId,
     blockhash,
     headers,
@@ -347,6 +348,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     transactionStart,
   }: {
     appEnv: AppEnv & { app: App }
+    appKey: string
     transactionId: string
     blockhash: string
     headers?: Record<string, string>
@@ -355,10 +357,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     solanaStart: Date
     transactionStart: Date
   }) {
-    const environment = appEnv.name
-    const index = appEnv.app.index
-    const appKey = this.data.getAppKey(environment, index)
-    const solana = await this.solana.getConnection(environment, index)
+    const solana = await this.solana.getConnection(appKey)
     this.logger.verbose(`${appKey}: confirmSignature: confirming ${signature}`)
 
     const finalized = await solana.confirmTransaction(

@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
@@ -77,7 +78,7 @@ export class ApiClusterAdminDataAccessService {
       include: { app: true },
     })
     for (const env of envs) {
-      this.solana.deleteConnection(env.name, env.app.index)
+      this.solana.deleteConnection(getAppKey(env.name, env.app.index))
     }
     return updated
   }

@@ -8,17 +8,15 @@ export class ApiSolanaDataAccessService {
   private readonly loggers = new Map<string, Logger>()
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
-  deleteConnection(environment: string, index: number): void {
-    const appKey = this.data.getAppKey(environment, index)
+  deleteConnection(appKey: string): void {
     this.connections.delete(appKey)
     this.getLogger(appKey).log(`Deleted cached connection for ${appKey}`)
   }
 
-  async getConnection(environment: string, index: number): Promise<Solana> {
-    const appKey = this.data.getAppKey(environment, index)
+  async getConnection(appKey: string): Promise<Solana> {
     if (!this.connections.has(appKey)) {
-      const env = await this.data.getAppByEnvironmentIndex(environment, index)
-      this.connections.set(appKey, new Solana(env.cluster.endpointPrivate, { logger: this.getLogger(appKey) }))
+      const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+      this.connections.set(appKey, new Solana(appEnv.cluster.endpointPrivate, { logger: this.getLogger(appKey) }))
       this.getLogger(appKey).log(`Created new connection for ${appKey}`)
     }
     return this.connections.get(appKey)

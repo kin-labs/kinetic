@@ -2,6 +2,7 @@ import { AirdropConfig } from '@kin-kinetic/api/airdrop/util'
 import { hashPassword } from '@kin-kinetic/api/auth/util'
 import { ProvisionedCluster } from '@kin-kinetic/api/cluster/util'
 import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
+import { parseAppKey } from '@kin-kinetic/api/core/util'
 import { Keypair } from '@kin-kinetic/keypair'
 import { getPublicKey } from '@kin-kinetic/solana'
 import { Injectable, Logger, NotFoundException, OnModuleInit, UnauthorizedException } from '@nestjs/common'
@@ -164,17 +165,8 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
     })
   }
 
-  async getAppEnvironment(environment: string, index: number): Promise<{ appEnv: AppEnvironment; appKey: string }> {
-    const appEnv = await this.getAppByEnvironmentIndex(environment, index)
-    const appKey = this.getAppKey(environment, index)
-    return {
-      appEnv,
-      appKey,
-    }
-  }
-
-  getAppByEnvironmentIndex(environment: string, index: number): Promise<AppEnvironment> {
-    const appKey = this.getAppKey(environment, index)
+  getAppEnvironmentByAppKey(appKey: string): Promise<AppEnvironment> {
+    const { environment, index } = parseAppKey(appKey)
     this.getAppByEnvironmentIndexCounter?.add(1, { appKey })
     return this.appEnv.findFirst({
       where: { app: { index }, name: environment },
@@ -221,10 +213,6 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
 
   getAppEnvById(appEnvId: string) {
     return this.appEnv.findUnique({ where: { id: appEnvId }, include: { app: true } })
-  }
-
-  getAppKey(environment: string, index: number): string {
-    return `app-${index}-${environment}`
   }
 
   async getUserByEmail(email: string) {
