@@ -19,5 +19,6 @@
       }
     }
   },
-  "tags": ["scope:api", "type:data-access"]
+  "tags": ["scope:api", "type:data-access"],
+  "name": "api-transaction-data-access"
 }

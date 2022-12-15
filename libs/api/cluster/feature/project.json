@@ -18,5 +18,6 @@
       }
     }
   },
-  "tags": ["scope:api", "type:feature"]
+  "tags": ["scope:api", "type:feature"],
+  "name": "api-cluster-feature"
 }

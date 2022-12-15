@@ -18,5 +18,6 @@
       }
     }
   },
-  "tags": ["scope:api", "type:data-access"]
+  "tags": ["scope:api", "type:data-access"],
+  "name": "api-webhook-data-access"
 }
