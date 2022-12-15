@@ -19,5 +19,6 @@
       }
     }
   },
-  "tags": ["scope:api", "type:util"]
+  "tags": ["scope:api", "type:util"],
+  "name": "api-airdrop-util"
 }

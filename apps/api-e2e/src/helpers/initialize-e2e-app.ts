@@ -8,7 +8,7 @@ export async function initializeE2eApp(): Promise<INestApplication> {
   }).compile()
 
   const app = moduleFixture.createNestApplication()
-  app.useGlobalPipes(new ValidationPipe({ transform: true }))
+  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false, transform: true }))
   app.setGlobalPrefix('api')
   await app.init()
   return app
