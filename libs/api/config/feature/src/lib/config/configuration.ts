@@ -78,10 +78,7 @@ export default () => ({
     },
   },
   redis: {
-    host: process.env.REDIS_HOST,
-    port: parseInt(process.env.REDIS_PORT, 10),
-    username: process.env.REDIS_USERNAME,
-    password: process.env.REDIS_PASSWORD,
+    url: process.env.REDIS_URL,
   },
   solana: {
     devnet: {

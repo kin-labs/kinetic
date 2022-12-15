@@ -10,12 +10,9 @@ import { ApiCoreCacheService } from './api-core-cache.service'
       imports: [ApiConfigDataAccessModule],
       inject: [ApiConfigDataAccessService],
       isGlobal: false,
-      useFactory: (cfg) => ({
+      useFactory: (cfg: ApiConfigDataAccessService) => ({
         store: redisStore,
-        host: cfg.redisHost,
-        port: cfg.redisPort,
-        username: cfg.redisUsername,
-        password: cfg.redisPassword,
+        url: cfg.redisUrl,
         ttl: 5,
       }),
     }),

@@ -219,13 +219,8 @@ export class ApiConfigDataAccessService {
     return this.config.get('queue.closeAccount.start')
   }
 
-  get redisConfig() {
-    return {
-      host: this.config.get('redis.host'),
-      port: this.config.get('redis.port'),
-      username: this.config.get('redis.username'),
-      password: this.config.get('redis.password'),
-    }
+  get redisUrl() {
+    return this.config.get('redis.url')
   }
 
   get solanaDevnetEnabled(): boolean {
