@@ -60,7 +60,7 @@ export function WebToolboxUiRequestAirdrop({
     >
       <Form
         defaultValues={{
-          amount: (selectedMint?.airdropAmount || '0').toString(),
+          amount: (selectedMint?.airdropMax || '0').toString(),
         }}
         onSubmit={onSubmit}
       >
@@ -75,7 +75,7 @@ export function WebToolboxUiRequestAirdrop({
             <Field
               size="lg"
               name="amount"
-              width={70}
+              width={79}
               placeholder="Airdrop Amount"
               type="text"
               rules={{ required: true }}

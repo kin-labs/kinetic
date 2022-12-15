@@ -59,10 +59,13 @@ export function WebToolboxUiMakeTransfer({
       sdk={sdk}
       signature={response?.signature ? response?.signature : undefined}
     >
-      <Form defaultValues={{ amount: '1000', destination: '' }} onSubmit={onSubmit}>
+      <Form
+        defaultValues={{ amount: '42', destination: 'BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y' }}
+        onSubmit={onSubmit}
+      >
         <ButtonGroup>
           <Box>
-            <SubmitButton isLoading={loading} type="submit" size="lg" disableIfUntouched>
+            <SubmitButton isLoading={loading} type="submit" size="lg" disableIfInvalid>
               Make Transfer
             </SubmitButton>
           </Box>
