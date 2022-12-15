@@ -34,11 +34,13 @@
     "test:sdk-e2e:watch": "nx run sdk-e2e:e2e --verbose --watch",
     "test:web-e2e": "nx run web-e2e:e2e",
     "test:web-e2e:watch": "nx run web-e2e:e2e --headed --watch",
+    "update-deps": "yarn ncu -ux babel-jest,jest,ts-jest,jest-environment-jsdom,@types/jest,cache-manager,cache-manager-redis-store,axios,@nestjs/axios,framer-motion,@solana/buffer-layout",
+    "update-nx": "yarn nx migrate latest",
     "update-version": "node tools/update-version.js"
   },
   "private": true,
   "resolutions": {
-    "@solana/web3.js": "1.66.2"
+    "@solana/web3.js": "1.70.1"
   },
   "dependencies": {
     "@ajna/pagination": "^1.4.19",
@@ -79,7 +81,7 @@
     "@scure/bip39": "^1.1.0",
     "@solana/buffer-layout": "4.0.0",
     "@solana/spl-token": "^0.3.6",
-    "@solana/web3.js": "1.66.2",
+    "@solana/web3.js": "1.70.1",
     "@tabler/icons": "^1.117.0",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-table": "^7.7.12",
@@ -217,6 +219,7 @@
     "jest-environment-jsdom": "^29.0.2",
     "lint-staged": "^13.1.0",
     "nodemon": "^2.0.20",
+    "npm-check-updates": "^16.6.0",
     "nx": "15.3.3",
     "prettier": "2.8.1",
     "prisma": "^4.7.1",
