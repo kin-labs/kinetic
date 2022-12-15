@@ -28,12 +28,12 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
     this.logger.verbose(`app ${input.index}: creating ${input.name}...`)
     const activeClusters = await this.data.getActiveClusters()
 
-    const envs = []
+    const envs: Prisma.AppEnvCreateWithoutAppInput[] = []
 
     // Create an app environment for each active cluster
     for (const cluster of activeClusters) {
       const enabledMints = cluster.mints.filter((mint) => mint.default && mint.enabled)
-      const mints = []
+      const mints: Prisma.AppMintCreateWithoutAppEnvInput[] = []
       const wallets = []
       for (const mint of enabledMints) {
         const generated = await this.data.generateAppWallet(userId, input.index)
@@ -54,6 +54,19 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
         wallets: { connect: wallets },
         // Create the default mint and connect it to the wallet
         mints: { create: mints },
+        // Configure the default webhook settings if enabled
+        ...(input.enableWebhooks
+          ? {
+              webhookBalanceEnabled: false,
+              webhookBalanceUrl: 'http://localhost:9876/webhook/balance',
+              webhookBalanceThreshold: '0.5',
+              webhookDebugging: true,
+              webhookEventEnabled: true,
+              webhookEventUrl: 'http://localhost:9876/webhook/event',
+              webhookVerifyEnabled: true,
+              webhookVerifyUrl: 'http://localhost:9876/webhook/verify',
+            }
+          : undefined),
       })
     }
 
@@ -155,7 +168,12 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
             })
             adminId = admin.id
           }
-          await this.adminCreateApp(adminId, { index: app.index, name: app.name, logoUrl: app?.logoUrl })
+          await this.adminCreateApp(adminId, {
+            index: app.index,
+            name: app.name,
+            logoUrl: app?.logoUrl,
+            enableWebhooks: app?.enableWebhooks,
+          })
         }
       }),
     )

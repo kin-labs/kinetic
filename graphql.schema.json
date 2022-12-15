@@ -15,6 +15,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "enableWebhooks",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "index",
             "description": null,
             "type": {

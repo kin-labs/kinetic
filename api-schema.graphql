@@ -3,6 +3,7 @@
 # ------------------------------------------------------
 
 input AdminAppCreateInput {
+  enableWebhooks: Boolean
   index: Int!
   logoUrl: String
   name: String!

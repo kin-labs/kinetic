@@ -21,6 +21,7 @@ export type Scalars = {
 }
 
 export type AdminAppCreateInput = {
+  enableWebhooks?: InputMaybe<Scalars['Boolean']>
   index: Scalars['Int']
   logoUrl?: InputMaybe<Scalars['String']>
   name: Scalars['String']

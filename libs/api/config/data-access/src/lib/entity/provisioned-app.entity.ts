@@ -1,6 +1,7 @@
 export interface ProvisionedApp {
-  secret: string
+  enableWebhooks: boolean
   index: number
   logoUrl?: string
   name: string
+  secret: string
 }

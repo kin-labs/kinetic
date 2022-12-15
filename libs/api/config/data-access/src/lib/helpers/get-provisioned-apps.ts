@@ -16,5 +16,8 @@ export function getProvisionedApps(envVars: string[]): ProvisionedApp[] {
     index,
     name: process.env[`APP_${index}_NAME`],
     logoUrl: process.env[`APP_${index}_LOGO_URL`],
+    enableWebhooks: process.env[`APP_${index}_ENABLE_WEBHOOKS`]
+      ? process.env[`APP_${index}_ENABLE_WEBHOOKS`].toString().toLowerCase() === 'true'
+      : false,
   }))
 }
