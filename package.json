@@ -24,6 +24,7 @@
     "format": "nx format:write",
     "format:check": "nx format:check",
     "format:write": "nx format:write",
+    "lint:all": "yarn nx run-many --target lint --all --verbose",
     "prepare": "husky install",
     "start": "yarn prisma db push && node dist/apps/api/main.js",
     "test": "nx test && yarn test:sdk-e2e",

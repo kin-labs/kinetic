@@ -3,14 +3,12 @@ import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, KineticSdk } from '@kin-kinetic/sdk'
 import { yupResolver } from '@saas-ui/forms/yup'
 import {
-  ArrayField,
   ArrayFieldAddButton,
   ArrayFieldContainer,
   ArrayFieldRemoveButton,
   ArrayFieldRowContainer,
   ArrayFieldRowFields,
   ArrayFieldRows,
-  Button,
   ButtonGroup,
   Field,
   Form,
@@ -21,19 +19,19 @@ import * as Yup from 'yup'
 import { WebToolboxUiCard } from './web-toolbox-ui-card'
 
 export function WebToolboxUiMakeTransferBatch({
-  keypair,
+  // keypair,
   sdk,
-  selectedMint,
-}: {
+}: // selectedMint,
+{
   keypair: Keypair
   sdk: KineticSdk
   selectedMint: AppConfigMint | undefined
 }) {
   const [error, setError] = useState<unknown | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [response, setResponse] = useState<any | undefined>()
+  const [response, setResponse] = useState<unknown | undefined>()
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: unknown) => {
     console.log(data)
     return
     setResponse(undefined)
@@ -70,21 +68,23 @@ export function WebToolboxUiMakeTransferBatch({
     <WebToolboxUiCard
       response={response}
       error={error}
-      explorer={response?.signature && sdk?.getExplorerUrl(`tx/${response?.signature}`)}
+      // explorer={response?.signature && sdk?.getExplorerUrl(`tx/${response?.signature}`)}
     >
       <Form
-        defaultValues={{
-          destinations: [
-            {
-              amount: '100',
-              destination: 'ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA',
-            },
-            {
-              amount: '100',
-              destination: 'BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y',
-            },
-          ],
-        }}
+        defaultValues={
+          {
+            // destinations: [
+            //   {
+            //     amount: '100',
+            //     destination: 'ALisrzsaVqciCxy8r6g7MUrPoRo3CpGxPhwBbZzqZ9bA',
+            //   },
+            //   {
+            //     amount: '100',
+            //     destination: 'BobQoPqWy5cpFioy1dMTYqNH9WpC39mkAEDJWXECoJ9y',
+            //   },
+            // ],
+          }
+        }
         resolver={yupResolver(schema)}
         onSubmit={onSubmit}
       >
@@ -132,13 +132,13 @@ export function WebToolboxUiMakeTransferBatch({
             <ArrayFieldAddButton />
           </ArrayFieldContainer>
 
-          {response?.status && (
-            <Box>
-              <Button size="lg" disabled={true}>
-                {response?.status}
-              </Button>
-            </Box>
-          )}
+          {/*{response?.status && (*/}
+          {/*  <Box>*/}
+          {/*    <Button size="lg" disabled={true}>*/}
+          {/*      {response?.status}*/}
+          {/*    </Button>*/}
+          {/*  </Box>*/}
+          {/*)}*/}
         </ButtonGroup>
       </Form>
     </WebToolboxUiCard>

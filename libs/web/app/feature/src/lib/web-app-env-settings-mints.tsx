@@ -37,8 +37,8 @@ export function WebAppEnvSettingsMints({ app, env }: { app: App; env: AppEnv }) 
   const [, enableMintMutation] = useUserAppEnvMintEnableMutation()
   const [, setWalletMutation] = useUserAppEnvMintSetWalletMutation()
 
-  const enabledMintIds = data?.item?.mints?.map((mint) => mint.mint).map((mint) => mint!.id!) || []
-  const availableMints = data?.item?.cluster?.mints?.filter((mint) => !enabledMintIds?.includes(mint!.id!))
+  const enabledMintIds = data?.item?.mints?.map((mint) => mint.mint).map((mint) => `${mint?.id}`) || []
+  const availableMints = data?.item?.cluster?.mints?.filter((mint) => !enabledMintIds?.includes(`${mint?.id}`))
 
   const disableMint = (mintId: string) => {
     disableMintMutation({

@@ -1,4 +1,4 @@
-import { Tag, useToast } from '@chakra-ui/react'
+import { Tag } from '@chakra-ui/react'
 import { WebServerEntity } from '@kin-kinetic/web/server/data-access'
 import { List } from '@saas-ui/react'
 import { WebServerUiListItemMenu } from './web-server-ui-list-item.menu'
@@ -16,8 +16,6 @@ export function WebServerUiList({
   servers: WebServerEntity[]
   updateServer: (server: WebServerEntity) => void
 }) {
-  const toast = useToast()
-
   return (
     <List
       items={servers?.map((server) => ({

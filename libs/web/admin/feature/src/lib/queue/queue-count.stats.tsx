@@ -1,4 +1,4 @@
-import { Button, Stack, Stat, StatGroup, StatLabel, StatNumber, Text } from '@chakra-ui/react'
+import { Button, Stack, Stat, StatGroup, StatLabel, StatNumber } from '@chakra-ui/react'
 import { JobStatus, QueueCount } from '@kin-kinetic/web/util/sdk'
 import { ButtonGroup } from '@saas-ui/react'
 import { MdDelete } from 'react-icons/md'

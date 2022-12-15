@@ -4,21 +4,21 @@ import { Field, FieldErrors, Form, FormLayout, FormProps, SubmitHandler } from '
 import { Button } from '@saas-ui/react'
 import * as React from 'react'
 
-interface SubmitParams {
+export interface SubmitParams {
   username: string
   password: string
-  [key: string]: any
+  [key: string]: string
 }
 
 export interface PasswordFormProps extends Pick<FormProps<SubmitParams>, 'schema' | 'resolver' | 'children'> {
-  schema?: any
-  onSuccess?: (data: any) => void
-  onError?: (error: any) => void
+  schema?: unknown
+  onSuccess?: (data: unknown) => void
+  onError?: (error: unknown) => void
   onValidationError?: (error: FieldErrors<SubmitParams>) => void
   submitLabel?: string
   usernameLabel?: string
   passwordLabel?: string
-  defaultValues?: Record<string, any>
+  defaultValues?: Record<string, string>
 }
 
 export const PasswordForm: React.FC<PasswordFormProps> = ({

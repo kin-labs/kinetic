@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 
-export function WebToolboxUiDebug({ data }: { data: any }) {
+export function WebToolboxUiDebug({ data }: { data: unknown }) {
   return (
     <Box
       as="pre"

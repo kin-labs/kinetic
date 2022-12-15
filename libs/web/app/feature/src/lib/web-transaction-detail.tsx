@@ -1,4 +1,4 @@
-import { Box, Button, Code, Flex, Icon, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, Code, Flex, Icon, Stack, useDisclosure, useToast } from '@chakra-ui/react'
 import { WebUiPropertyList } from '@kin-kinetic/web/app/ui'
 import { AppEnv, Transaction } from '@kin-kinetic/web/util/sdk'
 import { ButtonGroup } from '@saas-ui/react'

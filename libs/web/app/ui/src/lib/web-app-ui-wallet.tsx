@@ -21,7 +21,7 @@ export interface WebAppUiWalletProps {
 export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppUiWalletProps) {
   const toast = useToast()
   const [amount, setAmount] = useState<number>(1)
-  const [_, removeWalletMutation] = useUserAppEnvWalletRemoveMutation()
+  const [, removeWalletMutation] = useUserAppEnvWalletRemoveMutation()
   const [{ data }, refreshWallet] = useUserWalletBalanceQuery({
     variables: {
       appEnvId,

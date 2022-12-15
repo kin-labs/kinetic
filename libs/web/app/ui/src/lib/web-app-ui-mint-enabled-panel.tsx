@@ -68,7 +68,7 @@ export function WebAppUiMintEnabledPanel({
                     <WebUiAddress address={item?.publicKey || ''} />
                   </Code>
                 </Flex>
-                <Button size="sm" onClick={() => selectWallet(appMint.id, item.id!)}>
+                <Button size="sm" onClick={() => selectWallet(appMint.id, item.id)}>
                   Use as Fee Payer
                 </Button>
               </Stack>

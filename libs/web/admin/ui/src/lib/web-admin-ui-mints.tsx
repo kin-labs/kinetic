@@ -31,10 +31,10 @@ export function WebAdminUiMints({ mints, deleteMint, importMintWallet }: WebAdmi
           <Flex justify={'end'} w={'full'} mt={4}>
             {mint?.id ? (
               <Stack direction={'row'}>
-                <Button size={'xs'} onClick={() => deleteMint(mint.id!)}>
+                <Button size={'xs'} onClick={() => deleteMint(`${mint.id}`)}>
                   Delete Mint
                 </Button>
-                <Button size={'xs'} onClick={() => importWallet(mint.id!)}>
+                <Button size={'xs'} onClick={() => importWallet(`${mint.id}`)}>
                   Import Airdrop Wallet
                 </Button>
               </Stack>

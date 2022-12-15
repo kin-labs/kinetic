@@ -23,6 +23,7 @@ import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
 import { CloseAccountRequest } from './dto/close-account-request.dto'
 import { CreateAccountRequest } from './dto/create-account-request.dto'
+import { AccountInfo } from './entities/account.info'
 import { HistoryResponse } from './entities/history-response.entity'
 import { validateCloseAccount } from './helpers/validate-close.account'
 
@@ -151,16 +152,12 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     }
   }
 
-  async getAccountInfo(appKey: string, accountId: PublicKeyString) {
+  async getAccountInfo(appKey: string, accountId: PublicKeyString): Promise<AccountInfo> {
     const solana = await this.solana.getConnection(appKey)
     const account = getPublicKey(accountId)
-    const accountInfo = await solana.connection.getParsedAccountInfo(account)
+    const accountInfo = await solana.getParsedAccountInfo(account)
 
-    if (!accountInfo) {
-      return null
-    }
-
-    const parsed = (accountInfo.value as any)?.data?.parsed
+    const parsed = accountInfo?.data?.parsed
 
     const isMint = parsed?.type === 'mint'
     const isTokenAccount = parsed?.type === 'account'
@@ -173,7 +170,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
       isOwner: false,
       isTokenAccount,
       owner,
-      program: accountInfo?.value?.owner?.toString() ?? null,
+      program: accountInfo?.owner?.toString() ?? null,
       tokens: !isMint && !isTokenAccount ? [] : null,
     }
 
@@ -187,8 +184,8 @@ export class ApiAccountDataAccessService implements OnModuleInit {
 
     const tokenAccounts = await solana.getTokenAccounts(account, mint.publicKey)
     for (const tokenAccount of tokenAccounts) {
-      const info = await solana.connection.getParsedAccountInfo(getPublicKey(tokenAccount))
-      const parsed = (info.value as any)?.data?.parsed?.info
+      const info = await solana.getParsedAccountInfo(tokenAccount)
+      const parsed = info?.data?.parsed?.info
 
       result.tokens.push({
         account: tokenAccount,

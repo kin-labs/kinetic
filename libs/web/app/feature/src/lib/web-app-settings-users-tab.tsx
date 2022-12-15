@@ -9,31 +9,14 @@ import {
   useUserAppUserAddMutation,
   useUserAppUserRemoveMutation,
   useUserAppUserUpdateRoleMutation,
-  useUserUpdateAppMutation,
 } from '@kin-kinetic/web/util/sdk'
 import { CardHeader, CardTitle } from '@saas-ui/react'
 
 export function WebAppSettingsUsersTab({ app }: { app: App }) {
   const toast = useToast()
-  // const [{ data }] = useUserApp
-  const [, updateApp] = useUserUpdateAppMutation()
   const [, addAppUser] = useUserAppUserAddMutation()
   const [, removeAppUser] = useUserAppUserRemoveMutation()
   const [, updateAppUserRole] = useUserAppUserUpdateRoleMutation()
-
-  const submit = (data: App) => {
-    updateApp({ appId: app.id, input: { name: data.name } })
-      .then(() => {
-        toast({ status: 'success', title: 'App saved' })
-      })
-      .catch((error) => {
-        toast({
-          status: 'error',
-          title: 'Something went wrong',
-          description: `${error}`,
-        })
-      })
-  }
 
   const handleAddAppUser = (input: UserAppUserAddInput) => {
     addAppUser({ appId: app.id, input })

@@ -2,7 +2,7 @@ import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { AdminQueueLoadInput } from './dto/admin-queue-load.input'
-import { JobStatus } from './entity/job-status.enum'
+import { JobStatus, JobStatusClean } from './entity/job-status.enum'
 import { Job } from './entity/job.entity'
 import { QueueType } from './entity/queue-type.enum'
 import { Queue } from './entity/queue.entity'
@@ -35,7 +35,7 @@ export class ApiQueueDataAccessService {
   async adminQueueJobs(type: QueueType, statuses: JobStatus[]): Promise<Job[]> {
     if (type === QueueType.CloseAccount) {
       const jobs = await this.accountQueue.queue.getJobs(
-        statuses.map((status) => status.toLowerCase() as any),
+        statuses.map((status) => status.toLowerCase() as JobStatus),
         0,
         1000,
       )
@@ -59,7 +59,7 @@ export class ApiQueueDataAccessService {
       if (!status) {
         await this.accountQueue.queue.obliterate()
       } else {
-        await this.accountQueue.queue.clean(1000, status.toLowerCase() as any)
+        await this.accountQueue.queue.clean(1000, status.toLowerCase() as JobStatusClean)
       }
       return true
     }

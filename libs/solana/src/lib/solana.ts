@@ -3,7 +3,6 @@ import {
   Connection,
   ParsedAccountData,
   PublicKey,
-  RpcResponseAndContext,
   Transaction as SolanaTransaction,
 } from '@solana/web3.js'
 import axios from 'axios'
@@ -61,15 +60,6 @@ export class Solana {
       console.log(error)
       return error
     }
-  }
-  async getAccountInfo(
-    accountId: PublicKeyString,
-    commitment = Commitment.Confirmed,
-  ): Promise<RpcResponseAndContext<AccountInfo<ParsedAccountData>>> {
-    this.config.logger?.log(`Getting account info: ${accountId}`)
-    const info = await this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
-
-    return info as RpcResponseAndContext<AccountInfo<ParsedAccountData>>
   }
 
   async getBalance(
@@ -152,6 +142,16 @@ export class Solana {
   getLatestBlockhash() {
     this.config.logger?.log(`Getting latest blockhash`)
     return this.connection.getLatestBlockhash()
+  }
+
+  async getParsedAccountInfo(
+    accountId: PublicKeyString,
+    commitment = Commitment.Confirmed,
+  ): Promise<AccountInfo<ParsedAccountData>> {
+    this.config.logger?.log(`Parsing account info: ${accountId} with commitment ${commitment}`)
+    const result = await this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
+
+    return result.value as AccountInfo<ParsedAccountData>
   }
 
   async getTokenAccounts(account: PublicKeyString, mint: PublicKeyString) {

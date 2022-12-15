@@ -16,7 +16,7 @@ export function WebToolboxUiTransactionProgress({
 
   const updateConfirmations = () => {
     sdk.getTransaction({ signature }).then((res) => {
-      const status = (res.status as any).value
+      const status = res.status.value
       const confirmationStatus = status?.confirmationStatus
       const confirmations = status?.confirmations ?? 0
 
