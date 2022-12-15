@@ -22,6 +22,7 @@ import {
   WalletType,
 } from '@prisma/client'
 import { MetricService } from 'nestjs-otel'
+import { ApiCoreCacheService } from './cache/api-core-cache.service'
 
 export type AppEnvironment = AppEnv & {
   app: App
@@ -38,7 +39,11 @@ export class ApiCoreDataAccessService extends PrismaClient implements OnModuleIn
   private getAppByEnvironmentIndexCounter: Counter
   private getAppByIndexCounter: Counter
 
-  constructor(readonly config: ApiConfigDataAccessService, readonly metrics: MetricService) {
+  constructor(
+    readonly cache: ApiCoreCacheService,
+    readonly config: ApiConfigDataAccessService,
+    readonly metrics: MetricService,
+  ) {
     super()
   }
 
