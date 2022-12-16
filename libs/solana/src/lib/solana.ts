@@ -194,10 +194,13 @@ export class Solana {
     return this.connection.requestAirdrop(getPublicKey(account), amount)
   }
 
-  async sendRawTransaction(tx: SolanaTransaction) {
+  async sendRawTransaction(
+    tx: SolanaTransaction,
+    { maxRetries, skipPreflight }: { maxRetries: number; skipPreflight: boolean },
+  ) {
     await this.simulateTransaction(tx)
     this.config.logger?.log(`Send Raw Transaction`)
-    return this.connection.sendRawTransaction(tx.serialize(), { maxRetries: 5, skipPreflight: false })
+    return this.connection.sendRawTransaction(tx.serialize(), { maxRetries, skipPreflight })
   }
 
   async simulateTransaction(tx: SolanaTransaction) {

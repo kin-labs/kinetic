@@ -1,5 +1,5 @@
 import { Cluster } from '@kin-kinetic/api/cluster/data-access'
-import { Field, HideField, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { AppMint } from './app-mint.entity'
 import { App } from './app.entity'
 
@@ -17,6 +17,10 @@ export class AppEnv {
   ipsAllowed?: string[]
   @Field(() => [String], { nullable: true })
   ipsBlocked?: string[]
+  @Field(() => Int, { nullable: true })
+  solanaTransactionMaxRetries?: number
+  @Field({ nullable: true })
+  solanaTransactionSkipPreflight: boolean
   @Field(() => [String], { nullable: true })
   uasAllowed?: string[]
   @Field(() => [String], { nullable: true })

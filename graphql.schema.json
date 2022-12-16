@@ -969,6 +969,30 @@
             "deprecationReason": null
           },
           {
+            "name": "solanaTransactionMaxRetries",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "solanaTransactionSkipPreflight",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "uasAllowed",
             "description": null,
             "args": [],
@@ -6357,6 +6381,30 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "solanaTransactionMaxRetries",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "solanaTransactionSkipPreflight",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "webhookBalanceEnabled",
             "description": null,

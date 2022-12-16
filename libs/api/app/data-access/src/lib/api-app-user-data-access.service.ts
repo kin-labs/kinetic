@@ -119,11 +119,11 @@ export class ApiAppUserDataAccessService {
     })
   }
 
-  async userUpdateAppEnv(userId: string, appId: string, appEnvId: string, data: UserAppEnvUpdateInput) {
+  async userUpdateAppEnv(userId: string, appId: string, appEnvId: string, input: UserAppEnvUpdateInput) {
     await this.data.ensureAppOwner(userId, appId)
     return this.data.appEnv.update({
       where: { id: appEnvId },
-      data,
+      data: input,
       include: {
         ...this.app.includeAppEnv,
         app: true,

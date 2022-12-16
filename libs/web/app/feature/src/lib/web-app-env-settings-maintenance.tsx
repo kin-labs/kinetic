@@ -4,7 +4,6 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  AlertIcon,
   Box,
   ButtonGroup,
   Flex,
@@ -76,13 +75,6 @@ export function WebAppEnvSettingsMaintenance({ env }: { app: App; env: AppEnv })
           </Text>
         </Box>
       </Flex>
-      {env.webhookDebugging ? (
-        <WebUiAlert status="warning">
-          <AlertIcon />
-          Debugging enabled, webhooks will not be sent to your server. Inspect the transactions to see the webhook
-          payloads.
-        </WebUiAlert>
-      ) : null}
       <WebUiCard px={2}>
         <Accordion defaultIndex={[0]} allowMultiple>
           <AccordionItem>
