@@ -8,13 +8,12 @@ export type {
   AppConfigMint,
   BalanceResponse,
   BalanceToken,
-  Commitment,
   GetTransactionResponse,
   HistoryResponse,
   RequestAirdropResponse,
   TokenInfo,
   Transaction,
 } from './generated'
-
+export { Commitment } from './generated'
 export { Keypair, SolanaPublicKey, SolanaKeypair } from '@kin-kinetic/keypair'
 export { getPublicKey, removeDecimals, addDecimals, TransactionType } from '@kin-kinetic/solana'
