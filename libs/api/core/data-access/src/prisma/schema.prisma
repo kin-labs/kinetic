@@ -27,7 +27,7 @@ model AppEnv {
   ipsAllowed                     String[]
   ipsBlocked                     String[]
   mints                          AppMint[]
-  solanaTransactionMaxRetries    Int             @default(5)
+  solanaTransactionMaxRetries    Int             @default(0)
   solanaTransactionSkipPreflight Boolean         @default(false)
   transaction                    Transaction[]
   uasAllowed                     String[]

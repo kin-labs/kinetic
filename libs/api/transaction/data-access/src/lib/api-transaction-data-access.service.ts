@@ -310,7 +310,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
     // Solana Transaction
     const sent = await this.sendSolanaTransaction(appKey, transaction.id, solana, solanaTransaction, {
-      maxRetries: appEnv.solanaTransactionMaxRetries ?? 5,
+      maxRetries: appEnv.solanaTransactionMaxRetries ?? 0,
       skipPreflight: appEnv.solanaTransactionSkipPreflight ?? false,
     })
     if (sent.status === TransactionStatus.Failed) {

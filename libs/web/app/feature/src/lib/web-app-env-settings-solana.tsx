@@ -23,7 +23,7 @@ export function WebAppEnvSettingsSolana({ app, env }: { app: App; env: AppEnv })
   const [, updateAppEnv] = useUserUpdateAppEnvMutation()
 
   const submit = async ({
-    solanaTransactionMaxRetries = 5,
+    solanaTransactionMaxRetries = 0,
     solanaTransactionSkipPreflight = false,
   }: AppEnvSolanaTransactionInput) => {
     await updateAppEnv({
