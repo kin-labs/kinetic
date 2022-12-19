@@ -15,3 +15,6 @@ export type {
   TokenInfo,
   Transaction,
 } from './generated'
+
+export { Keypair, SolanaPublicKey, SolanaKeypair } from '@kin-kinetic/keypair'
+export { getPublicKey, PublicKeyString, removeDecimals, addDecimals, TransactionType } from '@kin-kinetic/solana'
