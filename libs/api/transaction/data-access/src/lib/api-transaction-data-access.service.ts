@@ -244,10 +244,10 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     })
   }
 
-  async getTransaction(appKey: string, signature: string): Promise<GetTransactionResponse> {
+  async getTransaction(appKey: string, signature: string, commitment: Commitment): Promise<GetTransactionResponse> {
     const solana = await this.solana.getConnection(appKey)
 
-    return solana.getTransaction(signature)
+    return solana.getTransaction(signature, commitment)
   }
 
   async handleTransaction({

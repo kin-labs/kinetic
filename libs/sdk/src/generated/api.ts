@@ -1408,6 +1408,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1415,6 +1416,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       environment: string,
       index: number,
       accountId: string,
+      commitment: Commitment,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'environment' is not null or undefined
@@ -1423,6 +1425,8 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       assertParamExists('getAccountInfo', 'index', index)
       // verify required parameter 'accountId' is not null or undefined
       assertParamExists('getAccountInfo', 'accountId', accountId)
+      // verify required parameter 'commitment' is not null or undefined
+      assertParamExists('getAccountInfo', 'commitment', commitment)
       const localVarPath = `/api/account/info/{environment}/{index}/{accountId}`
         .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
@@ -1437,6 +1441,10 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
+
+      if (commitment !== undefined) {
+        localVarQueryParameter['commitment'] = commitment
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter)
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
@@ -1507,6 +1515,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {number} index
      * @param {string} accountId
      * @param {string} mint
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1515,6 +1524,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       index: number,
       accountId: string,
       mint: string,
+      commitment: Commitment,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'environment' is not null or undefined
@@ -1525,6 +1535,8 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       assertParamExists('getHistory', 'accountId', accountId)
       // verify required parameter 'mint' is not null or undefined
       assertParamExists('getHistory', 'mint', mint)
+      // verify required parameter 'commitment' is not null or undefined
+      assertParamExists('getHistory', 'commitment', commitment)
       const localVarPath = `/api/account/history/{environment}/{index}/{accountId}/{mint}`
         .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
@@ -1540,6 +1552,10 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
+
+      if (commitment !== undefined) {
+        localVarQueryParameter['commitment'] = commitment
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter)
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
@@ -1557,6 +1573,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {number} index
      * @param {string} accountId
      * @param {string} mint
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1565,6 +1582,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       index: number,
       accountId: string,
       mint: string,
+      commitment: Commitment,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'environment' is not null or undefined
@@ -1575,6 +1593,8 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       assertParamExists('getTokenAccounts', 'accountId', accountId)
       // verify required parameter 'mint' is not null or undefined
       assertParamExists('getTokenAccounts', 'mint', mint)
+      // verify required parameter 'commitment' is not null or undefined
+      assertParamExists('getTokenAccounts', 'commitment', commitment)
       const localVarPath = `/api/account/token-accounts/{environment}/{index}/{accountId}/{mint}`
         .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
@@ -1590,6 +1610,10 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
+
+      if (commitment !== undefined) {
+        localVarQueryParameter['commitment'] = commitment
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter)
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
@@ -1644,6 +1668,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1651,9 +1676,16 @@ export const AccountApiFp = function (configuration?: Configuration) {
       environment: string,
       index: number,
       accountId: string,
+      commitment: Commitment,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountInfo>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountInfo(environment, index, accountId, options)
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getAccountInfo(
+        environment,
+        index,
+        accountId,
+        commitment,
+        options,
+      )
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -1689,6 +1721,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {number} index
      * @param {string} accountId
      * @param {string} mint
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1697,9 +1730,17 @@ export const AccountApiFp = function (configuration?: Configuration) {
       index: number,
       accountId: string,
       mint: string,
+      commitment: Commitment,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<HistoryResponse>>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(environment, index, accountId, mint, options)
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getHistory(
+        environment,
+        index,
+        accountId,
+        mint,
+        commitment,
+        options,
+      )
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -1709,6 +1750,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {number} index
      * @param {string} accountId
      * @param {string} mint
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1717,6 +1759,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
       index: number,
       accountId: string,
       mint: string,
+      commitment: Commitment,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<string>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getTokenAccounts(
@@ -1724,6 +1767,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
         index,
         accountId,
         mint,
+        commitment,
         options,
       )
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
@@ -1764,12 +1808,19 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getAccountInfo(environment: string, index: number, accountId: string, options?: any): AxiosPromise<AccountInfo> {
+    getAccountInfo(
+      environment: string,
+      index: number,
+      accountId: string,
+      commitment: Commitment,
+      options?: any,
+    ): AxiosPromise<AccountInfo> {
       return localVarFp
-        .getAccountInfo(environment, index, accountId, options)
+        .getAccountInfo(environment, index, accountId, commitment, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -1800,6 +1851,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {number} index
      * @param {string} accountId
      * @param {string} mint
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1808,10 +1860,11 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
       index: number,
       accountId: string,
       mint: string,
+      commitment: Commitment,
       options?: any,
     ): AxiosPromise<Array<HistoryResponse>> {
       return localVarFp
-        .getHistory(environment, index, accountId, mint, options)
+        .getHistory(environment, index, accountId, mint, commitment, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -1821,6 +1874,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {number} index
      * @param {string} accountId
      * @param {string} mint
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1829,10 +1883,11 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
       index: number,
       accountId: string,
       mint: string,
+      commitment: Commitment,
       options?: any,
     ): AxiosPromise<Array<string>> {
       return localVarFp
-        .getTokenAccounts(environment, index, accountId, mint, options)
+        .getTokenAccounts(environment, index, accountId, mint, commitment, options)
         .then((request) => request(axios, basePath))
     },
   }
@@ -1870,6 +1925,7 @@ export interface AccountApiInterface {
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
+   * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApiInterface
@@ -1878,6 +1934,7 @@ export interface AccountApiInterface {
     environment: string,
     index: number,
     accountId: string,
+    commitment: Commitment,
     options?: AxiosRequestConfig,
   ): AxiosPromise<AccountInfo>
 
@@ -1907,6 +1964,7 @@ export interface AccountApiInterface {
    * @param {number} index
    * @param {string} accountId
    * @param {string} mint
+   * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApiInterface
@@ -1916,6 +1974,7 @@ export interface AccountApiInterface {
     index: number,
     accountId: string,
     mint: string,
+    commitment: Commitment,
     options?: AxiosRequestConfig,
   ): AxiosPromise<Array<HistoryResponse>>
 
@@ -1926,6 +1985,7 @@ export interface AccountApiInterface {
    * @param {number} index
    * @param {string} accountId
    * @param {string} mint
+   * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApiInterface
@@ -1935,6 +1995,7 @@ export interface AccountApiInterface {
     index: number,
     accountId: string,
     mint: string,
+    commitment: Commitment,
     options?: AxiosRequestConfig,
   ): AxiosPromise<Array<string>>
 }
@@ -1980,13 +2041,20 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
+   * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApi
    */
-  public getAccountInfo(environment: string, index: number, accountId: string, options?: AxiosRequestConfig) {
+  public getAccountInfo(
+    environment: string,
+    index: number,
+    accountId: string,
+    commitment: Commitment,
+    options?: AxiosRequestConfig,
+  ) {
     return AccountApiFp(this.configuration)
-      .getAccountInfo(environment, index, accountId, options)
+      .getAccountInfo(environment, index, accountId, commitment, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -2020,13 +2088,21 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
    * @param {number} index
    * @param {string} accountId
    * @param {string} mint
+   * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApi
    */
-  public getHistory(environment: string, index: number, accountId: string, mint: string, options?: AxiosRequestConfig) {
+  public getHistory(
+    environment: string,
+    index: number,
+    accountId: string,
+    mint: string,
+    commitment: Commitment,
+    options?: AxiosRequestConfig,
+  ) {
     return AccountApiFp(this.configuration)
-      .getHistory(environment, index, accountId, mint, options)
+      .getHistory(environment, index, accountId, mint, commitment, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -2037,6 +2113,7 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
    * @param {number} index
    * @param {string} accountId
    * @param {string} mint
+   * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof AccountApi
@@ -2046,10 +2123,11 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
     index: number,
     accountId: string,
     mint: string,
+    commitment: Commitment,
     options?: AxiosRequestConfig,
   ) {
     return AccountApiFp(this.configuration)
-      .getTokenAccounts(environment, index, accountId, mint, options)
+      .getTokenAccounts(environment, index, accountId, mint, commitment, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }
@@ -2516,6 +2594,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
      * @param {string} environment
      * @param {number} index
      * @param {string} signature
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2523,6 +2602,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
       environment: string,
       index: number,
       signature: string,
+      commitment: Commitment,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'environment' is not null or undefined
@@ -2531,6 +2611,8 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
       assertParamExists('getTransaction', 'index', index)
       // verify required parameter 'signature' is not null or undefined
       assertParamExists('getTransaction', 'signature', signature)
+      // verify required parameter 'commitment' is not null or undefined
+      assertParamExists('getTransaction', 'commitment', commitment)
       const localVarPath = `/api/transaction/transaction/{environment}/{index}/{signature}`
         .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
@@ -2545,6 +2627,10 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
       const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
+
+      if (commitment !== undefined) {
+        localVarQueryParameter['commitment'] = commitment
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter)
       let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
@@ -2647,6 +2733,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
      * @param {string} environment
      * @param {number} index
      * @param {string} signature
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2654,9 +2741,16 @@ export const TransactionApiFp = function (configuration?: Configuration) {
       environment: string,
       index: number,
       signature: string,
+      commitment: Commitment,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetTransactionResponse>> {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getTransaction(environment, index, signature, options)
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getTransaction(
+        environment,
+        index,
+        signature,
+        commitment,
+        options,
+      )
       return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)
     },
     /**
@@ -2723,6 +2817,7 @@ export const TransactionApiFactory = function (
      * @param {string} environment
      * @param {number} index
      * @param {string} signature
+     * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -2730,10 +2825,11 @@ export const TransactionApiFactory = function (
       environment: string,
       index: number,
       signature: string,
+      commitment: Commitment,
       options?: any,
     ): AxiosPromise<GetTransactionResponse> {
       return localVarFp
-        .getTransaction(environment, index, signature, options)
+        .getTransaction(environment, index, signature, commitment, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -2793,6 +2889,7 @@ export interface TransactionApiInterface {
    * @param {string} environment
    * @param {number} index
    * @param {string} signature
+   * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TransactionApiInterface
@@ -2801,6 +2898,7 @@ export interface TransactionApiInterface {
     environment: string,
     index: number,
     signature: string,
+    commitment: Commitment,
     options?: AxiosRequestConfig,
   ): AxiosPromise<GetTransactionResponse>
 
@@ -2864,13 +2962,20 @@ export class TransactionApi extends BaseAPI implements TransactionApiInterface {
    * @param {string} environment
    * @param {number} index
    * @param {string} signature
+   * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TransactionApi
    */
-  public getTransaction(environment: string, index: number, signature: string, options?: AxiosRequestConfig) {
+  public getTransaction(
+    environment: string,
+    index: number,
+    signature: string,
+    commitment: Commitment,
+    options?: AxiosRequestConfig,
+  ) {
     return TransactionApiFp(this.configuration)
-      .getTransaction(environment, index, signature, options)
+      .getTransaction(environment, index, signature, commitment, options)
       .then((request) => request(this.axios, this.basePath))
   }
 

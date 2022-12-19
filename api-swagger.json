@@ -89,6 +89,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "commitment",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Commitment"
+            }
           }
         ],
         "responses": {
@@ -195,6 +203,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "commitment",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Commitment"
+            }
           }
         ],
         "responses": {
@@ -250,6 +266,14 @@
             "in": "path",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "commitment",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Commitment"
             }
           }
         ],
@@ -514,6 +538,14 @@
             "in": "path",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "commitment",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Commitment"
             }
           }
         ],

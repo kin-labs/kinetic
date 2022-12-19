@@ -37,13 +37,15 @@ export class ApiAccountFeatureController {
   @Get('info/:environment/:index/:accountId')
   @ApiOperation({ operationId: 'getAccountInfo' })
   @ApiParam({ name: 'index', type: 'integer' })
+  @ApiQuery({ name: 'commitment', enum: Commitment, enumName: 'Commitment' })
   @ApiResponse({ type: AccountInfo })
   getAccountInfo(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
     @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
+    @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getAccountInfo(getAppKey(environment, index), accountId)
+    return this.service.getAccountInfo(getAppKey(environment, index), accountId, commitment)
   }
 
   @Get('balance/:environment/:index/:accountId')
@@ -63,26 +65,30 @@ export class ApiAccountFeatureController {
   @Get('history/:environment/:index/:accountId/:mint')
   @ApiOperation({ operationId: 'getHistory' })
   @ApiParam({ name: 'index', type: 'integer' })
+  @ApiQuery({ name: 'commitment', enum: Commitment, enumName: 'Commitment' })
   @ApiResponse({ type: HistoryResponse, isArray: true })
   getHistory(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
     @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
     @Param('mint', new PublicKeyPipe('mint')) mint: string,
+    @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getHistory(getAppKey(environment, index), accountId, mint)
+    return this.service.getHistory(getAppKey(environment, index), accountId, mint, commitment)
   }
 
   @Get('token-accounts/:environment/:index/:accountId/:mint')
   @ApiOperation({ operationId: 'getTokenAccounts' })
   @ApiParam({ name: 'index', type: 'integer' })
+  @ApiQuery({ name: 'commitment', enum: Commitment, enumName: 'Commitment' })
   @ApiResponse({ type: String, isArray: true })
   getTokenAccounts(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
     @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
     @Param('mint', new PublicKeyPipe('mint')) mint: string,
+    @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getTokenAccounts(getAppKey(environment, index), accountId, mint)
+    return this.service.getTokenAccounts(getAppKey(environment, index), accountId, mint, commitment)
   }
 }

@@ -95,7 +95,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     }: { appKey: string; appEnv: AppEnvironment; headers?: Record<string, string>; ip?: string; ua?: string },
   ): Promise<Transaction> {
     this.closeAccountRequestCounter.add(1, { appKey })
-    const accountInfo = await this.getAccountInfo(appKey, input.account)
+    const accountInfo = await this.getAccountInfo(appKey, input.account, input.commitment)
 
     try {
       const tokenAccount = validateCloseAccount({
@@ -152,10 +152,10 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     }
   }
 
-  async getAccountInfo(appKey: string, accountId: PublicKeyString): Promise<AccountInfo> {
+  async getAccountInfo(appKey: string, accountId: PublicKeyString, commitment: Commitment): Promise<AccountInfo> {
     const solana = await this.solana.getConnection(appKey)
     const account = getPublicKey(accountId)
-    const accountInfo = await solana.getParsedAccountInfo(account)
+    const accountInfo = await solana.getParsedAccountInfo(account, commitment)
 
     const parsed = accountInfo?.data?.parsed
 
@@ -182,9 +182,9 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const appEnv = await this.app.getAppConfig(appKey)
     const mint = appEnv.mint
 
-    const tokenAccounts = await solana.getTokenAccounts(account, mint.publicKey)
+    const tokenAccounts = await solana.getTokenAccounts(account, mint.publicKey, commitment)
     for (const tokenAccount of tokenAccounts) {
-      const info = await solana.getParsedAccountInfo(tokenAccount)
+      const info = await solana.getParsedAccountInfo(tokenAccount, commitment)
       const parsed = info?.data?.parsed?.info
 
       result.tokens.push({
@@ -212,20 +212,26 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     return solana.getBalance(accountId, mints, commitment)
   }
 
-  async getHistory(appKey: string, accountId: PublicKeyString, mint?: PublicKeyString): Promise<HistoryResponse[]> {
+  async getHistory(
+    appKey: string,
+    accountId: PublicKeyString,
+    mint: PublicKeyString,
+    commitment: Commitment,
+  ): Promise<HistoryResponse[]> {
     const solana = await this.solana.getConnection(appKey)
-    const appEnv = await this.app.getAppConfig(appKey)
-    mint = mint || appEnv.mint.publicKey
 
-    return solana.getTokenHistory(accountId, mint.toString())
+    return solana.getTokenHistory(accountId, mint.toString(), commitment)
   }
 
-  async getTokenAccounts(appKey: string, accountId: PublicKeyString, mint?: PublicKeyString): Promise<string[]> {
+  async getTokenAccounts(
+    appKey: string,
+    accountId: PublicKeyString,
+    mint: PublicKeyString,
+    commitment: Commitment,
+  ): Promise<string[]> {
     const solana = await this.solana.getConnection(appKey)
-    const appEnv = await this.app.getAppConfig(appKey)
-    mint = mint || appEnv.mint.publicKey
 
-    return solana.getTokenAccounts(accountId, mint.toString())
+    return solana.getTokenAccounts(accountId, mint.toString(), commitment)
   }
 
   async createAccount(req: Request, input: CreateAccountRequest): Promise<Transaction> {
@@ -266,11 +272,11 @@ export class ApiAccountDataAccessService implements OnModuleInit {
       appKey,
       transaction,
       blockhash,
-      commitment: input?.commitment,
+      commitment: input.commitment,
       decimals: mint?.mint?.decimals,
       feePayer,
       headers: req.headers as Record<string, string>,
-      lastValidBlockHeight: input?.lastValidBlockHeight,
+      lastValidBlockHeight: input.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
       solanaTransaction,
       source,

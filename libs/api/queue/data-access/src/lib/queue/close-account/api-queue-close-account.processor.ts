@@ -18,10 +18,11 @@ export class ApiQueueCloseAccountProcessor {
     const { account, environment, index, mint, mints, wallets } = job.data
 
     this.logger.debug(`${job.id} Start processing...`)
+    const commitment = Commitment.Finalized
 
     try {
       const appKey = getAppKey(environment, index)
-      const accountInfo = await this.service.account.getAccountInfo(appKey, account)
+      const accountInfo = await this.service.account.getAccountInfo(appKey, account, commitment)
 
       try {
         validateCloseAccount({ info: accountInfo, mint, mints, wallets })
@@ -31,10 +32,9 @@ export class ApiQueueCloseAccountProcessor {
         )
 
         const appEnv = await this.service.data.getAppEnvironmentByAppKey(appKey)
-
         const transaction = await this.service.account.handleCloseAccount(
           {
-            commitment: Commitment.Confirmed,
+            commitment,
             mint,
             referenceId: `${job.id}`,
             referenceType: QueueType.CloseAccount,

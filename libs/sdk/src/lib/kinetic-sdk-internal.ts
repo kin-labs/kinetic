@@ -126,8 +126,9 @@ export class KineticSdkInternal {
   }
 
   getAccountInfo(options: GetAccountInfoOptions) {
+    const commitment = this.getCommitment(options.commitment)
     return this.accountApi
-      .getAccountInfo(this.sdkConfig.environment, this.sdkConfig.index, options.account.toString())
+      .getAccountInfo(this.sdkConfig.environment, this.sdkConfig.index, options.account.toString(), commitment)
       .then((res) => res.data)
   }
 
@@ -156,10 +157,17 @@ export class KineticSdkInternal {
 
   getHistory(options: GetHistoryOptions): Promise<HistoryResponse[]> {
     const appConfig = this.ensureAppConfig()
+    const commitment = this.getCommitment(options.commitment)
     const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     return this.accountApi
-      .getHistory(this.sdkConfig.environment, this.sdkConfig.index, options.account.toString(), mint.publicKey)
+      .getHistory(
+        this.sdkConfig.environment,
+        this.sdkConfig.index,
+        options.account.toString(),
+        mint.publicKey,
+        commitment,
+      )
       .then((res) => res.data)
       .catch((err) => {
         throw new Error(err?.response?.data?.message ?? 'Unknown error')
@@ -168,10 +176,17 @@ export class KineticSdkInternal {
 
   getTokenAccounts(options: GetTokenAccountsOptions): Promise<string[]> {
     const appConfig = this.ensureAppConfig()
+    const commitment = this.getCommitment(options.commitment)
     const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     return this.accountApi
-      .getTokenAccounts(this.sdkConfig.environment, this.sdkConfig.index, options.account.toString(), mint.publicKey)
+      .getTokenAccounts(
+        this.sdkConfig.environment,
+        this.sdkConfig.index,
+        options.account.toString(),
+        mint.publicKey,
+        commitment,
+      )
       .then((res) => res.data)
       .catch((err) => {
         throw new Error(err?.response?.data?.message ?? 'Unknown error')
@@ -179,8 +194,10 @@ export class KineticSdkInternal {
   }
 
   getTransaction(options: GetTransactionOptions) {
+    const commitment = this.getCommitment(options.commitment)
+
     return this.transactionApi
-      .getTransaction(this.sdkConfig.environment, this.sdkConfig.index, options.signature)
+      .getTransaction(this.sdkConfig.environment, this.sdkConfig.index, options.signature, commitment)
       .then((res) => res.data)
       .catch((err) => {
         throw new Error(err?.response?.data?.message ?? 'Unknown error')

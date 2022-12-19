@@ -8,7 +8,14 @@ import {
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import { NAME } from '../version'
-import { convertCommitment, getPublicKey, parseEndpoint, parseTransactionSimulation, removeDecimals } from './helpers'
+import {
+  convertCommitment,
+  convertFinality,
+  getPublicKey,
+  parseEndpoint,
+  parseTransactionSimulation,
+  removeDecimals,
+} from './helpers'
 import {
   BalanceMint,
   BalanceMintMap,
@@ -65,7 +72,7 @@ export class Solana {
   async getBalance(
     accountId: PublicKeyString,
     mints: BalanceMint | BalanceMint[],
-    commitment: Commitment = Commitment.Finalized,
+    commitment: Commitment,
   ): Promise<BalanceSummary> {
     mints = Array.isArray(mints) ? mints : [mints]
     this.config.logger?.log(
@@ -84,7 +91,7 @@ export class Solana {
         accounts: string[]
       }>[] = await Promise.allSettled(
         mints.map((mint) => {
-          return this.getTokenAccounts(accountId, mint.publicKey).then((accounts) => ({ mint, accounts }))
+          return this.getTokenAccounts(accountId, mint.publicKey, commitment).then((accounts) => ({ mint, accounts }))
         }),
       )
       const tokenAccounts = tokenAccountResult
@@ -146,7 +153,7 @@ export class Solana {
 
   async getParsedAccountInfo(
     accountId: PublicKeyString,
-    commitment = Commitment.Confirmed,
+    commitment: Commitment,
   ): Promise<AccountInfo<ParsedAccountData>> {
     this.config.logger?.log(`Parsing account info: ${accountId} with commitment ${commitment}`)
     const result = await this.connection.getParsedAccountInfo(new PublicKey(accountId), convertCommitment(commitment))
@@ -154,9 +161,13 @@ export class Solana {
     return result.value as AccountInfo<ParsedAccountData>
   }
 
-  async getTokenAccounts(account: PublicKeyString, mint: PublicKeyString) {
+  async getTokenAccounts(account: PublicKeyString, mint: PublicKeyString, commitment: Commitment) {
     this.config.logger?.log(`Getting token account: ${getPublicKey(account)} / mint: ${getPublicKey(mint)}`)
-    const res = await this.connection.getTokenAccountsByOwner(getPublicKey(account), { mint: getPublicKey(mint) })
+    const res = await this.connection.getTokenAccountsByOwner(
+      getPublicKey(account),
+      { mint: getPublicKey(mint) },
+      { commitment: convertCommitment(commitment) },
+    )
     return res.value.map(({ pubkey }) => pubkey.toBase58())
   }
 
@@ -165,10 +176,7 @@ export class Solana {
     return Promise.all(accounts.map((account) => this.getAccountHistory(account)))
   }
 
-  async getTokenBalance(
-    account: PublicKeyString,
-    commitment: Commitment = Commitment.Finalized,
-  ): Promise<TokenBalance> {
+  async getTokenBalance(account: PublicKeyString, commitment: Commitment): Promise<TokenBalance> {
     this.config.logger?.log(`Getting token balance: ${getPublicKey(account)} with commitment: ${commitment}`)
     const res = await this.connection.getTokenAccountBalance(getPublicKey(account), convertCommitment(commitment))
     return {
@@ -177,15 +185,18 @@ export class Solana {
     }
   }
 
-  async getTokenHistory(account: PublicKeyString, mint: PublicKeyString) {
+  async getTokenHistory(account: PublicKeyString, mint: PublicKeyString, commitment: Commitment) {
     this.config.logger?.log(`Getting token history: ${getPublicKey(account)} / ${getPublicKey(mint)} `)
-    return this.getTokenAccounts(account, mint).then((accounts) => this.getTokenAccountsHistory(accounts))
+    return this.getTokenAccounts(account, mint, commitment).then((accounts) => this.getTokenAccountsHistory(accounts))
   }
 
-  async getTransaction(signature: string) {
+  async getTransaction(signature: string, commitment: Commitment) {
     this.config.logger?.log(`Getting transaction: ${signature} `)
     const status = await this.connection.getSignatureStatus(signature, { searchTransactionHistory: true })
-    const transaction = await this.connection.getTransaction(signature, { maxSupportedTransactionVersion: 0 })
+    const transaction = await this.connection.getTransaction(signature, {
+      maxSupportedTransactionVersion: 0,
+      commitment: convertFinality(commitment),
+    })
     return { signature, status, transaction }
   }
 

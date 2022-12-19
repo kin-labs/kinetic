@@ -8,8 +8,9 @@ import {
   MinimumRentExemptionBalanceResponse,
   Transaction,
 } from '@kin-kinetic/api/transaction/data-access'
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Req } from '@nestjs/common'
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Commitment } from '@kin-kinetic/solana'
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common'
+import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
 
 @ApiTags('transaction')
@@ -48,12 +49,14 @@ export class ApiTransactionFeatureController {
   @Get('transaction/:environment/:index/:signature')
   @ApiOperation({ operationId: 'getTransaction' })
   @ApiParam({ name: 'index', type: 'integer' })
+  @ApiQuery({ name: 'commitment', enum: Commitment, enumName: 'Commitment' })
   @ApiResponse({ type: GetTransactionResponse })
   getTransaction(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
     @Param('signature') signature: string,
+    @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getTransaction(getAppKey(environment, index), signature)
+    return this.service.getTransaction(getAppKey(environment, index), signature, commitment)
   }
 }
