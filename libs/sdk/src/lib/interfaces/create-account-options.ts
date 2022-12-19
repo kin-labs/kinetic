@@ -1,5 +1,5 @@
 import { Keypair } from '@kin-kinetic/keypair'
-import { Commitment } from '@kin-kinetic/solana'
+import { Commitment } from '../../generated'
 
 export interface CreateAccountOptions {
   commitment?: Commitment

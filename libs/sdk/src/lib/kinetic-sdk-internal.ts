@@ -1,5 +1,4 @@
 import {
-  Commitment,
   generateCreateAccountTransaction,
   generateMakeTransferBatchTransaction,
   generateMakeTransferTransaction,
@@ -15,6 +14,7 @@ import {
   AppConfigMint,
   BalanceResponse,
   CloseAccountRequest,
+  Commitment,
   Configuration,
   CreateAccountRequest,
   HistoryResponse,

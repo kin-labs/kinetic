@@ -8,6 +8,7 @@ export type {
   AppConfigMint,
   BalanceResponse,
   BalanceToken,
+  Commitment,
   GetTransactionResponse,
   HistoryResponse,
   RequestAirdropResponse,

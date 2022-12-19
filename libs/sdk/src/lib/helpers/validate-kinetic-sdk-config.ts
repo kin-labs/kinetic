@@ -1,4 +1,4 @@
-import { Commitment } from '@kin-kinetic/solana'
+import { Commitment } from '../../generated'
 import { KineticSdkConfig } from '../interfaces'
 
 function removeTrailingSlash(str: string) {

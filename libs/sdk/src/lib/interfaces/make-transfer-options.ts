@@ -1,5 +1,6 @@
 import { Keypair } from '@kin-kinetic/keypair'
-import { Commitment, TransactionType } from '@kin-kinetic/solana'
+import { TransactionType } from '@kin-kinetic/solana'
+import { Commitment } from '../../generated'
 import { TransferDestination } from './transfer-destination'
 
 export interface MakeTransferOptions extends TransferDestination {

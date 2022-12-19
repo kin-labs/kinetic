@@ -1,6 +1,6 @@
 import { Keypair } from '@kin-kinetic/keypair'
-import { Commitment } from '@kin-kinetic/solana'
 import { clusterApiUrl } from '@solana/web3.js'
+import { Commitment } from '../generated'
 import { validateKineticSdkConfig } from './helpers/validate-kinetic-sdk-config'
 import { KineticSdkConfig } from './interfaces'
 import { KineticSdk } from './kinetic-sdk'

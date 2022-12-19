@@ -1,4 +1,4 @@
-import { Commitment } from '@kin-kinetic/solana'
+import { Commitment } from '../../generated'
 import { KineticSdkLogger } from './kinetic-sdk-logger'
 
 export interface KineticSdkConfig {
