@@ -1,3 +1,4 @@
+import { Commitment } from '@kin-kinetic/solana'
 import { KineticSdkConfig } from '../interfaces'
 
 function removeTrailingSlash(str: string) {
@@ -27,6 +28,7 @@ export function validateKineticSdkConfig(config: KineticSdkConfig): KineticSdkCo
   }
   return {
     ...config,
+    commitment: config.commitment || Commitment.Confirmed,
     endpoint: removeTrailingSlash(config.endpoint),
   }
 }
