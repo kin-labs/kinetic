@@ -6,6 +6,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { WebAppEnvSettingsAccess } from './web-app-env-settings-access'
 import { WebAppEnvSettingsMaintenance } from './web-app-env-settings-maintenance'
 import { WebAppEnvSettingsMints } from './web-app-env-settings-mints'
+import { WebAppEnvSettingsSolana } from './web-app-env-settings-solana'
 import { WebAppEnvSettingsWebhooks } from './web-app-env-settings-webhooks'
 
 export function WebAppEnvSettings({ app, env }: { app: App; env: AppEnv }) {
@@ -13,6 +14,7 @@ export function WebAppEnvSettings({ app, env }: { app: App; env: AppEnv }) {
     { label: 'Access Control', path: 'access-control' },
     { label: 'Maintenance', path: 'maintenance' },
     { label: 'Mints', path: 'mints' },
+    { label: 'Solana', path: 'solana' },
     { label: 'Webhooks', path: 'webhooks' },
   ]
   return (
@@ -23,6 +25,7 @@ export function WebAppEnvSettings({ app, env }: { app: App; env: AppEnv }) {
           <Route path="access-control" element={<WebAppEnvSettingsAccess app={app} env={env} />} />
           <Route path="maintenance" element={<WebAppEnvSettingsMaintenance app={app} env={env} />} />
           <Route path="mints" element={<WebAppEnvSettingsMints app={app} env={env} />} />
+          <Route path="solana" element={<WebAppEnvSettingsSolana app={app} env={env} />} />
           <Route path="webhooks" element={<WebAppEnvSettingsWebhooks app={app} env={env} />} />
         </Routes>
       </WebUiContainer>

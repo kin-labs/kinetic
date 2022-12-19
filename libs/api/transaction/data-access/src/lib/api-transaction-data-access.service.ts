@@ -309,7 +309,10 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     }
 
     // Solana Transaction
-    const sent = await this.sendSolanaTransaction(appKey, transaction.id, solana, solanaTransaction)
+    const sent = await this.sendSolanaTransaction(appKey, transaction.id, solana, solanaTransaction, {
+      maxRetries: appEnv.solanaTransactionMaxRetries ?? 0,
+      skipPreflight: appEnv.solanaTransactionSkipPreflight ?? false,
+    })
     if (sent.status === TransactionStatus.Failed) {
       this.logger.error(
         `Transaction ${updatedTransaction.id} sendSolanaTransaction failed:${sent.errors
@@ -485,10 +488,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     transactionId: string,
     solana: Solana,
     solanaTransaction: SolanaTransaction,
+    { maxRetries, skipPreflight }: { maxRetries: number; skipPreflight: boolean },
   ): Promise<TransactionWithErrors> {
     const solanaStart = new Date()
     try {
-      const signature = await solana.sendRawTransaction(solanaTransaction)
+      const signature = await solana.sendRawTransaction(solanaTransaction, { maxRetries, skipPreflight })
       const status = TransactionStatus.Committed
       const solanaCommitted = new Date()
       const solanaCommittedDuration = solanaCommitted.getTime() - solanaStart.getTime()

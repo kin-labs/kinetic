@@ -36,6 +36,8 @@ fragment AppEnvDetails on AppEnv {
     ...AppMintDetails
   }
   name
+  solanaTransactionMaxRetries
+  solanaTransactionSkipPreflight
   uasAllowed
   uasBlocked
   webhookBalanceEnabled
