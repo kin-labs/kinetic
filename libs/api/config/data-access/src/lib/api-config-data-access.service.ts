@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
 import { CookieOptions } from 'express-serve-static-core'
 import * as fs from 'fs'
+import * as Redis from 'ioredis'
 import { join } from 'path'
 import { ProvisionedApp } from './entity/provisioned-app.entity'
 import { WebConfig } from './entity/web-config.entity'
@@ -217,6 +218,22 @@ export class ApiConfigDataAccessService {
 
   get queueCloseAccountStart() {
     return this.config.get('queue.closeAccount.start')
+  }
+
+  get redisOptions(): Redis.RedisOptions {
+    const parsed = new URL(this.redisUrl)
+
+    return {
+      host: parsed.hostname,
+      port: Number(parsed.port),
+      password: parsed.password,
+      username: parsed.username,
+      tls: parsed.protocol?.startsWith('rediss')
+        ? {
+            rejectUnauthorized: false,
+          }
+        : undefined,
+    }
   }
 
   get redisUrl() {

@@ -16,7 +16,7 @@ import { ApiQueueCloseAccountModule } from './queue/close-account/api-queue-clos
       imports: [ApiConfigDataAccessModule],
       useFactory: async (config: ApiConfigDataAccessService) => ({
         prefix: 'kinetic:queue',
-        redis: config.redisUrl,
+        redis: config.redisOptions,
       }),
       inject: [ApiConfigDataAccessService],
     }),
