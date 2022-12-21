@@ -1,12 +1,12 @@
 import { Code, Stack, Text, useToast } from '@chakra-ui/react'
 import { ellipsify } from '@kin-kinetic/web/app/ui'
 import { useWebKeypair, WebKeypairEntity } from '@kin-kinetic/web/keypair/data-access'
+import { WebUiCopy } from '@kin-kinetic/web/ui/copy'
 
 import { Button, ButtonGroup } from '@saas-ui/react'
-import { IconCopy, IconEye, IconEyeOff } from '@tabler/icons'
+import { IconEye, IconEyeOff } from '@tabler/icons'
 import { decode } from 'bs58'
 import { useState } from 'react'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { MdDelete } from 'react-icons/md'
 
 export function WebKeypairUiItem({ keypair }: { keypair?: WebKeypairEntity }) {
@@ -78,25 +78,13 @@ export function WebKeypairUiItem({ keypair }: { keypair?: WebKeypairEntity }) {
           </ButtonGroup>
           {details ? (
             <ButtonGroup>
-              <Copy disabled={!secrets.mnemonic} label={'Copy Mnemonic'} text={secrets.mnemonic ?? ''} />
-              <Copy disabled={!secrets.secretKey} label={'Copy Secret Key'} text={secrets.secretKey ?? ''} />
-              <Copy disabled={!secrets.byteArray} label={'Copy Byte Array'} text={secrets.byteArray ?? ''} />
+              <WebUiCopy disabled={!secrets.mnemonic} label={'Copy Mnemonic'} text={secrets.mnemonic ?? ''} />
+              <WebUiCopy disabled={!secrets.secretKey} label={'Copy Secret Key'} text={secrets.secretKey ?? ''} />
+              <WebUiCopy disabled={!secrets.byteArray} label={'Copy Byte Array'} text={secrets.byteArray ?? ''} />
             </ButtonGroup>
           ) : null}
         </Stack>
       </Stack>
     </Stack>
-  )
-}
-
-function Copy({ disabled, label, text }: { disabled?: boolean; label?: string; text: string }) {
-  const toast = useToast()
-  return (
-    <CopyToClipboard text={text} onCopy={() => toast({ status: 'info', title: 'Copied to clipboard' })}>
-      <Button p={2} variant={'outline'} disabled={disabled}>
-        <IconCopy color="gray" size={16} />
-        {label ? <Text ml={2}>{label}</Text> : null}
-      </Button>
-    </CopyToClipboard>
   )
 }

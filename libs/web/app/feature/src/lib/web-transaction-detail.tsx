@@ -1,25 +1,11 @@
-import { Box, Button, Code, Flex, Icon, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, Code, Flex, Icon, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import { WebUiPropertyList } from '@kin-kinetic/web/app/ui'
+import { WebUiCopy } from '@kin-kinetic/web/ui/copy'
 import { AppEnv, Transaction } from '@kin-kinetic/web/util/sdk'
 import { ButtonGroup } from '@saas-ui/react'
-import { IconCopy } from '@tabler/icons'
-import { ReactNode } from 'react'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { MdError } from 'react-icons/md'
 import Timeago from 'react-timeago'
 import { WebTransactionTimeline } from './web-transaction-timeline'
-
-function Copy({ value, label }: { value: string; label?: ReactNode }) {
-  const toast = useToast()
-  return (
-    <CopyToClipboard text={value} onCopy={() => toast({ status: 'info', title: 'Copied to clipboard' })}>
-      <Button p={2} variant={'outline'}>
-        <IconCopy color="gray" size={16} />
-        {label ? <Box mx={2}>{label}</Box> : null}
-      </Button>
-    </CopyToClipboard>
-  )
-}
 
 export function WebTransactionDetail({ env, transaction }: { env: AppEnv; transaction: Transaction }) {
   const { isOpen: isRawOpen, onToggle: onRawToggle } = useDisclosure()
@@ -63,7 +49,7 @@ export function WebTransactionDetail({ env, transaction }: { env: AppEnv; transa
               label: 'Signature',
               value: transaction.signature ? (
                 <Stack direction="row">
-                  <Copy label={<Code>{transaction.signature}</Code>} value={transaction.signature ?? ''} />
+                  <WebUiCopy label={<Code>{transaction.signature}</Code>} text={transaction.signature ?? ''} />
 
                   <Button as="a" href={getExplorerUrl(`tx/${transaction?.signature}`)} target="_blank">
                     View on Explorer
@@ -75,7 +61,7 @@ export function WebTransactionDetail({ env, transaction }: { env: AppEnv; transa
             },
             {
               label: 'Solana TX',
-              value: transaction.tx ? <Copy label="Copy to clipboard" value={transaction.tx ?? ''} /> : 'N/A',
+              value: transaction.tx ? <WebUiCopy label="Copy to clipboard" text={transaction.tx ?? ''} /> : 'N/A',
             },
             {
               label: 'Solana Logs',

@@ -75,6 +75,7 @@
       "@kin-kinetic/web/ui/app-avatar": ["libs/web/ui/app-avatar/src/index.ts"],
       "@kin-kinetic/web/ui/card": ["libs/web/ui/card/src/index.ts"],
       "@kin-kinetic/web/ui/container": ["libs/web/ui/container/src/index.ts"],
+      "@kin-kinetic/web/ui/copy": ["libs/web/ui/copy/src/index.ts"],
       "@kin-kinetic/web/ui/form": ["libs/web/ui/form/src/index.ts"],
       "@kin-kinetic/web/ui/identicon": ["libs/web/ui/identicon/src/index.ts"],
       "@kin-kinetic/web/ui/layout": ["libs/web/ui/layout/src/index.ts"],
