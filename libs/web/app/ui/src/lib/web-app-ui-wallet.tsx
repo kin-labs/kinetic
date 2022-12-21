@@ -1,5 +1,6 @@
 import { RepeatIcon } from '@chakra-ui/icons'
 import { Avatar, AvatarGroup, Box, Code, Flex, Input, Stack, useToast } from '@chakra-ui/react'
+import { WebUiCopy } from '@kin-kinetic/web/ui/copy'
 import { WebUiIdenticon } from '@kin-kinetic/web/ui/identicon'
 import {
   useUserAppEnvWalletRemoveMutation,
@@ -61,9 +62,12 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
         <Stack direction="row" spacing={2} alignItems="center">
           <WebUiIdenticon name={wallet.publicKey} />
           <Stack spacing={0}>
-            <Link to={`/apps/${appId}/environments/${appEnvId}/wallets/${wallet?.id}`}>
-              <Code colorScheme="teal">{wallet?.publicKey}</Code>
-            </Link>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Link to={`/apps/${appId}/environments/${appEnvId}/wallets/${wallet?.id}`}>
+                <Code colorScheme="teal">{wallet?.publicKey}</Code>
+              </Link>
+              <WebUiCopy size={'xs'} text={wallet.publicKey ?? ''} />
+            </Stack>
             <Box fontWeight="semibold" fontSize="lg" lineHeight="tight" noOfLines={1}>
               <ShowSolBalance balance={data?.balance?.balance} />
             </Box>

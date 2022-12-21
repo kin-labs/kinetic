@@ -2,10 +2,10 @@ import { Box, Flex, Link, Stack, Text, useToast } from '@chakra-ui/react'
 import { Keypair } from '@kin-kinetic/keypair'
 import { AppConfigMint, HistoryResponse, KineticSdk } from '@kin-kinetic/sdk'
 import { ellipsify } from '@kin-kinetic/web/app/ui'
+import { WebUiCopy } from '@kin-kinetic/web/ui/copy'
 import { Button, ButtonGroup } from '@saas-ui/react'
-import { IconCopy, IconExternalLink } from '@tabler/icons'
+import { IconExternalLink } from '@tabler/icons'
 import { useState } from 'react'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
 import Timeago from 'react-timeago'
 import { WebToolboxUiCard } from './web-toolbox-ui-card'
 
@@ -72,7 +72,7 @@ export function WebToolboxUiGetHistory({
                 {history.map((item) => (
                   <Flex key={item.signature} justify="space-between" py={2} align="center">
                     <ButtonGroup>
-                      <Copy text={`${item.signature}`} />
+                      <WebUiCopy text={`${item.signature}`} />
                       <Button
                         variant={'outline'}
                         as={'a'}
@@ -95,16 +95,5 @@ export function WebToolboxUiGetHistory({
         )}
       </Stack>
     </WebToolboxUiCard>
-  )
-}
-
-function Copy({ text }: { text: string }) {
-  const toast = useToast()
-  return (
-    <CopyToClipboard text={text} onCopy={() => toast({ status: 'info', title: 'Copied to clipboard' })}>
-      <Button p={2} variant={'outline'}>
-        <IconCopy color="gray" size={16} />
-      </Button>
-    </CopyToClipboard>
   )
 }
