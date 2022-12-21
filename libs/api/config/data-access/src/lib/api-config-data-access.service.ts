@@ -89,7 +89,11 @@ export class ApiConfigDataAccessService {
   cookieOptions(hostname: string): CookieOptions {
     const found = this.cookieDomains.find((domain) => hostname.endsWith(domain))
     if (!found) {
-      this.logger.warn(`Not configured to set cookies for ${hostname}`)
+      this.logger.warn(
+        `Not configured to set cookies for ${hostname}. cookieDomains: ${
+          this.cookieDomains.length ? this.cookieDomains.join(', ') : 'not configured'
+        }`,
+      )
     }
     const isSecure = this.apiUrl.startsWith('https')
     return {
