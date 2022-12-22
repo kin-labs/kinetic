@@ -22,7 +22,10 @@ export class ApiWalletUserDataAccessService {
 
   async checkBalance() {
     const appEnvs = await this.data.appEnv.findMany({
-      where: { cluster: { status: ClusterStatus.Active } },
+      where: {
+        cluster: { status: ClusterStatus.Active },
+        webhookBalanceEnabled: true,
+      },
       include: {
         app: true,
         cluster: true,
