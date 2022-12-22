@@ -40,7 +40,7 @@ export function WebAdminUiWalletTable({ wallets }: { wallets: Wallet[] }) {
                 {!Array.isArray(value) || !value?.length ? (
                   'Unknown'
                 ) : (
-                  <ShowSolBalance balance={value[0].balance || 0} />
+                  <ShowSolBalance balance={value[0].balance ?? 0} />
                 )}
               </Flex>
             )
