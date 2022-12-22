@@ -148,11 +148,6 @@ type AuthToken {
   user: User!
 }
 
-"""
-The `BigInt` scalar type represents non-fractional signed whole numeric values.
-"""
-scalar BigInt
-
 type Cluster {
   createdAt: DateTime
   endpointPrivate: String
@@ -296,7 +291,6 @@ type Query {
   adminUser(userId: String!): User
   adminUsers: [User!]
   adminWallet(walletId: String!): Wallet
-  adminWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
   adminWallets: [Wallet!]
   me: User
   uptime: Float!
@@ -313,8 +307,7 @@ type Query {
   userTransactions(appEnvId: String!, appId: String!, input: UserTransactionListInput): [Transaction!]
   userWallet(appEnvId: String!, walletId: String!): Wallet
   userWalletAirdrop(amount: Float!, appEnvId: String!, walletId: String!): WalletAirdropResponse
-  userWalletBalance(appEnvId: String!, walletId: String!): WalletBalance
-  userWalletBalances(appEnvId: String!, walletId: String!): [WalletBalance!]
+  userWalletBalance(appEnvId: String!, walletId: String!): String
   userWallets(appEnvId: String!): [Wallet!]
   webConfig: WebConfig!
 }
@@ -518,7 +511,6 @@ input UserTransactionListInput {
 type Wallet {
   appEnvs: [AppEnv!]
   appMints: [AppMint!]
-  balances: [WalletBalance!]
   createdAt: DateTime
   id: String!
   owner: User
@@ -529,15 +521,6 @@ type Wallet {
 
 type WalletAirdropResponse {
   signature: String
-}
-
-type WalletBalance {
-  appEnv: AppEnv
-  balance: BigInt
-  change: BigInt
-  createdAt: DateTime
-  id: String
-  updatedAt: DateTime
 }
 
 enum WalletType {

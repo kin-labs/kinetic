@@ -12,8 +12,6 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
-  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
-  BigInt: any
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: any
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
@@ -531,7 +529,6 @@ export type Query = {
   adminUser?: Maybe<User>
   adminUsers?: Maybe<Array<User>>
   adminWallet?: Maybe<Wallet>
-  adminWalletBalances?: Maybe<Array<WalletBalance>>
   adminWallets?: Maybe<Array<Wallet>>
   me?: Maybe<User>
   uptime: Scalars['Float']
@@ -548,8 +545,7 @@ export type Query = {
   userTransactions?: Maybe<Array<Transaction>>
   userWallet?: Maybe<Wallet>
   userWalletAirdrop?: Maybe<WalletAirdropResponse>
-  userWalletBalance?: Maybe<WalletBalance>
-  userWalletBalances?: Maybe<Array<WalletBalance>>
+  userWalletBalance?: Maybe<Scalars['String']>
   userWallets?: Maybe<Array<Wallet>>
   webConfig: WebConfig
 }
@@ -576,11 +572,6 @@ export type QueryAdminUserArgs = {
 }
 
 export type QueryAdminWalletArgs = {
-  walletId: Scalars['String']
-}
-
-export type QueryAdminWalletBalancesArgs = {
-  appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
 
@@ -639,11 +630,6 @@ export type QueryUserWalletAirdropArgs = {
 }
 
 export type QueryUserWalletBalanceArgs = {
-  appEnvId: Scalars['String']
-  walletId: Scalars['String']
-}
-
-export type QueryUserWalletBalancesArgs = {
   appEnvId: Scalars['String']
   walletId: Scalars['String']
 }
@@ -860,7 +846,6 @@ export type Wallet = {
   __typename?: 'Wallet'
   appEnvs?: Maybe<Array<AppEnv>>
   appMints?: Maybe<Array<AppMint>>
-  balances?: Maybe<Array<WalletBalance>>
   createdAt?: Maybe<Scalars['DateTime']>
   id: Scalars['String']
   owner?: Maybe<User>
@@ -872,16 +857,6 @@ export type Wallet = {
 export type WalletAirdropResponse = {
   __typename?: 'WalletAirdropResponse'
   signature?: Maybe<Scalars['String']>
-}
-
-export type WalletBalance = {
-  __typename?: 'WalletBalance'
-  appEnv?: Maybe<AppEnv>
-  balance?: Maybe<Scalars['BigInt']>
-  change?: Maybe<Scalars['BigInt']>
-  createdAt?: Maybe<Scalars['DateTime']>
-  id?: Maybe<Scalars['String']>
-  updatedAt?: Maybe<Scalars['DateTime']>
 }
 
 export enum WalletType {
@@ -1218,15 +1193,6 @@ export const UserEmailDetails = gql`
 export const WalletAirdropResponseDetails = gql`
   fragment WalletAirdropResponseDetails on WalletAirdropResponse {
     signature
-  }
-`
-export const WalletBalanceDetails = gql`
-  fragment WalletBalanceDetails on WalletBalance {
-    id
-    createdAt
-    updatedAt
-    balance
-    change
   }
 `
 export const AdminCreateApp = gql`
@@ -1880,24 +1846,10 @@ export const AdminWallet = gql`
   ${AppEnvDetails}
   ${UserDetails}
 `
-export const AdminWalletBalances = gql`
-  query AdminWalletBalances($appEnvId: String!, $walletId: String!) {
-    balances: adminWalletBalances(appEnvId: $appEnvId, walletId: $walletId) {
-      ...WalletBalanceDetails
-    }
-  }
-  ${WalletBalanceDetails}
-`
 export const AdminWallets = gql`
   query AdminWallets {
     items: adminWallets {
       ...WalletDetails
-      balances {
-        ...WalletBalanceDetails
-        appEnv {
-          ...AppEnvDetails
-        }
-      }
       appEnvs {
         ...AppEnvDetails
       }
@@ -1907,7 +1859,6 @@ export const AdminWallets = gql`
     }
   }
   ${WalletDetails}
-  ${WalletBalanceDetails}
   ${AppEnvDetails}
   ${UserDetails}
 `
@@ -1961,19 +1912,8 @@ export const UserWalletAirdrop = gql`
 `
 export const UserWalletBalance = gql`
   query UserWalletBalance($appEnvId: String!, $walletId: String!) {
-    balance: userWalletBalance(appEnvId: $appEnvId, walletId: $walletId) {
-      ...WalletBalanceDetails
-    }
+    balance: userWalletBalance(appEnvId: $appEnvId, walletId: $walletId)
   }
-  ${WalletBalanceDetails}
-`
-export const UserWalletBalances = gql`
-  query UserWalletBalances($appEnvId: String!, $walletId: String!) {
-    balances: userWalletBalances(appEnvId: $appEnvId, walletId: $walletId) {
-      ...WalletBalanceDetails
-    }
-  }
-  ${WalletBalanceDetails}
 `
 export const UserWallets = gql`
   query UserWallets($appEnvId: String!) {
@@ -6798,15 +6738,6 @@ export type WalletDetailsFragment = {
 
 export type WalletAirdropResponseDetailsFragment = { __typename?: 'WalletAirdropResponse'; signature?: string | null }
 
-export type WalletBalanceDetailsFragment = {
-  __typename?: 'WalletBalance'
-  id?: string | null
-  createdAt?: any | null
-  updatedAt?: any | null
-  balance?: any | null
-  change?: any | null
-}
-
 export type AdminDeleteWalletMutationVariables = Exact<{
   walletId: Scalars['String']
 }>
@@ -6951,23 +6882,6 @@ export type AdminWalletQuery = {
   } | null
 }
 
-export type AdminWalletBalancesQueryVariables = Exact<{
-  appEnvId: Scalars['String']
-  walletId: Scalars['String']
-}>
-
-export type AdminWalletBalancesQuery = {
-  __typename?: 'Query'
-  balances?: Array<{
-    __typename?: 'WalletBalance'
-    id?: string | null
-    createdAt?: any | null
-    updatedAt?: any | null
-    balance?: any | null
-    change?: any | null
-  }> | null
-}
-
 export type AdminWalletsQueryVariables = Exact<{ [key: string]: never }>
 
 export type AdminWalletsQuery = {
@@ -6979,115 +6893,6 @@ export type AdminWalletsQuery = {
     updatedAt?: any | null
     publicKey?: string | null
     type?: WalletType | null
-    balances?: Array<{
-      __typename?: 'WalletBalance'
-      id?: string | null
-      createdAt?: any | null
-      updatedAt?: any | null
-      balance?: any | null
-      change?: any | null
-      appEnv?: {
-        __typename?: 'AppEnv'
-        id: string
-        createdAt: any
-        updatedAt: any
-        endpoint?: string | null
-        key?: string | null
-        ipsAllowed?: Array<string> | null
-        ipsBlocked?: Array<string> | null
-        name?: string | null
-        solanaTransactionMaxRetries?: number | null
-        solanaTransactionSkipPreflight?: boolean | null
-        uasAllowed?: Array<string> | null
-        uasBlocked?: Array<string> | null
-        webhookBalanceEnabled?: boolean | null
-        webhookBalanceUrl?: string | null
-        webhookBalanceThreshold?: string | null
-        webhookDebugging?: boolean | null
-        webhookEventEnabled?: boolean | null
-        webhookEventUrl?: string | null
-        webhookSecret?: string | null
-        webhookVerifyEnabled?: boolean | null
-        webhookVerifyUrl?: string | null
-        app?: {
-          __typename?: 'App'
-          id: string
-          createdAt: any
-          updatedAt: any
-          index: number
-          maxEnvs: number
-          name?: string | null
-        } | null
-        cluster?: {
-          __typename?: 'Cluster'
-          id?: string | null
-          createdAt?: any | null
-          updatedAt?: any | null
-          endpointPrivate?: string | null
-          endpointPublic?: string | null
-          explorer?: string | null
-          name?: string | null
-          status?: ClusterStatus | null
-          type?: ClusterType | null
-          mints?: Array<{
-            __typename?: 'Mint'
-            id?: string | null
-            createdAt?: any | null
-            updatedAt?: any | null
-            addMemo?: boolean | null
-            address?: string | null
-            airdropAmount?: number | null
-            airdropMax?: number | null
-            airdropPublicKey?: string | null
-            coinGeckoId?: string | null
-            decimals?: number | null
-            default?: boolean | null
-            enabled?: boolean | null
-            logoUrl?: string | null
-            name?: string | null
-            order?: number | null
-            symbol?: string | null
-            type?: MintType | null
-          }> | null
-        } | null
-        mints?: Array<{
-          __typename?: 'AppMint'
-          id: string
-          createdAt: any
-          updatedAt: any
-          addMemo?: boolean | null
-          order?: number | null
-          mint?: {
-            __typename?: 'Mint'
-            id?: string | null
-            createdAt?: any | null
-            updatedAt?: any | null
-            addMemo?: boolean | null
-            address?: string | null
-            airdropAmount?: number | null
-            airdropMax?: number | null
-            airdropPublicKey?: string | null
-            coinGeckoId?: string | null
-            decimals?: number | null
-            default?: boolean | null
-            enabled?: boolean | null
-            logoUrl?: string | null
-            name?: string | null
-            order?: number | null
-            symbol?: string | null
-            type?: MintType | null
-          } | null
-          wallet?: {
-            __typename?: 'Wallet'
-            id: string
-            createdAt?: any | null
-            updatedAt?: any | null
-            publicKey?: string | null
-            type?: WalletType | null
-          } | null
-        }> | null
-      } | null
-    }> | null
     appEnvs?: Array<{
       __typename?: 'AppEnv'
       id: string
@@ -7423,34 +7228,7 @@ export type UserWalletBalanceQueryVariables = Exact<{
   walletId: Scalars['String']
 }>
 
-export type UserWalletBalanceQuery = {
-  __typename?: 'Query'
-  balance?: {
-    __typename?: 'WalletBalance'
-    id?: string | null
-    createdAt?: any | null
-    updatedAt?: any | null
-    balance?: any | null
-    change?: any | null
-  } | null
-}
-
-export type UserWalletBalancesQueryVariables = Exact<{
-  appEnvId: Scalars['String']
-  walletId: Scalars['String']
-}>
-
-export type UserWalletBalancesQuery = {
-  __typename?: 'Query'
-  balances?: Array<{
-    __typename?: 'WalletBalance'
-    id?: string | null
-    createdAt?: any | null
-    updatedAt?: any | null
-    balance?: any | null
-    change?: any | null
-  }> | null
-}
+export type UserWalletBalanceQuery = { __typename?: 'Query'; balance?: string | null }
 
 export type UserWalletsQueryVariables = Exact<{
   appEnvId: Scalars['String']

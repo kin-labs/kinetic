@@ -10,14 +10,6 @@ fragment WalletAirdropResponseDetails on WalletAirdropResponse {
   signature
 }
 
-fragment WalletBalanceDetails on WalletBalance {
-  id
-  createdAt
-  updatedAt
-  balance
-  change
-}
-
 mutation AdminDeleteWallet($walletId: String!) {
   deleted: adminDeleteWallet(walletId: $walletId) {
     ...WalletDetails
@@ -36,21 +28,9 @@ query AdminWallet($walletId: String!) {
   }
 }
 
-query AdminWalletBalances($appEnvId: String!, $walletId: String!) {
-  balances: adminWalletBalances(appEnvId: $appEnvId, walletId: $walletId) {
-    ...WalletBalanceDetails
-  }
-}
-
 query AdminWallets {
   items: adminWallets {
     ...WalletDetails
-    balances {
-      ...WalletBalanceDetails
-      appEnv {
-        ...AppEnvDetails
-      }
-    }
     appEnvs {
       ...AppEnvDetails
     }
@@ -97,15 +77,7 @@ query UserWalletAirdrop($appEnvId: String!, $walletId: String!, $amount: Float!)
 }
 
 query UserWalletBalance($appEnvId: String!, $walletId: String!) {
-  balance: userWalletBalance(appEnvId: $appEnvId, walletId: $walletId) {
-    ...WalletBalanceDetails
-  }
-}
-
-query UserWalletBalances($appEnvId: String!, $walletId: String!) {
-  balances: userWalletBalances(appEnvId: $appEnvId, walletId: $walletId) {
-    ...WalletBalanceDetails
-  }
+  balance: userWalletBalance(appEnvId: $appEnvId, walletId: $walletId)
 }
 
 query UserWallets($appEnvId: String!) {

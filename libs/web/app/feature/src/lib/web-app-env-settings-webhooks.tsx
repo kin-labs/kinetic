@@ -89,7 +89,13 @@ export function WebAppEnvSettingsWebhooks({ app, env }: { app: App; env: AppEnv 
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel pb={4}>
-              <WebWebhookUiBalanceForm env={env} onSubmit={onSubmit} />
+              <Stack spacing={4}>
+                <WebUiAlert status="info">
+                  <AlertIcon />
+                  Enabling the balance webhook will start polling the balance of the fee payer wallets each minute.
+                </WebUiAlert>
+                <WebWebhookUiBalanceForm env={env} onSubmit={onSubmit} />
+              </Stack>
             </AccordionPanel>
           </AccordionItem>
 

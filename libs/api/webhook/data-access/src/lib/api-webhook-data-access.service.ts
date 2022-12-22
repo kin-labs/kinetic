@@ -2,17 +2,18 @@ import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { HttpService } from '@nestjs/axios'
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
-import { App, AppEnv, Transaction, WalletBalance, WebhookDirection, WebhookType } from '@prisma/client'
+import { App, AppEnv, Transaction, WebhookDirection, WebhookType } from '@prisma/client'
 import { AxiosRequestHeaders } from 'axios'
 import { Response } from 'express'
 import { IncomingHttpHeaders } from 'http'
 import { switchMap } from 'rxjs'
 
 interface WebhookOptions {
+  balance?: number
+  publicKey?: string
   headers?: AxiosRequestHeaders
-  balance?: WalletBalance
-  transaction?: Transaction
   type: WebhookType
+  transaction?: Transaction
 }
 
 function isValidWebhookType(type: string) {
@@ -134,11 +135,7 @@ export class ApiWebhookDataAccessService {
   private sendBalanceWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
     const url = this.getDebugUrl(appEnv, options.type, appEnv.webhookBalanceUrl)
     const headers = this.getAppEnvHeaders(appEnv, options)
-    const payload = {
-      ...options.balance,
-      balance: options.balance?.balance?.toString(),
-      change: options.balance?.change?.toString(),
-    }
+    const payload = { balance: options.balance, publicKey: options.publicKey }
     return new Promise((resolve, reject) => {
       this.http
         .post(url, payload, { headers })

@@ -1,11 +1,6 @@
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
-import {
-  ApiWalletUserDataAccessService,
-  Wallet,
-  WalletAirdropResponse,
-  WalletBalance,
-} from '@kin-kinetic/api/wallet/data-access'
+import { ApiWalletUserDataAccessService, Wallet, WalletAirdropResponse } from '@kin-kinetic/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Float, Mutation, Query, Resolver } from '@nestjs/graphql'
 
@@ -44,14 +39,9 @@ export class ApiWalletUserFeatureResolver {
     return this.service.userWalletAirdrop(user.id, appEnvId, walletId, amount)
   }
 
-  @Query(() => WalletBalance, { nullable: true })
+  @Query(() => String, { nullable: true })
   userWalletBalance(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('walletId') walletId: string) {
     return this.service.userWalletBalance(user.id, appEnvId, walletId)
-  }
-
-  @Query(() => [WalletBalance], { nullable: true })
-  userWalletBalances(@CtxUser() user: User, @Args('appEnvId') appEnvId: string, @Args('walletId') walletId: string) {
-    return this.service.userWalletBalances(user.id, appEnvId, walletId)
   }
 
   @Query(() => [Wallet], { nullable: true })

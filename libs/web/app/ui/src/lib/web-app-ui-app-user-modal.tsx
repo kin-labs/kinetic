@@ -126,7 +126,7 @@ export function WebAppUiAppUserModal({
           <ModalFooter>
             {(!user?.user || userId) && (
               <>
-                <Button disabled={!userId || !role} colorScheme="teal" mr={3} onClick={onSubmit}>
+                <Button disabled={!userId || !role} colorScheme="purple" mr={3} onClick={onSubmit}>
                   {create ? 'Add' : 'Update'}
                 </Button>
                 <Button variant="ghost" onClick={onClose}>

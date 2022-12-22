@@ -1,7 +1,6 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
-import { WalletBalance } from './entity/wallet-balance.entity'
 
 @Injectable()
 export class ApiWalletAdminDataAccessService {
@@ -38,14 +37,6 @@ export class ApiWalletAdminDataAccessService {
       include: {
         appEnvs: this.include.appEnvs,
       },
-    })
-  }
-
-  async adminWalletBalances(userId: string, appEnvId: string, walletId: string): Promise<WalletBalance[]> {
-    await this.data.ensureAdminUser(userId)
-    return this.data.walletBalance.findMany({
-      where: { appEnvId, walletId: walletId },
-      orderBy: { createdAt: 'desc' },
     })
   }
 
