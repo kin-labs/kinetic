@@ -10,7 +10,6 @@ import { WebAppEnvSettings } from './web-app-env-settings'
 import { WebAppEnvToolbox } from './web-app-env-toolbox'
 import { WebAppEnvTransactionTab } from './web-app-env-transaction-tab'
 import { WebAppEnvTransactionsTab } from './web-app-env-transactions-tab'
-import { WebAppEnvWalletTab } from './web-app-env-wallet-tab'
 import { WebAppEnvWalletsTab } from './web-app-env-wallets-tab'
 
 export function WebAppEnvDetail() {
@@ -53,7 +52,6 @@ export function WebAppEnvDetail() {
         />
         <Route path="transactions/:transactionId" element={<WebAppEnvTransactionTab app={app} env={environment} />} />
         <Route path="wallets" element={<WebAppEnvWalletsTab app={app} env={environment} />} />
-        <Route path="wallets/:walletId" element={<WebAppEnvWalletTab app={app} env={environment} />} />
         <Route path="settings/*" element={<WebAppEnvSettings app={app} env={environment} />} />
         <Route
           path="toolbox/*"

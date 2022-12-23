@@ -23,12 +23,23 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
   const toast = useToast()
   const [amount, setAmount] = useState<number>(1)
   const [, removeWalletMutation] = useUserAppEnvWalletRemoveMutation()
-  const [{ data }, refreshWallet] = useUserWalletBalanceQuery({
+  const [{ data, error }, refreshWallet] = useUserWalletBalanceQuery({
     variables: {
       appEnvId,
       walletId: wallet.id,
     },
   })
+
+  if (error) {
+    toast({
+      title: 'Error',
+      description: error.message,
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    })
+  }
+
   const [{ data: airdropData, error: airdropError, fetching: airdropFetching }, requestAirdropMutation] =
     useUserWalletAirdropQuery({
       variables: {
@@ -63,13 +74,11 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
           <WebUiIdenticon name={wallet.publicKey} />
           <Stack spacing={0}>
             <Stack direction="row" spacing={2} alignItems="center">
-              <Link to={`/apps/${appId}/environments/${appEnvId}/wallets/${wallet?.id}`}>
-                <Code colorScheme="teal">{wallet?.publicKey}</Code>
-              </Link>
+              <Code colorScheme="purple">{wallet?.publicKey}</Code>
               <WebUiCopy size={'xs'} text={wallet.publicKey ?? ''} />
             </Stack>
             <Box fontWeight="semibold" fontSize="lg" lineHeight="tight" noOfLines={1}>
-              <ShowSolBalance balance={data?.balance?.balance ?? 0} />
+              <ShowSolBalance balance={data?.balance ?? 0} />
             </Box>
           </Stack>
         </Stack>
@@ -146,6 +155,6 @@ export function WebAppUiWallet({ appEnvId, appId, explorerUrl, wallet }: WebAppU
  */
 export const LAMPORTS_PER_SOL = 1000000000
 
-export function ShowSolBalance({ balance }: { balance: number }) {
-  return <span>{balance ? balance / LAMPORTS_PER_SOL : 0} SOL</span>
+export function ShowSolBalance({ balance }: { balance?: number | string }) {
+  return <span>{balance ? Number(balance) / LAMPORTS_PER_SOL : 0} SOL</span>
 }
