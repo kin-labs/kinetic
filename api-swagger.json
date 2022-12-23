@@ -61,7 +61,7 @@
         "tags": ["account"]
       }
     },
-    "/api/account/info/{environment}/{index}/{accountId}": {
+    "/api/account/info/{environment}/{index}/{accountId}/{mint}": {
       "get": {
         "operationId": "getAccountInfo",
         "summary": "",
@@ -84,6 +84,14 @@
           },
           {
             "name": "accountId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mint",
             "required": true,
             "in": "path",
             "schema": {

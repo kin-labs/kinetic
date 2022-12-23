@@ -34,7 +34,7 @@ export class ApiAccountFeatureController {
     return this.service.createAccount(req, body)
   }
 
-  @Get('info/:environment/:index/:accountId')
+  @Get('info/:environment/:index/:accountId/:mint')
   @ApiOperation({ operationId: 'getAccountInfo' })
   @ApiParam({ name: 'index', type: 'integer' })
   @ApiQuery({ name: 'commitment', enum: Commitment, enumName: 'Commitment' })
@@ -43,9 +43,10 @@ export class ApiAccountFeatureController {
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
     @Param('accountId', new PublicKeyPipe('accountId')) accountId: string,
+    @Param('mint', new PublicKeyPipe('mint')) mint: string,
     @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getAccountInfo(getAppKey(environment, index), accountId, commitment)
+    return this.service.getAccountInfo(getAppKey(environment, index), accountId, mint, commitment)
   }
 
   @Get('balance/:environment/:index/:accountId')

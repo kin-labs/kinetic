@@ -167,7 +167,7 @@ describe('KineticSdk (e2e) - Account', () => {
     it('should not close with non-existing tokens for a mint', async () => {
       await expect(
         async () => await sdk.closeAccount({ account: daveKeypair.publicKey, mint: usdcMint }),
-      ).rejects.toThrow('Account has no tokens for the specified mint')
+      ).rejects.toThrow('Account has no tokens')
     })
 
     it('should not close when close authority is not set', async () => {

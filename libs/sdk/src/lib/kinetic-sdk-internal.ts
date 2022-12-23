@@ -126,9 +126,18 @@ export class KineticSdkInternal {
   }
 
   getAccountInfo(options: GetAccountInfoOptions) {
+    const appConfig = this.ensureAppConfig()
     const commitment = this.getCommitment(options.commitment)
+    const mint = this.getAppMint(appConfig, options.mint?.toString())
+
     return this.accountApi
-      .getAccountInfo(this.sdkConfig.environment, this.sdkConfig.index, options.account.toString(), commitment)
+      .getAccountInfo(
+        this.sdkConfig.environment,
+        this.sdkConfig.index,
+        options.account.toString(),
+        mint.publicKey,
+        commitment,
+      )
       .then((res) => res.data)
   }
 

@@ -22,7 +22,7 @@ export class ApiQueueCloseAccountProcessor {
 
     try {
       const appKey = getAppKey(environment, index)
-      const accountInfo = await this.service.account.getAccountInfo(appKey, account, commitment)
+      const accountInfo = await this.service.account.getAccountInfo(appKey, account, mint, commitment)
 
       try {
         validateCloseAccount({ info: accountInfo, mint, mints, wallets })
