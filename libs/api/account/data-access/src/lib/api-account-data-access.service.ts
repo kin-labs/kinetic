@@ -95,7 +95,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     }: { appKey: string; appEnv: AppEnvironment; headers?: Record<string, string>; ip?: string; ua?: string },
   ): Promise<Transaction> {
     this.closeAccountRequestCounter.add(1, { appKey })
-    const accountInfo = await this.getAccountInfo(appKey, input.account, input.commitment)
+    const accountInfo = await this.getAccountInfo(appKey, input.account, input.mint, input.commitment)
 
     try {
       const tokenAccount = validateCloseAccount({
@@ -152,7 +152,12 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     }
   }
 
-  async getAccountInfo(appKey: string, accountId: PublicKeyString, commitment: Commitment): Promise<AccountInfo> {
+  async getAccountInfo(
+    appKey: string,
+    accountId: PublicKeyString,
+    mint: PublicKeyString,
+    commitment: Commitment,
+  ): Promise<AccountInfo> {
     const solana = await this.solana.getConnection(appKey)
     const account = getPublicKey(accountId)
     const accountInfo = await solana.getParsedAccountInfo(account, commitment)
@@ -179,20 +184,21 @@ export class ApiAccountDataAccessService implements OnModuleInit {
       return result
     }
 
-    const appEnv = await this.app.getAppConfig(appKey)
-    const mint = appEnv.mint
+    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    const appMint = this.transaction.validateMint(appEnv, appKey, mint.toString())
 
-    const tokenAccounts = await solana.getTokenAccounts(account, mint.publicKey, commitment)
+    const tokenAccounts = await solana.getTokenAccounts(account, appMint.mint.address, commitment)
+
     for (const tokenAccount of tokenAccounts) {
       const info = await solana.getParsedAccountInfo(tokenAccount, commitment)
       const parsed = info?.data?.parsed?.info
 
       result.tokens.push({
         account: tokenAccount,
-        balance: parsed?.tokenAmount?.amount ? removeDecimals(parsed.tokenAmount.amount, mint.decimals) : null,
+        balance: parsed?.tokenAmount?.amount ? removeDecimals(parsed.tokenAmount.amount, appMint.mint.decimals) : null,
         closeAuthority: parsed?.closeAuthority ?? null,
-        decimals: mint.decimals ?? 0,
-        mint: mint.publicKey,
+        decimals: appMint.mint.decimals ?? 0,
+        mint: appMint.mint.address,
         owner: parsed?.owner ?? null,
       })
     }

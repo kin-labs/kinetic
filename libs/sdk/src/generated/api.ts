@@ -1408,6 +1408,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1416,6 +1417,7 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       environment: string,
       index: number,
       accountId: string,
+      mint: string,
       commitment: Commitment,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
@@ -1425,12 +1427,15 @@ export const AccountApiAxiosParamCreator = function (configuration?: Configurati
       assertParamExists('getAccountInfo', 'index', index)
       // verify required parameter 'accountId' is not null or undefined
       assertParamExists('getAccountInfo', 'accountId', accountId)
+      // verify required parameter 'mint' is not null or undefined
+      assertParamExists('getAccountInfo', 'mint', mint)
       // verify required parameter 'commitment' is not null or undefined
       assertParamExists('getAccountInfo', 'commitment', commitment)
-      const localVarPath = `/api/account/info/{environment}/{index}/{accountId}`
+      const localVarPath = `/api/account/info/{environment}/{index}/{accountId}/{mint}`
         .replace(`{${'environment'}}`, encodeURIComponent(String(environment)))
         .replace(`{${'index'}}`, encodeURIComponent(String(index)))
         .replace(`{${'accountId'}}`, encodeURIComponent(String(accountId)))
+        .replace(`{${'mint'}}`, encodeURIComponent(String(mint)))
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL)
       let baseOptions
@@ -1668,6 +1673,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1676,6 +1682,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
       environment: string,
       index: number,
       accountId: string,
+      mint: string,
       commitment: Commitment,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AccountInfo>> {
@@ -1683,6 +1690,7 @@ export const AccountApiFp = function (configuration?: Configuration) {
         environment,
         index,
         accountId,
+        mint,
         commitment,
         options,
       )
@@ -1808,6 +1816,7 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
      * @param {string} environment
      * @param {number} index
      * @param {string} accountId
+     * @param {string} mint
      * @param {Commitment} commitment
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1816,11 +1825,12 @@ export const AccountApiFactory = function (configuration?: Configuration, basePa
       environment: string,
       index: number,
       accountId: string,
+      mint: string,
       commitment: Commitment,
       options?: any,
     ): AxiosPromise<AccountInfo> {
       return localVarFp
-        .getAccountInfo(environment, index, accountId, commitment, options)
+        .getAccountInfo(environment, index, accountId, mint, commitment, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -1925,6 +1935,7 @@ export interface AccountApiInterface {
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
+   * @param {string} mint
    * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1934,6 +1945,7 @@ export interface AccountApiInterface {
     environment: string,
     index: number,
     accountId: string,
+    mint: string,
     commitment: Commitment,
     options?: AxiosRequestConfig,
   ): AxiosPromise<AccountInfo>
@@ -2041,6 +2053,7 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
    * @param {string} environment
    * @param {number} index
    * @param {string} accountId
+   * @param {string} mint
    * @param {Commitment} commitment
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -2050,11 +2063,12 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
     environment: string,
     index: number,
     accountId: string,
+    mint: string,
     commitment: Commitment,
     options?: AxiosRequestConfig,
   ) {
     return AccountApiFp(this.configuration)
-      .getAccountInfo(environment, index, accountId, commitment, options)
+      .getAccountInfo(environment, index, accountId, mint, commitment, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
