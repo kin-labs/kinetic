@@ -7,12 +7,14 @@ export interface GenerateMakeTransferOptions {
   amount: string
   blockhash: string
   destination: PublicKeyString
+  destinationTokenAccount: PublicKeyString
   index: number
   lastValidBlockHeight: number
   mintDecimals: number
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
   owner: Keypair
+  ownerTokenAccount: PublicKeyString
   senderCreate?: boolean
   type: TransactionType
 }

@@ -129,11 +129,12 @@ describe('KineticSdk (e2e) - Account', () => {
       // Create new account
       const keypair = Keypair.random()
       const tx = await sdk.createAccount({ owner: keypair, commitment: Commitment.Finalized })
+      expect(tx.errors).toEqual([])
       expect(tx).not.toBeNull()
       expect(tx.mint).toEqual(DEFAULT_MINT)
       const { signature, errors } = tx
-      expect(typeof signature).toBe('string')
       expect(errors).toEqual([])
+      expect(typeof signature).toBe('string')
       // Close account
       const closeTx = await sdk.closeAccount({ account: keypair.publicKey })
       expect(closeTx).not.toBeNull()
@@ -180,11 +181,12 @@ describe('KineticSdk (e2e) - Account', () => {
       // Create new account
       const keypair = Keypair.random()
       const tx = await sdk.createAccount({ owner: keypair, commitment: Commitment.Finalized })
+      expect(tx.errors).toEqual([])
       expect(tx).not.toBeNull()
       expect(tx.mint).toEqual(DEFAULT_MINT)
       const { signature, errors } = tx
-      expect(typeof signature).toBe('string')
       expect(errors).toEqual([])
+      expect(typeof signature).toBe('string')
 
       const airdrop = await sdk.requestAirdrop({
         account: keypair.publicKey,
