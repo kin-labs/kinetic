@@ -84,21 +84,15 @@ describe('KineticSdk (e2e)', () => {
 
   it('should fail when one account does not exist in batch transfer', async () => {
     const kp = Keypair.random()
+    const kp2 = Keypair.random()
     const destinations: Destination[] = []
     destinations.push({ destination: bobKeypair.publicKey, amount: '15' })
     destinations.push({ destination: kp.publicKey, amount: '12' })
+    destinations.push({ destination: kp2.publicKey, amount: '12' })
 
-    const transferTx = await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })
-
-    expect(transferTx).not.toBeNull()
-    expect(transferTx.mint).toEqual(DEFAULT_MINT)
-
-    const { signature, errors, tx } = transferTx
-    expect(signature).toBeNull()
-    expect(tx).toBeDefined()
-    expect(errors.length).toBeGreaterThan(0)
-    expect(errors[0].type).toEqual('InvalidAccount')
-    expect(errors[0].instruction).toEqual(2)
+    await expect(async () => await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })).rejects.toThrow(
+      `Destination accounts ${kp.publicKey}, ${kp2.publicKey} have no token account for mint ${DEFAULT_MINT}.`,
+    )
   })
 
   it('should throw when insufficient funds in a transaction', async () => {
@@ -117,8 +111,7 @@ describe('KineticSdk (e2e)', () => {
   it('should throw when insufficient funds in a batch transaction', async () => {
     const destinations: Destination[] = []
     destinations.push({ destination: bobKeypair.publicKey, amount: '15' })
-    const kp = Keypair.random()
-    destinations.push({ destination: kp.publicKey, amount: '99999999999999' })
+    destinations.push({ destination: daveKeypair.publicKey, amount: '99999999999999' })
     const res = await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })
     expect(res.amount).toBe('15')
     expect(res.decimals).toBe(5)
@@ -178,7 +171,7 @@ describe('KineticSdk (e2e)', () => {
     destinations.push({ destination: kinMint, amount: '12' })
 
     await expect(async () => await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })).rejects.toThrow(
-      `Transfers to a mint are not allowed.`,
+      `Account is a mint account.`,
     )
   })
 

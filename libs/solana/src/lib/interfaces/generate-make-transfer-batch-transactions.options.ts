@@ -13,5 +13,6 @@ export interface GenerateMakeTransferBatchTransactionsOptions {
   mintFeePayer: PublicKeyString
   mintPublicKey: PublicKeyString
   owner: Keypair
+  ownerTokenAccount: PublicKeyString
   type: TransactionType
 }

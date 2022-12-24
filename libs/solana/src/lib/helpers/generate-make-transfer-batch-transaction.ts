@@ -1,74 +1,58 @@
-import { createTransferCheckedInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
+import { createTransferCheckedInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateMakeTransferBatchTransactionsOptions } from '../interfaces'
 import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
 import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
-export async function generateMakeTransferBatchTransaction({
-  addMemo,
-  blockhash,
-  destinations,
-  index,
-  lastValidBlockHeight,
-  mintDecimals,
-  mintFeePayer,
-  mintPublicKey,
-  owner,
-  type,
-}: GenerateMakeTransferBatchTransactionsOptions): Promise<Transaction> {
+export async function generateMakeTransferBatchTransaction(
+  options: GenerateMakeTransferBatchTransactionsOptions,
+): Promise<Transaction> {
   // Create objects from Response
-  const mintKey = getPublicKey(mintPublicKey)
-  const feePayerKey = getPublicKey(mintFeePayer)
-  const ownerPublicKey = owner.publicKey
+  const feePayerKey = getPublicKey(options.mintFeePayer)
+  const mintKey = getPublicKey(options.mintPublicKey)
+  const ownerPublicKey = options.owner.publicKey
+  const ownerTokenAccountPublicKey = getPublicKey(options.ownerTokenAccount)
 
-  // Get TokenAccount from Owner
-  const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, ownerPublicKey)
-
-  // Get TokenAccount from Destination
-  const destinationInfo: { amount: number; destination: PublicKey }[] = await Promise.all(
-    destinations.map(async ({ amount, destination }) => ({
-      amount: addDecimals(amount, mintDecimals).toNumber(),
-      destination: await getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
-    })),
-  )
-
-  // Create Transaction
+  // Create Instructions
   const instructions: TransactionInstruction[] = []
 
-  if (addMemo) {
+  // Create the Memo Instruction
+  if (options.addMemo) {
     instructions.push(
       generateKinMemoInstruction({
-        index,
-        type,
+        index: options.index,
+        type: options.type,
       }),
     )
   }
 
-  destinationInfo.map(({ amount, destination }) =>
+  // Create the Token Transfer Instructions
+  options.destinations.map(({ amount, destination }) =>
     instructions.push(
       createTransferCheckedInstruction(
-        ownerTokenAccount,
+        ownerTokenAccountPublicKey,
         mintKey,
-        destination,
+        getPublicKey(destination),
         ownerPublicKey,
-        amount,
-        mintDecimals,
+        addDecimals(amount, options.mintDecimals).toNumber(),
+        options.mintDecimals,
         [],
         TOKEN_PROGRAM_ID,
       ),
     ),
   )
 
+  // Create transaction
   const transaction = new Transaction({
-    blockhash,
+    blockhash: options.blockhash,
     feePayer: feePayerKey,
-    lastValidBlockHeight,
+    lastValidBlockHeight: options.lastValidBlockHeight,
     signatures: [{ publicKey: ownerPublicKey, signature: null }],
   }).add(...instructions)
 
   // Partially sign the transaction
-  transaction.partialSign(owner)
+  transaction.partialSign(options.owner)
 
   return transaction
 }
