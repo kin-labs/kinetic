@@ -225,12 +225,18 @@ export class ApiConfigDataAccessService {
   }
 
   get redisOptions(): Redis.RedisOptions {
+    // Parse the Redis URL to get the host, port, and password, etc.
     const parsed = new URL(this.redisUrl)
+
+    // The URL class encodes the password if it contains special characters, so we need to decode it.
+    // https://nodejs.org/dist/latest-v18.x/docs/api/url.html#urlpassword
+    // This caused an issue because Azure Cache for Redis generates passwords that end with an equals sign.
+    const password = parsed.password ? decodeURIComponent(parsed.password) : undefined
 
     return {
       host: parsed.hostname,
       port: Number(parsed.port),
-      password: parsed.password,
+      password: password,
       username: parsed.username,
       tls: parsed.protocol?.startsWith('rediss')
         ? {
