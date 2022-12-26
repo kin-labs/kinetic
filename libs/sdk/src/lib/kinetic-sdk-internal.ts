@@ -2,6 +2,7 @@ import {
   generateCreateAccountTransaction,
   generateMakeTransferBatchTransaction,
   generateMakeTransferTransaction,
+  PublicKeyString,
   serializeTransaction,
   TransactionType,
 } from '@kin-kinetic/solana'
@@ -24,6 +25,7 @@ import {
   TransactionApi,
 } from '../generated'
 import { NAME, VERSION } from '../version'
+import { getTokenAddress } from './helpers'
 import {
   CloseAccountOptions,
   CreateAccountOptions,
@@ -221,28 +223,57 @@ export class KineticSdkInternal {
     const destination = options.destination.toString()
     const senderCreate = options.senderCreate || false
 
-    this.validateDestination(appConfig, destination)
+    // We get the token account for the owner
+    const ownerTokenAccount = await this.findTokenAccount({
+      account: options.owner.publicKey,
+      commitment,
+      mint: mint.publicKey,
+    })
 
-    const accounts = await this.getTokenAccounts({ account: destination, mint: mint.publicKey })
+    // The operation fails if the owner doesn't have a token account for this mint
+    if (!ownerTokenAccount) {
+      throw new Error(`Owner account doesn't exist for mint ${mint.publicKey}.`)
+    }
 
-    if (!accounts?.length && !senderCreate) {
-      throw new Error(`Destination account doesn't exist.`)
+    // We get the account info for the destination
+    const destinationTokenAccount = await this.findTokenAccount({
+      account: destination,
+      commitment,
+      mint: mint.publicKey,
+    })
+
+    // The operation fails if the destination doesn't have a token account for this mint and senderCreate is not set
+    if (!destinationTokenAccount && !senderCreate) {
+      throw new Error(`Destination account doesn't exist for mint ${mint.publicKey}.`)
+    }
+
+    // Derive the associated token address if the destination doesn't have a token account for this mint and senderCreate is set
+    let senderCreateTokenAccount: PublicKeyString | undefined
+    if (!destinationTokenAccount && senderCreate) {
+      senderCreateTokenAccount = await getTokenAddress({ account: destination, mint: mint.publicKey })
+    }
+
+    // The operation fails if there is still no destination token account
+    if (!destinationTokenAccount && !senderCreateTokenAccount) {
+      throw new Error('Destination token account not found.')
     }
 
     const { lastValidBlockHeight, blockhash } = await this.getBlockhash()
 
-    const tx = await generateMakeTransferTransaction({
+    const tx = generateMakeTransferTransaction({
       addMemo: mint.addMemo,
       amount: options.amount,
       blockhash,
       destination,
+      destinationTokenAccount: (destinationTokenAccount?.toString() ?? senderCreateTokenAccount?.toString()) as string,
       index: this.sdkConfig.index,
       lastValidBlockHeight,
       mintDecimals: mint.decimals,
       mintFeePayer: mint.feePayer,
       mintPublicKey: mint.publicKey,
       owner: options.owner.solana,
-      senderCreate: !accounts?.length && senderCreate,
+      ownerTokenAccount,
+      senderCreate: senderCreate && !!senderCreateTokenAccount,
       type: options.type || TransactionType.None,
     })
 
@@ -336,6 +367,28 @@ export class KineticSdkInternal {
       throw new Error(`AppConfig not initialized`)
     }
     return this.appConfig
+  }
+
+  private async findTokenAccount({
+    account,
+    commitment,
+    mint,
+  }: {
+    account: string
+    commitment: Commitment
+    mint: string
+  }): Promise<string | undefined> {
+    // We get the account info for the account
+    const accountInfo = await this.getAccountInfo({ account, commitment, mint })
+
+    // The operation fails when the account is a mint account
+    if (accountInfo.isMint) {
+      throw new Error(`Account is a mint account.`)
+    }
+
+    // Find the token account for this mint
+    // FIXME: we need to support the use case where the account has multiple accounts for this mint
+    return accountInfo?.tokens?.find((t) => t.mint === mint)?.account
   }
 
   private getAppMint(appConfig: AppConfig, mint?: string): AppConfigMint {

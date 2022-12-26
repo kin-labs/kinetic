@@ -1,80 +1,72 @@
 import {
   createAssociatedTokenAccountInstruction,
   createTransferCheckedInstruction,
-  getAssociatedTokenAddress,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateMakeTransferOptions } from '../interfaces'
-import { addDecimals } from './add-remove-decimals'
 import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
+import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
-export async function generateMakeTransferTransaction({
-  addMemo,
-  amount,
-  blockhash,
-  destination,
-  index,
-  lastValidBlockHeight,
-  mintDecimals,
-  mintFeePayer,
-  mintPublicKey,
-  owner,
-  senderCreate,
-  type,
-}: GenerateMakeTransferOptions): Promise<Transaction> {
+export function generateMakeTransferTransaction(options: GenerateMakeTransferOptions): Transaction {
   // Create objects from Response
-  const mintKey = getPublicKey(mintPublicKey)
-  const feePayerKey = getPublicKey(mintFeePayer)
-  const ownerPublicKey = owner.publicKey
-
-  // Get TokenAccount from Owner and Destination
-  const [ownerTokenAccount, destinationTokenAccount] = await Promise.all([
-    getAssociatedTokenAddress(mintKey, ownerPublicKey),
-    getAssociatedTokenAddress(mintKey, getPublicKey(destination)),
-  ])
+  const destinationPublicKey = getPublicKey(options.destination)
+  const destinationTokenAccountPublicKey = getPublicKey(options.destinationTokenAccount)
+  const feePayerKey = getPublicKey(options.mintFeePayer)
+  const mintKey = getPublicKey(options.mintPublicKey)
+  const ownerPublicKey = options.owner.publicKey
+  const ownerTokenAccountPublicKey = getPublicKey(options.ownerTokenAccount)
 
   // Create Instructions
   const instructions: TransactionInstruction[] = []
 
-  if (addMemo) {
+  // Create the Memo Instruction
+  if (options.addMemo) {
     instructions.push(
       generateKinMemoInstruction({
-        index,
-        type,
+        index: options.index,
+        type: options.type,
       }),
     )
   }
 
-  if (senderCreate) {
+  // Create the Token Account if senderCreate is enabled
+  if (options.senderCreate) {
     instructions.push(
-      createAssociatedTokenAccountInstruction(feePayerKey, destinationTokenAccount, getPublicKey(destination), mintKey),
+      createAssociatedTokenAccountInstruction(
+        feePayerKey,
+        destinationTokenAccountPublicKey,
+        destinationPublicKey,
+        mintKey,
+      ),
     )
   }
 
+  // Create the Token Transfer Instruction
   instructions.push(
     createTransferCheckedInstruction(
-      ownerTokenAccount,
+      ownerTokenAccountPublicKey,
       mintKey,
-      destinationTokenAccount,
+      destinationTokenAccountPublicKey,
       ownerPublicKey,
-      addDecimals(amount, mintDecimals).toNumber(),
-      mintDecimals,
+      addDecimals(options.amount, options.mintDecimals).toNumber(),
+      options.mintDecimals,
       [],
       TOKEN_PROGRAM_ID,
     ),
   )
 
+  // Create transaction
   const transaction = new Transaction({
-    blockhash,
+    blockhash: options.blockhash,
     feePayer: feePayerKey,
-    lastValidBlockHeight,
+    lastValidBlockHeight: options.lastValidBlockHeight,
     signatures: [{ publicKey: ownerPublicKey, signature: null }],
   }).add(...instructions)
 
   // Partially sign the transaction
-  transaction.partialSign(owner)
+  transaction.partialSign(options.owner)
 
   return transaction
 }
