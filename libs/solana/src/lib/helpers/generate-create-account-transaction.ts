@@ -2,7 +2,6 @@ import {
   AuthorityType,
   createAssociatedTokenAccountInstruction,
   createSetAuthorityInstruction,
-  getAssociatedTokenAddress,
 } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateCreateAccountTransactionOptions } from '../interfaces'
@@ -10,50 +9,42 @@ import { TransactionType } from '../kin'
 import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
 import { getPublicKey } from './get-public-key'
 
-export async function generateCreateAccountTransaction({
-  addMemo,
-  blockhash,
-  index,
-  lastValidBlockHeight,
-  mintFeePayer,
-  mintPublicKey,
-  owner,
-}: GenerateCreateAccountTransactionOptions): Promise<Transaction> {
+export async function generateCreateAccountTransaction(
+  options: GenerateCreateAccountTransactionOptions,
+): Promise<Transaction> {
   // Create objects from Response
-  const mintKey = getPublicKey(mintPublicKey)
-  const feePayerKey = getPublicKey(mintFeePayer)
-  const ownerPublicKey = owner.publicKey
-
-  // Get AssociatedTokenAccount
-  const ownerTokenAccount = await getAssociatedTokenAddress(mintKey, ownerPublicKey)
+  const mintKey = getPublicKey(options.mintPublicKey)
+  const feePayerKey = getPublicKey(options.mintFeePayer)
+  const ownerPublicKey = options.owner.publicKey
+  const ownerTokenAccountPublicKey = getPublicKey(options.ownerTokenAccount)
 
   // Create Instructions
   const instructions: TransactionInstruction[] = []
 
   // Create Memo Instruction for KRE Ingestion - Must be Memo Program v1, not v2
-  if (addMemo) {
+  if (options.addMemo) {
     instructions.push(
       generateKinMemoInstruction({
-        index,
+        index: options.index,
         type: TransactionType.None,
       }),
     )
   }
 
   instructions.push(
-    createAssociatedTokenAccountInstruction(feePayerKey, ownerTokenAccount, ownerPublicKey, mintKey),
-    createSetAuthorityInstruction(ownerTokenAccount, ownerPublicKey, AuthorityType.CloseAccount, feePayerKey),
+    createAssociatedTokenAccountInstruction(feePayerKey, ownerTokenAccountPublicKey, ownerPublicKey, mintKey),
+    createSetAuthorityInstruction(ownerTokenAccountPublicKey, ownerPublicKey, AuthorityType.CloseAccount, feePayerKey),
   )
 
   const transaction = new Transaction({
-    blockhash,
-    feePayer: getPublicKey(mintFeePayer),
-    lastValidBlockHeight,
+    blockhash: options.blockhash,
+    feePayer: feePayerKey,
+    lastValidBlockHeight: options.lastValidBlockHeight,
     signatures: [{ publicKey: ownerPublicKey, signature: null }],
   }).add(...instructions)
 
   // Partially sign the transaction
-  transaction.partialSign(owner)
+  transaction.partialSign(options.owner)
 
   return transaction
 }

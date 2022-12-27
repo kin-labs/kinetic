@@ -12,7 +12,6 @@ import {
   AirdropApi,
   AppApi,
   AppConfig,
-  AppConfigMint,
   BalanceResponse,
   CloseAccountRequest,
   Commitment,
@@ -25,7 +24,7 @@ import {
   TransactionApi,
 } from '../generated'
 import { NAME, VERSION } from '../version'
-import { getTokenAddress } from './helpers'
+import { getAppMint, getTokenAddress } from './helpers'
 import {
   CloseAccountOptions,
   CreateAccountOptions,
@@ -65,15 +64,15 @@ export class KineticSdkInternal {
 
   async closeAccount(options: CloseAccountOptions): Promise<Transaction> {
     const appConfig = this.ensureAppConfig()
+    const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
-    const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     const request: CloseAccountRequest = {
       account: options.account.toString(),
       commitment,
       environment: this.sdkConfig.environment,
       index: this.sdkConfig.index,
-      mint: mint.publicKey,
+      mint: appMint.publicKey,
       referenceId: options.referenceId,
       referenceType: options.referenceType,
     }
@@ -88,24 +87,33 @@ export class KineticSdkInternal {
 
   async createAccount(options: CreateAccountOptions): Promise<Transaction> {
     const appConfig = this.ensureAppConfig()
+    const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
-    const mint = this.getAppMint(appConfig, options.mint?.toString())
 
-    const accounts = await this.getTokenAccounts({ account: options.owner.publicKey, mint: mint.publicKey })
-    if (accounts?.length) {
-      throw new Error(`Owner ${options.owner.publicKey} already has an account for mint ${mint.publicKey}.`)
+    const existing = await this.findTokenAccount({
+      account: options.owner.publicKey,
+      commitment,
+      mint: appMint.publicKey,
+    })
+
+    if (existing) {
+      throw new Error(`Owner ${options.owner.publicKey} already has an account for mint ${appMint.publicKey}.`)
     }
 
-    const { blockhash, lastValidBlockHeight } = await this.getBlockhash()
+    // Get AssociatedTokenAccount
+    const ownerTokenAccount = await getTokenAddress({ account: options.owner.publicKey, mint: appMint.publicKey })
+
+    const { blockhash, lastValidBlockHeight } = await this.getBlockhashAndHeight()
 
     const tx = await generateCreateAccountTransaction({
-      addMemo: mint.addMemo,
+      addMemo: appMint.addMemo,
       blockhash,
       index: this.sdkConfig.index,
       lastValidBlockHeight,
-      mintFeePayer: mint.feePayer,
-      mintPublicKey: mint.publicKey,
+      mintFeePayer: appMint.feePayer,
+      mintPublicKey: appMint.publicKey,
       owner: options.owner.solana,
+      ownerTokenAccount,
     })
 
     const request: CreateAccountRequest = {
@@ -113,7 +121,7 @@ export class KineticSdkInternal {
       environment: this.sdkConfig.environment,
       index: this.sdkConfig.index,
       lastValidBlockHeight,
-      mint: mint.publicKey,
+      mint: appMint.publicKey,
       referenceId: options.referenceId,
       referenceType: options.referenceType,
       tx: serializeTransaction(tx),
@@ -129,15 +137,15 @@ export class KineticSdkInternal {
 
   getAccountInfo(options: GetAccountInfoOptions) {
     const appConfig = this.ensureAppConfig()
+    const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
-    const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     return this.accountApi
       .getAccountInfo(
         this.sdkConfig.environment,
         this.sdkConfig.index,
         options.account.toString(),
-        mint.publicKey,
+        appMint.publicKey,
         commitment,
       )
       .then((res) => res.data)
@@ -166,17 +174,21 @@ export class KineticSdkInternal {
       })
   }
 
+  getExplorerUrl(path: string): string | undefined {
+    return this.appConfig?.environment?.explorer?.replace(`{path}`, path)
+  }
+
   getHistory(options: GetHistoryOptions): Promise<HistoryResponse[]> {
     const appConfig = this.ensureAppConfig()
+    const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
-    const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     return this.accountApi
       .getHistory(
         this.sdkConfig.environment,
         this.sdkConfig.index,
         options.account.toString(),
-        mint.publicKey,
+        appMint.publicKey,
         commitment,
       )
       .then((res) => res.data)
@@ -187,15 +199,15 @@ export class KineticSdkInternal {
 
   getTokenAccounts(options: GetTokenAccountsOptions): Promise<string[]> {
     const appConfig = this.ensureAppConfig()
+    const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
-    const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     return this.accountApi
       .getTokenAccounts(
         this.sdkConfig.environment,
         this.sdkConfig.index,
         options.account.toString(),
-        mint.publicKey,
+        appMint.publicKey,
         commitment,
       )
       .then((res) => res.data)
@@ -217,8 +229,8 @@ export class KineticSdkInternal {
 
   async makeTransfer(options: MakeTransferOptions) {
     const appConfig = this.ensureAppConfig()
+    const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
-    const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     const destination = options.destination.toString()
     const senderCreate = options.senderCreate || false
@@ -227,30 +239,30 @@ export class KineticSdkInternal {
     const ownerTokenAccount = await this.findTokenAccount({
       account: options.owner.publicKey,
       commitment,
-      mint: mint.publicKey,
+      mint: appMint.publicKey,
     })
 
     // The operation fails if the owner doesn't have a token account for this mint
     if (!ownerTokenAccount) {
-      throw new Error(`Owner account doesn't exist for mint ${mint.publicKey}.`)
+      throw new Error(`Owner account doesn't exist for mint ${appMint.publicKey}.`)
     }
 
     // We get the account info for the destination
     const destinationTokenAccount = await this.findTokenAccount({
       account: destination,
       commitment,
-      mint: mint.publicKey,
+      mint: appMint.publicKey,
     })
 
     // The operation fails if the destination doesn't have a token account for this mint and senderCreate is not set
     if (!destinationTokenAccount && !senderCreate) {
-      throw new Error(`Destination account doesn't exist for mint ${mint.publicKey}.`)
+      throw new Error(`Destination account doesn't exist for mint ${appMint.publicKey}.`)
     }
 
     // Derive the associated token address if the destination doesn't have a token account for this mint and senderCreate is set
     let senderCreateTokenAccount: PublicKeyString | undefined
     if (!destinationTokenAccount && senderCreate) {
-      senderCreateTokenAccount = await getTokenAddress({ account: destination, mint: mint.publicKey })
+      senderCreateTokenAccount = await getTokenAddress({ account: destination, mint: appMint.publicKey })
     }
 
     // The operation fails if there is still no destination token account
@@ -258,19 +270,19 @@ export class KineticSdkInternal {
       throw new Error('Destination token account not found.')
     }
 
-    const { lastValidBlockHeight, blockhash } = await this.getBlockhash()
+    const { lastValidBlockHeight, blockhash } = await this.getBlockhashAndHeight()
 
     const tx = generateMakeTransferTransaction({
-      addMemo: mint.addMemo,
+      addMemo: appMint.addMemo,
       amount: options.amount,
       blockhash,
       destination,
       destinationTokenAccount: (destinationTokenAccount?.toString() ?? senderCreateTokenAccount?.toString()) as string,
       index: this.sdkConfig.index,
       lastValidBlockHeight,
-      mintDecimals: mint.decimals,
-      mintFeePayer: mint.feePayer,
-      mintPublicKey: mint.publicKey,
+      mintDecimals: appMint.decimals,
+      mintFeePayer: appMint.feePayer,
+      mintPublicKey: appMint.publicKey,
       owner: options.owner.solana,
       ownerTokenAccount,
       senderCreate: senderCreate && !!senderCreateTokenAccount,
@@ -282,7 +294,7 @@ export class KineticSdkInternal {
       environment: this.sdkConfig.environment,
       index: this.sdkConfig.index,
       lastValidBlockHeight,
-      mint: mint.publicKey,
+      mint: appMint.publicKey,
       referenceId: options.referenceId,
       referenceType: options.referenceType,
       tx: serializeTransaction(tx),
@@ -293,8 +305,8 @@ export class KineticSdkInternal {
 
   async makeTransferBatch(options: MakeTransferBatchOptions) {
     const appConfig = this.ensureAppConfig()
+    const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
-    const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     const destinations = options.destinations
     const referenceId = options.referenceId || null
@@ -312,28 +324,28 @@ export class KineticSdkInternal {
     const ownerTokenAccount = await this.findTokenAccount({
       account: options.owner.publicKey,
       commitment,
-      mint: mint.publicKey,
+      mint: appMint.publicKey,
     })
 
     // The operation fails if the owner doesn't have a token account for this mint
     if (!ownerTokenAccount) {
-      throw new Error(`Owner account doesn't exist for mint ${mint.publicKey}.`)
+      throw new Error(`Owner account doesn't exist for mint ${appMint.publicKey}.`)
     }
 
     // Get TokenAccount from destinations, keep track of missing ones
     const nonExistingDestinations: string[] = []
     const destinationInfo: { amount: string; destination?: string }[] = await Promise.all(
-      destinations.map(async (d) => {
+      destinations.map(async (item) => {
         const destination = await this.findTokenAccount({
-          account: d.destination.toString(),
+          account: item.destination.toString(),
           commitment,
-          mint: mint.publicKey,
+          mint: appMint.publicKey,
         })
         if (!destination) {
-          nonExistingDestinations.push(d.destination.toString())
+          nonExistingDestinations.push(item.destination.toString())
         }
         return {
-          amount: d.amount,
+          amount: item.amount,
           destination: destination?.toString(),
         }
       }),
@@ -342,21 +354,23 @@ export class KineticSdkInternal {
     // The operation fails if any of the destinations doesn't have a token account for this mint
     if (nonExistingDestinations.length) {
       throw new Error(
-        `Destination accounts ${nonExistingDestinations.join(', ')} have no token account for mint ${mint.publicKey}.`,
+        `Destination accounts ${nonExistingDestinations.sort().join(', ')} have no token account for mint ${
+          appMint.publicKey
+        }.`,
       )
     }
 
-    const { blockhash, lastValidBlockHeight } = await this.getBlockhash()
+    const { blockhash, lastValidBlockHeight } = await this.getBlockhashAndHeight()
 
     const tx = await generateMakeTransferBatchTransaction({
-      addMemo: mint.addMemo,
+      addMemo: appMint.addMemo,
       blockhash,
       destinations: destinationInfo as TransferDestination[],
       index: this.sdkConfig.index,
       lastValidBlockHeight,
-      mintDecimals: mint.decimals,
-      mintFeePayer: mint.feePayer,
-      mintPublicKey: mint.publicKey,
+      mintDecimals: appMint.decimals,
+      mintFeePayer: appMint.feePayer,
+      mintPublicKey: appMint.publicKey,
       owner: options.owner.solana,
       ownerTokenAccount,
       type: options.type || TransactionType.None,
@@ -367,7 +381,7 @@ export class KineticSdkInternal {
       environment: this.sdkConfig.environment,
       index: this.sdkConfig.index,
       lastValidBlockHeight,
-      mint: mint.publicKey,
+      mint: appMint.publicKey,
       referenceId,
       referenceType,
       tx: serializeTransaction(tx),
@@ -378,8 +392,8 @@ export class KineticSdkInternal {
 
   requestAirdrop(options: RequestAirdropOptions): Promise<RequestAirdropResponse> {
     const appConfig = this.ensureAppConfig()
+    const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
-    const mint = this.getAppMint(appConfig, options.mint?.toString())
 
     return this.airdropApi
       .requestAirdrop({
@@ -388,7 +402,7 @@ export class KineticSdkInternal {
         commitment,
         environment: this.sdkConfig.environment,
         index: this.sdkConfig.index,
-        mint: mint.publicKey,
+        mint: appMint.publicKey,
       })
       .then((res) => res.data)
       .catch((err) => {
@@ -436,16 +450,7 @@ export class KineticSdkInternal {
     return accountInfo?.tokens?.find((t) => t.mint === mint)?.account
   }
 
-  private getAppMint(appConfig: AppConfig, mint?: string): AppConfigMint {
-    mint = mint || appConfig.mint.publicKey
-    const found = appConfig.mints.find((item) => item.publicKey === mint)
-    if (!found) {
-      throw new Error(`Mint not found`)
-    }
-    return found
-  }
-
-  private async getBlockhash(): Promise<{
+  private async getBlockhashAndHeight(): Promise<{
     blockhash: string
     lastValidBlockHeight: number
   }> {

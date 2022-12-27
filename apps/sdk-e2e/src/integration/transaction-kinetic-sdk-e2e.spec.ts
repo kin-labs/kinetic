@@ -91,7 +91,9 @@ describe('KineticSdk (e2e)', () => {
     destinations.push({ destination: kp2.publicKey, amount: '12' })
 
     await expect(async () => await sdk.makeTransferBatch({ destinations, owner: aliceKeypair })).rejects.toThrow(
-      `Destination accounts ${kp.publicKey}, ${kp2.publicKey} have no token account for mint ${DEFAULT_MINT}.`,
+      `Destination accounts ${[kp.publicKey, kp2.publicKey]
+        .sort()
+        .join(', ')} have no token account for mint ${DEFAULT_MINT}.`,
     )
   })
 

@@ -64,7 +64,7 @@ export class KineticSdk {
   }
 
   getExplorerUrl(path: string): string | undefined {
-    return this.internal?.appConfig?.environment?.explorer?.replace(`{path}`, path)
+    return this.internal.getExplorerUrl(path)
   }
 
   getHistory(options: GetHistoryOptions): Promise<HistoryResponse[]> {
