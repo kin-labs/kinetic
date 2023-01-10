@@ -9,8 +9,8 @@ export { SolanaKeypair, SolanaPublicKey }
 export class Keypair {
   private readonly solanaKeypair: SolanaKeypair
   mnemonic?: string
-  secretKey?: string
   publicKey: string
+  secretKey?: string
 
   constructor(secretKey: string) {
     this.solanaKeypair = SolanaKeypair.fromSecretKey(bs58.decode(secretKey))
@@ -56,12 +56,9 @@ export class Keypair {
     return keys
   }
 
-  static fromSeed(seed: Buffer): Keypair {
-    return this.fromSecretKey(bs58.encode(SolanaKeypair.fromSeed(seed).secretKey))
-  }
-
   static fromSecret(secret: string): Keypair {
     secret = secret.trim()
+
     let keypair: Keypair
 
     if (this.isMnemonic(secret)) {
@@ -95,6 +92,10 @@ export class Keypair {
     const hd = HDKey.fromMasterSeed(seed.toString('hex'))
 
     return Keypair.fromSeed(Buffer.from(hd.derive(path).privateKey))
+  }
+
+  private static fromSeed(seed: Buffer): Keypair {
+    return this.fromSecretKey(bs58.encode(SolanaKeypair.fromSeed(seed).secretKey))
   }
 
   private static isByteArray(secret: string) {
