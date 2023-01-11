@@ -427,7 +427,7 @@ export const ClusterType = {
   SolanaTestnet: 'SolanaTestnet',
 } as const
 
-export type ClusterType = typeof ClusterType[keyof typeof ClusterType]
+export type ClusterType = (typeof ClusterType)[keyof typeof ClusterType]
 
 /**
  *
@@ -441,7 +441,7 @@ export const Commitment = {
   Processed: 'Processed',
 } as const
 
-export type Commitment = typeof Commitment[keyof typeof Commitment]
+export type Commitment = (typeof Commitment)[keyof typeof Commitment]
 
 /**
  *
@@ -499,7 +499,7 @@ export const ConfirmationStatus = {
   Finalized: 'finalized',
 } as const
 
-export type ConfirmationStatus = typeof ConfirmationStatus[keyof typeof ConfirmationStatus]
+export type ConfirmationStatus = (typeof ConfirmationStatus)[keyof typeof ConfirmationStatus]
 
 /**
  *
@@ -1273,7 +1273,7 @@ export const TransactionErrorType = {
   WebhookFailed: 'WebhookFailed',
 } as const
 
-export type TransactionErrorType = typeof TransactionErrorType[keyof typeof TransactionErrorType]
+export type TransactionErrorType = (typeof TransactionErrorType)[keyof typeof TransactionErrorType]
 
 /**
  *
@@ -1320,7 +1320,7 @@ export const TransactionStatus = {
   Processing: 'Processing',
 } as const
 
-export type TransactionStatus = typeof TransactionStatus[keyof typeof TransactionStatus]
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
 
 /**
  * AccountApi - axios parameter creator
