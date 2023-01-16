@@ -1,33 +1,19 @@
 import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
-import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
-import { ApiKineticService, TransactionWithErrors } from '@kin-kinetic/api/kinetic/data-access'
+import { ApiKineticService, CloseAccountRequest, TransactionWithErrors } from '@kin-kinetic/api/kinetic/data-access'
 import { Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
-import {
-  BalanceMint,
-  BalanceSummary,
-  Commitment,
-  generateCloseAccountTransaction,
-  getPublicKey,
-  parseAndSignTransaction,
-  PublicKeyString,
-  removeDecimals,
-} from '@kin-kinetic/solana'
+import { BalanceMint, BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@kin-kinetic/solana'
 import { Injectable, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
-import { CloseAccountRequest } from './dto/close-account-request.dto'
+
 import { CreateAccountRequest } from './dto/create-account-request.dto'
-import { AccountInfo } from './entities/account.info'
 import { HistoryResponse } from './entities/history-response.entity'
-import { validateCloseAccount } from './helpers/validate-close.account'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {
-  private closeAccountRequestCounter: Counter
-  private closeAccountRequestInvalidCounter: Counter
-  private closeAccountRequestValidCounter: Counter
   private createAccountRequestCounter: Counter
   private createAccountErrorMintNotFoundCounter: Counter
   private createAccountSolanaTransactionSuccessCounter: Counter
@@ -36,21 +22,11 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   constructor(
     readonly data: ApiCoreDataAccessService,
     private readonly app: ApiAppDataAccessService,
-    private readonly kinetic: ApiKineticService,
+    readonly kinetic: ApiKineticService,
   ) {}
 
   onModuleInit() {
-    const closePrefix = 'api_account_close_account'
     const createPrefix = 'api_account_create_account'
-    this.closeAccountRequestCounter = this.data.metrics.getCounter(`${closePrefix}_request`, {
-      description: 'Number of closeAccount requests',
-    })
-    this.closeAccountRequestInvalidCounter = this.data.metrics.getCounter(`${closePrefix}_invalid_request`, {
-      description: 'Number of invalid closeAccount requests',
-    })
-    this.closeAccountRequestValidCounter = this.data.metrics.getCounter(`${closePrefix}_valid_request`, {
-      description: 'Number of valid closeAccount requests',
-    })
     this.createAccountRequestCounter = this.data.metrics.getCounter(`${createPrefix}_request`, {
       description: 'Number of createAccount requests',
     })
@@ -76,132 +52,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
     const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
-    return this.handleCloseAccount(input, { appEnv, appKey, ip, ua })
-  }
-
-  async handleCloseAccount(
-    input: CloseAccountRequest,
-    {
-      appEnv,
-      appKey,
-      headers,
-      ip,
-      ua,
-    }: { appKey: string; appEnv: AppEnvironment; headers?: Record<string, string>; ip?: string; ua?: string },
-  ): Promise<Transaction> {
-    this.closeAccountRequestCounter.add(1, { appKey })
-    const accountInfo = await this.getAccountInfo(appKey, input.account, input.mint, input.commitment)
-
-    try {
-      const tokenAccount = validateCloseAccount({
-        info: accountInfo,
-        mint: input.mint,
-        mints: appEnv.mints.map((m) => m.mint?.address),
-        wallets: appEnv.wallets.map((w) => w.publicKey),
-      })
-
-      this.closeAccountRequestValidCounter.add(1, { appKey })
-
-      const mint = this.kinetic.validateMint(appEnv, appKey, input.mint)
-
-      // Create the Transaction
-      const transaction: TransactionWithErrors = await this.kinetic.createTransaction({
-        appEnvId: appEnv.id,
-        commitment: input.commitment,
-        ip,
-        referenceId: input.referenceId,
-        referenceType: input.referenceType,
-        ua,
-      })
-
-      const { blockhash, lastValidBlockHeight } = await this.kinetic.getLatestBlockhash(appKey)
-
-      const signer = Keypair.fromSecret(mint.wallet?.secretKey)
-
-      const { transaction: solanaTransaction } = generateCloseAccountTransaction({
-        addMemo: mint.addMemo,
-        blockhash,
-        index: input.index,
-        lastValidBlockHeight,
-        signer: signer.solana,
-        tokenAccount: tokenAccount.account,
-      })
-
-      return this.kinetic.processTransaction({
-        appEnv,
-        appKey,
-        blockhash,
-        commitment: input.commitment,
-        transaction,
-        decimals: mint?.mint?.decimals,
-        feePayer: tokenAccount.closeAuthority,
-        headers,
-        lastValidBlockHeight,
-        mintPublicKey: mint?.mint?.address,
-        solanaTransaction,
-        source: input.account,
-      })
-    } catch (error) {
-      this.closeAccountRequestInvalidCounter.add(1, { appKey })
-      throw error
-    }
-  }
-
-  async getAccountInfo(
-    appKey: string,
-    accountId: PublicKeyString,
-    mint: PublicKeyString,
-    commitment: Commitment,
-  ): Promise<AccountInfo> {
-    const solana = await this.kinetic.getSolanaConnection(appKey)
-    const account = getPublicKey(accountId)
-    const accountInfo = await solana.getParsedAccountInfo(account, commitment)
-
-    const parsed = accountInfo?.data?.parsed
-
-    const isMint = parsed?.type === 'mint'
-    const isTokenAccount = parsed?.type === 'account'
-
-    const owner = isTokenAccount ? parsed.info.owner : null
-
-    const result = {
-      account: account.toString(),
-      isMint,
-      isOwner: false,
-      isTokenAccount,
-      owner,
-      program: accountInfo?.owner?.toString() ?? null,
-      tokens: !isMint && !isTokenAccount ? [] : null,
-    }
-
-    // We only want to get the token accounts if the account is not a mint or token account
-    if (isMint || isTokenAccount) {
-      return result
-    }
-
-    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
-    const appMint = this.kinetic.validateMint(appEnv, appKey, mint.toString())
-
-    const tokenAccounts = await solana.getTokenAccounts(account, appMint.mint.address, commitment)
-
-    for (const tokenAccount of tokenAccounts) {
-      const info = await solana.getParsedAccountInfo(tokenAccount, commitment)
-      const parsed = info?.data?.parsed?.info
-
-      result.tokens.push({
-        account: tokenAccount,
-        balance: parsed?.tokenAmount?.amount ? removeDecimals(parsed.tokenAmount.amount, appMint.mint.decimals) : null,
-        closeAuthority: parsed?.closeAuthority ?? null,
-        decimals: appMint.mint.decimals ?? 0,
-        mint: appMint.mint.address,
-        owner: parsed?.owner ?? null,
-      })
-    }
-
-    return {
-      ...result,
-      isOwner: result.tokens.length > 0,
-    }
+    return this.kinetic.handleCloseAccount(input, { appEnv, appKey, ip, ua })
   }
 
   async getBalance(appKey: string, accountId: PublicKeyString, commitment: Commitment): Promise<BalanceSummary> {

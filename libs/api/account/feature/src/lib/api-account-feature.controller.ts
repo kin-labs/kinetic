@@ -1,12 +1,11 @@
 import {
-  AccountInfo,
   ApiAccountDataAccessService,
   BalanceResponse,
-  CloseAccountRequest,
   CreateAccountRequest,
   HistoryResponse,
 } from '@kin-kinetic/api/account/data-access'
 import { getAppKey, PublicKeyPipe } from '@kin-kinetic/api/core/util'
+import { AccountInfo, CloseAccountRequest } from '@kin-kinetic/api/kinetic/data-access'
 import { Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Commitment } from '@kin-kinetic/solana'
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common'
@@ -46,7 +45,7 @@ export class ApiAccountFeatureController {
     @Param('mint', new PublicKeyPipe('mint')) mint: string,
     @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getAccountInfo(getAppKey(environment, index), accountId, mint, commitment)
+    return this.service.kinetic.getAccountInfo(getAppKey(environment, index), accountId, mint, commitment)
   }
 
   @Get('balance/:environment/:index/:accountId')
