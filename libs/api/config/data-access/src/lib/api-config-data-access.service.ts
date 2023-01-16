@@ -7,6 +7,7 @@ import { UserRole } from '@prisma/client'
 import { CookieOptions } from 'express-serve-static-core'
 import * as fs from 'fs'
 import * as Redis from 'ioredis'
+import { OpenTelemetryModuleOptions } from 'nestjs-otel/lib/interfaces'
 import { join } from 'path'
 import { ProvisionedApp } from './entity/provisioned-app.entity'
 import { WebConfig } from './entity/web-config.entity'
@@ -210,6 +211,15 @@ export class ApiConfigDataAccessService {
 
   get host() {
     return this.config.get('host')
+  }
+
+  get openTelemetryConfig(): OpenTelemetryModuleOptions {
+    return {
+      metrics: {
+        apiMetrics: { enable: this.metricsEnabled },
+        hostMetrics: this.metricsEnabled,
+      },
+    }
   }
 
   get port() {
