@@ -1,12 +1,8 @@
 import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
-import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
-import {
-  ApiTransactionDataAccessService,
-  Transaction,
-  TransactionWithErrors,
-} from '@kin-kinetic/api/transaction/data-access'
+import { ApiKineticService, TransactionWithErrors } from '@kin-kinetic/api/kinetic/data-access'
+import { ApiTransactionDataAccessService, Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import {
   BalanceMint,
@@ -40,7 +36,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   constructor(
     readonly data: ApiCoreDataAccessService,
     private readonly app: ApiAppDataAccessService,
-    private readonly solana: ApiSolanaDataAccessService,
+    private readonly kinetic: ApiKineticService,
     private readonly transaction: ApiTransactionDataAccessService,
   ) {}
 
@@ -132,7 +128,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
         tokenAccount: tokenAccount.account,
       })
 
-      return this.transaction.handleTransaction({
+      return this.kinetic.processTransaction({
         appEnv,
         appKey,
         blockhash,
@@ -158,7 +154,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     mint: PublicKeyString,
     commitment: Commitment,
   ): Promise<AccountInfo> {
-    const solana = await this.solana.getConnection(appKey)
+    const solana = await this.kinetic.getSolanaConnection(appKey)
     const account = getPublicKey(accountId)
     const accountInfo = await solana.getParsedAccountInfo(account, commitment)
 
@@ -210,7 +206,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   }
 
   async getBalance(appKey: string, accountId: PublicKeyString, commitment: Commitment): Promise<BalanceSummary> {
-    const solana = await this.solana.getConnection(appKey)
+    const solana = await this.kinetic.getSolanaConnection(appKey)
     const appEnv = await this.app.getAppConfig(appKey)
 
     const mints: BalanceMint[] = appEnv.mints.map(({ decimals, publicKey }) => ({ decimals, publicKey }))
@@ -224,7 +220,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     mint: PublicKeyString,
     commitment: Commitment,
   ): Promise<HistoryResponse[]> {
-    const solana = await this.solana.getConnection(appKey)
+    const solana = await this.kinetic.getSolanaConnection(appKey)
 
     return solana.getTokenHistory(accountId, mint.toString(), commitment)
   }
@@ -235,7 +231,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     mint: PublicKeyString,
     commitment: Commitment,
   ): Promise<string[]> {
-    const solana = await this.solana.getConnection(appKey)
+    const solana = await this.kinetic.getSolanaConnection(appKey)
 
     return solana.getTokenAccounts(accountId, mint.toString(), commitment)
   }
@@ -273,7 +269,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
       signer: signer.solana,
     })
 
-    return this.transaction.handleTransaction({
+    return this.kinetic.processTransaction({
       appEnv,
       appKey,
       transaction,
