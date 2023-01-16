@@ -1,12 +1,18 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
 import { parseTransactionError } from '@kin-kinetic/api/kinetic/util'
 import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Commitment, removeDecimals, Solana } from '@kin-kinetic/solana'
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { App, AppEnv, Prisma, Transaction, TransactionErrorType, TransactionStatus } from '@prisma/client'
 import { Transaction as SolanaTransaction } from '@solana/web3.js'
+import { Request } from 'express'
+import * as requestIp from 'request-ip'
+import { GetTransactionResponse } from './entities/get-transaction-response.entity'
+import { LatestBlockhashResponse } from './entities/latest-blockhash-response.entity'
+import { MinimumRentExemptionBalanceRequest } from './entities/minimum-rent-exemption-balance-request.dto'
+import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
 import { ProcessTransactionOptions } from './interfaces/process-transaction-options'
 import { TransactionWithErrors } from './interfaces/transaction-with-errors'
 
@@ -16,6 +22,7 @@ export class ApiKineticService implements OnModuleInit {
 
   private confirmSignatureFinalizedCounter: Counter
   private confirmTransactionSolanaConfirmedCounter: Counter
+  private mintNotFoundErrorCounter: Counter
   private sendEventWebhookErrorCounter: Counter
   private sendEventWebhookSuccessCounter: Counter
   private sendSolanaTransactionConfirmedCounter: Counter
@@ -31,41 +38,103 @@ export class ApiKineticService implements OnModuleInit {
 
   onModuleInit() {
     this.confirmSignatureFinalizedCounter = this.data.metrics.getCounter(
-      `api_transaction_confirm_signature_finalized_counter`,
+      `api_kinetic_confirm_signature_finalized_counter`,
       { description: 'Number of makeTransfer finalized Solana transactions' },
     )
     this.confirmTransactionSolanaConfirmedCounter = this.data.metrics.getCounter(
-      `api_transaction_confirm_transaction_solana_confirmed_counter`,
+      `api_kinetic_confirm_transaction_solana_confirmed_counter`,
       { description: 'Number of makeTransfer committed Solana transactions' },
     )
-    this.sendEventWebhookErrorCounter = this.data.metrics.getCounter(
-      `api_transaction_send_event_webhook_error_counter`,
-      { description: 'Number of makeTransfer webhook event errors' },
-    )
+    this.mintNotFoundErrorCounter = this.data.metrics.getCounter(`api_kinetic_mint_not_found_error_counter`, {
+      description: 'Number of makeTransfer mint not found errors',
+    })
+
+    this.sendEventWebhookErrorCounter = this.data.metrics.getCounter(`api_kinetic_send_event_webhook_error_counter`, {
+      description: 'Number of makeTransfer webhook event errors',
+    })
     this.sendEventWebhookSuccessCounter = this.data.metrics.getCounter(
-      `api_transaction_send_event_webhook_success_counter`,
+      `api_kinetic_send_event_webhook_success_counter`,
       { description: 'Number of makeTransfer webhook event success' },
     )
     this.sendSolanaTransactionConfirmedCounter = this.data.metrics.getCounter(
-      `api_transaction_send_solana_transaction_confirmed_counter`,
+      `api_kinetic_send_solana_transaction_confirmed_counter`,
       { description: 'Number of makeTransfer confirmed Solana transactions' },
     )
     this.sendSolanaTransactionErrorCounter = this.data.metrics.getCounter(
-      `api_transaction_send_solana_transaction_error_counter`,
+      `api_kinetic_send_solana_transaction_error_counter`,
       { description: 'Number of makeTransfer Solana errors' },
     )
-    this.sendVerifyWebhookErrorCounter = this.data.metrics.getCounter(
-      `api_transaction_send_verify_webhook_error_counter`,
-      { description: 'Number of makeTransfer webhook verify errors' },
-    )
+    this.sendVerifyWebhookErrorCounter = this.data.metrics.getCounter(`api_kinetic_send_verify_webhook_error_counter`, {
+      description: 'Number of makeTransfer webhook verify errors',
+    })
     this.sendVerifyWebhookSuccessCounter = this.data.metrics.getCounter(
-      `api_transaction_send_verify_webhook_success_counter`,
+      `api_kinetic_send_verify_webhook_success_counter`,
       { description: 'Number of makeTransfer webhook verify success' },
     )
   }
 
+  deleteSolanaConnection(appKey: string): void {
+    return this.solana.deleteConnection(appKey)
+  }
+
   getSolanaConnection(appKey: string): Promise<Solana> {
     return this.solana.getConnection(appKey)
+  }
+
+  createTransaction({
+    appEnvId,
+    commitment,
+    ip,
+    referenceId,
+    referenceType,
+    tx,
+    ua,
+  }: {
+    appEnvId: string
+    commitment: Commitment
+    ip: string
+    referenceId?: string
+    referenceType?: string
+    tx?: string
+    ua: string
+  }): Promise<TransactionWithErrors> {
+    return this.data.transaction.create({
+      data: {
+        appEnvId,
+        commitment,
+        ip,
+        referenceId,
+        referenceType,
+        tx,
+        ua,
+      },
+      include: { errors: true },
+    })
+  }
+
+  async getLatestBlockhash(appKey: string): Promise<LatestBlockhashResponse> {
+    return this.data.cache.wrap<LatestBlockhashResponse>(
+      'solana',
+      `${appKey}:getLatestBlockhash`,
+      () => this.getSolanaConnection(appKey).then((solana) => solana.getLatestBlockhash()),
+      this.data.config.cache.solana.getLatestBlockhash.ttl,
+    )
+  }
+
+  async getMinimumRentExemptionBalance(
+    appKey: string,
+    { dataLength }: MinimumRentExemptionBalanceRequest,
+  ): Promise<MinimumRentExemptionBalanceResponse> {
+    const solana = await this.getSolanaConnection(appKey)
+    const lamports = await solana.getMinimumBalanceForRentExemption(dataLength)
+
+    return { lamports } as MinimumRentExemptionBalanceResponse
+  }
+
+  async getTransaction(appKey: string, signature: string, commitment: Commitment): Promise<GetTransactionResponse> {
+    const solana = await this.getSolanaConnection(appKey)
+
+    return solana.getTransaction(signature, commitment)
   }
 
   async processTransaction({
@@ -161,6 +230,37 @@ export class ApiKineticService implements OnModuleInit {
     }
 
     return sent
+  }
+
+  validateMint(appEnv: AppEnvironment, appKey: string, inputMint: string) {
+    const found = appEnv.mints.find(({ mint }) => mint.address === inputMint)
+    if (!found) {
+      this.mintNotFoundErrorCounter.add(1, { appKey, mint: inputMint.toString() })
+      throw new BadRequestException(`${appKey}: Can't find mint ${inputMint}`)
+    }
+    return found
+  }
+
+  validateRequest(appEnv: AppEnv, req: Request): { ip: string; ua: string } {
+    const ip = requestIp.getClientIp(req)
+    const ua = `${req.headers['kinetic-user-agent'] || req.headers['user-agent']}`
+
+    if (appEnv?.ipsAllowed.length > 0 && !appEnv?.ipsAllowed.includes(ip)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+
+    if (appEnv?.ipsBlocked.length > 0 && appEnv?.ipsBlocked.includes(ip)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+
+    if (appEnv?.uasAllowed.length > 0 && !appEnv?.uasAllowed.includes(ua)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+
+    if (appEnv?.uasBlocked.length > 0 && appEnv?.uasBlocked.includes(ua)) {
+      throw new UnauthorizedException('Request not allowed')
+    }
+    return { ip, ua }
   }
 
   private async confirmSignature({

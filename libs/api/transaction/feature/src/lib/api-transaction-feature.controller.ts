@@ -1,11 +1,13 @@
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import {
-  ApiTransactionDataAccessService,
   GetTransactionResponse,
   LatestBlockhashResponse,
-  MakeTransferRequest,
   MinimumRentExemptionBalanceRequest,
   MinimumRentExemptionBalanceResponse,
+} from '@kin-kinetic/api/kinetic/data-access'
+import {
+  ApiTransactionDataAccessService,
+  MakeTransferRequest,
   Transaction,
 } from '@kin-kinetic/api/transaction/data-access'
 import { Commitment } from '@kin-kinetic/solana'
@@ -23,7 +25,7 @@ export class ApiTransactionFeatureController {
   @ApiParam({ name: 'index', type: 'integer' })
   @ApiResponse({ type: LatestBlockhashResponse })
   getLatestBlockhash(@Param('environment') environment: string, @Param('index', ParseIntPipe) index: number) {
-    return this.service.getLatestBlockhash(getAppKey(environment, index))
+    return this.service.kinetic.getLatestBlockhash(getAppKey(environment, index))
   }
 
   @Get('minimum-rent-exemption-balance/:environment/:index')
@@ -35,7 +37,7 @@ export class ApiTransactionFeatureController {
     @Param('index', ParseIntPipe) index: number,
     @Param('input') input: MinimumRentExemptionBalanceRequest,
   ) {
-    return this.service.getMinimumRentExemptionBalance(getAppKey(environment, index), input)
+    return this.service.kinetic.getMinimumRentExemptionBalance(getAppKey(environment, index), input)
   }
 
   @Post('make-transfer')
@@ -57,6 +59,6 @@ export class ApiTransactionFeatureController {
     @Param('signature') signature: string,
     @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getTransaction(getAppKey(environment, index), signature, commitment)
+    return this.service.kinetic.getTransaction(getAppKey(environment, index), signature, commitment)
   }
 }

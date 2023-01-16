@@ -2,7 +2,7 @@ import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService, TransactionWithErrors } from '@kin-kinetic/api/kinetic/data-access'
-import { ApiTransactionDataAccessService, Transaction } from '@kin-kinetic/api/transaction/data-access'
+import { Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import {
   BalanceMint,
@@ -37,7 +37,6 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     readonly data: ApiCoreDataAccessService,
     private readonly app: ApiAppDataAccessService,
     private readonly kinetic: ApiKineticService,
-    private readonly transaction: ApiTransactionDataAccessService,
   ) {}
 
   onModuleInit() {
@@ -75,7 +74,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   async closeAccount(req: Request, input: CloseAccountRequest): Promise<Transaction> {
     const appKey = getAppKey(input.environment, input.index)
     const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
-    const { ip, ua } = this.transaction.validateRequest(appEnv, req)
+    const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
     return this.handleCloseAccount(input, { appEnv, appKey, ip, ua })
   }
@@ -103,10 +102,10 @@ export class ApiAccountDataAccessService implements OnModuleInit {
 
       this.closeAccountRequestValidCounter.add(1, { appKey })
 
-      const mint = this.transaction.validateMint(appEnv, appKey, input.mint)
+      const mint = this.kinetic.validateMint(appEnv, appKey, input.mint)
 
       // Create the Transaction
-      const transaction: TransactionWithErrors = await this.transaction.createTransaction({
+      const transaction: TransactionWithErrors = await this.kinetic.createTransaction({
         appEnvId: appEnv.id,
         commitment: input.commitment,
         ip,
@@ -115,7 +114,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
         ua,
       })
 
-      const { blockhash, lastValidBlockHeight } = await this.transaction.getLatestBlockhash(appKey)
+      const { blockhash, lastValidBlockHeight } = await this.kinetic.getLatestBlockhash(appKey)
 
       const signer = Keypair.fromSecret(mint.wallet?.secretKey)
 
@@ -181,7 +180,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     }
 
     const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
-    const appMint = this.transaction.validateMint(appEnv, appKey, mint.toString())
+    const appMint = this.kinetic.validateMint(appEnv, appKey, mint.toString())
 
     const tokenAccounts = await solana.getTokenAccounts(account, appMint.mint.address, commitment)
 
@@ -241,12 +240,12 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
     this.createAccountRequestCounter.add(1, { appKey })
 
-    const { ip, ua } = this.transaction.validateRequest(appEnv, req)
+    const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
-    const mint = this.transaction.validateMint(appEnv, appKey, input.mint)
+    const mint = this.kinetic.validateMint(appEnv, appKey, input.mint)
 
     // Create the Transaction
-    const transaction: TransactionWithErrors = await this.transaction.createTransaction({
+    const transaction: TransactionWithErrors = await this.kinetic.createTransaction({
       appEnvId: appEnv.id,
       commitment: input.commitment,
       ip,
