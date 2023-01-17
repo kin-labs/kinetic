@@ -96,6 +96,16 @@ export class ApiKineticService implements OnModuleInit {
     )
   }
 
+  createAppEnvTransaction(appEnvId: string, options: Prisma.TransactionCreateInput): Promise<TransactionWithErrors> {
+    return this.data.transaction.create({
+      data: {
+        appEnv: { connect: { id: appEnvId } },
+        ...options,
+      },
+      include: { errors: true },
+    })
+  }
+
   deleteSolanaConnection(appKey: string): void {
     return this.solana.deleteConnection(appKey)
   }
@@ -171,6 +181,7 @@ export class ApiKineticService implements OnModuleInit {
       ua,
     }: { appKey: string; appEnv: AppEnvironment; headers?: Record<string, string>; ip?: string; ua?: string },
   ): Promise<Transaction> {
+    const processingStartedAt = Date.now()
     this.closeAccountRequestCounter.add(1, { appKey })
     const accountInfo = await this.getAccountInfo(appKey, input.account, input.mint, input.commitment)
 
@@ -185,16 +196,6 @@ export class ApiKineticService implements OnModuleInit {
       this.closeAccountRequestValidCounter.add(1, { appKey })
 
       const mint = this.validateMint(appEnv, appKey, input.mint)
-
-      // Create the Transaction
-      const transaction: TransactionWithErrors = await this.createTransaction({
-        appEnvId: appEnv.id,
-        commitment: input.commitment,
-        ip,
-        referenceId: input.referenceId,
-        referenceType: input.referenceType,
-        ua,
-      })
 
       const { blockhash, lastValidBlockHeight } = await this.getLatestBlockhash(appKey)
 
@@ -214,50 +215,24 @@ export class ApiKineticService implements OnModuleInit {
         appKey,
         blockhash,
         commitment: input.commitment,
-        transaction,
         decimals: mint?.mint?.decimals,
         feePayer: tokenAccount.closeAuthority,
         headers,
+        ip,
         lastValidBlockHeight,
         mintPublicKey: mint?.mint?.address,
+        referenceId: input.referenceId,
+        referenceType: input.referenceType,
+        processingStartedAt,
         solanaTransaction,
         source: input.account,
+        tx: solanaTransaction.serialize().toString('base64'),
+        ua,
       })
     } catch (error) {
       this.closeAccountRequestInvalidCounter.add(1, { appKey })
       throw error
     }
-  }
-
-  createTransaction({
-    appEnvId,
-    commitment,
-    ip,
-    referenceId,
-    referenceType,
-    tx,
-    ua,
-  }: {
-    appEnvId: string
-    commitment: Commitment
-    ip: string
-    referenceId?: string
-    referenceType?: string
-    tx?: string
-    ua: string
-  }): Promise<TransactionWithErrors> {
-    return this.data.transaction.create({
-      data: {
-        appEnvId,
-        commitment,
-        ip,
-        referenceId,
-        referenceType,
-        tx,
-        ua,
-      },
-      include: { errors: true },
-    })
   }
 
   async getLatestBlockhash(appKey: string): Promise<LatestBlockhashResponse> {
@@ -289,37 +264,49 @@ export class ApiKineticService implements OnModuleInit {
     amount,
     appEnv,
     appKey,
-    transaction,
     blockhash,
     commitment,
     decimals,
     destination,
     feePayer,
     headers,
+    ip,
     lastValidBlockHeight,
     mintPublicKey,
+    referenceId,
+    referenceType,
+    processingStartedAt,
     solanaTransaction,
     source,
+    tx,
+    ua,
   }: ProcessTransactionOptions): Promise<TransactionWithErrors> {
     const solana = await this.solana.getConnection(appKey)
 
-    // Update Transaction
-    const updatedTransaction = await this.updateTransaction(transaction.id, {
+    // Create the transaction and link it to the app environment
+    const transaction: TransactionWithErrors = await this.createAppEnvTransaction(appEnv.id, {
       amount: amount ? removeDecimals(amount.toString(), decimals)?.toString() : undefined,
+      commitment,
       decimals,
       destination,
       feePayer,
+      ip,
       mint: mintPublicKey,
-      processingDuration: new Date().getTime() - transaction.createdAt.getTime(),
+      referenceId,
+      referenceType,
       source,
+      tx,
+      ua,
+      processingDuration: new Date().getTime() - processingStartedAt,
     })
 
-    // Send Verify Webhook
+    // Send Verify Webhook and wait for the response before continuing. If the webhook fails, we don't continue
     if (appEnv.webhookVerifyEnabled && appEnv.webhookVerifyUrl) {
-      const verifiedTransaction = await this.sendVerifyWebhook(appKey, appEnv, updatedTransaction, headers)
+      const verifiedTransaction = await this.sendVerifyWebhook(appKey, appEnv, transaction, headers)
+
       if (verifiedTransaction.status === TransactionStatus.Failed) {
         this.logger.error(
-          `Transaction ${updatedTransaction.id} sendVerifyWebhook failed:${verifiedTransaction.errors
+          `Transaction ${transaction.id} sendVerifyWebhook failed:${verifiedTransaction.errors
             .map((e) => e.message)
             .join(', ')}`,
           verifiedTransaction.errors,
@@ -333,48 +320,46 @@ export class ApiKineticService implements OnModuleInit {
       maxRetries: appEnv.solanaTransactionMaxRetries ?? 0,
       skipPreflight: appEnv.solanaTransactionSkipPreflight ?? false,
     })
-    if (sent.status === TransactionStatus.Failed) {
+
+    if (sent.status === TransactionStatus.Failed || !sent.signature) {
       this.logger.error(
-        `Transaction ${updatedTransaction.id} sendSolanaTransaction failed:${sent.errors
-          .map((e) => e.message)
-          .join(', ')}`,
+        `Transaction ${transaction.id} sendSolanaTransaction failed:${sent.errors.map((e) => e.message).join(', ')}`,
         sent.errors,
       )
       return sent
     }
 
     // Confirm transaction
-    if (solanaTransaction.signature) {
-      const confirmedTransaction = await this.confirmTransaction(
-        appKey,
-        blockhash,
-        commitment,
-        lastValidBlockHeight,
-        sent,
-        solana,
+
+    const confirmedTransaction = await this.confirmTransaction(
+      appKey,
+      blockhash,
+      commitment,
+      lastValidBlockHeight,
+      sent,
+      solana,
+    )
+
+    this.confirmSignature({
+      appEnv,
+      appKey,
+      transactionId: transaction.id,
+      blockhash,
+      headers,
+      lastValidBlockHeight: lastValidBlockHeight,
+      signature: sent.signature as string,
+      solanaStart: confirmedTransaction.solanaStart,
+      transactionStart: confirmedTransaction.createdAt,
+    })
+
+    if (confirmedTransaction.status === TransactionStatus.Failed) {
+      this.logger.error(
+        `Transaction ${transaction.id} confirmTransaction failed:${confirmedTransaction.errors
+          .map((e) => e.message)
+          .join(', ')}`,
+        confirmedTransaction.errors,
       )
-
-      this.confirmSignature({
-        appEnv,
-        appKey,
-        transactionId: transaction.id,
-        blockhash,
-        headers,
-        lastValidBlockHeight: lastValidBlockHeight,
-        signature: sent.signature as string,
-        solanaStart: confirmedTransaction.solanaStart,
-        transactionStart: confirmedTransaction.createdAt,
-      })
-
-      if (confirmedTransaction.status === TransactionStatus.Failed) {
-        this.logger.error(
-          `Transaction ${updatedTransaction.id} confirmTransaction failed:${confirmedTransaction.errors
-            .map((e) => e.message)
-            .join(', ')}`,
-          confirmedTransaction.errors,
-        )
-        return confirmedTransaction
-      }
+      return confirmedTransaction
     }
 
     return sent
@@ -389,6 +374,7 @@ export class ApiKineticService implements OnModuleInit {
     return found
   }
 
+  // FIXME: Validating the request should be done in a NestJS guard or interceptor
   validateRequest(appEnv: AppEnv, req: Request): { ip: string; ua: string } {
     const ip = requestIp.getClientIp(req)
     const ua = `${req.headers['kinetic-user-agent'] || req.headers['user-agent']}`

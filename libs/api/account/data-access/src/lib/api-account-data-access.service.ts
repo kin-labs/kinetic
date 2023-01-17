@@ -1,7 +1,7 @@
 import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
-import { ApiKineticService, CloseAccountRequest, TransactionWithErrors } from '@kin-kinetic/api/kinetic/data-access'
+import { ApiKineticService, CloseAccountRequest } from '@kin-kinetic/api/kinetic/data-access'
 import { Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BalanceMint, BalanceSummary, Commitment, parseAndSignTransaction, PublicKeyString } from '@kin-kinetic/solana'
@@ -50,6 +50,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   async closeAccount(req: Request, input: CloseAccountRequest): Promise<Transaction> {
     const appKey = getAppKey(input.environment, input.index)
     const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    // FIXME: Validating the request should be done in a NestJS guard or interceptor, not here
     const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
     return this.kinetic.handleCloseAccount(input, { appEnv, appKey, ip, ua })
@@ -87,24 +88,15 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   }
 
   async createAccount(req: Request, input: CreateAccountRequest): Promise<Transaction> {
+    const processingStartedAt = Date.now()
     const appKey = getAppKey(input.environment, input.index)
     const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
     this.createAccountRequestCounter.add(1, { appKey })
 
+    // FIXME: Validating the request should be done in a NestJS guard or interceptor, not here
     const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
     const mint = this.kinetic.validateMint(appEnv, appKey, input.mint)
-
-    // Create the Transaction
-    const transaction: TransactionWithErrors = await this.kinetic.createTransaction({
-      appEnvId: appEnv.id,
-      commitment: input.commitment,
-      ip,
-      referenceId: input.referenceId,
-      referenceType: input.referenceType,
-      tx: input.tx,
-      ua,
-    })
 
     // Process the Solana transaction
     const signer = Keypair.fromSecret(mint.wallet?.secretKey)
@@ -122,16 +114,21 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     return this.kinetic.processTransaction({
       appEnv,
       appKey,
-      transaction,
       blockhash,
       commitment: input.commitment,
       decimals: mint?.mint?.decimals,
       feePayer,
       headers: req.headers as Record<string, string>,
+      ip,
       lastValidBlockHeight: input.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
+      processingStartedAt,
+      referenceId: input.referenceId,
+      referenceType: input.referenceType,
       solanaTransaction,
       source,
+      tx: input.tx,
+      ua,
     })
   }
 }
