@@ -1,5 +1,5 @@
 import { Commitment } from '@kin-kinetic/solana'
-import { App, AppEnv, Transaction } from '@prisma/client'
+import { App, AppEnv } from '@prisma/client'
 import { Transaction as SolanaTransaction } from '@solana/web3.js'
 
 export interface ProcessTransactionOptions {
@@ -15,11 +15,11 @@ export interface ProcessTransactionOptions {
   ip: string
   lastValidBlockHeight: number
   mintPublicKey: string
-  referenceId?: string
-  referenceType?: string
+  processingStartedAt: number
+  referenceId: string
+  referenceType: string
   solanaTransaction: SolanaTransaction
   source: string
-  transaction: Transaction
   tx: string
   ua: string
 }

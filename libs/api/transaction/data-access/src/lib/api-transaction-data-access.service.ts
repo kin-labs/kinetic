@@ -68,6 +68,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   async makeTransfer(req: Request, input: MakeTransferRequest): Promise<TransactionWithErrors> {
+    const processingStartedAt = Date.now()
     const appKey = getAppKey(input.environment, input.index)
     const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
     this.makeTransferRequestCounter.add(1, { appKey })
@@ -75,17 +76,6 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
     const mint = this.kinetic.validateMint(appEnv, appKey, input.mint)
-
-    // Create the Transaction
-    const transaction: TransactionWithErrors = await this.kinetic.createKineticTransaction({
-      appEnvId: appEnv.id,
-      commitment: input.commitment,
-      ip,
-      referenceId: input.referenceId,
-      referenceType: input.referenceType,
-      tx: input.tx,
-      ua,
-    })
 
     // Process the Solana transaction
     const signer = Keypair.fromSecret(mint.wallet?.secretKey)
@@ -106,7 +96,6 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       amount,
       appEnv,
       appKey,
-      transaction,
       blockhash,
       commitment: input?.commitment,
       decimals: mint?.mint?.decimals,
@@ -116,6 +105,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       ip,
       lastValidBlockHeight: input?.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
+      processingStartedAt,
       referenceId: input?.referenceId,
       referenceType: input?.referenceType,
       solanaTransaction,
