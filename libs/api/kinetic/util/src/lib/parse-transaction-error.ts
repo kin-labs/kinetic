@@ -1,6 +1,6 @@
 import { Prisma, TransactionErrorType } from '@prisma/client'
 
-export function parseError(
+export function parseTransactionError(
   error,
   errorType?: string,
   instruction?: number,

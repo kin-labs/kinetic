@@ -1,5 +1,5 @@
-import { ApiAccountDataAccessModule } from '@kin-kinetic/api/account/data-access'
 import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
+import { ApiKineticDataAccessModule } from '@kin-kinetic/api/kinetic/data-access'
 import { BullModule } from '@nestjs/bull'
 import { Module } from '@nestjs/common'
 import { QueueType } from '../../entity/queue-type.enum'
@@ -8,8 +8,8 @@ import { ApiQueueCloseAccountService } from './api-queue-close-account.service'
 
 @Module({
   imports: [
-    ApiAccountDataAccessModule,
     ApiCoreDataAccessModule,
+    ApiKineticDataAccessModule,
     BullModule.registerQueue({
       name: QueueType.CloseAccount,
     }),

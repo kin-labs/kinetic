@@ -1,4 +1,3 @@
-import { ApiAccountDataAccessService } from '@kin-kinetic/api/account/data-access'
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
@@ -9,11 +8,7 @@ import { QueueOptions, QueueType } from '../../entity/queue-type.enum'
 @Injectable()
 export class ApiQueueCloseAccountService implements OnModuleInit {
   private readonly logger = new Logger(ApiQueueCloseAccountService.name)
-  constructor(
-    @InjectQueue(QueueType.CloseAccount) readonly queue: Queue,
-    readonly account: ApiAccountDataAccessService,
-    readonly data: ApiCoreDataAccessService,
-  ) {}
+  constructor(@InjectQueue(QueueType.CloseAccount) readonly queue: Queue, readonly data: ApiCoreDataAccessService) {}
 
   async onModuleInit(): Promise<void> {
     if (this.data.config.queueCloseAccountStart) {

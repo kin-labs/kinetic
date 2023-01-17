@@ -1,20 +1,19 @@
 import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
-import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
+import { ApiKineticService } from '@kin-kinetic/api/kinetic/data-access'
 import { ApiWebhookDataAccessService } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
-import { ClusterStatus, WebhookType } from '@prisma/client'
+import { ClusterStatus, WalletType, WebhookType } from '@prisma/client'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
-import { WalletType } from './entity/wallet-type.enum'
 
 @Injectable()
 export class ApiWalletUserDataAccessService implements OnModuleInit {
   private readonly logger = new Logger(ApiWalletUserDataAccessService.name)
   constructor(
     private readonly data: ApiCoreDataAccessService,
-    private readonly solana: ApiSolanaDataAccessService,
+    private readonly kinetic: ApiKineticService,
     private readonly webhook: ApiWebhookDataAccessService,
   ) {}
 
@@ -49,7 +48,7 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
 
     for (const appEnv of appEnvs) {
       const appKey = getAppKey(appEnv.name, appEnv.app.index)
-      const solana = await this.solana.getConnection(appKey)
+      const solana = await this.kinetic.getSolanaConnection(appKey)
 
       for (const { publicKey } of appEnv.wallets.filter((w) => w.appMints?.length)) {
         const lamports = await solana.getBalanceSol(publicKey)
@@ -139,7 +138,7 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
     const wallet = await this.userWallet(userId, appEnvId, walletId)
     const appEnv = await this.data.getAppEnvById(appEnvId)
     const appKey = getAppKey(appEnv.name, appEnv.app.index)
-    const solana = await this.solana.getConnection(appKey)
+    const solana = await this.kinetic.getSolanaConnection(appKey)
     const floatAmount = parseFloat(amount?.toString())
     const signature = await solana.requestAirdrop(wallet.publicKey, floatAmount * LAMPORTS_PER_SOL)
 
@@ -153,7 +152,7 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
     const appEnv = await this.data.getAppEnvById(appEnvId)
     await this.data.ensureAppUser(userId, appEnv.app.id)
     const appKey = getAppKey(appEnv.name, appEnv.app.index)
-    const solana = await this.solana.getConnection(appKey)
+    const solana = await this.kinetic.getSolanaConnection(appKey)
 
     const balance = await solana.getBalanceSol(wallet.publicKey)
 
