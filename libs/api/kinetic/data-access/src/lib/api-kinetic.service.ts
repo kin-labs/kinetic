@@ -27,6 +27,16 @@ import { validateCloseAccount } from './helpers/validate-close.account'
 import { ProcessTransactionOptions } from './interfaces/process-transaction-options'
 import { TransactionWithErrors } from './interfaces/transaction-with-errors'
 
+interface CreateKineticTransactionOptions {
+  appEnvId: string
+  commitment: Commitment
+  ip: string
+  referenceId?: string
+  referenceType?: string
+  tx?: string
+  ua: string
+}
+
 @Injectable()
 export class ApiKineticService implements OnModuleInit {
   private logger = new Logger(ApiKineticService.name)
@@ -187,7 +197,7 @@ export class ApiKineticService implements OnModuleInit {
       const mint = this.validateMint(appEnv, appKey, input.mint)
 
       // Create the Transaction
-      const transaction: TransactionWithErrors = await this.createTransaction({
+      const transaction: TransactionWithErrors = await this.createKineticTransaction({
         appEnvId: appEnv.id,
         commitment: input.commitment,
         ip,
@@ -218,10 +228,15 @@ export class ApiKineticService implements OnModuleInit {
         decimals: mint?.mint?.decimals,
         feePayer: tokenAccount.closeAuthority,
         headers,
+        ip,
         lastValidBlockHeight,
         mintPublicKey: mint?.mint?.address,
+        referenceId: input.referenceId,
+        referenceType: input.referenceType,
         solanaTransaction,
         source: input.account,
+        tx: solanaTransaction.serialize().toString('base64'),
+        ua,
       })
     } catch (error) {
       this.closeAccountRequestInvalidCounter.add(1, { appKey })
@@ -229,33 +244,9 @@ export class ApiKineticService implements OnModuleInit {
     }
   }
 
-  createTransaction({
-    appEnvId,
-    commitment,
-    ip,
-    referenceId,
-    referenceType,
-    tx,
-    ua,
-  }: {
-    appEnvId: string
-    commitment: Commitment
-    ip: string
-    referenceId?: string
-    referenceType?: string
-    tx?: string
-    ua: string
-  }): Promise<TransactionWithErrors> {
+  createKineticTransaction(options: CreateKineticTransactionOptions): Promise<TransactionWithErrors> {
     return this.data.transaction.create({
-      data: {
-        appEnvId,
-        commitment,
-        ip,
-        referenceId,
-        referenceType,
-        tx,
-        ua,
-      },
+      data: options,
       include: { errors: true },
     })
   }

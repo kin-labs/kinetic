@@ -77,7 +77,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     const mint = this.kinetic.validateMint(appEnv, appKey, input.mint)
 
     // Create the Transaction
-    const transaction: TransactionWithErrors = await this.kinetic.createTransaction({
+    const transaction: TransactionWithErrors = await this.kinetic.createKineticTransaction({
       appEnvId: appEnv.id,
       commitment: input.commitment,
       ip,
@@ -113,10 +113,15 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       destination: destination?.pubkey.toBase58(),
       feePayer,
       headers: req.headers as Record<string, string>,
+      ip,
       lastValidBlockHeight: input?.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
+      referenceId: input?.referenceId,
+      referenceType: input?.referenceType,
       solanaTransaction,
       source,
+      tx: input.tx,
+      ua,
     })
   }
 }
