@@ -2,6 +2,7 @@ import { Keypair } from '@kin-kinetic/keypair'
 import { KineticSdk } from '@kin-kinetic/sdk'
 import { Commitment, Destination } from '@kin-kinetic/solana'
 import { TransactionStatus } from '@prisma/client'
+import { uniqueId } from 'lodash'
 import { aliceKeypair, bobKeypair, charlieKeypair, daveKeypair, usdcMint } from './fixtures'
 import { DEFAULT_MINT } from './helpers'
 
@@ -34,6 +35,28 @@ describe('KineticSdk (e2e)', () => {
     expect(amount).toBe('43.12345')
     expect(decimals).toBe(5)
     expect(source).toBe(aliceKeypair.publicKey)
+  })
+
+  it('should make a transfer with references', async () => {
+    const myReferenceId = uniqueId()
+    const tx = await sdk.makeTransfer({
+      amount: '1',
+      destination: bobKeypair.publicKey,
+      owner: aliceKeypair,
+      referenceId: myReferenceId,
+    })
+    expect(tx).not.toBeNull()
+    expect(tx.mint).toEqual(DEFAULT_MINT)
+    const { id, signature, errors, referenceId } = tx
+    expect(errors).toEqual([])
+    expect(typeof signature).toBe('string')
+    expect(referenceId).toBe(myReferenceId)
+    const found = await sdk.getKineticTransaction({
+      referenceId,
+    })
+
+    expect(found.length).toBe(1)
+    expect(found[0].id).toBe(id)
   })
 
   it('should fail to make a transfer with a new account', async () => {

@@ -31,6 +31,7 @@ import {
   GetAccountInfoOptions,
   GetBalanceOptions,
   GetHistoryOptions,
+  GetKineticTransactionOptions,
   GetTokenAccountsOptions,
   GetTransactionOptions,
   KineticSdkConfig,
@@ -190,6 +191,21 @@ export class KineticSdkInternal {
         options.account.toString(),
         appMint.publicKey,
         commitment,
+      )
+      .then((res) => res.data)
+      .catch((err) => {
+        throw new Error(err?.response?.data?.message ?? 'Unknown error')
+      })
+  }
+
+  getKineticTransaction(options: GetKineticTransactionOptions) {
+    return this.transactionApi
+      .getKineticTransaction(
+        this.sdkConfig.environment,
+        this.sdkConfig.index,
+        options.referenceId ?? '',
+        options.referenceType ?? '',
+        options.signature ?? '',
       )
       .then((res) => res.data)
       .catch((err) => {
