@@ -5,9 +5,13 @@ import { NestFactory } from '@nestjs/core'
 import { OgmaService } from '@ogma/nestjs-module'
 import { exec } from 'child_process'
 import cookieParser from 'cookie-parser'
-import redirectSSL from 'redirect-ssl'
 import { json } from 'express'
+import redirectSSL from 'redirect-ssl'
 import { AppModule } from './app/app.module'
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('UNHANDLED REJECTION at:', promise, 'reason:', reason)
+})
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true })
