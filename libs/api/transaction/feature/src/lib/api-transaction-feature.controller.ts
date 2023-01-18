@@ -20,6 +20,26 @@ import { Request } from 'express'
 export class ApiTransactionFeatureController {
   constructor(private readonly service: ApiTransactionDataAccessService) {}
 
+  @Get('kinetic-transaction/:environment/:index')
+  @ApiOperation({ operationId: 'getKineticTransaction' })
+  @ApiParam({ name: 'index', type: 'integer' })
+  @ApiQuery({ name: 'referenceId', type: 'string' })
+  @ApiQuery({ name: 'referenceType', type: 'string' })
+  @ApiQuery({ name: 'signature', type: 'string' })
+  @ApiResponse({ type: Transaction, isArray: true })
+  getKineticTransaction(
+    @Param('environment') environment: string,
+    @Param('index', ParseIntPipe) index: number,
+    @Query('referenceId') referenceId: string,
+    @Query('referenceType') referenceType: string,
+    @Query('signature') signature: string,
+  ) {
+    return this.service.kinetic.getKineticTransaction(getAppKey(environment, index), {
+      referenceId,
+      referenceType,
+      signature,
+    })
+  }
   @Get('latest-blockhash/:environment/:index')
   @ApiOperation({ operationId: 'getLatestBlockhash' })
   @ApiParam({ name: 'index', type: 'integer' })

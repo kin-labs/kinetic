@@ -1,4 +1,5 @@
 import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
+import { parseAppKey } from '@kin-kinetic/api/core/util'
 import { parseTransactionError } from '@kin-kinetic/api/kinetic/util'
 import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
@@ -11,7 +12,14 @@ import {
   removeDecimals,
   Solana,
 } from '@kin-kinetic/solana'
-import { BadRequestException, Injectable, Logger, OnModuleInit, UnauthorizedException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  OnModuleInit,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
 import { App, AppEnv, Prisma, Transaction, TransactionErrorType, TransactionStatus } from '@prisma/client'
 import { Transaction as SolanaTransaction } from '@solana/web3.js'
@@ -233,6 +241,35 @@ export class ApiKineticService implements OnModuleInit {
       this.closeAccountRequestInvalidCounter.add(1, { appKey })
       throw error
     }
+  }
+
+  async getKineticTransaction(
+    appKey: string,
+    { referenceId, referenceType, signature }: { signature: string; referenceType: string; referenceId: string },
+  ): Promise<TransactionWithErrors[]> {
+    if (!referenceId?.length && !referenceType?.length && !signature?.length) {
+      throw new BadRequestException(`${appKey}: Please provide either referenceId, referenceType or signature`)
+    }
+    const { environment, index } = parseAppKey(appKey)
+
+    const found = await this.data.transaction.findMany({
+      where: {
+        appEnv: {
+          app: {
+            index,
+          },
+          name: environment,
+        },
+        ...(referenceId && { referenceId }),
+        ...(referenceType && { referenceType }),
+        ...(signature && { signature }),
+      },
+      include: { errors: true },
+    })
+    if (!found.length) {
+      throw new NotFoundException(`${appKey}: Transaction not found`)
+    }
+    return found
   }
 
   async getLatestBlockhash(appKey: string): Promise<LatestBlockhashResponse> {

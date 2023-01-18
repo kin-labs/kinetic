@@ -407,6 +407,70 @@
         "tags": ["app"]
       }
     },
+    "/api/transaction/kinetic-transaction/{environment}/{index}": {
+      "get": {
+        "operationId": "getKineticTransaction",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "environment",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "referenceId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referenceType",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "signature",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Transaction"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["transaction"]
+      }
+    },
     "/api/transaction/latest-blockhash/{environment}/{index}": {
       "get": {
         "operationId": "getLatestBlockhash",
