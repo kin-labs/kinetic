@@ -1,7 +1,7 @@
 import { createTransferCheckedInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateMakeTransferBatchTransactionsOptions } from '../interfaces'
-import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
+import { generateKinMemoInstruction } from '../kin'
 import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
@@ -22,6 +22,7 @@ export async function generateMakeTransferBatchTransaction(
     instructions.push(
       generateKinMemoInstruction({
         index: options.index,
+        reference: options.reference,
         type: options.type,
       }),
     )

@@ -279,6 +279,7 @@ export class ApiKineticService implements OnModuleInit {
         blockhash,
         index: input.index,
         lastValidBlockHeight,
+        reference: input.reference,
         signer: signer.solana,
         tokenAccount: tokenAccount.account,
       })

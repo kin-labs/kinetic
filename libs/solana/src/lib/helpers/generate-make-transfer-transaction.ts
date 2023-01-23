@@ -5,7 +5,7 @@ import {
 } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateMakeTransferOptions } from '../interfaces'
-import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
+import { generateKinMemoInstruction } from '../kin'
 import { addDecimals } from './add-remove-decimals'
 import { getPublicKey } from './get-public-key'
 
@@ -26,6 +26,7 @@ export function generateMakeTransferTransaction(options: GenerateMakeTransferOpt
     instructions.push(
       generateKinMemoInstruction({
         index: options.index,
+        reference: options.reference,
         type: options.type,
       }),
     )

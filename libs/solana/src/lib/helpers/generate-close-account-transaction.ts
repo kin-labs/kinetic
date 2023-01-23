@@ -9,6 +9,7 @@ export function generateCloseAccountTransaction({
   blockhash,
   index,
   lastValidBlockHeight,
+  reference,
   signer,
   tokenAccount,
 }: GenerateCloseAccountTransactionOptions): {
@@ -22,6 +23,7 @@ export function generateCloseAccountTransaction({
     instructions.push(
       generateKinMemoInstruction({
         index,
+        reference,
         type: TransactionType.None,
       }),
     )

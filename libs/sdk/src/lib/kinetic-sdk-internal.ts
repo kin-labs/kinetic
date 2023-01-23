@@ -67,6 +67,7 @@ export class KineticSdkInternal {
     const appConfig = this.ensureAppConfig()
     const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
+    const reference = options.reference || null
 
     const request: CloseAccountRequest = {
       account: options.account.toString(),
@@ -74,7 +75,7 @@ export class KineticSdkInternal {
       environment: this.sdkConfig.environment,
       index: this.sdkConfig.index,
       mint: appMint.publicKey,
-      reference: options.reference,
+      reference,
     }
 
     return this.accountApi
@@ -89,6 +90,7 @@ export class KineticSdkInternal {
     const appConfig = this.ensureAppConfig()
     const appMint = getAppMint(appConfig, options.mint?.toString())
     const commitment = this.getCommitment(options.commitment)
+    const reference = options.reference || null
 
     const existing = await this.findTokenAccount({
       account: options.owner.publicKey,
@@ -114,6 +116,7 @@ export class KineticSdkInternal {
       mintPublicKey: appMint.publicKey,
       owner: options.owner.solana,
       ownerTokenAccount,
+      reference,
     })
 
     const request: CreateAccountRequest = {
@@ -122,7 +125,7 @@ export class KineticSdkInternal {
       index: this.sdkConfig.index,
       lastValidBlockHeight,
       mint: appMint.publicKey,
-      reference: options.reference,
+      reference,
       tx: serializeTransaction(tx),
     }
 
@@ -247,6 +250,7 @@ export class KineticSdkInternal {
 
     const destination = options.destination.toString()
     const senderCreate = options.senderCreate || false
+    const reference = options.reference || null
 
     // We get the token account for the owner
     const ownerTokenAccount = await this.findTokenAccount({
@@ -298,6 +302,7 @@ export class KineticSdkInternal {
       mintPublicKey: appMint.publicKey,
       owner: options.owner.solana,
       ownerTokenAccount,
+      reference,
       senderCreate: senderCreate && !!senderCreateTokenAccount,
       type: options.type || TransactionType.None,
     })
@@ -308,7 +313,7 @@ export class KineticSdkInternal {
       index: this.sdkConfig.index,
       lastValidBlockHeight,
       mint: appMint.publicKey,
-      reference: options.reference,
+      reference,
       tx: serializeTransaction(tx),
     }).catch((err) => {
       throw new Error(err?.response?.data?.message ?? 'Unknown error')

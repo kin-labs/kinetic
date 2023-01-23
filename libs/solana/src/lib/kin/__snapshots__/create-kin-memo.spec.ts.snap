@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createKinMemo create memo with reference data 1`] = `"BQQAXLfhn7vy3xttxl1/CmKMSmadimquym6/DnPMAgA="`;

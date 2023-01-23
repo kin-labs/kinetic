@@ -40,4 +40,25 @@ describe('createKinMemo', () => {
     expect(parsed.transactionType()).toEqual(TransactionType.P2P)
     expect(parsed.index()).toEqual(1)
   })
+
+  it('create memo with reference data', () => {
+    const reference = '1234567890abcdefghijklmnopqrstuvwxyz'
+    const memo = createKinMemo({ index, reference })
+    const parsed = KinMemo.fromB64String(memo)
+
+    expect(memo).toMatchSnapshot()
+    expect(parsed.transactionType()).toEqual(TransactionType.None)
+    expect(parsed.foreignKey().toString('base64')).toEqual(`${reference}AAA=`)
+    expect(parsed.index()).toEqual(1)
+  })
+
+  it('fail creating a memo with reference data that is too long', () => {
+    const reference = `1234567890abcdefghijklmnopqrstuvwxyz1234`
+
+    try {
+      createKinMemo({ index, reference })
+    } catch (e) {
+      expect(e.message).toEqual('invalid foreign key length')
+    }
+  })
 })

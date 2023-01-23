@@ -15,6 +15,7 @@ export interface GenerateMakeTransferOptions {
   mintPublicKey: PublicKeyString
   owner: Keypair
   ownerTokenAccount: PublicKeyString
+  reference?: string | null
   senderCreate?: boolean
   type: TransactionType
 }
