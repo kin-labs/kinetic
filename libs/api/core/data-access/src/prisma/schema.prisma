@@ -148,12 +148,16 @@ model Transaction {
   createdAt               DateTime               @default(now())
   updatedAt               DateTime               @updatedAt
   amount                  String?
+  appKey                  String?
+  blockhash               String?
   commitment              TransactionCommitment?
   decimals                Int?
   destination             String?
   errors                  TransactionError[]
   feePayer                String?
+  headers                 Json?
   ip                      String?
+  lastValidBlockHeight    Int?
   mint                    String?
   processingDuration      Int?
   referenceId             String?

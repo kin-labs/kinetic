@@ -114,6 +114,71 @@ export class ApiKineticService implements OnModuleInit {
     })
   }
 
+  async confirmSignature({
+    appEnv,
+    appKey,
+    transactionId,
+    blockhash,
+    headers,
+    lastValidBlockHeight,
+    signature,
+    solanaStart,
+    transactionStart,
+  }: {
+    appEnv: AppEnv & { app: App }
+    appKey: string
+    transactionId: string
+    blockhash: string
+    headers?: Record<string, string>
+    lastValidBlockHeight: number
+    signature: string
+    solanaStart: Date
+    transactionStart: Date
+  }): Promise<Transaction | undefined> {
+    const solana = await this.solana.getConnection(appKey)
+    this.logger.verbose(`${appKey}: confirmSignature: confirming ${signature}`)
+
+    const finalized = await solana.confirmTransaction(
+      {
+        blockhash,
+        lastValidBlockHeight,
+        signature: signature as string,
+      },
+      Commitment.Finalized,
+    )
+    if (finalized) {
+      const solanaFinalized = new Date()
+      const solanaFinalizedDuration = solanaFinalized.getTime() - solanaStart.getTime()
+      const totalDuration = solanaFinalized.getTime() - transactionStart.getTime()
+      this.logger.verbose(`${appKey}: confirmSignature: ${Commitment.Finalized} ${signature}`)
+      const solanaTransaction = await solana.connection.getParsedTransaction(signature, 'finalized')
+      const transaction = await this.updateTransaction(transactionId, {
+        solanaFinalized,
+        solanaFinalizedDuration,
+        solanaTransaction: solanaTransaction ? JSON.parse(JSON.stringify(solanaTransaction)) : undefined,
+        status: TransactionStatus.Finalized,
+        totalDuration,
+      })
+      this.confirmSignatureFinalizedCounter.add(1, { appKey })
+      // Send Event Webhook
+      if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl && transaction) {
+        const eventWebhookTransaction = await this.sendEventWebhook(appKey, appEnv, transaction, headers)
+        if (eventWebhookTransaction.status === TransactionStatus.Failed) {
+          this.logger.error(
+            `Transaction ${transaction.id} sendEventWebhook failed:${eventWebhookTransaction.errors
+              .map((e) => e.message)
+              .join(', ')}`,
+            eventWebhookTransaction.errors,
+          )
+          return eventWebhookTransaction
+        }
+      }
+
+      this.logger.verbose(`${appKey}: confirmSignature: finished ${signature}`)
+      return transaction
+    }
+  }
+
   deleteSolanaConnection(appKey: string): void {
     return this.solana.deleteConnection(appKey)
   }
@@ -323,10 +388,14 @@ export class ApiKineticService implements OnModuleInit {
     // Create the transaction and link it to the app environment
     const transaction: TransactionWithErrors = await this.createAppEnvTransaction(appEnv.id, {
       amount: amount ? removeDecimals(amount.toString(), decimals)?.toString() : undefined,
+      appKey,
+      blockhash,
       commitment,
       decimals,
       destination,
       feePayer,
+      headers,
+      lastValidBlockHeight,
       ip,
       mint: mintPublicKey,
       referenceId,
@@ -432,70 +501,6 @@ export class ApiKineticService implements OnModuleInit {
       throw new UnauthorizedException('Request not allowed')
     }
     return { ip, ua }
-  }
-
-  private async confirmSignature({
-    appEnv,
-    appKey,
-    transactionId,
-    blockhash,
-    headers,
-    lastValidBlockHeight,
-    signature,
-    solanaStart,
-    transactionStart,
-  }: {
-    appEnv: AppEnv & { app: App }
-    appKey: string
-    transactionId: string
-    blockhash: string
-    headers?: Record<string, string>
-    lastValidBlockHeight: number
-    signature: string
-    solanaStart: Date
-    transactionStart: Date
-  }) {
-    const solana = await this.solana.getConnection(appKey)
-    this.logger.verbose(`${appKey}: confirmSignature: confirming ${signature}`)
-
-    const finalized = await solana.confirmTransaction(
-      {
-        blockhash,
-        lastValidBlockHeight,
-        signature: signature as string,
-      },
-      Commitment.Finalized,
-    )
-    if (finalized) {
-      const solanaFinalized = new Date()
-      const solanaFinalizedDuration = solanaFinalized.getTime() - solanaStart.getTime()
-      const totalDuration = solanaFinalized.getTime() - transactionStart.getTime()
-      this.logger.verbose(`${appKey}: confirmSignature: ${Commitment.Finalized} ${signature}`)
-      const solanaTransaction = await solana.connection.getParsedTransaction(signature, 'finalized')
-      const transaction = await this.updateTransaction(transactionId, {
-        solanaFinalized,
-        solanaFinalizedDuration,
-        solanaTransaction: solanaTransaction ? JSON.parse(JSON.stringify(solanaTransaction)) : undefined,
-        status: TransactionStatus.Finalized,
-        totalDuration,
-      })
-      this.confirmSignatureFinalizedCounter.add(1, { appKey })
-      // Send Event Webhook
-      if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl && transaction) {
-        const eventWebhookTransaction = await this.sendEventWebhook(appKey, appEnv, transaction, headers)
-        if (eventWebhookTransaction.status === TransactionStatus.Failed) {
-          this.logger.error(
-            `Transaction ${transaction.id} sendEventWebhook failed:${eventWebhookTransaction.errors
-              .map((e) => e.message)
-              .join(', ')}`,
-            eventWebhookTransaction.errors,
-          )
-          return eventWebhookTransaction
-        }
-      }
-
-      this.logger.verbose(`${appKey}: confirmSignature: finished ${signature}`)
-    }
   }
 
   private async sendEventWebhook(
