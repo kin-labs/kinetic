@@ -74,8 +74,7 @@ export class KineticSdkInternal {
       environment: this.sdkConfig.environment,
       index: this.sdkConfig.index,
       mint: appMint.publicKey,
-      referenceId: options.referenceId,
-      referenceType: options.referenceType,
+      reference: options.reference,
     }
 
     return this.accountApi
@@ -123,8 +122,7 @@ export class KineticSdkInternal {
       index: this.sdkConfig.index,
       lastValidBlockHeight,
       mint: appMint.publicKey,
-      referenceId: options.referenceId,
-      referenceType: options.referenceType,
+      reference: options.reference,
       tx: serializeTransaction(tx),
     }
 
@@ -203,8 +201,7 @@ export class KineticSdkInternal {
       .getKineticTransaction(
         this.sdkConfig.environment,
         this.sdkConfig.index,
-        options.referenceId ?? '',
-        options.referenceType ?? '',
+        options.reference ?? '',
         options.signature ?? '',
       )
       .then((res) => res.data)
@@ -311,8 +308,7 @@ export class KineticSdkInternal {
       index: this.sdkConfig.index,
       lastValidBlockHeight,
       mint: appMint.publicKey,
-      referenceId: options.referenceId,
-      referenceType: options.referenceType,
+      reference: options.reference,
       tx: serializeTransaction(tx),
     }).catch((err) => {
       throw new Error(err?.response?.data?.message ?? 'Unknown error')
@@ -325,8 +321,7 @@ export class KineticSdkInternal {
     const commitment = this.getCommitment(options.commitment)
 
     const destinations = options.destinations
-    const referenceId = options.referenceId || null
-    const referenceType = options.referenceType || null
+    const reference = options.reference || null
 
     if (destinations?.length < 1) {
       throw new Error('At least 1 destination required')
@@ -398,8 +393,7 @@ export class KineticSdkInternal {
       index: this.sdkConfig.index,
       lastValidBlockHeight,
       mint: appMint.publicKey,
-      referenceId,
-      referenceType,
+      reference,
       tx: serializeTransaction(tx),
     }).catch((err) => {
       throw new Error(err?.response?.data?.message ?? 'Unknown error')

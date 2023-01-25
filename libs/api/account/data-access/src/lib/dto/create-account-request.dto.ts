@@ -13,9 +13,7 @@ export class CreateAccountRequest {
   @ApiProperty()
   mint: string
   @ApiProperty({ required: false, nullable: true })
-  referenceId?: string
-  @ApiProperty({ required: false, nullable: true })
-  referenceType?: string
+  reference?: string
   @ApiProperty()
   tx: string
 }

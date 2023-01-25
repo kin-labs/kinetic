@@ -43,8 +43,7 @@ export function WebTransactionDetail({ env, transaction }: { env: AppEnv; transa
             { label: 'Mint', value: `${transaction?.mint}` },
             { label: 'Decimals', value: transaction?.decimals ? `${transaction?.decimals}` : 'N/A' },
             { label: 'Amount', value: transaction.amount ? `${transaction?.amount}` : 'N/A' },
-            { label: 'Reference ID', value: transaction.referenceId ? `${transaction?.referenceId}` : 'N/A' },
-            { label: 'Reference Type', value: transaction.referenceType ? `${transaction?.referenceType}` : 'N/A' },
+            { label: 'Reference', value: transaction.reference ? `${transaction?.reference}` : 'N/A' },
             {
               label: 'Signature',
               value: transaction.signature ? (

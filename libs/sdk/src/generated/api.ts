@@ -406,13 +406,7 @@ export interface CloseAccountRequest {
    * @type {string}
    * @memberof CloseAccountRequest
    */
-  referenceId?: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof CloseAccountRequest
-   */
-  referenceType?: string | null
+  reference?: string | null
 }
 /**
  *
@@ -647,13 +641,7 @@ export interface CreateAccountRequest {
    * @type {string}
    * @memberof CreateAccountRequest
    */
-  referenceId?: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof CreateAccountRequest
-   */
-  referenceType?: string | null
+  reference?: string | null
   /**
    *
    * @type {string}
@@ -765,13 +753,7 @@ export interface MakeTransferRequest {
    * @type {string}
    * @memberof MakeTransferRequest
    */
-  referenceId?: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof MakeTransferRequest
-   */
-  referenceType?: string | null
+  reference?: string | null
   /**
    *
    * @type {string}
@@ -1086,13 +1068,7 @@ export interface Transaction {
    * @type {string}
    * @memberof Transaction
    */
-  referenceId?: string | null
-  /**
-   *
-   * @type {string}
-   * @memberof Transaction
-   */
-  referenceType?: string | null
+  reference?: string | null
   /**
    *
    * @type {string}
@@ -2519,8 +2495,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
      * @summary
      * @param {string} environment
      * @param {number} index
-     * @param {string} referenceId
-     * @param {string} referenceType
+     * @param {string} reference
      * @param {string} signature
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2528,8 +2503,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
     getKineticTransaction: async (
       environment: string,
       index: number,
-      referenceId: string,
-      referenceType: string,
+      reference: string,
       signature: string,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
@@ -2537,10 +2511,8 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
       assertParamExists('getKineticTransaction', 'environment', environment)
       // verify required parameter 'index' is not null or undefined
       assertParamExists('getKineticTransaction', 'index', index)
-      // verify required parameter 'referenceId' is not null or undefined
-      assertParamExists('getKineticTransaction', 'referenceId', referenceId)
-      // verify required parameter 'referenceType' is not null or undefined
-      assertParamExists('getKineticTransaction', 'referenceType', referenceType)
+      // verify required parameter 'reference' is not null or undefined
+      assertParamExists('getKineticTransaction', 'reference', reference)
       // verify required parameter 'signature' is not null or undefined
       assertParamExists('getKineticTransaction', 'signature', signature)
       const localVarPath = `/api/transaction/kinetic-transaction/{environment}/{index}`
@@ -2557,12 +2529,8 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
 
-      if (referenceId !== undefined) {
-        localVarQueryParameter['referenceId'] = referenceId
-      }
-
-      if (referenceType !== undefined) {
-        localVarQueryParameter['referenceType'] = referenceType
+      if (reference !== undefined) {
+        localVarQueryParameter['reference'] = reference
       }
 
       if (signature !== undefined) {
@@ -2771,8 +2739,7 @@ export const TransactionApiFp = function (configuration?: Configuration) {
      * @summary
      * @param {string} environment
      * @param {number} index
-     * @param {string} referenceId
-     * @param {string} referenceType
+     * @param {string} reference
      * @param {string} signature
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2780,16 +2747,14 @@ export const TransactionApiFp = function (configuration?: Configuration) {
     async getKineticTransaction(
       environment: string,
       index: number,
-      referenceId: string,
-      referenceType: string,
+      reference: string,
       signature: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Transaction>>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getKineticTransaction(
         environment,
         index,
-        referenceId,
-        referenceType,
+        reference,
         signature,
         options,
       )
@@ -2893,8 +2858,7 @@ export const TransactionApiFactory = function (
      * @summary
      * @param {string} environment
      * @param {number} index
-     * @param {string} referenceId
-     * @param {string} referenceType
+     * @param {string} reference
      * @param {string} signature
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2902,13 +2866,12 @@ export const TransactionApiFactory = function (
     getKineticTransaction(
       environment: string,
       index: number,
-      referenceId: string,
-      referenceType: string,
+      reference: string,
       signature: string,
       options?: any,
     ): AxiosPromise<Array<Transaction>> {
       return localVarFp
-        .getKineticTransaction(environment, index, referenceId, referenceType, signature, options)
+        .getKineticTransaction(environment, index, reference, signature, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -2986,8 +2949,7 @@ export interface TransactionApiInterface {
    * @summary
    * @param {string} environment
    * @param {number} index
-   * @param {string} referenceId
-   * @param {string} referenceType
+   * @param {string} reference
    * @param {string} signature
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -2996,8 +2958,7 @@ export interface TransactionApiInterface {
   getKineticTransaction(
     environment: string,
     index: number,
-    referenceId: string,
-    referenceType: string,
+    reference: string,
     signature: string,
     options?: AxiosRequestConfig,
   ): AxiosPromise<Array<Transaction>>
@@ -3076,8 +3037,7 @@ export class TransactionApi extends BaseAPI implements TransactionApiInterface {
    * @summary
    * @param {string} environment
    * @param {number} index
-   * @param {string} referenceId
-   * @param {string} referenceType
+   * @param {string} reference
    * @param {string} signature
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -3086,13 +3046,12 @@ export class TransactionApi extends BaseAPI implements TransactionApiInterface {
   public getKineticTransaction(
     environment: string,
     index: number,
-    referenceId: string,
-    referenceType: string,
+    reference: string,
     signature: string,
     options?: AxiosRequestConfig,
   ) {
     return TransactionApiFp(this.configuration)
-      .getKineticTransaction(environment, index, referenceId, referenceType, signature, options)
+      .getKineticTransaction(environment, index, reference, signature, options)
       .then((request) => request(this.axios, this.basePath))
   }
 

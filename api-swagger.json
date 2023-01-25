@@ -429,15 +429,7 @@
             }
           },
           {
-            "name": "referenceId",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "referenceType",
+            "name": "reference",
             "required": true,
             "in": "query",
             "schema": {
@@ -681,11 +673,7 @@
           "mint": {
             "type": "string"
           },
-          "referenceId": {
-            "type": "string",
-            "nullable": true
-          },
-          "referenceType": {
+          "reference": {
             "type": "string",
             "nullable": true
           }
@@ -780,11 +768,7 @@
             "type": "integer",
             "nullable": true
           },
-          "referenceId": {
-            "type": "string",
-            "nullable": true
-          },
-          "referenceType": {
+          "reference": {
             "type": "string",
             "nullable": true
           },
@@ -887,11 +871,7 @@
           "mint": {
             "type": "string"
           },
-          "referenceId": {
-            "type": "string",
-            "nullable": true
-          },
-          "referenceType": {
+          "reference": {
             "type": "string",
             "nullable": true
           },
@@ -1264,11 +1244,7 @@
           "lastValidBlockHeight": {
             "type": "integer"
           },
-          "referenceId": {
-            "type": "string",
-            "nullable": true
-          },
-          "referenceType": {
+          "reference": {
             "type": "string",
             "nullable": true
           },

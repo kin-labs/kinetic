@@ -23,20 +23,17 @@ export class ApiTransactionFeatureController {
   @Get('kinetic-transaction/:environment/:index')
   @ApiOperation({ operationId: 'getKineticTransaction' })
   @ApiParam({ name: 'index', type: 'integer' })
-  @ApiQuery({ name: 'referenceId', type: 'string' })
-  @ApiQuery({ name: 'referenceType', type: 'string' })
+  @ApiQuery({ name: 'reference', type: 'string' })
   @ApiQuery({ name: 'signature', type: 'string' })
   @ApiResponse({ type: Transaction, isArray: true })
   getKineticTransaction(
     @Param('environment') environment: string,
     @Param('index', ParseIntPipe) index: number,
-    @Query('referenceId') referenceId: string,
-    @Query('referenceType') referenceType: string,
+    @Query('reference') reference: string,
     @Query('signature') signature: string,
   ) {
     return this.service.kinetic.getKineticTransaction(getAppKey(environment, index), {
-      referenceId,
-      referenceType,
+      reference,
       signature,
     })
   }

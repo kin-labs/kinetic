@@ -10,13 +10,12 @@ export class ApiTransactionUserDataAccessService {
   constructor(private readonly data: ApiCoreDataAccessService) {}
 
   private userTransactionsWhere(appEnvId: string, input: UserTransactionListInput = {}): Prisma.TransactionWhereInput {
-    const { destination, ip, referenceId, referenceType, signature, source, status, ua } = input
+    const { destination, ip, reference, signature, source, status, ua } = input
     return {
       appEnvId,
       destination,
       ip,
-      referenceId,
-      referenceType,
+      reference,
       signature,
       source,
       status: status?.length ? { in: status } : undefined,

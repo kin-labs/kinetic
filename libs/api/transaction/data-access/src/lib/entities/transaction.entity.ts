@@ -45,10 +45,7 @@ export class Transaction {
   processingDuration?: number
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
-  referenceId?: string
-  @ApiProperty({ nullable: true, required: false })
-  @Field({ nullable: true })
-  referenceType?: string
+  reference?: string
   @ApiProperty({ nullable: true, required: false })
   @Field({ nullable: true })
   signature?: string

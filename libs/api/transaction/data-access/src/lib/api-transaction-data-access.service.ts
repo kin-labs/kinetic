@@ -5,7 +5,7 @@ import { Keypair } from '@kin-kinetic/keypair'
 import { parseAndSignTokenTransfer } from '@kin-kinetic/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
-import { Transaction, TransactionErrorType, TransactionStatus } from '@prisma/client'
+import { Prisma, Transaction, TransactionErrorType, TransactionStatus } from '@prisma/client'
 import { Request } from 'express'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 
@@ -83,10 +83,11 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     return failed
   }
 
-  onModuleInit() {
+  async onModuleInit() {
     this.makeTransferRequestCounter = this.data.metrics.getCounter(`api_transaction_make_transfer_request_counter`, {
       description: 'Number of requests to makeTransfer',
     })
+    await this.migrateTransactionReferences()
   }
 
   async makeTransfer(req: Request, input: MakeTransferRequest): Promise<TransactionWithErrors> {
@@ -128,12 +129,52 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
       lastValidBlockHeight: input?.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
       processingStartedAt,
-      referenceId: input?.referenceId,
-      referenceType: input?.referenceType,
+      reference: input?.reference,
       solanaTransaction,
       source,
       tx: input.tx,
       ua,
     })
+  }
+
+  // MIGRATION: This migration will be removed in v1.0.0
+  private async migrateTransactionReferences() {
+    const transactions = await this.data.transaction.findMany({
+      where: {
+        OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
+      },
+    })
+
+    if (!transactions.length) {
+      this.logger.verbose('migrateTransactionReferences: no transactions to migrate')
+      return
+    }
+    this.logger.verbose(`migrateTransactionReferences: migrating ${transactions.length} transactions`)
+
+    const updates: { id: string; data: Prisma.TransactionUpdateInput }[] = transactions.map((tx) => {
+      let reference = null
+      if (tx.referenceId && tx.referenceType) {
+        reference = `${tx.referenceType}|${tx.referenceId}`
+      } else if (tx.referenceId && !tx.referenceType) {
+        reference = `${tx.referenceId}`
+      } else if (!tx.referenceId && tx.referenceType) {
+        reference = `${tx.referenceType}`
+      }
+      return {
+        id: tx.id,
+        data: { reference, referenceId: null, referenceType: null },
+      }
+    })
+
+    const updated = await Promise.all(
+      updates.map(async (update) => {
+        return this.data.transaction.update({
+          where: { id: update.id },
+          data: update.data,
+        })
+      }),
+    )
+
+    this.logger.verbose(`migrateTransactionReferences: updated ${updated.length} transactions`)
   }
 }

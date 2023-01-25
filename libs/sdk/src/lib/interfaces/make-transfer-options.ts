@@ -7,8 +7,7 @@ export interface MakeTransferOptions extends TransferDestination {
   commitment?: Commitment
   mint?: string
   owner: Keypair
-  referenceId?: string
-  referenceType?: string
+  reference?: string
   senderCreate?: boolean
   type?: TransactionType
 }

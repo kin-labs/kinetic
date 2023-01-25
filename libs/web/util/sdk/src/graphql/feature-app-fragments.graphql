@@ -94,8 +94,7 @@ fragment TransactionDetails on Transaction {
   ip
   mint
   processingDuration
-  referenceId
-  referenceType
+  reference
   signature
   solanaCommittedDuration
   solanaFinalized

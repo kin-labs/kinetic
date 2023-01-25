@@ -1,5 +1,4 @@
 export interface GetKineticTransactionOptions {
-  referenceId?: string
-  referenceType?: string
+  reference?: string
   signature?: string
 }
