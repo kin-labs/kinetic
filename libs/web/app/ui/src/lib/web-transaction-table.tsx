@@ -7,8 +7,7 @@ import { Transaction, TransactionStatus } from '@kin-kinetic/web/util/sdk'
 import { formatDistance, millisecondsToSeconds } from 'date-fns'
 import { TransactionFilterIp } from './transaction-filter.ip'
 import { TransactionFilterUa } from './transaction-filter.ua'
-import { TransactionFilterReferenceId } from './web-transaction-filter-reference-id'
-import { TransactionFilterReferenceType } from './web-transaction-filter-reference-type'
+import { TransactionFilterReference } from './web-transaction-filter-reference'
 import { TransactionFilterSignature } from './web-transaction-filter-signature'
 import { TransactionFilterStatus } from './web-transaction-filter-status'
 import { WebTransactionStatus } from './web-transaction-status'
@@ -22,8 +21,7 @@ const fields: WebUiTableColumn<Transaction>[] = [
   }),
   tableColumn<Transaction>('ip', 'IP'),
   tableColumn<Transaction>('ua', 'UA'),
-  tableColumn<Transaction>('referenceType', 'Reference Type', {}),
-  tableColumn<Transaction>('referenceId', 'Reference ID'),
+  tableColumn<Transaction>('reference', 'Reference', {}),
   tableColumn<Transaction>('createdAt', 'Created', {
     render: (tx) => <div>{formatDistance(new Date(tx.createdAt).getTime(), Date.now())} ago</div>,
   }),
@@ -120,8 +118,7 @@ export function TransactionFilter() {
       <TransactionFilterIp />
       <TransactionFilterUa />
       <TransactionFilterSignature />
-      <TransactionFilterReferenceType />
-      <TransactionFilterReferenceId />
+      <TransactionFilterReference />
     </Stack>
   )
 }

@@ -676,8 +676,7 @@ export type Transaction = {
   ip?: Maybe<Scalars['String']>
   mint?: Maybe<Scalars['String']>
   processingDuration?: Maybe<Scalars['Int']>
-  referenceId?: Maybe<Scalars['String']>
-  referenceType?: Maybe<Scalars['String']>
+  reference?: Maybe<Scalars['String']>
   signature?: Maybe<Scalars['String']>
   solanaCommitted?: Maybe<Scalars['DateTime']>
   solanaCommittedDuration?: Maybe<Scalars['Int']>
@@ -836,8 +835,7 @@ export type UserTransactionListInput = {
   ip?: InputMaybe<Scalars['String']>
   limit?: InputMaybe<Scalars['Float']>
   page?: InputMaybe<Scalars['Float']>
-  referenceId?: InputMaybe<Scalars['String']>
-  referenceType?: InputMaybe<Scalars['String']>
+  reference?: InputMaybe<Scalars['String']>
   signature?: InputMaybe<Scalars['String']>
   source?: InputMaybe<Scalars['String']>
   status?: InputMaybe<Array<TransactionStatus>>
@@ -1813,8 +1811,7 @@ export type TransactionDetailsFragment = {
   ip?: string | null
   mint?: string | null
   processingDuration?: number | null
-  referenceId?: string | null
-  referenceType?: string | null
+  reference?: string | null
   signature?: string | null
   solanaCommittedDuration?: number | null
   solanaFinalized?: any | null
@@ -4258,8 +4255,7 @@ export type UserTransactionQuery = {
     ip?: string | null
     mint?: string | null
     processingDuration?: number | null
-    referenceId?: string | null
-    referenceType?: string | null
+    reference?: string | null
     signature?: string | null
     solanaCommittedDuration?: number | null
     solanaFinalized?: any | null
@@ -4362,8 +4358,7 @@ export type UserTransactionsQuery = {
     ip?: string | null
     mint?: string | null
     processingDuration?: number | null
-    referenceId?: string | null
-    referenceType?: string | null
+    reference?: string | null
     signature?: string | null
     solanaCommittedDuration?: number | null
     solanaFinalized?: any | null
@@ -6416,8 +6411,7 @@ export const TransactionDetailsFragmentDoc = gql`
     ip
     mint
     processingDuration
-    referenceId
-    referenceType
+    reference
     signature
     solanaCommittedDuration
     solanaFinalized

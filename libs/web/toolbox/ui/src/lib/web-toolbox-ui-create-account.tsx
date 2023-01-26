@@ -28,7 +28,7 @@ export function WebToolboxUiCreateAccount({
     setLoading(true)
 
     sdk
-      .createAccount({ owner: keypair, referenceType: 'Toolbox', referenceId: 'Create', commitment })
+      .createAccount({ owner: keypair, reference: 'Toolbox|Create', commitment })
       .then((res) => {
         setResponse(res)
         if (res.errors?.length) {

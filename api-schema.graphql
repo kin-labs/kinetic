@@ -345,8 +345,7 @@ type Transaction {
   ip: String
   mint: String
   processingDuration: Int
-  referenceId: String
-  referenceType: String
+  reference: String
   signature: String
   solanaCommitted: DateTime
   solanaCommittedDuration: Int
@@ -500,8 +499,7 @@ input UserTransactionListInput {
   ip: String
   limit: Float
   page: Float
-  referenceId: String
-  referenceType: String
+  reference: String
   signature: String
   source: String
   status: [TransactionStatus!]

@@ -12,9 +12,7 @@ export class UserTransactionListInput {
   @Field({ nullable: true })
   page?: number
   @Field({ nullable: true })
-  referenceId?: string
-  @Field({ nullable: true })
-  referenceType?: string
+  reference?: string
   @Field({ nullable: true })
   signature?: string
   @Field({ nullable: true })

@@ -38,21 +38,21 @@ describe('KineticSdk (e2e)', () => {
   })
 
   it('should make a transfer with references', async () => {
-    const myReferenceId = uniqueId()
+    const myReference = uniqueId()
     const tx = await sdk.makeTransfer({
       amount: '1',
       destination: bobKeypair.publicKey,
       owner: aliceKeypair,
-      referenceId: myReferenceId,
+      reference: myReference,
     })
     expect(tx).not.toBeNull()
     expect(tx.mint).toEqual(DEFAULT_MINT)
-    const { id, signature, errors, referenceId } = tx
+    const { id, signature, errors, reference } = tx
     expect(errors).toEqual([])
     expect(typeof signature).toBe('string')
-    expect(referenceId).toBe(myReferenceId)
+    expect(reference).toBe(myReference)
     const found = await sdk.getKineticTransaction({
-      referenceId,
+      reference,
     })
 
     expect(found.length).toBe(1)

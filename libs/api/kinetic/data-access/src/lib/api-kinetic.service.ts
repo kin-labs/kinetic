@@ -294,8 +294,7 @@ export class ApiKineticService implements OnModuleInit {
         ip,
         lastValidBlockHeight,
         mintPublicKey: mint?.mint?.address,
-        referenceId: input.referenceId,
-        referenceType: input.referenceType,
+        reference: input.reference,
         processingStartedAt,
         solanaTransaction,
         source: input.account,
@@ -310,10 +309,10 @@ export class ApiKineticService implements OnModuleInit {
 
   async getKineticTransaction(
     appKey: string,
-    { referenceId, referenceType, signature }: { signature: string; referenceType: string; referenceId: string },
+    { reference, signature }: { signature: string; reference: string },
   ): Promise<TransactionWithErrors[]> {
-    if (!referenceId?.length && !referenceType?.length && !signature?.length) {
-      throw new BadRequestException(`${appKey}: Please provide either referenceId, referenceType or signature`)
+    if (!reference?.length && !signature?.length) {
+      throw new BadRequestException(`${appKey}: Please provide either reference or signature`)
     }
     const { environment, index } = parseAppKey(appKey)
 
@@ -325,8 +324,7 @@ export class ApiKineticService implements OnModuleInit {
           },
           name: environment,
         },
-        ...(referenceId && { referenceId }),
-        ...(referenceType && { referenceType }),
+        ...(reference && { reference }),
         ...(signature && { signature }),
       },
       include: { errors: true },
@@ -375,8 +373,7 @@ export class ApiKineticService implements OnModuleInit {
     ip,
     lastValidBlockHeight,
     mintPublicKey,
-    referenceId,
-    referenceType,
+    reference,
     processingStartedAt,
     solanaTransaction,
     source,
@@ -398,8 +395,7 @@ export class ApiKineticService implements OnModuleInit {
       lastValidBlockHeight,
       ip,
       mint: mintPublicKey,
-      referenceId,
-      referenceType,
+      reference,
       source,
       tx,
       ua,

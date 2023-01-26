@@ -16,12 +16,12 @@ export function WebAppEnvTransactionsTab({ app, env }: { app: App; env: AppEnv }
     setSearchParams({ limit: `${limit}`, page: `${page}` })
   }
 
-  const { referenceId, referenceType, signature, status } = useWebTransaction()
+  const { reference, signature, status } = useWebTransaction()
   const [{ data, fetching, error }, refresh] = useUserTransactionsQuery({
     variables: {
       appId: app.id,
       appEnvId: env.id,
-      input: { limit, page, referenceId, referenceType, status, signature },
+      input: { limit, page, reference, status, signature },
     },
   })
 

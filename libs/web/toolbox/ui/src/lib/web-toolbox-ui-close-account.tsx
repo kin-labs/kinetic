@@ -28,7 +28,7 @@ export function WebToolboxUiCloseAccount({
     setLoading(true)
 
     sdk
-      .closeAccount({ account, referenceType: 'Toolbox', referenceId: 'Close', commitment })
+      .closeAccount({ account, reference: 'Toolbox|Close', commitment })
       .then((res) => {
         setResponse(res)
         setLoading(false)

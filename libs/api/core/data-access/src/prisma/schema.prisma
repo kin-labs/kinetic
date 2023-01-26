@@ -160,7 +160,10 @@ model Transaction {
   lastValidBlockHeight    Int?
   mint                    String?
   processingDuration      Int?
+  reference               String?
+  // Deprecated in v1.0.0
   referenceId             String?
+  // Deprecated in v1.0.0
   referenceType           String?
   signature               String?
   solanaCommitted         DateTime?
@@ -285,6 +288,7 @@ enum WalletType {
   Provisioned
 }
 
+// Deprecated in v1.0.0
 model WalletBalance {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -304,6 +308,7 @@ model Webhook {
   direction       WebhookDirection
   headers         Json?
   payload         Json?
+  reference       String?
   referenceId     String?
   referenceType   String?
   responsePayload Json?

@@ -4,21 +4,21 @@ import { useState } from 'react'
 import { MdTag } from 'react-icons/md'
 import { WebTransactionFilterPopover } from './web-transaction-filter-popover'
 
-export function TransactionFilterReferenceType() {
-  const { referenceType, setReferenceType } = useWebTransaction()
-  const [item, setItem] = useState<string | undefined>(referenceType)
+export function TransactionFilterReference() {
+  const { reference, setReference } = useWebTransaction()
+  const [item, setItem] = useState<string | undefined>(reference)
   const onClear = () => {
     setItem(undefined)
-    setReferenceType(undefined)
+    setReference(undefined)
   }
   const onSave = () => {
-    setReferenceType(item)
+    setReference(item)
   }
   return (
     <WebTransactionFilterPopover
-      active={!!referenceType}
+      active={!!reference}
       icon={<MdTag />}
-      label={'ReferenceType'}
+      label={'Reference'}
       onClear={onClear}
       onSave={onSave}
     >

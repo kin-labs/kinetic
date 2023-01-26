@@ -16,8 +16,7 @@ export interface ProcessTransactionOptions {
   lastValidBlockHeight: number
   mintPublicKey: string
   processingStartedAt: number
-  referenceId: string
-  referenceType: string
+  reference: string
   solanaTransaction: SolanaTransaction
   source: string
   tx: string

@@ -36,8 +36,7 @@ export class ApiQueueCloseAccountProcessor {
           {
             commitment,
             mint,
-            referenceId: `${job.id}`,
-            referenceType: QueueType.CloseAccount,
+            reference: `CloseAccount:${job.id}`,
             environment,
             index,
             account,
