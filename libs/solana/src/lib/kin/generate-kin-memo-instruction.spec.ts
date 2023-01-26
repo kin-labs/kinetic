@@ -5,6 +5,7 @@ describe('generateMemoInstruction', () => {
   it('should create a Memo Instruction', async () => {
     const memo = generateKinMemoInstruction({
       index: 1,
+      reference: 'ref-type|ref-id',
       type: TransactionType.Spend,
     })
 

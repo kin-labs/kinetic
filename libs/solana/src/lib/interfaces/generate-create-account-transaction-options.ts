@@ -10,4 +10,5 @@ export interface GenerateCreateAccountTransactionOptions {
   mintPublicKey: PublicKeyString
   owner: Keypair
   ownerTokenAccount: PublicKeyString
+  reference?: string | null
 }

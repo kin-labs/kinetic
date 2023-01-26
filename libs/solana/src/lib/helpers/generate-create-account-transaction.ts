@@ -5,8 +5,7 @@ import {
 } from '@solana/spl-token'
 import { Transaction, TransactionInstruction } from '@solana/web3.js'
 import { GenerateCreateAccountTransactionOptions } from '../interfaces'
-import { TransactionType } from '../kin'
-import { generateKinMemoInstruction } from '../kin/generate-kin-memo-instruction'
+import { generateKinMemoInstruction, TransactionType } from '../kin'
 import { getPublicKey } from './get-public-key'
 
 export async function generateCreateAccountTransaction(
@@ -26,6 +25,7 @@ export async function generateCreateAccountTransaction(
     instructions.push(
       generateKinMemoInstruction({
         index: options.index,
+        reference: options.reference,
         type: TransactionType.None,
       }),
     )

@@ -6,6 +6,7 @@ export interface GenerateCloseAccountTransactionOptions {
   blockhash: string
   index: number
   lastValidBlockHeight: number
-  tokenAccount: PublicKeyString
+  reference?: string
   signer: Keypair
+  tokenAccount: PublicKeyString
 }
