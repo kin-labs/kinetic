@@ -49,13 +49,14 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private async verifyTransaction(transaction: Transaction): Promise<Transaction> {
     if (transaction?.appKey && transaction.signature) {
       const appEnv = await this.data.getAppEnvironmentByAppKey(transaction.appKey)
+      const { blockhash, lastValidBlockHeight } = await this.kinetic.getLatestBlockhash(transaction.appKey)
       const tx = await this.kinetic.confirmSignature({
         appEnv,
         appKey: transaction.appKey,
         transactionId: transaction.id,
-        blockhash: transaction.blockhash,
+        blockhash,
         headers: transaction.headers as Record<string, string>,
-        lastValidBlockHeight: transaction.lastValidBlockHeight,
+        lastValidBlockHeight,
         signature: transaction.signature,
         solanaStart: transaction.solanaStart,
         transactionStart: transaction.createdAt,
