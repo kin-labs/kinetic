@@ -35,6 +35,9 @@ export default () => ({
       getLatestBlockhash: {
         ttl: process.env.CACHE_SOLANA_GET_LATEST_BLOCKHASH_TTL,
       },
+      getTokenAccounts: {
+        ttl: process.env.CACHE_SOLANA_GET_TOKEN_ACCOUNTS_TTL,
+      },
     },
   },
   cors: {

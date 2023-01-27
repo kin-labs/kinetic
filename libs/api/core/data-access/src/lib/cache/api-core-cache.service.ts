@@ -22,14 +22,26 @@ export class ApiCoreCacheService {
 
   /**
    * Get a value from the cache, or set it if it doesn't exist.
+   * @param {CacheNamespace} namespace - The namespace to cache the value under
+   * @param {string} key - The key to cache the value under
+   * @param {Value<T>} value - The value or the promise returning the value to cache
+   * @param {number} ttl - The time to live in seconds
+   * @param {(value: Value<T>) => boolean} validate - A function to validate if we want to cache the value or not
+   * @returns {Promise<T>}
    */
-  async wrap<T>(namespace: CacheNamespace, key: string, value: Value<T>, ttl?: number): Promise<T> {
+  async wrap<T>(
+    namespace: CacheNamespace,
+    key: string,
+    value: Value<T>,
+    ttl?: number,
+    validate: (value: Value<T>) => boolean = (value) => !!value,
+  ): Promise<T> {
     const fn: ValueFn<T> = (typeof value === 'function' ? value : () => Promise.resolve(value)) as ValueFn<T>
     const cacheKey = getCacheKey(namespace, key)
     const found = await this.get<T>(namespace, key)
     if (!found) {
       const result = await fn()
-      if (result) {
+      if (validate(result)) {
         await this.set<T>(namespace, key, result, ttl)
         this.logger.verbose(`${style.bYellow.apply('[CACHE MISS]')} ${cacheKey} ttl=${ttl} seconds`)
         return result

@@ -10,7 +10,6 @@ import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
 
 import { CreateAccountRequest } from './dto/create-account-request.dto'
-import { HistoryResponse } from './entities/history-response.entity'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {
@@ -56,35 +55,18 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     return this.kinetic.handleCloseAccount(input, { appEnv, appKey, ip, ua })
   }
 
-  async getBalance(appKey: string, accountId: PublicKeyString, commitment: Commitment): Promise<BalanceSummary> {
+  async getBalance(appKey: string, account: PublicKeyString, commitment: Commitment): Promise<BalanceSummary> {
     const solana = await this.kinetic.getSolanaConnection(appKey)
     const appEnv = await this.app.getAppConfig(appKey)
 
+    // Get the mints for this app environment
     const mints: BalanceMint[] = appEnv.mints.map(({ decimals, publicKey }) => ({ decimals, publicKey }))
 
-    return solana.getBalance(accountId, mints, commitment)
-  }
+    // Get the token accounts for the mints
+    const mintAccounts = await this.kinetic.getMintAccounts(appKey, account, commitment, mints)
 
-  async getHistory(
-    appKey: string,
-    accountId: PublicKeyString,
-    mint: PublicKeyString,
-    commitment: Commitment,
-  ): Promise<HistoryResponse[]> {
-    const solana = await this.kinetic.getSolanaConnection(appKey)
-
-    return solana.getTokenHistory(accountId, mint.toString(), commitment)
-  }
-
-  async getTokenAccounts(
-    appKey: string,
-    accountId: PublicKeyString,
-    mint: PublicKeyString,
-    commitment: Commitment,
-  ): Promise<string[]> {
-    const solana = await this.kinetic.getSolanaConnection(appKey)
-
-    return solana.getTokenAccounts(accountId, mint.toString(), commitment)
+    // Get the balances for the token accounts
+    return solana.getMintAccountBalance(mintAccounts, commitment)
   }
 
   async createAccount(req: Request, input: CreateAccountRequest): Promise<Transaction> {

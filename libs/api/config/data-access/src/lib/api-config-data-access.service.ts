@@ -75,6 +75,9 @@ export class ApiConfigDataAccessService {
         getLatestBlockhash: {
           ttl: this.config.get('cache.solana.getLatestBlockhash.ttl'),
         },
+        getTokenAccounts: {
+          ttl: this.config.get('cache.solana.getTokenAccounts.ttl'),
+        },
       },
     }
   }

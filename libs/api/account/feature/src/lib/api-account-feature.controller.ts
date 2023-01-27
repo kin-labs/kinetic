@@ -2,10 +2,9 @@ import {
   ApiAccountDataAccessService,
   BalanceResponse,
   CreateAccountRequest,
-  HistoryResponse,
 } from '@kin-kinetic/api/account/data-access'
 import { getAppKey, PublicKeyPipe } from '@kin-kinetic/api/core/util'
-import { AccountInfo, CloseAccountRequest } from '@kin-kinetic/api/kinetic/data-access'
+import { AccountInfo, CloseAccountRequest, HistoryResponse } from '@kin-kinetic/api/kinetic/data-access'
 import { Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Commitment } from '@kin-kinetic/solana'
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common'
@@ -74,7 +73,7 @@ export class ApiAccountFeatureController {
     @Param('mint', new PublicKeyPipe('mint')) mint: string,
     @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getHistory(getAppKey(environment, index), accountId, mint, commitment)
+    return this.service.kinetic.getHistory(getAppKey(environment, index), accountId, mint, commitment)
   }
 
   @Get('token-accounts/:environment/:index/:accountId/:mint')
@@ -89,6 +88,6 @@ export class ApiAccountFeatureController {
     @Param('mint', new PublicKeyPipe('mint')) mint: string,
     @Query('commitment') commitment: Commitment,
   ) {
-    return this.service.getTokenAccounts(getAppKey(environment, index), accountId, mint, commitment)
+    return this.service.kinetic.getTokenAccounts(getAppKey(environment, index), accountId, mint, commitment)
   }
 }

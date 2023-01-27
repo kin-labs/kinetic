@@ -17,11 +17,11 @@ import {
   removeDecimals,
 } from './helpers'
 import {
-  BalanceMint,
   BalanceMintMap,
   BalanceSummary,
   BalanceToken,
   Commitment,
+  MintAccounts,
   PublicKeyString,
   SolanaConfig,
   TokenBalance,
@@ -69,15 +69,8 @@ export class Solana {
     }
   }
 
-  async getBalance(
-    accountId: PublicKeyString,
-    mints: BalanceMint | BalanceMint[],
-    commitment: Commitment,
-  ): Promise<BalanceSummary> {
-    mints = Array.isArray(mints) ? mints : [mints]
-    this.config.logger?.log(
-      `Getting account balance summary: ${accountId} for mints ${mints.map((mint) => mint.publicKey).join(', ')}`,
-    )
+  async getMintAccountBalance(mintAccounts: MintAccounts[], commitment: Commitment): Promise<BalanceSummary> {
+    const mints = mintAccounts.map((mint) => mint.mint)
 
     if (!mints.length) {
       throw new Error(`getBalance: No mints provided.`)
@@ -86,26 +79,14 @@ export class Solana {
     try {
       const tokens: BalanceToken[] = []
 
-      const tokenAccountResult: PromiseSettledResult<{
-        mint: BalanceMint
-        accounts: string[]
-      }>[] = await Promise.allSettled(
-        mints.map((mint) => {
-          return this.getTokenAccounts(accountId, mint.publicKey, commitment).then((accounts) => ({ mint, accounts }))
-        }),
-      )
-      const tokenAccounts = tokenAccountResult
-        .filter((item) => item.status === 'fulfilled')
-        .map((item) => (item as PromiseFulfilledResult<{ mint: BalanceMint; accounts: string[] }>).value)
-
       const mintMap: Record<string, string[]> = mints.reduce((acc, curr) => {
         return {
           ...acc,
-          [curr.publicKey]: tokenAccounts.find((ta) => ta.mint.publicKey === curr.publicKey)?.accounts || [],
+          [curr.publicKey]: mintAccounts.find((ta) => ta.mint.publicKey === curr.publicKey)?.accounts || [],
         }
       }, {})
 
-      for (const { mint, accounts } of tokenAccounts) {
+      for (const { mint, accounts } of mintAccounts) {
         for (const account of accounts) {
           const { balance } = await this.getTokenBalance(account, commitment)
           tokens.push({
@@ -131,7 +112,9 @@ export class Solana {
       }
     } catch (e) {
       throw new Error(
-        `No token accounts found for ${mints.length > 1 ? `mints ${mints.join(', ')}` : `mint ${defaultMint}`}`,
+        `No token accounts found for ${
+          mints.length > 1 ? `mints ${mints.map((m) => m.publicKey).join(', ')}` : `mint ${defaultMint.publicKey}`
+        }`,
       )
     }
   }
@@ -183,11 +166,6 @@ export class Solana {
       account,
       balance: new BigNumber(res.value.amount),
     }
-  }
-
-  async getTokenHistory(account: PublicKeyString, mint: PublicKeyString, commitment: Commitment) {
-    this.config.logger?.log(`Getting token history: ${getPublicKey(account)} / ${getPublicKey(mint)} `)
-    return this.getTokenAccounts(account, mint, commitment).then((accounts) => this.getTokenAccountsHistory(accounts))
   }
 
   async getTransaction(signature: string, commitment: Commitment) {
