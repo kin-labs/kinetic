@@ -632,7 +632,7 @@
   "info": {
     "title": "@kin-kinetic/api",
     "description": "The OpenAPI definition of the Kinetic API",
-    "version": "1.0.0-rc.15",
+    "version": "1.0.0-rc.16",
     "contact": {}
   },
   "tags": [
