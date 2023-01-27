@@ -1,13 +1,14 @@
 import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
-import { parseAppKey } from '@kin-kinetic/api/core/util'
+import { ellipsify, parseAppKey } from '@kin-kinetic/api/core/util'
 import { parseTransactionError } from '@kin-kinetic/api/kinetic/util'
 import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
 import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import {
+  BalanceMint,
   Commitment,
   generateCloseAccountTransaction,
-  getPublicKey,
+  MintAccounts,
   PublicKeyString,
   removeDecimals,
   Solana,
@@ -186,12 +187,11 @@ export class ApiKineticService implements OnModuleInit {
 
   async getAccountInfo(
     appKey: string,
-    accountId: PublicKeyString,
+    account: PublicKeyString,
     mint: PublicKeyString,
     commitment: Commitment,
   ): Promise<AccountInfo> {
     const solana = await this.getSolanaConnection(appKey)
-    const account = getPublicKey(accountId)
     const accountInfo = await solana.getParsedAccountInfo(account, commitment)
 
     const parsed = accountInfo?.data?.parsed
@@ -240,15 +240,16 @@ export class ApiKineticService implements OnModuleInit {
       isOwner: result.tokens.length > 0,
     }
   }
+
   async getHistory(
     appKey: string,
-    accountId: PublicKeyString,
+    account: PublicKeyString,
     mint: PublicKeyString,
     commitment: Commitment,
   ): Promise<HistoryResponse[]> {
     const solana = await this.getSolanaConnection(appKey)
 
-    return this.getTokenAccounts(appKey, getPublicKey(accountId), mint, commitment).then((accounts) =>
+    return this.getTokenAccounts(appKey, account, mint, commitment).then((accounts) =>
       solana.getTokenAccountsHistory(accounts),
     )
   }
@@ -367,6 +368,47 @@ export class ApiKineticService implements OnModuleInit {
 
     return { lamports } as MinimumRentExemptionBalanceResponse
   }
+
+  getMintAccounts(
+    appKey: string,
+    account: PublicKeyString,
+    commitment: Commitment,
+    mints: BalanceMint[],
+  ): Promise<MintAccounts[]> {
+    // Create cache key
+    const mintsKey = mints.map((mint) => ellipsify(mint.publicKey, 4, '-')).join(',')
+
+    return this.data.cache.wrap<MintAccounts[]>(
+      'solana',
+      `${account}:${mintsKey}:${commitment}`,
+      async () => {
+        // Get token accounts for each mint, gracefully handle errors (e.g. if mint is not found)
+        const mintAccounts = await Promise.allSettled(
+          mints.map((mint) => this.getMintTokenAccounts(appKey, account, mint, commitment)),
+        )
+
+        // Return only fulfilled promises
+        return mintAccounts
+          .filter((item) => item.status === 'fulfilled')
+          .map((item: PromiseFulfilledResult<MintAccounts>) => item.value)
+      },
+      this.data.config.cache.solana.getTokenAccounts.ttl,
+      (value) => !!value.length,
+    )
+  }
+
+  getMintTokenAccounts(
+    appKey: string,
+    account: PublicKeyString,
+    mint: BalanceMint,
+    commitment: Commitment,
+  ): Promise<MintAccounts> {
+    return this.getTokenAccounts(appKey, account, mint.publicKey, commitment).then((accounts) => ({
+      mint,
+      accounts,
+    }))
+  }
+
   getTokenAccounts(
     appKey: string,
     account: PublicKeyString,
