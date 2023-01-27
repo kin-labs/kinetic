@@ -5,6 +5,7 @@ export const validationSchema = Joi.object({
   AUTH_PASSWORD_ENABLED: Joi.boolean().default('false'),
   AUTH_USERS: Joi.string().default(''),
   CACHE_SOLANA_GET_LATEST_BLOCKHASH_TTL: Joi.number().default(5),
+  CACHE_SOLANA_GET_TOKEN_ACCOUNTS_TTL: Joi.number().default(60),
   COOKIE_NAME: Joi.string().default('__session'),
   DATABASE_URL: Joi.string().required(),
   DISCORD_ENABLED: Joi.boolean().default('false'),

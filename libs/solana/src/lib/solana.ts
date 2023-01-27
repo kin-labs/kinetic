@@ -185,11 +185,6 @@ export class Solana {
     }
   }
 
-  async getTokenHistory(account: PublicKeyString, mint: PublicKeyString, commitment: Commitment) {
-    this.config.logger?.log(`Getting token history: ${getPublicKey(account)} / ${getPublicKey(mint)} `)
-    return this.getTokenAccounts(account, mint, commitment).then((accounts) => this.getTokenAccountsHistory(accounts))
-  }
-
   async getTransaction(signature: string, commitment: Commitment) {
     this.config.logger?.log(`Getting transaction: ${signature} `)
     const status = await this.connection.getSignatureStatus(signature, { searchTransactionHistory: true })

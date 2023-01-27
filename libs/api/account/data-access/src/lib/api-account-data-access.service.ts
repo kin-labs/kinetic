@@ -10,7 +10,6 @@ import { Counter } from '@opentelemetry/api-metrics'
 import { Request } from 'express'
 
 import { CreateAccountRequest } from './dto/create-account-request.dto'
-import { HistoryResponse } from './entities/history-response.entity'
 
 @Injectable()
 export class ApiAccountDataAccessService implements OnModuleInit {
@@ -63,28 +62,6 @@ export class ApiAccountDataAccessService implements OnModuleInit {
     const mints: BalanceMint[] = appEnv.mints.map(({ decimals, publicKey }) => ({ decimals, publicKey }))
 
     return solana.getBalance(accountId, mints, commitment)
-  }
-
-  async getHistory(
-    appKey: string,
-    accountId: PublicKeyString,
-    mint: PublicKeyString,
-    commitment: Commitment,
-  ): Promise<HistoryResponse[]> {
-    const solana = await this.kinetic.getSolanaConnection(appKey)
-
-    return solana.getTokenHistory(accountId, mint.toString(), commitment)
-  }
-
-  async getTokenAccounts(
-    appKey: string,
-    accountId: PublicKeyString,
-    mint: PublicKeyString,
-    commitment: Commitment,
-  ): Promise<string[]> {
-    const solana = await this.kinetic.getSolanaConnection(appKey)
-
-    return solana.getTokenAccounts(accountId, mint.toString(), commitment)
   }
 
   async createAccount(req: Request, input: CreateAccountRequest): Promise<Transaction> {

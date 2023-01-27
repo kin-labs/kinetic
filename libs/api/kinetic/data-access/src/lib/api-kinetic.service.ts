@@ -28,6 +28,7 @@ import * as requestIp from 'request-ip'
 import { CloseAccountRequest } from './dto/close-account-request.dto'
 import { AccountInfo } from './entities/account.info'
 import { GetTransactionResponse } from './entities/get-transaction-response.entity'
+import { HistoryResponse } from './entities/history-response.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash-response.entity'
 import { MinimumRentExemptionBalanceRequest } from './entities/minimum-rent-exemption-balance-request.dto'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
@@ -218,9 +219,9 @@ export class ApiKineticService implements OnModuleInit {
     const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
     const appMint = this.validateMint(appEnv, appKey, mint.toString())
 
-    const tokenAccounts = await solana.getTokenAccounts(account, appMint.mint.address, commitment)
+    const tokenAccounts = await this.getTokenAccounts(appKey, account, appMint.mint.address, commitment)
 
-    for (const tokenAccount of tokenAccounts) {
+    for (const tokenAccount of tokenAccounts ?? []) {
       const info = await solana.getParsedAccountInfo(tokenAccount, commitment)
       const parsed = info?.data?.parsed?.info
 
@@ -238,6 +239,18 @@ export class ApiKineticService implements OnModuleInit {
       ...result,
       isOwner: result.tokens.length > 0,
     }
+  }
+  async getHistory(
+    appKey: string,
+    accountId: PublicKeyString,
+    mint: PublicKeyString,
+    commitment: Commitment,
+  ): Promise<HistoryResponse[]> {
+    const solana = await this.getSolanaConnection(appKey)
+
+    return this.getTokenAccounts(appKey, getPublicKey(accountId), mint, commitment).then((accounts) =>
+      solana.getTokenAccountsHistory(accounts),
+    )
   }
 
   getSolanaConnection(appKey: string): Promise<Solana> {
@@ -353,6 +366,20 @@ export class ApiKineticService implements OnModuleInit {
     const lamports = await solana.getMinimumBalanceForRentExemption(dataLength)
 
     return { lamports } as MinimumRentExemptionBalanceResponse
+  }
+  getTokenAccounts(
+    appKey: string,
+    account: PublicKeyString,
+    mint: PublicKeyString,
+    commitment: Commitment,
+  ): Promise<string[]> {
+    return this.data.cache.wrap<string[]>(
+      'solana',
+      `${appKey}:getTokenAccounts:${account}:${mint}:${commitment}`,
+      () => this.getSolanaConnection(appKey).then((solana) => solana.getTokenAccounts(account, mint, commitment)),
+      this.data.config.cache.solana.getTokenAccounts.ttl,
+      (value) => !!value?.length,
+    )
   }
 
   async getTransaction(appKey: string, signature: string, commitment: Commitment): Promise<GetTransactionResponse> {
