@@ -5,6 +5,7 @@ on:
     branches:
       - dev
       - main
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -49,4 +50,12 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker (Manual)
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
