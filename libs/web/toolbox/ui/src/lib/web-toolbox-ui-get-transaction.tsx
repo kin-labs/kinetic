@@ -45,7 +45,7 @@ export function WebToolboxUiGetTransaction({ sdk }: { sdk: KineticSdk }) {
           {response?.status && (
             <Box>
               <Button size="lg" disabled={true}>
-                {response?.status?.value?.confirmationStatus}
+                {response?.status?.confirmationStatus}
               </Button>
             </Box>
           )}

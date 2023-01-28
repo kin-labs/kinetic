@@ -33,6 +33,7 @@ import { HistoryResponse } from './entities/history-response.entity'
 import { LatestBlockhashResponse } from './entities/latest-blockhash-response.entity'
 import { MinimumRentExemptionBalanceRequest } from './entities/minimum-rent-exemption-balance-request.dto'
 import { MinimumRentExemptionBalanceResponse } from './entities/minimum-rent-exemption-balance-response.entity'
+import { SignatureStatus } from './entities/signature-status.entity'
 import { validateCloseAccount } from './helpers/validate-close.account'
 import { ProcessTransactionOptions } from './interfaces/process-transaction-options'
 import { TransactionWithErrors } from './interfaces/transaction-with-errors'
@@ -425,6 +426,12 @@ export class ApiKineticService implements OnModuleInit {
       this.data.config.cache.solana.getTokenAccounts.ttl,
       (value) => !!value?.length,
     )
+  }
+
+  async getSignatureStatus(appKey: string, signature: string): Promise<SignatureStatus> {
+    const solana = await this.getSolanaConnection(appKey)
+
+    return solana.getSignatureStatus(signature)
   }
 
   async getTransaction(appKey: string, signature: string, commitment: Commitment): Promise<GetTransactionResponse> {
