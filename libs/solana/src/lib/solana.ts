@@ -3,6 +3,7 @@ import {
   Connection,
   ParsedAccountData,
   PublicKey,
+  SignatureStatus,
   Transaction as SolanaTransaction,
 } from '@solana/web3.js'
 import axios from 'axios'
@@ -168,9 +169,16 @@ export class Solana {
     }
   }
 
+  async getSignatureStatus(signature: string): Promise<SignatureStatus | null> {
+    this.config.logger?.log(`Getting signature status: ${signature} `)
+    const status = await this.connection.getSignatureStatus(signature, { searchTransactionHistory: true })
+
+    return status?.value
+  }
+
   async getTransaction(signature: string, commitment: Commitment) {
     this.config.logger?.log(`Getting transaction: ${signature} `)
-    const status = await this.connection.getSignatureStatus(signature, { searchTransactionHistory: true })
+    const status = await this.getSignatureStatus(signature)
     const transaction = await this.connection.getTransaction(signature, {
       maxSupportedTransactionVersion: 0,
       commitment: convertFinality(commitment),

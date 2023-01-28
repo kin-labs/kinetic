@@ -590,19 +590,6 @@ export interface ConfirmedTransactionMeta {
 /**
  *
  * @export
- * @interface Context
- */
-export interface Context {
-  /**
-   *
-   * @type {number}
-   * @memberof Context
-   */
-  slot?: number | null
-}
-/**
- *
- * @export
  * @interface CreateAccountRequest
  */
 export interface CreateAccountRequest {
@@ -663,10 +650,10 @@ export interface GetTransactionResponse {
   signature: string
   /**
    *
-   * @type {RpcResponseAndContext}
+   * @type {SignatureStatus}
    * @memberof GetTransactionResponse
    */
-  status: RpcResponseAndContext
+  status: SignatureStatus
   /**
    *
    * @type {TransactionResponse}
@@ -829,25 +816,6 @@ export interface RequestAirdropResponse {
    * @memberof RequestAirdropResponse
    */
   signature: string
-}
-/**
- *
- * @export
- * @interface RpcResponseAndContext
- */
-export interface RpcResponseAndContext {
-  /**
-   *
-   * @type {Context}
-   * @memberof RpcResponseAndContext
-   */
-  context: Context
-  /**
-   *
-   * @type {SignatureStatus}
-   * @memberof RpcResponseAndContext
-   */
-  value: SignatureStatus
 }
 /**
  *
