@@ -150,18 +150,15 @@ export class ApiKineticService implements OnModuleInit {
       Commitment.Finalized,
     )
     if (finalized) {
-      const solanaFinalized = new Date()
-      const solanaFinalizedDuration = solanaFinalized.getTime() - solanaStart.getTime()
-      const totalDuration = solanaFinalized.getTime() - transactionStart.getTime()
-      this.logger.verbose(`${appKey}: confirmSignature: ${Commitment.Finalized} ${signature}`)
       const solanaTransaction = await solana.connection.getParsedTransaction(signature, 'finalized')
-      const transaction = await this.updateTransaction(transactionId, {
-        solanaFinalized,
-        solanaFinalizedDuration,
-        solanaTransaction: solanaTransaction ? JSON.parse(JSON.stringify(solanaTransaction)) : undefined,
-        status: TransactionStatus.Finalized,
-        totalDuration,
-      })
+      const transaction = await this.storeFinalizedTransaction(
+        appKey,
+        transactionId,
+        signature,
+        solanaStart,
+        transactionStart,
+        solanaTransaction,
+      )
       this.confirmSignatureFinalizedCounter.add(1, { appKey })
       // Send Event Webhook
       if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl && transaction) {
@@ -180,6 +177,28 @@ export class ApiKineticService implements OnModuleInit {
       this.logger.verbose(`${appKey}: confirmSignature: finished ${signature}`)
       return transaction
     }
+  }
+
+  storeFinalizedTransaction(
+    appKey: string,
+    transactionId: string,
+    signature: string,
+    solanaStart: Date,
+    transactionStart: Date,
+    solanaTransaction: unknown,
+  ) {
+    const solanaFinalized = new Date()
+    const solanaFinalizedDuration = solanaFinalized.getTime() - solanaStart.getTime()
+    const totalDuration = solanaFinalized.getTime() - transactionStart.getTime()
+    this.logger.verbose(`${appKey}: storeFinalizedTransaction: ${Commitment.Finalized} ${signature}`)
+
+    return this.updateTransaction(transactionId, {
+      solanaFinalized,
+      solanaFinalizedDuration,
+      solanaTransaction: solanaTransaction ? JSON.parse(JSON.stringify(solanaTransaction)) : undefined,
+      status: TransactionStatus.Finalized,
+      totalDuration,
+    })
   }
 
   deleteSolanaConnection(appKey: string): void {
@@ -579,7 +598,7 @@ export class ApiKineticService implements OnModuleInit {
     return { ip, ua }
   }
 
-  private async sendEventWebhook(
+  async sendEventWebhook(
     appKey: string,
     appEnv: AppEnv & { app: App },
     transaction: Transaction,
