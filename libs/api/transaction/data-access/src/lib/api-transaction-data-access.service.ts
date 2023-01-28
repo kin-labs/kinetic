@@ -26,7 +26,9 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     if (!stale.length) return
     this.timeoutTransactions(stale).then((res) => {
       this.logger.verbose(
-        `cleanupStaleTransactions set ${stale?.length} stale transactions: ${res.map((item) => item.id)} `,
+        `cleanupStaleTransactions set ${stale?.length} stale transactions: ${res.map(
+          (item) => `${item.id}=${item.status}`,
+        )} `,
       )
     })
   }
@@ -46,42 +48,81 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     return Promise.all(transactions.map((transaction) => this.verifyTransaction(transaction)))
   }
 
-  private async verifyTransaction(transaction: Transaction): Promise<Transaction> {
-    if (transaction?.appKey && transaction.signature) {
-      const appEnv = await this.data.getAppEnvironmentByAppKey(transaction.appKey)
-      const { blockhash, lastValidBlockHeight } = await this.kinetic.getLatestBlockhash(transaction.appKey)
-      const tx = await this.kinetic.confirmSignature({
-        appEnv,
-        appKey: transaction.appKey,
-        transactionId: transaction.id,
-        blockhash,
-        headers: transaction.headers as Record<string, string>,
-        lastValidBlockHeight,
-        signature: transaction.signature,
-        solanaStart: transaction.solanaStart,
-        transactionStart: transaction.createdAt,
-      })
+  private async verifyTransaction({
+    appKey,
+    createdAt,
+    headers,
+    id: transactionId,
+    signature,
+    solanaStart,
+    status,
+  }: Transaction): Promise<Transaction> {
+    this.logger.verbose(`verifyTransaction: ${transactionId} ${appKey} ${status} ${signature}`)
+    if (appKey && signature) {
+      try {
+        const status = await this.kinetic.getSignatureStatus(appKey, signature)
 
-      if (tx?.status === 'Finalized') {
-        this.logger.verbose(`verifyTransaction: set ${transaction.id} to Finalized`)
-        return tx
+        if (status?.confirmationStatus === 'finalized') {
+          const solana = await this.kinetic.getSolanaConnection(appKey)
+          const solanaTransaction = await solana.connection.getParsedTransaction(signature, 'finalized')
+          const finalizedTx = await this.kinetic.storeFinalizedTransaction(
+            appKey,
+            transactionId,
+            signature,
+            solanaStart,
+            createdAt,
+            solanaTransaction,
+          )
+
+          const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+
+          // Send Event Webhook
+          if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl) {
+            const eventWebhookTransaction = await this.kinetic.sendEventWebhook(
+              appKey,
+              appEnv,
+              finalizedTx,
+              headers as Record<string, string>,
+            )
+            if (eventWebhookTransaction.status === TransactionStatus.Failed) {
+              this.logger.error(
+                `Transaction ${transactionId} sendEventWebhook failed:${eventWebhookTransaction.errors
+                  .map((e) => e.message)
+                  .join(', ')}`,
+                eventWebhookTransaction.errors,
+              )
+              return eventWebhookTransaction
+            }
+          }
+
+          return finalizedTx
+        }
+      } catch (e) {
+        return this.storeTransactionError(transactionId, `Error verifying transaction: ${e?.message || e?.toString()}`)
       }
     }
 
-    const failed = await this.data.transaction.update({
-      where: { id: transaction.id },
+    const failed = await this.storeTransactionError(
+      transactionId,
+      signature ? `Transaction timed out` : 'Transaction never signed',
+    )
+    this.logger.verbose(`verifyTransaction: set ${transactionId} to Failed`)
+    return failed
+  }
+
+  storeTransactionError(id: string, message: string) {
+    return this.data.transaction.update({
+      where: { id },
       data: {
         status: TransactionStatus.Failed,
         errors: {
           create: {
             type: TransactionErrorType.Timeout,
-            message: transaction.signature ? `Transaction timed out` : 'Transaction never signed',
+            message,
           },
         },
       },
     })
-    this.logger.verbose(`verifyTransaction: set ${transaction.id} to Failed`)
-    return failed
   }
 
   async onModuleInit() {
