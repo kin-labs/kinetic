@@ -200,6 +200,8 @@ export class ApiKineticService implements OnModuleInit {
     const isTokenAccount = parsed?.type === 'account'
 
     const owner = isTokenAccount ? parsed.info.owner : null
+    // There are situations where the owner of the token account is the same as the account
+    const tokenAccountIsOwner = account?.toString() === owner?.toString()
 
     const result = {
       account: account.toString(),
@@ -208,11 +210,12 @@ export class ApiKineticService implements OnModuleInit {
       isTokenAccount,
       owner,
       program: accountInfo?.owner?.toString() ?? null,
-      tokens: !isMint && !isTokenAccount ? [] : null,
+      tokens: isMint || (isTokenAccount && !tokenAccountIsOwner) ? null : [],
     }
 
-    // We only want to get the token accounts if the account is not a mint or token account
-    if (isMint || isTokenAccount) {
+    // We don't want to get the token accounts if the account is a mint or token account
+    // Unless the token account is the same as the owner.
+    if (isMint || (isTokenAccount && !tokenAccountIsOwner)) {
       return result
     }
 
