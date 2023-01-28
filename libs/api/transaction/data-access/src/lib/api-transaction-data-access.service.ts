@@ -140,42 +140,60 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   // MIGRATION: This migration will be removed in v1.0.0
   private async migrateTransactionReferences() {
-    const transactions = await this.data.transaction.findMany({
+    const count = await this.data.transaction.count({
       where: {
         OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
       },
     })
 
-    if (!transactions.length) {
+    if (!count) {
       this.logger.verbose('migrateTransactionReferences: no transactions to migrate')
       return
     }
-    this.logger.verbose(`migrateTransactionReferences: migrating ${transactions.length} transactions`)
 
-    const updates: { id: string; data: Prisma.TransactionUpdateInput }[] = transactions.map((tx) => {
-      let reference = null
-      if (tx.referenceId && tx.referenceType) {
-        reference = `${tx.referenceType}|${tx.referenceId}`
-      } else if (tx.referenceId && !tx.referenceType) {
-        reference = `${tx.referenceId}`
-      } else if (!tx.referenceId && tx.referenceType) {
-        reference = `${tx.referenceType}`
-      }
-      return {
-        id: tx.id,
-        data: { reference, referenceId: null, referenceType: null },
-      }
-    })
+    const batchSize = 100
+    const batches = Math.ceil(count / batchSize)
+    this.logger.verbose(`migrateTransactionReferences: migrating ${count} transactions in ${batches} batches`)
 
-    const updated = await Promise.all(
-      updates.map(async (update) => {
-        return this.data.transaction.update({
-          where: { id: update.id },
-          data: update.data,
-        })
-      }),
-    )
+    for (let i = 0; i < batches; i++) {
+      const transactions = await this.data.transaction.findMany({
+        where: {
+          OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
+        },
+        take: batchSize,
+      })
 
-    this.logger.verbose(`migrateTransactionReferences: updated ${updated.length} transactions`)
+      this.logger.verbose(
+        `migrateTransactionReferences: migrating ${transactions.length} transactions in batch ${i}/${batches}`,
+      )
+
+      const updates: { id: string; data: Prisma.TransactionUpdateInput }[] = transactions.map((tx) => {
+        let reference = null
+        if (tx.referenceId && tx.referenceType) {
+          reference = `${tx.referenceType}|${tx.referenceId}`
+        } else if (tx.referenceId && !tx.referenceType) {
+          reference = `${tx.referenceId}`
+        } else if (!tx.referenceId && tx.referenceType) {
+          reference = `${tx.referenceType}`
+        }
+        return {
+          id: tx.id,
+          data: { reference, referenceId: null, referenceType: null },
+        }
+      })
+
+      const updated = await Promise.all(
+        updates.map(async (update) => {
+          return this.data.transaction.update({
+            where: { id: update.id },
+            data: update.data,
+          })
+        }),
+      )
+
+      this.logger.verbose(
+        `migrateTransactionReferences: updated ${updated.length} transactions in batch ${i}/${batches}`,
+      )
+    }
   }
 }
