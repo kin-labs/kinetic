@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { UserTransactionListInput } from './dto/user-transaction-list.input'
@@ -7,7 +7,7 @@ import { Transaction } from './entities/transaction.entity'
 
 @Injectable()
 export class ApiTransactionUserDataAccessService {
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly core: ApiCoreService) {}
 
   private userTransactionsWhere(appEnvId: string, input: UserTransactionListInput = {}): Prisma.TransactionWhereInput {
     const { destination, ip, reference, signature, source, status, ua } = input
@@ -35,17 +35,17 @@ export class ApiTransactionUserDataAccessService {
   }
 
   async userTransaction(userId: string, appId: string, appEnvId: string, transactionId: string) {
-    await this.data.ensureAppUser(userId, appId)
-    return this.data.transaction.findFirst({
+    await this.core.ensureAppUser(userId, appId)
+    return this.core.transaction.findFirst({
       where: { id: transactionId, appEnvId },
       include: { errors: true, appEnv: { include: { cluster: true } }, webhooks: true },
     })
   }
 
   async userTransactions(userId: string, appId: string, appEnvId: string, input: UserTransactionListInput = {}) {
-    await this.data.ensureAppUser(userId, appId)
+    await this.core.ensureAppUser(userId, appId)
     const { skip, take } = this.userTransactionsLimit(input)
-    return this.data.transaction.findMany({
+    return this.core.transaction.findMany({
       include: { errors: true, appEnv: { include: { cluster: true } } },
       orderBy: { createdAt: 'desc' },
       skip,
@@ -60,8 +60,8 @@ export class ApiTransactionUserDataAccessService {
     appEnvId: string,
     input: UserTransactionListInput = {},
   ): Promise<TransactionCounter> {
-    await this.data.ensureAppUser(userId, appId)
-    const total = await this.data.transaction.count({
+    await this.core.ensureAppUser(userId, appId)
+    const total = await this.core.transaction.count({
       where: this.userTransactionsWhere(appEnvId, input),
     })
     const { page, take } = this.userTransactionsLimit(input)

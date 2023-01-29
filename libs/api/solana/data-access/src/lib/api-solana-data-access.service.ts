@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { Solana, SolanaLogger } from '@kin-kinetic/solana'
 import { Injectable, Logger } from '@nestjs/common'
 
@@ -6,7 +6,7 @@ import { Injectable, Logger } from '@nestjs/common'
 export class ApiSolanaDataAccessService {
   private readonly connections = new Map<string, Solana>()
   private readonly loggers = new Map<string, Logger>()
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly core: ApiCoreService) {}
 
   deleteConnection(appKey: string): void {
     this.connections.delete(appKey)
@@ -15,7 +15,7 @@ export class ApiSolanaDataAccessService {
 
   async getConnection(appKey: string): Promise<Solana> {
     if (!this.connections.has(appKey)) {
-      const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+      const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
       this.connections.set(appKey, new Solana(appEnv.cluster.endpointPrivate, { logger: this.getSolanaLogger(appKey) }))
       this.getLogger(appKey).verbose(`Created new connection for ${appKey}`)
     }

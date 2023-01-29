@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { HttpService } from '@nestjs/axios'
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
@@ -25,7 +25,7 @@ function isValidWebhookType(type: string) {
 @Injectable()
 export class ApiWebhookDataAccessService {
   private readonly logger = new Logger(ApiWebhookDataAccessService.name)
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly http: HttpService) {}
+  constructor(private readonly core: ApiCoreService, private readonly http: HttpService) {}
 
   sendWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
     const appKey = getAppKey(appEnv.name, appEnv.app?.index)
@@ -86,7 +86,7 @@ export class ApiWebhookDataAccessService {
 
     try {
       // Get the app by Index
-      const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+      const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
       if (!appEnv.webhookDebugging) {
         this.logger.warn(`storeIncomingWebhook ignoring request, webhookDebugging is disabled`)
         res.statusCode = 400
@@ -105,7 +105,7 @@ export class ApiWebhookDataAccessService {
       const transactionId = headers['kinetic-tx-id']?.toString()
 
       // Store the incoming webhook
-      const created = await this.data.webhook.create({
+      const created = await this.core.webhook.create({
         data: {
           direction: WebhookDirection.Incoming,
           appEnvId: appEnv.id,
@@ -129,7 +129,7 @@ export class ApiWebhookDataAccessService {
     if (!appEnv.webhookDebugging) {
       return defaultUrl
     }
-    return `${this.data.config.apiUrl}/app/${appEnv.name}/${appEnv.app?.index}/webhook/${type.toLowerCase()}`
+    return `${this.core.config.apiUrl}/app/${appEnv.name}/${appEnv.app?.index}/webhook/${type.toLowerCase()}`
   }
 
   private sendBalanceWebhook(appEnv: AppEnv & { app: App }, options: WebhookOptions) {
@@ -141,7 +141,7 @@ export class ApiWebhookDataAccessService {
         .post(url, payload, { headers })
         .pipe(
           switchMap((res) =>
-            this.data.webhook.create({
+            this.core.webhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
                 direction: WebhookDirection.Outgoing,
@@ -171,7 +171,7 @@ export class ApiWebhookDataAccessService {
         .post(url, payload, { headers })
         .pipe(
           switchMap((res) =>
-            this.data.webhook.create({
+            this.core.webhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
                 direction: WebhookDirection.Outgoing,
@@ -203,7 +203,7 @@ export class ApiWebhookDataAccessService {
         .post(url, payload, { headers })
         .pipe(
           switchMap((res) =>
-            this.data.webhook.create({
+            this.core.webhook.create({
               data: {
                 appEnv: { connect: { id: appEnv.id } },
                 direction: WebhookDirection.Outgoing,

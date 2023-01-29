@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
 import { ellipsify, parseAppKey } from '@kin-kinetic/api/core/util'
 import { parseTransactionError } from '@kin-kinetic/api/kinetic/util'
 import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
@@ -56,59 +56,59 @@ export class ApiKineticService implements OnModuleInit {
   private sendVerifyWebhookSuccessCounter: Counter
 
   constructor(
-    private readonly data: ApiCoreDataAccessService,
+    private readonly core: ApiCoreService,
     private readonly solana: ApiSolanaDataAccessService,
     private readonly webhook: ApiWebhookDataAccessService,
   ) {}
 
   onModuleInit() {
-    this.closeAccountRequestCounter = this.data.metrics.getCounter(`api_account_close_account_request`, {
+    this.closeAccountRequestCounter = this.core.metrics.getCounter(`api_account_close_account_request`, {
       description: 'Number of closeAccount requests',
     })
-    this.closeAccountRequestInvalidCounter = this.data.metrics.getCounter(`api_account_close_account_invalid_request`, {
+    this.closeAccountRequestInvalidCounter = this.core.metrics.getCounter(`api_account_close_account_invalid_request`, {
       description: 'Number of invalid closeAccount requests',
     })
-    this.closeAccountRequestValidCounter = this.data.metrics.getCounter(`api_account_close_account_valid_request`, {
+    this.closeAccountRequestValidCounter = this.core.metrics.getCounter(`api_account_close_account_valid_request`, {
       description: 'Number of valid closeAccount requests',
     })
-    this.confirmSignatureFinalizedCounter = this.data.metrics.getCounter(
+    this.confirmSignatureFinalizedCounter = this.core.metrics.getCounter(
       `api_kinetic_confirm_signature_finalized_counter`,
       { description: 'Number of makeTransfer finalized Solana transactions' },
     )
-    this.confirmTransactionSolanaConfirmedCounter = this.data.metrics.getCounter(
+    this.confirmTransactionSolanaConfirmedCounter = this.core.metrics.getCounter(
       `api_kinetic_confirm_transaction_solana_confirmed_counter`,
       { description: 'Number of makeTransfer committed Solana transactions' },
     )
-    this.mintNotFoundErrorCounter = this.data.metrics.getCounter(`api_kinetic_mint_not_found_error_counter`, {
+    this.mintNotFoundErrorCounter = this.core.metrics.getCounter(`api_kinetic_mint_not_found_error_counter`, {
       description: 'Number of makeTransfer mint not found errors',
     })
 
-    this.sendEventWebhookErrorCounter = this.data.metrics.getCounter(`api_kinetic_send_event_webhook_error_counter`, {
+    this.sendEventWebhookErrorCounter = this.core.metrics.getCounter(`api_kinetic_send_event_webhook_error_counter`, {
       description: 'Number of makeTransfer webhook event errors',
     })
-    this.sendEventWebhookSuccessCounter = this.data.metrics.getCounter(
+    this.sendEventWebhookSuccessCounter = this.core.metrics.getCounter(
       `api_kinetic_send_event_webhook_success_counter`,
       { description: 'Number of makeTransfer webhook event success' },
     )
-    this.sendSolanaTransactionConfirmedCounter = this.data.metrics.getCounter(
+    this.sendSolanaTransactionConfirmedCounter = this.core.metrics.getCounter(
       `api_kinetic_send_solana_transaction_confirmed_counter`,
       { description: 'Number of makeTransfer confirmed Solana transactions' },
     )
-    this.sendSolanaTransactionErrorCounter = this.data.metrics.getCounter(
+    this.sendSolanaTransactionErrorCounter = this.core.metrics.getCounter(
       `api_kinetic_send_solana_transaction_error_counter`,
       { description: 'Number of makeTransfer Solana errors' },
     )
-    this.sendVerifyWebhookErrorCounter = this.data.metrics.getCounter(`api_kinetic_send_verify_webhook_error_counter`, {
+    this.sendVerifyWebhookErrorCounter = this.core.metrics.getCounter(`api_kinetic_send_verify_webhook_error_counter`, {
       description: 'Number of makeTransfer webhook verify errors',
     })
-    this.sendVerifyWebhookSuccessCounter = this.data.metrics.getCounter(
+    this.sendVerifyWebhookSuccessCounter = this.core.metrics.getCounter(
       `api_kinetic_send_verify_webhook_success_counter`,
       { description: 'Number of makeTransfer webhook verify success' },
     )
   }
 
   createAppEnvTransaction(appEnvId: string, options: Prisma.TransactionCreateInput): Promise<TransactionWithErrors> {
-    return this.data.transaction.create({
+    return this.core.transaction.create({
       data: {
         appEnv: { connect: { id: appEnvId } },
         ...options,
@@ -239,7 +239,7 @@ export class ApiKineticService implements OnModuleInit {
       return result
     }
 
-    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
     const appMint = this.validateMint(appEnv, appKey, mint.toString())
 
     const tokenAccounts = await this.getTokenAccounts(appKey, account, appMint.mint.address, commitment)
@@ -354,7 +354,7 @@ export class ApiKineticService implements OnModuleInit {
     }
     const { environment, index } = parseAppKey(appKey)
 
-    const found = await this.data.transaction.findMany({
+    const found = await this.core.transaction.findMany({
       where: {
         appEnv: {
           app: {
@@ -374,11 +374,11 @@ export class ApiKineticService implements OnModuleInit {
   }
 
   async getLatestBlockhash(appKey: string): Promise<LatestBlockhashResponse> {
-    return this.data.cache.wrap<LatestBlockhashResponse>(
+    return this.core.cache.wrap<LatestBlockhashResponse>(
       'solana',
       `${appKey}:getLatestBlockhash`,
       () => this.getSolanaConnection(appKey).then((solana) => solana.getLatestBlockhash()),
-      this.data.config.cache.solana.getLatestBlockhash.ttl,
+      this.core.config.cache.solana.getLatestBlockhash.ttl,
     )
   }
 
@@ -401,7 +401,7 @@ export class ApiKineticService implements OnModuleInit {
     // Create cache key
     const mintsKey = mints.map((mint) => ellipsify(mint.publicKey, 4, '-')).join(',')
 
-    return this.data.cache.wrap<MintAccounts[]>(
+    return this.core.cache.wrap<MintAccounts[]>(
       'solana',
       `${account}:${mintsKey}:${commitment}`,
       async () => {
@@ -415,7 +415,7 @@ export class ApiKineticService implements OnModuleInit {
           .filter((item) => item.status === 'fulfilled')
           .map((item: PromiseFulfilledResult<MintAccounts>) => item.value)
       },
-      this.data.config.cache.solana.getTokenAccounts.ttl,
+      this.core.config.cache.solana.getTokenAccounts.ttl,
       (value) => !!value.length,
     )
   }
@@ -438,11 +438,11 @@ export class ApiKineticService implements OnModuleInit {
     mint: PublicKeyString,
     commitment: Commitment,
   ): Promise<string[]> {
-    return this.data.cache.wrap<string[]>(
+    return this.core.cache.wrap<string[]>(
       'solana',
       `${appKey}:getTokenAccounts:${account}:${mint}:${commitment}`,
       () => this.getSolanaConnection(appKey).then((solana) => solana.getTokenAccounts(account, mint, commitment)),
-      this.data.config.cache.solana.getTokenAccounts.ttl,
+      this.core.config.cache.solana.getTokenAccounts.ttl,
       (value) => !!value?.length,
     )
   }
@@ -734,7 +734,7 @@ export class ApiKineticService implements OnModuleInit {
   }
 
   private updateTransaction(id: string, data: Prisma.TransactionUpdateInput): Promise<TransactionWithErrors> {
-    return this.data.transaction.update({
+    return this.core.transaction.update({
       where: { id },
       data,
       include: { errors: true },

@@ -1,6 +1,6 @@
 import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
 import { validatePassword } from '@kin-kinetic/api/auth/util'
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService, JwtSignOptions } from '@nestjs/jwt'
 import { UserIdentityType, UserRole } from '@prisma/client'
@@ -15,16 +15,16 @@ export class ApiAuthDataAccessService {
 
   constructor(
     private readonly apps: ApiAppDataAccessService,
-    private readonly data: ApiCoreDataAccessService,
+    private readonly core: ApiCoreService,
     private readonly jwt: JwtService,
   ) {}
 
   resetCookie(req: AuthRequest, res: Response) {
-    return res.clearCookie(this.data.config.cookieName, this.data.config.cookieOptions(req.hostname))
+    return res.clearCookie(this.core.config.cookieName, this.core.config.cookieOptions(req.hostname))
   }
 
   setCookie(req: AuthRequest, res: Response, token: string) {
-    return res?.cookie(this.data.config.cookieName, token, this.data.config.cookieOptions(req.hostname))
+    return res?.cookie(this.core.config.cookieName, token, this.core.config.cookieOptions(req.hostname))
   }
 
   sign(payload: { id: string; username: string }): string {
@@ -41,17 +41,17 @@ export class ApiAuthDataAccessService {
       avatarUrl?: string
     },
   ) {
-    const foundIdentity = await this.data.getUserByIdentity(type, profile.externalId)
+    const foundIdentity = await this.core.getUserByIdentity(type, profile.externalId)
 
     if (foundIdentity) {
       return foundIdentity
     }
 
-    const foundEmail = await this.data.getUserByEmail(profile.email)
+    const foundEmail = await this.core.getUserByEmail(profile.email)
 
     if (foundEmail) {
       // Add this identity to the user
-      return this.data.user.update({
+      return this.core.user.update({
         where: { id: foundEmail.id },
         data: {
           avatarUrl: foundEmail.avatarUrl || profile.avatarUrl,
@@ -68,14 +68,14 @@ export class ApiAuthDataAccessService {
     }
 
     let username = profile.username
-    const foundUsername = await this.data.getUserByUsername(profile.username)
+    const foundUsername = await this.core.getUserByUsername(profile.username)
     if (foundUsername) {
       // suffix username with random number
       username = `${profile.username}-${Math.floor(Math.random() * 1000)}`
     }
 
     // Create new user
-    return this.data.user.create({
+    return this.core.user.create({
       data: {
         avatarUrl: profile.avatarUrl,
         name: profile.name,
@@ -105,11 +105,11 @@ export class ApiAuthDataAccessService {
     const token = this.sign({ username: user.username, id: user.id })
     this.setCookie(req, res, token)
 
-    return res.redirect(this.data.config.webUrl)
+    return res.redirect(this.core.config.webUrl)
   }
 
   async validateUser({ username, password }: { password: string; username: string }) {
-    const user = await this.data.getUserByUsername(username)
+    const user = await this.core.getUserByUsername(username)
 
     if (!user) {
       throw new UnauthorizedException(`User not found.`)
@@ -128,7 +128,7 @@ export class ApiAuthDataAccessService {
   }
 
   async login(req: AuthRequest, res: Response, input: UserLoginInput): Promise<AuthToken> {
-    if (!this.data.config.authPasswordEnabled) {
+    if (!this.core.config.authPasswordEnabled) {
       throw new UnauthorizedException(`Login with username and password is not allowed.`)
     }
     if (input?.password.length < 8) {

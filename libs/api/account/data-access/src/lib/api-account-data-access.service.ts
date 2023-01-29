@@ -1,5 +1,5 @@
 import { ApiAppDataAccessService } from '@kin-kinetic/api/app/data-access'
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService, CloseAccountRequest } from '@kin-kinetic/api/kinetic/data-access'
 import { Transaction } from '@kin-kinetic/api/transaction/data-access'
@@ -19,26 +19,26 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   private createAccountSolanaTransactionErrorCounter: Counter
 
   constructor(
-    readonly data: ApiCoreDataAccessService,
+    readonly core: ApiCoreService,
     private readonly app: ApiAppDataAccessService,
     readonly kinetic: ApiKineticService,
   ) {}
 
   onModuleInit() {
     const createPrefix = 'api_account_create_account'
-    this.createAccountRequestCounter = this.data.metrics.getCounter(`${createPrefix}_request`, {
+    this.createAccountRequestCounter = this.core.metrics.getCounter(`${createPrefix}_request`, {
       description: 'Number of createAccount requests',
     })
-    this.createAccountErrorMintNotFoundCounter = this.data.metrics.getCounter(`${createPrefix}_error_mint_not_found`, {
+    this.createAccountErrorMintNotFoundCounter = this.core.metrics.getCounter(`${createPrefix}_error_mint_not_found`, {
       description: 'Number of createAccount mint not found errors',
     })
-    this.createAccountSolanaTransactionSuccessCounter = this.data.metrics.getCounter(
+    this.createAccountSolanaTransactionSuccessCounter = this.core.metrics.getCounter(
       `${createPrefix}_send_solana_transaction_success`,
       {
         description: 'Number of createAccount Solana transaction success',
       },
     )
-    this.createAccountSolanaTransactionErrorCounter = this.data.metrics.getCounter(
+    this.createAccountSolanaTransactionErrorCounter = this.core.metrics.getCounter(
       `${createPrefix}_send_solana_transaction_error`,
       {
         description: 'Number of createAccount Solana transaction errors',
@@ -48,7 +48,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
 
   async closeAccount(req: Request, input: CloseAccountRequest): Promise<Transaction> {
     const appKey = getAppKey(input.environment, input.index)
-    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
     // FIXME: Validating the request should be done in a NestJS guard or interceptor, not here
     const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
@@ -72,7 +72,7 @@ export class ApiAccountDataAccessService implements OnModuleInit {
   async createAccount(req: Request, input: CreateAccountRequest): Promise<Transaction> {
     const processingStartedAt = Date.now()
     const appKey = getAppKey(input.environment, input.index)
-    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
     this.createAccountRequestCounter.add(1, { appKey })
 
     // FIXME: Validating the request should be done in a NestJS guard or interceptor, not here

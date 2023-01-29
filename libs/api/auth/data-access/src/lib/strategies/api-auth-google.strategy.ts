@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { UserIdentityType } from '@prisma/client'
@@ -7,13 +7,13 @@ import { ApiAuthDataAccessService } from '../api-auth-data-access.service'
 
 @Injectable()
 export class ApiAuthGoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(private data: ApiCoreDataAccessService, private service: ApiAuthDataAccessService) {
+  constructor(private core: ApiCoreService, private service: ApiAuthDataAccessService) {
     // TODO: We need to make sure to dynamically load ApiAuthGoogleStrategy only when the
     //       environment variable is set.
     super({
-      clientID: data.config.googleClientId ?? 'google-client-not-configured',
-      clientSecret: data.config.googleClientSecret ?? 'google-client-not-configured',
-      callbackURL: data.config.googleCallbackUrl ?? 'google-client-not-configured',
+      clientID: core.config.googleClientId ?? 'google-client-not-configured',
+      clientSecret: core.config.googleClientSecret ?? 'google-client-not-configured',
+      callbackURL: core.config.googleCallbackUrl ?? 'google-client-not-configured',
       scope: ['profile', 'email'],
     })
   }

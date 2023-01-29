@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService } from '@kin-kinetic/api/kinetic/data-access'
 import { ApiWebhookDataAccessService } from '@kin-kinetic/api/webhook/data-access'
@@ -12,7 +12,7 @@ import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
 export class ApiWalletUserDataAccessService implements OnModuleInit {
   private readonly logger = new Logger(ApiWalletUserDataAccessService.name)
   constructor(
-    private readonly data: ApiCoreDataAccessService,
+    private readonly core: ApiCoreService,
     private readonly kinetic: ApiKineticService,
     private readonly webhook: ApiWebhookDataAccessService,
   ) {}
@@ -21,15 +21,15 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
     // MIGRATION: This migration will be removed in v1.0.0
     // The wallet balance history will no longer be stored in the database
     // Any old records will be deleted
-    const balances = await this.data.walletBalance.count()
+    const balances = await this.core.walletBalance.count()
     if (balances > 0) {
       this.logger.warn(`MIGRATION: Deleting ${balances} wallet balance records`)
-      await this.data.walletBalance.deleteMany()
+      await this.core.walletBalance.deleteMany()
     }
   }
 
   async checkBalance() {
-    const appEnvs = await this.data.appEnv.findMany({
+    const appEnvs = await this.core.appEnv.findMany({
       where: {
         cluster: { status: ClusterStatus.Active },
         webhookBalanceEnabled: true,
@@ -76,15 +76,15 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
     if (wallet.appEnvs?.length) {
       throw new BadRequestException(`You can't delete a wallet that has environments`)
     }
-    return this.data.wallet.delete({ where: { id: walletId } })
+    return this.core.wallet.delete({ where: { id: walletId } })
   }
 
   async userGenerateWallet(userId: string, appEnvId: string) {
-    const appEnv = await this.data.getAppEnvById(appEnvId)
-    await this.data.ensureAppOwner(userId, appEnv.app.id)
+    const appEnv = await this.core.getAppEnvById(appEnvId)
+    await this.core.ensureAppOwner(userId, appEnv.app.id)
     const { publicKey, secretKey } = Keypair.random()
 
-    return this.data.wallet.create({
+    return this.core.wallet.create({
       data: {
         secretKey,
         publicKey,
@@ -97,13 +97,13 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
   }
 
   async userImportWallet(userId: string, appEnvId: string, secret: string) {
-    const appEnv = await this.data.getAppEnvById(appEnvId)
-    await this.data.ensureAppOwner(userId, appEnv.app.id)
+    const appEnv = await this.core.getAppEnvById(appEnvId)
+    await this.core.ensureAppOwner(userId, appEnv.app.id)
 
     try {
       const { publicKey, secretKey } = Keypair.fromSecret(secret.trim())
 
-      return this.data.wallet.create({
+      return this.core.wallet.create({
         data: {
           secretKey,
           publicKey,
@@ -118,10 +118,10 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
   }
 
   async userWallet(userId: string, appEnvId: string, walletId: string) {
-    const appEnv = await this.data.getAppEnvById(appEnvId)
-    await this.data.ensureAppUser(userId, appEnv.app.id)
+    const appEnv = await this.core.getAppEnvById(appEnvId)
+    await this.core.ensureAppUser(userId, appEnv.app.id)
     await this.ensureWalletById(walletId)
-    const wallet = await this.data.wallet.findUnique({
+    const wallet = await this.core.wallet.findUnique({
       where: { id: walletId },
       include: { appEnvs: true, appMints: { include: { mint: true } } },
     })
@@ -136,7 +136,7 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
     amount: number,
   ): Promise<WalletAirdropResponse> {
     const wallet = await this.userWallet(userId, appEnvId, walletId)
-    const appEnv = await this.data.getAppEnvById(appEnvId)
+    const appEnv = await this.core.getAppEnvById(appEnvId)
     const appKey = getAppKey(appEnv.name, appEnv.app.index)
     const solana = await this.kinetic.getSolanaConnection(appKey)
     const floatAmount = parseFloat(amount?.toString())
@@ -149,8 +149,8 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
 
   async userWalletBalance(userId: string, appEnvId: string, walletId: string): Promise<string> {
     const wallet = await this.userWallet(userId, appEnvId, walletId)
-    const appEnv = await this.data.getAppEnvById(appEnvId)
-    await this.data.ensureAppUser(userId, appEnv.app.id)
+    const appEnv = await this.core.getAppEnvById(appEnvId)
+    await this.core.ensureAppUser(userId, appEnv.app.id)
     const appKey = getAppKey(appEnv.name, appEnv.app.index)
     const solana = await this.kinetic.getSolanaConnection(appKey)
 
@@ -160,9 +160,9 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
   }
 
   async userWallets(userId: string, appEnvId: string) {
-    const appEnv = await this.data.getAppEnvById(appEnvId)
-    await this.data.ensureAppUser(userId, appEnv.app.id)
-    const wallets = await this.data.wallet.findMany({
+    const appEnv = await this.core.getAppEnvById(appEnvId)
+    await this.core.ensureAppUser(userId, appEnv.app.id)
+    const wallets = await this.core.wallet.findMany({
       where: { appEnvs: { some: { id: appEnvId } } },
       include: {
         appMints: {
@@ -178,7 +178,7 @@ export class ApiWalletUserDataAccessService implements OnModuleInit {
   }
 
   private async ensureWalletById(walletId: string) {
-    const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
+    const wallet = await this.core.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
       throw new NotFoundException(`Wallet with id ${walletId} does not exist.`)
     }

@@ -1,5 +1,5 @@
 import { Airdrop } from '@kin-kinetic/api/airdrop/util'
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService } from '@kin-kinetic/api/kinetic/data-access'
 import { Commitment } from '@kin-kinetic/solana'
@@ -12,11 +12,11 @@ export class ApiAirdropDataAccessService {
   private readonly airdrop = new Map<string, Airdrop>()
   private readonly logger = new Logger(ApiAirdropDataAccessService.name)
 
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly kinetic: ApiKineticService) {}
+  constructor(private readonly core: ApiCoreService, private readonly kinetic: ApiKineticService) {}
 
   async requestAirdrop(input: RequestAirdropRequest): Promise<RequestAirdropResponse> {
     const appKey = getAppKey(input.environment, input.index)
-    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
     const solana = await this.kinetic.getSolanaConnection(appKey)
 
     // Make sure the requested mint is enabled for this app
@@ -27,7 +27,7 @@ export class ApiAirdropDataAccessService {
     const mint = appMint.mint
 
     // Make sure there is an airdrop config for this mint
-    const airdropConfig = this.data.getAirdropConfig(mint, appEnv.cluster)
+    const airdropConfig = this.core.getAirdropConfig(mint, appEnv.cluster)
     if (!airdropConfig) {
       throw new BadRequestException(`Airdrop configuration not found.`)
     }

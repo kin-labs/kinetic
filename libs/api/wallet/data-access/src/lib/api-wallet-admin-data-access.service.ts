@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 
@@ -20,19 +20,19 @@ export class ApiWalletAdminDataAccessService {
     },
     owner: true,
   }
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly core: ApiCoreService) {}
 
   async adminDeleteWallet(userId: string, walletId: string) {
     const wallet = await this.adminWallet(userId, walletId)
     if (wallet.appEnvs?.length) {
       throw new BadRequestException(`You can't delete a wallet that has environments`)
     }
-    return this.data.wallet.delete({ where: { id: walletId } })
+    return this.core.wallet.delete({ where: { id: walletId } })
   }
 
   async adminWallet(userId: string, walletId: string) {
-    await this.data.ensureAdminUser(userId)
-    return this.data.wallet.findUnique({
+    await this.core.ensureAdminUser(userId)
+    return this.core.wallet.findUnique({
       where: { id: walletId },
       include: {
         appEnvs: this.include.appEnvs,
@@ -41,8 +41,8 @@ export class ApiWalletAdminDataAccessService {
   }
 
   async adminWallets(userId: string) {
-    await this.data.ensureAdminUser(userId)
-    return this.data.wallet.findMany({
+    await this.core.ensureAdminUser(userId)
+    return this.core.wallet.findMany({
       include: {
         ...this.include,
         balances: {

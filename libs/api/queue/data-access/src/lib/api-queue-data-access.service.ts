@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { AdminQueueLoadInput } from './dto/admin-queue-load.input'
@@ -11,10 +11,7 @@ import { ApiQueueCloseAccountService } from './queue/close-account/api-queue-clo
 @Injectable()
 export class ApiQueueDataAccessService {
   private readonly logger = new Logger(ApiQueueDataAccessService.name)
-  constructor(
-    private readonly data: ApiCoreDataAccessService,
-    private readonly accountQueue: ApiQueueCloseAccountService,
-  ) {}
+  constructor(private readonly core: ApiCoreService, private readonly accountQueue: ApiQueueCloseAccountService) {}
 
   async adminQueues(): Promise<Queue[]> {
     const queues = [this.accountQueue]
@@ -108,7 +105,7 @@ export class ApiQueueDataAccessService {
     const uniqueAccounts = [...new Set(accounts)]
 
     this.logger.debug(`Loading ${uniqueAccounts.length} accounts into ${QueueType.CloseAccount} queue in app ${appKey}`)
-    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
 
     // TODO: Add support for specifying which Mint accounts to close
     // Currently, only the token account for the default Mint is closed

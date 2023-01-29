@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { ApiKineticService } from '@kin-kinetic/api/kinetic/data-access'
 import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
@@ -38,19 +38,19 @@ export class ApiAppDataAccessService implements OnModuleInit {
   private getAppConfigErrorCounter: Counter
   private getAppConfigSuccessCounter: Counter
 
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly kinetic: ApiKineticService) {}
+  constructor(private readonly core: ApiCoreService, private readonly kinetic: ApiKineticService) {}
 
   async onModuleInit() {
-    this.getAppConfigErrorCounter = this.data.metrics.getCounter('api_app_get_app_config_error_counter', {
+    this.getAppConfigErrorCounter = this.core.metrics.getCounter('api_app_get_app_config_error_counter', {
       description: 'Number of getAppConfig errors',
     })
-    this.getAppConfigSuccessCounter = this.data.metrics.getCounter('api_app_get_app_config_success_counter', {
+    this.getAppConfigSuccessCounter = this.core.metrics.getCounter('api_app_get_app_config_success_counter', {
       description: 'Number of getAppConfig success',
     })
   }
 
   async getAppConfig(appKey: string): Promise<AppConfig> {
-    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
     if (!appEnv) {
       this.getAppConfigErrorCounter.add(1, { appKey })
       throw new NotFoundException(`App not found :(`)
@@ -81,8 +81,8 @@ export class ApiAppDataAccessService implements OnModuleInit {
         name: appEnv.app.name,
       },
       api: {
-        name: this.data.config.apiName,
-        version: this.data.config.apiVersion,
+        name: this.core.config.apiName,
+        version: this.core.config.apiVersion,
       },
       environment: {
         name: appEnv.name,

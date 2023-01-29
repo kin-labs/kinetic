@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService, TransactionWithErrors } from '@kin-kinetic/api/kinetic/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
@@ -19,7 +19,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   private makeTransferRequestCounter: Counter
 
-  constructor(readonly data: ApiCoreDataAccessService, readonly kinetic: ApiKineticService) {}
+  constructor(readonly core: ApiCoreService, readonly kinetic: ApiKineticService) {}
 
   async cleanupStaleTransactions() {
     const stale = await this.getExpiredTransactions()
@@ -36,7 +36,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   private getExpiredTransactions(): Promise<Transaction[]> {
     const expiredMinutes = 1
     const expired = getExpiredTime(expiredMinutes)
-    return this.data.transaction.findMany({
+    return this.core.transaction.findMany({
       where: {
         status: { notIn: [TransactionStatus.Finalized, TransactionStatus.Failed] },
         updatedAt: { lt: expired },
@@ -74,7 +74,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
             solanaTransaction,
           )
 
-          const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+          const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
 
           // Send Event Webhook
           if (appEnv.webhookEventEnabled && appEnv.webhookEventUrl) {
@@ -111,7 +111,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   storeTransactionError(id: string, message: string) {
-    return this.data.transaction.update({
+    return this.core.transaction.update({
       where: { id },
       data: {
         status: TransactionStatus.Failed,
@@ -126,7 +126,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    this.makeTransferRequestCounter = this.data.metrics.getCounter(`api_transaction_make_transfer_request_counter`, {
+    this.makeTransferRequestCounter = this.core.metrics.getCounter(`api_transaction_make_transfer_request_counter`, {
       description: 'Number of requests to makeTransfer',
     })
     await this.migrateTransactionReferences()
@@ -135,7 +135,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
   async makeTransfer(req: Request, input: MakeTransferRequest): Promise<TransactionWithErrors> {
     const processingStartedAt = Date.now()
     const appKey = getAppKey(input.environment, input.index)
-    const appEnv = await this.data.getAppEnvironmentByAppKey(appKey)
+    const appEnv = await this.core.getAppEnvironmentByAppKey(appKey)
     this.makeTransferRequestCounter.add(1, { appKey })
 
     const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
@@ -181,7 +181,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
   // MIGRATION: This migration will be removed in v1.0.0
   private async migrateTransactionReferences() {
-    const count = await this.data.transaction.count({
+    const count = await this.core.transaction.count({
       where: {
         OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
       },
@@ -197,7 +197,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
     this.logger.verbose(`migrateTransactionReferences: migrating ${count} transactions in ${batches} batches`)
 
     for (let i = 0; i < batches; i++) {
-      const transactions = await this.data.transaction.findMany({
+      const transactions = await this.core.transaction.findMany({
         where: {
           OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
         },
@@ -225,7 +225,7 @@ export class ApiTransactionDataAccessService implements OnModuleInit {
 
       const updated = await Promise.all(
         updates.map(async (update) => {
-          return this.data.transaction.update({
+          return this.core.transaction.update({
             where: { id: update.id },
             data: update.data,
           })

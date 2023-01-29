@@ -1,16 +1,16 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { Injectable } from '@nestjs/common'
 import { UserSearchUserInput } from './dto/user-search-user.input'
 
 @Injectable()
 export class ApiUserUserDataAccessService {
-  constructor(private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly core: ApiCoreService) {}
 
   async userSearchUsers(input: UserSearchUserInput) {
     if (!input.query) {
       return null
     }
-    return this.data.user
+    return this.core.user
       .findMany({
         where: {
           OR: [

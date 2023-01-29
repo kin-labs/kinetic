@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { UserRole } from '@kin-kinetic/api/user/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
@@ -13,20 +13,20 @@ import { AppUserRole } from './entity/app-user-role.enum'
 export class ApiAppAdminDataAccessService implements OnModuleInit {
   private readonly logger = new Logger(ApiAppAdminDataAccessService.name)
 
-  constructor(private readonly app: ApiAppDataAccessService, private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly app: ApiAppDataAccessService, private readonly core: ApiCoreService) {}
 
   async onModuleInit() {
     await this.configureProvisionedApps()
   }
 
   async adminCreateApp(userId: string, input: AdminAppCreateInput) {
-    await this.data.ensureAdminUser(userId)
-    const app = await this.data.getAppByIndex(input.index)
+    await this.core.ensureAdminUser(userId)
+    const app = await this.core.getAppByIndex(input.index)
     if (app) {
       throw new BadRequestException(`App with index ${input.index} already exists`)
     }
     this.logger.verbose(`app ${input.index}: creating ${input.name}...`)
-    const activeClusters = await this.data.getActiveClusters()
+    const activeClusters = await this.core.getActiveClusters()
 
     const envs: Prisma.AppEnvCreateWithoutAppInput[] = []
 
@@ -36,7 +36,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
       const mints: Prisma.AppMintCreateWithoutAppEnvInput[] = []
       const wallets = []
       for (const mint of enabledMints) {
-        const generated = await this.data.generateAppWallet(userId, input.index)
+        const generated = await this.core.generateAppWallet(userId, input.index)
         mints.push({
           addMemo: mint.addMemo,
           order: mint.order,
@@ -78,7 +78,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
       envs: { create: envs },
     }
 
-    const created = await this.data.app.create({
+    const created = await this.core.app.create({
       data,
       include: {
         envs: {
@@ -109,7 +109,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
 
   async adminUpdateApp(userId: string, appId: string, input: AdminAppUpdateInput) {
     await this.ensureAppById(userId, appId)
-    return this.data.app.update({
+    return this.core.app.update({
       data: { ...input },
       where: { id: appId },
     })
@@ -117,17 +117,17 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
 
   async adminDeleteApp(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
-    await this.data.appUser.deleteMany({ where: { appId } })
-    await this.data.transactionError.deleteMany({ where: { transaction: { appEnv: { appId } } } })
-    await this.data.transaction.deleteMany({ where: { appEnv: { appId } } })
-    await this.data.webhook.deleteMany({ where: { appEnv: { appId } } })
-    await this.data.appEnv.deleteMany({ where: { appId } })
-    return this.data.app.delete({ where: { id: appId } })
+    await this.core.appUser.deleteMany({ where: { appId } })
+    await this.core.transactionError.deleteMany({ where: { transaction: { appEnv: { appId } } } })
+    await this.core.transaction.deleteMany({ where: { appEnv: { appId } } })
+    await this.core.webhook.deleteMany({ where: { appEnv: { appId } } })
+    await this.core.appEnv.deleteMany({ where: { appId } })
+    return this.core.app.delete({ where: { id: appId } })
   }
 
   async adminApps(userId: string) {
-    await this.data.ensureAdminUser(userId)
-    return this.data.app.findMany({
+    await this.core.ensureAdminUser(userId)
+    return this.core.app.findMany({
       include: this.app.include,
       orderBy: { updatedAt: 'desc' },
     })
@@ -135,12 +135,12 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
 
   async adminApp(userId: string, appId: string) {
     await this.ensureAppById(userId, appId)
-    return this.data.getAppById(appId)
+    return this.core.getAppById(appId)
   }
 
   async ensureAppById(userId: string, appId: string) {
-    await this.data.ensureAdminUser(userId)
-    const app = await this.data.app.findUnique({ where: { id: appId } })
+    await this.core.ensureAdminUser(userId)
+    const app = await this.core.app.findUnique({ where: { id: appId } })
     if (!app) {
       throw new NotFoundException(`App with id ${appId} does not exist.`)
     }
@@ -148,11 +148,11 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
   }
 
   private async configureProvisionedApps() {
-    await this.data.configureDefaultData()
+    await this.core.configureDefaultData()
     let adminId
     return Promise.all(
-      this.data.config.provisionedApps.map(async (app) => {
-        const found = await this.data.getAppByIndex(app.index)
+      this.core.config.provisionedApps.map(async (app) => {
+        const found = await this.core.getAppByIndex(app.index)
         if (found) {
           const { publicKey } = Keypair.fromSecret(app.secret)
           this.logger.log(
@@ -162,7 +162,7 @@ export class ApiAppAdminDataAccessService implements OnModuleInit {
           )
         } else {
           if (!adminId) {
-            const admin = await this.data.user.findFirst({
+            const admin = await this.core.user.findFirst({
               where: { role: UserRole.Admin },
               orderBy: { createdAt: 'asc' },
             })

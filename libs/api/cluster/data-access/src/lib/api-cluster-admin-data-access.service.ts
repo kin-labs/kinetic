@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService } from '@kin-kinetic/api/kinetic/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
@@ -12,11 +12,11 @@ import { ClusterStatus } from './entity/cluster-status.enum'
 @Injectable()
 export class ApiClusterAdminDataAccessService {
   private readonly logger = new Logger(ApiClusterAdminDataAccessService.name)
-  constructor(private readonly data: ApiCoreDataAccessService, private readonly kinetic: ApiKineticService) {}
+  constructor(private readonly core: ApiCoreService, private readonly kinetic: ApiKineticService) {}
 
   async adminCreateCluster(userId: string, data: AdminClusterCreateInput) {
-    await this.data.ensureAdminUser(userId)
-    return this.data.cluster.create({
+    await this.core.ensureAdminUser(userId)
+    return this.core.cluster.create({
       data: {
         ...data,
         explorer: data.explorer || 'https://explorer.solana.com/{path}',
@@ -31,7 +31,7 @@ export class ApiClusterAdminDataAccessService {
       throw new BadRequestException('Cluster has apps deployed')
     }
     if (cluster.mints.length > 0) {
-      await this.data.mint
+      await this.core.mint
         .deleteMany({
           where: {
             clusterId: cluster.id,
@@ -42,15 +42,15 @@ export class ApiClusterAdminDataAccessService {
         })
     }
 
-    return this.data.cluster.delete({ where: { id: clusterId } }).then((res) => {
+    return this.core.cluster.delete({ where: { id: clusterId } }).then((res) => {
       this.logger.log(`Deleted cluster ${clusterId}`)
       return res
     })
   }
 
   async adminClusters(userId: string) {
-    await this.data.ensureAdminUser(userId)
-    return this.data.cluster.findMany({
+    await this.core.ensureAdminUser(userId)
+    return this.core.cluster.findMany({
       include: {
         envs: { include: { app: true } },
         mints: true,
@@ -60,8 +60,8 @@ export class ApiClusterAdminDataAccessService {
   }
 
   async adminCluster(userId: string, clusterId: string) {
-    await this.data.ensureAdminUser(userId)
-    return this.data.cluster.findUnique({
+    await this.core.ensureAdminUser(userId)
+    return this.core.cluster.findUnique({
       where: { id: clusterId },
       include: {
         envs: { include: { app: true } },
@@ -71,9 +71,9 @@ export class ApiClusterAdminDataAccessService {
   }
 
   async adminUpdateCluster(userId: string, clusterId: string, data: AdminClusterUpdateInput) {
-    await this.data.ensureAdminUser(userId)
-    const updated = await this.data.cluster.update({ where: { id: clusterId }, data })
-    const envs = await this.data.appEnv.findMany({
+    await this.core.ensureAdminUser(userId)
+    const updated = await this.core.cluster.update({ where: { id: clusterId }, data })
+    const envs = await this.core.appEnv.findMany({
       where: { clusterId: updated.id },
       include: { app: true },
     })
@@ -107,7 +107,7 @@ export class ApiClusterAdminDataAccessService {
       type: MintType.SplToken,
     }
 
-    return this.data.cluster.update({
+    return this.core.cluster.update({
       data: { mints: { create: mint } },
       where: { id: cluster.id },
       include: { mints: true },
@@ -115,8 +115,8 @@ export class ApiClusterAdminDataAccessService {
   }
 
   async adminDeleteMint(userId: string, mintId: string) {
-    await this.data.ensureAdminUser(userId)
-    const found = await this.data.mint.findUnique({ where: { id: mintId }, include: { cluster: true, appMints: true } })
+    await this.core.ensureAdminUser(userId)
+    const found = await this.core.mint.findUnique({ where: { id: mintId }, include: { cluster: true, appMints: true } })
 
     if (!found) {
       throw new BadRequestException('Mint not found')
@@ -126,19 +126,19 @@ export class ApiClusterAdminDataAccessService {
       throw new BadRequestException('Mint is in use by an app')
     }
 
-    return this.data.mint.delete({ where: { id: mintId } }).then((res) => {
+    return this.core.mint.delete({ where: { id: mintId } }).then((res) => {
       this.logger.log(`Deleted mint ${mintId}`)
       return res
     })
   }
 
   async adminMintImportWallet(userId: string, mintId: string, secret: string) {
-    await this.data.ensureAdminUser(userId)
+    await this.core.ensureAdminUser(userId)
 
     try {
       const { secretKey } = Keypair.fromSecret(secret)
 
-      return this.data.mint.update({
+      return this.core.mint.update({
         where: { id: mintId },
         data: {
           airdropSecretKey: secretKey,

@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { UserRole } from '@kin-kinetic/api/user/data-access'
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
@@ -15,11 +15,11 @@ import { UserAppUserUpdateRoleInput } from './dto/user-app-user-update-role.inpu
 @Injectable()
 export class ApiAppUserDataAccessService {
   private readonly logger = new Logger(ApiAppUserDataAccessService.name)
-  constructor(private readonly app: ApiAppDataAccessService, private readonly data: ApiCoreDataAccessService) {}
+  constructor(private readonly app: ApiAppDataAccessService, private readonly core: ApiCoreService) {}
 
   async userApps(userId: string) {
-    const user = await this.data.getUserById(userId)
-    return this.data.app.findMany({
+    const user = await this.core.getUserById(userId)
+    return this.core.app.findMany({
       include: this.app.include,
       orderBy: { name: 'asc' },
       where: this.allowAdmin(user.role, userId),
@@ -27,13 +27,13 @@ export class ApiAppUserDataAccessService {
   }
 
   async userApp(userId: string, appId: string) {
-    await this.data.ensureAppUser(userId, appId)
-    return this.data.getAppById(appId)
+    await this.core.ensureAppUser(userId, appId)
+    return this.core.getAppById(appId)
   }
 
   async userAppEnv(userId: string, appId: string, appEnvId: string) {
-    await this.data.ensureAppUser(userId, appId)
-    return this.data.appEnv.findUnique({
+    await this.core.ensureAppUser(userId, appId)
+    return this.core.appEnv.findUnique({
       where: { id: appEnvId },
       include: {
         app: true,
@@ -61,24 +61,24 @@ export class ApiAppUserDataAccessService {
   }
 
   userAppRole(userId: string, appId: string) {
-    return this.data.ensureAppUser(userId, appId)
+    return this.core.ensureAppUser(userId, appId)
   }
 
   async userUpdateApp(userId: string, appId: string, data: UserAppUpdateInput) {
-    await this.data.ensureAppOwner(userId, appId)
-    return this.data.app.update({ where: { id: appId }, data, include: this.app.include })
+    await this.core.ensureAppOwner(userId, appId)
+    return this.core.app.update({ where: { id: appId }, data, include: this.app.include })
   }
 
   async userCreateAppEnv(userId: string, appId: string, clusterId: string, data: UserAppEnvCreateInput) {
-    await this.data.ensureAppOwner(userId, appId)
-    const app = await this.data.getAppById(appId)
+    await this.core.ensureAppOwner(userId, appId)
+    const app = await this.core.getAppById(appId)
     if (app.envs.length >= app.maxEnvs) {
       this.logger.warn(`User ${userId} reached max number of environments for app ${appId}`)
       throw new Error(
         `The maximum number of environments has been reached for this app. Please contact your administrator to increase the maximum.`,
       )
     }
-    const activeClusters = await this.data.getActiveClusters()
+    const activeClusters = await this.core.getActiveClusters()
     const cluster = activeClusters.find((cluster) => cluster.id === clusterId)
 
     if (!cluster) {
@@ -89,7 +89,7 @@ export class ApiAppUserDataAccessService {
     const mints = []
     const wallets = []
     for (const mint of enabledMints) {
-      const generated = await this.data.generateAppWallet(userId, app.index)
+      const generated = await this.core.generateAppWallet(userId, app.index)
       mints.push({
         addMemo: mint.addMemo,
         order: mint.order,
@@ -99,7 +99,7 @@ export class ApiAppUserDataAccessService {
       wallets.push({ id: generated.id })
     }
 
-    return this.data.appEnv.create({
+    return this.core.appEnv.create({
       data: {
         // Connect the app
         app: { connect: { id: app.id } },
@@ -120,8 +120,8 @@ export class ApiAppUserDataAccessService {
   }
 
   async userUpdateAppEnv(userId: string, appId: string, appEnvId: string, input: UserAppEnvUpdateInput) {
-    await this.data.ensureAppOwner(userId, appId)
-    return this.data.appEnv.update({
+    await this.core.ensureAppOwner(userId, appId)
+    return this.core.appEnv.update({
       where: { id: appEnvId },
       data: input,
       include: {
@@ -132,8 +132,8 @@ export class ApiAppUserDataAccessService {
   }
 
   async userUpdateAppMint(userId: string, appId: string, appMintId: string, data: UserAppMintUpdateInput) {
-    await this.data.ensureAppOwner(userId, appId)
-    return this.data.appMint.update({
+    await this.core.ensureAppOwner(userId, appId)
+    return this.core.appMint.update({
       where: { id: appMintId },
       data,
     })
@@ -150,7 +150,7 @@ export class ApiAppUserDataAccessService {
       throw new BadRequestException(`Can't disable the default mint`)
     }
 
-    return this.data.appEnv.update({
+    return this.core.appEnv.update({
       where: { id: appEnvId },
       data: { mints: { disconnect: { id: found.id } } },
       include: this.app.includeAppEnv,
@@ -163,11 +163,11 @@ export class ApiAppUserDataAccessService {
     if (found) {
       throw new BadRequestException(`AppEnv already has a mint with id ${mintId}`)
     }
-    const mint = await this.data.mint.findUnique({ where: { id: mintId } })
+    const mint = await this.core.mint.findUnique({ where: { id: mintId } })
     if (!mint) {
       throw new BadRequestException(`Mint with id ${mintId} not found`)
     }
-    return this.data.appEnv.update({
+    return this.core.appEnv.update({
       where: { id: appEnvId },
       data: {
         mints: {
@@ -189,7 +189,7 @@ export class ApiAppUserDataAccessService {
       throw new BadRequestException(`AppEnv has no wallet with id ${walletId}`)
     }
 
-    await this.data.appMint.update({ where: { id: mintId }, data: { walletId } })
+    await this.core.appMint.update({ where: { id: mintId }, data: { walletId } })
     return this.userAppEnv(userId, appId, appEnvId)
   }
 
@@ -199,11 +199,11 @@ export class ApiAppUserDataAccessService {
     if (found) {
       throw new BadRequestException(`AppEnv already has a wallet with id ${walletId}`)
     }
-    const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
+    const wallet = await this.core.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
       throw new BadRequestException(`Wallet with id ${walletId} not found`)
     }
-    return this.data.appEnv.update({
+    return this.core.appEnv.update({
       where: { id: appEnvId },
       data: { wallets: { connect: { id: wallet.id } } },
       include: this.app.includeAppEnv,
@@ -216,11 +216,11 @@ export class ApiAppUserDataAccessService {
     if (!found) {
       throw new BadRequestException(`AppEnv has no wallet with id ${walletId}`)
     }
-    const wallet = await this.data.wallet.findUnique({ where: { id: walletId } })
+    const wallet = await this.core.wallet.findUnique({ where: { id: walletId } })
     if (!wallet) {
       throw new BadRequestException(`Wallet with id ${walletId} not found`)
     }
-    return this.data.appEnv.update({
+    return this.core.appEnv.update({
       where: { id: appEnvId },
       data: { wallets: { disconnect: { id: wallet.id } } },
       include: this.app.includeAppEnv,
@@ -228,8 +228,8 @@ export class ApiAppUserDataAccessService {
   }
 
   async userAppUserAdd(userId: string, appId: string, input: UserAppUserAddInput) {
-    await this.data.ensureAppOwner(userId, appId)
-    return this.data.app.update({
+    await this.core.ensureAppOwner(userId, appId)
+    return this.core.app.update({
       where: { id: appId },
       data: { users: { create: { userId: input.userId, role: input.role } } },
       include: this.app.include,
@@ -237,8 +237,8 @@ export class ApiAppUserDataAccessService {
   }
 
   async userAppUserRemove(userId: string, appId: string, input: UserAppUserRemoveInput) {
-    await this.data.ensureAppOwner(userId, appId)
-    return this.data.app.update({
+    await this.core.ensureAppOwner(userId, appId)
+    return this.core.app.update({
       where: { id: appId },
       data: { users: { deleteMany: { userId: input.userId } } },
       include: this.app.include,
@@ -246,9 +246,9 @@ export class ApiAppUserDataAccessService {
   }
 
   async userAppUserUpdateRole(userId: string, appId: string, input: UserAppUserUpdateRoleInput) {
-    await this.data.ensureAppOwner(userId, appId)
-    const existing = await this.data.appUser.findFirst({ where: { userId: input.userId, appId: appId } })
-    return this.data.app.update({
+    await this.core.ensureAppOwner(userId, appId)
+    const existing = await this.core.appUser.findFirst({ where: { userId: input.userId, appId: appId } })
+    return this.core.app.update({
       where: { id: appId },
       data: {
         users: {

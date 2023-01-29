@@ -31,7 +31,7 @@ export class ApiQueueCloseAccountProcessor {
           `${job.id} Account can close! ${JSON.stringify({ info: accountInfo, mint, mints, wallets }, null, 2)}`,
         )
 
-        const appEnv = await this.service.data.getAppEnvironmentByAppKey(appKey)
+        const appEnv = await this.service.core.getAppEnvironmentByAppKey(appKey)
         const transaction = await this.kinetic.handleCloseAccount(
           {
             commitment,
