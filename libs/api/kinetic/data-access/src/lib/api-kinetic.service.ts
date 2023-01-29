@@ -399,7 +399,7 @@ export class ApiKineticService implements OnModuleInit {
     mints: BalanceMint[],
   ): Promise<MintAccounts[]> {
     // Create cache key
-    const mintsKey = mints.map((mint) => ellipsify(mint.publicKey, 4, '-')).join(',')
+    const mintsKey = mints?.map((mint) => ellipsify(mint.publicKey, 4, '-')).join(',')
 
     return this.core.cache.wrap<MintAccounts[]>(
       'solana',
@@ -407,16 +407,16 @@ export class ApiKineticService implements OnModuleInit {
       async () => {
         // Get token accounts for each mint, gracefully handle errors (e.g. if mint is not found)
         const mintAccounts = await Promise.allSettled(
-          mints.map((mint) => this.getMintTokenAccounts(appKey, account, mint, commitment)),
+          mints?.map((mint) => this.getMintTokenAccounts(appKey, account, mint, commitment)),
         )
 
         // Return only fulfilled promises
         return mintAccounts
-          .filter((item) => item.status === 'fulfilled')
-          .map((item: PromiseFulfilledResult<MintAccounts>) => item.value)
+          ?.filter((item) => item.status === 'fulfilled')
+          ?.map((item: PromiseFulfilledResult<MintAccounts>) => item.value)
       },
       this.core.config.cache.solana.getTokenAccounts.ttl,
-      (value) => !!value.length,
+      (value) => !!value?.length,
     )
   }
 
