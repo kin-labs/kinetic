@@ -135,7 +135,6 @@ export function WebAppEnvSolanaTransactionForm({
             .
           </Text>
           <Field
-            isDisabled={!env.solanaTransactionMaxRetries}
             name="solanaTransactionMaxRetries"
             label="Max Retries"
             type="number"
