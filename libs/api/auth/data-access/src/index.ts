@@ -1,5 +1,5 @@
 export * from './lib/api-auth-data-access.module'
-export * from './lib/api-auth-data-access.service'
+export * from './lib/api-auth.service'
 export * from './lib/decorators/ctx-user'
 export * from './lib/dto/user-login.input'
 export * from './lib/entities/auth-request.entity'

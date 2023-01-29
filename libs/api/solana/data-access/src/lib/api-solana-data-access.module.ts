@@ -1,10 +1,10 @@
 import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { Module } from '@nestjs/common'
-import { ApiSolanaDataAccessService } from './api-solana-data-access.service'
+import { ApiSolanaService } from './api-solana.service'
 
 @Module({
-  providers: [ApiSolanaDataAccessService],
-  exports: [ApiSolanaDataAccessService],
+  providers: [ApiSolanaService],
+  exports: [ApiSolanaService],
   imports: [ApiCoreDataAccessModule],
 })
 export class ApiSolanaDataAccessModule {}

@@ -1,14 +1,14 @@
 import { AppEnv, AppMint } from '@kin-kinetic/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
-import { ApiWalletAdminDataAccessService, Wallet } from '@kin-kinetic/api/wallet/data-access'
+import { ApiWalletAdminService, Wallet } from '@kin-kinetic/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => Wallet)
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiWalletAdminFeatureResolver {
-  constructor(private readonly service: ApiWalletAdminDataAccessService) {}
+  constructor(private readonly service: ApiWalletAdminService) {}
 
   @Mutation(() => Wallet, { nullable: true })
   adminDeleteWallet(@CtxUser() user: User, @Args('walletId') walletId: string) {

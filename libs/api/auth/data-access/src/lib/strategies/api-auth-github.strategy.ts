@@ -1,20 +1,20 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { UserIdentityType } from '@prisma/client'
 import fetch from 'node-fetch'
 import { Profile, Strategy } from 'passport-github'
-import { ApiAuthDataAccessService } from '../api-auth-data-access.service'
+import { ApiAuthService } from '../api-auth.service'
 
 @Injectable()
 export class ApiAuthGithubStrategy extends PassportStrategy(Strategy, 'github') {
-  constructor(private data: ApiCoreDataAccessService, private service: ApiAuthDataAccessService) {
+  constructor(private core: ApiCoreService, private service: ApiAuthService) {
     // TODO: We need to make sure to dynamically load ApiAuthGithubStrategy only when the
     //       environment variable is set.
     super({
-      clientID: data.config.githubClientId ?? 'github-client-not-configured',
-      clientSecret: data.config.githubClientSecret ?? 'github-client-not-configured',
-      callbackURL: data.config.githubCallbackUrl ?? 'github-client-not-configured',
+      clientID: core.config.githubClientId ?? 'github-client-not-configured',
+      clientSecret: core.config.githubClientSecret ?? 'github-client-not-configured',
+      callbackURL: core.config.githubCallbackUrl ?? 'github-client-not-configured',
       scope: ['public_profile', 'user:email'],
       profilePath: 'https://api.github.com/user',
     })

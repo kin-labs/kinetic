@@ -1,7 +1,7 @@
 import { ApiAuthGraphqlGuard } from '@kin-kinetic/api/auth/data-access'
 import {
   AdminQueueLoadInput,
-  ApiQueueDataAccessService,
+  ApiQueueService,
   Job,
   JobStatus,
   Queue,
@@ -13,7 +13,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 @Resolver()
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiQueueAdminFeatureResolver {
-  constructor(private readonly service: ApiQueueDataAccessService) {}
+  constructor(private readonly service: ApiQueueService) {}
 
   @Query(() => Queue, { nullable: true })
   adminQueue(@Args('type', { type: () => QueueType }) type: QueueType) {

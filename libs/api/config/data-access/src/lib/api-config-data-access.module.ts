@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { ApiConfigDataAccessService } from './api-config-data-access.service'
+import { ApiConfigService } from './api-config.service'
 
 @Module({
-  providers: [ApiConfigDataAccessService],
-  exports: [ApiConfigDataAccessService],
+  providers: [ApiConfigService],
+  exports: [ApiConfigService],
   imports: [ConfigModule],
 })
 export class ApiConfigDataAccessModule {}

@@ -1,6 +1,6 @@
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import {
-  ApiUserAdminDataAccessService,
+  ApiUserAdminService,
   User,
   AdminUserCreateInput,
   AdminUserUpdateInput,
@@ -11,7 +11,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 @Resolver(() => User)
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiUserAdminFeatureResolver {
-  constructor(private readonly service: ApiUserAdminDataAccessService) {}
+  constructor(private readonly service: ApiUserAdminService) {}
 
   @Mutation(() => User, { nullable: true })
   adminCreateUser(@CtxUser() user: User, @Args('input') input: AdminUserCreateInput) {

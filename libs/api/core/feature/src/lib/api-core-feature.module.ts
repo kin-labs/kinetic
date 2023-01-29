@@ -3,7 +3,7 @@ import { ApiAirdropFeatureModule } from '@kin-kinetic/api/airdrop/feature'
 import { ApiAppFeatureModule } from '@kin-kinetic/api/app/feature'
 import { ApiAuthFeatureModule } from '@kin-kinetic/api/auth/feature'
 import { ApiClusterFeatureModule } from '@kin-kinetic/api/cluster/feature'
-import { ApiConfigDataAccessModule, ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
+import { ApiConfigDataAccessModule, ApiConfigService } from '@kin-kinetic/api/config/data-access'
 import { ApiConfigFeatureModule } from '@kin-kinetic/api/config/feature'
 import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { ApiCronDataAccessModule } from '@kin-kinetic/api/cron/data-access'
@@ -46,18 +46,18 @@ import { serveStaticFactory } from './serve-static.factory'
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       imports: [ApiConfigDataAccessModule, ApiWebhookFeatureModule],
-      inject: [ApiConfigDataAccessService],
-      useFactory: (cfg: ApiConfigDataAccessService) => cfg.graphqlConfig,
+      inject: [ApiConfigService],
+      useFactory: (cfg: ApiConfigService) => cfg.graphqlConfig,
     }),
     OgmaModule.forRootAsync({
       imports: [ApiConfigDataAccessModule],
-      inject: [ApiConfigDataAccessService],
+      inject: [ApiConfigService],
       useClass: ApiCoreFeatureOgmaConfig,
     }),
     OpenTelemetryModule.forRootAsync({
       imports: [ApiConfigDataAccessModule],
-      inject: [ApiConfigDataAccessService],
-      useFactory: (cfg: ApiConfigDataAccessService) => cfg.openTelemetryConfig,
+      inject: [ApiConfigService],
+      useFactory: (cfg: ApiConfigService) => cfg.openTelemetryConfig,
     }),
     ServeStaticModule.forRootAsync({ useFactory: serveStaticFactory() }),
     ScheduleModule.forRoot(),

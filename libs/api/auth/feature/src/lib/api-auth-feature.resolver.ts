@@ -1,5 +1,5 @@
 import {
-  ApiAuthDataAccessService,
+  ApiAuthService,
   ApiAuthGraphqlGuard,
   AuthToken,
   CtxUser,
@@ -11,7 +11,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()
 export class ApiAuthFeatureResolver {
-  constructor(private readonly service: ApiAuthDataAccessService) {}
+  constructor(private readonly service: ApiAuthService) {}
 
   @Mutation(() => AuthToken, { nullable: true })
   async login(@Context() context, @Args('input') input: UserLoginInput) {

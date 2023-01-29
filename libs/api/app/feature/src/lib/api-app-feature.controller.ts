@@ -1,4 +1,4 @@
-import { ApiAppDataAccessService, AppConfig, AppHealth } from '@kin-kinetic/api/app/data-access'
+import { ApiAppService, AppConfig, AppHealth } from '@kin-kinetic/api/app/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common'
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -6,7 +6,7 @@ import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 @ApiTags('app')
 @Controller('app')
 export class ApiAppFeatureController {
-  constructor(private readonly service: ApiAppDataAccessService) {}
+  constructor(private readonly service: ApiAppService) {}
 
   @Get(':environment/:index/config')
   @ApiOperation({ operationId: 'getAppConfig' })

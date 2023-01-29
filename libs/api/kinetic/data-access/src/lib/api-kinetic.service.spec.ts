@@ -4,7 +4,7 @@ import { ApiWebhookDataAccessModule } from '@kin-kinetic/api/webhook/data-access
 import { Test } from '@nestjs/testing'
 import { ApiKineticService } from './api-kinetic.service'
 
-describe('ApiKineticDataAccessService', () => {
+describe('ApiKineticService', () => {
   let service: ApiKineticService
 
   beforeEach(async () => {

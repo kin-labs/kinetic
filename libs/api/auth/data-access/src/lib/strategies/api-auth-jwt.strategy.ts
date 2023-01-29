@@ -1,4 +1,4 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Request } from 'express'
@@ -19,7 +19,7 @@ function cookieExtractor(req: Request) {
 
 @Injectable()
 export class ApiAuthJwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly data: ApiCoreDataAccessService) {
+  constructor(private readonly core: ApiCoreService) {
     super({
       jwtFromRequest: headerAndCookieExtractor,
       secretOrKey: process.env.JWT_SECRET,
@@ -30,7 +30,7 @@ export class ApiAuthJwtStrategy extends PassportStrategy(Strategy) {
     if (!payload.id) {
       throw new UnauthorizedException()
     }
-    const user = await this.data.getUserById(payload.id)
+    const user = await this.core.getUserById(payload.id)
     if (!user) {
       throw new UnauthorizedException()
     }

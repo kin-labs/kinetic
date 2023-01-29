@@ -1,19 +1,19 @@
-import { ApiCoreDataAccessService } from '@kin-kinetic/api/core/data-access'
+import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { UserIdentityType } from '@prisma/client'
 import { Profile, Strategy } from 'passport-discord'
-import { ApiAuthDataAccessService } from '../api-auth-data-access.service'
+import { ApiAuthService } from '../api-auth.service'
 
 @Injectable()
 export class ApiAuthDiscordStrategy extends PassportStrategy(Strategy, 'discord') {
-  constructor(private data: ApiCoreDataAccessService, private service: ApiAuthDataAccessService) {
+  constructor(private core: ApiCoreService, private service: ApiAuthService) {
     // TODO: We need to make sure to dynamically load ApiAuthDiscordStrategy only when the
     //       environment variable is set.
     super({
-      clientID: data.config.discordClientId ?? 'discord-client-not-configured',
-      clientSecret: data.config.discordClientSecret ?? 'discord-client-not-configured',
-      callbackURL: data.config.discordCallbackUrl ?? 'discord-client-not-configured',
+      clientID: core.config.discordClientId ?? 'discord-client-not-configured',
+      clientSecret: core.config.discordClientSecret ?? 'discord-client-not-configured',
+      callbackURL: core.config.discordCallbackUrl ?? 'discord-client-not-configured',
       scope: ['identify', 'email'],
     })
   }

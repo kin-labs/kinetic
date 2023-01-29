@@ -1,11 +1,11 @@
-import { ApiConfigDataAccessService, ApiConfigSummary } from '@kin-kinetic/api/config/data-access'
+import { ApiConfigService, ApiConfigSummary } from '@kin-kinetic/api/config/data-access'
 import { Controller, Get } from '@nestjs/common'
 import { ApiExcludeEndpoint, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('config')
 @Controller('config')
 export class ApiConfigFeatureController {
-  constructor(private readonly service: ApiConfigDataAccessService) {}
+  constructor(private readonly service: ApiConfigService) {}
 
   @Get()
   @ApiExcludeEndpoint()

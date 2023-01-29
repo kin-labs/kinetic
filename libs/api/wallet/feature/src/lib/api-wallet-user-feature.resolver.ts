@@ -1,13 +1,13 @@
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import { User } from '@kin-kinetic/api/user/data-access'
-import { ApiWalletUserDataAccessService, Wallet, WalletAirdropResponse } from '@kin-kinetic/api/wallet/data-access'
+import { ApiWalletUserService, Wallet, WalletAirdropResponse } from '@kin-kinetic/api/wallet/data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Float, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiWalletUserFeatureResolver {
-  constructor(private readonly service: ApiWalletUserDataAccessService) {}
+  constructor(private readonly service: ApiWalletUserService) {}
 
   @Mutation(() => Wallet, { nullable: true })
   userGenerateWallet(@CtxUser() user: User, @Args('appEnvId') appEnvId: string) {

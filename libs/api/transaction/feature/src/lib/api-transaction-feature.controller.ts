@@ -5,11 +5,7 @@ import {
   MinimumRentExemptionBalanceRequest,
   MinimumRentExemptionBalanceResponse,
 } from '@kin-kinetic/api/kinetic/data-access'
-import {
-  ApiTransactionDataAccessService,
-  MakeTransferRequest,
-  Transaction,
-} from '@kin-kinetic/api/transaction/data-access'
+import { ApiTransactionService, MakeTransferRequest, Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Commitment } from '@kin-kinetic/solana'
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common'
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -18,7 +14,7 @@ import { Request } from 'express'
 @ApiTags('transaction')
 @Controller('transaction')
 export class ApiTransactionFeatureController {
-  constructor(private readonly service: ApiTransactionDataAccessService) {}
+  constructor(private readonly service: ApiTransactionService) {}
 
   @Get('kinetic-transaction/:environment/:index')
   @ApiOperation({ operationId: 'getKineticTransaction' })
