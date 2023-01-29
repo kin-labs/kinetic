@@ -3,7 +3,7 @@ import {
   AdminClusterCreateInput,
   AdminClusterUpdateInput,
   AdminMintCreateInput,
-  ApiClusterAdminDataAccessService,
+  ApiClusterAdminService,
   Cluster,
   Mint,
 } from '@kin-kinetic/api/cluster/data-access'
@@ -14,7 +14,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 @Resolver()
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiClusterAdminFeatureResolver {
-  constructor(private readonly service: ApiClusterAdminDataAccessService) {}
+  constructor(private readonly service: ApiClusterAdminService) {}
 
   @Mutation(() => Cluster, { nullable: true })
   adminMintCreate(@CtxUser() user: User, @Args('input') input: AdminMintCreateInput) {

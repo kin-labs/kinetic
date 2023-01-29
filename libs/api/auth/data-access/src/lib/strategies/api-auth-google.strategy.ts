@@ -3,11 +3,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { UserIdentityType } from '@prisma/client'
 import { Profile, Strategy } from 'passport-google-oauth20'
-import { ApiAuthDataAccessService } from '../api-auth-data-access.service'
+import { ApiAuthService } from '../api-auth.service'
 
 @Injectable()
 export class ApiAuthGoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(private core: ApiCoreService, private service: ApiAuthDataAccessService) {
+  constructor(private core: ApiCoreService, private service: ApiAuthService) {
     // TODO: We need to make sure to dynamically load ApiAuthGoogleStrategy only when the
     //       environment variable is set.
     super({

@@ -1,4 +1,4 @@
-import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
+import { ApiConfigService } from '@kin-kinetic/api/config/data-access'
 import { OpenTelemetrySdk } from '@kin-kinetic/api/core/util'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
@@ -15,7 +15,7 @@ process.on('unhandledRejection', (reason, promise) => {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true })
-  const config = app.get(ApiConfigDataAccessService)
+  const config = app.get(ApiConfigService)
   const logger = app.get<OgmaService>(OgmaService)
   app.useLogger(logger)
   await OpenTelemetrySdk.start(config.metricsConfig)

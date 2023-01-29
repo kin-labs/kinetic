@@ -1,5 +1,5 @@
 import {
-  ApiAppUserDataAccessService,
+  ApiAppUserService,
   App,
   AppEnv,
   AppMint,
@@ -19,7 +19,7 @@ import { Args, Mutation, Query } from '@nestjs/graphql'
 
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiAppUserFeatureResolver {
-  constructor(private readonly service: ApiAppUserDataAccessService) {}
+  constructor(private readonly service: ApiAppUserService) {}
 
   @Query(() => App, { nullable: true })
   userApp(@CtxUser() user: User, @Args('appId') appId: string) {

@@ -1,6 +1,6 @@
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import {
-  ApiTransactionUserDataAccessService,
+  ApiTransactionUserService,
   Transaction,
   TransactionCounter,
   UserTransactionListInput,
@@ -12,7 +12,7 @@ import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql'
 @Resolver(() => Transaction)
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiTransactionFeatureResolver {
-  constructor(private readonly service: ApiTransactionUserDataAccessService) {}
+  constructor(private readonly service: ApiTransactionUserService) {}
 
   @Query(() => Transaction, { nullable: true })
   userTransaction(

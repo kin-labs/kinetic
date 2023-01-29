@@ -1,5 +1,5 @@
 import {
-  ApiAuthDataAccessService,
+  ApiAuthService,
   ApiAuthDiscordGuard,
   ApiAuthGithubGuard,
   ApiAuthGoogleGuard,
@@ -11,7 +11,7 @@ import { Response } from 'express'
 
 @Controller('auth')
 export class ApiAuthFeatureController {
-  constructor(private readonly service: ApiAuthDataAccessService) {}
+  constructor(private readonly service: ApiAuthService) {}
 
   @Get('discord')
   @ApiExcludeEndpoint()

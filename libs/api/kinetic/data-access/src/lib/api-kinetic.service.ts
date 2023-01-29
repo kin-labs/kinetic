@@ -1,8 +1,8 @@
 import { ApiCoreService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
 import { ellipsify, parseAppKey } from '@kin-kinetic/api/core/util'
 import { parseTransactionError } from '@kin-kinetic/api/kinetic/util'
-import { ApiSolanaDataAccessService } from '@kin-kinetic/api/solana/data-access'
-import { ApiWebhookDataAccessService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
+import { ApiSolanaService } from '@kin-kinetic/api/solana/data-access'
+import { ApiWebhookService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import {
   BalanceMint,
@@ -57,8 +57,8 @@ export class ApiKineticService implements OnModuleInit {
 
   constructor(
     private readonly core: ApiCoreService,
-    private readonly solana: ApiSolanaDataAccessService,
-    private readonly webhook: ApiWebhookDataAccessService,
+    private readonly solana: ApiSolanaService,
+    private readonly webhook: ApiWebhookService,
   ) {}
 
   onModuleInit() {

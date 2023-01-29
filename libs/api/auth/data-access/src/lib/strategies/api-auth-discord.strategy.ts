@@ -3,11 +3,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { UserIdentityType } from '@prisma/client'
 import { Profile, Strategy } from 'passport-discord'
-import { ApiAuthDataAccessService } from '../api-auth-data-access.service'
+import { ApiAuthService } from '../api-auth.service'
 
 @Injectable()
 export class ApiAuthDiscordStrategy extends PassportStrategy(Strategy, 'discord') {
-  constructor(private core: ApiCoreService, private service: ApiAuthDataAccessService) {
+  constructor(private core: ApiCoreService, private service: ApiAuthService) {
     // TODO: We need to make sure to dynamically load ApiAuthDiscordStrategy only when the
     //       environment variable is set.
     super({

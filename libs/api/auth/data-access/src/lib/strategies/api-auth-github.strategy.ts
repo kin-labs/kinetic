@@ -4,11 +4,11 @@ import { PassportStrategy } from '@nestjs/passport'
 import { UserIdentityType } from '@prisma/client'
 import fetch from 'node-fetch'
 import { Profile, Strategy } from 'passport-github'
-import { ApiAuthDataAccessService } from '../api-auth-data-access.service'
+import { ApiAuthService } from '../api-auth.service'
 
 @Injectable()
 export class ApiAuthGithubStrategy extends PassportStrategy(Strategy, 'github') {
-  constructor(private core: ApiCoreService, private service: ApiAuthDataAccessService) {
+  constructor(private core: ApiCoreService, private service: ApiAuthService) {
     // TODO: We need to make sure to dynamically load ApiAuthGithubStrategy only when the
     //       environment variable is set.
     super({

@@ -1,7 +1,7 @@
 import { AirdropConfig } from '@kin-kinetic/api/airdrop/util'
 import { hashPassword } from '@kin-kinetic/api/auth/util'
 import { ProvisionedCluster } from '@kin-kinetic/api/cluster/util'
-import { ApiConfigDataAccessService } from '@kin-kinetic/api/config/data-access'
+import { ApiConfigService } from '@kin-kinetic/api/config/data-access'
 import { parseAppKey } from '@kin-kinetic/api/core/util'
 import { Keypair } from '@kin-kinetic/keypair'
 import { getPublicKey } from '@kin-kinetic/solana'
@@ -39,11 +39,7 @@ export class ApiCoreService extends PrismaClient implements OnModuleInit {
   private getAppByEnvironmentIndexCounter: Counter
   private getAppByIndexCounter: Counter
 
-  constructor(
-    readonly cache: ApiCoreCacheService,
-    readonly config: ApiConfigDataAccessService,
-    readonly metrics: MetricService,
-  ) {
+  constructor(readonly cache: ApiCoreCacheService, readonly config: ApiConfigService, readonly metrics: MetricService) {
     super()
   }
 

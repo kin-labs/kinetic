@@ -2,27 +2,15 @@ import { ApiCoreDataAccessModule } from '@kin-kinetic/api/core/data-access'
 import { ApiKineticDataAccessModule } from '@kin-kinetic/api/kinetic/data-access'
 import { ApiWalletDataAccessModule } from '@kin-kinetic/api/wallet/data-access'
 import { Module } from '@nestjs/common'
-import { ApiAppAdminDataAccessService } from './api-app-admin-data-access.service'
-import { ApiAppDataAccessService } from './api-app-data-access.service'
-import { ApiAppEnvAdminDataAccessService } from './api-app-env-admin-data-access.service'
-import { ApiAppEnvUserDataAccessService } from './api-app-env-user-data-access.service'
-import { ApiAppUserDataAccessService } from './api-app-user-data-access.service'
+import { ApiAppAdminService } from './api-app-admin.service'
+import { ApiAppService } from './api-app.service'
+import { ApiAppEnvAdminService } from './api-app-env-admin.service'
+import { ApiAppEnvUserService } from './api-app-env-user.service'
+import { ApiAppUserService } from './api-app-user.service'
 
 @Module({
-  providers: [
-    ApiAppAdminDataAccessService,
-    ApiAppDataAccessService,
-    ApiAppEnvAdminDataAccessService,
-    ApiAppEnvUserDataAccessService,
-    ApiAppUserDataAccessService,
-  ],
-  exports: [
-    ApiAppAdminDataAccessService,
-    ApiAppDataAccessService,
-    ApiAppEnvAdminDataAccessService,
-    ApiAppEnvUserDataAccessService,
-    ApiAppUserDataAccessService,
-  ],
+  providers: [ApiAppAdminService, ApiAppService, ApiAppEnvAdminService, ApiAppEnvUserService, ApiAppUserService],
+  exports: [ApiAppAdminService, ApiAppService, ApiAppEnvAdminService, ApiAppEnvUserService, ApiAppUserService],
   imports: [ApiCoreDataAccessModule, ApiKineticDataAccessModule, ApiWalletDataAccessModule],
 })
 export class ApiAppDataAccessModule {}

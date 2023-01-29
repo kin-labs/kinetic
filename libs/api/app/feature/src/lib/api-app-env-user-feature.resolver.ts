@@ -1,4 +1,4 @@
-import { ApiAppEnvUserDataAccessService, AppEnv, AppEnvStats } from '@kin-kinetic/api/app/data-access'
+import { ApiAppEnvUserService, AppEnv, AppEnvStats } from '@kin-kinetic/api/app/data-access'
 import { ApiAuthGraphqlGuard, CtxUser } from '@kin-kinetic/api/auth/data-access'
 import { getAppKey } from '@kin-kinetic/api/core/util'
 import { TransactionStatus } from '@kin-kinetic/api/transaction/data-access'
@@ -10,7 +10,7 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 @Resolver(() => AppEnv)
 @UseGuards(ApiAuthGraphqlGuard)
 export class ApiAppEnvUserFeatureResolver {
-  constructor(private readonly service: ApiAppEnvUserDataAccessService) {}
+  constructor(private readonly service: ApiAppEnvUserService) {}
 
   @Query(() => AppEnvStats, { nullable: true })
   userAppEnvStats(@Args('appEnvId') appEnvId: string) {
