@@ -66,7 +66,7 @@ export class ApiAccountService implements OnModuleInit {
     const mintAccounts = await this.kinetic.getMintAccounts(appKey, account, commitment, mints)
 
     // Get the balances for the token accounts
-    return solana.getMintAccountBalance(mintAccounts, commitment)
+    return solana.getMintAccountBalance(mints, mintAccounts, commitment)
   }
 
   async createAccount(req: Request, input: CreateAccountRequest): Promise<Transaction> {

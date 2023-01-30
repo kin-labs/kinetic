@@ -18,6 +18,7 @@ import {
   removeDecimals,
 } from './helpers'
 import {
+  BalanceMint,
   BalanceMintMap,
   BalanceSummary,
   BalanceToken,
@@ -70,9 +71,11 @@ export class Solana {
     }
   }
 
-  async getMintAccountBalance(mintAccounts: MintAccounts[], commitment: Commitment): Promise<BalanceSummary> {
-    const mints = mintAccounts?.map((mint) => mint.mint)
-
+  async getMintAccountBalance(
+    mints: BalanceMint[],
+    mintAccounts: MintAccounts[],
+    commitment: Commitment,
+  ): Promise<BalanceSummary> {
     if (!mints?.length) {
       throw new Error(`getBalance: No mints provided.`)
     }
