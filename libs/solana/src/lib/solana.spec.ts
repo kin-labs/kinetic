@@ -22,7 +22,11 @@ describe('solana', () => {
     ]
 
     try {
-      await solana.getMintAccountBalance(mintAccounts, Commitment.Confirmed)
+      await solana.getMintAccountBalance(
+        mintAccounts?.map((mint) => mint.mint),
+        mintAccounts,
+        Commitment.Confirmed,
+      )
     } catch (error) {
       expect(error.message).toBe(`No token accounts found for mint 4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa`)
     }
@@ -43,7 +47,11 @@ describe('solana', () => {
     ]
 
     try {
-      await solana.getMintAccountBalance(mintAccounts, Commitment.Confirmed)
+      await solana.getMintAccountBalance(
+        mintAccounts?.map((mint) => mint.mint),
+        mintAccounts,
+        Commitment.Confirmed,
+      )
     } catch (error) {
       expect(error.message).toBe(
         `No token accounts found for mints 4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPa, 4hUG2bJHubNDddLVsHjXBVTcuRskg7BSPuriudsbTCPB`,

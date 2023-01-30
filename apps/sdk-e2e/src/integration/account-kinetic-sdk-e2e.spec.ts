@@ -101,10 +101,18 @@ describe('KineticSdk (e2e) - Account', () => {
     expect(tokenAccounts[0]).toBe('Ebq6K7xVh6PYQ8DrTQnD9fC91uQiyBMPGSV6JCG6GPdD')
   })
 
-  it('should throw an error when publicKey does not exit or is incorrect', async () => {
+  it('should throw an error when publicKey is incorrect', async () => {
     await expect(async () => await sdk.getBalance({ account: 'xx' })).rejects.toThrow(
       'accountId must be a valid PublicKey',
     )
+  })
+
+  it('should throw an error when publicKey does not exit', async () => {
+    const keypair = Keypair.random()
+    const res = await sdk.getBalance({ account: keypair.publicKey })
+
+    expect(res.balance).toEqual('0')
+    expect(res.tokens.length).toEqual(0)
   })
 
   it('should throw when try to create an account that already exists', async () => {

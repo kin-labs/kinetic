@@ -428,7 +428,7 @@ export class ApiKineticService implements OnModuleInit {
   ): Promise<MintAccounts> {
     return this.getTokenAccounts(appKey, account, mint.publicKey, commitment).then((accounts) => ({
       mint,
-      accounts,
+      accounts: accounts ?? [],
     }))
   }
 
