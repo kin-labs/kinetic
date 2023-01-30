@@ -1,6 +1,6 @@
 import { ApiAppService } from '@kin-kinetic/api/app/data-access'
 import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
-import { getAppKey } from '@kin-kinetic/api/core/util'
+import { createReference, getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService, CloseAccountRequest } from '@kin-kinetic/api/kinetic/data-access'
 import { Transaction } from '@kin-kinetic/api/transaction/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
@@ -105,7 +105,7 @@ export class ApiAccountService implements OnModuleInit {
       lastValidBlockHeight: input.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
       processingStartedAt,
-      reference: input.reference,
+      reference: input.reference || createReference(input.referenceType, input.referenceId),
       solanaTransaction,
       source,
       tx: input.tx,

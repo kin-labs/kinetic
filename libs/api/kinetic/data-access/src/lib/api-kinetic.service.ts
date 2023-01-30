@@ -1,5 +1,5 @@
 import { ApiCoreService, AppEnvironment } from '@kin-kinetic/api/core/data-access'
-import { ellipsify, parseAppKey } from '@kin-kinetic/api/core/util'
+import { createReference, ellipsify, parseAppKey } from '@kin-kinetic/api/core/util'
 import { parseTransactionError } from '@kin-kinetic/api/kinetic/util'
 import { ApiSolanaService } from '@kin-kinetic/api/solana/data-access'
 import { ApiWebhookService, WebhookType } from '@kin-kinetic/api/webhook/data-access'
@@ -316,7 +316,7 @@ export class ApiKineticService implements OnModuleInit {
         blockhash,
         index: input.index,
         lastValidBlockHeight,
-        reference: input.reference,
+        reference: input.reference || createReference(input.referenceType, input.referenceId),
         signer: signer.solana,
         tokenAccount: tokenAccount.account,
       })
@@ -332,7 +332,7 @@ export class ApiKineticService implements OnModuleInit {
         ip,
         lastValidBlockHeight,
         mintPublicKey: mint?.mint?.address,
-        reference: input.reference,
+        reference: input.reference || createReference(input.referenceType, input.referenceId),
         processingStartedAt,
         solanaTransaction,
         source: input.account,

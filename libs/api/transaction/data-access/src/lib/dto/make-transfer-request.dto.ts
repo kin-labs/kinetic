@@ -14,6 +14,10 @@ export class MakeTransferRequest {
   lastValidBlockHeight: number
   @ApiProperty({ nullable: true, required: false })
   reference?: string
+  @ApiProperty({ nullable: true, required: false, deprecated: true })
+  referenceId?: string
+  @ApiProperty({ nullable: true, required: false, deprecated: true })
+  referenceType?: string
   @ApiProperty()
   tx: string
 }
