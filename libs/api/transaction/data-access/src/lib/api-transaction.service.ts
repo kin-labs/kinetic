@@ -5,7 +5,7 @@ import { Keypair } from '@kin-kinetic/keypair'
 import { parseAndSignTokenTransfer } from '@kin-kinetic/solana'
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { Counter } from '@opentelemetry/api-metrics'
-import { Prisma, Transaction, TransactionErrorType, TransactionStatus } from '@prisma/client'
+import { Transaction, TransactionErrorType, TransactionStatus } from '@prisma/client'
 import { Request } from 'express'
 import { MakeTransferRequest } from './dto/make-transfer-request.dto'
 
@@ -129,7 +129,6 @@ export class ApiTransactionService implements OnModuleInit {
     this.makeTransferRequestCounter = this.core.metrics.getCounter(`api_transaction_make_transfer_request_counter`, {
       description: 'Number of requests to makeTransfer',
     })
-    await this.migrateTransactionReferences()
   }
 
   async makeTransfer(req: Request, input: MakeTransferRequest): Promise<TransactionWithErrors> {
@@ -177,64 +176,5 @@ export class ApiTransactionService implements OnModuleInit {
       tx: input.tx,
       ua,
     })
-  }
-
-  // MIGRATION: This migration will be removed in v1.0.0
-  private async migrateTransactionReferences() {
-    const count = await this.core.transaction.count({
-      where: {
-        OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
-      },
-    })
-
-    if (!count) {
-      this.logger.verbose('migrateTransactionReferences: no transactions to migrate')
-      return
-    }
-
-    const batchSize = 100
-    const batches = Math.ceil(count / batchSize)
-    this.logger.verbose(`migrateTransactionReferences: migrating ${count} transactions in ${batches} batches`)
-
-    for (let i = 0; i < batches; i++) {
-      const transactions = await this.core.transaction.findMany({
-        where: {
-          OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
-        },
-        take: batchSize,
-      })
-
-      this.logger.verbose(
-        `migrateTransactionReferences: migrating ${transactions.length} transactions in batch ${i}/${batches}`,
-      )
-
-      const updates: { id: string; data: Prisma.TransactionUpdateInput }[] = transactions.map((tx) => {
-        let reference = null
-        if (tx.referenceId && tx.referenceType) {
-          reference = `${tx.referenceType}|${tx.referenceId}`
-        } else if (tx.referenceId && !tx.referenceType) {
-          reference = `${tx.referenceId}`
-        } else if (!tx.referenceId && tx.referenceType) {
-          reference = `${tx.referenceType}`
-        }
-        return {
-          id: tx.id,
-          data: { reference, referenceId: null, referenceType: null },
-        }
-      })
-
-      const updated = await Promise.all(
-        updates.map(async (update) => {
-          return this.core.transaction.update({
-            where: { id: update.id },
-            data: update.data,
-          })
-        }),
-      )
-
-      this.logger.verbose(
-        `migrateTransactionReferences: updated ${updated.length} transactions in batch ${i}/${batches}`,
-      )
-    }
   }
 }

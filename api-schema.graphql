@@ -207,6 +207,17 @@ enum JobStatus {
   waiting
 }
 
+type Migration {
+  key: String!
+  status: MigrationStatus!
+  version: String!
+}
+
+type MigrationStatus {
+  count: Int!
+  done: Boolean!
+}
+
 type Mint {
   addMemo: Boolean
   address: String
@@ -241,6 +252,7 @@ type Mutation {
   adminDeleteMint(mintId: String!): Mint
   adminDeleteUser(userId: String!): User
   adminDeleteWallet(walletId: String!): Wallet
+  adminMigrate(key: String!): MigrationStatus
   adminMintCreate(input: AdminMintCreateInput!): Cluster
   adminMintImportWallet(mintId: String!, secret: String!): Mint
   adminQueueClean(status: JobStatus, type: QueueType!): Boolean
@@ -285,6 +297,7 @@ type Query {
   adminApps: [App!]
   adminCluster(clusterId: String!): Cluster
   adminClusters: [Cluster!]
+  adminMigrations: [Migration!]
   adminQueue(type: QueueType!): Queue
   adminQueueJobs(statuses: [JobStatus!]!, type: QueueType!): [Job!]
   adminQueues: [Queue!]

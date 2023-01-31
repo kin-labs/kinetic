@@ -1,3 +1,16 @@
+fragment MigrationDetails on Migration {
+  key
+  version
+  status {
+    ...MigrationStatusDetails
+  }
+}
+
+fragment MigrationStatusDetails on MigrationStatus {
+  count
+  done
+}
+
 query WebConfig {
   config: webConfig {
     discordEnabled
@@ -9,4 +22,16 @@ query WebConfig {
 
 query Uptime {
   uptime
+}
+
+query AdminMigrations {
+  items: adminMigrations {
+    ...MigrationDetails
+  }
+}
+
+mutation AdminMigrate($key: String!) {
+  item: adminMigrate(key: $key) {
+    ...MigrationStatusDetails
+  }
 }

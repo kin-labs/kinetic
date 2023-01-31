@@ -3,30 +3,19 @@ import { getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService } from '@kin-kinetic/api/kinetic/data-access'
 import { ApiWebhookService } from '@kin-kinetic/api/webhook/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
-import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { ClusterStatus, WalletType, WebhookType } from '@prisma/client'
 import { LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { WalletAirdropResponse } from './entity/wallet-airdrop-response.entity'
 
 @Injectable()
-export class ApiWalletUserService implements OnModuleInit {
+export class ApiWalletUserService {
   private readonly logger = new Logger(ApiWalletUserService.name)
   constructor(
     private readonly core: ApiCoreService,
     private readonly kinetic: ApiKineticService,
     private readonly webhook: ApiWebhookService,
   ) {}
-
-  async onModuleInit(): Promise<void> {
-    // MIGRATION: This migration will be removed in v1.0.0
-    // The wallet balance history will no longer be stored in the database
-    // Any old records will be deleted
-    const balances = await this.core.walletBalance.count()
-    if (balances > 0) {
-      this.logger.warn(`MIGRATION: Deleting ${balances} wallet balance records`)
-      await this.core.walletBalance.deleteMany()
-    }
-  }
 
   async checkBalance() {
     const appEnvs = await this.core.appEnv.findMany({

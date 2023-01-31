@@ -224,6 +224,19 @@ export enum JobStatus {
   Waiting = 'waiting',
 }
 
+export type Migration = {
+  __typename?: 'Migration'
+  key: Scalars['String']
+  status: MigrationStatus
+  version: Scalars['String']
+}
+
+export type MigrationStatus = {
+  __typename?: 'MigrationStatus'
+  count: Scalars['Int']
+  done: Scalars['Boolean']
+}
+
 export type Mint = {
   __typename?: 'Mint'
   addMemo?: Maybe<Scalars['Boolean']>
@@ -260,6 +273,7 @@ export type Mutation = {
   adminDeleteMint?: Maybe<Mint>
   adminDeleteUser?: Maybe<User>
   adminDeleteWallet?: Maybe<Wallet>
+  adminMigrate?: Maybe<MigrationStatus>
   adminMintCreate?: Maybe<Cluster>
   adminMintImportWallet?: Maybe<Mint>
   adminQueueClean?: Maybe<Scalars['Boolean']>
@@ -334,6 +348,10 @@ export type MutationAdminDeleteUserArgs = {
 
 export type MutationAdminDeleteWalletArgs = {
   walletId: Scalars['String']
+}
+
+export type MutationAdminMigrateArgs = {
+  key: Scalars['String']
 }
 
 export type MutationAdminMintCreateArgs = {
@@ -525,6 +543,7 @@ export type Query = {
   adminApps?: Maybe<Array<App>>
   adminCluster?: Maybe<Cluster>
   adminClusters?: Maybe<Array<Cluster>>
+  adminMigrations?: Maybe<Array<Migration>>
   adminQueue?: Maybe<Queue>
   adminQueueJobs?: Maybe<Array<Job>>
   adminQueues?: Maybe<Array<Queue>>
@@ -5353,6 +5372,15 @@ export type UserClustersQuery = {
   }> | null
 }
 
+export type MigrationDetailsFragment = {
+  __typename?: 'Migration'
+  key: string
+  version: string
+  status: { __typename?: 'MigrationStatus'; count: number; done: boolean }
+}
+
+export type MigrationStatusDetailsFragment = { __typename?: 'MigrationStatus'; count: number; done: boolean }
+
 export type WebConfigQueryVariables = Exact<{ [key: string]: never }>
 
 export type WebConfigQuery = {
@@ -5369,6 +5397,27 @@ export type WebConfigQuery = {
 export type UptimeQueryVariables = Exact<{ [key: string]: never }>
 
 export type UptimeQuery = { __typename?: 'Query'; uptime: number }
+
+export type AdminMigrationsQueryVariables = Exact<{ [key: string]: never }>
+
+export type AdminMigrationsQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'Migration'
+    key: string
+    version: string
+    status: { __typename?: 'MigrationStatus'; count: number; done: boolean }
+  }> | null
+}
+
+export type AdminMigrateMutationVariables = Exact<{
+  key: Scalars['String']
+}>
+
+export type AdminMigrateMutation = {
+  __typename?: 'Mutation'
+  item?: { __typename?: 'MigrationStatus'; count: number; done: boolean } | null
+}
 
 export type QueueDetailsFragment = {
   __typename?: 'Queue'
@@ -6496,6 +6545,22 @@ export const AuthTokenDetailsFragmentDoc = gql`
   }
   ${UserDetailsFragmentDoc}
 `
+export const MigrationStatusDetailsFragmentDoc = gql`
+  fragment MigrationStatusDetails on MigrationStatus {
+    count
+    done
+  }
+`
+export const MigrationDetailsFragmentDoc = gql`
+  fragment MigrationDetails on Migration {
+    key
+    version
+    status {
+      ...MigrationStatusDetails
+    }
+  }
+  ${MigrationStatusDetailsFragmentDoc}
+`
 export const QueueCountDetailsFragmentDoc = gql`
   fragment QueueCountDetails on QueueCount {
     active
@@ -7301,6 +7366,33 @@ export const UptimeDocument = gql`
 
 export function useUptimeQuery(options?: Omit<Urql.UseQueryArgs<UptimeQueryVariables>, 'query'>) {
   return Urql.useQuery<UptimeQuery, UptimeQueryVariables>({ query: UptimeDocument, ...options })
+}
+export const AdminMigrationsDocument = gql`
+  query AdminMigrations {
+    items: adminMigrations {
+      ...MigrationDetails
+    }
+  }
+  ${MigrationDetailsFragmentDoc}
+`
+
+export function useAdminMigrationsQuery(options?: Omit<Urql.UseQueryArgs<AdminMigrationsQueryVariables>, 'query'>) {
+  return Urql.useQuery<AdminMigrationsQuery, AdminMigrationsQueryVariables>({
+    query: AdminMigrationsDocument,
+    ...options,
+  })
+}
+export const AdminMigrateDocument = gql`
+  mutation AdminMigrate($key: String!) {
+    item: adminMigrate(key: $key) {
+      ...MigrationStatusDetails
+    }
+  }
+  ${MigrationStatusDetailsFragmentDoc}
+`
+
+export function useAdminMigrateMutation() {
+  return Urql.useMutation<AdminMigrateMutation, AdminMigrateMutationVariables>(AdminMigrateDocument)
 }
 export const AdminQueuesDocument = gql`
   query AdminQueues {
