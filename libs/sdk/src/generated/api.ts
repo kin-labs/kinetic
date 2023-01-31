@@ -407,6 +407,20 @@ export interface CloseAccountRequest {
    * @memberof CloseAccountRequest
    */
   reference?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof CloseAccountRequest
+   * @deprecated
+   */
+  referenceId?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof CloseAccountRequest
+   * @deprecated
+   */
+  referenceType?: string | null
 }
 /**
  *
@@ -633,6 +647,20 @@ export interface CreateAccountRequest {
    *
    * @type {string}
    * @memberof CreateAccountRequest
+   * @deprecated
+   */
+  referenceId?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountRequest
+   * @deprecated
+   */
+  referenceType?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountRequest
    */
   tx: string
 }
@@ -741,6 +769,20 @@ export interface MakeTransferRequest {
    * @memberof MakeTransferRequest
    */
   reference?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferRequest
+   * @deprecated
+   */
+  referenceId?: string | null
+  /**
+   *
+   * @type {string}
+   * @memberof MakeTransferRequest
+   * @deprecated
+   */
+  referenceType?: string | null
   /**
    *
    * @type {string}

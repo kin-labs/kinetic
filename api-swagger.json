@@ -676,6 +676,16 @@
           "reference": {
             "type": "string",
             "nullable": true
+          },
+          "referenceId": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
+          },
+          "referenceType": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
           }
         },
         "required": ["commitment", "account", "environment", "index", "mint"]
@@ -874,6 +884,16 @@
           "reference": {
             "type": "string",
             "nullable": true
+          },
+          "referenceId": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
+          },
+          "referenceType": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
           },
           "tx": {
             "type": "string"
@@ -1247,6 +1267,16 @@
           "reference": {
             "type": "string",
             "nullable": true
+          },
+          "referenceId": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
+          },
+          "referenceType": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true
           },
           "tx": {
             "type": "string"
