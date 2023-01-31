@@ -57,6 +57,15 @@ export class ApiCoreService extends PrismaClient implements OnModuleInit {
       description: 'Number of requests to getAppByIndex',
     })
     await this.$connect()
+    this.migrations().then((migrations) => {
+      migrations.map(({ key, status: { done }, version }) => {
+        if (!done) {
+          this.logger.warn(`Pending migration: ${key} (${version}). Please run this migration.`)
+        } else {
+          this.logger.verbose(`Migration applied: ${key} (${version}).`)
+        }
+      })
+    })
   }
 
   async ensureAdminUser(userId: string) {
