@@ -23,6 +23,8 @@ import {
 } from '@prisma/client'
 import { MetricService } from 'nestjs-otel'
 import { ApiCoreCacheService } from './cache/api-core-cache.service'
+import { MigrationStatus } from './entities/migration-status.entity'
+import { Migration } from './entities/migration.entity'
 
 export type AppEnvironment = AppEnv & {
   app: App
@@ -323,5 +325,138 @@ export class ApiCoreService extends PrismaClient implements OnModuleInit {
     await this.transactionError.deleteMany({ where: { transaction: { appEnv: { appId, id: appEnvId } } } })
     await this.transaction.deleteMany({ where: { appEnv: { appId, id: appEnvId } } })
     return this.appEnv.delete({ where: { id: appEnvId } })
+  }
+
+  // This migration system will be replaced with a more robust one in the future
+  private readonly migrationList = [
+    { key: 'references', version: 'v1.0.0-rc.17' },
+    { key: 'wallet-balances', version: 'v1.0.0-rc.17' },
+  ]
+
+  private findMigration(key: string) {
+    const found = this.migrationList.find((item) => item.key === key)
+    if (!found) {
+      throw new Error(`Unknown migration key: ${key}`)
+    }
+    return found
+  }
+
+  async migrations(): Promise<Migration[]> {
+    return Promise.all(
+      this.migrationList.map(async (item) => {
+        const status = await this.migrationStatus(item.key)
+        return { ...item, status }
+      }),
+    )
+  }
+
+  async migrate(key: string): Promise<MigrationStatus> {
+    const status = await this.migrationStatus(key)
+    if (status.done) {
+      return status
+    }
+
+    const migration = this.findMigration(key)
+    switch (migration.key) {
+      case 'references':
+        await this.migrateReferences()
+        return this.migrationStatus(key)
+      case 'wallet-balances':
+        await this.migrateWalletBalances()
+        return this.migrationStatus(key)
+    }
+    throw new Error(`Migration does not exist: ${key}`)
+  }
+
+  private async migrationStatus(key: string): Promise<MigrationStatus> {
+    const migration = this.findMigration(key)
+
+    switch (migration.key) {
+      case 'references': {
+        const count = await this.migrateReferencesCount()
+        return { count, done: count === 0 }
+      }
+      case 'wallet-balances': {
+        const count = await this.migrateWalletBalancesCount()
+        return { count, done: count === 0 }
+      }
+    }
+    throw new Error(`Migration does not exist: ${key}`)
+  }
+
+  private async migrateReferences(): Promise<void> {
+    // This migration combines the referenceId and referenceType fields into a single reference field
+    const count = await this.migrateReferencesCount()
+
+    if (!count) {
+      this.logger.verbose('migrateTransactionReferences: no transactions to migrate')
+      return
+    }
+
+    const batchSize = 100
+    const batches = Math.ceil(count / batchSize)
+    this.logger.verbose(`migrateTransactionReferences: migrating ${count} transactions in ${batches} batches`)
+
+    for (let i = 0; i < batches; i++) {
+      const transactions = await this.transaction.findMany({
+        where: {
+          OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
+        },
+        take: batchSize,
+      })
+
+      this.logger.verbose(
+        `migrateTransactionReferences: migrating ${transactions.length} transactions in batch ${i}/${batches}`,
+      )
+
+      const updates: { id: string; data: Prisma.TransactionUpdateInput }[] = transactions.map((tx) => {
+        let reference = null
+        if (tx.referenceId && tx.referenceType) {
+          reference = `${tx.referenceType}|${tx.referenceId}`
+        } else if (tx.referenceId && !tx.referenceType) {
+          reference = `${tx.referenceId}`
+        } else if (!tx.referenceId && tx.referenceType) {
+          reference = `${tx.referenceType}`
+        }
+        return {
+          id: tx.id,
+          data: { reference, referenceId: null, referenceType: null },
+        }
+      })
+
+      const updated = await Promise.all(
+        updates.map(async (update) => {
+          return this.transaction.update({
+            where: { id: update.id },
+            data: update.data,
+          })
+        }),
+      )
+
+      this.logger.verbose(
+        `migrateTransactionReferences: updated ${updated.length} transactions in batch ${i}/${batches}`,
+      )
+    }
+  }
+
+  private async migrateReferencesCount(): Promise<number> {
+    return this.transaction.count({
+      where: {
+        OR: [{ referenceId: { not: null } }, { referenceType: { not: null } }],
+      },
+    })
+  }
+
+  private async migrateWalletBalances(): Promise<void> {
+    // The wallet balance history will no longer be stored in the database
+    // Any old records will be deleted
+    const balances = await this.migrateWalletBalancesCount()
+    if (balances > 0) {
+      this.logger.warn(`MIGRATION: Deleting ${balances} wallet balance records`)
+      await this.walletBalance.deleteMany()
+    }
+  }
+  private migrateWalletBalancesCount(): Promise<number> {
+    return this.walletBalance.count()
   }
 }
