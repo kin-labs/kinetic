@@ -79,6 +79,7 @@ export class ApiAccountService implements OnModuleInit {
     const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
     const mint = this.kinetic.validateMint(appEnv, appKey, input.mint)
+    const reference = input?.reference || createReference(input?.referenceType, input?.referenceId)
 
     // Process the Solana transaction
     const signer = Keypair.fromSecret(mint.wallet?.secretKey)
@@ -105,7 +106,7 @@ export class ApiAccountService implements OnModuleInit {
       lastValidBlockHeight: input.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
       processingStartedAt,
-      reference: input.reference || createReference(input.referenceType, input.referenceId),
+      reference,
       solanaTransaction,
       source,
       tx: input.tx,
