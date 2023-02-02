@@ -1,5 +1,5 @@
 import { ApiCoreService } from '@kin-kinetic/api/core/data-access'
-import { getAppKey } from '@kin-kinetic/api/core/util'
+import { createReference, getAppKey } from '@kin-kinetic/api/core/util'
 import { ApiKineticService, TransactionWithErrors } from '@kin-kinetic/api/kinetic/data-access'
 import { Keypair } from '@kin-kinetic/keypair'
 import { parseAndSignTokenTransfer } from '@kin-kinetic/solana'
@@ -140,6 +140,7 @@ export class ApiTransactionService implements OnModuleInit {
     const { ip, ua } = this.kinetic.validateRequest(appEnv, req)
 
     const mint = this.kinetic.validateMint(appEnv, appKey, input.mint)
+    const reference = input?.reference || createReference(input?.referenceType, input?.referenceId)
 
     // Process the Solana transaction
     const signer = Keypair.fromSecret(mint.wallet?.secretKey)
@@ -170,7 +171,7 @@ export class ApiTransactionService implements OnModuleInit {
       lastValidBlockHeight: input?.lastValidBlockHeight,
       mintPublicKey: mint?.mint?.address,
       processingStartedAt,
-      reference: input?.reference,
+      reference,
       solanaTransaction,
       source,
       tx: input.tx,

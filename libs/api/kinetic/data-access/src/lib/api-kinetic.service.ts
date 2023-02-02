@@ -306,6 +306,7 @@ export class ApiKineticService implements OnModuleInit {
       this.closeAccountRequestValidCounter.add(1, { appKey })
 
       const mint = this.validateMint(appEnv, appKey, input.mint)
+      const reference = input?.reference || createReference(input?.referenceType, input?.referenceId)
 
       const { blockhash, lastValidBlockHeight } = await this.getLatestBlockhash(appKey)
 
@@ -316,7 +317,7 @@ export class ApiKineticService implements OnModuleInit {
         blockhash,
         index: input.index,
         lastValidBlockHeight,
-        reference: input.reference || createReference(input.referenceType, input.referenceId),
+        reference,
         signer: signer.solana,
         tokenAccount: tokenAccount.account,
       })
@@ -332,7 +333,7 @@ export class ApiKineticService implements OnModuleInit {
         ip,
         lastValidBlockHeight,
         mintPublicKey: mint?.mint?.address,
-        reference: input.reference || createReference(input.referenceType, input.referenceId),
+        reference,
         processingStartedAt,
         solanaTransaction,
         source: input.account,
